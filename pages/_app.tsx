@@ -6,7 +6,9 @@ import { StyledThemeProvider } from "@definitions/styled-components";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
 import { RootStoreProvider } from "@mobx";
+import "../src/styles/global.css";
 import { appWithTranslation } from "@i18n";
+import Layout from "src/layout";
 
 function MyApp({
     Component,
@@ -20,7 +22,6 @@ function MyApp({
                     //@ts-nocheck
                     <Hydrate state={pageProps.dehydratedState}>
                         <RootStoreProvider>
-                            //@ts-ignore
                             <Component {...pageProps} />
                         </RootStoreProvider>
                     </Hydrate>

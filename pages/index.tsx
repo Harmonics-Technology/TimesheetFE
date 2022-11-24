@@ -1,14 +1,9 @@
 import React from "react";
-import { Spacer, Flex } from "@chakra-ui/react";
 
-import { Header, Main, Cards, Footer } from "@components";
+import SideNav from "@components/sidenav";
 
 const Home: React.FC = () => {
-    return (
-        <Flex direction="column" minH="100vh">
-            Something Fresh
-        </Flex>
-    );
+    return <SideNav />;
 };
 
 export default Home;
