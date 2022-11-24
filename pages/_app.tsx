@@ -6,7 +6,9 @@ import { StyledThemeProvider } from "@definitions/styled-components";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Hydrate } from "react-query/hydration";
 import { RootStoreProvider } from "@mobx";
+import "../src/styles/global.css";
 import { appWithTranslation } from "@i18n";
+import Layout from "src/layout";
 
 function MyApp({
     Component,
@@ -19,7 +21,9 @@ function MyApp({
                 <QueryClientProvider client={queryClient}>
                     <Hydrate state={pageProps.dehydratedState}>
                         <RootStoreProvider>
-                            <Component {...pageProps} />
+                            <Layout>
+                                <Component {...pageProps} />
+                            </Layout>
                         </RootStoreProvider>
                     </Hydrate>
                 </QueryClientProvider>
