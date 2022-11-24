@@ -8,7 +8,10 @@ import { Hydrate } from "react-query/hydration";
 import { RootStoreProvider } from "@mobx";
 import { appWithTranslation } from "@i18n";
 
-function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+function MyApp({
+    Component,
+    pageProps,
+}: AppProps<{ dehydratedState: unknown }>): JSX.Element {
     const queryClient = new QueryClient();
     return (
         <ChakraProvider theme={theme}>

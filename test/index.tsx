@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, ReactNode } from "react";
 import {
     render as baseRender,
     RenderOptions,
@@ -10,6 +10,9 @@ import theme from "@definitions/chakra/theme";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RootStoreProvider } from "@mobx";
 
+interface Props {
+    children?: ReactNode;
+}
 /**
  * Custom renderer example with @testing-library/react
  * You can customize it to your needs.
@@ -18,7 +21,7 @@ import { RootStoreProvider } from "@mobx";
  * please visit https://testing-library.com/docs/react-testing-library/setup
  */
 
-export const AllTheProviders = ({ children }) => {
+export const AllTheProviders = ({ children }: Props) => {
     const queryClient = new QueryClient();
 
     return (
