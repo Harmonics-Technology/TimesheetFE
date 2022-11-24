@@ -17,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
                     //@ts-nocheck
                     <Hydrate state={pageProps.dehydratedState}>
                         <RootStoreProvider>
+                            //@ts-ignore
                             <Component {...pageProps} />
                         </RootStoreProvider>
                     </Hydrate>
