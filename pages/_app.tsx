@@ -14,6 +14,7 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         <ChakraProvider theme={theme}>
             <StyledThemeProvider>
                 <QueryClientProvider client={queryClient}>
+                    //@ts-nocheck
                     <Hydrate state={pageProps.dehydratedState}>
                         <RootStoreProvider>
                             <Component {...pageProps} />
