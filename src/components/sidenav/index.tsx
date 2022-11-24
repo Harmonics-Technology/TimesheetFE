@@ -46,14 +46,14 @@ function SideNav() {
                     menuTitle="Dashboard"
                     icon={<AiFillHome opacity=".8" />}
                     option={false}
-                    dropDown={["admin", "New Admin"]}
+                    dropDown={[]}
                 />
                 <MenuItem
                     linkName="profile"
                     menuTitle="Profile Management"
                     icon={<AiFillHome opacity=".8" />}
                     option={true}
-                    dropDown={["Admin", "New Admin"]}
+                    dropDown={["admin", "New Admin"]}
                 />
                 <MenuItem
                     linkName="profile"

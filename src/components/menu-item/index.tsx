@@ -34,17 +34,18 @@ function MenuItem({
                 onClick={option ? () => setOpenMenu(!openMenu) : undefined}
                 h={openMenu && option ? "100%" : "2rem"}
                 overflow="hidden"
+                transition="height .35s ease"
             >
                 <Flex justify="space-between" align="center" cursor="pointer">
                     <HStack>
                         <Square
                             bgColor={
-                                router.pathname === `/admin/${linkName}`
+                                router.pathname.startsWith(`/admin/${linkName}`)
                                     ? "brand.400"
                                     : "brand.500"
                             }
                             color={
-                                router.pathname === `/admin/${linkName}`
+                                router.pathname.startsWith(`/admin/${linkName}`)
                                     ? "white"
                                     : "brand.400"
                             }
@@ -56,12 +57,12 @@ function MenuItem({
                         </Square>
                         <Text
                             color={
-                                router.pathname === `/admin/${linkName}`
+                                router.pathname.startsWith(`/admin/${linkName}`)
                                     ? "brand.200"
                                     : "brand.300"
                             }
                             fontWeight={
-                                router.pathname === `/admin/${linkName}`
+                                router.pathname.startsWith(`/admin/${linkName}`)
                                     ? "600"
                                     : "500"
                             }
@@ -84,13 +85,28 @@ function MenuItem({
                     )}
                 </Flex>
                 {option && (
-                    <UnorderedList pl="1rem" mt=".4rem !important">
+                    <UnorderedList
+                        pl="1rem"
+                        mt=".4rem !important"
+                        transition="all .2s ease"
+                    >
                         {dropDown.map((x, i) => (
                             <ListItem
                                 key={i}
                                 color="brand.300"
-                                fontSize=".875rem"
+                                fontSize={
+                                    router.pathname ===
+                                    `/admin/${linkName}/${x}`
+                                        ? "1rem"
+                                        : ".875rem"
+                                }
                                 p=" .5rem 0 .5rem 1.2rem"
+                                fontWeight={
+                                    router.pathname ===
+                                    `/admin/${linkName}/${x}`
+                                        ? "bold"
+                                        : "400"
+                                }
                                 textTransform="capitalize"
                             >
                                 <Link href={`/admin/${linkName}/${x}`}>

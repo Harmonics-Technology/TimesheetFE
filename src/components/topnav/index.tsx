@@ -17,7 +17,7 @@ function TopNav() {
                     fontSize="1rem"
                     textTransform="capitalize"
                 >
-                    {router.pathname.split(0, 1)}
+                    {router.pathname.replace("/admin/", "").split("/")[0]}
                 </Text>
             </Box>
             <Stack direction="row" gap="2rem" color="gray.500" align="center">

@@ -1,9 +1,7 @@
 import React from "react";
 
-import SideNav from "@components/sidenav";
-
 const Home: React.FC = () => {
-    return <SideNav />;
+    return <p>Nothing Here</p>;
 };
 
 export default Home;
