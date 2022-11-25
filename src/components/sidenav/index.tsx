@@ -1,23 +1,17 @@
-import {
-    Box,
-    HStack,
-    Square,
-    VStack,
-    Text,
-    Divider,
-    Image,
-    Flex,
-    UnorderedList,
-    ListItem,
-} from "@chakra-ui/react";
+import { Box, HStack, VStack, Text, Divider, Image } from "@chakra-ui/react";
 import MenuItem from "@components/menu-item";
 import Link from "next/link";
-import { useState } from "react";
-import { AiFillHome } from "react-icons/ai";
-import { FaAngleDown } from "react-icons/fa";
+import {
+    FaCalendar,
+    FaCogs,
+    FaFile,
+    FaHome,
+    FaUser,
+    FaUsers,
+} from "react-icons/fa";
+import { RiLineChartFill } from "react-icons/ri";
 
 function SideNav() {
-    const [openMenu, setOpenMenu] = useState(false);
     return (
         <Box
             bgColor="#FFFFFF"
@@ -44,23 +38,56 @@ function SideNav() {
                 <MenuItem
                     linkName="dashboard"
                     menuTitle="Dashboard"
-                    icon={<AiFillHome opacity=".8" />}
+                    icon={<FaHome opacity=".8" />}
                     option={false}
                     dropDown={[]}
                 />
                 <MenuItem
-                    linkName="profile"
+                    linkName="profile-management"
                     menuTitle="Profile Management"
-                    icon={<AiFillHome opacity=".8" />}
+                    icon={<FaUsers opacity=".8" />}
                     option={true}
-                    dropDown={["admin", "New Admin"]}
+                    dropDown={[
+                        "admin",
+                        "clients",
+                        "team members",
+                        "payment partners",
+                    ]}
                 />
                 <MenuItem
-                    linkName="profile"
-                    menuTitle="Management"
-                    icon={<AiFillHome opacity=".8" />}
+                    linkName="timesheets"
+                    menuTitle="Timesheets"
+                    icon={<FaCalendar opacity=".8" />}
                     option={true}
-                    dropDown={["test", "New Admin"]}
+                    dropDown={["approval", "history"]}
+                />
+                <MenuItem
+                    linkName="financials"
+                    menuTitle="Financials"
+                    icon={<RiLineChartFill opacity=".8" />}
+                    option={true}
+                    dropDown={["expenses", "invoices", "payrolls", "payslips"]}
+                />
+                <MenuItem
+                    linkName="contracts"
+                    menuTitle="Contracts"
+                    icon={<FaFile opacity=".8" />}
+                    option={false}
+                    dropDown={[]}
+                />
+                <MenuItem
+                    linkName="my-profile"
+                    menuTitle="My Profile"
+                    icon={<FaUser opacity=".8" />}
+                    option={false}
+                    dropDown={[]}
+                />
+                <MenuItem
+                    linkName="settings"
+                    menuTitle="Settings"
+                    icon={<FaCogs opacity=".8" />}
+                    option={true}
+                    dropDown={["expense type"]}
                 />
             </VStack>
         </Box>

@@ -1,10 +1,26 @@
-import { Flex, Box, Text, Stack, HStack } from "@chakra-ui/react";
+import {
+    Flex,
+    Box,
+    Text,
+    Stack,
+    HStack,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Menu,
+    Circle,
+} from "@chakra-ui/react";
 import { FaUser } from "react-icons/fa";
 import { BsBellFill } from "react-icons/bs";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 function TopNav() {
     const router = useRouter();
+    function Logout() {
+        Cookies.remove("user");
+        router.push("/login");
+    }
     return (
         <Flex justify="space-between" pt=".5rem" pr="1rem">
             <Box color="brand.200">
@@ -21,10 +37,43 @@ function TopNav() {
                 </Text>
             </Box>
             <Stack direction="row" gap="2rem" color="gray.500" align="center">
-                <HStack>
-                    <FaUser />
-                    <Text>Oluwabukunmi</Text>
-                </HStack>
+                <Menu>
+                    <MenuButton>
+                        <HStack>
+                            <FaUser />
+                            <Text>Oluwabukunmi</Text>
+                        </HStack>
+                    </MenuButton>
+                    <MenuList>
+                        <MenuItem
+                            flexDirection="column"
+                            _hover={{ bgColor: "unset" }}
+                        >
+                            <Circle
+                                bgColor="brand.300"
+                                size="2.5rem"
+                                fontSize="1rem"
+                                color="white"
+                            >
+                                <FaUser />
+                            </Circle>
+                            <Text fontWeight="bold" color="brand.200">
+                                Super Admin Profile
+                            </Text>
+                            <Flex align="center" onClick={() => Logout()}>
+                                <FaUser />
+                                <Text
+                                    fontWeight="bold"
+                                    color="brand.200"
+                                    mb="0"
+                                    pl="1rem"
+                                >
+                                    Sign Out
+                                </Text>
+                            </Flex>
+                        </MenuItem>
+                    </MenuList>
+                </Menu>
                 <Box>
                     <BsBellFill />
                 </Box>

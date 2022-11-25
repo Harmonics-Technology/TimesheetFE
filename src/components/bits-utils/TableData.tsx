@@ -1,11 +1,21 @@
-import { Box, Td } from "@chakra-ui/react";
-import React from "react";
+import {
+    Box,
+    Button,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Td,
+} from "@chakra-ui/react";
+import Link from "next/link";
+import React, { useState } from "react";
+import { FaEllipsisH } from "react-icons/fa";
 
 export function TableData({ name }: { name: string }) {
     return (
         <Td
             pl="1rem"
-            fontSize="11px"
+            fontSize="13px"
             color="brand.200"
             fontWeight="400"
             // textTransform="uppercase"
@@ -30,6 +40,31 @@ export function TableStatus({ name }: { name: string }) {
             >
                 {name}
             </Box>
+        </td>
+    );
+}
+export function TableActions({ id }: { id: any }) {
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        <FaEllipsisH />
+                    </Box>
+                </MenuButton>
+                <MenuList>
+                    <MenuItem>Resend Invite</MenuItem>
+                    <MenuItem>
+                        <Link href={`admin/${id}`}>View Profile</Link>
+                    </MenuItem>
+                </MenuList>
+            </Menu>
         </td>
     );
 }

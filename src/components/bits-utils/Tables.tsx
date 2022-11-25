@@ -1,13 +1,4 @@
-import {
-    Divider,
-    Table,
-    TableContainer,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr,
-} from "@chakra-ui/react";
+import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 
 interface TablesProps {
@@ -24,7 +15,7 @@ function Tables({ tableHead, children }: TablesProps) {
                         {tableHead.map((x, i) => (
                             <Th
                                 pl="1rem"
-                                fontSize="11px"
+                                fontSize="12px"
                                 color="brand.200"
                                 fontWeight="600"
                                 // textTransform="capitalize"

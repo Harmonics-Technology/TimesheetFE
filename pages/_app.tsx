@@ -8,21 +8,37 @@ import { Hydrate } from "react-query/hydration";
 import { RootStoreProvider } from "@mobx";
 import "../src/styles/global.css";
 import Layout from "src/layout";
+import { UserProvider } from "@components/context/UserContext";
+import Head from "next/head";
+import Cookies from "js-cookie";
+import { OpenAPI } from "src/services";
 
 function MyApp({
     Component,
     pageProps,
 }: AppProps<{ dehydratedState: unknown }>): JSX.Element {
     const queryClient = new QueryClient();
+    OpenAPI.BASE = process.env.NEXT_PUBLIC_API_BASEURL as string;
+    OpenAPI.TOKEN = Cookies.get("token") as string;
     return (
         <ChakraProvider theme={theme}>
+            <Head>
+                <meta
+                    name="viewport"
+                    content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
+                />
+                <title>Timesheet</title>
+                <link rel="icon" href="/assets/logo.png" type="image/x-icon" />
+            </Head>
             <StyledThemeProvider>
                 <QueryClientProvider client={queryClient}>
                     <Hydrate state={pageProps.dehydratedState}>
                         <RootStoreProvider>
-                            <Layout>
-                                <Component {...pageProps} />
-                            </Layout>
+                            <UserProvider>
+                                <Layout>
+                                    <Component {...pageProps} />
+                                </Layout>
+                            </UserProvider>
                         </RootStoreProvider>
                     </Hydrate>
                 </QueryClientProvider>

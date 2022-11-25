@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, HStack, Square, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, HStack, Square, Stack, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { FaArrowRight, FaUser } from "react-icons/fa";
 
