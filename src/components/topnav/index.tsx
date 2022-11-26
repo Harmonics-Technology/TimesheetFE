@@ -11,6 +11,7 @@ import {
     Circle,
 } from "@chakra-ui/react";
 import { FaUser } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
 import { BsBellFill } from "react-icons/bs";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
@@ -21,6 +22,8 @@ function TopNav() {
         Cookies.remove("user");
         router.push("/login");
     }
+    const curPage = router.pathname.split("/").at(-1);
+    const idPage = router.pathname.split("/").at(-2);
     return (
         <Flex justify="space-between" pt=".5rem" pr="1rem">
             <Box color="brand.200">
@@ -33,7 +36,7 @@ function TopNav() {
                     fontSize="1rem"
                     textTransform="capitalize"
                 >
-                    {router.pathname.replace("/admin/", "").split("/")[0]}
+                    {curPage == "[id]" ? idPage : curPage}
                 </Text>
             </Box>
             <Stack direction="row" gap="2rem" color="gray.500" align="center">
@@ -49,8 +52,8 @@ function TopNav() {
                             flexDirection="column"
                             _hover={{ bgColor: "unset" }}
                         >
-                            <Circle
-                                bgColor="brand.300"
+                            {/* <Circle
+                                bgColor="brand.600"
                                 size="2.5rem"
                                 fontSize="1rem"
                                 color="white"
@@ -59,9 +62,9 @@ function TopNav() {
                             </Circle>
                             <Text fontWeight="bold" color="brand.200">
                                 Super Admin Profile
-                            </Text>
+                            </Text> */}
                             <Flex align="center" onClick={() => Logout()}>
-                                <FaUser />
+                                <FiLogOut />
                                 <Text
                                     fontWeight="bold"
                                     color="brand.200"

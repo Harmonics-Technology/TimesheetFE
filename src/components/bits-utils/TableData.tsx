@@ -43,7 +43,7 @@ export function TableStatus({ name }: { name: string }) {
         </td>
     );
 }
-export function TableActions({ id }: { id: any }) {
+export function TableActions({ id, route }: { id: any; route: string }) {
     return (
         <td>
             <Menu>
@@ -61,7 +61,7 @@ export function TableActions({ id }: { id: any }) {
                 <MenuList>
                     <MenuItem>Resend Invite</MenuItem>
                     <MenuItem>
-                        <Link href={`admin/${id}`}>View Profile</Link>
+                        <Link href={`${route}/${id}`}>View Profile</Link>
                     </MenuItem>
                 </MenuList>
             </Menu>

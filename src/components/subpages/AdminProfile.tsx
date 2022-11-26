@@ -112,6 +112,15 @@ function AdminProfile() {
                 </Grid>
                 <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem" my="2rem">
                     <Button
+                        bgColor="gray.500"
+                        color="white"
+                        height="3rem"
+                        fontSize="14px"
+                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                    >
+                        Back
+                    </Button>
+                    <Button
                         bgColor="brand.400"
                         color="white"
                         height="3rem"
@@ -122,15 +131,6 @@ function AdminProfile() {
                             <VscSaveAs />
                         </Box>
                         <Box>Update Profile</Box>
-                    </Button>
-                    <Button
-                        bgColor="gray.500"
-                        color="white"
-                        height="3rem"
-                        fontSize="14px"
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                    >
-                        Back
                     </Button>
                 </Grid>
             </form>

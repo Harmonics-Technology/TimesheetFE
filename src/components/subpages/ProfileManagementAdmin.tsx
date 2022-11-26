@@ -71,34 +71,33 @@ function ProfileManagementAdmin() {
         },
     ];
     const onSubmit = async (data: RegisterModel) => {
-        try {
-            const result = await UserService.create(data);
-            if (result.status) {
-                toast({
-                    title: `Successfully created`,
-                    status: "success",
-                    isClosable: true,
-                    position: "top-right",
-                });
-                onClose();
-                return;
-            }
-            toast({
-                title: result.message,
-                status: "error",
-                isClosable: true,
-                position: "top-right",
-            });
-
-            return;
-        } catch (err) {
-            toast({
-                title: "An error occurred",
-                status: "error",
-                isClosable: true,
-                position: "top-right",
-            });
-        }
+        // try {
+        //     const result = await UserService.create(data);
+        //     if (result.status) {
+        //         toast({
+        //             title: `Successfully created`,
+        //             status: "success",
+        //             isClosable: true,
+        //             position: "top-right",
+        //         });
+        //         onClose();
+        //         return;
+        //     }
+        //     toast({
+        //         title: result.message,
+        //         status: "error",
+        //         isClosable: true,
+        //         position: "top-right",
+        //     });
+        //     return;
+        // } catch (err) {
+        //     toast({
+        //         title: "An error occurred",
+        //         status: "error",
+        //         isClosable: true,
+        //         position: "top-right",
+        //     });
+        // }
     };
     return (
         <>
@@ -139,7 +138,7 @@ function ProfileManagementAdmin() {
                             <TableData name={"dotunbrown@gmail.com"} />
                             <TableData name={"SuperAdmin"} />
                             <TableStatus name={"ACTIVE"} />
-                            <TableActions id={"12"} />
+                            <TableActions id={"12"} route="clients" />
                         </Tr>
                         <Tr>
                             <TableData name={"Olade"} />
@@ -165,7 +164,7 @@ function ProfileManagementAdmin() {
                         <Circle
                             bgColor="white"
                             color="brand.200"
-                            border="1px solid #f2f2f2"
+                            border="1px solid #767676"
                             size="2rem"
                         >
                             <FaAngleLeft fontSize=".6rem" />
@@ -176,7 +175,7 @@ function ProfileManagementAdmin() {
                         <Circle
                             bgColor="white"
                             color="brand.200"
-                            border="1px solid #f2f2f2"
+                            border="1px solid #767676"
                             size="2rem"
                         >
                             2
@@ -184,7 +183,7 @@ function ProfileManagementAdmin() {
                         <Circle
                             bgColor="white"
                             color="brand.200"
-                            border="1px solid #f2f2f2"
+                            border="1px solid #767676"
                             size="2rem"
                         >
                             <FaAngleRight fontSize=".6rem" />
@@ -298,6 +297,7 @@ function ProfileManagementAdmin() {
                                 height="3rem"
                                 fontSize="14px"
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                onClick={() => onClose()}
                             >
                                 Close
                             </Button>

@@ -29,67 +29,75 @@ function MenuItem({
     const router = useRouter();
     const [openMenu, setOpenMenu] = useState(false);
     return (
-        <Link href={option ? "" : `/admin/${linkName}`} passHref>
-            <Box
-                onClick={option ? () => setOpenMenu(!openMenu) : undefined}
-                h={openMenu && option ? "100%" : "2rem"}
-                overflow="hidden"
-                transition="height .35s ease"
-            >
-                <Flex justify="space-between" align="center" cursor="pointer">
-                    <HStack>
-                        <Square
-                            bgColor={
-                                router.pathname.startsWith(`/admin/${linkName}`)
-                                    ? "brand.400"
-                                    : "brand.500"
-                            }
-                            color={
-                                router.pathname.startsWith(`/admin/${linkName}`)
-                                    ? "white"
-                                    : "brand.400"
-                            }
-                            borderRadius="8px"
-                            size="2rem"
-                            fontSize=".65rem"
-                        >
-                            {icon}
-                        </Square>
-                        <Text
-                            color={
-                                router.pathname.startsWith(`/admin/${linkName}`)
-                                    ? "brand.200"
-                                    : "brand.300"
-                            }
-                            fontWeight={
-                                router.pathname.startsWith(`/admin/${linkName}`)
-                                    ? "600"
-                                    : "500"
-                            }
-                            fontSize=".9rem"
-                            fontFamily="Open Sans"
-                            pl=".5rem"
-                        >
-                            {menuTitle}
-                        </Text>
-                        <Text display="none">{linkName}</Text>
-                    </HStack>
-                    {option && (
-                        <>
-                            {openMenu ? (
-                                <FaAngleUp color="gray" />
-                            ) : (
-                                <FaAngleDown color="gray" />
-                            )}
-                        </>
-                    )}
-                </Flex>
-                {option && (
-                    <UnorderedList
-                        pl="1rem"
-                        mt=".4rem !important"
-                        transition="all .2s ease"
+        <>
+            {option ? (
+                <Box
+                    onClick={() => setOpenMenu(!openMenu)}
+                    overflow="hidden"
+                    transition="all .35s ease-in-out"
+                    maxH={openMenu ? "13rem" : "2rem"}
+                >
+                    <Flex
+                        justify="space-between"
+                        align="center"
+                        cursor="pointer"
                     >
+                        <HStack>
+                            <Square
+                                bgColor={
+                                    router.pathname.startsWith(
+                                        `/admin/${linkName}`,
+                                    )
+                                        ? "brand.400"
+                                        : "brand.500"
+                                }
+                                color={
+                                    router.pathname.startsWith(
+                                        `/admin/${linkName}`,
+                                    )
+                                        ? "white"
+                                        : "brand.400"
+                                }
+                                borderRadius="8px"
+                                size="2rem"
+                                fontSize=".65rem"
+                            >
+                                {icon}
+                            </Square>
+                            <Text
+                                color={
+                                    router.pathname.startsWith(
+                                        `/admin/${linkName}`,
+                                    )
+                                        ? "brand.200"
+                                        : "brand.300"
+                                }
+                                fontWeight={
+                                    router.pathname.startsWith(
+                                        `/admin/${linkName}`,
+                                    )
+                                        ? "600"
+                                        : "500"
+                                }
+                                fontSize=".9rem"
+                                fontFamily="Open Sans"
+                                pl=".5rem"
+                            >
+                                {menuTitle}
+                            </Text>
+                            <Text display="none">{linkName}</Text>
+                        </HStack>
+
+                        <Box
+                            transform={
+                                openMenu ? "rotate(-180deg)" : "rotate(0deg)"
+                            }
+                            transition="all .35s ease-in-out"
+                        >
+                            <FaAngleDown color="gray" />
+                        </Box>
+                    </Flex>
+                    <UnorderedList pl="1rem" mt=".4rem !important">
                         {dropDown.map((x, i) => (
                             <ListItem
                                 key={i}
@@ -115,9 +123,59 @@ function MenuItem({
                             </ListItem>
                         ))}
                     </UnorderedList>
-                )}
-            </Box>
-        </Link>
+                </Box>
+            ) : (
+                <Link href={`/admin/${linkName}`} passHref>
+                    <Box overflow="hidden" cursor="pointer">
+                        <HStack>
+                            <Square
+                                bgColor={
+                                    router.pathname.startsWith(
+                                        `/admin/${linkName}`,
+                                    )
+                                        ? "brand.400"
+                                        : "brand.500"
+                                }
+                                color={
+                                    router.pathname.startsWith(
+                                        `/admin/${linkName}`,
+                                    )
+                                        ? "white"
+                                        : "brand.400"
+                                }
+                                borderRadius="8px"
+                                size="2rem"
+                                fontSize=".65rem"
+                            >
+                                {icon}
+                            </Square>
+                            <Text
+                                color={
+                                    router.pathname.startsWith(
+                                        `/admin/${linkName}`,
+                                    )
+                                        ? "brand.200"
+                                        : "brand.300"
+                                }
+                                fontWeight={
+                                    router.pathname.startsWith(
+                                        `/admin/${linkName}`,
+                                    )
+                                        ? "600"
+                                        : "500"
+                                }
+                                fontSize=".9rem"
+                                fontFamily="Open Sans"
+                                pl=".5rem"
+                            >
+                                {menuTitle}
+                            </Text>
+                            <Text display="none">{linkName}</Text>
+                        </HStack>
+                    </Box>
+                </Link>
+            )}
+        </>
     );
 }
 
