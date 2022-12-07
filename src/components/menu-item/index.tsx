@@ -28,6 +28,7 @@ function MenuItem({
 }: MenuProps) {
     const router = useRouter();
     const [openMenu, setOpenMenu] = useState(false);
+    const url = `/admin/${linkName}`;
     return (
         <>
             {option ? (
@@ -45,16 +46,12 @@ function MenuItem({
                         <HStack>
                             <Square
                                 bgColor={
-                                    router.pathname.startsWith(
-                                        `/admin/${linkName}`,
-                                    )
+                                    router.pathname.startsWith(url)
                                         ? "brand.400"
                                         : "brand.500"
                                 }
                                 color={
-                                    router.pathname.startsWith(
-                                        `/admin/${linkName}`,
-                                    )
+                                    router.pathname.startsWith(url)
                                         ? "white"
                                         : "brand.400"
                                 }
@@ -66,22 +63,19 @@ function MenuItem({
                             </Square>
                             <Text
                                 color={
-                                    router.pathname.startsWith(
-                                        `/admin/${linkName}`,
-                                    )
+                                    router.pathname.startsWith(url)
                                         ? "brand.200"
                                         : "brand.300"
                                 }
                                 fontWeight={
-                                    router.pathname.startsWith(
-                                        `/admin/${linkName}`,
-                                    )
+                                    router.pathname.startsWith(url)
                                         ? "600"
                                         : "500"
                                 }
                                 fontSize=".9rem"
                                 fontFamily="Open Sans"
                                 pl=".5rem"
+                                noOfLines={1}
                             >
                                 {menuTitle}
                             </Text>
@@ -103,15 +97,13 @@ function MenuItem({
                                 key={i}
                                 color="brand.300"
                                 fontSize={
-                                    router.pathname ===
-                                    `/admin/${linkName}/${x}`
+                                    router.pathname.startsWith(`${url}/${x}`)
                                         ? "1rem"
                                         : ".875rem"
                                 }
                                 p=" .5rem 0 .5rem 1.2rem"
                                 fontWeight={
-                                    router.pathname ===
-                                    `/admin/${linkName}/${x}`
+                                    router.pathname.startsWith(`${url}/${x}`)
                                         ? "bold"
                                         : "400"
                                 }
@@ -167,6 +159,7 @@ function MenuItem({
                                 fontSize=".9rem"
                                 fontFamily="Open Sans"
                                 pl=".5rem"
+                                noOfLines={1}
                             >
                                 {menuTitle}
                             </Text>

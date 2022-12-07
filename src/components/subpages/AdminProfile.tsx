@@ -6,6 +6,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { CleaningModel } from "@interfaces/types";
 import { VscSaveAs } from "react-icons/vsc";
+import roles from "../generics/roles.json";
+import { PrimarySelect } from "@components/bits-utils/PrimarySelect";
 
 const schema = yup.object().shape({
     buildingType: yup.string(),
@@ -70,7 +72,7 @@ function AdminProfile() {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
                     <PrimaryInput<CleaningModel>
-                        label="No. of Bedrooms"
+                        label="First Name"
                         name="numberOfBedrooms"
                         error={errors.numberOfBedrooms}
                         placeholder=""
@@ -78,7 +80,7 @@ function AdminProfile() {
                         register={register}
                     />
                     <PrimaryInput<CleaningModel>
-                        label="No. of Bedrooms"
+                        label="Last Name"
                         name="numberOfBedrooms"
                         error={errors.numberOfBedrooms}
                         placeholder=""
@@ -86,23 +88,31 @@ function AdminProfile() {
                         register={register}
                     />
                     <PrimaryInput<CleaningModel>
-                        label="No. of Bedrooms"
+                        label="Email"
                         name="numberOfBedrooms"
                         error={errors.numberOfBedrooms}
                         placeholder=""
                         defaultValue=""
                         register={register}
                     />
-                    <PrimaryInput<CleaningModel>
-                        label="No. of Bedrooms"
-                        name="numberOfBedrooms"
-                        error={errors.numberOfBedrooms}
-                        placeholder=""
-                        defaultValue=""
+                    <PrimarySelect<CleaningModel>
                         register={register}
+                        name="fileName"
+                        error={errors.fileName}
+                        label="Role"
+                        placeholder="..."
+                        options={
+                            <>
+                                {roles.map((x: any) => {
+                                    return (
+                                        <option value={x.id}>{x.title}</option>
+                                    );
+                                })}
+                            </>
+                        }
                     />
                     <PrimaryInput<CleaningModel>
-                        label="No. of Bedrooms"
+                        label="Profile Status"
                         name="numberOfBedrooms"
                         error={errors.numberOfBedrooms}
                         placeholder=""

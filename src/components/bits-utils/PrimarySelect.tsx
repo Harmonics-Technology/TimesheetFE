@@ -3,10 +3,8 @@ import {
     FormErrorMessage,
     FormLabel,
     Select,
-    Text,
 } from "@chakra-ui/react";
 import { FieldError, Path, UseFormRegister } from "react-hook-form";
-import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
@@ -19,6 +17,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     fontSize?: string;
     options: any;
     defaultValue?: any;
+    id?: any;
 }
 export const PrimarySelect = <TFormValues extends Record<string, any>>({
     name,
@@ -31,6 +30,7 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
     fontSize = ".8rem",
     options,
     defaultValue,
+    id,
 }: FormInputProps<TFormValues>) => {
     return (
         <FormControl isInvalid={error?.type === "required"}>
@@ -51,6 +51,7 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
                 textTransform="capitalize"
                 placeholder={placeholder}
                 defaultValue={defaultValue}
+                id={id}
                 // isReadOnly
             >
                 {/* <option disabled>{placeholder}</option> */}

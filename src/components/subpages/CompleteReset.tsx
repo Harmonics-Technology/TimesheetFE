@@ -38,10 +38,14 @@ const CompleteReset = ({ code }: { code: string }) => {
         },
         mode: "all",
     });
-    const [showSuccess, setShowSuccess] = useState(true);
+    const [showSuccess, setShowSuccess] = useState(false);
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+    const [passwordVisibleB, setPasswordVisibleB] = useState<boolean>(false);
     const changeInputType = () => {
         setPasswordVisible(!passwordVisible);
+    };
+    const changeInputTypeB = () => {
+        setPasswordVisibleB(!passwordVisibleB);
     };
 
     const onSubmit = async (data: LoginModel) => {
@@ -118,10 +122,12 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     error={errors.password}
                                     defaultValue=""
                                     placeholder="*********"
-                                    type={passwordVisible ? "text" : "password"}
+                                    type={
+                                        passwordVisibleB ? "text" : "password"
+                                    }
                                     icon={true}
-                                    passwordVisible={passwordVisible}
-                                    changeVisibility={changeInputType}
+                                    passwordVisible={passwordVisibleB}
+                                    changeVisibility={changeInputTypeB}
                                     label="Confirm Password"
                                     fontSize="1rem"
                                 />

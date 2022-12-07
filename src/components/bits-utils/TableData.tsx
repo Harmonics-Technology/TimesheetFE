@@ -6,19 +6,21 @@ import {
     MenuItem,
     MenuList,
     Td,
+    useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaEllipsisH } from "react-icons/fa";
+import { InitiateResetModel, UserService } from "src/services";
 
-export function TableData({ name }: { name: string }) {
+export function TableData({ name }: { name: string | undefined | null }) {
     return (
         <Td
             pl="1rem"
             fontSize="13px"
             color="brand.200"
             fontWeight="400"
-            // textTransform="uppercase"
+            textTransform="capitalize"
             py=".8rem"
         >
             {name}
@@ -43,7 +45,40 @@ export function TableStatus({ name }: { name: string }) {
         </td>
     );
 }
-export function TableActions({ id, route }: { id: any; route: string }) {
+export function TableActions({
+    id,
+    route,
+    email,
+}: {
+    id: any;
+    route: string;
+    email: any;
+}) {
+    const toast = useToast();
+    const resendInvite = async (data: InitiateResetModel) => {
+        console.log(data.email);
+        try {
+            const result = await UserService.resendInvite(data);
+            if (result.status) {
+                console.log({ result });
+                toast({
+                    title: `Login Successful`,
+                    status: "success",
+                    isClosable: true,
+                    position: "top-right",
+                });
+                return;
+            }
+            toast({
+                title: result.message,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        } catch (error) {
+            console.log({ error });
+        }
+    };
     return (
         <td>
             <Menu>
@@ -59,7 +94,9 @@ export function TableActions({ id, route }: { id: any; route: string }) {
                     </Box>
                 </MenuButton>
                 <MenuList>
-                    <MenuItem>Resend Invite</MenuItem>
+                    <MenuItem onClick={() => resendInvite({ email })}>
+                        Resend Invite
+                    </MenuItem>
                     <MenuItem>
                         <Link href={`${route}/${id}`}>View Profile</Link>
                     </MenuItem>

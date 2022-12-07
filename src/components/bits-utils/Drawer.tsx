@@ -23,7 +23,7 @@ export default function DrawerWrapper({
         <>
             <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
                 <DrawerOverlay />
-                <DrawerContent maxW="50%" px="1rem">
+                <DrawerContent maxW={["100%", "50%"]} px="1rem">
                     <DrawerCloseButton />
                     <DrawerHeader borderBottomWidth="1px" mt="1rem">
                         <Text>Add new admin</Text>

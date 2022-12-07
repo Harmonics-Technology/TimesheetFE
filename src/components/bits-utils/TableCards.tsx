@@ -15,6 +15,7 @@ function TableCards({ title, url }: TableCardsProps) {
             bgColor="white"
             borderRadius="15px"
             padding="1.5rem"
+            overflow="hidden"
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
             <Text

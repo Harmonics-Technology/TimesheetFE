@@ -170,6 +170,7 @@ userId: string,
      * @param role 
      * @param offset 
      * @param limit 
+     * @param search 
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -177,6 +178,7 @@ userId: string,
 role: string,
 offset?: number,
 limit?: number,
+search?: string,
 ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -187,10 +189,27 @@ limit?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'Search': search,
             },
             errors: {
                 401: `Unauthorized`,
             },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static resendInvite(
+requestBody?: InitiateResetModel,
+): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/invite/resend',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
         });
     }
 

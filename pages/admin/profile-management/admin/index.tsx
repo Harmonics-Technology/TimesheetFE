@@ -1,28 +1,43 @@
+import { filterPagingSearchOptions } from "@components/generics/filterPagingSearchOptions";
+import { withPageAuth } from "@components/generics/withPageAuth";
 import ProfileManagementAdmin from "@components/subpages/ProfileManagementAdmin";
 import { GetServerSideProps } from "next";
 import React from "react";
-import { UserService } from "src/services";
+import {
+    UserService,
+    UserViewPagedCollectionStandardResponse,
+} from "src/services";
+interface adminProps {
+    adminList: UserViewPagedCollectionStandardResponse;
+}
 
-function admin() {
-    return <ProfileManagementAdmin />;
+function admin({ adminList }: adminProps) {
+    return <ProfileManagementAdmin adminList={adminList} />;
 }
 
 export default admin;
 
-// export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
-//     try {
-//         const data = await UserService.listUsers();
-//         return {
-//             props: {
-//                 data: data,
-//             },
-//         };
-//     } catch (error: any) {
-//         console.log(error);
-//         return {
-//             props: {
-//                 data: [],
-//             },
-//         };
-//     }
-// };
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx: any) => {
+        const pagingOptions = filterPagingSearchOptions(ctx);
+        try {
+            const data = await UserService.listUsers(
+                "admin",
+                pagingOptions.offset,
+                pagingOptions.limit,
+            );
+            return {
+                props: {
+                    adminList: data,
+                },
+            };
+        } catch (error: any) {
+            console.log(error);
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);
