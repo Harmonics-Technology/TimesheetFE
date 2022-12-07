@@ -56,11 +56,11 @@ export function TableActions({
 }) {
     const toast = useToast();
     const resendInvite = async (data: InitiateResetModel) => {
-        console.log(data.email);
+        // console.log(data.email);
         try {
             const result = await UserService.resendInvite(data);
             if (result.status) {
-                console.log({ result });
+                // console.log({ result });
                 toast({
                     title: `Login Successful`,
                     status: "success",

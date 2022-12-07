@@ -11,24 +11,24 @@ function AdminDetails({ data }: pageOptions) {
 
 export default AdminDetails;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(
-    async (ctx: any) => {
-        const { id } = ctx.query;
-        console.log({ id });
-        try {
-            const data = await UserService.listUsers(id);
-            return {
-                props: {
-                    adminList: data,
-                },
-            };
-        } catch (error: any) {
-            console.log(error);
-            return {
-                props: {
-                    data: [],
-                },
-            };
-        }
-    },
-);
+// export const getServerSideProps: GetServerSideProps = withPageAuth(
+//     async (ctx: any) => {
+//         const { id } = ctx.query;
+//         console.log({ id });
+//         try {
+//             const data = await UserService.listUsers(id);
+//             return {
+//                 props: {
+//                     adminList: data,
+//                 },
+//             };
+//         } catch (error: any) {
+//             console.log(error);
+//             return {
+//                 props: {
+//                     data: [],
+//                 },
+//             };
+//         }
+//     },
+// );
