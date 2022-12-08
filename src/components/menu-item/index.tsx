@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { FaAngleDown } from "react-icons/fa";
 
 interface MenuProps {
     menuTitle: string;

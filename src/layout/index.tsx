@@ -1,9 +1,8 @@
-import { Box, Flex, HStack, Text } from "@chakra-ui/react";
-import { UserContext } from "@components/context/UserContext";
+import { Box, Flex } from "@chakra-ui/react";
 import SideNav from "@components/sidenav";
 import TopNav from "@components/topnav";
 import { useRouter } from "next/router";
-import React, { ReactNode, useContext, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import Footer from "./Footer";
 
 type LayoutProps = {

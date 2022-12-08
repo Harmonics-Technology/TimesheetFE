@@ -84,7 +84,7 @@ function MyProfile() {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid
                     templateColumns="repeat(3,1fr)"
-                    gap="1rem 2rem"
+                    gap="1rem 1rem"
                     my="1.5rem"
                 >
                     <Box
@@ -96,7 +96,7 @@ function MyProfile() {
                         <Text
                             fontWeight="600"
                             fontSize="1.1rem"
-                            mb="3rem"
+                            mb="2rem"
                             textTransform="capitalize"
                             fontFamily="Open Sans"
                             color="brand.200"
@@ -111,6 +111,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                             <PrimaryInput<CleaningModel>
                                 label="No. of Bedrooms"
@@ -119,6 +120,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                             <PrimaryInput<CleaningModel>
                                 label="No. of Bedrooms"
@@ -127,6 +129,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                             <PrimaryInput<CleaningModel>
                                 label="No. of Bedrooms"
@@ -135,6 +138,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                         </Grid>
                     </Box>
@@ -147,7 +151,7 @@ function MyProfile() {
                         <Text
                             fontWeight="600"
                             fontSize="1.1rem"
-                            mb="3rem"
+                            mb="2rem"
                             textTransform="capitalize"
                             fontFamily="Open Sans"
                             color="brand.200"
@@ -162,6 +166,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                             <PrimaryInput<CleaningModel>
                                 label="No. of Bedrooms"
@@ -170,6 +175,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                             <PrimaryInput<CleaningModel>
                                 label="No. of Bedrooms"
@@ -178,6 +184,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                             <PrimaryInput<CleaningModel>
                                 label="No. of Bedrooms"
@@ -186,6 +193,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                         </Grid>
                     </Box>
@@ -198,7 +206,7 @@ function MyProfile() {
                         <Text
                             fontWeight="600"
                             fontSize="1.1rem"
-                            mb="3rem"
+                            mb="2rem"
                             textTransform="capitalize"
                             fontFamily="Open Sans"
                             color="brand.200"
@@ -213,6 +221,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                             <PrimaryInput<CleaningModel>
                                 label="No. of Bedrooms"
@@ -221,6 +230,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                             <PrimaryInput<CleaningModel>
                                 label="No. of Bedrooms"
@@ -229,6 +239,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                             <PrimaryInput<CleaningModel>
                                 label="No. of Bedrooms"
@@ -237,6 +248,7 @@ function MyProfile() {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                h="2rem"
                             />
                         </Grid>
                     </Box>

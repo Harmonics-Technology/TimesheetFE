@@ -62,7 +62,7 @@ export function TableActions({
             if (result.status) {
                 // console.log({ result });
                 toast({
-                    title: `Login Successful`,
+                    title: result.message,
                     status: "success",
                     isClosable: true,
                     position: "top-right",

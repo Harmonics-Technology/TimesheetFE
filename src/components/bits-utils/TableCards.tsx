@@ -12,7 +12,7 @@ interface TableCardsProps {
     data: UserView[] | null | undefined;
 }
 function TableCards({ title, url, data }: TableCardsProps) {
-    console.log({ data });
+    // console.log({ data });
     return (
         <Box
             bgColor="white"
@@ -35,7 +35,7 @@ function TableCards({ title, url, data }: TableCardsProps) {
             <Tables tableHead={["CLIENT NAME", "EMAIL", "STATUS"]}>
                 <Link href={"/admin/rent/applications/"} key={1}>
                     <>
-                        {data?.map((x: UserView) => (
+                        {data?.slice(0, 4).map((x: UserView) => (
                             <Tr>
                                 <TableData name={x.firstName} />
                                 <TableData name={x.email} />

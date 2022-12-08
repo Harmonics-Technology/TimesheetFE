@@ -1,34 +1,36 @@
 import { withPageAuth } from "@components/generics/withPageAuth";
 import AdminProfile from "@components/subpages/AdminProfile";
 import { GetServerSideProps } from "next";
+import { UserService } from "src/services";
 interface pageOptions {
-    data: any;
+    userProfile: any;
 }
 
-function AdminDetails({ data }: pageOptions) {
-    return <AdminProfile />;
+function AdminDetails({ userProfile }: pageOptions) {
+    return <AdminProfile userProfile={userProfile} />;
 }
 
 export default AdminDetails;
 
-// export const getServerSideProps: GetServerSideProps = withPageAuth(
-//     async (ctx: any) => {
-//         const { id } = ctx.query;
-//         console.log({ id });
-//         try {
-//             const data = await UserService.listUsers(id);
-//             return {
-//                 props: {
-//                     adminList: data,
-//                 },
-//             };
-//         } catch (error: any) {
-//             console.log(error);
-//             return {
-//                 props: {
-//                     data: [],
-//                 },
-//             };
-//         }
-//     },
-// );
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx: any) => {
+        const { id } = ctx.query;
+        // console.log({ id });
+        try {
+            const data = await UserService.getUserById(id);
+            // console.log({ data });
+            return {
+                props: {
+                    userProfile: data.data,
+                },
+            };
+        } catch (error: any) {
+            console.log(error);
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);

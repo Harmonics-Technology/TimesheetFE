@@ -31,7 +31,7 @@ const schema = yup.object().shape({
 
 function Login() {
     const router = useRouter();
-    const { user, setUser } = useContext(UserContext);
+    const { setUser } = useContext(UserContext);
     const path = Cookies.get("path") as string;
     const toast = useToast();
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
@@ -80,6 +80,7 @@ function Login() {
                 title: result.message,
                 status: "error",
                 isClosable: true,
+                position: "top-right",
             });
             return;
         } catch (error) {
@@ -88,6 +89,7 @@ function Login() {
                 title: `Check your network connection and try again`,
                 status: "error",
                 isClosable: true,
+                position: "top-right",
             });
         }
     };

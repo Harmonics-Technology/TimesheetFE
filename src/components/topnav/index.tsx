@@ -35,7 +35,14 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     const curPage = router.pathname.split("/").at(-1);
     const idPage = router.pathname.split("/").at(-2);
     return (
-        <Flex justify="space-between" pt=".5rem" pr="1rem">
+        <Flex
+            justify="space-between"
+            pt=".5rem"
+            pr="1rem"
+            pos="sticky"
+            top="0"
+            bgColor="#f6f7f8"
+        >
             <Box color="brand.200">
                 <Text
                     fontSize=".875rem"

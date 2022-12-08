@@ -1,90 +1,65 @@
 import {
     Box,
     Flex,
-    HStack,
     Image,
     Text,
     Link,
     VStack,
     Button,
     useToast,
-    Checkbox,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useForm } from "react-hook-form";
-import { useContext, useEffect, useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/router";
-import Cookies from "js-cookie";
-// import {
-//     AdminService,
-//     LoginModel,
-//     OpenAPI,
-//     UserViewStandardResponse,
-// } from "Services";
-interface LoginModel {
-    email: string;
-    password: string;
-}
 import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
-import { UserContext } from "@components/context/UserContext";
+import { InitiateResetModel, UserService } from "src/services";
+import { useRouter } from "next/router";
 const schema = yup.object().shape({
     email: yup.string().required("Email is required"),
-    password: yup.string().required("Password is required"),
 });
 
 function ForgotPassword() {
-    const router = useRouter();
-    const { setAdmin } = useContext(UserContext);
-    const path = Cookies.get("path") as string;
     const toast = useToast();
+    const router = useRouter();
     const {
         handleSubmit,
         register,
         formState: { errors, isSubmitting },
-    } = useForm<LoginModel>({
+    } = useForm<InitiateResetModel>({
         resolver: yupResolver(schema),
         mode: "all",
     });
 
-    const onSubmit = async (data: LoginModel) => {
-        // try {
-        //     const result = (await AdminService.authenticate(
-        //         data,
-        //     )) as UserViewStandardResponse;
-        //     if (result.status) {
-        //         OpenAPI.TOKEN = result?.data?.token as string;
-        //         toast({
-        //             title: `show toast`,
-        //             status: "success",
-        //             isClosable: true,
-        //         });
-        //         setAdmin(result.data);
-        //         Cookies.set("admin", JSON.stringify(result.data));
-        //         result.data &&
-        //             Cookies.set("token", result.data.token as string);
-        //         if (typeof path === "string" && path.trim().length === 0) {
-        //             router.push(path);
-        //             return;
-        //         }
-        //         router.push("/admin/dashboard");
-        //         return;
-        //     }
-        //     toast({
-        //         title: `show toast`,
-        //         status: "error",
-        //         isClosable: true,
-        //     });
-        //     return;
-        // } catch (error) {
-        //     console.log(error);
-        //     toast({
-        //         title: `show toast`,
-        //         status: "error",
-        //         isClosable: true,
-        //     });
-        // }
+    const onSubmit = async (data: InitiateResetModel) => {
+        try {
+            const result = await UserService.resendInvite(data);
+            if (result.status) {
+                // console.log({ result });
+                toast({
+                    title: result.message,
+                    status: "success",
+                    isClosable: true,
+                    position: "top-right",
+                });
+                router.push("/login");
+                return;
+            }
+            toast({
+                title: result.message,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        } catch (error) {
+            console.log({ error });
+            toast({
+                title: `check your network connection and try again`,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        }
     };
     return (
         <Flex w="full" h="100vh" justify="center" alignItems="center">
@@ -109,7 +84,7 @@ function ForgotPassword() {
 
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <VStack w="full" spacing=".7rem">
-                        <PrimaryInput<LoginModel>
+                        <PrimaryInput<InitiateResetModel>
                             register={register}
                             name="email"
                             error={errors.email}

@@ -1,55 +1,68 @@
-import { Box, Button, Grid, Text } from "@chakra-ui/react";
+import { Box, Button, Grid, Text, useToast } from "@chakra-ui/react";
 import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { CleaningModel } from "@interfaces/types";
 import { VscSaveAs } from "react-icons/vsc";
 import roles from "../generics/roles.json";
 import { PrimarySelect } from "@components/bits-utils/PrimarySelect";
+import { UpdateUserModel, UserService, UserView } from "src/services";
+import InputBlank from "@components/bits-utils/InputBlank";
 
 const schema = yup.object().shape({
-    buildingType: yup.string(),
-    buildingState: yup.string(),
-    propertyTypeId: yup.number().required(),
-    dateNeeded: yup.string().required(),
-    numberOfBathrooms: yup.string().required(),
-    numberOfBedrooms: yup.string().required(),
-    numberOfFloors: yup.string().required(),
+    firstName: yup.string().required(),
+    lastName: yup.string().required(),
+    role: yup.string().required(),
+    isActive: yup.string().required(),
+    id: yup.string().required(),
 });
-
-function AdminProfile() {
+interface AdminProfileProps {
+    userProfile?: UserView;
+}
+function AdminProfile({ userProfile }: AdminProfileProps) {
     const {
         register,
         handleSubmit,
-        formState: { errors, isValid },
-    } = useForm<CleaningModel>({
+        formState: { errors, isSubmitting },
+    } = useForm<UpdateUserModel>({
         resolver: yupResolver(schema),
         mode: "all",
+        defaultValues: {
+            id: userProfile?.id,
+        },
     });
-    const onSubmit = async (data: CleaningModel) => {
-        // data.dateNeeded = new Date(
-        //     data.dateNeeded as unknown as Date,
-        // ).toLocaleDateString();
-        // try {
-        //     const result = await (await RequestCleaning(undefined, data)).data;
-        //     if (result.status) {
-        //         onClose();
-        //         addToast("Job created sucessfully", {
-        //             appearance: "success",
-        //             autoDismiss: true,
-        //         });
-        //         router.reload();
-        //         return;
-        //     }
-        //     onClose();
-        //     addToast(result.message, {
-        //         appearance: "error",
-        //         autoDismiss: true,
-        //     });
-        //     return;
-        // } catch (err) {}
+    const toast = useToast();
+    const onSubmit = async (data: UpdateUserModel) => {
+        data.isActive = data.isActive === ("true" as unknown as boolean);
+
+        try {
+            const result = await UserService.adminUpdateUser(data);
+            // console.log({ result });
+            if (result.status) {
+                toast({
+                    title: "Profile Update Success",
+                    status: "success",
+                    isClosable: true,
+                    position: "top-right",
+                });
+                return;
+            }
+            toast({
+                title: result.message,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        } catch (error) {
+            console.log(error);
+            toast({
+                title: `Check your network connection and try again`,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        }
     };
     return (
         <Box
@@ -71,53 +84,62 @@ function AdminProfile() {
             </Text>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
-                    <PrimaryInput<CleaningModel>
+                    <PrimaryInput<UpdateUserModel>
                         label="First Name"
-                        name="numberOfBedrooms"
-                        error={errors.numberOfBedrooms}
+                        name="firstName"
+                        error={errors.firstName}
                         placeholder=""
-                        defaultValue=""
+                        defaultValue={userProfile?.firstName as string}
                         register={register}
                     />
-                    <PrimaryInput<CleaningModel>
+                    <PrimaryInput<UpdateUserModel>
                         label="Last Name"
-                        name="numberOfBedrooms"
-                        error={errors.numberOfBedrooms}
+                        name="lastName"
+                        error={errors.lastName}
                         placeholder=""
-                        defaultValue=""
+                        defaultValue={userProfile?.lastName as string}
                         register={register}
                     />
-                    <PrimaryInput<CleaningModel>
+                    <InputBlank
                         label="Email"
-                        name="numberOfBedrooms"
-                        error={errors.numberOfBedrooms}
                         placeholder=""
-                        defaultValue=""
-                        register={register}
+                        defaultValue={userProfile?.email as string}
+                        disableLabel={true}
                     />
-                    <PrimarySelect<CleaningModel>
+                    <PrimarySelect<UpdateUserModel>
                         register={register}
-                        name="fileName"
-                        error={errors.fileName}
+                        name="role"
+                        error={errors.role}
                         label="Role"
-                        placeholder="..."
+                        placeholder={userProfile?.role as string}
                         options={
                             <>
-                                {roles.map((x: any) => {
+                                {roles.slice(0, 4).map((x: any) => {
                                     return (
-                                        <option value={x.id}>{x.title}</option>
+                                        <option value={x.title}>
+                                            {x.title}
+                                        </option>
                                     );
                                 })}
                             </>
                         }
                     />
-                    <PrimaryInput<CleaningModel>
-                        label="Profile Status"
-                        name="numberOfBedrooms"
-                        error={errors.numberOfBedrooms}
-                        placeholder=""
-                        defaultValue=""
+                    <PrimarySelect<UpdateUserModel>
                         register={register}
+                        name="isActive"
+                        error={errors.isActive}
+                        label="Profile Status"
+                        placeholder={
+                            userProfile?.isActive === true
+                                ? "Active"
+                                : "Not Active"
+                        }
+                        options={
+                            <>
+                                <option value="true">Active</option>
+                                <option value="false">Not Active</option>
+                            </>
+                        }
                     />
                 </Grid>
                 <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem" my="2rem">
@@ -134,6 +156,8 @@ function AdminProfile() {
                         bgColor="brand.400"
                         color="white"
                         height="3rem"
+                        type="submit"
+                        isLoading={isSubmitting}
                         fontSize="14px"
                         boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     >

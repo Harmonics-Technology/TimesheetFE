@@ -28,14 +28,14 @@ function SadminDashboard({ metrics }: DashboardProps) {
                 />
                 <DashboardCard
                     url="/"
-                    title="downline"
+                    title="admins"
                     value={adminMetrics?.totalDownLines}
                 />
             </Grid>
             <Grid templateColumns={["1fr", "2fr 1fr"]} gap="1.2rem" w="full">
                 <TableCards
                     title={"Recent Clients"}
-                    url={"/"}
+                    url={"profile-management/clients"}
                     data={adminMetrics?.recentCLients}
                 />
                 <Box

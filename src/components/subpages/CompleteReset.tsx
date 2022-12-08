@@ -1,37 +1,32 @@
 import {
-    Stack,
-    Grid,
     Box,
     Image,
     Text,
     Flex,
     Button,
     VStack,
+    useToast,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useState } from "react";
 import Link from "next/link";
-import { GetServerSidePropsContext } from "next";
 import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
+import { PasswordReset, UserService } from "src/services";
+import InputBlank from "@components/bits-utils/InputBlank";
 
 const schema = yup.object().shape({
     newPassword: yup.string().required(),
     code: yup.string(),
 });
 
-interface LoginModel {
-    code: string;
-    password: string;
-}
-
 const CompleteReset = ({ code }: { code: string }) => {
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm<LoginModel>({
+    } = useForm<PasswordReset>({
         resolver: yupResolver(schema),
         defaultValues: {
             code: code,
@@ -39,6 +34,7 @@ const CompleteReset = ({ code }: { code: string }) => {
         mode: "all",
     });
     const [showSuccess, setShowSuccess] = useState(false);
+    const [confirmPass, setConfirmPass] = useState("");
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [passwordVisibleB, setPasswordVisibleB] = useState<boolean>(false);
     const changeInputType = () => {
@@ -47,9 +43,40 @@ const CompleteReset = ({ code }: { code: string }) => {
     const changeInputTypeB = () => {
         setPasswordVisibleB(!passwordVisibleB);
     };
+    const toast = useToast();
 
-    const onSubmit = async (data: LoginModel) => {
-        //
+    const onSubmit = async (data: PasswordReset) => {
+        if (confirmPass !== data.newPassword) {
+            toast({
+                title: "Password do not match",
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+            return;
+        }
+        // console.log({ data });
+        try {
+            const result = await UserService.completeReset(data);
+            if (result.status) {
+                setShowSuccess(true);
+                return;
+            }
+            toast({
+                title: result.message,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        } catch (error) {
+            console.log(error);
+            toast({
+                title: `Check your network connection and try again`,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        }
     };
 
     return (
@@ -103,10 +130,10 @@ const CompleteReset = ({ code }: { code: string }) => {
                             </Flex>
                         ) : (
                             <VStack w="full" spacing=".7rem">
-                                <PrimaryInput<LoginModel>
+                                <PrimaryInput<PasswordReset>
                                     register={register}
-                                    name="password"
-                                    error={errors.password}
+                                    name="newPassword"
+                                    error={errors.newPassword}
                                     defaultValue=""
                                     placeholder="*********"
                                     type={passwordVisible ? "text" : "password"}
@@ -116,21 +143,22 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     label="New Password"
                                     fontSize="1rem"
                                 />
-                                <PrimaryInput<LoginModel>
-                                    register={register}
-                                    name="password"
-                                    error={errors.password}
-                                    defaultValue=""
+
+                                <InputBlank
+                                    label="Confirm Password"
                                     placeholder="*********"
+                                    fontSize="1rem"
                                     type={
                                         passwordVisibleB ? "text" : "password"
                                     }
                                     icon={true}
                                     passwordVisible={passwordVisibleB}
                                     changeVisibility={changeInputTypeB}
-                                    label="Confirm Password"
-                                    fontSize="1rem"
+                                    onChange={(e: any) =>
+                                        setConfirmPass(e.target.value)
+                                    }
                                 />
+
                                 <Button
                                     variant="solid"
                                     type="submit"

@@ -12,6 +12,7 @@ import { UserProvider } from "@components/context/UserContext";
 import Head from "next/head";
 import Cookies from "js-cookie";
 import { OpenAPI } from "src/services";
+import NextNProgress from "nextjs-progressbar";
 
 function MyApp({
     Component,
@@ -35,6 +36,7 @@ function MyApp({
                     <Hydrate state={pageProps.dehydratedState}>
                         <RootStoreProvider>
                             <UserProvider>
+                                <NextNProgress color="#2EAFA3" />
                                 <Layout>
                                     <Component {...pageProps} />
                                 </Layout>
