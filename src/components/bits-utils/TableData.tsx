@@ -1,6 +1,5 @@
 import {
     Box,
-    Button,
     Menu,
     MenuButton,
     MenuItem,
@@ -9,7 +8,7 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { FaEllipsisH } from "react-icons/fa";
 import { InitiateResetModel, UserService } from "src/services";
 
@@ -20,27 +19,28 @@ export function TableData({ name }: { name: string | undefined | null }) {
             fontSize="13px"
             color="brand.200"
             fontWeight="400"
-            textTransform="capitalize"
+            // textTransform="capitalize"
             py=".8rem"
         >
             {name}
         </Td>
     );
 }
-export function TableStatus({ name }: { name: string }) {
+export function TableStatus({ name }: { name: boolean | undefined }) {
     return (
         <td>
             <Box
                 fontSize="10px"
-                bgColor={name == "ACTIVE" ? "brand.400" : "red"}
+                bgColor={name == true ? "brand.400" : "red"}
                 borderRadius="4px"
                 color="white"
                 fontWeight="bold"
                 padding=".2rem 1rem"
                 width="fit-content"
                 cursor="pointer"
+                textTransform="uppercase"
             >
-                {name}
+                {name == true ? "Active" : "Inactive"}
             </Box>
         </td>
     );

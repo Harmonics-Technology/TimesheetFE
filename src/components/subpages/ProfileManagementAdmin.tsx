@@ -163,7 +163,7 @@ function ProfileManagementAdmin({ adminList }: adminProps) {
                                 <TableData name={x.firstName} />
                                 <TableData name={x.email} />
                                 <TableData name={x.role} />
-                                <TableStatus name={"ACTIVE"} />
+                                <TableStatus name={x.isActive} />
                                 <TableActions
                                     id={x.id}
                                     route="admin"
@@ -213,7 +213,7 @@ function ProfileManagementAdmin({ adminList }: adminProps) {
                                     <>
                                         {roles.slice(0, 4).map((x: any) => {
                                             return (
-                                                <option value={x.id}>
+                                                <option value={x.title}>
                                                     {x.title}
                                                 </option>
                                             );

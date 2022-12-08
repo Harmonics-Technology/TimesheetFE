@@ -16,23 +16,19 @@ const Layout = ({ children }: LayoutProps) => {
 
     return (
         <>
-            {router.pathname.startsWith("/admin") ? (
-                <Flex pos="relative" p="1rem" bg="#f6f7f8">
-                    <SideNav openSidenav={openSidenav} />
-                    <Box w={["full", "82%"]} as="main" ml="auto" minH="95vh">
-                        <Box as="div" w="95%" mx="auto" mt="1rem" mb="3rem">
-                            <TopNav
-                                setOpenSidenav={setOpenSidenav}
-                                openSidenav={openSidenav}
-                            />
-                            <Box mt="2rem">{children}</Box>
-                            <Footer />
-                        </Box>
+            <Flex pos="relative" p="1rem" bg="#f6f7f8">
+                <SideNav openSidenav={openSidenav} />
+                <Box w={["full", "82%"]} as="main" ml="auto" minH="95vh">
+                    <Box as="div" w="95%" mx="auto" mt="1rem" mb="3rem">
+                        <TopNav
+                            setOpenSidenav={setOpenSidenav}
+                            openSidenav={openSidenav}
+                        />
+                        <Box mt="2rem">{children}</Box>
+                        <Footer />
                     </Box>
-                </Flex>
-            ) : (
-                <Box>{children}</Box>
-            )}
+                </Box>
+            </Flex>
         </>
     );
 };

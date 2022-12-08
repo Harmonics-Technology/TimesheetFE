@@ -213,4 +213,60 @@ requestBody?: InitiateResetModel,
         });
     }
 
+    /**
+     * @param id 
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getUserById(
+id: string,
+): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/get/{id}',
+            path: {
+                'id': id,
+            },
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param id 
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static toggleUserActive(
+id: string,
+): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/toggle-active/{id}',
+            path: {
+                'id': id,
+            },
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static adminUpdateUser(
+requestBody?: UpdateUserModel,
+): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/ad-update-user',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
 }

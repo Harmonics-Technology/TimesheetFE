@@ -1,14 +1,14 @@
 import { Box, Grid, Image, VStack } from "@chakra-ui/react";
 import DashboardCard from "@components/bits-utils/DashboardCard";
 import TableCards from "@components/bits-utils/TableCards";
-import { DashboardView } from "src/services";
+import { DashboardView, DashboardViewStandardResponse } from "src/services";
 
 interface DashboardProps {
-    metrics: DashboardView;
+    metrics: DashboardViewStandardResponse;
 }
 
 function SadminDashboard({ metrics }: DashboardProps) {
-    console.log({ metrics });
+    const adminMetrics = metrics?.data as DashboardView;
     return (
         <VStack gap="1rem">
             <Grid
@@ -19,21 +19,25 @@ function SadminDashboard({ metrics }: DashboardProps) {
                 <DashboardCard
                     url="/"
                     title="client"
-                    value={metrics?.totalClients}
+                    value={adminMetrics?.totalClients}
                 />
                 <DashboardCard
                     url="/"
                     title="team members"
-                    value={metrics?.totalTeamMembers}
+                    value={adminMetrics?.totalTeamMembers}
                 />
                 <DashboardCard
                     url="/"
                     title="downline"
-                    value={metrics?.totalDownLines}
+                    value={adminMetrics?.totalDownLines}
                 />
             </Grid>
             <Grid templateColumns={["1fr", "2fr 1fr"]} gap="1.2rem" w="full">
-                <TableCards title={"Recent Clients"} url={"/"} />
+                <TableCards
+                    title={"Recent Clients"}
+                    url={"/"}
+                    data={adminMetrics?.recentCLients}
+                />
                 <Box
                     bgColor="white"
                     borderRadius="15px"

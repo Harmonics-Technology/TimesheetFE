@@ -29,4 +29,3 @@ export type { UserViewStandardResponse } from './models/UserViewStandardResponse
 export { DashboardService } from './services/DashboardService';
 export { SettingsService } from './services/SettingsService';
 export { UserService } from './services/UserService';
-export { ValuesService } from './services/ValuesService';

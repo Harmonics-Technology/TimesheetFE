@@ -46,6 +46,7 @@ function Login() {
         resolver: yupResolver(schema),
         mode: "all",
     });
+    // console.log({ user });
 
     const onSubmit = async (data: LoginModel) => {
         try {
@@ -70,7 +71,9 @@ function Login() {
                     router.push(path);
                     return;
                 }
-                router.push(`${result?.data?.role}/dashboard`);
+                router.push(
+                    `${result?.data?.role?.replace(" ", "")}/dashboard`,
+                );
                 return;
             }
             toast({

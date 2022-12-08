@@ -2,14 +2,17 @@ import { Box, HStack, Stack, Text, Tr } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
+import { UserView } from "src/services";
 import { TableData, TableStatus } from "./TableData";
 import Tables from "./Tables";
 
 interface TableCardsProps {
     title: string;
     url: string;
+    data: UserView[] | null | undefined;
 }
-function TableCards({ title, url }: TableCardsProps) {
+function TableCards({ title, url, data }: TableCardsProps) {
+    console.log({ data });
     return (
         <Box
             bgColor="white"
@@ -32,21 +35,13 @@ function TableCards({ title, url }: TableCardsProps) {
             <Tables tableHead={["CLIENT NAME", "EMAIL", "STATUS"]}>
                 <Link href={"/admin/rent/applications/"} key={1}>
                     <>
-                        <Tr>
-                            <TableData name={"Olade"} />
-                            <TableData name={"dotunbrown@gmail.com"} />
-                            <TableStatus name={"ACTIVE"} />
-                        </Tr>
-                        <Tr>
-                            <TableData name={"Olade"} />
-                            <TableData name={"dotunbrown@gmail.com"} />
-                            <TableStatus name={"ACTIVE"} />
-                        </Tr>
-                        <Tr>
-                            <TableData name={"Olade"} />
-                            <TableData name={"dotunbrown@gmail.com"} />
-                            <TableStatus name={"ACTIVE"} />
-                        </Tr>
+                        {data?.map((x: UserView) => (
+                            <Tr>
+                                <TableData name={x.firstName} />
+                                <TableData name={x.email} />
+                                <TableStatus name={x.isActive} />
+                            </Tr>
+                        ))}
                     </>
                 </Link>
             </Tables>

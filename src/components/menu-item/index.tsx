@@ -18,6 +18,7 @@ interface MenuProps {
     icon: any;
     option: boolean;
     dropDown: string[];
+    role?: string;
 }
 function MenuItem({
     menuTitle,
@@ -25,10 +26,12 @@ function MenuItem({
     icon,
     option = false,
     dropDown,
+    role,
 }: MenuProps) {
     const router = useRouter();
     const [openMenu, setOpenMenu] = useState(false);
-    const url = `/admin/${linkName}`;
+    const url = `/${role}/${linkName}`;
+    // console.log({ url });
     return (
         <>
             {option ? (
@@ -109,29 +112,23 @@ function MenuItem({
                                 }
                                 textTransform="capitalize"
                             >
-                                <Link href={`/admin/${linkName}/${x}`}>
-                                    {x}
-                                </Link>
+                                <Link href={`${url}/${x}`}>{x}</Link>
                             </ListItem>
                         ))}
                     </UnorderedList>
                 </Box>
             ) : (
-                <Link href={`/admin/${linkName}`} passHref>
+                <Link href={url} passHref>
                     <Box overflow="hidden" cursor="pointer">
                         <HStack>
                             <Square
                                 bgColor={
-                                    router.pathname.startsWith(
-                                        `/admin/${linkName}`,
-                                    )
+                                    router.pathname.startsWith(url)
                                         ? "brand.400"
                                         : "brand.500"
                                 }
                                 color={
-                                    router.pathname.startsWith(
-                                        `/admin/${linkName}`,
-                                    )
+                                    router.pathname.startsWith(url)
                                         ? "white"
                                         : "brand.400"
                                 }
@@ -143,16 +140,12 @@ function MenuItem({
                             </Square>
                             <Text
                                 color={
-                                    router.pathname.startsWith(
-                                        `/admin/${linkName}`,
-                                    )
+                                    router.pathname.startsWith(url)
                                         ? "brand.200"
                                         : "brand.300"
                                 }
                                 fontWeight={
-                                    router.pathname.startsWith(
-                                        `/admin/${linkName}`,
-                                    )
+                                    router.pathname.startsWith(url)
                                         ? "600"
                                         : "500"
                                 }
