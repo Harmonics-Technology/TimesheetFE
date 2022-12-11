@@ -56,9 +56,9 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
     iconClass,
     changePasswordType,
     border,
-    borderColor,
+    borderColor = "gray.300",
     icon,
-    h = "3rem",
+    h = "2.6rem",
 }: FormInputProps<TFormValues>) => {
     return (
         <FormControl>
@@ -81,6 +81,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                     disabled={disableLabel}
                     border={border}
                     borderColor={borderColor}
+                    borderRadius="0"
                     h={h}
                 />
                 {icon && (

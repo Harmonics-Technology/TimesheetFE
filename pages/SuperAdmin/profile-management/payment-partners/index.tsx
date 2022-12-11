@@ -1,39 +1,35 @@
 import { filterPagingSearchOptions } from "@components/generics/filterPagingSearchOptions";
 import { withPageAuth } from "@components/generics/withPageAuth";
-import ProfileManagementAdmin from "@components/subpages/AdminManagement";
+import PaymentPartnerManagement from "@components/subpages/PaymentPartnerManagement";
 import { GetServerSideProps } from "next";
 import React from "react";
 import {
     UserService,
-    UserView,
     UserViewPagedCollectionStandardResponse,
 } from "src/services";
-interface adminProps {
-    adminList: UserViewPagedCollectionStandardResponse;
-    team: UserView[];
+interface PaymentPartnerProps {
+    PaymentPartnerList: UserViewPagedCollectionStandardResponse;
 }
 
-function admin({ adminList, team }: adminProps) {
-    // console.log({ team });
-    return <ProfileManagementAdmin adminList={adminList} team={team} />;
+function PaymentPartner({ PaymentPartnerList }: PaymentPartnerProps) {
+    // console.log({ PaymentPartner });
+    return <PaymentPartnerManagement adminList={PaymentPartnerList} />;
 }
 
-export default admin;
+export default PaymentPartner;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const team = await UserService.listUsers("Team Member");
             const data = await UserService.listUsers(
-                "admin",
+                "payment partner",
                 pagingOptions.offset,
                 pagingOptions.limit,
             );
             return {
                 props: {
-                    adminList: data,
-                    team: team?.data?.value,
+                    PaymentPartnerList: data,
                 },
             };
         } catch (error: any) {

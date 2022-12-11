@@ -100,19 +100,25 @@ function MenuItem({
                                 key={i}
                                 color="brand.300"
                                 fontSize={
-                                    router.pathname.startsWith(`${url}/${x}`)
+                                    router.pathname.startsWith(
+                                        `${url}/${x.replace(" ", "-")}`,
+                                    )
                                         ? "1rem"
                                         : ".875rem"
                                 }
                                 p=" .5rem 0 .5rem 1.2rem"
                                 fontWeight={
-                                    router.pathname.startsWith(`${url}/${x}`)
+                                    router.pathname.startsWith(
+                                        `${url}/${x.replace(" ", "-")}`,
+                                    )
                                         ? "bold"
                                         : "400"
                                 }
                                 textTransform="capitalize"
                             >
-                                <Link href={`${url}/${x}`}>{x}</Link>
+                                <Link href={`${url}/${x.replace(" ", "-")}`}>
+                                    {x}
+                                </Link>
                             </ListItem>
                         ))}
                     </UnorderedList>

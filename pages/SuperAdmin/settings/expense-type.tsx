@@ -1,35 +1,27 @@
 import { filterPagingSearchOptions } from "@components/generics/filterPagingSearchOptions";
 import { withPageAuth } from "@components/generics/withPageAuth";
-import ClientManagement from "@components/subpages/ClientManagement";
+import ExpenseType from "@components/subpages/ExpenseType";
 import { GetServerSideProps } from "next";
 import React from "react";
-import {
-    UserService,
-    UserViewPagedCollectionStandardResponse,
-} from "src/services";
-interface clientProps {
-    adminList: UserViewPagedCollectionStandardResponse;
+import { ExpenseTypeView, SettingsService } from "src/services";
+
+interface expenseProps {
+    expenses: ExpenseTypeView[];
+}
+function expensetype({ expenses }: expenseProps) {
+    return <ExpenseType expenses={expenses} />;
 }
 
-function client({ adminList }: clientProps) {
-    // console.log({ team });
-    return <ClientManagement adminList={adminList} />;
-}
-
-export default client;
+export default expensetype;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await UserService.listUsers(
-                "client",
-                pagingOptions.offset,
-                pagingOptions.limit,
-            );
+            const data = await SettingsService.listExpenseTypes();
             return {
                 props: {
-                    adminList: data,
+                    expenses: data.data,
                 },
             };
         } catch (error: any) {

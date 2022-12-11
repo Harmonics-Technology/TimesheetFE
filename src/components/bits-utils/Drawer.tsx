@@ -14,10 +14,12 @@ export default function DrawerWrapper({
     children,
     isOpen,
     onClose,
+    title,
 }: {
     children: ReactNode;
     isOpen: any;
     onClose: any;
+    title: string;
 }) {
     return (
         <>
@@ -26,7 +28,7 @@ export default function DrawerWrapper({
                 <DrawerContent maxW={["100%", "50%"]} px="1rem">
                     <DrawerCloseButton />
                     <DrawerHeader borderBottomWidth="1px" mt="1rem">
-                        <Text>Add new admin</Text>
+                        <Text>{title}</Text>
                     </DrawerHeader>
                     <DrawerBody>{children}</DrawerBody>
                 </DrawerContent>

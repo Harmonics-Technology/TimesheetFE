@@ -1,1 +1,33 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap");
+@import url("./calendar.css");
+
+.phone-input {
+    /* border: 1px solid #e5e5e5; */
+    height: 2.6rem;
+    /* border-radius: 5px; */
+    /* padding: 0 1rem; */
+    box-sizing: border-box;
+}
+.PhoneInputInput {
+    height: 100% !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+}
+.searchInput-box {
+    border: 0 !important;
+    border-bottom: 1px solid #cacaca !important;
+    width: 100%;
+    border-radius: 0 !important;
+    margin-left: 0 !important;
+}
+.date {
+    border: 1px solid #e5e5e5;
+    height: 2.6rem;
+    /* border-radius: 5px; */
+    padding: 0 1rem;
+    box-sizing: border-box;
+    width: 100%;
+}
+.dateWrapper {
+    width: 100%;
+}

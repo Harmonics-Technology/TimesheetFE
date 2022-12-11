@@ -37,11 +37,12 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     return (
         <Flex
             justify="space-between"
-            pt=".5rem"
+            pt="3rem"
             pr="1rem"
             pos="sticky"
             top="0"
             bgColor="#f6f7f8"
+            zIndex="999"
         >
             <Box color="brand.200">
                 <Text
@@ -58,7 +59,9 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                     fontSize="1rem"
                     textTransform="capitalize"
                 >
-                    {curPage == "[id]" ? idPage : curPage}
+                    {curPage == "[id]"
+                        ? idPage?.replace("-", " ")
+                        : curPage?.replace("-", " ")}
                 </Text>
             </Box>
             <VStack alignItems="flex-end">

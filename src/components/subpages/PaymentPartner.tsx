@@ -12,11 +12,11 @@ import { useRouter } from "next/router";
 import { SelectrixBox } from "@components/bits-utils/Selectrix";
 
 const schema = yup.object().shape({});
-interface ClientProfileProps {
+interface PaymentPartnerProps {
     userProfile?: UserView;
 }
 
-function ClientProfile({ userProfile }: ClientProfileProps) {
+function PaymentPartner({ userProfile }: PaymentPartnerProps) {
     const {
         register,
         handleSubmit,
@@ -180,7 +180,7 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
                                 register={register}
                             />
                             <InputBlank
-                                label="Contact Email"
+                                label="Conatct Email"
                                 placeholder=""
                                 defaultValue={userProfile?.email as string}
                                 disableLabel={true}
@@ -229,4 +229,4 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
     );
 }
 
-export default ClientProfile;
+export default PaymentPartner;

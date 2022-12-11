@@ -9,11 +9,13 @@ import roles from "../generics/roles.json";
 import { PrimarySelect } from "@components/bits-utils/PrimarySelect";
 import { UpdateUserModel, UserService, UserView } from "src/services";
 import InputBlank from "@components/bits-utils/InputBlank";
+import { useRouter } from "next/router";
+import { SelectrixBox } from "@components/bits-utils/Selectrix";
 
 const schema = yup.object().shape({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
-    role: yup.string().required(),
+    // role: yup.string().required(),
     isActive: yup.string().required(),
     id: yup.string().required(),
 });
@@ -21,48 +23,57 @@ interface AdminProfileProps {
     userProfile?: UserView;
 }
 function AdminProfile({ userProfile }: AdminProfileProps) {
+    // console.log({ userProfile });
     const {
         register,
         handleSubmit,
+        watch,
+        control,
         formState: { errors, isSubmitting },
     } = useForm<UpdateUserModel>({
         resolver: yupResolver(schema),
         mode: "all",
         defaultValues: {
             id: userProfile?.id,
+            isActive: userProfile?.isActive,
+            role: userProfile?.role,
         },
     });
+    // console.log(watch("role"));
+
     const toast = useToast();
+    const router = useRouter();
     const onSubmit = async (data: UpdateUserModel) => {
         data.isActive = data.isActive === ("true" as unknown as boolean);
+        console.log({ data });
 
-        try {
-            const result = await UserService.adminUpdateUser(data);
-            // console.log({ result });
-            if (result.status) {
-                toast({
-                    title: "Profile Update Success",
-                    status: "success",
-                    isClosable: true,
-                    position: "top-right",
-                });
-                return;
-            }
-            toast({
-                title: result.message,
-                status: "error",
-                isClosable: true,
-                position: "top-right",
-            });
-        } catch (error) {
-            console.log(error);
-            toast({
-                title: `Check your network connection and try again`,
-                status: "error",
-                isClosable: true,
-                position: "top-right",
-            });
-        }
+        // try {
+        //     const result = await UserService.adminUpdateUser(data);
+        //     // console.log({ result });
+        //     if (result.status) {
+        //         toast({
+        //             title: "Profile Update Success",
+        //             status: "success",
+        //             isClosable: true,
+        //             position: "top-right",
+        //         });
+        //         return;
+        //     }
+        //     toast({
+        //         title: result.message,
+        //         status: "error",
+        //         isClosable: true,
+        //         position: "top-right",
+        //     });
+        // } catch (error) {
+        //     console.log(error);
+        //     toast({
+        //         title: `Check your network connection and try again`,
+        //         status: "error",
+        //         isClosable: true,
+        //         position: "top-right",
+        //     });
+        // }
     };
     return (
         <Box
@@ -106,40 +117,33 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                         defaultValue={userProfile?.email as string}
                         disableLabel={true}
                     />
-                    <PrimarySelect<UpdateUserModel>
-                        register={register}
+                    <SelectrixBox<UpdateUserModel>
+                        control={control}
                         name="role"
                         error={errors.role}
+                        keys="title"
+                        keyLabel="title"
                         label="Role"
                         placeholder={userProfile?.role as string}
-                        options={
-                            <>
-                                {roles.slice(0, 4).map((x: any) => {
-                                    return (
-                                        <option value={x.title}>
-                                            {x.title}
-                                        </option>
-                                    );
-                                })}
-                            </>
-                        }
+                        options={roles.slice(0, 4)}
                     />
-                    <PrimarySelect<UpdateUserModel>
-                        register={register}
+
+                    <SelectrixBox<UpdateUserModel>
+                        control={control}
                         name="isActive"
                         error={errors.isActive}
+                        keys="id"
+                        keyLabel="label"
                         label="Profile Status"
                         placeholder={
                             userProfile?.isActive === true
                                 ? "Active"
                                 : "Not Active"
                         }
-                        options={
-                            <>
-                                <option value="true">Active</option>
-                                <option value="false">Not Active</option>
-                            </>
-                        }
+                        options={[
+                            { id: "true", label: "Active" },
+                            { id: "false", label: "Not Active" },
+                        ]}
                     />
                 </Grid>
                 <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem" my="2rem">
@@ -149,6 +153,7 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                         height="3rem"
                         fontSize="14px"
                         boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                        onClick={() => router.back()}
                     >
                         Back
                     </Button>

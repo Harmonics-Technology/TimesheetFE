@@ -8,7 +8,7 @@ import { FieldError, Path, UseFormRegister } from "react-hook-form";
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
-    placeholder: string;
+    placeholder?: string;
     register: UseFormRegister<TFormValues>;
     required?: boolean;
     validate?: any;

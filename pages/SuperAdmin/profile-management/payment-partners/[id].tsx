@@ -1,5 +1,5 @@
 import { withPageAuth } from "@components/generics/withPageAuth";
-import ClientProfile from "@components/subpages/ClientProfile";
+import PaymentPartner from "@components/subpages/PaymentPartner";
 import { GetServerSideProps } from "next";
 import { UserService } from "src/services";
 
@@ -7,11 +7,11 @@ interface pageOptions {
     userProfile: any;
 }
 
-function ClientDetails({ userProfile }: pageOptions) {
-    return <ClientProfile userProfile={userProfile} />;
+function PaymentPartnerDetails({ userProfile }: pageOptions) {
+    return <PaymentPartner userProfile={userProfile} />;
 }
 
-export default ClientDetails;
+export default PaymentPartnerDetails;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {

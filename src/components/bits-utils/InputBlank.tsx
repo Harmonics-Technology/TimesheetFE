@@ -49,7 +49,9 @@ function InputBlank({
                     disabled={disableLabel}
                     onChange={onChange}
                     defaultValue={defaultValue}
-                    h="3rem"
+                    borderColor="gray.400"
+                    borderRadius="0"
+                    h="2.6rem"
                 />
                 {icon && (
                     <InputRightElement

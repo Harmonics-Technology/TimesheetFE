@@ -23,7 +23,7 @@ const Layout = ({ children }: LayoutProps) => {
                 <Flex pos="relative" p="1rem" bg="#f6f7f8">
                     <SideNav openSidenav={openSidenav} />
                     <Box w={["full", "82%"]} as="main" ml="auto" minH="95vh">
-                        <Box as="div" w="95%" mx="auto" mt="1rem" mb="3rem">
+                        <Box as="div" w="95%" mx="auto" mb="3rem">
                             <TopNav
                                 setOpenSidenav={setOpenSidenav}
                                 openSidenav={openSidenav}

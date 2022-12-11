@@ -12,6 +12,7 @@ import {
     Grid,
     DrawerFooter,
     useToast,
+    Checkbox,
 } from "@chakra-ui/react";
 import DrawerWrapper from "@components/bits-utils/Drawer";
 import {
@@ -20,7 +21,7 @@ import {
     TableStatus,
 } from "@components/bits-utils/TableData";
 import Tables from "@components/bits-utils/Tables";
-import React from "react";
+import React, { useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -28,6 +29,10 @@ import * as yup from "yup";
 import { RiMailSendFill } from "react-icons/ri";
 import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
 import { PrimarySelect } from "@components/bits-utils/PrimarySelect";
+interface adminProps {
+    adminList: UserViewPagedCollectionStandardResponse;
+}
+
 import {
     RegisterModel,
     UserService,
@@ -36,26 +41,28 @@ import {
 } from "src/services";
 import Pagination from "@components/bits-utils/Pagination";
 import roles from "../generics/roles.json";
-import { FaTimes } from "react-icons/fa";
 import { useRouter } from "next/router";
+import { PrimaryTextarea } from "@components/bits-utils/PrimaryTextArea";
+import { PrimaryPhoneInput } from "@components/bits-utils/PrimaryPhoneInput";
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
     firstName: yup.string().required(),
     role: yup.string().required(),
     email: yup.string().email().required(),
+    organizationEmail: yup.string().email().required(),
+    organizationName: yup.string().required(),
+    organizationAddress: yup.string().required(),
+    organizationPhone: yup.number().required(),
 });
-interface adminProps {
-    adminList: UserViewPagedCollectionStandardResponse;
-}
 
-function ProfileManagementAdmin({ adminList }: adminProps) {
+function PaymentPartnerManagement({ adminList }: adminProps) {
     // console.log({ adminList });
     const {
         register,
         handleSubmit,
+        control,
         watch,
-        setValue,
         formState: { errors, isSubmitting },
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),
@@ -64,20 +71,30 @@ function ProfileManagementAdmin({ adminList }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    // console.log(watch("organizationName"));
-    const newUser = watch("firstName");
-    const oldMember = watch("organizationName");
+    // console.log(watch("organizationPhone"));
+    const [same, setSame] = useState(false);
+    // console.log({ same });
 
     const onSubmit = async (data: RegisterModel) => {
+        {
+            same
+                ? ((data.firstName = data.organizationName),
+                  (data.email = data.organizationEmail),
+                  (data.phoneNumber = data.organizationPhone),
+                  (data.lastName = data.organizationName))
+                : null;
+        }
+        console.log({ data });
         try {
             const result = await UserService.create(data);
             if (result.status) {
                 toast({
-                    title: `Successfully created`,
+                    title: `Invite Sent`,
                     status: "success",
                     isClosable: true,
                     position: "top-right",
                 });
+                router.reload();
                 onClose();
                 return;
             }
@@ -98,9 +115,6 @@ function ProfileManagementAdmin({ adminList }: adminProps) {
         }
     };
 
-    function Reset() {
-        setValue("organizationName", undefined);
-    }
     function setFilter(filter: string) {
         router.push({
             query: {
@@ -108,6 +122,7 @@ function ProfileManagementAdmin({ adminList }: adminProps) {
             },
         });
     }
+
     function search(term: string) {
         router.push({
             query: {
@@ -115,6 +130,7 @@ function ProfileManagementAdmin({ adminList }: adminProps) {
             },
         });
     }
+
     return (
         <>
             <Box
@@ -131,7 +147,7 @@ function ProfileManagementAdmin({ adminList }: adminProps) {
                     boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     onClick={onOpen}
                 >
-                    +Admin
+                    +Payment Partner
                 </Button>
                 <Flex justify="space-between" align="center" my="2.5rem">
                     <HStack fontSize=".8rem" w="fit-content">
@@ -166,7 +182,7 @@ function ProfileManagementAdmin({ adminList }: adminProps) {
                                 <TableStatus name={x.isActive} />
                                 <TableActions
                                     id={x.id}
-                                    route="admin"
+                                    route="PaymentPartners"
                                     email={x.email}
                                 />
                             </Tr>
@@ -175,20 +191,83 @@ function ProfileManagementAdmin({ adminList }: adminProps) {
                 </Tables>
                 <Pagination data={adminList} />
             </Box>
-            <DrawerWrapper onClose={onClose} isOpen={isOpen}>
+            <DrawerWrapper
+                onClose={onClose}
+                isOpen={isOpen}
+                title={"Add new PaymentPartner"}
+            >
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    {oldMember === undefined || oldMember === "" ? (
-                        <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
+                    <PrimaryInput<RegisterModel>
+                        label="Organization Name"
+                        name="organizationName"
+                        error={errors.organizationName}
+                        placeholder=""
+                        defaultValue=""
+                        register={register}
+                    />
+                    <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
+                        <PrimaryInput<RegisterModel>
+                            label="Organization Email"
+                            name="organizationEmail"
+                            error={errors.organizationEmail}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
+                        <PrimaryPhoneInput<RegisterModel>
+                            label="Phone Number"
+                            name="organizationPhone"
+                            error={errors.organizationPhone}
+                            placeholder="Organization Phone No."
+                            control={control}
+                        />
+                        <PrimaryTextarea<RegisterModel>
+                            label="Organization Address"
+                            name="organizationAddress"
+                            error={errors.organizationAddress}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
+                    </Grid>
+                    <Box w="full">
+                        <Flex
+                            justify="space-between"
+                            align="center"
+                            my="1rem"
+                            py="1rem"
+                            borderY="1px solid"
+                            borderColor="gray.300"
+                        >
+                            <Text
+                                textTransform="uppercase"
+                                mb="0"
+                                fontSize="1.3rem"
+                                fontWeight="500"
+                            >
+                                Contact Details
+                            </Text>
+                            <Checkbox
+                                onChange={(e) => setSame(e.target.checked)}
+                            >
+                                Same as above
+                            </Checkbox>
+                        </Flex>
+                        <Grid
+                            templateColumns="repeat(2,1fr)"
+                            gap="1rem 2rem"
+                            display={same ? "none" : "grid"}
+                        >
                             <PrimaryInput<RegisterModel>
-                                label="First Name"
+                                label="Contact First Name"
                                 name="firstName"
                                 error={errors.firstName}
                                 placeholder=""
-                                defaultValue=""
+                                defaultValue={""}
                                 register={register}
                             />
                             <PrimaryInput<RegisterModel>
-                                label="Last Name"
+                                label="Contact Last Name"
                                 name="lastName"
                                 error={errors.lastName}
                                 placeholder=""
@@ -196,108 +275,22 @@ function ProfileManagementAdmin({ adminList }: adminProps) {
                                 register={register}
                             />
                             <PrimaryInput<RegisterModel>
-                                label="Email"
+                                label="Contact Email"
                                 name="email"
                                 error={errors.email}
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
                             />
-                            <PrimarySelect<RegisterModel>
-                                register={register}
-                                name="role"
-                                error={errors.role}
-                                label="Role"
-                                placeholder="..."
-                                options={
-                                    <>
-                                        {roles.slice(0, 4).map((x: any) => {
-                                            return (
-                                                <option value={x.title}>
-                                                    {x.title}
-                                                </option>
-                                            );
-                                        })}
-                                    </>
-                                }
+                            <PrimaryPhoneInput<RegisterModel>
+                                label="Contact Phone No."
+                                name="phoneNumber"
+                                error={errors.phoneNumber}
+                                placeholder=""
+                                control={control}
                             />
                         </Grid>
-                    ) : null}
-
-                    {(oldMember === undefined || oldMember === "") &&
-                    (newUser === undefined || newUser === "") ? (
-                        <Text
-                            textAlign="center"
-                            borderTop="1px solid"
-                            borderBottom="1px solid"
-                            borderColor="#e5e5e5"
-                            py="1rem"
-                        >
-                            OR
-                        </Text>
-                    ) : null}
-
-                    <>
-                        {newUser === undefined || newUser === "" ? (
-                            <Grid
-                                templateColumns="repeat(2,1fr)"
-                                gap="1rem 2rem"
-                            >
-                                <Box>
-                                    <PrimarySelect<RegisterModel>
-                                        register={register}
-                                        name="organizationName"
-                                        error={errors.organizationName}
-                                        label="Select From Team Members"
-                                        placeholder="..."
-                                        options={
-                                            <>
-                                                {roles.map((x: any) => {
-                                                    return (
-                                                        <option value={x.id}>
-                                                            {x.title}
-                                                        </option>
-                                                    );
-                                                })}
-                                            </>
-                                        }
-                                    />
-                                    {oldMember !== undefined && (
-                                        <Flex
-                                            fontSize=".8rem"
-                                            mt=".5rem"
-                                            onClick={Reset}
-                                            align="center"
-                                            cursor="pointer"
-                                        >
-                                            <FaTimes />{" "}
-                                            <Text mb="0" ml=".4rem">
-                                                Clear
-                                            </Text>
-                                        </Flex>
-                                    )}
-                                </Box>
-                                <PrimarySelect<RegisterModel>
-                                    register={register}
-                                    name="role"
-                                    error={errors.role}
-                                    label="Role"
-                                    placeholder="..."
-                                    options={
-                                        <>
-                                            {roles.map((x: any) => {
-                                                return (
-                                                    <option value={x.id}>
-                                                        {x.title}
-                                                    </option>
-                                                );
-                                            })}
-                                        </>
-                                    }
-                                />
-                            </Grid>
-                        ) : null}
-                    </>
+                    </Box>
 
                     <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">
                         <Grid
@@ -338,4 +331,4 @@ function ProfileManagementAdmin({ adminList }: adminProps) {
     );
 }
 
-export default ProfileManagementAdmin;
+export default PaymentPartnerManagement;

@@ -9,4 +9,8 @@ export type UpdateUserModel = {
     phoneNumber?: string | null;
     isActive?: boolean;
     role?: string | null;
+    organizationName?: string | null;
+    organizationEmail?: string | null;
+    organizationPhone?: string | null;
+    organizationAddress?: string | null;
 };

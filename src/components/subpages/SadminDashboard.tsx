@@ -17,17 +17,17 @@ function SadminDashboard({ metrics }: DashboardProps) {
                 w="full"
             >
                 <DashboardCard
-                    url="/"
+                    url="/SuperAdmin/profile-management/client"
                     title="client"
                     value={adminMetrics?.totalClients}
                 />
                 <DashboardCard
-                    url="/"
+                    url="/SuperAdmin/profile-management/admin"
                     title="team members"
                     value={adminMetrics?.totalTeamMembers}
                 />
                 <DashboardCard
-                    url="/"
+                    url="/SuperAdmin/profile-management/admin"
                     title="admins"
                     value={adminMetrics?.totalDownLines}
                 />

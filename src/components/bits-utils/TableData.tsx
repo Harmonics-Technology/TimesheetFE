@@ -8,9 +8,10 @@ import {
     useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { FaEllipsisH } from "react-icons/fa";
-import { InitiateResetModel, UserService } from "src/services";
+import { InitiateResetModel, SettingsService, UserService } from "src/services";
 
 export function TableData({ name }: { name: string | undefined | null }) {
     return (
@@ -45,6 +46,25 @@ export function TableStatus({ name }: { name: boolean | undefined }) {
         </td>
     );
 }
+export function TableState({ name }: { name: string }) {
+    return (
+        <td>
+            <Box
+                fontSize="10px"
+                bgColor={name == "ACTIVE" ? "brand.400" : "red"}
+                borderRadius="4px"
+                color="white"
+                fontWeight="bold"
+                padding=".2rem 1rem"
+                width="fit-content"
+                cursor="pointer"
+                textTransform="uppercase"
+            >
+                {name}
+            </Box>
+        </td>
+    );
+}
 export function TableActions({
     id,
     route,
@@ -62,7 +82,7 @@ export function TableActions({
             if (result.status) {
                 // console.log({ result });
                 toast({
-                    title: result.message,
+                    title: "Invite Sent",
                     status: "success",
                     isClosable: true,
                     position: "top-right",
@@ -99,6 +119,57 @@ export function TableActions({
                     </MenuItem>
                     <MenuItem>
                         <Link href={`${route}/${id}`}>View Profile</Link>
+                    </MenuItem>
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+export function ToggleStatus({ id, status }: { id: any; status: string }) {
+    const toast = useToast();
+    const router = useRouter();
+    const toggleStatus = async (data: string) => {
+        // console.log(data.email);
+        try {
+            const result = await SettingsService.toggleStatus(data);
+            if (result.status) {
+                console.log({ result });
+                toast({
+                    title: result.message,
+                    status: "success",
+                    isClosable: true,
+                    position: "top-right",
+                });
+                router.reload();
+                return;
+            }
+            toast({
+                title: result.message,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        } catch (error) {
+            console.log({ error });
+        }
+    };
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        <FaEllipsisH />
+                    </Box>
+                </MenuButton>
+                <MenuList>
+                    <MenuItem onClick={() => toggleStatus(id)}>
+                        {status == "ACTIVE" ? "Deactivate" : "Activate"}
                     </MenuItem>
                 </MenuList>
             </Menu>

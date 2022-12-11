@@ -1,54 +1,80 @@
-import { Box, Button, Circle, Grid, HStack, Text } from "@chakra-ui/react";
-import React from "react";
+import {
+    Box,
+    Button,
+    Circle,
+    Grid,
+    HStack,
+    Text,
+    useToast,
+} from "@chakra-ui/react";
+import React, { useContext } from "react";
 import { FaUser } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { CleaningModel } from "@interfaces/types";
 import { VscSaveAs } from "react-icons/vsc";
 import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
+import { UserContext } from "@components/context/UserContext";
+import { UpdateUserModel, UserService } from "src/services";
+import InputBlank from "@components/bits-utils/InputBlank";
+import Cookies from "js-cookie";
 
 const schema = yup.object().shape({
-    buildingType: yup.string(),
-    buildingState: yup.string(),
-    propertyTypeId: yup.number().required(),
-    dateNeeded: yup.string().required(),
-    numberOfBathrooms: yup.string().required(),
-    numberOfBedrooms: yup.string().required(),
-    numberOfFloors: yup.string().required(),
+    // firstName: yup.string().required(),
+    // lastName: yup.string().required(),
+    // role: yup.string().required(),
+    // isActive: yup.string().required(),
+    // id: yup.string().required(),
 });
 
 function MyProfile() {
+    const { user, setUser } = useContext(UserContext);
+    console.log({ user });
     const {
         register,
         handleSubmit,
-        formState: { errors, isValid },
-    } = useForm<CleaningModel>({
+        formState: { errors, isSubmitting },
+    } = useForm<UpdateUserModel>({
         resolver: yupResolver(schema),
         mode: "all",
+        defaultValues: {
+            id: user?.id,
+            role: user?.role,
+            isActive: user?.isActive,
+        },
     });
-    const onSubmit = async (data: CleaningModel) => {
-        // data.dateNeeded = new Date(
-        //     data.dateNeeded as unknown as Date,
-        // ).toLocaleDateString();
-        // try {
-        //     const result = await (await RequestCleaning(undefined, data)).data;
-        //     if (result.status) {
-        //         onClose();
-        //         addToast("Job created sucessfully", {
-        //             appearance: "success",
-        //             autoDismiss: true,
-        //         });
-        //         router.reload();
-        //         return;
-        //     }
-        //     onClose();
-        //     addToast(result.message, {
-        //         appearance: "error",
-        //         autoDismiss: true,
-        //     });
-        //     return;
-        // } catch (err) {}
+    const toast = useToast();
+    const onSubmit = async (data: UpdateUserModel) => {
+        console.log({ data });
+        try {
+            const result = await UserService.updateUser(data);
+            console.log({ result });
+            if (result.status) {
+                toast({
+                    title: "Profile Update Success",
+                    status: "success",
+                    isClosable: true,
+                    position: "top-right",
+                });
+                setUser(result.data);
+                Cookies.set("user", JSON.stringify(result.data));
+                return;
+            }
+            toast({
+                title: result.message,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        } catch (error) {
+            console.log(error);
+            toast({
+                title: `Check your network connection and try again`,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        }
     };
     return (
         <Box>
@@ -73,10 +99,10 @@ function MyProfile() {
                             color="brand.300"
                             fontWeight="bold"
                         >
-                            Super Admin Profile
+                            {user?.role} Profile
                         </Text>
                         <Text fontSize=".8rem" color="brand.300" mb="0">
-                            Oluwabukunmi Akinyemi
+                            {user?.fullName}
                         </Text>
                     </Box>
                 </HStack>
@@ -104,42 +130,30 @@ function MyProfile() {
                             Personal Information
                         </Text>
                         <Grid gap=".5rem">
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
+                            <PrimaryInput<UpdateUserModel>
+                                label="First Name"
+                                name="firstName"
+                                error={errors.firstName}
                                 placeholder=""
-                                defaultValue=""
+                                defaultValue={user?.firstName as string}
                                 register={register}
-                                h="2rem"
                             />
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
+                            <PrimaryInput<UpdateUserModel>
+                                label="Last Name"
+                                name="lastName"
+                                error={errors.lastName}
                                 placeholder=""
-                                defaultValue=""
+                                defaultValue={user?.lastName as string}
                                 register={register}
-                                h="2rem"
                             />
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
+                            {/* <PrimaryInput<UpdateUserModel>
+                                label="Preferred Name"
+                                name="isActive"
+                                error={errors.isActive}
                                 placeholder=""
-                                defaultValue=""
+                                defaultValue={"Adelowomi"}
                                 register={register}
-                                h="2rem"
-                            />
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
-                                placeholder=""
-                                defaultValue=""
-                                register={register}
-                                h="2rem"
-                            />
+                            /> */}
                         </Grid>
                     </Box>
                     <Box
@@ -159,41 +173,27 @@ function MyProfile() {
                             Contact Information
                         </Text>
                         <Grid gap=".5rem">
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
+                            <InputBlank
+                                label="Email"
                                 placeholder=""
-                                defaultValue=""
-                                register={register}
-                                h="2rem"
+                                defaultValue={user?.email as string}
+                                disableLabel={true}
                             />
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
+                            {/* <PrimaryInput<UpdateUserModel>
+                                label="Address"
+                                name="role"
+                                error={errors.role}
                                 placeholder=""
-                                defaultValue=""
+                                defaultValue={user?.lastName as string}
                                 register={register}
-                                h="2rem"
-                            />
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
+                            /> */}
+                            <PrimaryInput<UpdateUserModel>
+                                label="Phone No."
+                                name="phoneNumber"
+                                error={errors.phoneNumber}
                                 placeholder=""
-                                defaultValue=""
+                                defaultValue={user?.phoneNumber as string}
                                 register={register}
-                                h="2rem"
-                            />
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
-                                placeholder=""
-                                defaultValue=""
-                                register={register}
-                                h="2rem"
                             />
                         </Grid>
                     </Box>
@@ -214,41 +214,23 @@ function MyProfile() {
                             Job Information
                         </Text>
                         <Grid gap=".5rem">
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
+                            <InputBlank
+                                label="Company Name"
                                 placeholder=""
-                                defaultValue=""
-                                register={register}
-                                h="2rem"
+                                defaultValue={user?.email as string}
+                                disableLabel={true}
                             />
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
+                            <InputBlank
+                                label="Job Title"
                                 placeholder=""
-                                defaultValue=""
-                                register={register}
-                                h="2rem"
+                                defaultValue={user?.email as string}
+                                disableLabel={true}
                             />
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
+                            <InputBlank
+                                label="Supervisor"
                                 placeholder=""
-                                defaultValue=""
-                                register={register}
-                                h="2rem"
-                            />
-                            <PrimaryInput<CleaningModel>
-                                label="No. of Bedrooms"
-                                name="numberOfBedrooms"
-                                error={errors.numberOfBedrooms}
-                                placeholder=""
-                                defaultValue=""
-                                register={register}
-                                h="2rem"
+                                defaultValue={user?.email as string}
+                                disableLabel={true}
                             />
                         </Grid>
                     </Box>
@@ -267,6 +249,8 @@ function MyProfile() {
                         color="white"
                         height="4rem"
                         fontSize="15px"
+                        type="submit"
+                        isLoading={isSubmitting}
                         w="98%"
                         boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     >
