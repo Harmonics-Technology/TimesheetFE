@@ -37,17 +37,19 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         // console.log({ id });
         try {
             const data = await UserService.getUserById(id);
-            const contractList = await ContractService.getContract(id);
+            // const contractList = await ContractService.getContract(
+            //     data.data?.employeeInformation?.contractId,
+            // );
             const clients = await UserService.listUsers("client");
             const supervisor = await UserService.listUsers("supervisor");
             const paymentPartner = await UserService.listUsers(
                 "payment partner",
             );
-            // console.log({ data });
+            console.log({ data });
             return {
                 props: {
                     userProfile: data.data,
-                    contractList: contractList,
+                    // contractList: contractList,
                     clients: clients?.data?.value,
                     supervisor: supervisor?.data?.value,
                     paymentPartner: paymentPartner?.data?.value,

@@ -46,10 +46,10 @@ import { PrimaryTextarea } from "@components/bits-utils/PrimaryTextArea";
 import { PrimaryPhoneInput } from "@components/bits-utils/PrimaryPhoneInput";
 
 const schema = yup.object().shape({
-    lastName: yup.string().required(),
-    firstName: yup.string().required(),
-    role: yup.string().required(),
-    email: yup.string().email().required(),
+    // lastName: yup.string().required(),
+    // firstName: yup.string().required(),
+    // role: yup.string().required(),
+    // email: yup.string().email().required(),
     organizationEmail: yup.string().email().required(),
     organizationName: yup.string().required(),
     organizationAddress: yup.string().required(),
@@ -67,6 +67,9 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),
         mode: "all",
+        defaultValues: {
+            role: "Payment Partner",
+        },
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -182,7 +185,7 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                                 <TableStatus name={x.isActive} />
                                 <TableActions
                                     id={x.id}
-                                    route="PaymentPartners"
+                                    route="payment-partners"
                                     email={x.email}
                                 />
                             </Tr>
@@ -205,7 +208,10 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                         defaultValue=""
                         register={register}
                     />
-                    <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
+                    <Grid
+                        templateColumns={["1fr", "repeat(2,1fr)"]}
+                        gap="1rem 2rem"
+                    >
                         <PrimaryInput<RegisterModel>
                             label="Organization Email"
                             name="organizationEmail"
@@ -221,15 +227,15 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                             placeholder="Organization Phone No."
                             control={control}
                         />
-                        <PrimaryTextarea<RegisterModel>
-                            label="Organization Address"
-                            name="organizationAddress"
-                            error={errors.organizationAddress}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
                     </Grid>
+                    <PrimaryTextarea<RegisterModel>
+                        label="Organization Address"
+                        name="organizationAddress"
+                        error={errors.organizationAddress}
+                        placeholder=""
+                        defaultValue=""
+                        register={register}
+                    />
                     <Box w="full">
                         <Flex
                             justify="space-between"
@@ -254,7 +260,7 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                             </Checkbox>
                         </Flex>
                         <Grid
-                            templateColumns="repeat(2,1fr)"
+                            templateColumns={["1fr", "repeat(2,1fr)"]}
                             gap="1rem 2rem"
                             display={same ? "none" : "grid"}
                         >

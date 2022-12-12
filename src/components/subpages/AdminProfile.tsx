@@ -94,7 +94,10 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                 Basic Info
             </Text>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
+                <Grid
+                    templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                    gap="1rem 2rem"
+                >
                     <PrimaryInput<UpdateUserModel>
                         label="First Name"
                         name="firstName"
@@ -146,7 +149,11 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                         ]}
                     />
                 </Grid>
-                <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem" my="2rem">
+                <Grid
+                    templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                    gap="1rem 2rem"
+                    my="2rem"
+                >
                     <Button
                         bgColor="gray.500"
                         color="white"

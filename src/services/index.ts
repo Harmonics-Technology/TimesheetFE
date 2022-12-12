@@ -6,6 +6,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { BooleanStandardResponse } from './models/BooleanStandardResponse';
 export type { ContractModel } from './models/ContractModel';
 export type { ContractView } from './models/ContractView';
 export type { ContractViewPagedCollection } from './models/ContractViewPagedCollection';
@@ -28,6 +29,8 @@ export type { TeamMemberModel } from './models/TeamMemberModel';
 export type { TimeSheetHistoryView } from './models/TimeSheetHistoryView';
 export type { TimeSheetHistoryViewPagedCollection } from './models/TimeSheetHistoryViewPagedCollection';
 export type { TimeSheetHistoryViewPagedCollectionStandardResponse } from './models/TimeSheetHistoryViewPagedCollectionStandardResponse';
+export type { TimeSheetMonthlyView } from './models/TimeSheetMonthlyView';
+export type { TimeSheetMonthlyViewIEnumerableStandardResponse } from './models/TimeSheetMonthlyViewIEnumerableStandardResponse';
 export type { UpdateUserModel } from './models/UpdateUserModel';
 export type { UserProfileView } from './models/UserProfileView';
 export type { UserProfileViewStandardResponse } from './models/UserProfileViewStandardResponse';

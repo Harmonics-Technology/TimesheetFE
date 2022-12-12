@@ -6,6 +6,7 @@ import {
     HStack,
     Text,
     useToast,
+    Image,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { FaUser } from "react-icons/fa";
@@ -18,6 +19,8 @@ import { UserContext } from "@components/context/UserContext";
 import { UpdateUserModel, UserService } from "src/services";
 import InputBlank from "@components/bits-utils/InputBlank";
 import Cookies from "js-cookie";
+import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
+import { DateObject } from "react-multi-date-picker";
 
 const schema = yup.object().shape({
     // firstName: yup.string().required(),
@@ -33,6 +36,7 @@ function MyProfile() {
     const {
         register,
         handleSubmit,
+        control,
         formState: { errors, isSubmitting },
     } = useForm<UpdateUserModel>({
         resolver: yupResolver(schema),
@@ -90,8 +94,18 @@ function MyProfile() {
                         size="4rem"
                         fontSize="2rem"
                         color="white"
+                        overflow="hidden"
                     >
-                        <FaUser />
+                        {user?.profilePicture ? (
+                            <Image
+                                src={user?.profilePicture}
+                                w="full"
+                                h="full"
+                                objectFit="cover"
+                            />
+                        ) : (
+                            <FaUser />
+                        )}
                     </Circle>
                     <Box>
                         <Text
@@ -154,6 +168,14 @@ function MyProfile() {
                                 defaultValue={"Adelowomi"}
                                 register={register}
                             /> */}
+                            <PrimaryDate<UpdateUserModel>
+                                control={control}
+                                name="isActive"
+                                label="Date of Birth"
+                                error={errors.isActive}
+                                placeholder={user?.active as string}
+                                max={new DateObject().subtract(1, "days")}
+                            />
                         </Grid>
                     </Box>
                     <Box
@@ -179,14 +201,16 @@ function MyProfile() {
                                 defaultValue={user?.email as string}
                                 disableLabel={true}
                             />
-                            {/* <PrimaryInput<UpdateUserModel>
+                            <PrimaryInput<UpdateUserModel>
                                 label="Address"
-                                name="role"
-                                error={errors.role}
+                                name="organizationAddress"
+                                error={errors.organizationAddress}
                                 placeholder=""
-                                defaultValue={user?.lastName as string}
+                                defaultValue={
+                                    user?.organizationAddress as string
+                                }
                                 register={register}
-                            /> */}
+                            />
                             <PrimaryInput<UpdateUserModel>
                                 label="Phone No."
                                 name="phoneNumber"

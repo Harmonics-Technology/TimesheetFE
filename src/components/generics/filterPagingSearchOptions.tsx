@@ -3,7 +3,7 @@ export const filterPagingSearchOptions = (ctx: any) => {
 
     const { limit, offset, search } = ctx.query;
     const options = {
-        limit: limit ? limit : 10,
+        limit: limit ? limit : 5,
         offset: offset ? offset : 0,
         search: search ? search : "",
     };

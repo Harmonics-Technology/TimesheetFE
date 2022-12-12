@@ -79,7 +79,10 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
+                <Grid
+                    templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                    gap="1rem 2rem"
+                >
                     <Box>
                         <Text
                             fontWeight="600"
@@ -91,7 +94,10 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
                         >
                             Basic Info
                         </Text>
-                        <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
+                        <Grid
+                            templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                            gap="1rem 2rem"
+                        >
                             <PrimaryInput<UpdateUserModel>
                                 label="Organisation Name"
                                 name="organizationName"
@@ -162,7 +168,10 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
                         >
                             Contact Details
                         </Text>
-                        <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
+                        <Grid
+                            templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                            gap="1rem 2rem"
+                        >
                             <PrimaryInput<UpdateUserModel>
                                 label="Contact First Name"
                                 name="firstName"
@@ -198,7 +207,11 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
                         </Grid>
                     </Box>
                 </Grid>
-                <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem" my="2rem">
+                <Grid
+                    templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                    gap="1rem 2rem"
+                    my="2rem"
+                >
                     <Button
                         bgColor="gray.500"
                         color="white"

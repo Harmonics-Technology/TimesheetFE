@@ -10,6 +10,8 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     control: Control<TFormValues>;
     fontSize?: string;
     placeholder?: string;
+    min?: any;
+    max?: any;
 }
 
 export const PrimaryDate = <TFormValues extends Record<string, any>>({
@@ -19,6 +21,8 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
     control,
     fontSize = ".8rem",
     placeholder,
+    min,
+    max,
 }: FormInputProps<TFormValues>) => {
     return (
         <GridItem>
@@ -35,21 +39,24 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                     control={control}
                     name={name}
                     rules={{ required: true }} //optional
-                    render={({
-                        field: { onChange, name, value },
-                        formState: { errors }, //optional, but necessary if you want to show an error message
-                    }) => (
+                    render={({ field: { onChange, name, value } }) => (
                         <>
                             <DatePicker
                                 value={value || ""}
-                                onChange={(date) => {
-                                    onChange(date ? date : "");
+                                onChange={(date: any) => {
+                                    onChange(
+                                        JSON.stringify(
+                                            date?.toDate?.(),
+                                        )?.replaceAll('"', ""),
+                                    );
                                 }}
                                 format={"DD/MM/YYYY"}
                                 inputClass={"date"}
                                 containerClassName="dateWrapper"
                                 hideOnScroll
                                 placeholder={placeholder}
+                                minDate={min}
+                                maxDate={max}
                             />
                         </>
                     )}

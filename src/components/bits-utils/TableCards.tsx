@@ -36,7 +36,7 @@ function TableCards({ title, url, data }: TableCardsProps) {
                 <Link href={"/admin/rent/applications/"} key={1}>
                     <>
                         {data?.slice(0, 4).map((x: UserView) => (
-                            <Tr>
+                            <Tr key={x.id}>
                                 <TableData name={x.firstName} />
                                 <TableData name={x.email} />
                                 <TableStatus name={x.isActive} />

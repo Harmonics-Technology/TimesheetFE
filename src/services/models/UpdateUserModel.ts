@@ -13,4 +13,5 @@ export type UpdateUserModel = {
     organizationEmail?: string | null;
     organizationPhone?: string | null;
     organizationAddress?: string | null;
+    profilePicture?: string | null;
 };

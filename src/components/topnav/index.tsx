@@ -42,7 +42,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
             pos="sticky"
             top="0"
             bgColor="#f6f7f8"
-            zIndex="999"
+            zIndex="800"
         >
             <Box color="brand.200">
                 <Text

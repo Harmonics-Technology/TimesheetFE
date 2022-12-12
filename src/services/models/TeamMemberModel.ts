@@ -15,7 +15,7 @@ export type TeamMemberModel = {
     organizationAddress?: string | null;
     payRollTypeId?: number;
     clientId?: string | null;
-    supervisorId?: string;
+    supervisorId?: string | null;
     ratePerHour?: number;
     dateOfBirth?: string;
     jobTitle?: string | null;

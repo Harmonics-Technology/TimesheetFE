@@ -16,7 +16,11 @@ import {
     FormLabel,
 } from "@chakra-ui/react";
 import DrawerWrapper from "@components/bits-utils/Drawer";
-import { TableData, TableState } from "@components/bits-utils/TableData";
+import {
+    TableContract,
+    TableData,
+    TableState,
+} from "@components/bits-utils/TableData";
 import Tables from "@components/bits-utils/Tables";
 import React, { useRef, useState } from "react";
 import { Widget } from "@uploadcare/react-widget";
@@ -25,6 +29,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { RiMailSendFill } from "react-icons/ri";
 import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
+import moment from "moment";
+
 interface adminProps {
     adminList: ContractViewPagedCollectionStandardResponse;
     userProfile?: UserView;
@@ -40,6 +46,7 @@ import {
 import Pagination from "@components/bits-utils/Pagination";
 import { useRouter } from "next/router";
 import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
+import { DateObject } from "react-multi-date-picker";
 
 const schema = yup.object().shape({
     title: yup.string().required(),
@@ -210,21 +217,32 @@ function TeamManagement({ adminList, userProfile }: adminProps) {
                     ]}
                 >
                     <>
-                        {adminList?.data?.value?.map((x: ContractView) => (
-                            <Tr key={x.title}>
-                                <TableData name={userProfile?.fullName} />
-                                <TableData name={x.title} />
-                                <TableData name={x.startDate} />
-                                <TableData name={x.endDate} />
-                                <TableData
-                                    name={x.tenor as unknown as string}
-                                />
-                                <TableState name={x.status as string} />
-                            </Tr>
-                        ))}
+                        {userProfile?.employeeInformation?.contracts?.map(
+                            (x: ContractView) => (
+                                <Tr key={x.title}>
+                                    <TableData name={userProfile?.fullName} />
+                                    <TableData name={x.title} />
+                                    <TableData
+                                        name={moment(x.startDate).format(
+                                            "DD/MM/YYYY",
+                                        )}
+                                    />
+                                    <TableData
+                                        name={moment(x.endDate).format(
+                                            "DD/MM/YYYY",
+                                        )}
+                                    />
+                                    <TableData
+                                        name={x.tenor as unknown as string}
+                                    />
+                                    <TableContract url={x.document} />
+                                    <TableState name={"ACTIVE"} />
+                                    <TableData name={"..."} />
+                                </Tr>
+                            ),
+                        )}
                     </>
                 </Tables>
-                <Pagination data={adminList} />
             </Box>
             <DrawerWrapper
                 onClose={onClose}
@@ -233,7 +251,10 @@ function TeamManagement({ adminList, userProfile }: adminProps) {
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Box w="full">
-                        <Grid templateColumns="repeat(3,1fr)" gap="1rem 2rem">
+                        <Grid
+                            templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                            gap="1rem 2rem"
+                        >
                             <PrimaryInput<ContractModel>
                                 label="Contract Title"
                                 name="title"
@@ -247,12 +268,14 @@ function TeamManagement({ adminList, userProfile }: adminProps) {
                                 name="startDate"
                                 label="Start Date"
                                 error={errors.startDate}
+                                min={new Date()}
                             />
                             <PrimaryDate<ContractModel>
                                 control={control}
                                 name="endDate"
                                 label="End Date"
                                 error={errors.endDate}
+                                min={new DateObject().add(3, "days")}
                             />
                         </Grid>
                         <Box>
@@ -270,7 +293,7 @@ function TeamManagement({ adminList, userProfile }: adminProps) {
                                 h="2.6rem"
                                 align="center"
                                 pr="1rem"
-                                w="63%"
+                                w={["100%", "63%"]}
                                 // justifyContent="space-between"
                             >
                                 <Flex

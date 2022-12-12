@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-sparse-arrays */
 import {
     Box,
@@ -52,27 +53,28 @@ import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
 import { SelectrixBox } from "@components/bits-utils/Selectrix";
 import { FaTimes } from "react-icons/fa";
 import { PrimaryRadio } from "@components/bits-utils/PrimaryRadio";
+import { DateObject } from "react-multi-date-picker";
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
     firstName: yup.string().required(),
     email: yup.string().email().required(),
-    phoneNumber: yup.number().required(),
+    phoneNumber: yup.string().required(),
     jobTitle: yup.string().required(),
-    dateOfBirth: yup.string().required(),
     clientId: yup.string().required(),
-    // // supervisorId: yup.string().required(),
-    isActive: yup.string().required(),
-    payRollTypeId: yup.string().required(),
-    hoursPerDay: yup.string().required(),
+    supervisorId: yup.string().required(),
+    isActive: yup.boolean().required(),
+    payRollTypeId: yup.number().required(),
+    hoursPerDay: yup.number().required(),
     paymentPartnerId: yup.string().required(),
-    ratePerHour: yup.string().required(),
+    ratePerHour: yup.number().required(),
     currency: yup.string().required(),
     paymentRate: yup.string().required(),
-    fixedAmount: yup.string().required(),
+    fixedAmount: yup.boolean().required(),
     title: yup.string().required(),
     startDate: yup.string().required(),
     endDate: yup.string().required(),
+    dateOfBirth: yup.string().required(),
 });
 
 function TeamManagement({
@@ -99,7 +101,7 @@ function TeamManagement({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    console.log(watch("organizationPhone"));
+    console.log(watch("phoneNumber"));
 
     const [showLoading, setShowLoading] = useState(false);
     const widgetApi = useRef<any>();
@@ -117,11 +119,10 @@ function TeamManagement({
             });
         }
     };
+    showLoading && showLoadingState;
 
     const onSubmit = async (data: TeamMemberModel) => {
-        data.fixedAmount = data.fixedAmount === ("true" as unknown as boolean);
-        data.isActive = data.isActive === ("true" as unknown as boolean);
-        data.document = contract.cdnUrl;
+        data.document = `${contract.cdnUrl} ${contract.name}`;
         if (data.document === undefined || "") {
             toast({
                 title: "Please select a contract document and try again",
@@ -132,34 +133,35 @@ function TeamManagement({
             return;
         }
         console.log({ data });
-        // try {
-        //     const result = await UserService.create(data);
-        //     if (result.status) {
-        //         toast({
-        //             title: `Invite Sent`,
-        //             status: "success",
-        //             isClosable: true,
-        //             position: "top-right",
-        //         });
-        //         router.reload();
-        //         onClose();
-        //         return;
-        //     }
-        //     toast({
-        //         title: result.message,
-        //         status: "error",
-        //         isClosable: true,
-        //         position: "top-right",
-        //     });
-        //     return;
-        // } catch (err) {
-        //     toast({
-        //         title: "An error occurred",
-        //         status: "error",
-        //         isClosable: true,
-        //         position: "top-right",
-        //     });
-        // }
+
+        try {
+            const result = await UserService.addTeamMember(data);
+            if (result.status) {
+                toast({
+                    title: `Invite Sent`,
+                    status: "success",
+                    isClosable: true,
+                    position: "top-right",
+                });
+                router.reload();
+                onClose();
+                return;
+            }
+            toast({
+                title: result.message,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+            return;
+        } catch (err) {
+            toast({
+                title: "An error occurred",
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        }
     };
 
     function setFilter(filter: string) {
@@ -202,7 +204,7 @@ function TeamManagement({
                             w="fit-content"
                             onChange={(e) => setFilter(e.target.value)}
                         >
-                            <option value="10">10</option>
+                            <option value="5">5</option>
                             <option value="20">20</option>
                             <option value="30">30</option>
                         </Select>
@@ -221,17 +223,27 @@ function TeamManagement({
                     tableHead={[
                         "Name",
                         "Job Title",
-                        "Email",
+                        "Client",
+                        "Phone No",
                         "Role",
                         "Status",
-                        "Action",
+                        "",
                     ]}
                 >
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
                                 <TableData name={x.firstName} />
-                                <TableData name={x.email} />
+                                <TableData
+                                    name={x.employeeInformation?.jobTitle}
+                                />
+                                <TableData
+                                    name={
+                                        x.employeeInformation?.client
+                                            ?.organizationName
+                                    }
+                                />
+                                <TableData name={x.phoneNumber} />
                                 <TableData name={x.role} />
                                 <TableStatus name={x.isActive} />
                                 <TableActions
@@ -251,7 +263,10 @@ function TeamManagement({
                 title={"Add a new Team Member"}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <Grid templateColumns="repeat(3,1fr)" gap="1rem 2rem">
+                    <Grid
+                        templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                        gap="1rem 2rem"
+                    >
                         <PrimaryInput<TeamMemberModel>
                             label="First Name"
                             name="firstName"
@@ -296,6 +311,7 @@ function TeamManagement({
                             name="dateOfBirth"
                             label="Date of Birth"
                             error={errors.dateOfBirth}
+                            max={new DateObject().subtract(1, "days")}
                         />
                         <SelectrixBox<TeamMemberModel>
                             control={control}
@@ -346,7 +362,10 @@ function TeamManagement({
                                 Work Data
                             </Text>
                         </Flex>
-                        <Grid templateColumns="repeat(3,1fr)" gap="1rem 2rem">
+                        <Grid
+                            templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                            gap="1rem 2rem"
+                        >
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
                                 name="payRollTypeId"
@@ -356,11 +375,11 @@ function TeamManagement({
                                 label="Payroll Type"
                                 options={[
                                     {
-                                        id: 1,
+                                        id: "1",
                                         label: "Onshore Contract",
                                     },
                                     {
-                                        id: 2,
+                                        id: "2",
                                         label: "Offshore contract",
                                     },
                                 ]}
@@ -447,7 +466,10 @@ function TeamManagement({
                                 Contract Details
                             </Text>
                         </Flex>
-                        <Grid templateColumns="repeat(3,1fr)" gap="1rem 2rem">
+                        <Grid
+                            templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                            gap="1rem 2rem"
+                        >
                             <PrimaryInput<TeamMemberModel>
                                 label="Contract Title"
                                 name="title"
@@ -461,12 +483,14 @@ function TeamManagement({
                                 name="startDate"
                                 label="Start Date"
                                 error={errors.startDate}
+                                min={new Date()}
                             />
                             <PrimaryDate<TeamMemberModel>
                                 control={control}
                                 name="endDate"
                                 label="End Date"
                                 error={errors.endDate}
+                                min={new DateObject().add(3, "days")}
                             />
                         </Grid>
                         <Box>
@@ -484,7 +508,7 @@ function TeamManagement({
                                 h="2.6rem"
                                 align="center"
                                 pr="1rem"
-                                w="63%"
+                                w={["100%", "63%"]}
                                 // justifyContent="space-between"
                             >
                                 <Flex

@@ -280,7 +280,10 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                 <Loading loading={loading} />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     {oldMember === undefined || oldMember === "" ? (
-                        <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
+                        <Grid
+                            templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                            gap="1rem 2rem"
+                        >
                             <PrimaryInput<RegisterModel>
                                 label="First Name"
                                 name="firstName"

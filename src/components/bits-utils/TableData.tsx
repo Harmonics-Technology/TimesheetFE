@@ -7,11 +7,14 @@ import {
     Td,
     useToast,
 } from "@chakra-ui/react";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import { AiOutlineDownload } from "react-icons/ai";
 import { FaEllipsisH } from "react-icons/fa";
 import { InitiateResetModel, SettingsService, UserService } from "src/services";
+import fileDownload from "js-file-download";
 
 export function TableData({ name }: { name: string | undefined | null }) {
     return (
@@ -61,6 +64,33 @@ export function TableState({ name }: { name: string }) {
                 textTransform="uppercase"
             >
                 {name}
+            </Box>
+        </td>
+    );
+}
+export function TableContract({ url }: { url: any }) {
+    url = url.split(" ")[0];
+    const downloadFile = (url) => {
+        console.log({ url });
+        axios
+            .get(url, {
+                responseType: "blob",
+            })
+            .then((res) => {
+                fileDownload(res.data, `${url.split(" ")[1]}`);
+            });
+    };
+    return (
+        <td>
+            <Box
+                fontSize="1.4rem"
+                fontWeight="bold"
+                padding=".2rem 1rem"
+                width="fit-content"
+                cursor="pointer"
+                onClick={() => downloadFile(url)}
+            >
+                <AiOutlineDownload />
             </Box>
         </td>
     );
@@ -119,6 +149,34 @@ export function TableActions({
                     </MenuItem>
                     <MenuItem>
                         <Link href={`${route}/${id}`}>View Profile</Link>
+                    </MenuItem>
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+export function TableContractAction({ id }: { id: any }) {
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        <FaEllipsisH />
+                    </Box>
+                </MenuButton>
+                <MenuList>
+                    <MenuItem>
+                        <Link
+                            href={`/SuperAdmin/profile-management/team-members/${id}`}
+                        >
+                            View Profile
+                        </Link>
                     </MenuItem>
                 </MenuList>
             </Menu>

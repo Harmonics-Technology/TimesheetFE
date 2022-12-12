@@ -67,7 +67,9 @@ function ClientManagement({ adminList }: adminProps) {
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),
         mode: "all",
-        defaultValues: {},
+        defaultValues: {
+            role: "client",
+        },
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -206,7 +208,10 @@ function ClientManagement({ adminList }: adminProps) {
                         defaultValue=""
                         register={register}
                     />
-                    <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
+                    <Grid
+                        templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                        gap="1rem 2rem"
+                    >
                         <PrimaryInput<RegisterModel>
                             label="Organization Email"
                             name="organizationEmail"
@@ -222,15 +227,15 @@ function ClientManagement({ adminList }: adminProps) {
                             placeholder="Organization Phone No."
                             control={control}
                         />
-                        <PrimaryTextarea<RegisterModel>
-                            label="Organization Address"
-                            name="organizationAddress"
-                            error={errors.organizationAddress}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
                     </Grid>
+                    <PrimaryTextarea<RegisterModel>
+                        label="Organization Address"
+                        name="organizationAddress"
+                        error={errors.organizationAddress}
+                        placeholder=""
+                        defaultValue=""
+                        register={register}
+                    />
                     <Box w="full">
                         <Flex
                             justify="space-between"

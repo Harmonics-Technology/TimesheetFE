@@ -1,9 +1,3 @@
-.App {
-    font-family: sans-serif;
-    text-align: center;
-    color: #212121;
-}
-
 .changeMonth {
     margin: 0px 20px;
 }
@@ -20,37 +14,60 @@
 
 .weekContainer {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(8, 1fr);
+    /* background-color: #2eafa3; */
+    margin-top: 1rem;
+}
+.weekContainer .day {
+    height: 4rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    padding-top: 0;
+    align-items: center;
+    /* flex-direction: row; */
+    justify-content: center;
+}
+.dayContainer {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    border: 1px solid #e5e5e5;
+    gap: 0;
 }
 
 .day {
-    margin: 12px;
-    height: 4rem;
-    width: 4rem;
+    /* margin: 12px; */
+    height: 8rem;
+    padding-top: 1rem;
+    width: 100%;
     cursor: pointer;
     display: flex;
-    justify-content: center;
-    align-items: center;    
-    border-radius: 50%;
+    align-items: center;
+    /* align-items: center; */
+    /* border-radius: 50%; */
+    border: 1px solid #e5e5e5;
+    flex-direction: column;
 }
 
 .weekNames {
-    color: #9e9e9e;
+    /* color: white; */
     cursor: default;
+    text-transform: uppercase;
 }
 
 .inactiveDay {
     color: #9e9e9e;
 }
 .today {
-    background: #efefee;
+    /* background: #efefee; */
     border-radius: 50%;
 }
-
 .selectedDay {
-    color: white;
-    background: #3366ff;
+    /* color: white;
+    background: #3366ff; */
     border-radius: 50%;
+}
+.day.selectedDay {
+    border: none;
 }
 
 .navIcon {

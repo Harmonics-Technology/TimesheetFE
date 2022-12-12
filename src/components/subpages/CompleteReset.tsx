@@ -86,6 +86,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                     w={["full", "35%"]}
                     mx="auto"
                     boxShadow="0 20px 27px 0 rgb(0 0 0 / 10%)"
+                    h={["full", "auto"]}
                     p="1rem 3rem 4rem"
                 >
                     <Box

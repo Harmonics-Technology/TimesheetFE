@@ -30,6 +30,7 @@ import { SelectrixBox } from "@components/bits-utils/Selectrix";
 import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
 import { PrimaryRadio } from "@components/bits-utils/PrimaryRadio";
 import ContractTable from "@components/bits-utils/ContractTable";
+import { DateObject } from "react-multi-date-picker";
 
 const schema = yup.object().shape({});
 interface TeamProfileProps {
@@ -62,6 +63,7 @@ function TeamProfile({
     });
     const router = useRouter();
     const toast = useToast();
+    console.log({ userProfile });
 
     const onSubmit = async (data: TeamMemberModel) => {
         data.isActive = data.isActive === ("true" as unknown as boolean);
@@ -104,7 +106,10 @@ function TeamProfile({
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Grid templateColumns="repeat(3,1fr)" gap="1rem 2rem">
+                <Grid
+                    templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                    gap="1rem 2rem"
+                >
                     <PrimaryInput<TeamMemberModel>
                         label="First Name"
                         name="firstName"
@@ -150,6 +155,7 @@ function TeamProfile({
                         label="Date of Birth"
                         error={errors.dateOfBirth}
                         placeholder={userProfile?.email as string}
+                        max={new DateObject().subtract(1, "days")}
                     />
                     <SelectrixBox<TeamMemberModel>
                         control={control}
@@ -213,7 +219,10 @@ function TeamProfile({
                             Work Data
                         </Text>
                     </Flex>
-                    <Grid templateColumns="repeat(3,1fr)" gap="1rem 2rem">
+                    <Grid
+                        templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                        gap="1rem 2rem"
+                    >
                         <SelectrixBox<TeamMemberModel>
                             control={control}
                             name="payRollTypeId"
@@ -222,16 +231,16 @@ function TeamProfile({
                             keyLabel="label"
                             label="Payroll Type"
                             placeholder={
-                                userProfile?.employeeInformation
-                                    ?.payrollType as string
+                                (userProfile?.employeeInformation
+                                    ?.payrollType as string) || "Please Select"
                             }
                             options={[
                                 {
-                                    id: 1,
+                                    id: "1",
                                     label: "Onshore Contract",
                                 },
                                 {
-                                    id: 2,
+                                    id: "2",
                                     label: "Offshore contract",
                                 },
                             ]}
@@ -325,7 +334,11 @@ function TeamProfile({
                     userProfile={userProfile}
                     adminList={contractList}
                 />
-                <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem" my="2rem">
+                <Grid
+                    templateColumns={["repeat(2,1fr)", "repeat(2,1fr)"]}
+                    gap="1rem 2rem"
+                    my="2rem"
+                >
                     <Button
                         bgColor="gray.500"
                         color="white"
