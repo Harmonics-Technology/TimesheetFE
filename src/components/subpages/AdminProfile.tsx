@@ -6,7 +6,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { VscSaveAs } from "react-icons/vsc";
 import roles from "../generics/roles.json";
-import { PrimarySelect } from "@components/bits-utils/PrimarySelect";
 import { UpdateUserModel, UserService, UserView } from "src/services";
 import InputBlank from "@components/bits-utils/InputBlank";
 import { useRouter } from "next/router";
@@ -27,7 +26,6 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
     const {
         register,
         handleSubmit,
-        watch,
         control,
         formState: { errors, isSubmitting },
     } = useForm<UpdateUserModel>({
@@ -47,33 +45,33 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
         data.isActive = data.isActive === ("true" as unknown as boolean);
         console.log({ data });
 
-        // try {
-        //     const result = await UserService.adminUpdateUser(data);
-        //     // console.log({ result });
-        //     if (result.status) {
-        //         toast({
-        //             title: "Profile Update Success",
-        //             status: "success",
-        //             isClosable: true,
-        //             position: "top-right",
-        //         });
-        //         return;
-        //     }
-        //     toast({
-        //         title: result.message,
-        //         status: "error",
-        //         isClosable: true,
-        //         position: "top-right",
-        //     });
-        // } catch (error) {
-        //     console.log(error);
-        //     toast({
-        //         title: `Check your network connection and try again`,
-        //         status: "error",
-        //         isClosable: true,
-        //         position: "top-right",
-        //     });
-        // }
+        try {
+            const result = await UserService.adminUpdateUser(data);
+            // console.log({ result });
+            if (result.status) {
+                toast({
+                    title: "Profile Update Success",
+                    status: "success",
+                    isClosable: true,
+                    position: "top-right",
+                });
+                return;
+            }
+            toast({
+                title: result.message,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        } catch (error) {
+            console.log(error);
+            toast({
+                title: `Check your network connection and try again`,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        }
     };
     return (
         <Box

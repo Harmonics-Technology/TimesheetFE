@@ -39,7 +39,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                     control={control}
                     name={name}
                     rules={{ required: true }} //optional
-                    render={({ field: { onChange, name, value } }) => (
+                    render={({ field: { onChange, value } }) => (
                         <>
                             <DatePicker
                                 value={value || ""}

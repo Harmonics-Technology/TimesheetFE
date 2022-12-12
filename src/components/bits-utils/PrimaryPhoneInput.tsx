@@ -1,18 +1,7 @@
 import { FormLabel, FormControl, Text } from "@chakra-ui/react";
-import {
-    Control,
-    Controller,
-    FieldError,
-    Path,
-    UseFormRegister,
-} from "react-hook-form";
+import { Control, Controller, FieldError, Path } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-// import "react-phone-number-input/style.css";
-// import PhoneInput, {
-//     isPossiblePhoneNumber,
-//     isValidPhoneNumber,
-// } from "react-phone-number-input";
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
@@ -27,8 +16,6 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
 }
 export const PrimaryPhoneInput = <TFormValues extends Record<string, any>>({
     name,
-    required = false,
-    validate = {},
     error,
     label = "",
     control,
@@ -36,7 +23,7 @@ export const PrimaryPhoneInput = <TFormValues extends Record<string, any>>({
     placeholder,
     defaultCountry = "ca",
 }: FormInputProps<TFormValues>) => {
-    const value = control._formValues[name];
+    // const value = control._formValues[name];
     // console.log({ value });
     return (
         <>

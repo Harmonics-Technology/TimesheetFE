@@ -4,16 +4,9 @@ import {
     RadioGroup,
     Stack,
     HStack,
-    Box,
     Radio,
 } from "@chakra-ui/react";
-import {
-    Controller,
-    UseFormRegister,
-    Path,
-    FieldError,
-    Control,
-} from "react-hook-form";
+import { Controller, Path, FieldError, Control } from "react-hook-form";
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
@@ -29,9 +22,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
 
 export const PrimaryRadio = <TFormValues extends Record<string, any>>({
     name,
-    required = false,
     label = "",
-    validate = {},
     error,
     control,
     radios,

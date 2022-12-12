@@ -43,7 +43,6 @@ import {
     ContractViewPagedCollectionStandardResponse,
     UserView,
 } from "src/services";
-import Pagination from "@components/bits-utils/Pagination";
 import { useRouter } from "next/router";
 import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
 import { DateObject } from "react-multi-date-picker";

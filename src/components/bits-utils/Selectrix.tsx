@@ -1,16 +1,5 @@
-import {
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-    Select,
-} from "@chakra-ui/react";
-import {
-    Control,
-    Controller,
-    FieldError,
-    Path,
-    UseFormRegister,
-} from "react-hook-form";
+import { FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
+import { Control, Controller, FieldError, Path } from "react-hook-form";
 interface select {
     options: UserView[];
     customKeys: { key: string; label: string };

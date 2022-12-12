@@ -27,7 +27,7 @@ function Pagination({ data }: pageOptions) {
     const paginate = (direction: "next" | "previous") => {
         let link = "";
         if (direction == "previous" && previous != null) {
-            link = previous!.split("?")[1];
+            link = previous?.split("?")[1] ?? false;
             router.push({
                 query: {
                     url: link,
@@ -35,7 +35,7 @@ function Pagination({ data }: pageOptions) {
             });
         }
         if (direction == "next" && next != null) {
-            link = next!.split("?")[1];
+            link = next?.split("?")[1] ?? false;
             router.push({
                 query: {
                     url: link,

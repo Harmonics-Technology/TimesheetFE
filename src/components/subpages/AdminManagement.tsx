@@ -28,8 +28,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { RiMailSendFill } from "react-icons/ri";
 import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
-import { PrimarySelect } from "@components/bits-utils/PrimarySelect";
-// import Selectrix from "react-selectrix";
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     team: UserView[];
@@ -54,6 +52,7 @@ import Pagination from "@components/bits-utils/Pagination";
 import roles from "../generics/roles.json";
 import { useRouter } from "next/router";
 import Loading from "@components/bits-utils/Loading";
+import { SelectrixBox } from "@components/bits-utils/Selectrix";
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -68,6 +67,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
         register,
         handleSubmit,
         watch,
+        control,
         formState: { errors, isSubmitting },
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),
@@ -84,7 +84,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
             const result = await UserService.create(data);
             if (result.status) {
                 toast({
-                    title: `Successfully created`,
+                    title: `Invite Sent`,
                     status: "success",
                     isClosable: true,
                     position: "top-right",
@@ -138,15 +138,6 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
     const [loading, setLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    function Reset() {
-        setUserDetail({
-            firstName: "",
-            lastName: "",
-            email: "",
-            role: "",
-            id: "",
-        });
-    }
     const getUserData = async (id: string) => {
         if (id === undefined) {
             setUserDetail({
@@ -308,26 +299,14 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                                 defaultValue=""
                                 register={register}
                             />
-                            <PrimarySelect<RegisterModel>
-                                register={register}
+                            <SelectrixBox<RegisterModel>
+                                control={control}
                                 name="role"
                                 error={errors.role}
+                                keys="title"
+                                keyLabel="title"
                                 label="Role"
-                                placeholder="..."
-                                options={
-                                    <>
-                                        {roles.slice(0, 4).map((x: any) => {
-                                            return (
-                                                <option
-                                                    value={x.title}
-                                                    key={x.id}
-                                                >
-                                                    {x.title}
-                                                </option>
-                                            );
-                                        })}
-                                    </>
-                                }
+                                options={roles.slice(0, 4)}
                             />
                         </Grid>
                     ) : null}
@@ -407,21 +386,6 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                                                 }
                                             />
                                         </Box>
-
-                                        {/* {oldMember !== "" && (
-                                            <Flex
-                                                fontSize=".8rem"
-                                                mt=".5rem"
-                                                onClick={Reset}
-                                                align="center"
-                                                cursor="pointer"
-                                            >
-                                                <FaTimes />{" "}
-                                                <Text mb="0" ml=".4rem">
-                                                    Clear
-                                                </Text>
-                                            </Flex>
-                                        )} */}
                                     </Box>
                                     <Box>
                                         <FormLabel

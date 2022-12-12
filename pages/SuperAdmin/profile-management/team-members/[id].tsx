@@ -1,7 +1,7 @@
 import { withPageAuth } from "@components/generics/withPageAuth";
 import TeamProfile from "@components/subpages/TeamProfile";
 import { GetServerSideProps } from "next";
-import { ContractService, UserService, UserView } from "src/services";
+import { UserService, UserView } from "src/services";
 
 interface pageOptions {
     userProfile: any;

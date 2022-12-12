@@ -13,7 +13,6 @@ import {
     Grid,
     DrawerFooter,
     useToast,
-    Checkbox,
     Spinner,
     FormLabel,
 } from "@chakra-ui/react";
@@ -26,7 +25,7 @@ import {
 import Tables from "@components/bits-utils/Tables";
 import React, { useRef, useState } from "react";
 import { Widget } from "@uploadcare/react-widget";
-import { FieldError, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { RiMailSendFill } from "react-icons/ri";
@@ -45,13 +44,10 @@ import {
     UserViewPagedCollectionStandardResponse,
 } from "src/services";
 import Pagination from "@components/bits-utils/Pagination";
-import roles from "../generics/roles.json";
 import { useRouter } from "next/router";
-import { PrimaryTextarea } from "@components/bits-utils/PrimaryTextArea";
 import { PrimaryPhoneInput } from "@components/bits-utils/PrimaryPhoneInput";
 import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
 import { SelectrixBox } from "@components/bits-utils/Selectrix";
-import { FaTimes } from "react-icons/fa";
 import { PrimaryRadio } from "@components/bits-utils/PrimaryRadio";
 import { DateObject } from "react-multi-date-picker";
 

@@ -39,7 +39,6 @@ import {
     UserViewPagedCollectionStandardResponse,
 } from "src/services";
 import Pagination from "@components/bits-utils/Pagination";
-import roles from "../generics/roles.json";
 import { useRouter } from "next/router";
 import { PrimaryTextarea } from "@components/bits-utils/PrimaryTextArea";
 import { PrimaryPhoneInput } from "@components/bits-utils/PrimaryPhoneInput";
@@ -62,7 +61,6 @@ function ClientManagement({ adminList }: adminProps) {
         register,
         handleSubmit,
         control,
-        watch,
         formState: { errors, isSubmitting },
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),

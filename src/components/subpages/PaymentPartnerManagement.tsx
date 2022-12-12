@@ -28,7 +28,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { RiMailSendFill } from "react-icons/ri";
 import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
-import { PrimarySelect } from "@components/bits-utils/PrimarySelect";
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
 }
@@ -40,7 +39,6 @@ import {
     UserViewPagedCollectionStandardResponse,
 } from "src/services";
 import Pagination from "@components/bits-utils/Pagination";
-import roles from "../generics/roles.json";
 import { useRouter } from "next/router";
 import { PrimaryTextarea } from "@components/bits-utils/PrimaryTextArea";
 import { PrimaryPhoneInput } from "@components/bits-utils/PrimaryPhoneInput";
@@ -62,7 +60,6 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
         register,
         handleSubmit,
         control,
-        watch,
         formState: { errors, isSubmitting },
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),

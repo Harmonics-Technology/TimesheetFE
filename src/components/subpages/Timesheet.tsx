@@ -13,7 +13,7 @@ import {
 } from "date-fns";
 
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-import { Box, Checkbox, Flex, Grid, Text } from "@chakra-ui/react";
+import { Box, Checkbox, Flex, Grid } from "@chakra-ui/react";
 import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
 } from "@components/bits-utils/TimeSheetEstimation";
