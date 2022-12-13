@@ -10,22 +10,48 @@ import {
     isSameDay,
     subMonths,
     addMonths,
+    lastDayOfMonth,
 } from "date-fns";
 
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-import { Box, Checkbox, Flex, Grid } from "@chakra-ui/react";
+import { MdArrowDropDown } from "react-icons/md";
+import {
+    Box,
+    Checkbox,
+    Flex,
+    Grid,
+    Select,
+    Input,
+    Tooltip,
+} from "@chakra-ui/react";
 import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
 } from "@components/bits-utils/TimeSheetEstimation";
+import {
+    TimeSheetMonthlyView,
+    TimeSheetMonthlyViewIEnumerableStandardResponse,
+    TimeSheetService,
+} from "src/services";
+import moment from "moment";
 
-const Timesheet = () => {
+const Timesheet = ({
+    timeSheets,
+}: {
+    timeSheets: TimeSheetMonthlyViewIEnumerableStandardResponse;
+}) => {
+    console.log({ timeSheets });
+    const sheet = timeSheets.data;
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [activeDate, setActiveDate] = useState(new Date());
+    const [hours, setHours] = useState<string>("");
+    const [monthlyTimesheets, setMonthlyTimesheets] = useState<
+        TimeSheetMonthlyView[]
+    >(sheet as TimeSheetMonthlyView[]);
 
     const getHeader = () => {
         return (
             <div className="header">
-                <div
+                {/* <div
                     className="todayButton"
                     onClick={() => {
                         setSelectedDate(new Date());
@@ -33,18 +59,54 @@ const Timesheet = () => {
                     }}
                 >
                     Today
-                </div>
-                <AiOutlineLeft
-                    className="navIcon"
-                    onClick={() => setActiveDate(subMonths(activeDate, 1))}
-                />
-                <AiOutlineRight
-                    className="navIcon"
-                    onClick={() => setActiveDate(addMonths(activeDate, 1))}
-                />
-                <h2 className="currentMonth">
-                    {format(activeDate, "MMMM yyyy")}
-                </h2>
+                </div> */}
+                <Select
+                    border="0"
+                    w="fit-content"
+                    fontSize="1.3rem"
+                    fontWeight="600"
+                    icon={<MdArrowDropDown />}
+                    className="select"
+                    _focus={{
+                        border: 0,
+                    }}
+                >
+                    <option value="">Monthly Activities</option>
+                    <option value="">Weekly Activities</option>
+                </Select>
+                <Flex align="center">
+                    <AiOutlineLeft
+                        className="navIcon"
+                        onClick={() => setActiveDate(subMonths(activeDate, 1))}
+                    />
+                    <Box
+                        borderRadius="15px"
+                        bgColor="#f5f5ff"
+                        p=".3rem .8rem"
+                        color="#000"
+                    >
+                        {`${format(activeDate, "MMM 01")} - ${format(
+                            lastDayOfMonth(activeDate),
+                            "MMM dd",
+                        )}`}
+                    </Box>
+                    <AiOutlineRight
+                        className="navIcon"
+                        onClick={() => setActiveDate(addMonths(activeDate, 1))}
+                    />
+                </Flex>
+                <Flex
+                    px="2rem"
+                    border="1px solid"
+                    // borderColor="gray.400"
+                    borderRadius="30px"
+                    fontSize="1rem"
+                    h="2.8rem"
+                    align="center"
+                    // ml="6rem"
+                >
+                    {monthlyTimesheets[0].employeeInformationId}
+                </Flex>
             </div>
         );
     };
@@ -61,6 +123,7 @@ const Timesheet = () => {
         }
         return (
             <div className="weekContainer">
+                <Box className="day weekNames" color="brand.400"></Box>
                 {weekDays}
                 <Box className="day weekNames" color="brand.400">
                     Total
@@ -70,10 +133,44 @@ const Timesheet = () => {
     };
 
     const generateDatesForCurrentWeek = (date, selectedDate, activeDate) => {
-        let currentDate = date;
+        const approveTimeSheetForADay = async (userId, chosenDate) => {
+            console.log({ userId, chosenDate });
+            try {
+                const data = await TimeSheetService.approveTimeSheetForADay(
+                    userId,
+                    chosenDate,
+                );
+                console.log({ data });
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        const addHours = async (userId, chosenDate, hours) => {
+            window.setTimeout(async () => {
+                console.log({ userId, chosenDate, hours });
+                // try {
+                //     const data = await TimeSheetService.addWorkHoursForADay(
+                //         userId,
+                //         chosenDate,
+                //         hours,
+                //     );
+                //     console.log({ data });
+                // } catch (error) {
+                //     console.log(error);
+                // }
+            }, 2000);
+        };
+        let currentDate: Date = date;
         const week: any[] = [];
         for (let day = 0; day < 7; day++) {
             const cloneDate = currentDate;
+            const timesheets = monthlyTimesheets?.filter(
+                (x) =>
+                    new Date(x.date as string).toLocaleDateString() ==
+                    currentDate.toLocaleDateString(),
+            )[0];
+            const userId = timesheets?.employeeInformationId;
+            const userDate = moment(timesheets?.date).format("YYYY-MM-DD");
             week.push(
                 <Box
                     className={`day ${
@@ -90,25 +187,48 @@ const Timesheet = () => {
                         setSelectedDate(cloneDate);
                     }}
                 >
-                    <div>{format(currentDate, "d")}</div>
-                    <Checkbox
-                        mt="1rem"
-                        disabled={!isSameMonth(currentDate, activeDate)}
-                    >
-                        8hr 06m
-                    </Checkbox>
+                    <Flex>
+                        <div>{format(currentDate, "MMM, d")}</div>
+                        <Checkbox
+                            disabled={!isSameMonth(currentDate, activeDate)}
+                            ml=".5rem"
+                            onChange={() =>
+                                approveTimeSheetForADay(userId, userDate)
+                            }
+                            defaultChecked={timesheets?.isApproved || false}
+                        ></Checkbox>
+                    </Flex>
+
+                    <Input
+                        defaultValue={timesheets?.hours}
+                        placeholder="---"
+                        border="0"
+                        w="50%"
+                        h="auto"
+                        textAlign="center"
+                        onChange={(e) => setHours(e.target.value)}
+                        onKeyUp={() => addHours(userId, userDate, hours)}
+                    />
                 </Box>,
             );
             currentDate = addDays(currentDate, 1);
         }
         return (
             <>
-                {week}
                 <Flex
                     className="day"
                     justify="center"
                     fontWeight="500"
-                    fontSize="1.1rem"
+                    fontSize=".9rem"
+                >
+                    Week
+                </Flex>
+                <>{week}</>
+                <Flex
+                    className="day"
+                    justify="center"
+                    fontWeight="500"
+                    fontSize=".9rem"
                 >
                     40hr 35m
                 </Flex>
@@ -142,23 +262,28 @@ const Timesheet = () => {
 
     return (
         <Box>
-            <Flex bgColor="white" p="2rem" borderRadius="10px">
-                <Box w="full">
-                    {getHeader()}
+            <Box>
+                {getHeader()}
+                <Box
+                    w="full"
+                    bgColor="white"
+                    p="0rem 2rem 0rem"
+                    // borderRadius="10px"
+                >
                     {getWeekDaysNames()}
                     {getDates()}
                 </Box>
                 {/* <Box></Box> */}
-            </Flex>
+            </Box>
             <Box
                 w="100%"
                 ml="auto"
                 bgColor="white"
-                mt="2rem"
-                borderRadius="10px"
-                p="2rem"
+                mt="0rem"
+                // borderRadius="10px"
+                p="1rem 2rem"
             >
-                <Grid templateColumns="repeat(5,1fr)" w="100%" ml="auto">
+                <Grid templateColumns="repeat(5,1fr)" w="80%" mr="auto">
                     <TimeSheetEstimation
                         label="Expected Total Hours"
                         data="100"

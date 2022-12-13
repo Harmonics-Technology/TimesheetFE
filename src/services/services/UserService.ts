@@ -295,7 +295,7 @@ requestBody?: TeamMemberModel,
 requestBody?: TeamMemberModel,
 ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
-            method: 'GET',
+            method: 'POST',
             url: '/api/User/update-team-member',
             body: requestBody,
             mediaType: 'application/json-patch+json',

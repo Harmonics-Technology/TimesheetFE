@@ -69,15 +69,15 @@ export function TableState({ name }: { name: string }) {
     );
 }
 export function TableContract({ url }: { url: any }) {
-    url = url.split(" ")[0];
-    const downloadFile = (url) => {
-        console.log({ url });
+    console.log({ url });
+    const downloadFile = (url: string) => {
+        console.log(url);
         axios
             .get(url, {
                 responseType: "blob",
             })
             .then((res) => {
-                fileDownload(res.data, `${url.split(" ")[1]}`);
+                fileDownload(res.data, `${url.split(" ").pop()}`);
             });
     };
     return (
@@ -155,7 +155,13 @@ export function TableActions({
         </td>
     );
 }
-export function TableContractAction({ id }: { id: any }) {
+export function TableContractAction({
+    id,
+    timeSheets,
+}: {
+    id: any;
+    timeSheets?: boolean;
+}) {
     return (
         <td>
             <Menu>
@@ -172,11 +178,17 @@ export function TableContractAction({ id }: { id: any }) {
                 </MenuButton>
                 <MenuList>
                     <MenuItem>
-                        <Link
-                            href={`/SuperAdmin/profile-management/team-members/${id}`}
-                        >
-                            View Profile
-                        </Link>
+                        {timeSheets === true ? (
+                            <Link href={`/SuperAdmin/timesheets/${id}`}>
+                                View Timesheet
+                            </Link>
+                        ) : (
+                            <Link
+                                href={`/SuperAdmin/profile-management/team-members/${id}`}
+                            >
+                                View Profile
+                            </Link>
+                        )}
                     </MenuItem>
                 </MenuList>
             </Menu>

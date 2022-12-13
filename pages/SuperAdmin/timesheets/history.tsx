@@ -1,5 +1,5 @@
 import { withPageAuth } from "@components/generics/withPageAuth";
-import TimeSheetApproval from "@components/subpages/TimesheetApproval";
+import TimesheetHistory from "@components/subpages/TimesheetHistory";
 import { GetServerSideProps } from "next";
 import React from "react";
 import {
@@ -7,15 +7,15 @@ import {
     TimeSheetService,
 } from "src/services";
 
-function approval({
+function history({
     timeSheets,
 }: {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
 }) {
-    return <TimeSheetApproval timeSheets={timeSheets} />;
+    return <TimesheetHistory timeSheets={timeSheets} />;
 }
 
-export default approval;
+export default history;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
     try {

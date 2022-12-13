@@ -23,5 +23,8 @@ export type EmployeeInformationView = {
     paymentRate?: string | null;
     currency?: string | null;
     fixedAmount?: boolean;
+    clientRate?: number | null;
+    monthlyPayoutRate?: number | null;
+    paymentFrequency?: string | null;
     contracts?: Array<ContractView> | null;
 };

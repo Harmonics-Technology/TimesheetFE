@@ -5,6 +5,7 @@ interface select {
     customKeys: { key: string; label: string };
     onChange: (value: any) => void;
     placeholder?: string;
+    disabled?: boolean;
 }
 import dynamic from "next/dynamic";
 import { UserView } from "src/services";
@@ -22,6 +23,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     keys: string;
     keyLabel: string;
     control: Control<TFormValues>;
+    disabled?: boolean;
 }
 export const SelectrixBox = <TFormValues extends Record<string, any>>({
     name,
@@ -33,6 +35,7 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
     keys,
     keyLabel,
     control,
+    disabled,
 }: FormInputProps<TFormValues>) => {
     return (
         <FormControl isInvalid={error?.type === "required"}>
@@ -49,6 +52,7 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                     <Selectrix
                         options={options}
                         placeholder={placeholder}
+                        disabled={disabled}
                         customKeys={{
                             key: keys,
                             label: keyLabel,

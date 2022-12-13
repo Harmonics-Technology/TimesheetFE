@@ -8,6 +8,8 @@ import type { UserView } from './UserView';
 export type UserViewPagedCollection = {
     offset?: number | null;
     limit?: number | null;
+    nextOffset?: number | null;
+    previousOffset?: number | null;
     size?: number;
     first?: Link;
     previous?: Link;

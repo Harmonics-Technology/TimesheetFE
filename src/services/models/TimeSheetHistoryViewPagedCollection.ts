@@ -8,6 +8,8 @@ import type { TimeSheetHistoryView } from './TimeSheetHistoryView';
 export type TimeSheetHistoryViewPagedCollection = {
     offset?: number | null;
     limit?: number | null;
+    nextOffset?: number | null;
+    previousOffset?: number | null;
     size?: number;
     first?: Link;
     previous?: Link;

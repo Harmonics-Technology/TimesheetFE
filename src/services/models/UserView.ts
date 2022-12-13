@@ -14,6 +14,8 @@ export type UserView = {
     profilePicture?: string | null;
     role?: string | null;
     isActive?: boolean;
+    address?: string | null;
+    dateOfBirth?: string;
     employeeInformation?: EmployeeInformationView;
     phoneNumber?: string | null;
     organizationName?: string | null;

@@ -31,6 +31,8 @@ function Pagination({ data }: pageOptions) {
             router.push({
                 query: {
                     url: link,
+                    limit: data.limit,
+                    offset: data.previousOffset,
                 },
             });
         }
@@ -39,6 +41,8 @@ function Pagination({ data }: pageOptions) {
             router.push({
                 query: {
                     url: link,
+                    limit: data.limit,
+                    offset: data.nextOffset,
                 },
             });
         }

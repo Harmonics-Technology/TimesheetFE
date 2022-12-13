@@ -28,7 +28,7 @@ const Layout = ({ children }: LayoutProps) => {
                                 setOpenSidenav={setOpenSidenav}
                                 openSidenav={openSidenav}
                             />
-                            <Box mt="2rem">{children}</Box>
+                            <Box mt="1rem">{children}</Box>
                             <Footer />
                         </Box>
                     </Box>

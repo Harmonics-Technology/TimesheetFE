@@ -21,6 +21,7 @@ import InputBlank from "@components/bits-utils/InputBlank";
 import Cookies from "js-cookie";
 import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
 import { DateObject } from "react-multi-date-picker";
+import moment from "moment";
 
 const schema = yup.object().shape({
     // firstName: yup.string().required(),
@@ -123,7 +124,7 @@ function MyProfile() {
             </Box>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid
-                    templateColumns="repeat(3,1fr)"
+                    templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
                     gap="1rem 1rem"
                     my="1.5rem"
                 >
@@ -173,7 +174,9 @@ function MyProfile() {
                                 name="isActive"
                                 label="Date of Birth"
                                 error={errors.isActive}
-                                placeholder={user?.active as string}
+                                placeholder={moment(user?.dateOfBirth).format(
+                                    "DD MM YYYY",
+                                )}
                                 max={new DateObject().subtract(1, "days")}
                             />
                         </Grid>

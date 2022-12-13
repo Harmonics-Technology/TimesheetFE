@@ -32,5 +32,8 @@ export type TeamMemberModel = {
     startDate?: string;
     endDate?: string;
     document?: string | null;
+    clientRate?: number | null;
+    monthlyPayoutRate?: number | null;
+    paymentFrequency?: string | null;
     isActive?: boolean;
 };

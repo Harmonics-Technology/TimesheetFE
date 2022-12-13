@@ -56,21 +56,21 @@ const schema = yup.object().shape({
     firstName: yup.string().required(),
     email: yup.string().email().required(),
     phoneNumber: yup.string().required(),
-    jobTitle: yup.string().required(),
-    clientId: yup.string().required(),
-    supervisorId: yup.string().required(),
-    isActive: yup.boolean().required(),
-    payRollTypeId: yup.number().required(),
-    hoursPerDay: yup.number().required(),
-    paymentPartnerId: yup.string().required(),
-    ratePerHour: yup.number().required(),
-    currency: yup.string().required(),
-    paymentRate: yup.string().required(),
-    fixedAmount: yup.boolean().required(),
-    title: yup.string().required(),
-    startDate: yup.string().required(),
-    endDate: yup.string().required(),
-    dateOfBirth: yup.string().required(),
+    // jobTitle: yup.string().required(),
+    // clientId: yup.string().required(),
+    // supervisorId: yup.string().required(),
+    // isActive: yup.boolean().required(),
+    // payRollTypeId: yup.number().required(),
+    // hoursPerDay: yup.number().required(),
+    // paymentPartnerId: yup.string().required(),
+    // ratePerHour: yup.number().required(),
+    // currency: yup.string().required(),
+    // paymentRate: yup.string().required(),
+    // fixedAmount: yup.boolean().required(),
+    // title: yup.string().required(),
+    // startDate: yup.string().required(),
+    // endDate: yup.string().required(),
+    // dateOfBirth: yup.string().required(),
 });
 
 function TeamManagement({
@@ -80,7 +80,7 @@ function TeamManagement({
     paymentPartner,
 }: adminProps) {
     console.log({ adminList });
-    const [contract, setContractFile] = useState<any>("");
+
     const {
         register,
         handleSubmit,
@@ -97,11 +97,62 @@ function TeamManagement({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    console.log(watch("phoneNumber"));
+    // console.log(watch("payRollTypeId"));
+    const payroll = watch("payRollTypeId");
+    console.log({ payroll });
 
+    const [contract, setContractFile] = useState<any>("");
+    const [icd, setIcd] = useState<any>("");
+    const [voidCheck, setVoidCheck] = useState<any>("");
+    const [inc, setInc] = useState<any>("");
     const [showLoading, setShowLoading] = useState(false);
+    const [showLoadingB, setShowLoadingB] = useState(false);
+    const [showLoadingC, setShowLoadingC] = useState(false);
+    const [showLoadingD, setShowLoadingD] = useState(false);
     const widgetApi = useRef<any>();
+    const widgetApiB = useRef<any>();
+    const widgetApiC = useRef<any>();
+    const widgetApiD = useRef<any>();
 
+    const showLoadingStateB = (file) => {
+        if (file) {
+            file.progress((info) => {
+                console.log("File progress: ", info.progress),
+                    setShowLoadingB(true);
+            });
+            file.done((info) => {
+                setShowLoadingB(false),
+                    console.log("File uploaded: ", info),
+                    setIcd(info);
+            });
+        }
+    };
+    const showLoadingStateC = (file) => {
+        if (file) {
+            file.progress((info) => {
+                console.log("File progress: ", info.progress),
+                    setShowLoadingC(true);
+            });
+            file.done((info) => {
+                setShowLoadingC(false),
+                    console.log("File uploaded: ", info),
+                    setVoidCheck(info);
+            });
+        }
+    };
+    const showLoadingStateD = (file) => {
+        if (file) {
+            file.progress((info) => {
+                console.log("File progress: ", info.progress),
+                    setShowLoadingD(true);
+            });
+            file.done((info) => {
+                setShowLoadingD(false),
+                    console.log("File uploaded: ", info),
+                    setInc(info);
+            });
+        }
+    };
     const showLoadingState = (file) => {
         if (file) {
             file.progress((info) => {
@@ -119,6 +170,9 @@ function TeamManagement({
 
     const onSubmit = async (data: TeamMemberModel) => {
         data.document = `${contract.cdnUrl} ${contract.name}`;
+        data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
+        data.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
+        data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
         if (data.document === undefined || "") {
             toast({
                 title: "Please select a contract document and try again",
@@ -380,14 +434,267 @@ function TeamManagement({
                                     },
                                 ]}
                             />
-                            <PrimaryInput<TeamMemberModel>
-                                label="Hr/Day"
-                                name="hoursPerDay"
-                                error={errors.hoursPerDay}
-                                placeholder=""
-                                defaultValue=""
-                                register={register}
-                            />
+                            {payroll == 1 ? (
+                                <>
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Rate/Hr"
+                                        name="ratePerHour"
+                                        error={errors.ratePerHour}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                    />
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Hr/Day"
+                                        name="hoursPerDay"
+                                        error={errors.hoursPerDay}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                    />
+                                    <Box>
+                                        <FormLabel
+                                            textTransform="capitalize"
+                                            width="fit-content"
+                                            fontSize=".8rem"
+                                        >
+                                            Incorporation Document
+                                        </FormLabel>
+
+                                        <Flex
+                                            outline="1px solid"
+                                            outlineColor="gray.300"
+                                            h="2.6rem"
+                                            align="center"
+                                            pr="1rem"
+                                            w="full"
+                                            // justifyContent="space-between"
+                                        >
+                                            <Flex
+                                                bgColor="#f5f5f5"
+                                                fontSize=".8rem"
+                                                px="1rem"
+                                                h="full"
+                                                align="center"
+                                                cursor="pointer"
+                                                my="auto"
+                                                fontWeight="600"
+                                                onClick={() =>
+                                                    widgetApiB.current.openDialog()
+                                                }
+                                            >
+                                                <Text noOfLines={1} mb="0">
+                                                    Choose File
+                                                </Text>
+                                            </Flex>
+
+                                            {showLoadingB ? (
+                                                <Flex align="center">
+                                                    <Text
+                                                        mb="0"
+                                                        fontStyle="italic"
+                                                        mr="1rem"
+                                                    >
+                                                        ...loading data info
+                                                    </Text>
+                                                    <Spinner />
+                                                </Flex>
+                                            ) : (
+                                                <Text
+                                                    noOfLines={1}
+                                                    my="auto"
+                                                    px=".5rem"
+                                                >
+                                                    {icd?.name ||
+                                                        "No File Chosen"}
+                                                </Text>
+                                            )}
+                                        </Flex>
+                                        <Box display="none">
+                                            <Widget
+                                                publicKey="fda3a71102659f95625f"
+                                                clearable
+                                                onFileSelect={showLoadingStateB}
+                                                ref={widgetApiB}
+                                                systemDialog={true}
+                                                inputAcceptTypes={
+                                                    ".docx,.pdf, .doc"
+                                                }
+                                            />
+                                        </Box>
+                                    </Box>
+                                    <Box>
+                                        <FormLabel
+                                            textTransform="capitalize"
+                                            width="fit-content"
+                                            fontSize=".8rem"
+                                        >
+                                            Void check
+                                        </FormLabel>
+
+                                        <Flex
+                                            outline="1px solid"
+                                            outlineColor="gray.300"
+                                            h="2.6rem"
+                                            align="center"
+                                            pr="1rem"
+                                            w="full"
+                                            // justifyContent="space-between"
+                                        >
+                                            <Flex
+                                                bgColor="#f5f5f5"
+                                                fontSize=".8rem"
+                                                px="1rem"
+                                                h="full"
+                                                align="center"
+                                                cursor="pointer"
+                                                my="auto"
+                                                fontWeight="600"
+                                                onClick={() =>
+                                                    widgetApiC.current.openDialog()
+                                                }
+                                            >
+                                                <Text noOfLines={1} mb="0">
+                                                    Choose File
+                                                </Text>
+                                            </Flex>
+
+                                            {showLoadingC ? (
+                                                <Flex align="center">
+                                                    <Text
+                                                        mb="0"
+                                                        fontStyle="italic"
+                                                        mr="1rem"
+                                                    >
+                                                        ...loading data info
+                                                    </Text>
+                                                    <Spinner />
+                                                </Flex>
+                                            ) : (
+                                                <Text
+                                                    noOfLines={1}
+                                                    my="auto"
+                                                    px=".5rem"
+                                                >
+                                                    {voidCheck?.name ||
+                                                        "No File Chosen"}
+                                                </Text>
+                                            )}
+                                        </Flex>
+                                        <Box display="none">
+                                            <Widget
+                                                publicKey="fda3a71102659f95625f"
+                                                clearable
+                                                onFileSelect={showLoadingStateC}
+                                                ref={widgetApiC}
+                                                systemDialog={true}
+                                                inputAcceptTypes={
+                                                    ".docx,.pdf, .doc"
+                                                }
+                                            />
+                                        </Box>
+                                    </Box>
+                                    <Box>
+                                        <FormLabel
+                                            textTransform="capitalize"
+                                            width="fit-content"
+                                            fontSize=".8rem"
+                                        >
+                                            Issuance Certificate
+                                        </FormLabel>
+
+                                        <Flex
+                                            outline="1px solid"
+                                            outlineColor="gray.300"
+                                            h="2.6rem"
+                                            align="center"
+                                            pr="1rem"
+                                            w="full"
+                                            // justifyContent="space-between"
+                                        >
+                                            <Flex
+                                                bgColor="#f5f5f5"
+                                                fontSize=".8rem"
+                                                px="1rem"
+                                                h="full"
+                                                align="center"
+                                                cursor="pointer"
+                                                my="auto"
+                                                fontWeight="600"
+                                                onClick={() =>
+                                                    widgetApiD.current.openDialog()
+                                                }
+                                            >
+                                                <Text noOfLines={1} mb="0">
+                                                    Choose File
+                                                </Text>
+                                            </Flex>
+
+                                            {showLoadingD ? (
+                                                <Flex align="center">
+                                                    <Text
+                                                        mb="0"
+                                                        fontStyle="italic"
+                                                        mr="1rem"
+                                                    >
+                                                        ...loading data info
+                                                    </Text>
+                                                    <Spinner />
+                                                </Flex>
+                                            ) : (
+                                                <Text
+                                                    noOfLines={1}
+                                                    my="auto"
+                                                    px=".5rem"
+                                                >
+                                                    {inc?.name ||
+                                                        "No File Chosen"}
+                                                </Text>
+                                            )}
+                                        </Flex>
+                                        <Box display="none">
+                                            <Widget
+                                                publicKey="fda3a71102659f95625f"
+                                                clearable
+                                                onFileSelect={showLoadingStateD}
+                                                ref={widgetApiD}
+                                                systemDialog={true}
+                                                inputAcceptTypes={
+                                                    ".docx,.pdf, .doc"
+                                                }
+                                            />
+                                        </Box>
+                                    </Box>
+
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="HST No."
+                                        name="hstNumber"
+                                        error={errors.hstNumber}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                    />
+                                </>
+                            ) : payroll == 2 ? (
+                                <>
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Monthly Payout"
+                                        name="monthlyPayoutRate"
+                                        error={errors.monthlyPayoutRate}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                    />
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Hr/Day"
+                                        name="hoursPerDay"
+                                        error={errors.hoursPerDay}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                    />
+                                </>
+                            ) : null}
 
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -400,8 +707,8 @@ function TeamManagement({
                             />
                             <PrimaryInput<TeamMemberModel>
                                 label="Client Rate"
-                                name="ratePerHour"
-                                error={errors.ratePerHour}
+                                name="clientRate"
+                                error={errors.clientRate}
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
@@ -420,8 +727,8 @@ function TeamManagement({
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
-                                name="paymentRate"
-                                error={errors.paymentRate}
+                                name="paymentFrequency"
+                                error={errors.paymentFrequency}
                                 keys="id"
                                 keyLabel="label"
                                 label="Payment Frequency"

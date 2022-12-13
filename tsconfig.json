@@ -41,6 +41,6 @@
         "**/*.ts",
         "**/*.tsx",
         "src/components/subpages"
-    ],
+, "pages/TeamMember/dashboard"    ],
     "exclude": ["node_modules", "test/*"]
 }

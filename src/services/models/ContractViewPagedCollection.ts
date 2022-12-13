@@ -8,6 +8,8 @@ import type { Link } from './Link';
 export type ContractViewPagedCollection = {
     offset?: number | null;
     limit?: number | null;
+    nextOffset?: number | null;
+    previousOffset?: number | null;
     size?: number;
     first?: Link;
     previous?: Link;

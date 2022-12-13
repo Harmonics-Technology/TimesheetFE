@@ -90,7 +90,7 @@ function TeamManagement({ adminList, userProfile }: adminProps) {
     };
 
     const onSubmit = async (data: ContractModel) => {
-        data.document = contract.cdnUrl;
+        data.document = `${contract.cdnUrl} ${contract.name}`;
         if (data.document === undefined || "") {
             toast({
                 title: "Please select a contract document and try again",

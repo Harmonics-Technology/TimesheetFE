@@ -94,4 +94,27 @@ date?: string,
         });
     }
 
+    /**
+     * @param employeeInformationId 
+     * @param date 
+     * @param hours 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static addWorkHoursForADay(
+employeeInformationId?: string,
+date?: string,
+hours?: number,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/TimeSheet/add-hour',
+            query: {
+                'employeeInformationId': employeeInformationId,
+                'date': date,
+                'hours': hours,
+            },
+        });
+    }
+
 }

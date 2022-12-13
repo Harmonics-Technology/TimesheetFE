@@ -5,6 +5,7 @@
 export type TimeSheetHistoryView = {
     name?: string | null;
     email?: string | null;
+    employeeInformationId?: string;
     totalHours?: number;
     numberOfDays?: number;
 };

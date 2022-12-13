@@ -114,7 +114,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         role={role}
                     />
                 </VStack>
-            ) : role == "teamMember" ? (
+            ) : role == "TeamMember" ? (
                 <VStack align="left" gap="1.5rem" pr="1rem">
                     <MenuItem
                         linkName="dashboard"
@@ -122,26 +122,29 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaHome opacity=".8" />}
                         option={false}
                         dropDown={[]}
+                        role={role}
                     />
 
+                    <MenuItem
+                        linkName="timesheets"
+                        menuTitle="Manage Timesheets"
+                        icon={<FaCalendar opacity=".8" />}
+                        option={true}
+                        role={role}
+                        dropDown={["my timesheet", "timesheet history"]}
+                    />
                     <MenuItem
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
                         option={true}
+                        role={role}
                         dropDown={[
-                            "expenses",
-                            "invoices",
-                            "payrolls",
-                            "payslips",
+                            "my expenses",
+                            "my invoices",
+                            "my payrolls",
+                            "my payslips",
                         ]}
-                    />
-                    <MenuItem
-                        linkName="contracts"
-                        menuTitle="Contracts"
-                        icon={<FaFile opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
                     />
                     <MenuItem
                         linkName="my-profile"
@@ -149,13 +152,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaUser opacity=".8" />}
                         option={false}
                         dropDown={[]}
-                    />
-                    <MenuItem
-                        linkName="settings"
-                        menuTitle="Settings"
-                        icon={<FaCogs opacity=".8" />}
-                        option={true}
-                        dropDown={["expense type"]}
+                        role={role}
                     />
                 </VStack>
             ) : null}

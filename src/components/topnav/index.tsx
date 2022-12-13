@@ -37,7 +37,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     return (
         <Flex
             justify="space-between"
-            pt="3rem"
+            pt="2rem"
             pr="1rem"
             pos="sticky"
             top="0"

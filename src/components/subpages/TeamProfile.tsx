@@ -1,6 +1,15 @@
-import { Box, Button, Flex, Grid, Text, useToast } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    Flex,
+    FormLabel,
+    Grid,
+    Spinner,
+    Text,
+    useToast,
+} from "@chakra-ui/react";
 import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -19,6 +28,11 @@ import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
 import { PrimaryRadio } from "@components/bits-utils/PrimaryRadio";
 import ContractTable from "@components/bits-utils/ContractTable";
 import { DateObject } from "react-multi-date-picker";
+import moment from "moment";
+import { Widget } from "@uploadcare/react-widget";
+import { AiOutlineDownload } from "react-icons/ai";
+import axios from "axios";
+import fileDownload from "js-file-download";
 
 const schema = yup.object().shape({});
 interface TeamProfileProps {
@@ -40,21 +54,103 @@ function TeamProfile({
         register,
         handleSubmit,
         control,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(schema),
         mode: "all",
         defaultValues: {
+            role: "Team Member",
             isActive: userProfile?.isActive,
             phoneNumber: userProfile?.phoneNumber,
+            email: userProfile?.email,
+            dateOfBirth: userProfile?.dateOfBirth,
+            clientId: userProfile?.employeeInformation?.clientId,
+            supervisorId: userProfile?.employeeInformation?.supervisorId,
+            paymentPartnerId:
+                userProfile?.employeeInformation?.paymentPartnerId,
+            currency: userProfile?.employeeInformation?.currency,
+            paymentRate: userProfile?.employeeInformation?.paymentRate,
+            insuranceDocumentUrl:
+                userProfile?.employeeInformation?.insuranceDocumentUrl,
+            voidCheckUrl: userProfile?.employeeInformation?.voidCheckUrl,
+            inCorporationDocumentUrl:
+                userProfile?.employeeInformation?.inCorporationDocumentUrl,
         },
     });
     const router = useRouter();
     const toast = useToast();
     console.log({ userProfile });
+    const payroll = userProfile?.employeeInformation?.payrollType;
+    const payrolls = watch("payRollTypeId");
+    console.log({ payrolls });
+
+    const [icd, setIcd] = useState<any>("");
+    const [voidCheck, setVoidCheck] = useState<any>("");
+    const [inc, setInc] = useState<any>("");
+    const [showLoadingB, setShowLoadingB] = useState(false);
+    const [showLoadingC, setShowLoadingC] = useState(false);
+    const [showLoadingD, setShowLoadingD] = useState(false);
+    const widgetApiB = useRef<any>();
+    const widgetApiC = useRef<any>();
+    const widgetApiD = useRef<any>();
+
+    const showLoadingStateB = (file) => {
+        if (file) {
+            file.progress((info) => {
+                console.log("File progress: ", info.progress),
+                    setShowLoadingB(true);
+            });
+            file.done((info) => {
+                setShowLoadingB(false),
+                    console.log("File uploaded: ", info),
+                    setIcd(info);
+            });
+        }
+    };
+    const showLoadingStateC = (file) => {
+        if (file) {
+            file.progress((info) => {
+                console.log("File progress: ", info.progress),
+                    setShowLoadingC(true);
+            });
+            file.done((info) => {
+                setShowLoadingC(false),
+                    console.log("File uploaded: ", info),
+                    setVoidCheck(info);
+            });
+        }
+    };
+    const showLoadingStateD = (file) => {
+        if (file) {
+            file.progress((info) => {
+                console.log("File progress: ", info.progress),
+                    setShowLoadingD(true);
+            });
+            file.done((info) => {
+                setShowLoadingD(false),
+                    console.log("File uploaded: ", info),
+                    setInc(info);
+            });
+        }
+    };
+
+    const downloadFile = (url: any) => {
+        console.log(url);
+        axios
+            .get(url, {
+                responseType: "blob",
+            })
+            .then((res) => {
+                fileDownload(res.data, `${url.split(" ").pop()}`);
+            });
+    };
 
     const onSubmit = async (data: TeamMemberModel) => {
         data.isActive = data.isActive === ("true" as unknown as boolean);
+        data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
+        data.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
+        data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
         console.log({ data });
 
         try {
@@ -142,7 +238,9 @@ function TeamProfile({
                         name="dateOfBirth"
                         label="Date of Birth"
                         error={errors.dateOfBirth}
-                        placeholder={userProfile?.email as string}
+                        placeholder={moment(userProfile?.dateOfBirth).format(
+                            "DD MM YYYY",
+                        )}
                         max={new DateObject().subtract(1, "days")}
                     />
                     <SelectrixBox<TeamMemberModel>
@@ -218,6 +316,7 @@ function TeamProfile({
                             keys="id"
                             keyLabel="label"
                             label="Payroll Type"
+                            // disabled={true}
                             placeholder={
                                 (userProfile?.employeeInformation
                                     ?.payrollType as string) || "Please Select"
@@ -233,14 +332,334 @@ function TeamProfile({
                                 },
                             ]}
                         />
-                        <PrimaryInput<TeamMemberModel>
-                            label="Hr/Day"
-                            name="hoursPerDay"
-                            error={errors.hoursPerDay}
-                            placeholder=""
-                            defaultValue={userProfile?.email as string}
-                            register={register}
-                        />
+                        {(payroll == "ONSHORE" && payrolls == undefined) ||
+                        (payroll == "ONSHORE" && payrolls == 1) ? (
+                            <>
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Rate/Hr"
+                                    name="ratePerHour"
+                                    error={errors.ratePerHour}
+                                    placeholder=""
+                                    defaultValue={
+                                        userProfile?.employeeInformation
+                                            ?.ratePerHour as unknown as string
+                                    }
+                                    register={register}
+                                />
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Hr/Day"
+                                    name="hoursPerDay"
+                                    error={errors.hoursPerDay}
+                                    placeholder=""
+                                    defaultValue={
+                                        userProfile?.employeeInformation
+                                            ?.hoursPerDay as unknown as string
+                                    }
+                                    register={register}
+                                />
+                                <Box>
+                                    <Flex>
+                                        <FormLabel
+                                            textTransform="capitalize"
+                                            width="fit-content"
+                                            fontSize=".8rem"
+                                        >
+                                            Incorporation Document
+                                        </FormLabel>
+                                        <Box
+                                            cursor="pointer"
+                                            onClick={() =>
+                                                downloadFile(
+                                                    userProfile
+                                                        ?.employeeInformation
+                                                        ?.inCorporationDocumentUrl,
+                                                )
+                                            }
+                                        >
+                                            <AiOutlineDownload />
+                                        </Box>
+                                    </Flex>
+
+                                    <Flex
+                                        outline="1px solid"
+                                        outlineColor="gray.300"
+                                        h="2.6rem"
+                                        align="center"
+                                        pr="1rem"
+                                        w="full"
+                                        // justifyContent="space-between"
+                                    >
+                                        <Flex
+                                            bgColor="#f5f5f5"
+                                            fontSize=".8rem"
+                                            px="1rem"
+                                            h="full"
+                                            align="center"
+                                            cursor="pointer"
+                                            my="auto"
+                                            fontWeight="600"
+                                            onClick={() =>
+                                                widgetApiB.current.openDialog()
+                                            }
+                                        >
+                                            <Text noOfLines={1} mb="0">
+                                                Choose File
+                                            </Text>
+                                        </Flex>
+
+                                        {showLoadingB ? (
+                                            <Flex align="center">
+                                                <Text
+                                                    mb="0"
+                                                    fontStyle="italic"
+                                                    mr="1rem"
+                                                >
+                                                    ...loading data info
+                                                </Text>
+                                                <Spinner />
+                                            </Flex>
+                                        ) : (
+                                            <Text
+                                                noOfLines={1}
+                                                my="auto"
+                                                px=".5rem"
+                                            >
+                                                {icd?.name ||
+                                                    userProfile?.employeeInformation?.inCorporationDocumentUrl
+                                                        ?.split(" ")
+                                                        ?.pop() ||
+                                                    "No File Chosen"}
+                                            </Text>
+                                        )}
+                                    </Flex>
+                                    <Box display="none">
+                                        <Widget
+                                            publicKey="fda3a71102659f95625f"
+                                            clearable
+                                            onFileSelect={showLoadingStateB}
+                                            ref={widgetApiB}
+                                            systemDialog={true}
+                                            inputAcceptTypes={
+                                                ".docx,.pdf, .doc"
+                                            }
+                                        />
+                                    </Box>
+                                </Box>
+                                <Box>
+                                    <Flex>
+                                        <FormLabel
+                                            textTransform="capitalize"
+                                            width="fit-content"
+                                            fontSize=".8rem"
+                                        >
+                                            Void Check
+                                        </FormLabel>
+                                        <Box
+                                            cursor="pointer"
+                                            onClick={() =>
+                                                downloadFile(
+                                                    userProfile
+                                                        ?.employeeInformation
+                                                        ?.voidCheckUrl,
+                                                )
+                                            }
+                                        >
+                                            <AiOutlineDownload />
+                                        </Box>
+                                    </Flex>
+
+                                    <Flex
+                                        outline="1px solid"
+                                        outlineColor="gray.300"
+                                        h="2.6rem"
+                                        align="center"
+                                        pr="1rem"
+                                        w="full"
+                                        // justifyContent="space-between"
+                                    >
+                                        <Flex
+                                            bgColor="#f5f5f5"
+                                            fontSize=".8rem"
+                                            px="1rem"
+                                            h="full"
+                                            align="center"
+                                            cursor="pointer"
+                                            my="auto"
+                                            fontWeight="600"
+                                            onClick={() =>
+                                                widgetApiC.current.openDialog()
+                                            }
+                                        >
+                                            <Text noOfLines={1} mb="0">
+                                                Choose File
+                                            </Text>
+                                        </Flex>
+
+                                        {showLoadingC ? (
+                                            <Flex align="center">
+                                                <Text
+                                                    mb="0"
+                                                    fontStyle="italic"
+                                                    mr="1rem"
+                                                >
+                                                    ...loading data info
+                                                </Text>
+                                                <Spinner />
+                                            </Flex>
+                                        ) : (
+                                            <Text
+                                                noOfLines={1}
+                                                my="auto"
+                                                px=".5rem"
+                                            >
+                                                {voidCheck?.name ||
+                                                    userProfile?.employeeInformation?.voidCheckUrl
+                                                        ?.split(" ")
+                                                        ?.pop() ||
+                                                    "No File Chosen"}
+                                            </Text>
+                                        )}
+                                    </Flex>
+                                    <Box display="none">
+                                        <Widget
+                                            publicKey="fda3a71102659f95625f"
+                                            clearable
+                                            onFileSelect={showLoadingStateC}
+                                            ref={widgetApiC}
+                                            systemDialog={true}
+                                            inputAcceptTypes={
+                                                ".docx,.pdf, .doc"
+                                            }
+                                        />
+                                    </Box>
+                                </Box>
+                                <Box>
+                                    <Flex>
+                                        <FormLabel
+                                            textTransform="capitalize"
+                                            width="fit-content"
+                                            fontSize=".8rem"
+                                        >
+                                            Issuance Certificate
+                                        </FormLabel>
+                                        <Box
+                                            cursor="pointer"
+                                            onClick={() =>
+                                                downloadFile(
+                                                    userProfile
+                                                        ?.employeeInformation
+                                                        ?.insuranceDocumentUrl,
+                                                )
+                                            }
+                                        >
+                                            <AiOutlineDownload />
+                                        </Box>
+                                    </Flex>
+
+                                    <Flex
+                                        outline="1px solid"
+                                        outlineColor="gray.300"
+                                        h="2.6rem"
+                                        align="center"
+                                        pr="1rem"
+                                        w="full"
+                                        // justifyContent="space-between"
+                                    >
+                                        <Flex
+                                            bgColor="#f5f5f5"
+                                            fontSize=".8rem"
+                                            px="1rem"
+                                            h="full"
+                                            align="center"
+                                            cursor="pointer"
+                                            my="auto"
+                                            fontWeight="600"
+                                            onClick={() =>
+                                                widgetApiD.current.openDialog()
+                                            }
+                                        >
+                                            <Text noOfLines={1} mb="0">
+                                                Choose File
+                                            </Text>
+                                        </Flex>
+
+                                        {showLoadingD ? (
+                                            <Flex align="center">
+                                                <Text
+                                                    mb="0"
+                                                    fontStyle="italic"
+                                                    mr="1rem"
+                                                >
+                                                    ...loading data info
+                                                </Text>
+                                                <Spinner />
+                                            </Flex>
+                                        ) : (
+                                            <Text
+                                                noOfLines={1}
+                                                my="auto"
+                                                px=".5rem"
+                                            >
+                                                {inc?.name ||
+                                                    userProfile?.employeeInformation?.insuranceDocumentUrl
+                                                        ?.split(" ")
+                                                        ?.pop() ||
+                                                    "No File Chosen"}
+                                            </Text>
+                                        )}
+                                    </Flex>
+                                    <Box display="none">
+                                        <Widget
+                                            publicKey="fda3a71102659f95625f"
+                                            clearable
+                                            onFileSelect={showLoadingStateD}
+                                            ref={widgetApiD}
+                                            systemDialog={true}
+                                            inputAcceptTypes={
+                                                ".docx,.pdf, .doc"
+                                            }
+                                        />
+                                    </Box>
+                                </Box>
+
+                                <PrimaryInput<TeamMemberModel>
+                                    label="HST No."
+                                    name="hstNumber"
+                                    error={errors.hstNumber}
+                                    placeholder=""
+                                    defaultValue={
+                                        userProfile?.employeeInformation
+                                            ?.hstNumber as unknown as string
+                                    }
+                                    register={register}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Monthly Payout"
+                                    name="monthlyPayoutRate"
+                                    error={errors.monthlyPayoutRate}
+                                    placeholder=""
+                                    defaultValue={
+                                        userProfile?.employeeInformation
+                                            ?.monthlyPayoutRate as unknown as string
+                                    }
+                                    register={register}
+                                />
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Hr/Day"
+                                    name="hoursPerDay"
+                                    error={errors.hoursPerDay}
+                                    placeholder=""
+                                    defaultValue={
+                                        userProfile?.employeeInformation
+                                            ?.hoursPerDay as unknown as string
+                                    }
+                                    register={register}
+                                />
+                            </>
+                        )}
 
                         <SelectrixBox<TeamMemberModel>
                             control={control}
