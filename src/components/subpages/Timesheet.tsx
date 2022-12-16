@@ -138,17 +138,18 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
             </div>
         );
     };
-
+    const [loading, setLoading] = useState<boolean>(false);
     const generateDatesForCurrentWeek = (date, selectedDate, activeDate) => {
         const approveTimeSheetForADay = async (userId, chosenDate) => {
             console.log({ userId, chosenDate });
             try {
+                setLoading(true);
                 const data = await TimeSheetService.approveTimeSheetForADay(
                     userId,
                     chosenDate,
                 );
                 if (data.status) {
-                    router.reload();
+                    setLoading(false);
                     return;
                 }
                 console.log({ data });
@@ -156,7 +157,6 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                 console.log(error);
             }
         };
-        const [loading, setLoading] = useState<boolean>(false);
         const addHours = async (userId, chosenDate, hours) => {
             console.log({ userId, chosenDate, hours });
             try {
@@ -345,7 +345,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                         label="Actual Payout"
                         data={actualPayout}
                     />
-                    <TimeSheetEstimationBtn id={1} />
+                    <TimeSheetEstimationBtn id={1} loading={loading} />
                 </Grid>
             </Box>
         </Box>

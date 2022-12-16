@@ -1,4 +1,5 @@
 import { Button, Flex, Tooltip } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React from "react";
 
 interface TimeProps {
@@ -49,7 +50,14 @@ export default function TimeSheetEstimation({ label, data, tip }: TimeProps) {
         </Flex>
     );
 }
-export function TimeSheetEstimationBtn({ id }: { id: any }) {
+export function TimeSheetEstimationBtn({
+    id,
+    loading,
+}: {
+    id: any;
+    loading: boolean;
+}) {
+    const router = useRouter();
     return (
         <Flex flexDirection="column" fontSize="1rem" width="100%">
             <Flex
@@ -69,6 +77,8 @@ export function TimeSheetEstimationBtn({ id }: { id: any }) {
                     h="full"
                     width="100"
                     color="white"
+                    disabled={loading}
+                    onClick={() => router.reload()}
                 >
                     Update Timesheet
                 </Button>
