@@ -13,6 +13,7 @@ export type TeamMemberModel = {
     organizationEmail?: string | null;
     organizationPhone?: string | null;
     organizationAddress?: string | null;
+    id?: string;
     payRollTypeId?: number;
     clientId?: string | null;
     supervisorId?: string | null;

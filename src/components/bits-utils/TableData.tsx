@@ -6,9 +6,10 @@ import {
     MenuList,
     Td,
     useToast,
+    Link,
 } from "@chakra-ui/react";
 import axios from "axios";
-import Link from "next/link";
+import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineDownload } from "react-icons/ai";
@@ -63,7 +64,7 @@ export function TableState({ name }: { name: string }) {
                 cursor="pointer"
                 textTransform="uppercase"
             >
-                {name}
+                {name || "Inactive"}
             </Box>
         </td>
     );
@@ -144,11 +145,66 @@ export function TableActions({
                     </Box>
                 </MenuButton>
                 <MenuList>
-                    <MenuItem onClick={() => resendInvite({ email })}>
+                    <MenuItem onClick={() => resendInvite({ email })} w="full">
                         Resend Invite
                     </MenuItem>
-                    <MenuItem>
-                        <Link href={`${route}/${id}`}>View Profile</Link>
+                    <MenuItem w="full">
+                        <NextLink href={`${route}/${id}`} passHref>
+                            <Link width="100%" textDecor="none !important">
+                                View Profile
+                            </Link>
+                        </NextLink>
+                    </MenuItem>
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+export function TableContractOptions({
+    id,
+    extend,
+    modify,
+    clicked,
+    data,
+}: {
+    id: any;
+    extend?: any;
+    modify?: any;
+    clicked?: any;
+    data: any;
+}) {
+    const setExtend = (data: any) => {
+        clicked(data);
+        extend(true);
+    };
+    const setModify = (data: any) => {
+        clicked(data);
+        modify(true);
+    };
+    const terminate = (data: any) => {
+        clicked(data);
+        id();
+    };
+
+    return (
+        <td>
+            <Menu>
+                <MenuButton type="button">
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        <FaEllipsisH />
+                    </Box>
+                </MenuButton>
+                <MenuList>
+                    <MenuItem onClick={() => setExtend(data)}>Extend</MenuItem>
+                    <MenuItem onClick={() => setModify(data)}>Modify</MenuItem>
+                    <MenuItem onClick={() => terminate(data)}>
+                        Terminate
                     </MenuItem>
                 </MenuList>
             </Menu>
@@ -183,11 +239,14 @@ export function TableContractAction({
                                 View Timesheet
                             </Link>
                         ) : (
-                            <Link
+                            <NextLink
                                 href={`/SuperAdmin/profile-management/team-members/${id}`}
+                                passHref
                             >
-                                View Profile
-                            </Link>
+                                <Link width="100%" textDecor="none !important">
+                                    View Profile
+                                </Link>
+                            </NextLink>
                         )}
                     </MenuItem>
                 </MenuList>

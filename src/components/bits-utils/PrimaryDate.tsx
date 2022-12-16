@@ -12,6 +12,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     placeholder?: string;
     min?: any;
     max?: any;
+    disabled?: boolean;
 }
 
 export const PrimaryDate = <TFormValues extends Record<string, any>>({
@@ -23,6 +24,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
     placeholder,
     min,
     max,
+    disabled,
 }: FormInputProps<TFormValues>) => {
     return (
         <GridItem>
@@ -57,6 +59,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                                 placeholder={placeholder}
                                 minDate={min}
                                 maxDate={max}
+                                disabled={disabled}
                             />
                         </>
                     )}

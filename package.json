@@ -18,7 +18,7 @@
         "openapi:codegen": "openapi --input https://insighttimesheetapi.azurewebsites.net/swagger/v1/swagger.json --output ./src/services --client axios"
     },
     "dependencies": {
-        "@chakra-ui/react": "^1.1.4",
+        "@chakra-ui/react": "^2.4.3",
         "@codegena/oapi3ts-cli": "^2.1.10-alpha.8",
         "@emotion/react": "^11.1.4",
         "@emotion/styled": "^11.0.0",
@@ -41,8 +41,8 @@
         "nextjs-progressbar": "^0.0.16",
         "openapi-typescript-codegen": "^0.23.0",
         "prettier": "^2.2.1",
-        "react": "17.0.2",
-        "react-dom": "17.0.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
         "react-hook-form": "^7.39.5",
         "react-icons": "^4.7.1",
         "react-multi-date-picker": "^3.3.4",

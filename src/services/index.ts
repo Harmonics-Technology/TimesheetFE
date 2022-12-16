@@ -15,9 +15,14 @@ export type { ContractViewStandardResponse } from './models/ContractViewStandard
 export type { DashboardView } from './models/DashboardView';
 export type { DashboardViewStandardResponse } from './models/DashboardViewStandardResponse';
 export type { EmployeeInformationView } from './models/EmployeeInformationView';
+export type { ExpenseModel } from './models/ExpenseModel';
 export type { ExpenseTypeView } from './models/ExpenseTypeView';
 export type { ExpenseTypeViewIEnumerableStandardResponse } from './models/ExpenseTypeViewIEnumerableStandardResponse';
 export type { ExpenseTypeViewStandardResponse } from './models/ExpenseTypeViewStandardResponse';
+export type { ExpenseView } from './models/ExpenseView';
+export type { ExpenseViewPagedCollection } from './models/ExpenseViewPagedCollection';
+export type { ExpenseViewPagedCollectionStandardResponse } from './models/ExpenseViewPagedCollectionStandardResponse';
+export type { ExpenseViewStandardResponse } from './models/ExpenseViewStandardResponse';
 export { HttpStatusCode } from './models/HttpStatusCode';
 export type { InitiateResetModel } from './models/InitiateResetModel';
 export type { Link } from './models/Link';
@@ -31,6 +36,7 @@ export type { TimeSheetHistoryViewPagedCollection } from './models/TimeSheetHist
 export type { TimeSheetHistoryViewPagedCollectionStandardResponse } from './models/TimeSheetHistoryViewPagedCollectionStandardResponse';
 export type { TimeSheetMonthlyView } from './models/TimeSheetMonthlyView';
 export type { TimeSheetMonthlyViewIEnumerableStandardResponse } from './models/TimeSheetMonthlyViewIEnumerableStandardResponse';
+export type { TimeSheetView } from './models/TimeSheetView';
 export type { UpdateUserModel } from './models/UpdateUserModel';
 export type { UserProfileView } from './models/UserProfileView';
 export type { UserProfileViewStandardResponse } from './models/UserProfileViewStandardResponse';
@@ -41,6 +47,7 @@ export type { UserViewStandardResponse } from './models/UserViewStandardResponse
 
 export { ContractService } from './services/ContractService';
 export { DashboardService } from './services/DashboardService';
+export { FinancialService } from './services/FinancialService';
 export { SettingsService } from './services/SettingsService';
 export { TimeSheetService } from './services/TimeSheetService';
 export { UserService } from './services/UserService';

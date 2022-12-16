@@ -18,6 +18,7 @@ import {
 import DrawerWrapper from "@components/bits-utils/Drawer";
 import {
     TableContract,
+    TableContractOptions,
     TableData,
     TableState,
 } from "@components/bits-utils/TableData";
@@ -32,7 +33,6 @@ import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
 import moment from "moment";
 
 interface adminProps {
-    adminList: ContractViewPagedCollectionStandardResponse;
     userProfile?: UserView;
 }
 
@@ -40,12 +40,14 @@ import {
     ContractModel,
     ContractService,
     ContractView,
-    ContractViewPagedCollectionStandardResponse,
     UserView,
 } from "src/services";
 import { useRouter } from "next/router";
 import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
 import { DateObject } from "react-multi-date-picker";
+import ExtendContract from "./ExtendContract";
+import ModifyContract from "./ModifyContract";
+import ConfirmModal from "./ConfirmModal";
 
 const schema = yup.object().shape({
     title: yup.string().required(),
@@ -53,9 +55,12 @@ const schema = yup.object().shape({
     endDate: yup.string().required(),
 });
 
-function TeamManagement({ adminList, userProfile }: adminProps) {
-    console.log({ adminList });
+function TeamManagement({ userProfile }: adminProps) {
     const [contract, setContractFile] = useState<any>("");
+    const [modify, setModify] = useState<boolean>(false);
+    const [extend, setExtend] = useState<boolean>(false);
+    const [clickedItem, setClickedItem] = useState<ContractView>({});
+    console.log({ clickedItem });
     const {
         register,
         handleSubmit,
@@ -66,9 +71,12 @@ function TeamManagement({ adminList, userProfile }: adminProps) {
         mode: "all",
         defaultValues: {
             userId: userProfile?.id,
+            startDate: clickedItem.startDate,
+            endDate: clickedItem.endDate,
         },
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: opens, onOpen: opened, onClose: closed } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
 
@@ -235,8 +243,14 @@ function TeamManagement({ adminList, userProfile }: adminProps) {
                                         name={x.tenor as unknown as string}
                                     />
                                     <TableContract url={x.document} />
-                                    <TableState name={"ACTIVE"} />
-                                    <TableData name={"..."} />
+                                    <TableState name={x.status as string} />
+                                    <TableContractOptions
+                                        id={opened}
+                                        modify={setModify}
+                                        extend={setExtend}
+                                        clicked={setClickedItem}
+                                        data={x}
+                                    />
                                 </Tr>
                             ),
                         )}
@@ -251,7 +265,7 @@ function TeamManagement({ adminList, userProfile }: adminProps) {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Box w="full">
                         <Grid
-                            templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                            templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
                             gap="1rem 2rem"
                         >
                             <PrimaryInput<ContractModel>
@@ -276,67 +290,67 @@ function TeamManagement({ adminList, userProfile }: adminProps) {
                                 error={errors.endDate}
                                 min={new DateObject().add(3, "days")}
                             />
-                        </Grid>
-                        <Box>
-                            <FormLabel
-                                textTransform="capitalize"
-                                width="fit-content"
-                                fontSize=".8rem"
-                            >
-                                Attach Document
-                            </FormLabel>
-
-                            <Flex
-                                outline="1px solid"
-                                outlineColor="gray.300"
-                                h="2.6rem"
-                                align="center"
-                                pr="1rem"
-                                w={["100%", "63%"]}
-                                // justifyContent="space-between"
-                            >
-                                <Flex
-                                    bgColor="#f5f5f5"
+                            <Box>
+                                <FormLabel
+                                    textTransform="capitalize"
+                                    width="fit-content"
                                     fontSize=".8rem"
-                                    px="2rem"
-                                    h="full"
-                                    align="center"
-                                    cursor="pointer"
-                                    my="auto"
-                                    fontWeight="600"
-                                    onClick={() =>
-                                        widgetApi.current.openDialog()
-                                    }
                                 >
-                                    Choose File
-                                </Flex>
-                                <Text noOfLines={1} my="auto" px=".5rem">
-                                    {contract.name}
-                                </Text>
-                                {showLoading && (
-                                    <Flex align="center">
-                                        <Text
-                                            mb="0"
-                                            fontStyle="italic"
-                                            mr="1rem"
-                                        >
-                                            ...loading data info
-                                        </Text>
-                                        <Spinner />
+                                    Attach Document
+                                </FormLabel>
+
+                                <Flex
+                                    outline="1px solid"
+                                    outlineColor="gray.300"
+                                    h="2.6rem"
+                                    align="center"
+                                    pr="1rem"
+                                    w={["100%", "100%"]}
+                                    // justifyContent="space-between"
+                                >
+                                    <Flex
+                                        bgColor="#f5f5f5"
+                                        fontSize=".8rem"
+                                        px="2rem"
+                                        h="full"
+                                        align="center"
+                                        cursor="pointer"
+                                        my="auto"
+                                        fontWeight="600"
+                                        onClick={() =>
+                                            widgetApi.current.openDialog()
+                                        }
+                                    >
+                                        Choose File
                                     </Flex>
-                                )}
-                            </Flex>
-                            <Box display="none">
-                                <Widget
-                                    publicKey="fda3a71102659f95625f"
-                                    clearable
-                                    onFileSelect={showLoadingState}
-                                    ref={widgetApi}
-                                    systemDialog={true}
-                                    inputAcceptTypes={".docx,.pdf, .doc"}
-                                />
+                                    <Text noOfLines={1} my="auto" px=".5rem">
+                                        {contract.name}
+                                    </Text>
+                                    {showLoading && (
+                                        <Flex align="center">
+                                            <Text
+                                                mb="0"
+                                                fontStyle="italic"
+                                                mr="1rem"
+                                            >
+                                                ...loading data info
+                                            </Text>
+                                            <Spinner />
+                                        </Flex>
+                                    )}
+                                </Flex>
+                                <Box display="none">
+                                    <Widget
+                                        publicKey="fda3a71102659f95625f"
+                                        clearable
+                                        onFileSelect={showLoadingState}
+                                        ref={widgetApi}
+                                        systemDialog={true}
+                                        inputAcceptTypes={".docx,.pdf, .doc"}
+                                    />
+                                </Box>
                             </Box>
-                        </Box>
+                        </Grid>
                     </Box>
 
                     <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">
@@ -374,6 +388,17 @@ function TeamManagement({ adminList, userProfile }: adminProps) {
                     </DrawerFooter>
                 </form>
             </DrawerWrapper>
+            <ExtendContract
+                extend={extend}
+                clickedItem={clickedItem}
+                setExtend={setExtend}
+            />
+            <ModifyContract
+                modify={modify}
+                clickedItem={clickedItem}
+                setmodify={setModify}
+            />
+            <ConfirmModal isOpen={opens} onClose={closed} id={clickedItem.id} />
         </>
     );
 }

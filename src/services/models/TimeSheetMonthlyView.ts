@@ -2,13 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { EmployeeInformationView } from './EmployeeInformationView';
+import type { TimeSheetView } from './TimeSheetView';
 
 export type TimeSheetMonthlyView = {
-    id?: string;
-    date?: string;
-    isApproved?: boolean;
-    employeeInformationId?: string;
-    employeeInformation?: EmployeeInformationView;
-    hours?: number;
+    timeSheet?: Array<TimeSheetView> | null;
+    expectedPay?: number | null;
+    expectedWorkHours?: number;
 };

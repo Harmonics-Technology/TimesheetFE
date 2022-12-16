@@ -23,30 +23,36 @@ import {
     Select,
     Input,
     Tooltip,
+    InputRightElement,
+    InputGroup,
+    Spinner,
 } from "@chakra-ui/react";
 import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
 } from "@components/bits-utils/TimeSheetEstimation";
 import {
     TimeSheetMonthlyView,
-    TimeSheetMonthlyViewIEnumerableStandardResponse,
     TimeSheetService,
+    TimeSheetView,
 } from "src/services";
 import moment from "moment";
+import { FaCheck, FaCheckCircle } from "react-icons/fa";
+import { useRouter } from "next/router";
 
-const Timesheet = ({
-    timeSheets,
-}: {
-    timeSheets: TimeSheetMonthlyViewIEnumerableStandardResponse;
-}) => {
+const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
+    const router = useRouter();
     console.log({ timeSheets });
-    const sheet = timeSheets.data;
+    const sheet = timeSheets?.timeSheet;
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [activeDate, setActiveDate] = useState(new Date());
-    const [hours, setHours] = useState<string>("");
-    const [monthlyTimesheets, setMonthlyTimesheets] = useState<
-        TimeSheetMonthlyView[]
-    >(sheet as TimeSheetMonthlyView[]);
+    const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
+        sheet as TimeSheetView[],
+    );
+    const totalHours = 60;
+    const actualPayout = Math.round(
+        ((timeSheets?.expectedPay as number) * totalHours) /
+            (timeSheets?.expectedWorkHours as number),
+    );
 
     const getHeader = () => {
         return (
@@ -105,7 +111,8 @@ const Timesheet = ({
                     align="center"
                     // ml="6rem"
                 >
-                    {monthlyTimesheets[0].employeeInformationId}
+                    {/* {monthlyTimesheets[0].employeeInformationId} */}
+                    {`Viewing ${"Adeleke"} Timesheet`}
                 </Flex>
             </div>
         );
@@ -116,7 +123,7 @@ const Timesheet = ({
         const weekDays: any[] = [];
         for (let day = 0; day < 7; day++) {
             weekDays.push(
-                <div className="day weekNames">
+                <div className="day weekNames" key={day}>
                     {format(addDays(weekStartDate, day), "E")}
                 </div>,
             );
@@ -140,25 +147,34 @@ const Timesheet = ({
                     userId,
                     chosenDate,
                 );
+                if (data.status) {
+                    router.reload();
+                    return;
+                }
                 console.log({ data });
             } catch (error) {
                 console.log(error);
             }
         };
+        const [loading, setLoading] = useState<boolean>(false);
         const addHours = async (userId, chosenDate, hours) => {
-            window.setTimeout(async () => {
-                console.log({ userId, chosenDate, hours });
-                // try {
-                //     const data = await TimeSheetService.addWorkHoursForADay(
-                //         userId,
-                //         chosenDate,
-                //         hours,
-                //     );
-                //     console.log({ data });
-                // } catch (error) {
-                //     console.log(error);
-                // }
-            }, 2000);
+            console.log({ userId, chosenDate, hours });
+            try {
+                setLoading(true);
+                const data = await TimeSheetService.addWorkHoursForADay(
+                    userId,
+                    chosenDate,
+                    hours,
+                );
+                if (data.status) {
+                    setLoading(false);
+                    router.reload();
+                    console.log({ data });
+                    return;
+                }
+            } catch (error) {
+                console.log(error);
+            }
         };
         let currentDate: Date = date;
         const week: any[] = [];
@@ -171,6 +187,8 @@ const Timesheet = ({
             )[0];
             const userId = timesheets?.employeeInformationId;
             const userDate = moment(timesheets?.date).format("YYYY-MM-DD");
+            const [hours, setHours] = useState<string>("");
+
             week.push(
                 <Box
                     className={`day ${
@@ -199,16 +217,41 @@ const Timesheet = ({
                         ></Checkbox>
                     </Flex>
 
-                    <Input
-                        defaultValue={timesheets?.hours}
-                        placeholder="---"
+                    <InputGroup
                         border="0"
-                        w="50%"
-                        h="auto"
-                        textAlign="center"
-                        onChange={(e) => setHours(e.target.value)}
-                        onKeyUp={() => addHours(userId, userDate, hours)}
-                    />
+                        w="80%"
+                        h="1.5rem"
+                        mt=".3rem"
+                        alignItems="center"
+                    >
+                        <Input
+                            type="tel"
+                            defaultValue={timesheets?.hours}
+                            placeholder="---"
+                            textAlign="center"
+                            h="full"
+                            border="0"
+                            onChange={(e) => setHours(e.target.value)}
+                        />
+                        {hours !== "" && (
+                            <InputRightElement
+                                h="full"
+                                onClick={() =>
+                                    addHours(userId, userDate, hours)
+                                }
+                                children={
+                                    loading ? (
+                                        <Spinner size="xs" />
+                                    ) : (
+                                        <FaCheckCircle color="brand.400" />
+                                    )
+                                }
+                            />
+                        )}
+                        {hours === "" && timesheets?.isApproved && (
+                            <FaCheck color="green" />
+                        )}
+                    </InputGroup>
                 </Box>,
             );
             currentDate = addDays(currentDate, 1);
@@ -286,11 +329,22 @@ const Timesheet = ({
                 <Grid templateColumns="repeat(5,1fr)" w="80%" mr="auto">
                     <TimeSheetEstimation
                         label="Expected Total Hours"
-                        data="100"
+                        data={timeSheets.expectedWorkHours}
+                        tip="Your work/hr in a month"
                     />
-                    <TimeSheetEstimation label="Total Hours Worked" data="25" />
-                    <TimeSheetEstimation label="Total Payout" data="1000" />
-                    <TimeSheetEstimation label="Actual Payout" data="50" />
+                    <TimeSheetEstimation
+                        label="Total Hours Worked"
+                        data={totalHours}
+                        tip="How much you work in a month"
+                    />
+                    <TimeSheetEstimation
+                        label="Total Payout"
+                        data={timeSheets.expectedPay}
+                    />
+                    <TimeSheetEstimation
+                        label="Actual Payout"
+                        data={actualPayout}
+                    />
                     <TimeSheetEstimationBtn id={1} />
                 </Grid>
             </Box>

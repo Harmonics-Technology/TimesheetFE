@@ -1,27 +1,23 @@
 import { withPageAuth } from "@components/generics/withPageAuth";
-import Timesheet from "@components/subpages/Timesheet";
+// import Timesheet from "@components/subpages/Timesheet";
+import TimesheetTeam from "@components/subpages/TimesheetClient";
 import moment from "moment";
 import { GetServerSideProps } from "next";
 import React from "react";
-import {
-    TimeSheetMonthlyViewIEnumerableStandardResponse,
-    TimeSheetService,
-} from "src/services";
+import { TimeSheetMonthlyView, TimeSheetService } from "src/services";
 
-function SingleTimeSheet({
-    timeSheets,
-}: {
-    timeSheets: TimeSheetMonthlyViewIEnumerableStandardResponse;
-}) {
-    return <Timesheet timeSheets={timeSheets} />;
+function SingleTimeSheet({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) {
+    return <TimesheetTeam timeSheets={timeSheets} />;
 }
 
 export default SingleTimeSheet;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        console.log({ ctx: JSON.parse(ctx.req.cookies.user).id });
-        const id = "08dadc70-c993-45b8-814c-69d63e1ebfdf";
+        console.log({
+            ctx: JSON.parse(ctx.req.cookies.user).employeeInformationId,
+        });
+        const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
         const date = moment(new Date()).format("YYYY-MM-DD");
         console.log({ id });
         try {
@@ -29,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             console.log({ data });
             return {
                 props: {
-                    timeSheets: data,
+                    timeSheets: data.data,
                 },
             };
         } catch (error: any) {

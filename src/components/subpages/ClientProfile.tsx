@@ -52,6 +52,7 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
                     isClosable: true,
                     position: "top-right",
                 });
+                router.reload();
                 return;
             }
             toast({

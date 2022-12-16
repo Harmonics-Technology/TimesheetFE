@@ -1,7 +1,12 @@
-import { Box, Grid, Image, VStack } from "@chakra-ui/react";
+import { Box, Grid, Image, Tr, VStack } from "@chakra-ui/react";
 import DashboardCard from "@components/bits-utils/DashboardCard";
 import TableCards from "@components/bits-utils/TableCards";
-import { DashboardView, DashboardViewStandardResponse } from "src/services";
+import { TableData, TableStatus } from "@components/bits-utils/TableData";
+import {
+    DashboardView,
+    DashboardViewStandardResponse,
+    UserView,
+} from "src/services";
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
@@ -22,7 +27,7 @@ function TeamDashboard({ metrics }: DashboardProps) {
                     value={adminMetrics?.totalClients}
                 />
                 <DashboardCard
-                    url="/SuperAdmin/profile-management/admin"
+                    url="/SuperAdmin/profile-management/team-members"
                     title="team members"
                     value={adminMetrics?.totalTeamMembers}
                 />
@@ -34,35 +39,60 @@ function TeamDashboard({ metrics }: DashboardProps) {
             </Grid>
             <Grid templateColumns={["1fr", "2fr 1fr"]} gap="1.2rem" w="full">
                 <TableCards
-                    title={"Recent Timesheet"}
+                    title={"Recent Payroll"}
                     url={"profile-management/clients"}
-                    data={adminMetrics?.recentCLients}
+                    data={adminMetrics?.recentCLients
+                        ?.slice(0, 4)
+                        .map((x: UserView) => (
+                            <Tr key={x.id}>
+                                <TableData name={x.firstName} />
+                                <TableData name={x.email} />
+                                <TableStatus name={x.isActive} />
+                                <TableData name={x.firstName} />
+                                <TableData name={x.email} />
+                                <TableStatus name={x.isActive} />
+                                <TableData name={x.firstName} />
+                            </Tr>
+                        ))}
+                    thead={[
+                        "Client",
+                        "Start date",
+                        "End date",
+                        "Rate",
+                        "Total Amount",
+                        "Status",
+                        "Action",
+                    ]}
+                    link={"/"}
                 />
-                <Box
-                    bgColor="white"
-                    borderRadius="15px"
-                    padding="1.5rem"
-                    w="full"
-                    boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
-                >
-                    <Image src="/assets/dash.png" h="full" mx="auto" />
-                </Box>
             </Grid>
             <Grid templateColumns={["1fr", "2fr 1fr"]} gap="1.2rem" w="full">
                 <TableCards
-                    title={"Recent Payslip"}
+                    title={"Recent Payroll"}
                     url={"profile-management/clients"}
-                    data={adminMetrics?.recentCLients}
+                    data={adminMetrics?.recentCLients
+                        ?.slice(0, 4)
+                        .map((x: UserView) => (
+                            <Tr key={x.id}>
+                                <TableData name={x.firstName} />
+                                <TableData name={x.email} />
+                                <TableStatus name={x.isActive} />
+                                <TableData name={x.firstName} />
+                                <TableData name={x.email} />
+                                <TableStatus name={x.isActive} />
+                                <TableData name={x.firstName} />
+                            </Tr>
+                        ))}
+                    thead={[
+                        "Client",
+                        "Invoice no.",
+                        "Amount",
+                        "Generated on",
+                        "Status",
+                        "Action",
+                    ]}
+                    link={"/"}
                 />
-                <Box
-                    bgColor="white"
-                    borderRadius="15px"
-                    padding="1.5rem"
-                    w="full"
-                    boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
-                >
-                    <Image src="/assets/dash.png" h="full" mx="auto" />
-                </Box>
             </Grid>
         </VStack>
     );

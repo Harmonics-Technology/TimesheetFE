@@ -1,13 +1,19 @@
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, Tooltip } from "@chakra-ui/react";
 import React from "react";
 
 interface TimeProps {
     label: string;
     data: any;
+    tip?: string;
 }
-export default function TimeSheetEstimation({ label, data }: TimeProps) {
+export default function TimeSheetEstimation({ label, data, tip }: TimeProps) {
     return (
-        <Flex flexDirection="column" fontSize=".8rem" width="100%">
+        <Flex
+            flexDirection="column"
+            fontSize=".8rem"
+            width="100%"
+            cursor="default"
+        >
             <Flex
                 border="1px solid"
                 m="0"
@@ -20,18 +26,26 @@ export default function TimeSheetEstimation({ label, data }: TimeProps) {
             >
                 {label}
             </Flex>
-            <Flex
-                border="1px solid"
-                m="0"
-                h="3rem"
-                w="full"
-                justify="center"
-                align="center"
-                fontWeight="500"
-                borderColor="#e5e5e5"
+            <Tooltip
+                label={tip}
+                hasArrow
+                bgColor="gray.300"
+                color="black"
+                placement="bottom"
             >
-                {data}
-            </Flex>
+                <Flex
+                    border="1px solid"
+                    m="0"
+                    h="3rem"
+                    w="full"
+                    justify="center"
+                    align="center"
+                    fontWeight="500"
+                    borderColor="#e5e5e5"
+                >
+                    {data}
+                </Flex>
+            </Tooltip>
         </Flex>
     );
 }

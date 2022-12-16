@@ -48,7 +48,7 @@ function ContractList({ adminList }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between" align="center" my="2.5rem">
+                <Flex justify="space-between" align="center" my=".5rem">
                     <HStack fontSize=".8rem" w="fit-content">
                         <Select
                             w="fit-content"
@@ -73,11 +73,12 @@ function ContractList({ adminList }: adminProps) {
                     tableHead={[
                         "Name",
                         "Job Title",
-                        "Client",
-                        "Phone No",
-                        "Role",
+                        "Start Date",
+                        "End Date",
+                        "Tenor",
+                        "Contract",
                         "Status",
-                        "",
+                        "Action",
                     ]}
                 >
                     <>
@@ -99,7 +100,7 @@ function ContractList({ adminList }: adminProps) {
                                     name={x.tenor as unknown as string}
                                 />
                                 <TableContract url={x.document} />
-                                <TableState name={"ACTIVE"} />
+                                <TableState name={x.status as string} />
                                 <TableContractAction id={x.userId} />
                             </Tr>
                         ))}

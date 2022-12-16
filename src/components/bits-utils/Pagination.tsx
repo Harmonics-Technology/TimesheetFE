@@ -23,8 +23,9 @@ function Pagination({ data }: pageOptions) {
     const router = useRouter();
     const next = data?.next?.href;
     const previous = data?.previous?.href;
+    const last = data?.last?.href;
 
-    const paginate = (direction: "next" | "previous") => {
+    const paginate = (direction: "next" | "previous" | "last") => {
         let link = "";
         if (direction == "previous" && previous != null) {
             link = previous?.split("?")[1] ?? false;
@@ -43,6 +44,16 @@ function Pagination({ data }: pageOptions) {
                     url: link,
                     limit: data.limit,
                     offset: data.nextOffset,
+                },
+            });
+        }
+        if (direction == "last" && last != null) {
+            link = last?.split("?")[1] ?? false;
+            router.push({
+                query: {
+                    url: link,
+                    limit: data.limit,
+                    offset: data.previousOffset,
                 },
             });
         }
@@ -78,14 +89,20 @@ function Pagination({ data }: pageOptions) {
                         {currentPage}
                     </Circle>
                     <Text mx=".5rem">of</Text>
-                    <Circle
+                    <Button
                         bgColor="white"
                         color="brand.200"
                         border="1px solid #767676"
-                        size="2rem"
+                        width="2rem"
+                        height="2rem"
+                        minW="unset"
+                        padding="0"
+                        borderRadius="50%"
+                        disabled={!previous}
+                        onClick={() => paginate("last")}
                     >
                         {totalPages}
-                    </Circle>
+                    </Button>
 
                     <Button
                         bgColor="white"

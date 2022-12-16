@@ -40,7 +40,8 @@
         "next-env.d.ts",
         "**/*.ts",
         "**/*.tsx",
-        "src/components/subpages"
-, "pages/TeamMember/dashboard"    ],
+        "src/components/subpages",
+        "pages/TeamMember/dashboard"
+    ],
     "exclude": ["node_modules", "test/*"]
 }

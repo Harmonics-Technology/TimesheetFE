@@ -55,6 +55,7 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                     isClosable: true,
                     position: "top-right",
                 });
+                router.reload();
                 return;
             }
             toast({

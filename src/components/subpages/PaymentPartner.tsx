@@ -52,6 +52,7 @@ function PaymentPartner({ userProfile }: PaymentPartnerProps) {
                     isClosable: true,
                     position: "top-right",
                 });
+                router.reload();
                 return;
             }
             toast({

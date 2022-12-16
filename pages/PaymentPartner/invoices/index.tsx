@@ -1,0 +1,36 @@
+import ViewPayroll from "@components/bits-utils/ViewPayroll";
+import { withPageAuth } from "@components/generics/withPageAuth";
+import ContractList from "@components/subpages/ContractList";
+import { GetServerSideProps } from "next";
+import React from "react";
+import {
+    ContractService,
+    ContractViewPagedCollectionStandardResponse,
+} from "src/services";
+interface adminProps {
+    adminList: ContractViewPagedCollectionStandardResponse;
+}
+
+function invoices({ adminList }: adminProps) {
+    return <ViewPayroll adminList={adminList} />;
+}
+
+export default invoices;
+
+export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
+    try {
+        const data = await ContractService.listContracts();
+        return {
+            props: {
+                adminList: data,
+            },
+        };
+    } catch (error: any) {
+        console.log(error);
+        return {
+            props: {
+                data: [],
+            },
+        };
+    }
+});

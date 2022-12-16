@@ -3,15 +3,16 @@ import Link from "next/link";
 import React from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { UserView } from "src/services";
-import { TableData, TableStatus } from "./TableData";
 import Tables from "./Tables";
 
 interface TableCardsProps {
     title: string;
     url: string;
-    data: UserView[] | null | undefined;
+    data: any[] | null | undefined;
+    thead: any[];
+    link: string;
 }
-function TableCards({ title, url, data }: TableCardsProps) {
+function TableCards({ title, url, data, thead, link }: TableCardsProps) {
     // console.log({ data });
     return (
         <Box
@@ -32,17 +33,9 @@ function TableCards({ title, url, data }: TableCardsProps) {
             >
                 {title}
             </Text>
-            <Tables tableHead={["CLIENT NAME", "EMAIL", "STATUS"]}>
-                <Link href={"/admin/rent/applications/"} key={1}>
-                    <>
-                        {data?.slice(0, 4).map((x: UserView) => (
-                            <Tr key={x.id}>
-                                <TableData name={x.firstName} />
-                                <TableData name={x.email} />
-                                <TableStatus name={x.isActive} />
-                            </Tr>
-                        ))}
-                    </>
+            <Tables tableHead={thead}>
+                <Link href={link} key={1}>
+                    <>{data}</>
                 </Link>
             </Tables>
             <Stack direction="column" align="flex-end" mt="1rem">

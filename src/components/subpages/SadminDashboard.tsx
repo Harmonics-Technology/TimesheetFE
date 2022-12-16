@@ -1,7 +1,12 @@
-import { Box, Grid, Image, VStack } from "@chakra-ui/react";
+import { Box, Grid, Image, Tr, VStack } from "@chakra-ui/react";
 import DashboardCard from "@components/bits-utils/DashboardCard";
 import TableCards from "@components/bits-utils/TableCards";
-import { DashboardView, DashboardViewStandardResponse } from "src/services";
+import { TableData, TableStatus } from "@components/bits-utils/TableData";
+import {
+    DashboardView,
+    DashboardViewStandardResponse,
+    UserView,
+} from "src/services";
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
@@ -36,7 +41,17 @@ function SadminDashboard({ metrics }: DashboardProps) {
                 <TableCards
                     title={"Recent Clients"}
                     url={"profile-management/clients"}
-                    data={adminMetrics?.recentCLients}
+                    data={adminMetrics?.recentCLients
+                        ?.slice(0, 4)
+                        .map((x: UserView) => (
+                            <Tr key={x.id}>
+                                <TableData name={x.firstName} />
+                                <TableData name={x.email} />
+                                <TableStatus name={x.isActive} />
+                            </Tr>
+                        ))}
+                    thead={["CLIENT NAME", "EMAIL", "STATUS"]}
+                    link={"/"}
                 />
                 <Box
                     bgColor="white"

@@ -6,6 +6,7 @@ import type { EmployeeInformationView } from './EmployeeInformationView';
 
 export type UserView = {
     id?: string;
+    employeeInformationId?: string | null;
     firstName?: string | null;
     lastName?: string | null;
     fullName?: string | null;

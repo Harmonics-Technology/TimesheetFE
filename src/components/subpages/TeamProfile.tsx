@@ -40,7 +40,6 @@ interface TeamProfileProps {
     clients: UserView[];
     supervisor: UserView[];
     paymentPartner: UserView[];
-    contractList: ContractViewPagedCollectionStandardResponse;
 }
 
 function TeamProfile({
@@ -48,7 +47,6 @@ function TeamProfile({
     clients,
     supervisor,
     paymentPartner,
-    contractList,
 }: TeamProfileProps) {
     const {
         register,
@@ -60,7 +58,7 @@ function TeamProfile({
         resolver: yupResolver(schema),
         mode: "all",
         defaultValues: {
-            role: "Team Member",
+            role: userProfile?.role as unknown as string,
             isActive: userProfile?.isActive,
             phoneNumber: userProfile?.phoneNumber,
             email: userProfile?.email,
@@ -83,7 +81,6 @@ function TeamProfile({
     console.log({ userProfile });
     const payroll = userProfile?.employeeInformation?.payrollType;
     const payrolls = watch("payRollTypeId");
-    console.log({ payrolls });
 
     const [icd, setIcd] = useState<any>("");
     const [voidCheck, setVoidCheck] = useState<any>("");
@@ -148,38 +145,45 @@ function TeamProfile({
 
     const onSubmit = async (data: TeamMemberModel) => {
         data.isActive = data.isActive === ("true" as unknown as boolean);
-        data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
-        data.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
-        data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
+        if (icd !== "") {
+            data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
+        }
+        if (voidCheck !== "") {
+            data.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
+        }
+        if (inc !== "") {
+            data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
+        }
         console.log({ data });
 
-        try {
-            const result = await UserService.updateTeamMember(data);
-            // console.log({ result });
-            if (result.status) {
-                toast({
-                    title: "Profile Update Success",
-                    status: "success",
-                    isClosable: true,
-                    position: "top-right",
-                });
-                return;
-            }
-            toast({
-                title: result.message,
-                status: "error",
-                isClosable: true,
-                position: "top-right",
-            });
-        } catch (error) {
-            console.log(error);
-            toast({
-                title: `Check your network connection and try again`,
-                status: "error",
-                isClosable: true,
-                position: "top-right",
-            });
-        }
+        // try {
+        //     const result = await UserService.updateTeamMember(data);
+        //     // console.log({ result });
+        //     if (result.status) {
+        //         toast({
+        //             title: "Profile Update Success",
+        //             status: "success",
+        //             isClosable: true,
+        //             position: "top-right",
+        //         });
+        //         router.reload();
+        //         return;
+        //     }
+        //     toast({
+        //         title: result.message,
+        //         status: "error",
+        //         isClosable: true,
+        //         position: "top-right",
+        //     });
+        // } catch (error) {
+        //     console.log(error);
+        //     toast({
+        //         title: `Check your network connection and try again`,
+        //         status: "error",
+        //         isClosable: true,
+        //         position: "top-right",
+        //     });
+        // }
     };
     return (
         <Box
@@ -189,7 +193,7 @@ function TeamProfile({
             minH="80vh"
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form>
                 <Grid
                     templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
                     gap="1rem 2rem"
@@ -268,6 +272,19 @@ function TeamProfile({
                                 ?.fullName as string
                         }
                         options={supervisor}
+                    />
+                    <SelectrixBox<TeamMemberModel>
+                        control={control}
+                        name="role"
+                        error={errors.role}
+                        keys="id"
+                        keyLabel="label"
+                        label="Role"
+                        placeholder={userProfile?.role as string}
+                        options={[
+                            { id: "Team Member", label: "Team Member" },
+                            { id: "Supervisor", label: "Supervisor/Manager" },
+                        ]}
                     />
                     <SelectrixBox<TeamMemberModel>
                         control={control}
@@ -737,41 +754,39 @@ function TeamProfile({
                         />
                     </Box>
                 </Box>
-                <ContractTable
-                    userProfile={userProfile}
-                    adminList={contractList}
-                />
-                <Grid
-                    templateColumns={["repeat(2,1fr)", "repeat(2,1fr)"]}
-                    gap="1rem 2rem"
-                    my="2rem"
-                >
-                    <Button
-                        bgColor="gray.500"
-                        color="white"
-                        height="3rem"
-                        fontSize="14px"
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        onClick={() => router.back()}
-                    >
-                        Back
-                    </Button>
-                    <Button
-                        bgColor="brand.400"
-                        color="white"
-                        height="3rem"
-                        fontSize="14px"
-                        type="submit"
-                        isLoading={isSubmitting}
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                    >
-                        <Box pr=".5rem">
-                            <VscSaveAs />
-                        </Box>
-                        <Box>Update Profile</Box>
-                    </Button>
-                </Grid>
+                <ContractTable userProfile={userProfile} />
             </form>
+            <Grid
+                templateColumns={["repeat(2,1fr)", "repeat(2,1fr)"]}
+                gap="1rem 2rem"
+                my="2rem"
+            >
+                <Button
+                    bgColor="gray.500"
+                    color="white"
+                    height="3rem"
+                    fontSize="14px"
+                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                    onClick={() => router.back()}
+                >
+                    Back
+                </Button>
+                <Button
+                    bgColor="brand.400"
+                    color="white"
+                    height="3rem"
+                    fontSize="14px"
+                    // type="submit"
+                    onClick={handleSubmit(onSubmit)}
+                    isLoading={isSubmitting}
+                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                >
+                    <Box pr=".5rem">
+                        <VscSaveAs />
+                    </Box>
+                    <Box>Update Profile</Box>
+                </Button>
+            </Grid>
         </Box>
     );
 }
