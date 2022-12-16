@@ -14,8 +14,13 @@ export default SingleTimeSheet;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
-        const date = moment(new Date()).format("YYYY-MM-DD");
-        console.log({ id });
+
+        let { date } = ctx.query;
+        if (date === undefined) {
+            date = moment(new Date()).format("YYYY-MM-DD");
+        }
+
+        console.log({ date });
         try {
             const data = await TimeSheetService.getTimeSheet(id, date);
             console.log({ data });

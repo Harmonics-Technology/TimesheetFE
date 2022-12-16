@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
+import type { TimeSheetApprovedViewPagedCollectionStandardResponse } from '../models/TimeSheetApprovedViewPagedCollectionStandardResponse';
 import type { TimeSheetHistoryViewPagedCollectionStandardResponse } from '../models/TimeSheetHistoryViewPagedCollectionStandardResponse';
 import type { TimeSheetMonthlyViewIEnumerableStandardResponse } from '../models/TimeSheetMonthlyViewIEnumerableStandardResponse';
 
@@ -113,6 +114,29 @@ hours?: number,
                 'employeeInformationId': employeeInformationId,
                 'date': date,
                 'hours': hours,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listApprovedTimeSheet(
+offset?: number,
+limit?: number,
+search?: string,
+): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/TimeSheet/approved',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
             },
         });
     }

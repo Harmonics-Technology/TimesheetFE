@@ -53,9 +53,13 @@ export default function TimeSheetEstimation({ label, data, tip }: TimeProps) {
 export function TimeSheetEstimationBtn({
     id,
     loading,
+    title,
+    click,
 }: {
     id: any;
     loading: boolean;
+    title: string;
+    click?: any;
 }) {
     const router = useRouter();
     return (
@@ -78,9 +82,9 @@ export function TimeSheetEstimationBtn({
                     width="100"
                     color="white"
                     disabled={loading}
-                    onClick={() => router.reload()}
+                    onClick={click}
                 >
-                    Update Timesheet
+                    {title}
                 </Button>
             </Flex>
             {/* <Flex

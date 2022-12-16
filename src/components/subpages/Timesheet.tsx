@@ -45,6 +45,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
     const sheet = timeSheets?.timeSheet;
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [activeDate, setActiveDate] = useState(new Date());
+    // console.log({ selectedDate, activeDate });
     const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
         sheet as TimeSheetView[],
     );
@@ -53,6 +54,53 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
         ((timeSheets?.expectedPay as number) * totalHours) /
             (timeSheets?.expectedWorkHours as number),
     );
+
+    const approveAllTimeSheet = async () => {
+        monthlyTimesheets.forEach((timeSheet) => {
+            approveTimeSheetForADay(
+                timeSheet.employeeInformationId,
+                timeSheet.date,
+            );
+            router.reload();
+        });
+    };
+
+    const approveTimeSheetForADay = async (userId, chosenDate) => {
+        console.log({ userId, chosenDate });
+        try {
+            setLoading(true);
+            const data = await TimeSheetService.approveTimeSheetForADay(
+                userId,
+                chosenDate,
+            );
+            if (data.status) {
+                setLoading(false);
+                return;
+            }
+            console.log({ data });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const addHours = async (userId, chosenDate, hours) => {
+        console.log({ userId, chosenDate, hours });
+        try {
+            setLoading(true);
+            const data = await TimeSheetService.addWorkHoursForADay(
+                userId,
+                chosenDate,
+                hours,
+            );
+            if (data.status) {
+                setLoading(false);
+                console.log({ data });
+                return;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const getHeader = () => {
         return (
@@ -83,7 +131,17 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                 <Flex align="center">
                     <AiOutlineLeft
                         className="navIcon"
-                        onClick={() => setActiveDate(subMonths(activeDate, 1))}
+                        onClick={() => {
+                            setActiveDate(subMonths(activeDate, 1));
+                            router.push({
+                                query: {
+                                    ...router.query,
+                                    date: moment(
+                                        subMonths(activeDate, 1),
+                                    ).format("YYYY-MM-DD"),
+                                },
+                            });
+                        }}
                     />
                     <Box
                         borderRadius="15px"
@@ -98,7 +156,17 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                     </Box>
                     <AiOutlineRight
                         className="navIcon"
-                        onClick={() => setActiveDate(addMonths(activeDate, 1))}
+                        onClick={() => {
+                            setActiveDate(addMonths(activeDate, 1));
+                            router.push({
+                                query: {
+                                    ...router.query,
+                                    date: moment(
+                                        addMonths(activeDate, 1),
+                                    ).format("YYYY-MM-DD"),
+                                },
+                            });
+                        }}
                     />
                 </Flex>
                 <Flex
@@ -111,8 +179,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                     align="center"
                     // ml="6rem"
                 >
-                    {/* {monthlyTimesheets[0].employeeInformationId} */}
-                    {`Viewing ${"Adeleke"} Timesheet`}
+                    {`Viewing ${timeSheets?.fullName} Timesheet`}
                 </Flex>
             </div>
         );
@@ -130,7 +197,9 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
         }
         return (
             <div className="weekContainer">
-                <Box className="day weekNames" color="brand.400"></Box>
+                <Box className="day weekNames" color="red.400">
+                    Week
+                </Box>
                 {weekDays}
                 <Box className="day weekNames" color="brand.400">
                     Total
@@ -139,45 +208,16 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
         );
     };
     const [loading, setLoading] = useState<boolean>(false);
-    const generateDatesForCurrentWeek = (date, selectedDate, activeDate) => {
-        const approveTimeSheetForADay = async (userId, chosenDate) => {
-            console.log({ userId, chosenDate });
-            try {
-                setLoading(true);
-                const data = await TimeSheetService.approveTimeSheetForADay(
-                    userId,
-                    chosenDate,
-                );
-                if (data.status) {
-                    setLoading(false);
-                    return;
-                }
-                console.log({ data });
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        const addHours = async (userId, chosenDate, hours) => {
-            console.log({ userId, chosenDate, hours });
-            try {
-                setLoading(true);
-                const data = await TimeSheetService.addWorkHoursForADay(
-                    userId,
-                    chosenDate,
-                    hours,
-                );
-                if (data.status) {
-                    setLoading(false);
-                    router.reload();
-                    console.log({ data });
-                    return;
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
+    const generateDatesForCurrentWeek = (
+        date,
+        selectedDate,
+        activeDate,
+        weekNumber,
+        total,
+    ) => {
         let currentDate: Date = date;
         const week: any[] = [];
+        // let total = 0;
         for (let day = 0; day < 7; day++) {
             const cloneDate = currentDate;
             const timesheets = monthlyTimesheets?.filter(
@@ -185,9 +225,18 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                     new Date(x.date as string).toLocaleDateString() ==
                     currentDate.toLocaleDateString(),
             )[0];
+
+            // console.log({ time: timesheets?.hours });
+
             const userId = timesheets?.employeeInformationId;
             const userDate = moment(timesheets?.date).format("YYYY-MM-DD");
             const [hours, setHours] = useState<string>("");
+            const allsheet = monthlyTimesheets?.filter((x) =>
+                isInWeek(new Date(x.date as string).toLocaleDateString()),
+            );
+            const sh = allsheet?.map((sheet) => sheet.hours);
+            total = sh?.reduce((a, b) => a + b, 0) as any;
+            // console.log({ total });
 
             week.push(
                 <Box
@@ -256,6 +305,11 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
             );
             currentDate = addDays(currentDate, 1);
         }
+        // console.log({ week });
+        function isInWeek(day) {
+            return day.includes(week);
+        }
+
         return (
             <>
                 <Flex
@@ -264,7 +318,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                     fontWeight="500"
                     fontSize=".9rem"
                 >
-                    Week
+                    {weekNumber}
                 </Flex>
                 <>{week}</>
                 <Flex
@@ -273,7 +327,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                     fontWeight="500"
                     fontSize=".9rem"
                 >
-                    40hr 35m
+                    {total}
                 </Flex>
             </>
         );
@@ -287,17 +341,28 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
 
         let currentDate = startDate;
 
+        // const isInWeek = currentDate >= startDate && currentDate <= endDate;
+        // console.log({ currentDate });
+
         const allWeeks: any[] = [];
 
+        let weekNumber = 1;
         while (currentDate <= endDate) {
             allWeeks.push(
                 generateDatesForCurrentWeek(
                     currentDate,
                     selectedDate,
                     activeDate,
+                    weekNumber,
                 ),
             );
-            currentDate = addDays(currentDate, 7);
+            weekNumber++, (currentDate = addDays(currentDate, 7));
+            const timesheets = monthlyTimesheets?.filter(
+                (x) =>
+                    new Date(x.date as string).toLocaleDateString() ==
+                    currentDate.toLocaleDateString(),
+            )[0];
+            // console.log({ time: timesheets });
         }
 
         return <div className="dayContainer">{allWeeks}</div>;
@@ -326,26 +391,39 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                 // borderRadius="10px"
                 p="1rem 2rem"
             >
-                <Grid templateColumns="repeat(5,1fr)" w="80%" mr="auto">
+                <Grid templateColumns="repeat(6,1fr)" w="80%" mr="auto">
                     <TimeSheetEstimation
                         label="Expected Total Hours"
-                        data={timeSheets.expectedWorkHours}
-                        tip="Your work/hr in a month"
+                        data={timeSheets?.expectedWorkHours}
+                        tip="Number of hours you are expected to work this month"
                     />
                     <TimeSheetEstimation
                         label="Total Hours Worked"
                         data={totalHours}
-                        tip="How much you work in a month"
+                        tip="Number of hours you worked this month"
                     />
                     <TimeSheetEstimation
-                        label="Total Payout"
-                        data={timeSheets.expectedPay}
+                        label="Expected Payout"
+                        data={timeSheets?.expectedPay}
+                        tip="Total amount you are expected to be paid this month"
                     />
                     <TimeSheetEstimation
                         label="Actual Payout"
                         data={actualPayout}
+                        tip="Number of hours you worked this month x Rate per hour"
                     />
-                    <TimeSheetEstimationBtn id={1} loading={loading} />
+                    <TimeSheetEstimationBtn
+                        id={1}
+                        loading={loading}
+                        title="Approve all"
+                        click={approveAllTimeSheet}
+                    />
+                    <TimeSheetEstimationBtn
+                        id={1}
+                        loading={loading}
+                        title="Update TimeSheet"
+                        click={() => router.reload()}
+                    />
                 </Grid>
             </Box>
         </Box>

@@ -8,4 +8,5 @@ export type TimeSheetMonthlyView = {
     timeSheet?: Array<TimeSheetView> | null;
     expectedPay?: number | null;
     expectedWorkHours?: number;
+    fullName?: string | null;
 };

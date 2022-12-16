@@ -39,11 +39,7 @@ import moment from "moment";
 import { FaCheck, FaCheckCircle } from "react-icons/fa";
 import { useRouter } from "next/router";
 
-const TimesheetTeam = ({
-    timeSheets,
-}: {
-    timeSheets: TimeSheetMonthlyView;
-}) => {
+const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
     const router = useRouter();
     console.log({ timeSheets });
     const sheet = timeSheets?.timeSheet;
@@ -57,6 +53,53 @@ const TimesheetTeam = ({
         ((timeSheets?.expectedPay as number) * totalHours) /
             (timeSheets?.expectedWorkHours as number),
     );
+
+    const approveAllTimeSheet = async () => {
+        monthlyTimesheets.forEach((timeSheet) => {
+            approveTimeSheetForADay(
+                timeSheet.employeeInformationId,
+                timeSheet.date,
+            );
+            router.reload();
+        });
+    };
+
+    const approveTimeSheetForADay = async (userId, chosenDate) => {
+        console.log({ userId, chosenDate });
+        try {
+            setLoading(true);
+            const data = await TimeSheetService.approveTimeSheetForADay(
+                userId,
+                chosenDate,
+            );
+            if (data.status) {
+                setLoading(false);
+                return;
+            }
+            console.log({ data });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const addHours = async (userId, chosenDate, hours) => {
+        console.log({ userId, chosenDate, hours });
+        try {
+            setLoading(true);
+            const data = await TimeSheetService.addWorkHoursForADay(
+                userId,
+                chosenDate,
+                hours,
+            );
+            if (data.status) {
+                setLoading(false);
+                console.log({ data });
+                return;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const getHeader = () => {
         return (
@@ -115,8 +158,7 @@ const TimesheetTeam = ({
                     align="center"
                     // ml="6rem"
                 >
-                    {/* {monthlyTimesheets[0].employeeInformationId} */}
-                    {`Viewing ${"Your"} Timesheet`}
+                    {`Viewing ${timeSheets.fullName} Timesheet`}
                 </Flex>
             </div>
         );
@@ -127,14 +169,16 @@ const TimesheetTeam = ({
         const weekDays: any[] = [];
         for (let day = 0; day < 7; day++) {
             weekDays.push(
-                <div className="day weekNames">
+                <div className="day weekNames" key={day}>
                     {format(addDays(weekStartDate, day), "E")}
                 </div>,
             );
         }
         return (
             <div className="weekContainer">
-                <Box className="day weekNames" color="brand.400"></Box>
+                <Box className="day weekNames" color="red.400">
+                    Week
+                </Box>
                 {weekDays}
                 <Box className="day weekNames" color="brand.400">
                     Total
@@ -143,43 +187,12 @@ const TimesheetTeam = ({
         );
     };
     const [loading, setLoading] = useState<boolean>(false);
-    const generateDatesForCurrentWeek = (date, selectedDate, activeDate) => {
-        const approveTimeSheetForADay = async (userId, chosenDate) => {
-            console.log({ userId, chosenDate });
-            try {
-                setLoading(true);
-                const data = await TimeSheetService.approveTimeSheetForADay(
-                    userId,
-                    chosenDate,
-                );
-                if (data.status) {
-                    setLoading(false);
-                    return;
-                }
-                console.log({ data });
-            } catch (error) {
-                console.log(error);
-            }
-        };
-
-        const addHours = async (userId, chosenDate, hours) => {
-            console.log({ userId, chosenDate, hours });
-            try {
-                setLoading(true);
-                const data = await TimeSheetService.addWorkHoursForADay(
-                    userId,
-                    chosenDate,
-                    hours,
-                );
-                if (data.status) {
-                    setLoading(false);
-                    console.log({ data });
-                    return;
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        };
+    const generateDatesForCurrentWeek = (
+        date,
+        selectedDate,
+        activeDate,
+        weekNumber,
+    ) => {
         let currentDate: Date = date;
         const week: any[] = [];
         for (let day = 0; day < 7; day++) {
@@ -269,7 +282,7 @@ const TimesheetTeam = ({
                     fontWeight="500"
                     fontSize=".9rem"
                 >
-                    Week
+                    {weekNumber}
                 </Flex>
                 <>{week}</>
                 <Flex
@@ -294,15 +307,17 @@ const TimesheetTeam = ({
 
         const allWeeks: any[] = [];
 
+        let weekNumber = 1;
         while (currentDate <= endDate) {
             allWeeks.push(
                 generateDatesForCurrentWeek(
                     currentDate,
                     selectedDate,
                     activeDate,
+                    weekNumber,
                 ),
             );
-            currentDate = addDays(currentDate, 7);
+            weekNumber++, (currentDate = addDays(currentDate, 7));
         }
 
         return <div className="dayContainer">{allWeeks}</div>;
@@ -331,30 +346,41 @@ const TimesheetTeam = ({
                 // borderRadius="10px"
                 p="1rem 2rem"
             >
-                <Grid templateColumns="repeat(5,1fr)" w="80%" mr="auto">
+                <Grid templateColumns="repeat(6,1fr)" w="80%" mr="auto">
                     <TimeSheetEstimation
                         label="Expected Total Hours"
                         data={timeSheets.expectedWorkHours}
-                        tip="Your work/hr in a month"
+                        tip="Number of hours you are expected to work this month"
                     />
                     <TimeSheetEstimation
                         label="Total Hours Worked"
                         data={totalHours}
-                        tip="How much you work in a month"
+                        tip="Number of hours you are expected to work in a month"
                     />
                     <TimeSheetEstimation
-                        label="Total Payout"
+                        label="Expected Payout"
                         data={timeSheets.expectedPay}
                     />
                     <TimeSheetEstimation
                         label="Actual Payout"
                         data={actualPayout}
                     />
-                    <TimeSheetEstimationBtn id={1} loading={loading} />
+                    <TimeSheetEstimationBtn
+                        id={1}
+                        loading={loading}
+                        title="Approve all"
+                        click={approveAllTimeSheet}
+                    />
+                    <TimeSheetEstimationBtn
+                        id={1}
+                        loading={loading}
+                        title="Update TimeSheet"
+                        click={() => router.reload()}
+                    />
                 </Grid>
             </Box>
         </Box>
     );
 };
 
-export default TimesheetTeam;
+export default Timesheet;

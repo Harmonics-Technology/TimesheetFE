@@ -340,7 +340,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         role={role}
                     />
                 </VStack>
-            ) : role == "Client" ? (
+            ) : role == "client" ? (
                 <VStack align="left" gap="1.5rem" pr="1rem">
                     <MenuItem
                         linkName="dashboard"
