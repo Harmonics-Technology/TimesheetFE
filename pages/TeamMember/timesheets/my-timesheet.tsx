@@ -1,10 +1,10 @@
-import { withPageAuth } from "@components/generics/withPageAuth";
+import { withPageAuth } from '@components/generics/withPageAuth';
 // import Timesheet from "@components/subpages/Timesheet";
-import TimesheetTeam from "@components/subpages/TimesheetClient";
-import moment from "moment";
-import { GetServerSideProps } from "next";
-import React from "react";
-import { TimeSheetMonthlyView, TimeSheetService } from "src/services";
+import TimesheetTeam from '@components/subpages/TimesheetTeam';
+import moment from 'moment';
+import { GetServerSideProps } from 'next';
+import React from 'react';
+import { TimeSheetMonthlyView, TimeSheetService } from 'src/services';
 
 function SingleTimeSheet({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) {
     return <TimesheetTeam timeSheets={timeSheets} />;
@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
 
         let { date } = ctx.query;
         if (date === undefined) {
-            date = moment(new Date()).format("YYYY-MM-DD");
+            date = moment(new Date()).format('YYYY-MM-DD');
         }
 
         try {

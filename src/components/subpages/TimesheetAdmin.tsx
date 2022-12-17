@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
     format,
     startOfWeek,
@@ -66,7 +66,7 @@ const TimesheetAdmin = ({
     const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
         sheet as TimeSheetView[],
     );
-    const [checked, setChecked] = useState(false);
+    // const [checked, setChecked] = useState(false);
     const toast = useToast();
     const totalHours = 60;
     const actualPayout = Math.round(
@@ -77,26 +77,27 @@ const TimesheetAdmin = ({
     // let userId = "";
     const [selected, setSelected] = useState<approveDate[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
-    console.log({ selectedInput });
-    console.log({ selected });
+    // console.log({ selectedInput });
+    // console.log({ selected });
 
     function ApproveAllTimeSheet() {
         const [loading, setLoading] = useState(false);
         const updateSelected = async () => {
-            setLoading(true);
-            setChecked(!checked);
-            monthlyTimesheets.forEach(async (timeSheet) => {
+            // setChecked(!checked);
+            await monthlyTimesheets.forEach(async (timeSheet) => {
                 if (timeSheet.employeeInformation) {
+                    setLoading(true);
                     await approveTimeSheetForADay(
                         timeSheet.employeeInformationId,
                         timeSheet.date,
                     );
-                    router.reload();
                 }
+                setLoading(false);
+                return;
             });
-            setLoading(false);
             router.reload();
         };
+        // console.log({ loading });
         return (
             <TimeSheetEstimationBtn
                 id={1}
@@ -108,29 +109,48 @@ const TimesheetAdmin = ({
     }
     function ApproveSelected() {
         const [loading, setLoading] = useState(false);
-        const selected = async () => {
-            updateSelected();
-            // router.reload();
+        const updateSelected = async () => {
+            await selected.forEach(async (select) => {
+                if (select.checked === true && select.userId) {
+                    setLoading(true);
+                    await approveTimeSheetForADay(
+                        select.userId,
+                        select.chosenDate,
+                    );
+                }
+                setLoading(false);
+            });
+            await selectedInput.forEach(async (select) => {
+                if (select.hours !== "" && select.userId !== undefined) {
+                    setLoading(true);
+                    await addHours(
+                        select.userId,
+                        select.chosenDate,
+                        select.hours,
+                    );
+                }
+                setLoading(false);
+            });
+            router.reload();
         };
+        // console.log({ loading });
         return (
             <TimeSheetEstimationBtn
                 id={1}
                 loading={loading}
                 title="Update TimeSheet"
-                click={() => selected()}
+                click={() => updateSelected()}
                 bg="brand.200"
             />
         );
     }
     const approveTimeSheetForADay = async (userId, chosenDate) => {
-        // setLoading(true);
         try {
             const data = await TimeSheetService.approveTimeSheetForADay(
                 userId,
                 chosenDate,
             );
             if (data.status) {
-                // setLoading(false);
                 console.log({ data });
                 return;
             }
@@ -147,21 +167,24 @@ const TimesheetAdmin = ({
         }
     };
 
-    const updateSelected = async () => {
-        setLoading(true);
-        selected.forEach(async (select) => {
-            if (select.checked === true && select.userId) {
-                await approveTimeSheetForADay(select.userId, select.chosenDate);
+    const addHours = async (userId, chosenDate, hours) => {
+        console.log({ userId, chosenDate, hours });
+
+        try {
+            const data = await TimeSheetService.addWorkHoursForADay(
+                userId,
+                chosenDate,
+                hours,
+            );
+            if (data.status) {
+                console.log({ data });
+                return;
             }
-        });
-        selectedInput.forEach(async (select) => {
-            if (select.hours !== "" && select.userId !== undefined) {
-                await addHours(select.userId, select.chosenDate, select.hours);
-            }
-        });
-        // setLoading(false);
-        // router.reload();
+        } catch (error) {
+            console.log(error);
+        }
     };
+
     const nextMonth = async () => {
         await router.push({
             query: {
@@ -179,25 +202,6 @@ const TimesheetAdmin = ({
             },
         });
         router.reload();
-    };
-
-    const addHours = async (userId, chosenDate, hours) => {
-        console.log({ userId, chosenDate, hours });
-        try {
-            setLoading(true);
-            const data = await TimeSheetService.addWorkHoursForADay(
-                userId,
-                chosenDate,
-                hours,
-            );
-            if (data.status) {
-                setLoading(false);
-                console.log({ data });
-                return;
-            }
-        } catch (error) {
-            console.log(error);
-        }
     };
 
     const getHeader = () => {
@@ -257,7 +261,7 @@ const TimesheetAdmin = ({
                     align="center"
                     // ml="6rem"
                 >
-                    {`Viewing ${timeSheets?.fullName} Timesheet`}
+                    {`Viewing ${timeSheets?.fullName || ""} Timesheet`}
                 </Flex>
             </div>
         );
@@ -295,6 +299,7 @@ const TimesheetAdmin = ({
         let currentDate: Date = date;
         const total: any[] = [];
         const week: any[] = [];
+        let sumOfHours = 0;
         for (let day = 0; day < 7; day++) {
             const cloneDate = currentDate;
             const timesheets = monthlyTimesheets?.filter(
@@ -305,7 +310,7 @@ const TimesheetAdmin = ({
             const userId = timesheets?.employeeInformationId as string;
             // console.log({ userId });
             const userDate = moment(timesheets?.date).format("YYYY-MM-DD");
-            const [hours, setHours] = useState<string>("");
+            // const [hours, setHours] = useState<string>("");
             const [singleCheck, setSingleCheck] = useState(false);
             const isApproved = timesheets?.isApproved;
             // console.log({ singleCheck });
@@ -394,8 +399,8 @@ const TimesheetAdmin = ({
             );
             currentDate = addDays(currentDate, 1);
             const dayHour = timesheets?.hours as number;
-            total.push(<>{timesheets?.hours == undefined ? 0 : dayHour}</>);
-            // console.log({ total });
+            total.push(timesheets?.hours == undefined ? 0 : dayHour);
+            sumOfHours = total.reduce((a, b) => a + b, 0);
         }
         return (
             <>
@@ -414,7 +419,7 @@ const TimesheetAdmin = ({
                     fontWeight="500"
                     fontSize=".9rem"
                 >
-                    {total}
+                    {sumOfHours}hr
                 </Flex>
             </>
         );

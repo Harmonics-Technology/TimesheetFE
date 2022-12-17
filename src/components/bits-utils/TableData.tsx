@@ -14,7 +14,12 @@ import { useRouter } from "next/router";
 import React from "react";
 import { AiOutlineDownload } from "react-icons/ai";
 import { FaEllipsisH } from "react-icons/fa";
-import { InitiateResetModel, SettingsService, UserService } from "src/services";
+import {
+    FinancialService,
+    InitiateResetModel,
+    SettingsService,
+    UserService,
+} from "src/services";
 import fileDownload from "js-file-download";
 
 export function TableData({ name }: { name: string | undefined | null }) {
@@ -300,6 +305,80 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
                     <MenuItem onClick={() => toggleStatus(id)}>
                         {status == "ACTIVE" ? "Deactivate" : "Activate"}
                     </MenuItem>
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+
+export function ExpenseActions({ id }: { id: any }) {
+    const toast = useToast();
+    const router = useRouter();
+    const Approve = async (data: string) => {
+        try {
+            const result = await FinancialService.approveExpense(data);
+            if (result.status) {
+                console.log({ result });
+                toast({
+                    title: result.message,
+                    status: "success",
+                    isClosable: true,
+                    position: "top-right",
+                });
+                router.reload();
+                return;
+            }
+            toast({
+                title: result.message,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        } catch (error) {
+            console.log({ error });
+        }
+    };
+    const Decline = async (data: string) => {
+        try {
+            const result = await FinancialService.declineExpense(data);
+            if (result.status) {
+                console.log({ result });
+                toast({
+                    title: result.message,
+                    status: "success",
+                    isClosable: true,
+                    position: "top-right",
+                });
+                router.reload();
+                return;
+            }
+            toast({
+                title: result.message,
+                status: "error",
+                isClosable: true,
+                position: "top-right",
+            });
+        } catch (error) {
+            console.log({ error });
+        }
+    };
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        <FaEllipsisH />
+                    </Box>
+                </MenuButton>
+                <MenuList>
+                    <MenuItem onClick={() => Approve(id)}>Approve</MenuItem>
+                    <MenuItem onClick={() => Decline(id)}>Reject</MenuItem>
                 </MenuList>
             </Menu>
         </td>

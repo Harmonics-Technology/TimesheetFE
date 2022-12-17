@@ -1,12 +1,12 @@
-import { withPageAuth } from "@components/generics/withPageAuth";
-import Timesheet from "@components/subpages/Timesheet";
-import moment from "moment";
-import { GetServerSideProps } from "next";
-import React from "react";
-import { TimeSheetMonthlyView, TimeSheetService } from "src/services";
+import { withPageAuth } from '@components/generics/withPageAuth';
+import TimesheetAdmin from '@components/subpages/TimesheetAdmin';
+import moment from 'moment';
+import { GetServerSideProps } from 'next';
+import React from 'react';
+import { TimeSheetMonthlyView, TimeSheetService } from 'src/services';
 
 function SingleTimeSheet({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) {
-    return <Timesheet timeSheets={timeSheets} />;
+    return <TimesheetAdmin timeSheets={timeSheets} />;
 }
 
 export default SingleTimeSheet;
@@ -14,7 +14,7 @@ export default SingleTimeSheet;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
-        const date = moment(new Date()).format("YYYY-MM-DD");
+        const date = moment(new Date()).format('YYYY-MM-DD');
         console.log({ id });
         try {
             const data = await TimeSheetService.getTimeSheet(id, date);

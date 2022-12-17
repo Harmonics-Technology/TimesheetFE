@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
     format,
     startOfWeek,
@@ -26,6 +26,8 @@ import {
     InputRightElement,
     InputGroup,
     Spinner,
+    HStack,
+    useToast,
 } from "@chakra-ui/react";
 import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
@@ -39,7 +41,18 @@ import moment from "moment";
 import { FaCheck, FaCheckCircle } from "react-icons/fa";
 import { useRouter } from "next/router";
 
-const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
+interface approveDate {
+    userId: string;
+    chosenDate: string;
+    hours?: string;
+    checked?: boolean;
+}
+
+const TimesheetTeam = ({
+    timeSheets,
+}: {
+    timeSheets: TimeSheetMonthlyView;
+}) => {
     const router = useRouter();
     console.log({ timeSheets });
     const sheet = timeSheets?.timeSheet;
@@ -53,20 +66,113 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
     const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
         sheet as TimeSheetView[],
     );
+    const [checked, setChecked] = useState(false);
+    const toast = useToast();
     const totalHours = 60;
     const actualPayout = Math.round(
         ((timeSheets?.expectedPay as number) * totalHours) /
             (timeSheets?.expectedWorkHours as number),
     );
 
-    const approveAllTimeSheet = async () => {
-        monthlyTimesheets.forEach((timeSheet) => {
-            approveTimeSheetForADay(
-                timeSheet.employeeInformationId,
-                timeSheet.date,
-            );
+    // let userId = "";
+    const [selected, setSelected] = useState<approveDate[]>([]);
+    const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
+    // console.log({ selectedInput });
+    // console.log({ selected });
+
+    // function ApproveAllTimeSheet() {
+    //     const [loading, setLoading] = useState(false);
+    //     const updateSelected = async () => {
+    //         // setChecked(!checked);
+    //         await monthlyTimesheets.forEach(async (timeSheet) => {
+    //             if (timeSheet.employeeInformation) {
+    //                 setLoading(true);
+    //                 await approveTimeSheetForADay(
+    //                     timeSheet.employeeInformationId,
+    //                     timeSheet.date,
+    //                 );
+    //             }
+    //             setLoading(false);
+    //             return;
+    //         });
+    //         router.reload();
+    //     };
+    //     // console.log({ loading });
+    //     return (
+    //         <TimeSheetEstimationBtn
+    //             id={1}
+    //             loading={loading}
+    //             title="Approve all TimeSheet"
+    //             click={() => updateSelected()}
+    //         />
+    //     );
+    // }
+    function ApproveSelected() {
+        const [loading, setLoading] = useState(false);
+        const updateSelected = async () => {
+            await selectedInput.forEach(async (select) => {
+                if (select.hours !== "" && select.userId !== undefined) {
+                    setLoading(true);
+                    await addHours(
+                        select.userId,
+                        select.chosenDate,
+                        select.hours,
+                    );
+                }
+                setLoading(false);
+            });
             router.reload();
-        });
+        };
+        // console.log({ loading });
+        return (
+            <TimeSheetEstimationBtn
+                id={1}
+                loading={loading}
+                title="Update TimeSheet"
+                click={() => updateSelected()}
+                bg="brand.200"
+            />
+        );
+    }
+    // const approveTimeSheetForADay = async (userId, chosenDate) => {
+    //     try {
+    //         const data = await TimeSheetService.approveTimeSheetForADay(
+    //             userId,
+    //             chosenDate,
+    //         );
+    //         if (data.status) {
+    //             console.log({ data });
+    //             return;
+    //         }
+    //         toast({
+    //             title: data.message,
+    //             status: "error",
+    //             isClosable: true,
+    //             position: "top-right",
+    //         });
+    //         console.log({ data });
+    //         return;
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
+
+    const addHours = async (userId, chosenDate, hours) => {
+        console.log({ userId, chosenDate, hours });
+
+        try {
+            const data = await TimeSheetService.addWorkHoursForADay(
+                userId,
+                chosenDate,
+                hours,
+            );
+            if (data.status) {
+                console.log({ data });
+                return;
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const nextMonth = async () => {
@@ -86,43 +192,6 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
             },
         });
         router.reload();
-    };
-
-    const approveTimeSheetForADay = async (userId, chosenDate) => {
-        console.log({ userId, chosenDate });
-        try {
-            setLoading(true);
-            const data = await TimeSheetService.approveTimeSheetForADay(
-                userId,
-                chosenDate,
-            );
-            if (data.status) {
-                setLoading(false);
-                return;
-            }
-            console.log({ data });
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const addHours = async (userId, chosenDate, hours) => {
-        console.log({ userId, chosenDate, hours });
-        try {
-            setLoading(true);
-            const data = await TimeSheetService.addWorkHoursForADay(
-                userId,
-                chosenDate,
-                hours,
-            );
-            if (data.status) {
-                setLoading(false);
-                console.log({ data });
-                return;
-            }
-        } catch (error) {
-            console.log(error);
-        }
     };
 
     const getHeader = () => {
@@ -182,7 +251,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                     align="center"
                     // ml="6rem"
                 >
-                    {`Viewing ${timeSheets?.fullName} Timesheet`}
+                    {`Viewing ${"My"} Timesheet`}
                 </Flex>
             </div>
         );
@@ -220,6 +289,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
         let currentDate: Date = date;
         const total: any[] = [];
         const week: any[] = [];
+        let sumOfHours = 0;
         for (let day = 0; day < 7; day++) {
             const cloneDate = currentDate;
             const timesheets = monthlyTimesheets?.filter(
@@ -227,9 +297,13 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                     new Date(x.date as string).toLocaleDateString() ==
                     currentDate.toLocaleDateString(),
             )[0];
-            const userId = timesheets?.employeeInformationId;
+            const userId = timesheets?.employeeInformationId as string;
+            // console.log({ userId });
             const userDate = moment(timesheets?.date).format("YYYY-MM-DD");
-            const [hours, setHours] = useState<string>("");
+            // const [hours, setHours] = useState<string>("");
+            const [singleCheck, setSingleCheck] = useState(false);
+            const isApproved = timesheets?.isApproved;
+            // console.log({ singleCheck });
 
             week.push(
                 <Box
@@ -252,16 +326,28 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                         {/* <Checkbox
                             disabled={!isSameMonth(currentDate, activeDate)}
                             ml=".5rem"
-                            onChange={() =>
-                                approveTimeSheetForADay(userId, userDate)
+                            onChange={() => {
+                                setSingleCheck(!singleCheck);
+                                selected.push({
+                                    userId: userId,
+                                    chosenDate: userDate,
+                                    checked: isApproved
+                                        ? singleCheck
+                                        : !singleCheck,
+                                });
+                            }}
+                            defaultChecked={
+                                timesheets?.isApproved || singleCheck || false
                             }
-                            defaultChecked={timesheets?.isApproved || false}
+                            // isChecked={
+                            //     singleCheck || timesheets?.isApproved || checked
+                            // }
                         ></Checkbox> */}
                     </Flex>
 
                     <InputGroup
                         border="0"
-                        w="80%"
+                        w="50%"
                         h="1.5rem"
                         mt=".3rem"
                         alignItems="center"
@@ -273,10 +359,16 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                             textAlign="center"
                             h="full"
                             border="0"
-                            disabled={timesheets?.isApproved}
-                            onChange={(e) => setHours(e.target.value)}
+                            // disabled={timesheets?.isApproved}
+                            onChange={(e) =>
+                                selectedInput.push({
+                                    userId: userId,
+                                    chosenDate: userDate,
+                                    hours: e.target.value,
+                                })
+                            }
                         />
-                        {hours !== "" && (
+                        {/* {hours !== "" && (
                             <InputRightElement
                                 h="full"
                                 onClick={() =>
@@ -290,17 +382,15 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                                     )
                                 }
                             />
-                        )}
-                        {hours === "" && timesheets?.isApproved && (
-                            <FaCheck color="green" />
-                        )}
+                        )} */}
+                        {timesheets?.isApproved && <FaCheck color="green" />}
                     </InputGroup>
                 </Box>,
             );
             currentDate = addDays(currentDate, 1);
             const dayHour = timesheets?.hours as number;
-            total.push(<>{timesheets?.hours == undefined ? 0 : dayHour}</>);
-            // console.log({ total });
+            total.push(timesheets?.hours == undefined ? 0 : dayHour);
+            sumOfHours = total.reduce((a, b) => a + b, 0);
         }
         return (
             <>
@@ -319,7 +409,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                     fontWeight="500"
                     fontSize=".9rem"
                 >
-                    {total}
+                    {sumOfHours}hr
                 </Flex>
             </>
         );
@@ -374,7 +464,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                 // borderRadius="10px"
                 p="1rem 2rem"
             >
-                <Grid templateColumns="repeat(6,1fr)" w="80%" mr="auto">
+                <Grid templateColumns="repeat(6,1fr)" w="100%" mr="auto">
                     <TimeSheetEstimation
                         label="Expected Total Hours"
                         data={timeSheets?.expectedWorkHours}
@@ -395,22 +485,20 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                         data={actualPayout}
                         tip="Number of hours you worked this month x Rate per hour"
                     />
-                    <TimeSheetEstimationBtn
-                        id={1}
-                        loading={loading}
-                        title="Approve all"
-                        click={approveAllTimeSheet}
-                    />
-                    <TimeSheetEstimationBtn
+                    {/* <TimeSheetEstimationBtn
                         id={1}
                         loading={loading}
                         title="Update TimeSheet"
-                        click={() => router.reload()}
-                    />
+                        click={() => approveSelected()}
+                        bg="brand.200"
+                    /> */}
+                    <ApproveSelected />
+                    {/* <ApproveAllTimeSheet /> */}
                 </Grid>
+                {/* <HStack></HStack> */}
             </Box>
         </Box>
     );
 };
 
-export default Timesheet;
+export default TimesheetTeam;
