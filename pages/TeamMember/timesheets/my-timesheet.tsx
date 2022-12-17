@@ -18,8 +18,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             ctx: JSON.parse(ctx.req.cookies.user).employeeInformationId,
         });
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
-        const date = moment(new Date()).format("YYYY-MM-DD");
         console.log({ id });
+
+        let { date } = ctx.query;
+        if (date === undefined) {
+            date = moment(new Date()).format("YYYY-MM-DD");
+        }
+
         try {
             const data = await TimeSheetService.getTimeSheet(id, date);
             console.log({ data });

@@ -9,6 +9,7 @@ import Tables from "@components/bits-utils/Tables";
 import Pagination from "@components/bits-utils/Pagination";
 import { useRouter } from "next/router";
 import {
+    TimeSheetApprovedView,
     TimeSheetHistoryView,
     TimeSheetHistoryViewPagedCollectionStandardResponse,
 } from "src/services";
@@ -72,22 +73,30 @@ function TimeSheetApproval({ timeSheets }: adminProps) {
                         "Email",
                         "Total Hours",
                         "No. of Days",
+                        "Approved No. of Hours",
                         "",
                     ]}
                 >
                     <>
                         {timeSheets?.data?.value?.map(
-                            (x: TimeSheetHistoryView) => (
+                            (x: TimeSheetApprovedView) => (
                                 <Tr key={x.employeeInformationId}>
                                     <TableData name={x.name} />
                                     <TableData name={x.email} />
                                     <TableData
-                                        name={x.totalHours as unknown as string}
+                                        name={`${
+                                            x.totalHours as unknown as string
+                                        } Hours`}
                                     />
                                     <TableData
-                                        name={
+                                        name={`${
                                             x.numberOfDays as unknown as string
-                                        }
+                                        } Days`}
+                                    />
+                                    <TableData
+                                        name={`${
+                                            x.approvedNumberOfHours as unknown as string
+                                        } Hours`}
                                     />
 
                                     <TableContractAction

@@ -19,7 +19,7 @@ export default approval;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
     try {
-        const data = await TimeSheetService.listTimeSheetHistories();
+        const data = await TimeSheetService.listApprovedTimeSheet();
         return {
             props: {
                 timeSheets: data,

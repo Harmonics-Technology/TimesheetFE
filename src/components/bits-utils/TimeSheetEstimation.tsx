@@ -55,11 +55,13 @@ export function TimeSheetEstimationBtn({
     loading,
     title,
     click,
+    bg = "brand.400",
 }: {
     id: any;
     loading: boolean;
     title: string;
     click?: any;
+    bg?: string;
 }) {
     const router = useRouter();
     return (
@@ -76,12 +78,12 @@ export function TimeSheetEstimationBtn({
                 p="1.5rem .8rem"
             >
                 <Button
-                    bgColor="brand.400"
+                    bgColor={bg}
                     borderRadius="0"
                     h="full"
                     width="100"
                     color="white"
-                    disabled={loading}
+                    isLoading={loading}
                     onClick={click}
                 >
                     {title}

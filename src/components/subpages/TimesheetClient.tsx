@@ -43,8 +43,13 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
     const router = useRouter();
     console.log({ timeSheets });
     const sheet = timeSheets?.timeSheet;
+    const { date } = router.query;
+    const newDate = new Date(date as unknown as string);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [activeDate, setActiveDate] = useState(new Date());
+    const [activeDate, setActiveDate] = useState(
+        //@ts-ignore
+        newDate instanceof Date && !isNaN(newDate) ? newDate : new Date(),
+    );
     const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
         sheet as TimeSheetView[],
     );
@@ -62,6 +67,25 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
             );
             router.reload();
         });
+    };
+
+    const nextMonth = async () => {
+        await router.push({
+            query: {
+                ...router.query,
+                date: moment(addMonths(activeDate, 1)).format("YYYY-MM-DD"),
+            },
+        });
+        router.reload();
+    };
+    const prevMonth = async () => {
+        await router.push({
+            query: {
+                ...router.query,
+                date: moment(subMonths(activeDate, 1)).format("YYYY-MM-DD"),
+            },
+        });
+        router.reload();
     };
 
     const approveTimeSheetForADay = async (userId, chosenDate) => {
@@ -130,7 +154,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                 <Flex align="center">
                     <AiOutlineLeft
                         className="navIcon"
-                        onClick={() => setActiveDate(subMonths(activeDate, 1))}
+                        onClick={() => prevMonth()}
                     />
                     <Box
                         borderRadius="15px"
@@ -145,7 +169,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                     </Box>
                     <AiOutlineRight
                         className="navIcon"
-                        onClick={() => setActiveDate(addMonths(activeDate, 1))}
+                        onClick={() => nextMonth()}
                     />
                 </Flex>
                 <Flex
@@ -158,7 +182,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                     align="center"
                     // ml="6rem"
                 >
-                    {`Viewing ${timeSheets.fullName} Timesheet`}
+                    {`Viewing ${timeSheets?.fullName} Timesheet`}
                 </Flex>
             </div>
         );
@@ -194,6 +218,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
         weekNumber,
     ) => {
         let currentDate: Date = date;
+        const total: any[] = [];
         const week: any[] = [];
         for (let day = 0; day < 7; day++) {
             const cloneDate = currentDate;
@@ -273,6 +298,9 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                 </Box>,
             );
             currentDate = addDays(currentDate, 1);
+            const dayHour = timesheets?.hours as number;
+            total.push(<>{timesheets?.hours == undefined ? 0 : dayHour}</>);
+            // console.log({ total });
         }
         return (
             <>
@@ -291,7 +319,7 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                     fontWeight="500"
                     fontSize=".9rem"
                 >
-                    40hr 35m
+                    {total}
                 </Flex>
             </>
         );
@@ -349,21 +377,23 @@ const Timesheet = ({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) => {
                 <Grid templateColumns="repeat(6,1fr)" w="80%" mr="auto">
                     <TimeSheetEstimation
                         label="Expected Total Hours"
-                        data={timeSheets.expectedWorkHours}
+                        data={timeSheets?.expectedWorkHours}
                         tip="Number of hours you are expected to work this month"
                     />
                     <TimeSheetEstimation
                         label="Total Hours Worked"
                         data={totalHours}
-                        tip="Number of hours you are expected to work in a month"
+                        tip="Number of hours you worked this month"
                     />
                     <TimeSheetEstimation
                         label="Expected Payout"
-                        data={timeSheets.expectedPay}
+                        data={timeSheets?.expectedPay}
+                        tip="Total amount you are expected to be paid this month"
                     />
                     <TimeSheetEstimation
                         label="Actual Payout"
                         data={actualPayout}
+                        tip="Number of hours you worked this month x Rate per hour"
                     />
                     <TimeSheetEstimationBtn
                         id={1}

@@ -1,12 +1,12 @@
 import { withPageAuth } from "@components/generics/withPageAuth";
-import Timesheet from "@components/subpages/Timesheet";
+import TimesheetAdmin from "@components/subpages/TimesheetAdmin";
 import moment from "moment";
 import { GetServerSideProps } from "next";
 import React from "react";
 import { TimeSheetMonthlyView, TimeSheetService } from "src/services";
 
 function SingleTimeSheet({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) {
-    return <Timesheet timeSheets={timeSheets} />;
+    return <TimesheetAdmin timeSheets={timeSheets} />;
 }
 
 export default SingleTimeSheet;
