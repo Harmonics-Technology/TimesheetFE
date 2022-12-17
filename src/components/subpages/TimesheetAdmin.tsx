@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 import {
     format,
     startOfWeek,
@@ -11,10 +11,10 @@ import {
     subMonths,
     addMonths,
     lastDayOfMonth,
-} from "date-fns";
+} from 'date-fns';
 
-import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-import { MdArrowDropDown } from "react-icons/md";
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import { MdArrowDropDown } from 'react-icons/md';
 import {
     Box,
     Checkbox,
@@ -28,18 +28,18 @@ import {
     Spinner,
     HStack,
     useToast,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
-} from "@components/bits-utils/TimeSheetEstimation";
+} from '@components/bits-utils/TimeSheetEstimation';
 import {
     TimeSheetMonthlyView,
     TimeSheetService,
     TimeSheetView,
-} from "src/services";
-import moment from "moment";
-import { FaCheck, FaCheckCircle } from "react-icons/fa";
-import { useRouter } from "next/router";
+} from 'src/services';
+import moment from 'moment';
+import { FaCheck, FaCheckCircle } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 interface approveDate {
     userId: string;
@@ -84,7 +84,7 @@ const TimesheetAdmin = ({
         const [loading, setLoading] = useState(false);
         const updateSelected = async () => {
             // setChecked(!checked);
-            await monthlyTimesheets.forEach(async (timeSheet) => {
+            monthlyTimesheets.forEach(async (timeSheet) => {
                 if (timeSheet.employeeInformation) {
                     setLoading(true);
                     await approveTimeSheetForADay(
@@ -95,7 +95,7 @@ const TimesheetAdmin = ({
                 setLoading(false);
                 return;
             });
-            router.reload();
+            // router.reload();
         };
         // console.log({ loading });
         return (
@@ -110,7 +110,7 @@ const TimesheetAdmin = ({
     function ApproveSelected() {
         const [loading, setLoading] = useState(false);
         const updateSelected = async () => {
-            await selected.forEach(async (select) => {
+            selected.forEach(async (select) => {
                 if (select.checked === true && select.userId) {
                     setLoading(true);
                     await approveTimeSheetForADay(
@@ -120,8 +120,8 @@ const TimesheetAdmin = ({
                 }
                 setLoading(false);
             });
-            await selectedInput.forEach(async (select) => {
-                if (select.hours !== "" && select.userId !== undefined) {
+            selectedInput.forEach(async (select) => {
+                if (select.hours !== '' && select.userId !== undefined) {
                     setLoading(true);
                     await addHours(
                         select.userId,
@@ -131,7 +131,7 @@ const TimesheetAdmin = ({
                 }
                 setLoading(false);
             });
-            router.reload();
+            // router.reload();
         };
         // console.log({ loading });
         return (
@@ -156,9 +156,9 @@ const TimesheetAdmin = ({
             }
             toast({
                 title: data.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             console.log({ data });
             return;
@@ -189,7 +189,7 @@ const TimesheetAdmin = ({
         await router.push({
             query: {
                 ...router.query,
-                date: moment(addMonths(activeDate, 1)).format("YYYY-MM-DD"),
+                date: moment(addMonths(activeDate, 1)).format('YYYY-MM-DD'),
             },
         });
         router.reload();
@@ -198,7 +198,7 @@ const TimesheetAdmin = ({
         await router.push({
             query: {
                 ...router.query,
-                date: moment(subMonths(activeDate, 1)).format("YYYY-MM-DD"),
+                date: moment(subMonths(activeDate, 1)).format('YYYY-MM-DD'),
             },
         });
         router.reload();
@@ -241,9 +241,9 @@ const TimesheetAdmin = ({
                         p=".3rem .8rem"
                         color="#000"
                     >
-                        {`${format(activeDate, "MMM 01")} - ${format(
+                        {`${format(activeDate, 'MMM 01')} - ${format(
                             lastDayOfMonth(activeDate),
-                            "MMM dd",
+                            'MMM dd',
                         )}`}
                     </Box>
                     <AiOutlineRight
@@ -261,7 +261,7 @@ const TimesheetAdmin = ({
                     align="center"
                     // ml="6rem"
                 >
-                    {`Viewing ${timeSheets?.fullName || ""} Timesheet`}
+                    {`Viewing ${timeSheets?.fullName || ''} Timesheet`}
                 </Flex>
             </div>
         );
@@ -273,7 +273,7 @@ const TimesheetAdmin = ({
         for (let day = 0; day < 7; day++) {
             weekDays.push(
                 <div className="day weekNames" key={day}>
-                    {format(addDays(weekStartDate, day), "E")}
+                    {format(addDays(weekStartDate, day), 'E')}
                 </div>,
             );
         }
@@ -289,7 +289,6 @@ const TimesheetAdmin = ({
             </div>
         );
     };
-    const [loading, setLoading] = useState<boolean>(false);
     const generateDatesForCurrentWeek = (
         date,
         selectedDate,
@@ -309,7 +308,7 @@ const TimesheetAdmin = ({
             )[0];
             const userId = timesheets?.employeeInformationId as string;
             // console.log({ userId });
-            const userDate = moment(timesheets?.date).format("YYYY-MM-DD");
+            const userDate = moment(timesheets?.date).format('YYYY-MM-DD');
             // const [hours, setHours] = useState<string>("");
             const [singleCheck, setSingleCheck] = useState(false);
             const isApproved = timesheets?.isApproved;
@@ -319,20 +318,20 @@ const TimesheetAdmin = ({
                 <Box
                     className={`day ${
                         isSameMonth(currentDate, activeDate)
-                            ? ""
-                            : "inactiveDay"
+                            ? ''
+                            : 'inactiveDay'
                     } ${
                         isSameDay(currentDate, selectedDate)
-                            ? "selectedDay"
-                            : ""
+                            ? 'selectedDay'
+                            : ''
                     }
-    ${isSameDay(currentDate, new Date()) ? "today" : ""}`}
+    ${isSameDay(currentDate, new Date()) ? 'today' : ''}`}
                     onClick={() => {
                         setSelectedDate(cloneDate);
                     }}
                 >
                     <Flex>
-                        <div>{format(currentDate, "MMM, d")}</div>
+                        <div>{format(currentDate, 'MMM, d')}</div>
                         <Checkbox
                             disabled={!isSameMonth(currentDate, activeDate)}
                             ml=".5rem"
