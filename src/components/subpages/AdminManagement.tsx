@@ -13,21 +13,21 @@ import {
     DrawerFooter,
     useToast,
     FormLabel,
-} from "@chakra-ui/react";
-import DrawerWrapper from "@components/bits-utils/Drawer";
+} from '@chakra-ui/react';
+import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
     TableActions,
     TableData,
     TableStatus,
-} from "@components/bits-utils/TableData";
-import Tables from "@components/bits-utils/Tables";
-import React, { useState } from "react";
+} from '@components/bits-utils/TableData';
+import Tables from '@components/bits-utils/Tables';
+import React, { useState } from 'react';
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { RiMailSendFill } from "react-icons/ri";
-import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { RiMailSendFill } from 'react-icons/ri';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     team: UserView[];
@@ -38,8 +38,8 @@ interface select {
     onChange: (value: any) => void;
 }
 
-import dynamic from "next/dynamic";
-const Selectrix = dynamic<select>(() => import("react-selectrix"), {
+import dynamic from 'next/dynamic';
+const Selectrix = dynamic<select>(() => import('react-selectrix'), {
     ssr: false,
 });
 import {
@@ -47,12 +47,13 @@ import {
     UserService,
     UserView,
     UserViewPagedCollectionStandardResponse,
-} from "src/services";
-import Pagination from "@components/bits-utils/Pagination";
-import roles from "../generics/roles.json";
-import { useRouter } from "next/router";
-import Loading from "@components/bits-utils/Loading";
-import { SelectrixBox } from "@components/bits-utils/Selectrix";
+} from 'src/services';
+import Pagination from '@components/bits-utils/Pagination';
+import roles from '../generics/roles.json';
+import { useRouter } from 'next/router';
+import Loading from '@components/bits-utils/Loading';
+import { SelectrixBox } from '@components/bits-utils/Selectrix';
+import FilterSearch from '@components/bits-utils/FilterSearch';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -71,7 +72,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
         formState: { errors, isSubmitting },
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),
-        mode: "all",
+        mode: 'all',
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -85,9 +86,9 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
             if (result.status) {
                 toast({
                     title: `Invite Sent`,
-                    status: "success",
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 router.reload();
                 onClose();
@@ -95,45 +96,29 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             return;
         } catch (err) {
             toast({
-                title: "An error occurred",
-                status: "error",
+                title: 'An error occurred',
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         }
     };
 
-    function setFilter(filter: string) {
-        router.push({
-            query: {
-                limit: filter,
-            },
-        });
-    }
-
-    function search(term: string) {
-        router.push({
-            query: {
-                search: term,
-            },
-        });
-    }
-
     const [userDetail, setUserDetail] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        role: "",
-        id: "",
+        firstName: '',
+        lastName: '',
+        email: '',
+        role: '',
+        id: '',
     });
-    const newUser = watch("firstName");
+    const newUser = watch('firstName');
     const oldMember = userDetail?.email;
     const [loading, setLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -141,11 +126,11 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
     const getUserData = async (id: string) => {
         if (id === undefined) {
             setUserDetail({
-                firstName: "",
-                lastName: "",
-                email: "",
-                role: "",
-                id: "",
+                firstName: '',
+                lastName: '',
+                email: '',
+                role: '',
+                id: '',
             });
             return;
         }
@@ -180,26 +165,26 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
             if (result.status) {
                 toast({
                     title: `Invite Sent`,
-                    status: "success",
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 onClose();
                 return;
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             return;
         } catch (err) {
             toast({
-                title: "An error occurred",
-                status: "error",
+                title: 'An error occurred',
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         }
     };
@@ -221,29 +206,9 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                 >
                     +Admin
                 </Button>
-                <Flex justify="space-between" align="center" my="2.5rem">
-                    <HStack fontSize=".8rem" w="fit-content">
-                        <Select
-                            w="fit-content"
-                            onChange={(e) => setFilter(e.target.value)}
-                        >
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </Select>
-
-                        <Text noOfLines={1}>entries per page</Text>
-                    </HStack>
-                    <Box>
-                        <Input
-                            type="search"
-                            placeholder="search"
-                            onChange={(e) => search(e.target.value)}
-                        />
-                    </Box>
-                </Flex>
+                <FilterSearch />
                 <Tables
-                    tableHead={["Name", "Email", "Role", "Status", "Action"]}
+                    tableHead={['Name', 'Email', 'Role', 'Status', 'Action']}
                 >
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
@@ -266,13 +231,13 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
             <DrawerWrapper
                 onClose={onClose}
                 isOpen={isOpen}
-                title={"Add new admin"}
+                title={'Add new admin'}
             >
                 <Loading loading={loading} />
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    {oldMember === undefined || oldMember === "" ? (
+                    {oldMember === undefined || oldMember === '' ? (
                         <Grid
-                            templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                            templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                             gap="1rem 2rem"
                         >
                             <PrimaryInput<RegisterModel>
@@ -311,7 +276,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                         </Grid>
                     ) : null}
 
-                    {newUser !== "" && newUser !== undefined ? (
+                    {newUser !== '' && newUser !== undefined ? (
                         <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">
                             <Grid
                                 templateColumns="repeat(2,1fr)"
@@ -346,8 +311,8 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                             </Grid>
                         </DrawerFooter>
                     ) : null}
-                    {(oldMember === undefined || oldMember === "") &&
-                    (newUser === undefined || newUser === "") ? (
+                    {(oldMember === undefined || oldMember === '') &&
+                    (newUser === undefined || newUser === '') ? (
                         <Text
                             textAlign="center"
                             borderTop="1px solid"
@@ -361,7 +326,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                 </form>
                 <form>
                     <>
-                        {newUser === undefined || newUser === "" ? (
+                        {newUser === undefined || newUser === '' ? (
                             <>
                                 <Grid
                                     templateColumns="repeat(2,1fr)"
@@ -378,8 +343,8 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                                             <Selectrix
                                                 options={team}
                                                 customKeys={{
-                                                    key: "id",
-                                                    label: "fullName",
+                                                    key: 'id',
+                                                    label: 'fullName',
                                                 }}
                                                 onChange={(value: any) =>
                                                     getUserData(value.key)
@@ -397,8 +362,8 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                                         <Selectrix
                                             options={roles.slice(0, 4)}
                                             customKeys={{
-                                                key: "id",
-                                                label: "title",
+                                                key: 'id',
+                                                label: 'title',
                                             }}
                                             onChange={(value: any) =>
                                                 setUserDetail((exist) => ({

@@ -1,20 +1,21 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-sparse-arrays */
-import { Box, Flex, Select, Text, HStack, Input, Tr } from "@chakra-ui/react";
+import { Box, Flex, Select, Text, HStack, Input, Tr } from '@chakra-ui/react';
 import {
     TableContract,
     TableContractAction,
     TableData,
     TableState,
-} from "@components/bits-utils/TableData";
-import Tables from "@components/bits-utils/Tables";
-import Pagination from "@components/bits-utils/Pagination";
-import { useRouter } from "next/router";
-import moment from "moment";
+} from '@components/bits-utils/TableData';
+import Tables from '@components/bits-utils/Tables';
+import Pagination from '@components/bits-utils/Pagination';
+import { useRouter } from 'next/router';
+import moment from 'moment';
 import {
     ContractView,
     ContractViewPagedCollectionStandardResponse,
-} from "src/services";
+} from 'src/services';
+import FilterSearch from '@components/bits-utils/FilterSearch';
 
 interface adminProps {
     adminList: ContractViewPagedCollectionStandardResponse;
@@ -24,22 +25,6 @@ function ContractList({ adminList }: adminProps) {
     console.log({ adminList });
     const router = useRouter();
 
-    function setFilter(filter: string) {
-        router.push({
-            query: {
-                limit: filter,
-            },
-        });
-    }
-
-    function search(term: string) {
-        router.push({
-            query: {
-                search: term,
-            },
-        });
-    }
-
     return (
         <>
             <Box
@@ -48,37 +33,17 @@ function ContractList({ adminList }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between" align="center" my=".5rem">
-                    <HStack fontSize=".8rem" w="fit-content">
-                        <Select
-                            w="fit-content"
-                            onChange={(e) => setFilter(e.target.value)}
-                        >
-                            <option value="5">5</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </Select>
-
-                        <Text noOfLines={1}>entries per page</Text>
-                    </HStack>
-                    <Box>
-                        <Input
-                            type="search"
-                            placeholder="search"
-                            onChange={(e) => search(e.target.value)}
-                        />
-                    </Box>
-                </Flex>
+                <FilterSearch />
                 <Tables
                     tableHead={[
-                        "Name",
-                        "Job Title",
-                        "Start Date",
-                        "End Date",
-                        "Tenor",
-                        "Contract",
-                        "Status",
-                        "Action",
+                        'Name',
+                        'Job Title',
+                        'Start Date',
+                        'End Date',
+                        'Tenor',
+                        'Contract',
+                        'Status',
+                        'Action',
                     ]}
                 >
                     <>
@@ -88,12 +53,12 @@ function ContractList({ adminList }: adminProps) {
                                 <TableData name={x.title} />
                                 <TableData
                                     name={moment(x.startDate).format(
-                                        "DD/MM/YYYY",
+                                        'DD/MM/YYYY',
                                     )}
                                 />
                                 <TableData
                                     name={moment(x.endDate).format(
-                                        "DD/MM/YYYY",
+                                        'DD/MM/YYYY',
                                     )}
                                 />
                                 <TableData

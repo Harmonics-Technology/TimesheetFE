@@ -65,17 +65,20 @@ const TimesheetAdmin = ({
     );
     // const [checked, setChecked] = useState(false);
     const toast = useToast();
-    let totalHours: any[] = [] || 0;
+    let hoursWorked: any[] = [];
     monthlyTimesheets?.forEach((x) => {
-        totalHours.push(x.hours);
+        hoursWorked.push(x.hours);
     });
-    totalHours = totalHours.reduce((a, b) => a + b);
+    if (hoursWorked.length > 0) {
+        hoursWorked = hoursWorked.reduce((a, b) => a + b);
+    }
+    const totalHours =
+        hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
+    console.log({ totalHours });
+    const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
+    const expectedPay = (timeSheets?.expectedPay as number) || 0;
     const actualPayout =
-        Math.round(
-            ((timeSheets?.expectedPay as number) *
-                (totalHours as unknown as number)) /
-                (timeSheets?.expectedWorkHours as number),
-        ) || 0;
+        Math.round((expectedPay * totalHours) / expectedHours) || 0;
 
     const [loading, setLoading] = useState(false);
     const [allChecked, setAllChecked] = useState<boolean>(false);
@@ -224,7 +227,7 @@ const TimesheetAdmin = ({
                 <Select
                     border="0"
                     w="fit-content"
-                    fontSize="1.3rem"
+                    fontSize={['.8rem', '1.3rem']}
                     fontWeight="600"
                     icon={<MdArrowDropDown />}
                     className="select"
@@ -243,7 +246,7 @@ const TimesheetAdmin = ({
                     <Box
                         borderRadius="15px"
                         bgColor="#f5f5ff"
-                        p=".3rem .8rem"
+                        p={['.3rem .5rem', '.3rem .8rem']}
                         color="#000"
                     >
                         {`${format(activeDate, 'MMM 01')} - ${format(
@@ -486,7 +489,7 @@ const TimesheetAdmin = ({
                 <Grid templateColumns="repeat(6,1fr)" w="100%" mr="auto">
                     <TimeSheetEstimation
                         label="Expected Total Hours"
-                        data={`${timeSheets?.expectedWorkHours} HR`}
+                        data={`${expectedHours} HR`}
                         tip="Number of hours you are expected to work this month"
                     />
                     <TimeSheetEstimation
@@ -496,7 +499,7 @@ const TimesheetAdmin = ({
                     />
                     <TimeSheetEstimation
                         label="Expected Payout"
-                        data={Naira(timeSheets?.expectedPay)}
+                        data={Naira(expectedPay)}
                         tip="Total amount you are expected to be paid this month"
                     />
                     <TimeSheetEstimation

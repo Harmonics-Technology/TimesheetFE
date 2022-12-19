@@ -1,3 +1,5 @@
+import HidePage from '@components/bits-utils/HidePage';
+import useWindowSize from '@components/generics/useWindowSize';
 import { withPageAuth } from '@components/generics/withPageAuth';
 // import Timesheet from "@components/subpages/Timesheet";
 import TimesheetTeam from '@components/subpages/TimesheetTeam';
@@ -5,9 +7,23 @@ import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import { TimeSheetMonthlyView, TimeSheetService } from 'src/services';
+interface Size {
+    width: number | undefined;
+    height: number | undefined;
+}
 
 function SingleTimeSheet({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) {
-    return <TimesheetTeam timeSheets={timeSheets} />;
+    const size: Size = useWindowSize();
+
+    return (
+        <>
+            {size.width != null && size.width <= 1025 ? (
+                <HidePage />
+            ) : (
+                <TimesheetTeam timeSheets={timeSheets} />
+            )}
+        </>
+    );
 }
 
 export default SingleTimeSheet;

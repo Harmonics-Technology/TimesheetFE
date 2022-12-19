@@ -39,6 +39,7 @@ import Pagination from "@components/bits-utils/Pagination";
 import { useRouter } from "next/router";
 import { SelectrixBox } from "@components/bits-utils/Selectrix";
 import { PrimaryTextarea } from "@components/bits-utils/PrimaryTextArea";
+import FilterSearch from "@components/bits-utils/FilterSearch";
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -142,27 +143,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                         Generate Invoice
                     </Button> */}
                 </Flex>
-                <Flex justify="space-between" align="center" my="2.5rem">
-                    <HStack fontSize=".8rem" w="fit-content">
-                        <Select
-                            w="fit-content"
-                            onChange={(e) => setFilter(e.target.value)}
-                        >
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </Select>
-
-                        <Text noOfLines={1}>entries per page</Text>
-                    </HStack>
-                    <Box>
-                        <Input
-                            type="search"
-                            placeholder="search"
-                            onChange={(e) => search(e.target.value)}
-                        />
-                    </Box>
-                </Flex>
+                <FilterSearch />
                 <Tables
                     tableHead={[
                         "Name",

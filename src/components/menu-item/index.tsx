@@ -6,11 +6,11 @@ import {
     Square,
     Text,
     UnorderedList,
-} from "@chakra-ui/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { FaAngleDown } from "react-icons/fa";
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { FaAngleDown } from 'react-icons/fa';
 
 interface MenuProps {
     menuTitle: string;
@@ -19,6 +19,7 @@ interface MenuProps {
     option: boolean;
     dropDown: string[];
     role?: string;
+    setOpenSidenav;
 }
 function MenuItem({
     menuTitle,
@@ -27,6 +28,7 @@ function MenuItem({
     option = false,
     dropDown,
     role,
+    setOpenSidenav,
 }: MenuProps) {
     const router = useRouter();
     const [openMenu, setOpenMenu] = useState(false);
@@ -39,7 +41,7 @@ function MenuItem({
                     onClick={() => setOpenMenu(!openMenu)}
                     overflow="hidden"
                     transition="all .35s ease-in-out"
-                    maxH={openMenu ? "13rem" : "2rem"}
+                    maxH={openMenu ? '13rem' : '2rem'}
                 >
                     <Flex
                         justify="space-between"
@@ -50,13 +52,13 @@ function MenuItem({
                             <Square
                                 bgColor={
                                     router.pathname.startsWith(url)
-                                        ? "brand.400"
-                                        : "brand.500"
+                                        ? 'brand.400'
+                                        : 'brand.500'
                                 }
                                 color={
                                     router.pathname.startsWith(url)
-                                        ? "white"
-                                        : "brand.400"
+                                        ? 'white'
+                                        : 'brand.400'
                                 }
                                 borderRadius="8px"
                                 size="2rem"
@@ -67,13 +69,13 @@ function MenuItem({
                             <Text
                                 color={
                                     router.pathname.startsWith(url)
-                                        ? "brand.200"
-                                        : "brand.300"
+                                        ? 'brand.200'
+                                        : 'brand.300'
                                 }
                                 fontWeight={
                                     router.pathname.startsWith(url)
-                                        ? "600"
-                                        : "500"
+                                        ? '600'
+                                        : '500'
                                 }
                                 fontSize=".9rem"
                                 fontFamily="Open Sans"
@@ -87,7 +89,7 @@ function MenuItem({
 
                         <Box
                             transform={
-                                openMenu ? "rotate(-180deg)" : "rotate(0deg)"
+                                openMenu ? 'rotate(-180deg)' : 'rotate(0deg)'
                             }
                             transition="all .35s ease-in-out"
                         >
@@ -99,24 +101,25 @@ function MenuItem({
                             <ListItem
                                 key={i}
                                 color="brand.300"
+                                onClick={() => setOpenSidenav(false)}
                                 fontSize={
                                     router.pathname.startsWith(
-                                        `${url}/${x.replace(" ", "-")}`,
+                                        `${url}/${x.replace(' ', '-')}`,
                                     )
-                                        ? "1rem"
-                                        : ".875rem"
+                                        ? '1rem'
+                                        : '.875rem'
                                 }
                                 p=" .5rem 0 .5rem 1.2rem"
                                 fontWeight={
                                     router.pathname.startsWith(
-                                        `${url}/${x.replace(" ", "-")}`,
+                                        `${url}/${x.replace(' ', '-')}`,
                                     )
-                                        ? "bold"
-                                        : "400"
+                                        ? 'bold'
+                                        : '400'
                                 }
                                 textTransform="capitalize"
                             >
-                                <Link href={`${url}/${x.replace(" ", "-")}`}>
+                                <Link href={`${url}/${x.replace(' ', '-')}`}>
                                     {x}
                                 </Link>
                             </ListItem>
@@ -125,18 +128,22 @@ function MenuItem({
                 </Box>
             ) : (
                 <Link href={url} passHref>
-                    <Box overflow="hidden" cursor="pointer">
+                    <Box
+                        overflow="hidden"
+                        cursor="pointer"
+                        onClick={() => setOpenSidenav(false)}
+                    >
                         <HStack>
                             <Square
                                 bgColor={
                                     router.pathname.startsWith(url)
-                                        ? "brand.400"
-                                        : "brand.500"
+                                        ? 'brand.400'
+                                        : 'brand.500'
                                 }
                                 color={
                                     router.pathname.startsWith(url)
-                                        ? "white"
-                                        : "brand.400"
+                                        ? 'white'
+                                        : 'brand.400'
                                 }
                                 borderRadius="8px"
                                 size="2rem"
@@ -147,13 +154,13 @@ function MenuItem({
                             <Text
                                 color={
                                     router.pathname.startsWith(url)
-                                        ? "brand.200"
-                                        : "brand.300"
+                                        ? 'brand.200'
+                                        : 'brand.300'
                                 }
                                 fontWeight={
                                     router.pathname.startsWith(url)
-                                        ? "600"
-                                        : "500"
+                                        ? '600'
+                                        : '500'
                                 }
                                 fontSize=".9rem"
                                 fontFamily="Open Sans"

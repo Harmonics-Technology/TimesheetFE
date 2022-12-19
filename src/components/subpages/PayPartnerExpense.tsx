@@ -13,26 +13,27 @@ import {
     DrawerFooter,
     useToast,
     Checkbox,
-} from "@chakra-ui/react";
-import DrawerWrapper from "@components/bits-utils/Drawer";
+} from '@chakra-ui/react';
+import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
     TableData,
     TableState,
     ToggleStatus,
-} from "@components/bits-utils/TableData";
-import Tables from "@components/bits-utils/Tables";
-import React from "react";
+} from '@components/bits-utils/TableData';
+import Tables from '@components/bits-utils/Tables';
+import React from 'react';
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { RiMailSendFill } from "react-icons/ri";
-import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
-import { ExpenseTypeView, SettingsService } from "src/services";
-import Pagination from "@components/bits-utils/Pagination";
-import { useRouter } from "next/router";
-import { SelectrixBox } from "@components/bits-utils/Selectrix";
-import { PrimaryTextarea } from "@components/bits-utils/PrimaryTextArea";
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { RiMailSendFill } from 'react-icons/ri';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
+import { ExpenseTypeView, SettingsService } from 'src/services';
+import Pagination from '@components/bits-utils/Pagination';
+import { useRouter } from 'next/router';
+import { SelectrixBox } from '@components/bits-utils/Selectrix';
+import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
+import FilterSearch from '@components/bits-utils/FilterSearch';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -55,7 +56,7 @@ function PayPartnerExpense({ expenses, team, listExpenses }: expenseProps) {
         formState: { errors, isSubmitting },
     } = useForm<ExpenseCreate>({
         resolver: yupResolver(schema),
-        mode: "all",
+        mode: 'all',
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -68,9 +69,9 @@ function PayPartnerExpense({ expenses, team, listExpenses }: expenseProps) {
             if (result.status) {
                 toast({
                     title: `Successfully created`,
-                    status: "success",
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 onClose();
                 router.reload();
@@ -78,17 +79,17 @@ function PayPartnerExpense({ expenses, team, listExpenses }: expenseProps) {
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             return;
         } catch (err) {
             toast({
-                title: "An error occurred",
-                status: "error",
+                title: 'An error occurred',
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         }
     };
@@ -136,37 +137,17 @@ function PayPartnerExpense({ expenses, team, listExpenses }: expenseProps) {
                         Generate Invoice
                     </Button>
                 </Flex>
-                <Flex justify="space-between" align="center" my="2.5rem">
-                    <HStack fontSize=".8rem" w="fit-content">
-                        <Select
-                            w="fit-content"
-                            onChange={(e) => setFilter(e.target.value)}
-                        >
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </Select>
-
-                        <Text noOfLines={1}>entries per page</Text>
-                    </HStack>
-                    <Box>
-                        <Input
-                            type="search"
-                            placeholder="search"
-                            onChange={(e) => search(e.target.value)}
-                        />
-                    </Box>
-                </Flex>
+                <FilterSearch />
                 <Tables
                     tableHead={[
-                        "Name",
-                        "Description",
-                        "Expense Type",
-                        "Currency",
-                        "Amount",
-                        "Status",
-                        "Action",
-                        "...",
+                        'Name',
+                        'Description',
+                        'Expense Type',
+                        'Currency',
+                        'Amount',
+                        'Status',
+                        'Action',
+                        '...',
                     ]}
                 >
                     <>
@@ -182,7 +163,7 @@ function PayPartnerExpense({ expenses, team, listExpenses }: expenseProps) {
                                     id={x.id}
                                     status={x.status as string}
                                 />
-                                {x.status == "Approved" && <Checkbox />}
+                                {x.status == 'Approved' && <Checkbox />}
                             </Tr>
                         ))}
                     </>
@@ -192,7 +173,7 @@ function PayPartnerExpense({ expenses, team, listExpenses }: expenseProps) {
             <DrawerWrapper
                 onClose={onClose}
                 isOpen={isOpen}
-                title={"Add New Expense"}
+                title={'Add New Expense'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <SelectrixBox<ExpenseCreate>
@@ -221,7 +202,7 @@ function PayPartnerExpense({ expenses, team, listExpenses }: expenseProps) {
                         label="Current Client"
                         options={expenses}
                     />
-                    <Grid templateColumns={["1fr", "2, 1fr"]} gap="1rem 2rem">
+                    <Grid templateColumns={['1fr', '2, 1fr']} gap="1rem 2rem">
                         <PrimaryInput<ExpenseCreate>
                             label="Expense Type"
                             name="name"
@@ -238,8 +219,8 @@ function PayPartnerExpense({ expenses, team, listExpenses }: expenseProps) {
                             keyLabel="fullName"
                             label="Currency"
                             options={[
-                                { id: "CAD", label: "CAD" },
-                                { id: "NGN", label: "NGN" },
+                                { id: 'CAD', label: 'CAD' },
+                                { id: 'NGN', label: 'NGN' },
                             ]}
                         />
                     </Grid>

@@ -1,8 +1,8 @@
-import { Box, HStack, VStack, Text, Divider, Image } from "@chakra-ui/react";
-import { UserContext } from "@components/context/UserContext";
-import MenuItem from "@components/menu-item";
-import Link from "next/link";
-import { useContext } from "react";
+import { Box, HStack, VStack, Text, Divider, Image } from '@chakra-ui/react';
+import { UserContext } from '@components/context/UserContext';
+import MenuItem from '@components/menu-item';
+import Link from 'next/link';
+import { useContext, useEffect } from 'react';
 import {
     FaCalendar,
     FaCogs,
@@ -12,29 +12,32 @@ import {
     FaMoneyBill,
     FaUser,
     FaUsers,
-} from "react-icons/fa";
-import { RiLineChartFill } from "react-icons/ri";
+} from 'react-icons/fa';
+import { RiLineChartFill } from 'react-icons/ri';
 interface sidenavProps {
     openSidenav: boolean;
+    setOpenSidenav: any;
 }
 
-function SideNav({ openSidenav }: sidenavProps) {
+function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
     const { user } = useContext(UserContext);
     console.log({ user });
-    const role = user?.role?.replace(" ", "");
+    const role = user?.role?.replace(' ', '');
+
     return (
         <Box
             bgColor="#FFFFFF"
             borderRadius="30px"
             h="95vh"
-            w={["50%", "17%"]}
+            w={['50%', '17%']}
             pos="fixed"
-            left={[openSidenav ? "2%" : "-50%", "unset"]}
+            left={[openSidenav ? '2%' : '-50%', 'unset']}
             pl="2rem"
             transition="left .3s ease-out"
             pt="2rem"
             zIndex="999"
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
+            
         >
             <Link href="/" passHref>
                 <HStack>
@@ -47,7 +50,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                 </HStack>
             </Link>
             <Divider my="2rem" />
-            {role == "SuperAdmin" ? (
+            {role == 'SuperAdmin' ? (
                 <VStack align="left" gap="1.5rem" pr="1rem">
                     <MenuItem
                         linkName="dashboard"
@@ -56,6 +59,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
                         linkName="profile-management"
@@ -63,11 +67,12 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaUsers opacity=".8" />}
                         option={true}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            "admin",
-                            "clients",
-                            "team members",
-                            "payment partners",
+                            'admin',
+                            'clients',
+                            'team members',
+                            'payment partners',
                         ]}
                     />
                     <MenuItem
@@ -76,7 +81,8 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaCalendar opacity=".8" />}
                         option={true}
                         role={role}
-                        dropDown={["approval", "history"]}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['approval', 'history']}
                     />
                     <MenuItem
                         linkName="financials"
@@ -84,11 +90,12 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<RiLineChartFill opacity=".8" />}
                         option={true}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            "expenses",
-                            "invoices",
-                            "payrolls",
-                            "payslips",
+                            'expenses',
+                            'invoices',
+                            'payrolls',
+                            'payslips',
                         ]}
                     />
                     <MenuItem
@@ -96,6 +103,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         menuTitle="Contracts"
                         icon={<FaFile opacity=".8" />}
                         option={false}
+                        setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
                     />
@@ -105,6 +113,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaUser opacity=".8" />}
                         option={false}
                         dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
                         role={role}
                     />
                     <MenuItem
@@ -112,11 +121,12 @@ function SideNav({ openSidenav }: sidenavProps) {
                         menuTitle="Settings"
                         icon={<FaCogs opacity=".8" />}
                         option={true}
-                        dropDown={["expense type"]}
+                        dropDown={['expense type']}
+                        setOpenSidenav={setOpenSidenav}
                         role={role}
                     />
                 </VStack>
-            ) : role == "TeamMember" ? (
+            ) : role == 'TeamMember' ? (
                 <VStack align="left" gap="1.5rem" pr="1rem">
                     <MenuItem
                         linkName="dashboard"
@@ -124,6 +134,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaHome opacity=".8" />}
                         option={false}
                         dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
                         role={role}
                     />
 
@@ -133,7 +144,8 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaCalendar opacity=".8" />}
                         option={true}
                         role={role}
-                        dropDown={["my timesheet", "timesheet history"]}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['my timesheet', 'timesheet history']}
                     />
                     <MenuItem
                         linkName="financials"
@@ -141,11 +153,12 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<RiLineChartFill opacity=".8" />}
                         option={true}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            "my expenses",
-                            "my invoices",
-                            "my payrolls",
-                            "my payslips",
+                            'my expenses',
+                            'my invoices',
+                            'my payrolls',
+                            'my payslips',
                         ]}
                     />
                     <MenuItem
@@ -154,10 +167,11 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaUser opacity=".8" />}
                         option={false}
                         dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
                         role={role}
                     />
                 </VStack>
-            ) : role == "Supervisor" ? (
+            ) : role == 'Supervisor' ? (
                 <VStack align="left" gap="1.5rem" pr="1rem">
                     <MenuItem
                         linkName="dashboard"
@@ -165,6 +179,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaHome opacity=".8" />}
                         option={false}
                         dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
                         role={role}
                     />
                     <MenuItem
@@ -174,6 +189,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
                         linkName="mgt-timesheets"
@@ -181,7 +197,8 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaCalendar opacity=".8" />}
                         option={true}
                         role={role}
-                        dropDown={["my timesheet", "my timesheet history"]}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['my timesheet', 'my timesheet history']}
                     />
                     <MenuItem
                         linkName="timesheets"
@@ -189,7 +206,8 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaCalendar opacity=".8" />}
                         option={true}
                         role={role}
-                        dropDown={["unapproved", "history"]}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['unapproved', 'history']}
                     />
                     <MenuItem
                         linkName="financials"
@@ -197,10 +215,11 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<RiLineChartFill opacity=".8" />}
                         option={true}
                         role={role}
-                        dropDown={["payslip"]}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['payslip']}
                     />
                 </VStack>
-            ) : role == "PaymentPartner" ? (
+            ) : role == 'PaymentPartner' ? (
                 <VStack align="left" gap="1.5rem" pr="1rem">
                     <MenuItem
                         linkName="dashboard"
@@ -209,6 +228,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
 
                     <MenuItem
@@ -218,6 +238,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         role={role}
                         dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
                         linkName="viewpayroll"
@@ -226,6 +247,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
                         linkName="invoices"
@@ -234,6 +256,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         role={role}
                         dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
                         linkName="approvals"
@@ -242,9 +265,10 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                 </VStack>
-            ) : role == "PayrollManager" ? (
+            ) : role == 'PayrollManager' ? (
                 <VStack align="left" gap="1.5rem" pr="1rem">
                     <MenuItem
                         linkName="dashboard"
@@ -253,6 +277,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
                         linkName="timesheets"
@@ -260,7 +285,8 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaCalendar opacity=".8" />}
                         option={true}
                         role={role}
-                        dropDown={["approval", "history"]}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['approval', 'history']}
                     />
                     <MenuItem
                         linkName="financials"
@@ -268,11 +294,12 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<RiLineChartFill opacity=".8" />}
                         option={true}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            "expenses",
-                            "invoices",
-                            "payrolls",
-                            "payslips",
+                            'expenses',
+                            'invoices',
+                            'payrolls',
+                            'payslips',
                         ]}
                     />
                     <MenuItem
@@ -282,6 +309,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
                         linkName="my-profile"
@@ -290,9 +318,10 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                 </VStack>
-            ) : role == "Admin" ? (
+            ) : role == 'Admin' ? (
                 <VStack align="left" gap="1.5rem" pr="1rem">
                     <MenuItem
                         linkName="dashboard"
@@ -301,6 +330,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
                         linkName="timesheets"
@@ -308,7 +338,8 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaCalendar opacity=".8" />}
                         option={true}
                         role={role}
-                        dropDown={["approval", "history"]}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['approval', 'history']}
                     />
                     <MenuItem
                         linkName="financials"
@@ -316,11 +347,12 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<RiLineChartFill opacity=".8" />}
                         option={true}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            "expenses",
-                            "invoices",
-                            "payrolls",
-                            "payslips",
+                            'expenses',
+                            'invoices',
+                            'payrolls',
+                            'payslips',
                         ]}
                     />
                     <MenuItem
@@ -330,6 +362,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
                         linkName="my-profile"
@@ -338,9 +371,10 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                 </VStack>
-            ) : role == "client" ? (
+            ) : role == 'client' ? (
                 <VStack align="left" gap="1.5rem" pr="1rem">
                     <MenuItem
                         linkName="dashboard"
@@ -349,6 +383,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
                         linkName="team-members"
@@ -357,6 +392,7 @@ function SideNav({ openSidenav }: sidenavProps) {
                         option={false}
                         dropDown={[]}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
                         linkName="timesheets"
@@ -364,7 +400,8 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<FaCalendar opacity=".8" />}
                         option={true}
                         role={role}
-                        dropDown={["approval", "history"]}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['approval', 'history']}
                     />
                     <MenuItem
                         linkName="financials"
@@ -372,11 +409,12 @@ function SideNav({ openSidenav }: sidenavProps) {
                         icon={<RiLineChartFill opacity=".8" />}
                         option={true}
                         role={role}
+                        setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            "expenses",
-                            "invoices",
-                            "payrolls",
-                            "payslips",
+                            'expenses',
+                            'invoices',
+                            'payrolls',
+                            'payslips',
                         ]}
                     />
                 </VStack>

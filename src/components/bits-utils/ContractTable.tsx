@@ -14,23 +14,23 @@ import {
     useToast,
     Spinner,
     FormLabel,
-} from "@chakra-ui/react";
-import DrawerWrapper from "@components/bits-utils/Drawer";
+} from '@chakra-ui/react';
+import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
     TableContract,
     TableContractOptions,
     TableData,
     TableState,
-} from "@components/bits-utils/TableData";
-import Tables from "@components/bits-utils/Tables";
-import React, { useRef, useState } from "react";
-import { Widget } from "@uploadcare/react-widget";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { RiMailSendFill } from "react-icons/ri";
-import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
-import moment from "moment";
+} from '@components/bits-utils/TableData';
+import Tables from '@components/bits-utils/Tables';
+import React, { useRef, useState } from 'react';
+import { Widget } from '@uploadcare/react-widget';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { RiMailSendFill } from 'react-icons/ri';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
+import moment from 'moment';
 
 interface adminProps {
     userProfile?: UserView;
@@ -41,13 +41,13 @@ import {
     ContractService,
     ContractView,
     UserView,
-} from "src/services";
-import { useRouter } from "next/router";
-import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
-import { DateObject } from "react-multi-date-picker";
-import ExtendContract from "./ExtendContract";
-import ModifyContract from "./ModifyContract";
-import ConfirmModal from "./ConfirmModal";
+} from 'src/services';
+import { useRouter } from 'next/router';
+import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
+import { DateObject } from 'react-multi-date-picker';
+import ExtendContract from './ExtendContract';
+import ModifyContract from './ModifyContract';
+import ConfirmModal from './ConfirmModal';
 
 const schema = yup.object().shape({
     title: yup.string().required(),
@@ -56,7 +56,7 @@ const schema = yup.object().shape({
 });
 
 function TeamManagement({ userProfile }: adminProps) {
-    const [contract, setContractFile] = useState<any>("");
+    const [contract, setContractFile] = useState<any>('');
     const [modify, setModify] = useState<boolean>(false);
     const [extend, setExtend] = useState<boolean>(false);
     const [clickedItem, setClickedItem] = useState<ContractView>({});
@@ -68,7 +68,7 @@ function TeamManagement({ userProfile }: adminProps) {
         formState: { errors, isSubmitting },
     } = useForm<ContractModel>({
         resolver: yupResolver(schema),
-        mode: "all",
+        mode: 'all',
         defaultValues: {
             userId: userProfile?.id,
             startDate: clickedItem.startDate,
@@ -86,12 +86,12 @@ function TeamManagement({ userProfile }: adminProps) {
     const showLoadingState = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log("File progress: ", info.progress),
+                console.log('File progress: ', info.progress),
                     setShowLoading(true);
             });
             file.done((info) => {
                 setShowLoading(false),
-                    console.log("File uploaded: ", info),
+                    console.log('File uploaded: ', info),
                     setContractFile(info);
             });
         }
@@ -99,12 +99,12 @@ function TeamManagement({ userProfile }: adminProps) {
 
     const onSubmit = async (data: ContractModel) => {
         data.document = `${contract.cdnUrl} ${contract.name}`;
-        if (data.document === undefined || "") {
+        if (data.document === undefined || '') {
             toast({
-                title: "Please select a contract document and try again",
-                status: "error",
+                title: 'Please select a contract document and try again',
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             return;
         }
@@ -114,9 +114,9 @@ function TeamManagement({ userProfile }: adminProps) {
             if (result.status) {
                 toast({
                     title: result.message,
-                    status: "success",
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 router.reload();
                 onClose();
@@ -124,36 +124,20 @@ function TeamManagement({ userProfile }: adminProps) {
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             return;
         } catch (err) {
             toast({
-                title: "An error occurred",
-                status: "error",
+                title: 'An error occurred',
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         }
     };
-
-    function setFilter(filter: string) {
-        router.push({
-            query: {
-                limit: filter,
-            },
-        });
-    }
-
-    function search(term: string) {
-        router.push({
-            query: {
-                search: term,
-            },
-        });
-    }
 
     return (
         <>
@@ -213,14 +197,14 @@ function TeamManagement({ userProfile }: adminProps) {
                 </Flex>
                 <Tables
                     tableHead={[
-                        "Name",
-                        "Contract Title",
-                        "Start Date",
-                        "End Date",
-                        "Tenor",
-                        "Contract",
-                        "Status",
-                        "Action",
+                        'Name',
+                        'Contract Title',
+                        'Start Date',
+                        'End Date',
+                        'Tenor',
+                        'Contract',
+                        'Status',
+                        'Action',
                     ]}
                 >
                     <>
@@ -231,12 +215,12 @@ function TeamManagement({ userProfile }: adminProps) {
                                     <TableData name={x.title} />
                                     <TableData
                                         name={moment(x.startDate).format(
-                                            "DD/MM/YYYY",
+                                            'DD/MM/YYYY',
                                         )}
                                     />
                                     <TableData
                                         name={moment(x.endDate).format(
-                                            "DD/MM/YYYY",
+                                            'DD/MM/YYYY',
                                         )}
                                     />
                                     <TableData
@@ -260,12 +244,12 @@ function TeamManagement({ userProfile }: adminProps) {
             <DrawerWrapper
                 onClose={onClose}
                 isOpen={isOpen}
-                title={"Add new Contract"}
+                title={'Add new Contract'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Box w="full">
                         <Grid
-                            templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                            templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                             gap="1rem 2rem"
                         >
                             <PrimaryInput<ContractModel>
@@ -288,7 +272,7 @@ function TeamManagement({ userProfile }: adminProps) {
                                 name="endDate"
                                 label="End Date"
                                 error={errors.endDate}
-                                min={new DateObject().add(3, "days")}
+                                min={new DateObject().add(3, 'days')}
                             />
                             <Box>
                                 <FormLabel
@@ -305,7 +289,7 @@ function TeamManagement({ userProfile }: adminProps) {
                                     h="2.6rem"
                                     align="center"
                                     pr="1rem"
-                                    w={["100%", "100%"]}
+                                    w={['100%', '100%']}
                                     // justifyContent="space-between"
                                 >
                                     <Flex
@@ -346,7 +330,7 @@ function TeamManagement({ userProfile }: adminProps) {
                                         onFileSelect={showLoadingState}
                                         ref={widgetApi}
                                         systemDialog={true}
-                                        inputAcceptTypes={".docx,.pdf, .doc"}
+                                        inputAcceptTypes={'.docx,.pdf, .doc'}
                                     />
                                 </Box>
                             </Box>

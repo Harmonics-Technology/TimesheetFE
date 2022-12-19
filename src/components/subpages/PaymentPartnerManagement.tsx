@@ -13,21 +13,21 @@ import {
     DrawerFooter,
     useToast,
     Checkbox,
-} from "@chakra-ui/react";
-import DrawerWrapper from "@components/bits-utils/Drawer";
+} from '@chakra-ui/react';
+import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
     TableActions,
     TableData,
     TableStatus,
-} from "@components/bits-utils/TableData";
-import Tables from "@components/bits-utils/Tables";
-import React, { useState } from "react";
+} from '@components/bits-utils/TableData';
+import Tables from '@components/bits-utils/Tables';
+import React, { useState } from 'react';
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { RiMailSendFill } from "react-icons/ri";
-import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { RiMailSendFill } from 'react-icons/ri';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
 }
@@ -37,11 +37,12 @@ import {
     UserService,
     UserView,
     UserViewPagedCollectionStandardResponse,
-} from "src/services";
-import Pagination from "@components/bits-utils/Pagination";
-import { useRouter } from "next/router";
-import { PrimaryTextarea } from "@components/bits-utils/PrimaryTextArea";
-import { PrimaryPhoneInput } from "@components/bits-utils/PrimaryPhoneInput";
+} from 'src/services';
+import Pagination from '@components/bits-utils/Pagination';
+import { useRouter } from 'next/router';
+import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
+import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
+import FilterSearch from '@components/bits-utils/FilterSearch';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -63,9 +64,9 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
         formState: { errors, isSubmitting },
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),
-        mode: "all",
+        mode: 'all',
         defaultValues: {
-            role: "Payment Partner",
+            role: 'Payment Partner',
         },
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -90,9 +91,9 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
             if (result.status) {
                 toast({
                     title: `Invite Sent`,
-                    status: "success",
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 router.reload();
                 onClose();
@@ -100,36 +101,20 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             return;
         } catch (err) {
             toast({
-                title: "An error occurred",
-                status: "error",
+                title: 'An error occurred',
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         }
     };
-
-    function setFilter(filter: string) {
-        router.push({
-            query: {
-                limit: filter,
-            },
-        });
-    }
-
-    function search(term: string) {
-        router.push({
-            query: {
-                search: term,
-            },
-        });
-    }
 
     return (
         <>
@@ -149,29 +134,9 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                 >
                     +Payment Partner
                 </Button>
-                <Flex justify="space-between" align="center" my="2.5rem">
-                    <HStack fontSize=".8rem" w="fit-content">
-                        <Select
-                            w="fit-content"
-                            onChange={(e) => setFilter(e.target.value)}
-                        >
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </Select>
-
-                        <Text noOfLines={1}>entries per page</Text>
-                    </HStack>
-                    <Box>
-                        <Input
-                            type="search"
-                            placeholder="search"
-                            onChange={(e) => search(e.target.value)}
-                        />
-                    </Box>
-                </Flex>
+                <FilterSearch />
                 <Tables
-                    tableHead={["Name", "Email", "Role", "Status", "Action"]}
+                    tableHead={['Name', 'Email', 'Role', 'Status', 'Action']}
                 >
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
@@ -194,7 +159,7 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
             <DrawerWrapper
                 onClose={onClose}
                 isOpen={isOpen}
-                title={"Add new PaymentPartner"}
+                title={'Add new PaymentPartner'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <PrimaryInput<RegisterModel>
@@ -206,7 +171,7 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                         register={register}
                     />
                     <Grid
-                        templateColumns={["1fr", "repeat(2,1fr)"]}
+                        templateColumns={['1fr', 'repeat(2,1fr)']}
                         gap="1rem 2rem"
                     >
                         <PrimaryInput<RegisterModel>
@@ -257,16 +222,16 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                             </Checkbox>
                         </Flex>
                         <Grid
-                            templateColumns={["1fr", "repeat(2,1fr)"]}
+                            templateColumns={['1fr', 'repeat(2,1fr)']}
                             gap="1rem 2rem"
-                            display={same ? "none" : "grid"}
+                            display={same ? 'none' : 'grid'}
                         >
                             <PrimaryInput<RegisterModel>
                                 label="Contact First Name"
                                 name="firstName"
                                 error={errors.firstName}
                                 placeholder=""
-                                defaultValue={""}
+                                defaultValue={''}
                                 register={register}
                             />
                             <PrimaryInput<RegisterModel>

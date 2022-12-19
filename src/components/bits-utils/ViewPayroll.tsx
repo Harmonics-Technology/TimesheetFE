@@ -1,20 +1,20 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-sparse-arrays */
-import { Box, Flex, Select, Text, HStack, Input, Tr } from "@chakra-ui/react";
+import { Box, Flex, Select, Text, HStack, Input, Tr } from '@chakra-ui/react';
 import {
     TableContract,
     TableContractAction,
     TableData,
     TableState,
-} from "@components/bits-utils/TableData";
-import Tables from "@components/bits-utils/Tables";
-import Pagination from "@components/bits-utils/Pagination";
-import { useRouter } from "next/router";
-import moment from "moment";
+} from '@components/bits-utils/TableData';
+import Tables from '@components/bits-utils/Tables';
+import Pagination from '@components/bits-utils/Pagination';
+import { useRouter } from 'next/router';
+import moment from 'moment';
 import {
     ContractView,
     ContractViewPagedCollectionStandardResponse,
-} from "src/services";
+} from 'src/services';
 
 interface adminProps {
     adminList: ContractViewPagedCollectionStandardResponse;
@@ -23,22 +23,6 @@ interface adminProps {
 function ViewPayroll({ adminList }: adminProps) {
     console.log({ adminList });
     const router = useRouter();
-
-    function setFilter(filter: string) {
-        router.push({
-            query: {
-                limit: filter,
-            },
-        });
-    }
-
-    function search(term: string) {
-        router.push({
-            query: {
-                search: term,
-            },
-        });
-    }
 
     return (
         <>
@@ -71,14 +55,14 @@ function ViewPayroll({ adminList }: adminProps) {
                 </Flex>
                 <Tables
                     tableHead={[
-                        "Total Hrs",
-                        "Rate",
-                        "Total Amount",
-                        "Start Date",
-                        "End Date",
-                        "Payment Date",
-                        "Status",
-                        "Action",
+                        'Total Hrs',
+                        'Rate',
+                        'Total Amount',
+                        'Start Date',
+                        'End Date',
+                        'Payment Date',
+                        'Status',
+                        'Action',
                     ]}
                 >
                     <>
@@ -89,17 +73,17 @@ function ViewPayroll({ adminList }: adminProps) {
                                 <TableData name={x.title} />
                                 <TableData
                                     name={moment(x.startDate).format(
-                                        "DD/MM/YYYY",
+                                        'DD/MM/YYYY',
                                     )}
                                 />
                                 <TableData
                                     name={moment(x.endDate).format(
-                                        "DD/MM/YYYY",
+                                        'DD/MM/YYYY',
                                     )}
                                 />
                                 <TableData
                                     name={moment(x.endDate).format(
-                                        "DD/MM/YYYY",
+                                        'DD/MM/YYYY',
                                     )}
                                 />
                                 <TableState name={x.status as string} />

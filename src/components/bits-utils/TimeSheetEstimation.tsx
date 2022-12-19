@@ -1,6 +1,6 @@
-import { Button, Flex, Tooltip } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import React from "react";
+import { Button, Flex, Tooltip, Text } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React from 'react';
 
 interface TimeProps {
     label: string;
@@ -19,13 +19,16 @@ export default function TimeSheetEstimation({ label, data, tip }: TimeProps) {
                 border="1px solid"
                 m="0"
                 py="1rem"
+                px=".5rem"
                 w="full"
                 justify="center"
                 align="center"
                 fontWeight="500"
                 borderColor="#e5e5e5"
             >
-                {label}
+                <Text mb="0" noOfLines={1}>
+                    {label}
+                </Text>
             </Flex>
             <Tooltip
                 label={tip}
@@ -55,7 +58,7 @@ export function TimeSheetEstimationBtn({
     loading,
     title,
     click,
-    bg = "brand.400",
+    bg = 'brand.400',
 }: {
     id: any;
     loading: boolean;

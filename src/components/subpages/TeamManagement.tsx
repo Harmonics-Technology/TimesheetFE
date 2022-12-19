@@ -15,21 +15,21 @@ import {
     useToast,
     Spinner,
     FormLabel,
-} from "@chakra-ui/react";
-import DrawerWrapper from "@components/bits-utils/Drawer";
+} from '@chakra-ui/react';
+import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
     TableActions,
     TableData,
     TableStatus,
-} from "@components/bits-utils/TableData";
-import Tables from "@components/bits-utils/Tables";
-import React, { useRef, useState } from "react";
-import { Widget } from "@uploadcare/react-widget";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { RiMailSendFill } from "react-icons/ri";
-import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
+} from '@components/bits-utils/TableData';
+import Tables from '@components/bits-utils/Tables';
+import React, { useRef, useState } from 'react';
+import { Widget } from '@uploadcare/react-widget';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { RiMailSendFill } from 'react-icons/ri';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     clients: UserView[];
@@ -42,14 +42,15 @@ import {
     UserService,
     UserView,
     UserViewPagedCollectionStandardResponse,
-} from "src/services";
-import Pagination from "@components/bits-utils/Pagination";
-import { useRouter } from "next/router";
-import { PrimaryPhoneInput } from "@components/bits-utils/PrimaryPhoneInput";
-import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
-import { SelectrixBox } from "@components/bits-utils/Selectrix";
-import { PrimaryRadio } from "@components/bits-utils/PrimaryRadio";
-import { DateObject } from "react-multi-date-picker";
+} from 'src/services';
+import Pagination from '@components/bits-utils/Pagination';
+import { useRouter } from 'next/router';
+import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
+import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
+import { SelectrixBox } from '@components/bits-utils/Selectrix';
+import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
+import { DateObject } from 'react-multi-date-picker';
+import FilterSearch from '@components/bits-utils/FilterSearch';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -89,22 +90,22 @@ function TeamManagement({
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(schema),
-        mode: "all",
+        mode: 'all',
         defaultValues: {
-            role: "Team Member",
+            role: 'Team Member',
         },
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
     // console.log(watch("payRollTypeId"));
-    const payroll = watch("payRollTypeId");
+    const payroll = watch('payRollTypeId');
     console.log({ payroll });
 
-    const [contract, setContractFile] = useState<any>("");
-    const [icd, setIcd] = useState<any>("");
-    const [voidCheck, setVoidCheck] = useState<any>("");
-    const [inc, setInc] = useState<any>("");
+    const [contract, setContractFile] = useState<any>('');
+    const [icd, setIcd] = useState<any>('');
+    const [voidCheck, setVoidCheck] = useState<any>('');
+    const [inc, setInc] = useState<any>('');
     const [showLoading, setShowLoading] = useState(false);
     const [showLoadingB, setShowLoadingB] = useState(false);
     const [showLoadingC, setShowLoadingC] = useState(false);
@@ -117,12 +118,12 @@ function TeamManagement({
     const showLoadingStateB = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log("File progress: ", info.progress),
+                console.log('File progress: ', info.progress),
                     setShowLoadingB(true);
             });
             file.done((info) => {
                 setShowLoadingB(false),
-                    console.log("File uploaded: ", info),
+                    console.log('File uploaded: ', info),
                     setIcd(info);
             });
         }
@@ -130,12 +131,12 @@ function TeamManagement({
     const showLoadingStateC = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log("File progress: ", info.progress),
+                console.log('File progress: ', info.progress),
                     setShowLoadingC(true);
             });
             file.done((info) => {
                 setShowLoadingC(false),
-                    console.log("File uploaded: ", info),
+                    console.log('File uploaded: ', info),
                     setVoidCheck(info);
             });
         }
@@ -143,12 +144,12 @@ function TeamManagement({
     const showLoadingStateD = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log("File progress: ", info.progress),
+                console.log('File progress: ', info.progress),
                     setShowLoadingD(true);
             });
             file.done((info) => {
                 setShowLoadingD(false),
-                    console.log("File uploaded: ", info),
+                    console.log('File uploaded: ', info),
                     setInc(info);
             });
         }
@@ -156,12 +157,12 @@ function TeamManagement({
     const showLoadingState = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log("File progress: ", info.progress),
+                console.log('File progress: ', info.progress),
                     setShowLoading(true);
             });
             file.done((info) => {
                 setShowLoading(false),
-                    console.log("File uploaded: ", info),
+                    console.log('File uploaded: ', info),
                     setContractFile(info);
             });
         }
@@ -173,12 +174,12 @@ function TeamManagement({
         data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
         data.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
         data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
-        if (data.document === undefined || "") {
+        if (data.document === undefined || '') {
             toast({
-                title: "Please select a contract document and try again",
-                status: "error",
+                title: 'Please select a contract document and try again',
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             return;
         }
@@ -189,9 +190,9 @@ function TeamManagement({
             if (result.status) {
                 toast({
                     title: `Invite Sent`,
-                    status: "success",
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 router.reload();
                 onClose();
@@ -199,36 +200,20 @@ function TeamManagement({
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             return;
         } catch (err) {
             toast({
-                title: "An error occurred",
-                status: "error",
+                title: 'An error occurred',
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         }
     };
-
-    function setFilter(filter: string) {
-        router.push({
-            query: {
-                limit: filter,
-            },
-        });
-    }
-
-    function search(term: string) {
-        router.push({
-            query: {
-                search: term,
-            },
-        });
-    }
 
     return (
         <>
@@ -248,36 +233,16 @@ function TeamManagement({
                 >
                     +Team Member
                 </Button>
-                <Flex justify="space-between" align="center" my="2.5rem">
-                    <HStack fontSize=".8rem" w="fit-content">
-                        <Select
-                            w="fit-content"
-                            onChange={(e) => setFilter(e.target.value)}
-                        >
-                            <option value="5">5</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </Select>
-
-                        <Text noOfLines={1}>entries per page</Text>
-                    </HStack>
-                    <Box>
-                        <Input
-                            type="search"
-                            placeholder="search"
-                            onChange={(e) => search(e.target.value)}
-                        />
-                    </Box>
-                </Flex>
+                <FilterSearch />
                 <Tables
                     tableHead={[
-                        "Name",
-                        "Job Title",
-                        "Client",
-                        "Phone No",
-                        "Role",
-                        "Status",
-                        "",
+                        'Name',
+                        'Job Title',
+                        'Client',
+                        'Phone No',
+                        'Role',
+                        'Status',
+                        '',
                     ]}
                 >
                     <>
@@ -310,11 +275,11 @@ function TeamManagement({
             <DrawerWrapper
                 onClose={onClose}
                 isOpen={isOpen}
-                title={"Add a new Team Member"}
+                title={'Add a new Team Member'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid
-                        templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                        templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                         gap="1rem 2rem"
                     >
                         <PrimaryInput<TeamMemberModel>
@@ -361,7 +326,7 @@ function TeamManagement({
                             name="dateOfBirth"
                             label="Date of Birth"
                             error={errors.dateOfBirth}
-                            max={new DateObject().subtract(1, "days")}
+                            max={new DateObject().subtract(1, 'days')}
                         />
                         <SelectrixBox<TeamMemberModel>
                             control={control}
@@ -389,8 +354,8 @@ function TeamManagement({
                             keyLabel="label"
                             label="Profile Status"
                             options={[
-                                { id: "true", label: "Active" },
-                                { id: "false", label: "Not Active" },
+                                { id: 'true', label: 'Active' },
+                                { id: 'false', label: 'Not Active' },
                             ]}
                         />
                     </Grid>
@@ -413,7 +378,7 @@ function TeamManagement({
                             </Text>
                         </Flex>
                         <Grid
-                            templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                            templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
                         >
                             <SelectrixBox<TeamMemberModel>
@@ -425,12 +390,12 @@ function TeamManagement({
                                 label="Payroll Type"
                                 options={[
                                     {
-                                        id: "1",
-                                        label: "Onshore Contract",
+                                        id: '1',
+                                        label: 'Onshore Contract',
                                     },
                                     {
-                                        id: "2",
-                                        label: "Offshore contract",
+                                        id: '2',
+                                        label: 'Offshore contract',
                                     },
                                 ]}
                             />
@@ -506,7 +471,7 @@ function TeamManagement({
                                                     px=".5rem"
                                                 >
                                                     {icd?.name ||
-                                                        "No File Chosen"}
+                                                        'No File Chosen'}
                                                 </Text>
                                             )}
                                         </Flex>
@@ -518,7 +483,7 @@ function TeamManagement({
                                                 ref={widgetApiB}
                                                 systemDialog={true}
                                                 inputAcceptTypes={
-                                                    ".docx,.pdf, .doc"
+                                                    '.docx,.pdf, .doc'
                                                 }
                                             />
                                         </Box>
@@ -577,7 +542,7 @@ function TeamManagement({
                                                     px=".5rem"
                                                 >
                                                     {voidCheck?.name ||
-                                                        "No File Chosen"}
+                                                        'No File Chosen'}
                                                 </Text>
                                             )}
                                         </Flex>
@@ -589,7 +554,7 @@ function TeamManagement({
                                                 ref={widgetApiC}
                                                 systemDialog={true}
                                                 inputAcceptTypes={
-                                                    ".docx,.pdf, .doc"
+                                                    '.docx,.pdf, .doc'
                                                 }
                                             />
                                         </Box>
@@ -648,7 +613,7 @@ function TeamManagement({
                                                     px=".5rem"
                                                 >
                                                     {inc?.name ||
-                                                        "No File Chosen"}
+                                                        'No File Chosen'}
                                                 </Text>
                                             )}
                                         </Flex>
@@ -660,7 +625,7 @@ function TeamManagement({
                                                 ref={widgetApiD}
                                                 systemDialog={true}
                                                 inputAcceptTypes={
-                                                    ".docx,.pdf, .doc"
+                                                    '.docx,.pdf, .doc'
                                                 }
                                             />
                                         </Box>
@@ -721,8 +686,8 @@ function TeamManagement({
                                 keyLabel="label"
                                 label="Currency"
                                 options={[
-                                    { id: "CAD", label: "CAD" },
-                                    { id: "NGN", label: "NGN" },
+                                    { id: 'CAD', label: 'CAD' },
+                                    { id: 'NGN', label: 'NGN' },
                                 ]}
                             />
                             <SelectrixBox<TeamMemberModel>
@@ -733,9 +698,9 @@ function TeamManagement({
                                 keyLabel="label"
                                 label="Payment Frequency"
                                 options={[
-                                    { id: "weekly", label: "Weekly" },
-                                    { id: "bi-weekly", label: "Bi-Weekly" },
-                                    { id: "monthly", label: "Monthly" },
+                                    { id: 'weekly', label: 'Weekly' },
+                                    { id: 'bi-weekly', label: 'Bi-Weekly' },
+                                    { id: 'monthly', label: 'Monthly' },
                                 ]}
                             />
                         </Grid>
@@ -745,8 +710,8 @@ function TeamManagement({
                                 control={control}
                                 error={errors.fixedAmount}
                                 radios={[
-                                    { label: "Fixed amount", val: "true" },
-                                    { label: "Percentage", val: "false" },
+                                    { label: 'Fixed amount', val: 'true' },
+                                    { label: 'Percentage', val: 'false' },
                                 ]}
                             />
                         </Box>
@@ -770,7 +735,7 @@ function TeamManagement({
                             </Text>
                         </Flex>
                         <Grid
-                            templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                            templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
                         >
                             <PrimaryInput<TeamMemberModel>
@@ -793,7 +758,7 @@ function TeamManagement({
                                 name="endDate"
                                 label="End Date"
                                 error={errors.endDate}
-                                min={new DateObject().add(3, "days")}
+                                min={new DateObject().add(3, 'days')}
                             />
                         </Grid>
                         <Box>
@@ -811,7 +776,7 @@ function TeamManagement({
                                 h="2.6rem"
                                 align="center"
                                 pr="1rem"
-                                w={["100%", "63%"]}
+                                w={['100%', '63%']}
                                 // justifyContent="space-between"
                             >
                                 <Flex
@@ -852,7 +817,7 @@ function TeamManagement({
                                     onFileSelect={showLoadingState}
                                     ref={widgetApi}
                                     systemDialog={true}
-                                    inputAcceptTypes={".docx,.pdf, .doc"}
+                                    inputAcceptTypes={'.docx,.pdf, .doc'}
                                 />
                             </Box>
                         </Box>

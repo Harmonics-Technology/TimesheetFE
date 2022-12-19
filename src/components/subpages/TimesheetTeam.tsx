@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import {
     format,
     startOfWeek,
@@ -65,21 +65,24 @@ const TimesheetTeam = ({
     );
     const toast = useToast();
 
-    let totalHours: any[] = [] || 0;
+    let hoursWorked: any[] = [] || 0;
     monthlyTimesheets?.forEach((x) => {
-        totalHours.push(x.hours);
+        hoursWorked.push(x.hours);
     });
-    totalHours = totalHours.reduce((a, b) => a + b);
+    if (hoursWorked.length > 0) {
+        hoursWorked = hoursWorked.reduce((a, b) => a + b);
+    }
+    const totalHours =
+        hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
+    console.log({ totalHours });
+    const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
+    const expectedPay = (timeSheets?.expectedPay as number) || 0;
     const actualPayout =
-        Math.round(
-            ((timeSheets?.expectedPay as number) *
-                (totalHours as unknown as number)) /
-                (timeSheets?.expectedWorkHours as number),
-        ) || 0;
+        Math.round((expectedPay * totalHours) / expectedHours) || 0;
 
     const [selected, setSelected] = useState<approveDate[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
-    console.log({ selectedInput });
+    // console.log({ selectedInput });
     // console.log({ selected });
 
     // function ApproveAllTimeSheet() {
@@ -468,10 +471,10 @@ const TimesheetTeam = ({
                 // borderRadius="10px"
                 p="1rem 2rem"
             >
-                <Grid templateColumns="repeat(6,1fr)" w="100%" mr="auto">
+                <Grid templateColumns="repeat(5,1fr)" w="100%" mr="auto">
                     <TimeSheetEstimation
                         label="Expected Total Hours"
-                        data={`${timeSheets?.expectedWorkHours} HR`}
+                        data={`${expectedHours} HR`}
                         tip="Number of hours you are expected to work this month"
                     />
                     <TimeSheetEstimation
@@ -481,7 +484,7 @@ const TimesheetTeam = ({
                     />
                     <TimeSheetEstimation
                         label="Expected Payout"
-                        data={Naira(timeSheets?.expectedPay)}
+                        data={Naira(expectedPay)}
                         tip="Total amount you are expected to be paid this month"
                     />
                     <TimeSheetEstimation

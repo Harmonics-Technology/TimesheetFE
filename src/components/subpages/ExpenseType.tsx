@@ -30,6 +30,7 @@ import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
 import { ExpenseTypeView, SettingsService } from "src/services";
 import Pagination from "@components/bits-utils/Pagination";
 import { useRouter } from "next/router";
+import FilterSearch from "@components/bits-utils/FilterSearch";
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -119,27 +120,7 @@ function ExpenseType({ expenses }: expenseProps) {
                 >
                     +Expense Type
                 </Button>
-                <Flex justify="space-between" align="center" my="2.5rem">
-                    <HStack fontSize=".8rem" w="fit-content">
-                        <Select
-                            w="fit-content"
-                            onChange={(e) => setFilter(e.target.value)}
-                        >
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </Select>
-
-                        <Text noOfLines={1}>entries per page</Text>
-                    </HStack>
-                    <Box>
-                        <Input
-                            type="search"
-                            placeholder="search"
-                            onChange={(e) => search(e.target.value)}
-                        />
-                    </Box>
-                </Flex>
+                <FilterSearch />
                 <Tables tableHead={["Expense Type", "Status", ""]}>
                     <>
                         {expenses?.map((x: ExpenseTypeView) => (

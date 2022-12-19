@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { FaUser } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
-import { TfiMenuAlt } from 'react-icons/tfi';
+import { TfiClose, TfiMenu, TfiMenuAlt } from 'react-icons/tfi';
 import { BsBellFill } from 'react-icons/bs';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
@@ -46,6 +46,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
             top="0"
             bgColor="#f6f7f8"
             zIndex="800"
+            align="center"
         >
             <Box color="brand.200">
                 <Text
@@ -61,6 +62,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                     fontFamily="Open Sans"
                     fontSize="1rem"
                     textTransform="capitalize"
+                    mb="0"
                 >
                     {curPage == '[id]'
                         ? idPage?.replace('-', ' ')
@@ -73,7 +75,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                     display={['block', 'none']}
                     onClick={() => setOpenSidenav(!openSidenav)}
                 >
-                    <TfiMenuAlt />
+                    {openSidenav ? <TfiClose /> : <TfiMenu />}
                 </Box>
                 <Stack
                     direction="row"

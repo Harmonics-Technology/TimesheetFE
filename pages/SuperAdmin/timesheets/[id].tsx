@@ -1,12 +1,27 @@
-import { withPageAuth } from "@components/generics/withPageAuth";
-import TimesheetAdmin from "@components/subpages/TimesheetAdmin";
-import moment from "moment";
-import { GetServerSideProps } from "next";
-import React from "react";
-import { TimeSheetMonthlyView, TimeSheetService } from "src/services";
+import HidePage from '@components/bits-utils/HidePage';
+import useWindowSize from '@components/generics/useWindowSize';
+import { withPageAuth } from '@components/generics/withPageAuth';
+import TimesheetAdmin from '@components/subpages/TimesheetAdmin';
+import moment from 'moment';
+import { GetServerSideProps } from 'next';
+import React from 'react';
+import { TimeSheetMonthlyView, TimeSheetService } from 'src/services';
+interface Size {
+    width: number | undefined;
+    height: number | undefined;
+}
 
 function SingleTimeSheet({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) {
-    return <TimesheetAdmin timeSheets={timeSheets} />;
+    const size: Size = useWindowSize();
+    return (
+        <>
+            {size.width != null && size.width <= 1245 ? (
+                <HidePage />
+            ) : (
+                <TimesheetAdmin timeSheets={timeSheets} />
+            )}
+        </>
+    );
 }
 
 export default SingleTimeSheet;
@@ -17,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
 
         let { date } = ctx.query;
         if (date === undefined) {
-            date = moment(new Date()).format("YYYY-MM-DD");
+            date = moment(new Date()).format('YYYY-MM-DD');
         }
 
         console.log({ date });

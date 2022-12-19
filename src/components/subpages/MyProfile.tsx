@@ -163,8 +163,12 @@ function MyProfile({ user }: { user: UserView }) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between" align="center">
-                    <HStack gap="1rem" align="center">
+                <Flex
+                    justify="space-between"
+                    align={['unset', 'center']}
+                    flexDirection={['column', 'row']}
+                >
+                    <HStack gap="1rem" align="center" mb={['1rem', '0']}>
                         <Circle
                             bgColor="brand.600"
                             size="4rem"
@@ -206,6 +210,7 @@ function MyProfile({ user }: { user: UserView }) {
                             borderColor="brand.600"
                             isLoading={showLoading}
                             onClick={() => widgetApi.current.openDialog()}
+                            w={['full', 'inherit']}
                         >
                             Change Profile Photo
                         </Button>
