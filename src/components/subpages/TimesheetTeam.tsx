@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {  useState } from 'react';
 import {
     format,
     startOfWeek,
@@ -22,11 +22,7 @@ import {
     Grid,
     Select,
     Input,
-    Tooltip,
-    InputRightElement,
     InputGroup,
-    Spinner,
-    HStack,
     useToast,
 } from '@chakra-ui/react';
 import TimeSheetEstimation, {
@@ -38,8 +34,9 @@ import {
     TimeSheetView,
 } from 'src/services';
 import moment from 'moment';
-import { FaCheck, FaCheckCircle } from 'react-icons/fa';
+import { FaCheck } from 'react-icons/fa';
 import { useRouter } from 'next/router';
+import Naira from '@components/generics/functions/Naira';
 
 interface approveDate {
     userId: string;
@@ -66,18 +63,23 @@ const TimesheetTeam = ({
     const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
         sheet as TimeSheetView[],
     );
-    const [checked, setChecked] = useState(false);
     const toast = useToast();
-    const totalHours = 60;
-    const actualPayout = Math.round(
-        ((timeSheets?.expectedPay as number) * totalHours) /
-            (timeSheets?.expectedWorkHours as number),
-    );
 
-    // let userId = "";
+    let totalHours: any[] = [] || 0;
+    monthlyTimesheets?.forEach((x) => {
+        totalHours.push(x.hours);
+    });
+    totalHours = totalHours.reduce((a, b) => a + b);
+    const actualPayout =
+        Math.round(
+            ((timeSheets?.expectedPay as number) *
+                (totalHours as unknown as number)) /
+                (timeSheets?.expectedWorkHours as number),
+        ) || 0;
+
     const [selected, setSelected] = useState<approveDate[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
-    // console.log({ selectedInput });
+    console.log({ selectedInput });
     // console.log({ selected });
 
     // function ApproveAllTimeSheet() {
@@ -107,9 +109,35 @@ const TimesheetTeam = ({
     //         />
     //     );
     // }
+
+    const addHours = async (userId, chosenDate, hours) => {
+        console.log({ userId, chosenDate, hours });
+
+        try {
+            const data = await TimeSheetService.addWorkHoursForADay(
+                userId,
+                chosenDate,
+                hours,
+            );
+            if (data.status) {
+                return;
+            }
+        } catch (error) {
+            console.log(error);
+            toast({
+                status: 'error',
+                title: 'An error occurred, please try again',
+            });
+        }
+    };
+
+    const reloadPage = () => {
+        router.reload();
+    };
+
     function ApproveSelected() {
         const [loading, setLoading] = useState(false);
-        const updateSelected = async () => {
+        const updateSelected = async (callback) => {
             selectedInput.forEach(async (select) => {
                 if (select.hours !== '' && select.userId !== undefined) {
                     setLoading(true);
@@ -120,17 +148,17 @@ const TimesheetTeam = ({
                     );
                 }
                 setLoading(false);
+                callback();
             });
-            // router.reload();
+            return;
         };
-        // console.log({ loading });
         return (
             <TimeSheetEstimationBtn
                 id={1}
                 loading={loading}
                 title="Update TimeSheet"
-                click={() => updateSelected()}
-                bg="brand.200"
+                click={() => updateSelected(reloadPage)}
+                bg="brand.400"
             />
         );
     }
@@ -156,24 +184,6 @@ const TimesheetTeam = ({
     //         console.log(error);
     //     }
     // };
-
-    const addHours = async (userId, chosenDate, hours) => {
-        console.log({ userId, chosenDate, hours });
-
-        try {
-            const data = await TimeSheetService.addWorkHoursForADay(
-                userId,
-                chosenDate,
-                hours,
-            );
-            if (data.status) {
-                console.log({ data });
-                return;
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     const nextMonth = async () => {
         await router.push({
@@ -279,7 +289,7 @@ const TimesheetTeam = ({
             </div>
         );
     };
-    const [loading, setLoading] = useState<boolean>(false);
+
     const generateDatesForCurrentWeek = (
         date,
         selectedDate,
@@ -298,12 +308,7 @@ const TimesheetTeam = ({
                     currentDate.toLocaleDateString(),
             )[0];
             const userId = timesheets?.employeeInformationId as string;
-            // console.log({ userId });
             const userDate = moment(timesheets?.date).format('YYYY-MM-DD');
-            // const [hours, setHours] = useState<string>("");
-            const [singleCheck, setSingleCheck] = useState(false);
-            const isApproved = timesheets?.isApproved;
-            // console.log({ singleCheck });
 
             week.push(
                 <Box
@@ -409,7 +414,7 @@ const TimesheetTeam = ({
                     fontWeight="500"
                     fontSize=".9rem"
                 >
-                    {sumOfHours}hr
+                    {sumOfHours} HR
                 </Flex>
             </>
         );
@@ -440,7 +445,6 @@ const TimesheetTeam = ({
 
         return <div className="dayContainer">{allWeeks}</div>;
     };
-
     return (
         <Box>
             <Box>
@@ -467,22 +471,22 @@ const TimesheetTeam = ({
                 <Grid templateColumns="repeat(6,1fr)" w="100%" mr="auto">
                     <TimeSheetEstimation
                         label="Expected Total Hours"
-                        data={timeSheets?.expectedWorkHours}
+                        data={`${timeSheets?.expectedWorkHours} HR`}
                         tip="Number of hours you are expected to work this month"
                     />
                     <TimeSheetEstimation
                         label="Total Hours Worked"
-                        data={totalHours}
+                        data={`${totalHours} HR`}
                         tip="Number of hours you worked this month"
                     />
                     <TimeSheetEstimation
                         label="Expected Payout"
-                        data={timeSheets?.expectedPay}
+                        data={Naira(timeSheets?.expectedPay)}
                         tip="Total amount you are expected to be paid this month"
                     />
                     <TimeSheetEstimation
                         label="Actual Payout"
-                        data={actualPayout}
+                        data={Naira(actualPayout)}
                         tip="Number of hours you worked this month x Rate per hour"
                     />
                     {/* <TimeSheetEstimationBtn

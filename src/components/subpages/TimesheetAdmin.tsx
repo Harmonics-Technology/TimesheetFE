@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import {
     format,
     startOfWeek,
@@ -22,11 +22,7 @@ import {
     Grid,
     Select,
     Input,
-    Tooltip,
-    InputRightElement,
     InputGroup,
-    Spinner,
-    HStack,
     useToast,
 } from '@chakra-ui/react';
 import TimeSheetEstimation, {
@@ -40,6 +36,7 @@ import {
 import moment from 'moment';
 import { FaCheck, FaCheckCircle } from 'react-icons/fa';
 import { useRouter } from 'next/router';
+import Naira from '@components/generics/functions/Naira';
 
 interface approveDate {
     userId: string;
@@ -68,82 +65,30 @@ const TimesheetAdmin = ({
     );
     // const [checked, setChecked] = useState(false);
     const toast = useToast();
-    const totalHours = 60;
-    const actualPayout = Math.round(
-        ((timeSheets?.expectedPay as number) * totalHours) /
-            (timeSheets?.expectedWorkHours as number),
-    );
+    let totalHours: any[] = [] || 0;
+    monthlyTimesheets?.forEach((x) => {
+        totalHours.push(x.hours);
+    });
+    totalHours = totalHours.reduce((a, b) => a + b);
+    const actualPayout =
+        Math.round(
+            ((timeSheets?.expectedPay as number) *
+                (totalHours as unknown as number)) /
+                (timeSheets?.expectedWorkHours as number),
+        ) || 0;
 
-    // let userId = "";
+    const [loading, setLoading] = useState(false);
+    const [allChecked, setAllChecked] = useState<boolean>(false);
+    console.log({ allChecked });
     const [selected, setSelected] = useState<approveDate[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
     // console.log({ selectedInput });
     // console.log({ selected });
 
-    function ApproveAllTimeSheet() {
-        const [loading, setLoading] = useState(false);
-        const updateSelected = async () => {
-            // setChecked(!checked);
-            monthlyTimesheets.forEach(async (timeSheet) => {
-                if (timeSheet.employeeInformation) {
-                    setLoading(true);
-                    await approveTimeSheetForADay(
-                        timeSheet.employeeInformationId,
-                        timeSheet.date,
-                    );
-                }
-                setLoading(false);
-                return;
-            });
-            // router.reload();
-        };
-        // console.log({ loading });
-        return (
-            <TimeSheetEstimationBtn
-                id={1}
-                loading={loading}
-                title="Approve all TimeSheet"
-                click={() => updateSelected()}
-            />
-        );
-    }
-    function ApproveSelected() {
-        const [loading, setLoading] = useState(false);
-        const updateSelected = async () => {
-            selected.forEach(async (select) => {
-                if (select.checked === true && select.userId) {
-                    setLoading(true);
-                    await approveTimeSheetForADay(
-                        select.userId,
-                        select.chosenDate,
-                    );
-                }
-                setLoading(false);
-            });
-            selectedInput.forEach(async (select) => {
-                if (select.hours !== '' && select.userId !== undefined) {
-                    setLoading(true);
-                    await addHours(
-                        select.userId,
-                        select.chosenDate,
-                        select.hours,
-                    );
-                }
-                setLoading(false);
-            });
-            // router.reload();
-        };
-        // console.log({ loading });
-        return (
-            <TimeSheetEstimationBtn
-                id={1}
-                loading={loading}
-                title="Update TimeSheet"
-                click={() => updateSelected()}
-                bg="brand.200"
-            />
-        );
-    }
+    const reloadPage = () => {
+        router.reload();
+    };
+
     const approveTimeSheetForADay = async (userId, chosenDate) => {
         try {
             const data = await TimeSheetService.approveTimeSheetForADay(
@@ -151,7 +96,6 @@ const TimesheetAdmin = ({
                 chosenDate,
             );
             if (data.status) {
-                console.log({ data });
                 return;
             }
             toast({
@@ -160,7 +104,6 @@ const TimesheetAdmin = ({
                 isClosable: true,
                 position: 'top-right',
             });
-            console.log({ data });
             return;
         } catch (error) {
             console.log(error);
@@ -177,13 +120,75 @@ const TimesheetAdmin = ({
                 hours,
             );
             if (data.status) {
-                console.log({ data });
                 return;
             }
         } catch (error) {
             console.log(error);
         }
     };
+
+    function ApproveAllTimeSheet() {
+        const updateSelected = async (callback) => {
+            setAllChecked(!allChecked);
+            monthlyTimesheets?.forEach(async (timeSheet) => {
+                if (timeSheet.employeeInformation) {
+                    setLoading(true);
+                    await approveTimeSheetForADay(
+                        timeSheet.employeeInformationId,
+                        timeSheet.date,
+                    );
+                }
+                setLoading(false);
+                callback();
+                return;
+            });
+        };
+        return (
+            <TimeSheetEstimationBtn
+                id={1}
+                loading={loading}
+                title="Approve all TimeSheet"
+                click={() => updateSelected(reloadPage)}
+            />
+        );
+    }
+    function ApproveSelected() {
+        const [loading, setLoading] = useState(false);
+        const updateSelected = async (callback) => {
+            selected.forEach(async (select) => {
+                if (select.checked === true && select.userId) {
+                    setLoading(true);
+                    await approveTimeSheetForADay(
+                        select.userId,
+                        select.chosenDate,
+                    );
+                }
+                setLoading(false);
+                callback();
+            });
+            selectedInput.forEach(async (select) => {
+                if (select.hours !== '' && select.userId !== undefined) {
+                    setLoading(true);
+                    await addHours(
+                        select.userId,
+                        select.chosenDate,
+                        select.hours,
+                    );
+                }
+                setLoading(false);
+                callback();
+            });
+        };
+        return (
+            <TimeSheetEstimationBtn
+                id={1}
+                loading={loading}
+                title="Update TimeSheet"
+                click={() => updateSelected(reloadPage)}
+                bg="brand.200"
+            />
+        );
+    }
 
     const nextMonth = async () => {
         await router.push({
@@ -307,12 +312,9 @@ const TimesheetAdmin = ({
                     currentDate.toLocaleDateString(),
             )[0];
             const userId = timesheets?.employeeInformationId as string;
-            // console.log({ userId });
             const userDate = moment(timesheets?.date).format('YYYY-MM-DD');
-            // const [hours, setHours] = useState<string>("");
             const [singleCheck, setSingleCheck] = useState(false);
             const isApproved = timesheets?.isApproved;
-            // console.log({ singleCheck });
 
             week.push(
                 <Box
@@ -332,26 +334,33 @@ const TimesheetAdmin = ({
                 >
                     <Flex>
                         <div>{format(currentDate, 'MMM, d')}</div>
-                        <Checkbox
-                            disabled={!isSameMonth(currentDate, activeDate)}
-                            ml=".5rem"
-                            onChange={() => {
-                                setSingleCheck(!singleCheck);
-                                selected.push({
-                                    userId: userId,
-                                    chosenDate: userDate,
-                                    checked: isApproved
-                                        ? singleCheck
-                                        : !singleCheck,
-                                });
-                            }}
-                            defaultChecked={
-                                timesheets?.isApproved || singleCheck || false
-                            }
-                            // isChecked={
-                            //     singleCheck || timesheets?.isApproved || checked
-                            // }
-                        ></Checkbox>
+                        {allChecked ? (
+                            <Checkbox
+                                disabled={!isSameMonth(currentDate, activeDate)}
+                                ml=".5rem"
+                                isChecked={true}
+                            ></Checkbox>
+                        ) : (
+                            <Checkbox
+                                disabled={!isSameMonth(currentDate, activeDate)}
+                                ml=".5rem"
+                                onChange={() => {
+                                    setSingleCheck(!singleCheck);
+                                    selected.push({
+                                        userId: userId,
+                                        chosenDate: userDate,
+                                        checked: isApproved
+                                            ? singleCheck
+                                            : !singleCheck,
+                                    });
+                                }}
+                                defaultChecked={
+                                    timesheets?.isApproved ||
+                                    singleCheck ||
+                                    false
+                                }
+                            ></Checkbox>
+                        )}
                     </Flex>
 
                     <InputGroup
@@ -398,9 +407,10 @@ const TimesheetAdmin = ({
             );
             currentDate = addDays(currentDate, 1);
             const dayHour = timesheets?.hours as number;
-            total.push(timesheets?.hours == undefined ? 0 : dayHour);
+            total.push(dayHour == undefined ? 0 : dayHour);
             sumOfHours = total.reduce((a, b) => a + b, 0);
         }
+
         return (
             <>
                 <Flex
@@ -418,7 +428,7 @@ const TimesheetAdmin = ({
                     fontWeight="500"
                     fontSize=".9rem"
                 >
-                    {sumOfHours}hr
+                    {sumOfHours} HR
                 </Flex>
             </>
         );
@@ -476,35 +486,28 @@ const TimesheetAdmin = ({
                 <Grid templateColumns="repeat(6,1fr)" w="100%" mr="auto">
                     <TimeSheetEstimation
                         label="Expected Total Hours"
-                        data={timeSheets?.expectedWorkHours}
+                        data={`${timeSheets?.expectedWorkHours} HR`}
                         tip="Number of hours you are expected to work this month"
                     />
                     <TimeSheetEstimation
                         label="Total Hours Worked"
-                        data={totalHours}
+                        data={`${totalHours} HR`}
                         tip="Number of hours you worked this month"
                     />
                     <TimeSheetEstimation
                         label="Expected Payout"
-                        data={timeSheets?.expectedPay}
+                        data={Naira(timeSheets?.expectedPay)}
                         tip="Total amount you are expected to be paid this month"
                     />
                     <TimeSheetEstimation
                         label="Actual Payout"
-                        data={actualPayout}
+                        data={Naira(actualPayout)}
                         tip="Number of hours you worked this month x Rate per hour"
                     />
-                    {/* <TimeSheetEstimationBtn
-                        id={1}
-                        loading={loading}
-                        title="Update TimeSheet"
-                        click={() => approveSelected()}
-                        bg="brand.200"
-                    /> */}
+
                     <ApproveSelected />
                     <ApproveAllTimeSheet />
                 </Grid>
-                {/* <HStack></HStack> */}
             </Box>
         </Box>
     );

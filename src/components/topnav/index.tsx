@@ -9,15 +9,18 @@ import {
     MenuList,
     Menu,
     VStack,
-} from "@chakra-ui/react";
-import { FaUser } from "react-icons/fa";
-import { FiLogOut } from "react-icons/fi";
-import { TfiMenuAlt } from "react-icons/tfi";
-import { BsBellFill } from "react-icons/bs";
-import { useRouter } from "next/router";
-import Cookies from "js-cookie";
-import { UserContext } from "@components/context/UserContext";
-import { useContext } from "react";
+    Circle,
+    Image,
+} from '@chakra-ui/react';
+import { FaUser } from 'react-icons/fa';
+import { FiLogOut } from 'react-icons/fi';
+import { TfiMenuAlt } from 'react-icons/tfi';
+import { BsBellFill } from 'react-icons/bs';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
+import { UserContext } from '@components/context/UserContext';
+import { useContext } from 'react';
+import { UserView } from 'src/services';
 interface topnavProps {
     setOpenSidenav: any;
     openSidenav: boolean;
@@ -28,12 +31,12 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     const { user } = useContext(UserContext);
     const role = user?.role;
     function Logout() {
-        Cookies.remove("user");
-        Cookies.remove("token");
-        router.push("/login");
+        Cookies.remove('user');
+        Cookies.remove('token');
+        router.push('/login');
     }
-    const curPage = router.pathname.split("/").at(-1);
-    const idPage = router.pathname.split("/").at(-2);
+    const curPage = router.pathname.split('/').at(-1);
+    const idPage = router.pathname.split('/').at(-2);
     return (
         <Flex
             justify="space-between"
@@ -59,29 +62,40 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                     fontSize="1rem"
                     textTransform="capitalize"
                 >
-                    {curPage == "[id]"
-                        ? idPage?.replace("-", " ")
-                        : curPage?.replace("-", " ")}
+                    {curPage == '[id]'
+                        ? idPage?.replace('-', ' ')
+                        : curPage?.replace('-', ' ')}
                 </Text>
             </Box>
             <VStack alignItems="flex-end">
                 <Box
                     cursor="pointer"
-                    display={["block", "none"]}
+                    display={['block', 'none']}
                     onClick={() => setOpenSidenav(!openSidenav)}
                 >
                     <TfiMenuAlt />
                 </Box>
                 <Stack
                     direction="row"
-                    gap={[".5rem", "2rem"]}
+                    gap={['.5rem', '2rem']}
                     color="gray.500"
                     align="center"
                 >
                     <Menu>
                         <MenuButton>
                             <HStack>
-                                <FaUser />
+                                <Circle size="2rem" overflow="hidden">
+                                    {user?.profilePicture ? (
+                                        <Image
+                                            src={user?.profilePicture}
+                                            w="full"
+                                            h="full"
+                                            objectFit="cover"
+                                        />
+                                    ) : (
+                                        <FaUser />
+                                    )}
+                                </Circle>
                                 <Text noOfLines={1} textTransform="capitalize">
                                     {user?.firstName}
                                 </Text>
@@ -90,7 +104,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                         <MenuList>
                             <MenuItem
                                 flexDirection="column"
-                                _hover={{ bgColor: "unset" }}
+                                _hover={{ bgColor: 'unset' }}
                             >
                                 {/* <Circle
                                 bgColor="brand.600"
