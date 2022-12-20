@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
+import type { RejectTimeSheetModel } from '../models/RejectTimeSheetModel';
 import type { TimeSheetApprovedViewPagedCollectionStandardResponse } from '../models/TimeSheetApprovedViewPagedCollectionStandardResponse';
 import type { TimeSheetHistoryViewPagedCollectionStandardResponse } from '../models/TimeSheetHistoryViewPagedCollectionStandardResponse';
 import type { TimeSheetMonthlyViewIEnumerableStandardResponse } from '../models/TimeSheetMonthlyViewIEnumerableStandardResponse';
@@ -137,6 +138,39 @@ search?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static rejectTimeSheetForADay(
+requestBody?: RejectTimeSheetModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/TimeSheet/reject',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param employeeInformationId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generatePayroll(
+employeeInformationId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/TimeSheet/generate-payroll',
+            query: {
+                'employeeInformationId': employeeInformationId,
             },
         });
     }

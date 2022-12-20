@@ -41,7 +41,7 @@ function MenuItem({
                     onClick={() => setOpenMenu(!openMenu)}
                     overflow="hidden"
                     transition="all .35s ease-in-out"
-                    maxH={openMenu ? '13rem' : '2rem'}
+                    maxH={openMenu ? '20rem' : '2rem'}
                 >
                     <Flex
                         justify="space-between"

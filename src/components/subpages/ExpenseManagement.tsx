@@ -13,40 +13,40 @@ import {
     DrawerFooter,
     useToast,
     Checkbox,
-} from "@chakra-ui/react";
-import DrawerWrapper from "@components/bits-utils/Drawer";
+} from '@chakra-ui/react';
+import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
     ExpenseActions,
     TableData,
     TableState,
-} from "@components/bits-utils/TableData";
-import Tables from "@components/bits-utils/Tables";
-import React from "react";
+} from '@components/bits-utils/TableData';
+import Tables from '@components/bits-utils/Tables';
+import React from 'react';
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { RiMailSendFill } from "react-icons/ri";
-import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { RiMailSendFill } from 'react-icons/ri';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import {
     ExpenseModel,
     ExpenseTypeView,
     ExpenseView,
     FinancialService,
     UserView,
-} from "src/services";
-import Pagination from "@components/bits-utils/Pagination";
-import { useRouter } from "next/router";
-import { SelectrixBox } from "@components/bits-utils/Selectrix";
-import { PrimaryTextarea } from "@components/bits-utils/PrimaryTextArea";
-import FilterSearch from "@components/bits-utils/FilterSearch";
+} from 'src/services';
+import Pagination from '@components/bits-utils/Pagination';
+import { useRouter } from 'next/router';
+import { SelectrixBox } from '@components/bits-utils/Selectrix';
+import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
+import FilterSearch from '@components/bits-utils/FilterSearch';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
     teamMemberId: yup.string().required(),
     expenseTypeId: yup.string().required(),
     currency: yup.string().required(),
-    amount: yup.string().required(),
+    amount: yup.number().required(),
 });
 interface expenseProps {
     expenses: ExpenseView[];
@@ -63,7 +63,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
         formState: { errors, isSubmitting },
     } = useForm<ExpenseModel>({
         resolver: yupResolver(schema),
-        mode: "all",
+        mode: 'all',
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -75,9 +75,9 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
             if (result.status) {
                 toast({
                     title: `Successfully created`,
-                    status: "success",
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 onClose();
                 router.reload();
@@ -85,35 +85,20 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             return;
         } catch (err) {
             toast({
-                title: "An error occurred",
-                status: "error",
+                title: 'An error occurred',
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         }
     };
-
-    function setFilter(filter: string) {
-        router.push({
-            query: {
-                limit: filter,
-            },
-        });
-    }
-    function search(term: string) {
-        router.push({
-            query: {
-                search: term,
-            },
-        });
-    }
     return (
         <>
             <Box
@@ -146,14 +131,14 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                 <FilterSearch />
                 <Tables
                     tableHead={[
-                        "Name",
-                        "Description",
-                        "Expense Type",
-                        "Currency",
-                        "Amount",
-                        "Status",
-                        "Action",
-                        "...",
+                        'Name',
+                        'Description',
+                        'Expense Type',
+                        'Currency',
+                        'Amount',
+                        'Status',
+                        'Action',
+                        '...',
                     ]}
                 >
                     <>
@@ -178,11 +163,11 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
             <DrawerWrapper
                 onClose={onClose}
                 isOpen={isOpen}
-                title={"Add New Expense"}
+                title={'Add New Expense'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid
-                        templateColumns={["1fr", "repeat(2, 1fr)"]}
+                        templateColumns={['1fr', 'repeat(2, 1fr)']}
                         gap="1rem 2rem"
                     >
                         <SelectrixBox<ExpenseModel>
@@ -214,6 +199,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                         <PrimaryInput<ExpenseModel>
                             label="Amount"
                             name="amount"
+                            type="number"
                             error={errors.amount}
                             placeholder=""
                             defaultValue=""
@@ -227,8 +213,8 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                             keyLabel="label"
                             label="Currency"
                             options={[
-                                { id: "CAD", label: "CAD" },
-                                { id: "NGN", label: "NGN" },
+                                { id: 'CAD', label: 'CAD' },
+                                { id: 'NGN', label: 'NGN' },
                             ]}
                         />
                     </Grid>

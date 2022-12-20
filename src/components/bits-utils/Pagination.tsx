@@ -1,7 +1,7 @@
-import { Flex, Text, Circle, HStack, Button } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import React from "react";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { Flex, Text, Circle, HStack, Button } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 interface pageOptions {
     data: any;
@@ -25,10 +25,10 @@ function Pagination({ data }: pageOptions) {
     const previous = data?.previous?.href;
     const last = data?.last?.href;
 
-    const paginate = (direction: "next" | "previous" | "last") => {
-        let link = "";
-        if (direction == "previous" && previous != null) {
-            link = previous?.split("?")[1] ?? false;
+    const paginate = (direction: 'next' | 'previous' | 'last') => {
+        let link = '';
+        if (direction == 'previous' && previous != null) {
+            link = previous?.split('?')[1] ?? false;
             router.push({
                 query: {
                     url: link,
@@ -37,8 +37,8 @@ function Pagination({ data }: pageOptions) {
                 },
             });
         }
-        if (direction == "next" && next != null) {
-            link = next?.split("?")[1] ?? false;
+        if (direction == 'next' && next != null) {
+            link = next?.split('?')[1] ?? false;
             router.push({
                 query: {
                     url: link,
@@ -47,13 +47,13 @@ function Pagination({ data }: pageOptions) {
                 },
             });
         }
-        if (direction == "last" && last != null) {
-            link = last?.split("?")[1] ?? false;
+        if (direction == 'last' && last != null) {
+            link = last?.split('?')[1] ?? false;
             router.push({
                 query: {
-                    url: link,
+                    // url: link,
                     limit: data.limit,
-                    offset: data.previousOffset,
+                    offset: data.nextOffset,
                 },
             });
         }
@@ -64,7 +64,7 @@ function Pagination({ data }: pageOptions) {
             align="center"
             p="1.5rem 0 .5rem"
             gap="1rem"
-            flexDirection={["column", "row"]}
+            flexDirection={['column', 'row']}
         >
             <Text fontSize=".9rem" color="brand.300" mb="0">
                 Showing {current} to {pageSize} of {total} entries
@@ -81,7 +81,7 @@ function Pagination({ data }: pageOptions) {
                         padding="0"
                         borderRadius="50%"
                         disabled={!previous}
-                        onClick={() => paginate("previous")}
+                        onClick={() => paginate('previous')}
                     >
                         <FaAngleLeft fontSize=".6rem" />
                     </Button>
@@ -99,7 +99,7 @@ function Pagination({ data }: pageOptions) {
                         padding="0"
                         borderRadius="50%"
                         disabled={!previous}
-                        onClick={() => paginate("last")}
+                        onClick={() => paginate('last')}
                     >
                         {totalPages}
                     </Button>
@@ -114,7 +114,7 @@ function Pagination({ data }: pageOptions) {
                         padding="0"
                         borderRadius="50%"
                         disabled={!next}
-                        onClick={() => paginate("next")}
+                        onClick={() => paginate('next')}
                     >
                         <FaAngleRight fontSize=".6rem" />
                     </Button>

@@ -20,4 +20,21 @@ export class DashboardService {
         });
     }
 
+    /**
+     * @param employeeInformationId 
+     * @returns DashboardViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getTeamMemberMetrics(
+employeeInformationId?: string,
+): CancelablePromise<DashboardViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Dashboard/team-member-metrics',
+            query: {
+                'employeeInformationId': employeeInformationId,
+            },
+        });
+    }
+
 }

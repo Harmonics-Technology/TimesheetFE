@@ -7,6 +7,7 @@ export type TeamMemberModel = {
     lastName?: string | null;
     email?: string | null;
     password?: string | null;
+    clientId?: string | null;
     role: string;
     phoneNumber?: string | null;
     organizationName?: string | null;
@@ -15,7 +16,6 @@ export type TeamMemberModel = {
     organizationAddress?: string | null;
     id?: string;
     payRollTypeId?: number;
-    clientId?: string | null;
     supervisorId?: string | null;
     ratePerHour?: number;
     dateOfBirth?: string;

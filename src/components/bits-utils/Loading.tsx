@@ -1,5 +1,5 @@
-import { Flex, Spinner } from "@chakra-ui/react";
-import React from "react";
+import { Flex, Spinner } from '@chakra-ui/react';
+import React from 'react';
 
 function Loading({ loading }: { loading: boolean }) {
     return (
@@ -13,7 +13,8 @@ function Loading({ loading }: { loading: boolean }) {
             left="0"
             top="0"
             zIndex="888"
-            display={loading ? "flex" : "none"}
+            pointerEvents="none"
+            display={loading ? 'flex' : 'none'}
         >
             <Spinner size="xl" color="black" />
         </Flex>

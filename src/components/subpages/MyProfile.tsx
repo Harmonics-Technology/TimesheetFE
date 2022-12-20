@@ -24,6 +24,8 @@ import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { DateObject } from 'react-multi-date-picker';
 import moment from 'moment';
 import { Widget } from '@uploadcare/react-widget';
+import { useRouter } from 'next/router';
+import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 
 const schema = yup.object().shape({
     // firstName: yup.string().required(),
@@ -49,7 +51,7 @@ function MyProfile({ user }: { user: UserView }) {
             isActive: user?.isActive,
             firstName: user?.firstName,
             lastName: user?.lastName,
-            organizationAddress: user?.organizationAddress,
+            address: user?.address,
             phoneNumber: user?.phoneNumber,
             organizationName: user?.organizationName,
             profilePicture: user?.profilePicture,
@@ -59,7 +61,12 @@ function MyProfile({ user }: { user: UserView }) {
     const [showLoading, setShowLoading] = useState(false);
     const [pictureUrl, setPictureUrl] = useState<any>('');
     const widgetApi = useRef<any>();
+    const router = useRouter();
 
+    const reloadPage = () => {
+        setShowLoading(false);
+        router.reload();
+    };
     const updatePicture = async (data: UpdateUserModel, info, callback) => {
         data.firstName = user?.firstName;
         data.lastName = user?.lastName;
@@ -114,7 +121,7 @@ function MyProfile({ user }: { user: UserView }) {
             file.done((info) => {
                 console.log('File uploaded: ', info), setPictureUrl(info);
                 if (info) {
-                    updatePicture(user, info, () => setShowLoading(false));
+                    updatePicture(user, info, reloadPage);
                     // setShowLoading(false);
                 }
             });
@@ -137,6 +144,7 @@ function MyProfile({ user }: { user: UserView }) {
                     position: 'top-right',
                 });
                 Cookies.set('user', JSON.stringify(result.data));
+                router.reload();
                 return;
             }
             toast({
@@ -207,12 +215,14 @@ function MyProfile({ user }: { user: UserView }) {
                             fontSize=".8rem"
                             borderRadius="0"
                             border="2px solid"
-                            borderColor="brand.600"
+                            // borderColor="brand.600"
                             isLoading={showLoading}
                             onClick={() => widgetApi.current.openDialog()}
                             w={['full', 'inherit']}
                         >
-                            Change Profile Photo
+                            {user.profilePicture == null
+                                ? 'Add Profile Photo'
+                                : 'Change Profile Photo'}
                         </Button>
                         <Box display="none">
                             <Widget
@@ -276,9 +286,9 @@ function MyProfile({ user }: { user: UserView }) {
                             /> */}
                             <PrimaryDate<UpdateUserModel>
                                 control={control}
-                                name="isActive"
+                                name="dateOfBirth"
                                 label="Date of Birth"
-                                error={errors.isActive}
+                                error={errors.dateOfBirth}
                                 placeholder={moment(user?.dateOfBirth).format(
                                     'DD MM YYYY',
                                 )}
@@ -311,21 +321,18 @@ function MyProfile({ user }: { user: UserView }) {
                             />
                             <PrimaryInput<UpdateUserModel>
                                 label="Address"
-                                name="organizationAddress"
-                                error={errors.organizationAddress}
+                                name="address"
+                                error={errors.address}
                                 placeholder=""
-                                defaultValue={
-                                    user?.organizationAddress as string
-                                }
+                                defaultValue={user?.address as string}
                                 register={register}
                             />
-                            <PrimaryInput<UpdateUserModel>
+                            <PrimaryPhoneInput<UpdateUserModel>
                                 label="Phone No."
                                 name="phoneNumber"
                                 error={errors.phoneNumber}
-                                placeholder=""
-                                defaultValue={user?.phoneNumber as string}
-                                register={register}
+                                placeholder={user?.phoneNumber as string}
+                                control={control}
                             />
                         </Grid>
                     </Box>

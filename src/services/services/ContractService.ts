@@ -120,4 +120,25 @@ search?: string,
         });
     }
 
+    /**
+     * @param employeeInformationId 
+     * @returns ContractViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listTeamMemberContracts(
+employeeInformationId?: string,
+): CancelablePromise<ContractViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Contract/team-member/contracts',
+            query: {
+                'employeeInformationId': employeeInformationId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
 }

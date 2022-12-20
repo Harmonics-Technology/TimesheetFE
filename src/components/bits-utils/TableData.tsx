@@ -7,20 +7,20 @@ import {
     Td,
     useToast,
     Link,
-} from "@chakra-ui/react";
-import axios from "axios";
-import NextLink from "next/link";
-import { useRouter } from "next/router";
-import React from "react";
-import { AiOutlineDownload } from "react-icons/ai";
-import { FaEllipsisH } from "react-icons/fa";
+} from '@chakra-ui/react';
+import axios from 'axios';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { AiOutlineDownload } from 'react-icons/ai';
+import { FaEllipsisH } from 'react-icons/fa';
 import {
     FinancialService,
     InitiateResetModel,
     SettingsService,
     UserService,
-} from "src/services";
-import fileDownload from "js-file-download";
+} from 'src/services';
+import fileDownload from 'js-file-download';
 
 export function TableData({ name }: { name: string | undefined | null }) {
     return (
@@ -41,7 +41,7 @@ export function TableStatus({ name }: { name: boolean | undefined }) {
         <td>
             <Box
                 fontSize="10px"
-                bgColor={name == true ? "brand.400" : "red"}
+                bgColor={name == true ? 'brand.400' : 'red'}
                 borderRadius="4px"
                 color="white"
                 fontWeight="bold"
@@ -50,7 +50,7 @@ export function TableStatus({ name }: { name: boolean | undefined }) {
                 cursor="pointer"
                 textTransform="uppercase"
             >
-                {name == true ? "Active" : "Inactive"}
+                {name == true ? 'Active' : 'Inactive'}
             </Box>
         </td>
     );
@@ -60,7 +60,7 @@ export function TableState({ name }: { name: string }) {
         <td>
             <Box
                 fontSize="10px"
-                bgColor={name == "ACTIVE" ? "brand.400" : "red"}
+                bgColor={name == 'ACTIVE' ? 'brand.400' : 'red'}
                 borderRadius="4px"
                 color="white"
                 fontWeight="bold"
@@ -69,7 +69,7 @@ export function TableState({ name }: { name: string }) {
                 cursor="pointer"
                 textTransform="uppercase"
             >
-                {name || "Inactive"}
+                {name || 'Inactive'}
             </Box>
         </td>
     );
@@ -80,10 +80,10 @@ export function TableContract({ url }: { url: any }) {
         console.log(url);
         axios
             .get(url, {
-                responseType: "blob",
+                responseType: 'blob',
             })
             .then((res) => {
-                fileDownload(res.data, `${url.split(" ").pop()}`);
+                fileDownload(res.data, `${url.split(' ').pop()}`);
             });
     };
     return (
@@ -118,18 +118,18 @@ export function TableActions({
             if (result.status) {
                 // console.log({ result });
                 toast({
-                    title: "Invite Sent",
-                    status: "success",
+                    title: 'Invite Sent',
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 return;
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         } catch (error) {
             console.log({ error });
@@ -149,7 +149,7 @@ export function TableActions({
                         <FaEllipsisH />
                     </Box>
                 </MenuButton>
-                <MenuList>
+                <MenuList w="full">
                     <MenuItem onClick={() => resendInvite({ email })} w="full">
                         Resend Invite
                     </MenuItem>
@@ -205,10 +205,14 @@ export function TableContractOptions({
                         <FaEllipsisH />
                     </Box>
                 </MenuButton>
-                <MenuList>
-                    <MenuItem onClick={() => setExtend(data)}>Extend</MenuItem>
-                    <MenuItem onClick={() => setModify(data)}>Modify</MenuItem>
-                    <MenuItem onClick={() => terminate(data)}>
+                <MenuList w="full">
+                    <MenuItem onClick={() => setExtend(data)} w="full">
+                        Extend
+                    </MenuItem>
+                    <MenuItem onClick={() => setModify(data)} w="full">
+                        Modify
+                    </MenuItem>
+                    <MenuItem onClick={() => terminate(data)} w="full">
                         Terminate
                     </MenuItem>
                 </MenuList>
@@ -219,9 +223,11 @@ export function TableContractOptions({
 export function TableContractAction({
     id,
     timeSheets,
+    supervisor,
 }: {
     id: any;
     timeSheets?: boolean;
+    supervisor?: boolean;
 }) {
     return (
         <td>
@@ -240,9 +246,23 @@ export function TableContractAction({
                 <MenuList>
                     <MenuItem>
                         {timeSheets === true ? (
-                            <Link href={`/SuperAdmin/timesheets/${id}`}>
-                                View Timesheet
-                            </Link>
+                            <NextLink
+                                href={`/SuperAdmin/timesheets/${id}`}
+                                passHref
+                            >
+                                <Link width="100%" textDecor="none !important">
+                                    View Timesheet
+                                </Link>
+                            </NextLink>
+                        ) : supervisor === true ? (
+                            <NextLink
+                                href={`/Supervisor/timesheets/${id}`}
+                                passHref
+                            >
+                                <Link width="100%" textDecor="none !important">
+                                    View Timesheet
+                                </Link>
+                            </NextLink>
                         ) : (
                             <NextLink
                                 href={`/SuperAdmin/profile-management/team-members/${id}`}
@@ -270,18 +290,18 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
                 console.log({ result });
                 toast({
                     title: result.message,
-                    status: "success",
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 router.reload();
                 return;
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         } catch (error) {
             console.log({ error });
@@ -301,9 +321,9 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
                         <FaEllipsisH />
                     </Box>
                 </MenuButton>
-                <MenuList>
-                    <MenuItem onClick={() => toggleStatus(id)}>
-                        {status == "ACTIVE" ? "Deactivate" : "Activate"}
+                <MenuList w="full">
+                    <MenuItem onClick={() => toggleStatus(id)} w="full">
+                        {status == 'ACTIVE' ? 'Deactivate' : 'Activate'}
                     </MenuItem>
                 </MenuList>
             </Menu>
@@ -321,18 +341,18 @@ export function ExpenseActions({ id }: { id: any }) {
                 console.log({ result });
                 toast({
                     title: result.message,
-                    status: "success",
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 router.reload();
                 return;
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         } catch (error) {
             console.log({ error });
@@ -345,18 +365,18 @@ export function ExpenseActions({ id }: { id: any }) {
                 console.log({ result });
                 toast({
                     title: result.message,
-                    status: "success",
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 router.reload();
                 return;
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         } catch (error) {
             console.log({ error });
@@ -376,9 +396,13 @@ export function ExpenseActions({ id }: { id: any }) {
                         <FaEllipsisH />
                     </Box>
                 </MenuButton>
-                <MenuList>
-                    <MenuItem onClick={() => Approve(id)}>Approve</MenuItem>
-                    <MenuItem onClick={() => Decline(id)}>Reject</MenuItem>
+                <MenuList w="full">
+                    <MenuItem onClick={() => Approve(id)} w="full">
+                        Approve
+                    </MenuItem>
+                    <MenuItem onClick={() => Decline(id)} w="full">
+                        Reject
+                    </MenuItem>
                 </MenuList>
             </Menu>
         </td>

@@ -1,6 +1,7 @@
 import { Box, HStack, VStack, Text, Divider, Image } from '@chakra-ui/react';
 import { UserContext } from '@components/context/UserContext';
 import MenuItem from '@components/menu-item';
+import { useDetectClickOutside } from 'react-detect-click-outside';
 import Link from 'next/link';
 import { useContext, useEffect } from 'react';
 import {
@@ -14,6 +15,7 @@ import {
     FaUsers,
 } from 'react-icons/fa';
 import { RiLineChartFill } from 'react-icons/ri';
+import { MdOutlineSupervisorAccount } from 'react-icons/md';
 interface sidenavProps {
     openSidenav: boolean;
     setOpenSidenav: any;
@@ -23,6 +25,10 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
     const { user } = useContext(UserContext);
     console.log({ user });
     const role = user?.role?.replace(' ', '');
+    const closeToggle = () => {
+        setOpenSidenav(false);
+    };
+    const ref = useDetectClickOutside({ onTriggered: closeToggle });
 
     return (
         <Box
@@ -37,7 +43,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
             pt="2rem"
             zIndex="999"
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
-            
+            // ref={ref}
         >
             <Link href="/" passHref>
                 <HStack>
@@ -71,6 +77,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={[
                             'admin',
                             'clients',
+                            'supervisors',
                             'team members',
                             'payment partners',
                         ]}
@@ -190,15 +197,6 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={[]}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                    />
-                    <MenuItem
-                        linkName="mgt-timesheets"
-                        menuTitle="Manage My Timesheets"
-                        icon={<FaCalendar opacity=".8" />}
-                        option={true}
-                        role={role}
-                        setOpenSidenav={setOpenSidenav}
-                        dropDown={['my timesheet', 'my timesheet history']}
                     />
                     <MenuItem
                         linkName="timesheets"
@@ -389,6 +387,15 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         linkName="team-members"
                         menuTitle="My Team"
                         icon={<FaUsers opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                    />
+                    <MenuItem
+                        linkName="supervisors"
+                        menuTitle="My Supervisors"
+                        icon={<MdOutlineSupervisorAccount opacity=".8" />}
                         option={false}
                         dropDown={[]}
                         role={role}

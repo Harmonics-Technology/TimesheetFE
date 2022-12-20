@@ -7,32 +7,32 @@ import {
     Spinner,
     Text,
     useToast,
-} from "@chakra-ui/react";
-import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
-import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { VscSaveAs } from "react-icons/vsc";
+} from '@chakra-ui/react';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
+import React, { useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { VscSaveAs } from 'react-icons/vsc';
 import {
     ContractViewPagedCollectionStandardResponse,
     TeamMemberModel,
     UserService,
     UserView,
-} from "src/services";
-import InputBlank from "@components/bits-utils/InputBlank";
-import { useRouter } from "next/router";
-import { PrimaryPhoneInput } from "@components/bits-utils/PrimaryPhoneInput";
-import { SelectrixBox } from "@components/bits-utils/Selectrix";
-import { PrimaryDate } from "@components/bits-utils/PrimaryDate";
-import { PrimaryRadio } from "@components/bits-utils/PrimaryRadio";
-import ContractTable from "@components/bits-utils/ContractTable";
-import { DateObject } from "react-multi-date-picker";
-import moment from "moment";
-import { Widget } from "@uploadcare/react-widget";
-import { AiOutlineDownload } from "react-icons/ai";
-import axios from "axios";
-import fileDownload from "js-file-download";
+} from 'src/services';
+import InputBlank from '@components/bits-utils/InputBlank';
+import { useRouter } from 'next/router';
+import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
+import { SelectrixBox } from '@components/bits-utils/Selectrix';
+import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
+import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
+import ContractTable from '@components/bits-utils/ContractTable';
+import { DateObject } from 'react-multi-date-picker';
+import moment from 'moment';
+import { Widget } from '@uploadcare/react-widget';
+import { AiOutlineDownload } from 'react-icons/ai';
+import axios from 'axios';
+import fileDownload from 'js-file-download';
 
 const schema = yup.object().shape({});
 interface TeamProfileProps {
@@ -56,7 +56,7 @@ function TeamProfile({
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(schema),
-        mode: "all",
+        mode: 'all',
         defaultValues: {
             role: userProfile?.role as unknown as string,
             isActive: userProfile?.isActive,
@@ -80,11 +80,11 @@ function TeamProfile({
     const toast = useToast();
     console.log({ userProfile });
     const payroll = userProfile?.employeeInformation?.payrollType;
-    const payrolls = watch("payRollTypeId");
+    const payrolls = watch('payRollTypeId');
 
-    const [icd, setIcd] = useState<any>("");
-    const [voidCheck, setVoidCheck] = useState<any>("");
-    const [inc, setInc] = useState<any>("");
+    const [icd, setIcd] = useState<any>('');
+    const [voidCheck, setVoidCheck] = useState<any>('');
+    const [inc, setInc] = useState<any>('');
     const [showLoadingB, setShowLoadingB] = useState(false);
     const [showLoadingC, setShowLoadingC] = useState(false);
     const [showLoadingD, setShowLoadingD] = useState(false);
@@ -95,12 +95,12 @@ function TeamProfile({
     const showLoadingStateB = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log("File progress: ", info.progress),
+                console.log('File progress: ', info.progress),
                     setShowLoadingB(true);
             });
             file.done((info) => {
                 setShowLoadingB(false),
-                    console.log("File uploaded: ", info),
+                    console.log('File uploaded: ', info),
                     setIcd(info);
             });
         }
@@ -108,12 +108,12 @@ function TeamProfile({
     const showLoadingStateC = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log("File progress: ", info.progress),
+                console.log('File progress: ', info.progress),
                     setShowLoadingC(true);
             });
             file.done((info) => {
                 setShowLoadingC(false),
-                    console.log("File uploaded: ", info),
+                    console.log('File uploaded: ', info),
                     setVoidCheck(info);
             });
         }
@@ -121,12 +121,12 @@ function TeamProfile({
     const showLoadingStateD = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log("File progress: ", info.progress),
+                console.log('File progress: ', info.progress),
                     setShowLoadingD(true);
             });
             file.done((info) => {
                 setShowLoadingD(false),
-                    console.log("File uploaded: ", info),
+                    console.log('File uploaded: ', info),
                     setInc(info);
             });
         }
@@ -136,54 +136,55 @@ function TeamProfile({
         console.log(url);
         axios
             .get(url, {
-                responseType: "blob",
+                responseType: 'blob',
             })
             .then((res) => {
-                fileDownload(res.data, `${url.split(" ").pop()}`);
+                fileDownload(res.data, `${url.split(' ').pop()}`);
             });
     };
 
     const onSubmit = async (data: TeamMemberModel) => {
-        data.isActive = data.isActive === ("true" as unknown as boolean);
-        if (icd !== "") {
+        // data.isActive = data.isActive === ('true' as unknown as boolean);
+        if (icd !== '') {
             data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
         }
-        if (voidCheck !== "") {
+        if (voidCheck !== '') {
             data.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
         }
-        if (inc !== "") {
+        if (inc !== '') {
             data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
         }
+        data.clientId = null;
         console.log({ data });
 
-        // try {
-        //     const result = await UserService.updateTeamMember(data);
-        //     // console.log({ result });
-        //     if (result.status) {
-        //         toast({
-        //             title: "Profile Update Success",
-        //             status: "success",
-        //             isClosable: true,
-        //             position: "top-right",
-        //         });
-        //         router.reload();
-        //         return;
-        //     }
-        //     toast({
-        //         title: result.message,
-        //         status: "error",
-        //         isClosable: true,
-        //         position: "top-right",
-        //     });
-        // } catch (error) {
-        //     console.log(error);
-        //     toast({
-        //         title: `Check your network connection and try again`,
-        //         status: "error",
-        //         isClosable: true,
-        //         position: "top-right",
-        //     });
-        // }
+        try {
+            const result = await UserService.updateTeamMember(data);
+            // console.log({ result });
+            if (result.status) {
+                toast({
+                    title: 'Profile Update Success',
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.reload();
+                return;
+            }
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error) {
+            console.log(error);
+            toast({
+                title: `Check your network connection and try again`,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
     };
     return (
         <Box
@@ -195,7 +196,7 @@ function TeamProfile({
         >
             <form>
                 <Grid
-                    templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                    templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                     gap="1rem 2rem"
                 >
                     <PrimaryInput<TeamMemberModel>
@@ -243,11 +244,11 @@ function TeamProfile({
                         label="Date of Birth"
                         error={errors.dateOfBirth}
                         placeholder={moment(userProfile?.dateOfBirth).format(
-                            "DD MM YYYY",
+                            'DD MM YYYY',
                         )}
-                        max={new DateObject().subtract(1, "days")}
+                        max={new DateObject().subtract(1, 'days')}
                     />
-                    <SelectrixBox<TeamMemberModel>
+                    {/* <SelectrixBox<TeamMemberModel>
                         control={control}
                         name="clientId"
                         error={errors.clientId}
@@ -260,19 +261,21 @@ function TeamProfile({
                         }
                         options={clients}
                     />
-                    <SelectrixBox<TeamMemberModel>
-                        control={control}
-                        name="supervisorId"
-                        error={errors.supervisorId}
-                        keys="id"
-                        keyLabel="fullName"
-                        label="Supervisor"
-                        placeholder={
-                            userProfile?.employeeInformation?.supervisor
-                                ?.fullName as string
-                        }
-                        options={supervisor}
-                    />
+                    {supervisors !== undefined && (
+                        <SelectrixBox<TeamMemberModel>
+                            control={control}
+                            name="supervisorId"
+                            error={errors.supervisorId}
+                            keys="id"
+                            keyLabel="fullName"
+                            label="Supervisor"
+                            placeholder={
+                                userProfile?.employeeInformation?.supervisor
+                                    ?.fullName as string
+                            }
+                            options={supervisors}
+                        />
+                    )} */}
                     <SelectrixBox<TeamMemberModel>
                         control={control}
                         name="role"
@@ -280,10 +283,11 @@ function TeamProfile({
                         keys="id"
                         keyLabel="label"
                         label="Role"
+                        disabled={true}
                         placeholder={userProfile?.role as string}
                         options={[
-                            { id: "Team Member", label: "Team Member" },
-                            { id: "Supervisor", label: "Supervisor/Manager" },
+                            { id: 'Team Member', label: 'Team Member' },
+                            { id: 'Supervisor', label: 'Supervisor/Manager' },
                         ]}
                     />
                     <SelectrixBox<TeamMemberModel>
@@ -295,12 +299,12 @@ function TeamProfile({
                         label="Profile Status"
                         placeholder={
                             userProfile?.isActive === true
-                                ? "Active"
-                                : "Not Active"
+                                ? 'Active'
+                                : 'Not Active'
                         }
                         options={[
-                            { id: "true", label: "Active" },
-                            { id: "false", label: "Not Active" },
+                            { id: 'true', label: 'Active' },
+                            { id: 'false', label: 'Not Active' },
                         ]}
                     />
                 </Grid>
@@ -323,7 +327,7 @@ function TeamProfile({
                         </Text>
                     </Flex>
                     <Grid
-                        templateColumns={["repeat(1,1fr)", "repeat(3,1fr)"]}
+                        templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                         gap="1rem 2rem"
                     >
                         <SelectrixBox<TeamMemberModel>
@@ -336,21 +340,21 @@ function TeamProfile({
                             // disabled={true}
                             placeholder={
                                 (userProfile?.employeeInformation
-                                    ?.payrollType as string) || "Please Select"
+                                    ?.payrollType as string) || 'Please Select'
                             }
                             options={[
                                 {
-                                    id: "1",
-                                    label: "Onshore Contract",
+                                    id: '1',
+                                    label: 'Onshore Contract',
                                 },
                                 {
-                                    id: "2",
-                                    label: "Offshore contract",
+                                    id: '2',
+                                    label: 'Offshore contract',
                                 },
                             ]}
                         />
-                        {(payroll == "ONSHORE" && payrolls == undefined) ||
-                        (payroll == "ONSHORE" && payrolls == 1) ? (
+                        {(payroll == 'ONSHORE' && payrolls == undefined) ||
+                        (payroll == 'ONSHORE' && payrolls == 1) ? (
                             <>
                                 <PrimaryInput<TeamMemberModel>
                                     label="Rate/Hr"
@@ -443,9 +447,9 @@ function TeamProfile({
                                             >
                                                 {icd?.name ||
                                                     userProfile?.employeeInformation?.inCorporationDocumentUrl
-                                                        ?.split(" ")
+                                                        ?.split(' ')
                                                         ?.pop() ||
-                                                    "No File Chosen"}
+                                                    'No File Chosen'}
                                             </Text>
                                         )}
                                     </Flex>
@@ -457,7 +461,7 @@ function TeamProfile({
                                             ref={widgetApiB}
                                             systemDialog={true}
                                             inputAcceptTypes={
-                                                ".docx,.pdf, .doc"
+                                                '.docx,.pdf, .doc'
                                             }
                                         />
                                     </Box>
@@ -531,9 +535,9 @@ function TeamProfile({
                                             >
                                                 {voidCheck?.name ||
                                                     userProfile?.employeeInformation?.voidCheckUrl
-                                                        ?.split(" ")
+                                                        ?.split(' ')
                                                         ?.pop() ||
-                                                    "No File Chosen"}
+                                                    'No File Chosen'}
                                             </Text>
                                         )}
                                     </Flex>
@@ -545,7 +549,7 @@ function TeamProfile({
                                             ref={widgetApiC}
                                             systemDialog={true}
                                             inputAcceptTypes={
-                                                ".docx,.pdf, .doc"
+                                                '.docx,.pdf, .doc'
                                             }
                                         />
                                     </Box>
@@ -619,9 +623,9 @@ function TeamProfile({
                                             >
                                                 {inc?.name ||
                                                     userProfile?.employeeInformation?.insuranceDocumentUrl
-                                                        ?.split(" ")
+                                                        ?.split(' ')
                                                         ?.pop() ||
-                                                    "No File Chosen"}
+                                                    'No File Chosen'}
                                             </Text>
                                         )}
                                     </Flex>
@@ -633,7 +637,7 @@ function TeamProfile({
                                             ref={widgetApiD}
                                             systemDialog={true}
                                             inputAcceptTypes={
-                                                ".docx,.pdf, .doc"
+                                                '.docx,.pdf, .doc'
                                             }
                                         />
                                     </Box>
@@ -649,6 +653,19 @@ function TeamProfile({
                                             ?.hstNumber as unknown as string
                                     }
                                     register={register}
+                                />
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="paymentPartnerId"
+                                    error={errors.paymentPartnerId}
+                                    keys="id"
+                                    keyLabel="fullName"
+                                    label="Payment Partner"
+                                    options={paymentPartner}
+                                    placeholder={
+                                        userProfile?.employeeInformation
+                                            ?.paymentPartner?.fullName as string
+                                    }
                                 />
                             </>
                         ) : (
@@ -678,19 +695,6 @@ function TeamProfile({
                             </>
                         )}
 
-                        <SelectrixBox<TeamMemberModel>
-                            control={control}
-                            name="paymentPartnerId"
-                            error={errors.paymentPartnerId}
-                            keys="id"
-                            keyLabel="fullName"
-                            label="Payment Partner"
-                            options={paymentPartner}
-                            placeholder={
-                                userProfile?.employeeInformation?.paymentPartner
-                                    ?.fullName as string
-                            }
-                        />
                         <PrimaryInput<TeamMemberModel>
                             label="Client Rate"
                             name="ratePerHour"
@@ -714,26 +718,26 @@ function TeamProfile({
                                     ?.currency as string
                             }
                             options={[
-                                { id: "CAD", label: "CAD" },
-                                { id: "NGN", label: "NGN" },
+                                { id: 'CAD', label: 'CAD' },
+                                { id: 'NGN', label: 'NGN' },
                             ]}
                         />
                         <SelectrixBox<TeamMemberModel>
                             control={control}
-                            name="paymentRate"
-                            error={errors.paymentRate}
+                            name="paymentFrequency"
+                            error={errors.paymentFrequency}
                             keys="id"
                             keyLabel="label"
                             label="Payment Frequency"
-                            placeholder={
-                                userProfile?.employeeInformation
-                                    ?.paymentRate as string
-                            }
                             options={[
-                                { id: "weekly", label: "Weekly" },
-                                { id: "bi-weekly", label: "Bi-Weekly" },
-                                { id: "monthly", label: "Monthly" },
+                                { id: 'weekly', label: 'Weekly' },
+                                { id: 'bi-weekly', label: 'Bi-Weekly' },
+                                { id: 'monthly', label: 'Monthly' },
                             ]}
+                            placeholder={
+                                (userProfile?.employeeInformation
+                                    ?.paymentRate as string) || 'Please select'
+                            }
                         />
                     </Grid>
                     <Box my=".8rem">
@@ -744,12 +748,12 @@ function TeamProfile({
                             value={
                                 userProfile?.employeeInformation?.fixedAmount ==
                                 true
-                                    ? "true"
-                                    : "false"
+                                    ? 'true'
+                                    : 'false'
                             }
                             radios={[
-                                { label: "Fixed amount", val: "true" },
-                                { label: "Percentage", val: "false" },
+                                { label: 'Fixed amount', val: 'true' },
+                                { label: 'Percentage', val: 'false' },
                             ]}
                         />
                     </Box>
@@ -757,7 +761,7 @@ function TeamProfile({
                 <ContractTable userProfile={userProfile} />
             </form>
             <Grid
-                templateColumns={["repeat(2,1fr)", "repeat(2,1fr)"]}
+                templateColumns={['repeat(2,1fr)', 'repeat(2,1fr)']}
                 gap="1rem 2rem"
                 my="2rem"
             >

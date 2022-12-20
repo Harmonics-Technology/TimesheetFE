@@ -34,7 +34,7 @@ import {
     TimeSheetView,
 } from 'src/services';
 import moment from 'moment';
-import { FaCheck } from 'react-icons/fa';
+import { FaCheck, FaTimes } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import Naira from '@components/generics/functions/Naira';
 
@@ -361,13 +361,17 @@ const TimesheetTeam = ({
                         alignItems="center"
                     >
                         <Input
-                            type="tel"
+                            type="number"
                             defaultValue={timesheets?.hours}
                             placeholder="---"
                             textAlign="center"
                             h="full"
                             border="0"
-                            // disabled={timesheets?.isApproved}
+                            disabled={
+                                timesheets?.status === 'APPROVED' ||
+                                timesheets?.status === 'REJECTED' ||
+                                timesheets == undefined
+                            }
                             onChange={(e) =>
                                 selectedInput.push({
                                     userId: userId,
@@ -391,7 +395,11 @@ const TimesheetTeam = ({
                                 }
                             />
                         )} */}
-                        {timesheets?.isApproved && <FaCheck color="green" />}
+                        {timesheets?.status == 'APPROVED' ? (
+                            <FaCheck color="green" />
+                        ) : timesheets?.status == 'REJECTED' ? (
+                            <FaTimes color="red" />
+                        ) : null}
                     </InputGroup>
                 </Box>,
             );
@@ -492,17 +500,10 @@ const TimesheetTeam = ({
                         data={Naira(actualPayout)}
                         tip="Number of hours you worked this month x Rate per hour"
                     />
-                    {/* <TimeSheetEstimationBtn
-                        id={1}
-                        loading={loading}
-                        title="Update TimeSheet"
-                        click={() => approveSelected()}
-                        bg="brand.200"
-                    /> */}
+
                     <ApproveSelected />
                     {/* <ApproveAllTimeSheet /> */}
                 </Grid>
-                {/* <HStack></HStack> */}
             </Box>
         </Box>
     );

@@ -9,5 +9,5 @@ export type TimeSheetApprovedView = {
     totalHours?: number;
     numberOfDays?: number;
     approvedNumberOfHours?: number;
-    month?: number;
+    dateCreated?: string;
 };

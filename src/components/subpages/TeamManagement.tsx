@@ -23,7 +23,7 @@ import {
     TableStatus,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Widget } from '@uploadcare/react-widget';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -33,7 +33,6 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     clients: UserView[];
-    supervisor: UserView[];
     paymentPartner: UserView[];
 }
 
@@ -51,6 +50,7 @@ import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 import { DateObject } from 'react-multi-date-picker';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import Loading from '@components/bits-utils/Loading';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -74,12 +74,7 @@ const schema = yup.object().shape({
     // dateOfBirth: yup.string().required(),
 });
 
-function TeamManagement({
-    adminList,
-    clients,
-    supervisor,
-    paymentPartner,
-}: adminProps) {
+function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     console.log({ adminList });
 
     const {
@@ -100,7 +95,8 @@ function TeamManagement({
     const toast = useToast();
     // console.log(watch("payRollTypeId"));
     const payroll = watch('payRollTypeId');
-    console.log({ payroll });
+    const clientId = watch('clientId');
+    // console.log({ clientId });
 
     const [contract, setContractFile] = useState<any>('');
     const [icd, setIcd] = useState<any>('');
@@ -169,11 +165,50 @@ function TeamManagement({
     };
     showLoading && showLoadingState;
 
+    const [supervisors, setSupervisors] = useState<any>();
+    const [loading, setLoading] = useState<any>();
+
+    const getSupervisor = async (id) => {
+        if (id === undefined) {
+            return;
+        }
+        setLoading(true);
+        console.log({ id });
+        try {
+            const data = await UserService.getSupervisors(id);
+            setLoading(false);
+            console.log({ data });
+            if (data.status) {
+                setSupervisors(data.data);
+                return;
+            }
+            setLoading(false);
+        } catch (error) {
+            //
+        }
+    };
+
+    useEffect(() => {
+        getSupervisor(clientId);
+    }, [clientId]);
+
+    console.log({ supervisors });
+
     const onSubmit = async (data: TeamMemberModel) => {
-        data.document = `${contract.cdnUrl} ${contract.name}`;
-        data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
-        data.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
-        data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
+        if (contract !== '') {
+            data.document = `${contract.cdnUrl} ${contract.name}`;
+        }
+        if (icd !== '') {
+            data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
+        }
+        if (voidCheck !== '') {
+            data.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
+        }
+        if (inc !== '') {
+            data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
+        }
+        data.clientId = null;
+
         if (data.document === undefined || '') {
             toast({
                 title: 'Please select a contract document and try again',
@@ -277,6 +312,7 @@ function TeamManagement({
                 isOpen={isOpen}
                 title={'Add a new Team Member'}
             >
+                <Loading loading={loading} />
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid
                         templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
@@ -337,15 +373,18 @@ function TeamManagement({
                             label="Current Client"
                             options={clients}
                         />
-                        <SelectrixBox<TeamMemberModel>
-                            control={control}
-                            name="supervisorId"
-                            error={errors.supervisorId}
-                            keys="id"
-                            keyLabel="fullName"
-                            label="Supervisor"
-                            options={supervisor}
-                        />
+                        {supervisors !== undefined && (
+                            <SelectrixBox<TeamMemberModel>
+                                control={control}
+                                name="supervisorId"
+                                error={errors.supervisorId}
+                                keys="id"
+                                keyLabel="fullName"
+                                label="Supervisor"
+                                options={supervisors}
+                            />
+                        )}
+
                         <SelectrixBox<TeamMemberModel>
                             control={control}
                             name="isActive"
@@ -639,6 +678,15 @@ function TeamManagement({
                                         defaultValue=""
                                         register={register}
                                     />
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="paymentPartnerId"
+                                        error={errors.paymentPartnerId}
+                                        keys="id"
+                                        keyLabel="fullName"
+                                        label="Payment Partner"
+                                        options={paymentPartner}
+                                    />
                                 </>
                             ) : payroll == 2 ? (
                                 <>
@@ -661,15 +709,6 @@ function TeamManagement({
                                 </>
                             ) : null}
 
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="paymentPartnerId"
-                                error={errors.paymentPartnerId}
-                                keys="id"
-                                keyLabel="fullName"
-                                label="Payment Partner"
-                                options={paymentPartner}
-                            />
                             <PrimaryInput<TeamMemberModel>
                                 label="Client Rate"
                                 name="clientRate"

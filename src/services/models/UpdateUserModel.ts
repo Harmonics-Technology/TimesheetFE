@@ -7,6 +7,8 @@ export type UpdateUserModel = {
     firstName?: string | null;
     lastName?: string | null;
     phoneNumber?: string | null;
+    dateOfBirth?: string;
+    address?: string | null;
     isActive?: boolean;
     role?: string | null;
     organizationName?: string | null;

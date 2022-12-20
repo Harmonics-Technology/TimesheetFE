@@ -14,7 +14,8 @@ import {
 } from 'date-fns';
 
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
-import { MdArrowDropDown } from 'react-icons/md';
+import { MdArrowDropDown, MdOutlineBookmarkAdd } from 'react-icons/md';
+import { BiX, BiCheck } from 'react-icons/bi';
 import {
     Box,
     Checkbox,
@@ -24,19 +25,27 @@ import {
     Input,
     InputGroup,
     useToast,
+    HStack,
+    Circle,
 } from '@chakra-ui/react';
 import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
 } from '@components/bits-utils/TimeSheetEstimation';
 import {
+    RejectTimeSheetModel,
     TimeSheetMonthlyView,
     TimeSheetService,
     TimeSheetView,
 } from 'src/services';
 import moment from 'moment';
-import { FaCheck, FaCheckCircle } from 'react-icons/fa';
+import { FaCheck, FaCheckCircle, FaTimes } from 'react-icons/fa';
 import { useRouter } from 'next/router';
-import Naira from '@components/generics/functions/Naira';
+import Naira, { CAD } from '@components/generics/functions/Naira';
+import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Button } from '..';
 
 interface approveDate {
     userId: string;
@@ -44,6 +53,10 @@ interface approveDate {
     hours?: string;
     checked?: boolean;
 }
+
+const schema = yup.object().shape({
+    reason: yup.string().required(),
+});
 
 const TimesheetAdmin = ({
     timeSheets,
@@ -74,24 +87,91 @@ const TimesheetAdmin = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    console.log({ totalHours });
+    // console.log({ totalHours });
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
+    const currency = timeSheets?.currency;
     const actualPayout =
         Math.round((expectedPay * totalHours) / expectedHours) || 0;
 
     const [loading, setLoading] = useState(false);
     const [allChecked, setAllChecked] = useState<boolean>(false);
-    console.log({ allChecked });
+    // console.log({ allChecked });
     const [selected, setSelected] = useState<approveDate[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
     // console.log({ selectedInput });
-    // console.log({ selected });
+    console.log({ selected });
+
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors, isSubmitting },
+    } = useForm<RejectTimeSheetModel>({
+        resolver: yupResolver(schema),
+        mode: 'all',
+        defaultValues: {},
+    });
 
     const reloadPage = () => {
         router.reload();
     };
 
+    const [reject, setReject] = useState<approveDate>({
+        userId: '',
+        chosenDate: '',
+    });
+    const showReject = (userId, chosenDate) => {
+        console.log({ chosenDate });
+        setReject({ userId, chosenDate });
+    };
+    console.log({ reject });
+    const onSubmit = async (data: RejectTimeSheetModel) => {
+        data.date = reject.chosenDate;
+        data.employeeInformationId = reject.userId;
+        console.log({ data });
+        try {
+            const result = await TimeSheetService.rejectTimeSheetForADay(data);
+            if (result.status) {
+                console.log({ result });
+                router.reload();
+                return;
+            }
+            console.log({ result });
+        } catch (error) {
+            console.log({ error });
+            toast({
+                title: 'An error occured',
+                status: 'error',
+                position: 'top-right',
+            });
+        }
+    };
+
+    const generatePayroll = async (id) => {
+        try {
+            const data = await TimeSheetService.generatePayroll(id);
+            if (data.status) {
+                console.log({ data });
+                return;
+            }
+            toast({
+                title: data.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        } catch (error) {
+            toast({
+                title: 'An error occurred',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            console.log(error);
+        }
+    };
     const approveTimeSheetForADay = async (userId, chosenDate) => {
         try {
             const data = await TimeSheetService.approveTimeSheetForADay(
@@ -99,6 +179,7 @@ const TimesheetAdmin = ({
                 chosenDate,
             );
             if (data.status) {
+                generatePayroll(userId);
                 return;
             }
             toast({
@@ -317,7 +398,9 @@ const TimesheetAdmin = ({
             const userId = timesheets?.employeeInformationId as string;
             const userDate = moment(timesheets?.date).format('YYYY-MM-DD');
             const [singleCheck, setSingleCheck] = useState(false);
+            const [singleReject, setSingleReject] = useState(false);
             const isApproved = timesheets?.isApproved;
+            // console.log({ timesheets });
 
             week.push(
                 <Box
@@ -337,7 +420,97 @@ const TimesheetAdmin = ({
                 >
                     <Flex>
                         <div>{format(currentDate, 'MMM, d')}</div>
-                        {allChecked ? (
+                        <HStack gap="0rem" ml=".5rem">
+                            <Circle
+                                size="1rem"
+                                bgColor={
+                                    !singleCheck ? 'gray.400' : 'green.500'
+                                }
+                                color="white"
+                                onClick={() => {
+                                    setSingleCheck(!singleCheck);
+                                    selected.push({
+                                        userId: userId,
+                                        chosenDate: userDate,
+                                        checked: !singleCheck,
+                                    });
+                                }}
+                                disabled={
+                                    timesheets?.status === 'APPROVED' ||
+                                    timesheets?.status === 'REJECTED' ||
+                                    timesheets == undefined
+                                }
+                                as={Button}
+                                minW="unset"
+                                p="0"
+                            >
+                                <BiCheck />
+                            </Circle>
+                            <Circle
+                                size="1rem"
+                                bgColor={!singleReject ? 'gray.400' : 'red.500'}
+                                color="white"
+                                onClick={() => {
+                                    setSingleReject(!singleReject);
+                                    showReject(userId, userDate);
+                                }}
+                                disabled={
+                                    timesheets?.status === 'APPROVED' ||
+                                    timesheets?.status === 'REJECTED' ||
+                                    timesheets == undefined
+                                }
+                                as={Button}
+                                minW="unset"
+                                p="0"
+                            >
+                                <BiX />
+                            </Circle>
+                            {singleReject && (
+                                <Box
+                                    w="fit-content"
+                                    h="fit-content"
+                                    bgColor="white"
+                                    pos="absolute"
+                                    p=".5rem 1rem .8rem"
+                                    zIndex="300"
+                                    borderRadius="8px"
+                                    // top="12rem"
+                                    boxShadow="0px 3px 10px 5px rgba(0,0,0,0.2)"
+                                >
+                                    <Flex
+                                        justify="flex-end"
+                                        onClick={() =>
+                                            setSingleReject(!singleReject)
+                                        }
+                                    >
+                                        <FaTimes />
+                                    </Flex>
+                                    <form onSubmit={handleSubmit(onSubmit)}>
+                                        <PrimaryTextarea<RejectTimeSheetModel>
+                                            label="Reason"
+                                            name="reason"
+                                            error={errors.reason}
+                                            placeholder=""
+                                            defaultValue=""
+                                            h="3rem"
+                                            register={register}
+                                        />
+                                        <Button
+                                            isLoading={isSubmitting}
+                                            type="submit"
+                                            w="full"
+                                            bgColor="brand.600"
+                                            color="white"
+                                            h="2rem"
+                                            fontSize=".8rem"
+                                        >
+                                            Reject
+                                        </Button>
+                                    </form>
+                                </Box>
+                            )}
+                        </HStack>
+                        {/* {allChecked ? (
                             <Checkbox
                                 disabled={!isSameMonth(currentDate, activeDate)}
                                 ml=".5rem"
@@ -345,7 +518,10 @@ const TimesheetAdmin = ({
                             ></Checkbox>
                         ) : (
                             <Checkbox
-                                disabled={!isSameMonth(currentDate, activeDate)}
+                                disabled={
+                                    !isSameMonth(currentDate, activeDate) ||
+                                    timesheets?.isApproved
+                                }
                                 ml=".5rem"
                                 onChange={() => {
                                     setSingleCheck(!singleCheck);
@@ -363,7 +539,7 @@ const TimesheetAdmin = ({
                                     false
                                 }
                             ></Checkbox>
-                        )}
+                        )} */}
                     </Flex>
 
                     <InputGroup
@@ -374,13 +550,17 @@ const TimesheetAdmin = ({
                         alignItems="center"
                     >
                         <Input
-                            type="tel"
+                            type="number"
                             defaultValue={timesheets?.hours}
                             placeholder="---"
                             textAlign="center"
                             h="full"
                             border="0"
-                            // disabled={timesheets?.isApproved}
+                            disabled={
+                                timesheets?.status === 'APPROVED' ||
+                                timesheets?.status === 'REJECTED' ||
+                                timesheets == undefined
+                            }
                             onChange={(e) =>
                                 selectedInput.push({
                                     userId: userId,
@@ -404,7 +584,11 @@ const TimesheetAdmin = ({
                                 }
                             />
                         )} */}
-                        {timesheets?.isApproved && <FaCheck color="green" />}
+                        {timesheets?.status == 'APPROVED' ? (
+                            <FaCheck color="green" />
+                        ) : timesheets?.status == 'REJECTED' ? (
+                            <FaTimes color="red" />
+                        ) : null}
                     </InputGroup>
                 </Box>,
             );
@@ -499,12 +683,20 @@ const TimesheetAdmin = ({
                     />
                     <TimeSheetEstimation
                         label="Expected Payout"
-                        data={Naira(expectedPay)}
+                        data={
+                            currency === 'NGN'
+                                ? Naira(expectedPay)
+                                : CAD(expectedPay)
+                        }
                         tip="Total amount you are expected to be paid this month"
                     />
                     <TimeSheetEstimation
                         label="Actual Payout"
-                        data={Naira(actualPayout)}
+                        data={
+                            currency === 'NGN'
+                                ? Naira(actualPayout)
+                                : CAD(actualPayout)
+                        }
                         tip="Number of hours you worked this month x Rate per hour"
                     />
 

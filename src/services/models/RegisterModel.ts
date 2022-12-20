@@ -7,6 +7,7 @@ export type RegisterModel = {
     lastName?: string | null;
     email?: string | null;
     password?: string | null;
+    clientId?: string | null;
     role: string;
     phoneNumber?: string | null;
     organizationName?: string | null;

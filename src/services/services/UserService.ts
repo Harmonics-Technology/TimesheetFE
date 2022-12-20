@@ -8,6 +8,7 @@ import type { RegisterModel } from '../models/RegisterModel';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
 import type { UpdateUserModel } from '../models/UpdateUserModel';
 import type { UserProfileViewStandardResponse } from '../models/UserProfileViewStandardResponse';
+import type { UserViewListStandardResponse } from '../models/UserViewListStandardResponse';
 import type { UserViewPagedCollectionStandardResponse } from '../models/UserViewPagedCollectionStandardResponse';
 import type { UserViewStandardResponse } from '../models/UserViewStandardResponse';
 
@@ -299,6 +300,23 @@ requestBody?: TeamMemberModel,
             url: '/api/User/update-team-member',
             body: requestBody,
             mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param clientId 
+     * @returns UserViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static getSupervisors(
+clientId: string,
+): CancelablePromise<UserViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/supervisors/{clientId}',
+            path: {
+                'clientId': clientId,
+            },
         });
     }
 

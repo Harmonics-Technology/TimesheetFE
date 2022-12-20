@@ -4,8 +4,8 @@ import {
     GridItem,
     Text,
     Textarea,
-} from "@chakra-ui/react";
-import { FieldError, UseFormRegister, Path } from "react-hook-form";
+} from '@chakra-ui/react';
+import { FieldError, UseFormRegister, Path } from 'react-hook-form';
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
@@ -29,22 +29,23 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     w?: string;
     h?: string;
     padding?: string;
+    fontsize?: string;
 }
 
 export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
     name,
     required = false,
-    type = "text",
-    label = "",
+    type = 'text',
+    label = '',
     register,
     validate = {},
     error,
     disableLabel = false,
-    placeholder = "",
-    variant = "outline",
-    borderColor = "gray.300",
-    borderRadius = "md",
-    placeholderColor = "gray.300",
+    placeholder = '',
+    variant = 'outline',
+    borderColor = 'gray.300',
+    borderRadius = 'md',
+    placeholderColor = 'gray.300',
     defaultValue,
     format,
     value,
@@ -52,6 +53,7 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
     testId,
     w,
     h,
+    fontsize = '.8rem',
     padding,
 }: FormInputProps<TFormValues>) => {
     return (
@@ -67,8 +69,9 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
                     isDisabled={disableLabel}
                     padding={padding}
                     size="sm"
-                    h={h}
+                    minH={h}
                     resize="none"
+                    fontSize={fontsize}
                     focusBorderColor="none"
                     // bgColor="rgba(25,25,25,.03)"
                     // borderColor="transparent"
@@ -77,7 +80,7 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
                 />
             </FormControl>
             <Text fontSize=".7rem" color="red">
-                {(error?.type === "required" && `${label} is required`) ||
+                {(error?.type === 'required' && `${label} is required`) ||
                     error?.message}
             </Text>
         </GridItem>
