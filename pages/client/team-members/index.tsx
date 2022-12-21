@@ -11,17 +11,15 @@ import {
 interface TeamProps {
     teamList: UserViewPagedCollectionStandardResponse;
     clients: UserView[];
-    supervisor: UserView[];
     paymentPartner: UserView[];
 }
 
-function Team({ teamList, clients, supervisor, paymentPartner }: TeamProps) {
+function Team({ teamList, clients, paymentPartner }: TeamProps) {
     // console.log({ team });
     return (
         <TeamManagement
             adminList={teamList}
             clients={clients}
-            supervisor={supervisor}
             paymentPartner={paymentPartner}
         />
     );
@@ -34,7 +32,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
             const clients = await UserService.listUsers("client");
-            const supervisor = await UserService.listUsers("supervisor");
             const paymentPartner = await UserService.listUsers(
                 "payment partner",
             );
@@ -47,7 +44,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 props: {
                     teamList: data,
                     clients: clients?.data?.value,
-                    supervisor: supervisor?.data?.value,
                     paymentPartner: paymentPartner?.data?.value,
                 },
             };

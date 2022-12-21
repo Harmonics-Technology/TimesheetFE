@@ -435,11 +435,11 @@ const TimesheetAdmin = ({
                                         checked: !singleCheck,
                                     });
                                 }}
-                                disabled={
-                                    timesheets?.status === 'APPROVED' ||
-                                    timesheets?.status === 'REJECTED' ||
-                                    timesheets == undefined
-                                }
+                                // disabled={
+                                //     timesheets?.status === 'APPROVED' ||
+                                //     timesheets?.status === 'REJECTED' ||
+                                //     timesheets == undefined
+                                // }
                                 as={Button}
                                 minW="unset"
                                 p="0"
@@ -454,11 +454,11 @@ const TimesheetAdmin = ({
                                     setSingleReject(!singleReject);
                                     showReject(userId, userDate);
                                 }}
-                                disabled={
-                                    timesheets?.status === 'APPROVED' ||
-                                    timesheets?.status === 'REJECTED' ||
-                                    timesheets == undefined
-                                }
+                                // disabled={
+                                //     timesheets?.status === 'APPROVED' ||
+                                //     timesheets?.status === 'REJECTED' ||
+                                //     timesheets == undefined
+                                // }
                                 as={Button}
                                 minW="unset"
                                 p="0"

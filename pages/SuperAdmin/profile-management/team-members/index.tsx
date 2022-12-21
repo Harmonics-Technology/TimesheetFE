@@ -1,27 +1,25 @@
-import { filterPagingSearchOptions } from "@components/generics/filterPagingSearchOptions";
-import { withPageAuth } from "@components/generics/withPageAuth";
-import TeamManagement from "@components/subpages/TeamManagement";
-import { GetServerSideProps } from "next";
-import React from "react";
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
+import { withPageAuth } from '@components/generics/withPageAuth';
+import TeamManagement from '@components/subpages/TeamManagement';
+import { GetServerSideProps } from 'next';
+import React from 'react';
 import {
     UserService,
     UserView,
     UserViewPagedCollectionStandardResponse,
-} from "src/services";
+} from 'src/services';
 interface TeamProps {
     teamList: UserViewPagedCollectionStandardResponse;
     clients: UserView[];
-    supervisor: UserView[];
     paymentPartner: UserView[];
 }
 
-function Team({ teamList, clients, supervisor, paymentPartner }: TeamProps) {
+function Team({ teamList, clients, paymentPartner }: TeamProps) {
     // console.log({ team });
     return (
         <TeamManagement
             adminList={teamList}
             clients={clients}
-            supervisor={supervisor}
             paymentPartner={paymentPartner}
         />
     );
@@ -33,13 +31,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const clients = await UserService.listUsers("client");
-            const supervisor = await UserService.listUsers("supervisor");
+            const clients = await UserService.listUsers('client');
             const paymentPartner = await UserService.listUsers(
-                "payment partner",
+                'payment partner',
             );
             const data = await UserService.listUsers(
-                "Team Member",
+                'Team Member',
                 pagingOptions.offset,
                 pagingOptions.limit,
             );
@@ -47,7 +44,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 props: {
                     teamList: data,
                     clients: clients?.data?.value,
-                    supervisor: supervisor?.data?.value,
                     paymentPartner: paymentPartner?.data?.value,
                 },
             };

@@ -13,6 +13,7 @@ import {
     DrawerFooter,
     useToast,
     Checkbox,
+    Td,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -153,7 +154,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                                 />
                                 <TableState name={x.status as string} />
                                 <ExpenseActions id={x.id} />
-                                {/* {x.status == "Approved" && <Checkbox />} */}
+                                <Td>{x.status == 'ACTIVE' && <Checkbox />}</Td>
                             </Tr>
                         ))}
                     </>
@@ -186,7 +187,9 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                             keys="id"
                             keyLabel="name"
                             label="Expense Type"
-                            options={expenseType}
+                            options={expenseType.filter(
+                                (x) => x.status == 'ACTIVE',
+                            )}
                         />
                         <PrimaryTextarea<ExpenseModel>
                             label="Description"

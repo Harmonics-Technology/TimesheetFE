@@ -15,6 +15,7 @@ import {
     ContractView,
     ContractViewPagedCollectionStandardResponse,
 } from 'src/services';
+import FilterSearch from './FilterSearch';
 
 interface adminProps {
     adminList: ContractViewPagedCollectionStandardResponse;
@@ -32,27 +33,7 @@ function ViewPayroll({ adminList }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between" align="center" my=".5rem">
-                    <HStack fontSize=".8rem" w="fit-content">
-                        <Select
-                            w="fit-content"
-                            onChange={(e) => setFilter(e.target.value)}
-                        >
-                            <option value="5">5</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </Select>
-
-                        <Text noOfLines={1}>entries per page</Text>
-                    </HStack>
-                    <Box>
-                        <Input
-                            type="search"
-                            placeholder="search"
-                            onChange={(e) => search(e.target.value)}
-                        />
-                    </Box>
-                </Flex>
+                <FilterSearch />
                 <Tables
                     tableHead={[
                         'Total Hrs',

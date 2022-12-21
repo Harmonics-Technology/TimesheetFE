@@ -218,6 +218,15 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             });
             return;
         }
+        if (data.supervisorId === undefined || '') {
+            toast({
+                title: 'Please select supervisor to create a team. Create one if none already exists',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
         console.log({ data });
 
         try {

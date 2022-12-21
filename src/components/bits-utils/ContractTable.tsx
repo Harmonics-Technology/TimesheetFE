@@ -48,6 +48,7 @@ import { DateObject } from 'react-multi-date-picker';
 import ExtendContract from './ExtendContract';
 import ModifyContract from './ModifyContract';
 import ConfirmModal from './ConfirmModal';
+import FilterSearch from './FilterSearch';
 
 const schema = yup.object().shape({
     title: yup.string().required(),
@@ -174,27 +175,7 @@ function TeamManagement({ userProfile }: adminProps) {
                         +Contract
                     </Button>
                 </Flex>
-                <Flex justify="space-between" align="center" my="2.5rem">
-                    <HStack fontSize=".8rem" w="fit-content">
-                        <Select
-                            w="fit-content"
-                            onChange={(e) => setFilter(e.target.value)}
-                        >
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </Select>
-
-                        <Text noOfLines={1}>entries per page</Text>
-                    </HStack>
-                    <Box>
-                        <Input
-                            type="search"
-                            placeholder="search"
-                            onChange={(e) => search(e.target.value)}
-                        />
-                    </Box>
-                </Flex>
+                <FilterSearch />
                 <Tables
                     tableHead={[
                         'Name',
