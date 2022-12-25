@@ -1,24 +1,18 @@
-import { filterPagingSearchOptions } from "@components/generics/filterPagingSearchOptions";
-import { withPageAuth } from "@components/generics/withPageAuth";
-import ExpenseType from "@components/subpages/ExpenseType";
-import PayPartnerExpense from "@components/subpages/PayPartnerExpense";
-import { GetServerSideProps } from "next";
-import React from "react";
-import { ExpenseTypeView, SettingsService, UserService } from "src/services";
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
+import { withPageAuth } from '@components/generics/withPageAuth';
+import PayPartnerExpense from '@components/subpages/PayPartnerExpense';
+import { GetServerSideProps } from 'next';
+import React from 'react';
+import {
+    ExpenseViewPagedCollectionStandardResponse,
+    FinancialService,
+} from 'src/services';
 
 interface expenseProps {
-    expenses: ExpenseTypeView[];
-    listExpenses: any;
-    team: any;
+    listExpenses: ExpenseViewPagedCollectionStandardResponse;
 }
-function expensetype({ expenses, team, listExpenses }: expenseProps) {
-    return (
-        <PayPartnerExpense
-            expenses={expenses}
-            team={team}
-            listExpenses={listExpenses}
-        />
-    );
+function expensetype({ listExpenses }: expenseProps) {
+    return <PayPartnerExpense listExpenses={listExpenses} />;
 }
 
 export default expensetype;
@@ -27,14 +21,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const expense = await SettingsService.listExpenseTypes();
-            const team = await UserService.listUsers("Team Member");
-            const listExpenses = await SettingsService.listExpenseTypes();
+            const listExpenses = await FinancialService.listApprovedExpenses(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+            );
             return {
                 props: {
-                    expenses: expense.data,
-                    team: team.data,
-                    listExpenses: listExpenses.data,
+                    listExpenses,
                 },
             };
         } catch (error: any) {

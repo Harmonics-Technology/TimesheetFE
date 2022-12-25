@@ -42,7 +42,7 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
     const toast = useToast();
     const router = useRouter();
     const onSubmit = async (data: UpdateUserModel) => {
-        data.isActive = data.isActive === ('true' as unknown as boolean);
+        // data.isActive = data.isActive === ('true' as unknown as boolean);
         console.log({ data });
 
         try {
@@ -87,7 +87,6 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
                 fontSize="1.1rem"
                 mb="3rem"
                 textTransform="capitalize"
-                fontFamily="Open Sans"
                 color="brand.200"
             >
                 Basic Info
@@ -143,8 +142,8 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
                                 : 'Not Active'
                         }
                         options={[
-                            { id: 'true', label: 'Active' },
-                            { id: 'false', label: 'Not Active' },
+                            { id: true, label: 'Active' },
+                            { id: false, label: 'Not Active' },
                         ]}
                     />
                 </Grid>

@@ -59,7 +59,6 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                 </Text>
                 <Text
                     fontWeight="bold"
-                    fontFamily="Open Sans"
                     fontSize="1rem"
                     textTransform="capitalize"
                     mb="0"

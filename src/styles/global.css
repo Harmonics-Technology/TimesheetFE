@@ -1,5 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap");
-@import url("./calendar.css");
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
+@import url('./calendar.css');
+@import url('./scrollbar.css');
 
 .phone-input {
     /* border: 1px solid #e5e5e5; */
@@ -33,4 +35,44 @@
 }
 .select option {
     color: #000 !important;
+}
+.formcheck {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #2eafa3;
+    border-radius: 0%;
+    background-color: transparent;
+    cursor: pointer;
+}
+input[type='checkbox'] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    appearance: none;
+    /* For iOS < 15 to remove gradient background */
+    background-color: transparent;
+    /* Not removed via appearance */
+    margin: 0;
+    display: grid;
+    place-content: center;
+}
+input[type='checkbox']::before {
+    content: '';
+    width: 0.65em;
+    height: 0.65em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--form-control-color);
+    background-color: white;
+    transform-origin: bottom left;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+input[type='checkbox']:checked::before {
+    transform: scale(1);
+}
+input[type='checkbox']:checked {
+    background: #2eafa3;
+}
+td {
+    border-bottom: 1px solid #edf2f7;
+    padding: 0.8rem 1rem;
 }

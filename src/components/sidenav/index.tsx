@@ -23,7 +23,7 @@ interface sidenavProps {
 
 function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
     const { user } = useContext(UserContext);
-    console.log({ user });
+    // console.log({ user });
     const role = user?.role?.replace(' ', '');
     const closeToggle = () => {
         setOpenSidenav(false);
@@ -42,6 +42,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
             transition="left .3s ease-out"
             pt="2rem"
             zIndex="999"
+            overflowY="auto"
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             // ref={ref}
         >
@@ -100,9 +101,9 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
                             'expenses',
-                            'invoices',
                             'payrolls',
                             'payslips',
+                            'invoices',
                         ]}
                     />
                     <MenuItem
@@ -163,9 +164,9 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
                             'my expenses',
-                            'my invoices',
-                            'my payrolls',
                             'my payslips',
+                            // 'my invoices',
+                            'my contracts',
                         ]}
                     />
                     <MenuItem
@@ -214,7 +215,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         option={true}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                        dropDown={['payslip']}
+                        dropDown={['expenses']}
                     />
                 </VStack>
             ) : role == 'PaymentPartner' ? (
@@ -257,8 +258,8 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
-                        linkName="approvals"
-                        menuTitle="Approvals"
+                        linkName="profile"
+                        menuTitle="Profile"
                         icon={<FaUser opacity=".8" />}
                         option={false}
                         dropDown={[]}
@@ -295,9 +296,9 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
                             'expenses',
-                            'invoices',
                             'payrolls',
                             'payslips',
+                            'invoices',
                         ]}
                     />
                     <MenuItem
@@ -348,9 +349,9 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
                             'expenses',
-                            'invoices',
                             'payrolls',
                             'payslips',
+                            'invoices',
                         ]}
                     />
                     <MenuItem
@@ -419,9 +420,9 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
                             'expenses',
-                            'invoices',
                             'payrolls',
                             'payslips',
+                            'invoices',
                         ]}
                     />
                 </VStack>

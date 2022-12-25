@@ -57,21 +57,35 @@ const schema = yup.object().shape({
     firstName: yup.string().required(),
     email: yup.string().email().required(),
     phoneNumber: yup.string().required(),
-    // jobTitle: yup.string().required(),
-    // clientId: yup.string().required(),
-    // supervisorId: yup.string().required(),
-    // isActive: yup.boolean().required(),
-    // payRollTypeId: yup.number().required(),
-    // hoursPerDay: yup.number().required(),
-    // paymentPartnerId: yup.string().required(),
-    // ratePerHour: yup.number().required(),
-    // currency: yup.string().required(),
+    jobTitle: yup.string().required(),
+    clientId: yup.string().required(),
+    supervisorId: yup.string().required(),
+    isActive: yup.boolean().required(),
+    hoursPerDay: yup.number().required(),
+    payRollTypeId: yup.number().required(),
+    paymentPartnerId: yup.string().when('payRollTypeId', {
+        is: 2,
+        then: yup.string().required(),
+    }),
+    ratePerHour: yup.string().when('payRollTypeId', {
+        is: 2,
+        then: yup.string().required(),
+    }),
+    hstNumber: yup.string().when('payRollTypeId', {
+        is: 2,
+        then: yup.string().required(),
+    }),
+    monthlyPayoutRate: yup.string().when('payRollTypeId', {
+        is: 1,
+        then: yup.string().required(),
+    }),
+    currency: yup.string().required(),
     // paymentRate: yup.string().required(),
-    // fixedAmount: yup.boolean().required(),
-    // title: yup.string().required(),
-    // startDate: yup.string().required(),
-    // endDate: yup.string().required(),
-    // dateOfBirth: yup.string().required(),
+    fixedAmount: yup.boolean().required(),
+    title: yup.string().required(),
+    startDate: yup.string().required(),
+    endDate: yup.string().required(),
+    dateOfBirth: yup.string().required(),
 });
 
 function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
@@ -96,7 +110,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     // console.log(watch("payRollTypeId"));
     const payroll = watch('payRollTypeId');
     const clientId = watch('clientId');
-    // console.log({ clientId });
+    console.log({ payroll });
 
     const [contract, setContractFile] = useState<any>('');
     const [icd, setIcd] = useState<any>('');
@@ -207,17 +221,29 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
         if (inc !== '') {
             data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
         }
-        data.clientId = null;
-
-        if (data.document === undefined || '') {
-            toast({
-                title: 'Please select a contract document and try again',
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
+        {
+            (data.hstNumber as unknown as string) == ''
+                ? (data.hstNumber = 0)
+                : (data.hstNumber as number);
         }
+        {
+            (data.ratePerHour as unknown as string) == ''
+                ? (data.ratePerHour = 0)
+                : (data.ratePerHour as number);
+        }
+        {
+            (data.hoursPerDay as unknown as string) == ''
+                ? (data.hoursPerDay = 0)
+                : (data.hoursPerDay as number);
+        }
+        {
+            (data.monthlyPayoutRate as unknown as string) == ''
+                ? (data.monthlyPayoutRate = 0)
+                : (data.monthlyPayoutRate as number);
+        }
+        data.clientId = null;
+        console.log({ data });
+
         if (data.supervisorId === undefined || '') {
             toast({
                 title: 'Please select supervisor to create a team. Create one if none already exists',
@@ -227,6 +253,16 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             });
             return;
         }
+        // if (data.document === undefined || '') {
+        //     toast({
+        //         title: 'Please select a contract document and try again',
+        //         status: 'error',
+        //         isClosable: true,
+        //         position: 'top-right',
+        //     });
+        //     return;
+        // }
+
         console.log({ data });
 
         try {
@@ -249,9 +285,10 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                 position: 'top-right',
             });
             return;
-        } catch (err) {
+        } catch (err: any) {
+            console.log({ err });
             toast({
-                title: 'An error occurred',
+                title: err.body.message || err.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -438,22 +475,23 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 label="Payroll Type"
                                 options={[
                                     {
-                                        id: '1',
+                                        id: 1,
                                         label: 'Onshore Contract',
                                     },
                                     {
-                                        id: '2',
+                                        id: 2,
                                         label: 'Offshore contract',
                                     },
                                 ]}
                             />
-                            {payroll == 1 ? (
+                            {payroll == 2 ? (
                                 <>
                                     <PrimaryInput<TeamMemberModel>
                                         label="Rate/Hr"
                                         name="ratePerHour"
                                         error={errors.ratePerHour}
                                         placeholder=""
+                                        type="number"
                                         defaultValue=""
                                         register={register}
                                     />
@@ -463,6 +501,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                         error={errors.hoursPerDay}
                                         placeholder=""
                                         defaultValue=""
+                                        type="number"
                                         register={register}
                                     />
                                     <Box>
@@ -685,6 +724,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                         error={errors.hstNumber}
                                         placeholder=""
                                         defaultValue=""
+                                        type="number"
                                         register={register}
                                     />
                                     <SelectrixBox<TeamMemberModel>
@@ -697,7 +737,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                         options={paymentPartner}
                                     />
                                 </>
-                            ) : payroll == 2 ? (
+                            ) : payroll == 1 ? (
                                 <>
                                     <PrimaryInput<TeamMemberModel>
                                         label="Monthly Payout"
@@ -705,6 +745,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                         error={errors.monthlyPayoutRate}
                                         placeholder=""
                                         defaultValue=""
+                                        type="number"
                                         register={register}
                                     />
                                     <PrimaryInput<TeamMemberModel>

@@ -1,15 +1,15 @@
-import { Box, Button, Grid, Text, useToast } from "@chakra-ui/react";
-import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { VscSaveAs } from "react-icons/vsc";
-import { PrimaryTextarea } from "@components/bits-utils/PrimaryTextArea";
-import { UpdateUserModel, UserService, UserView } from "src/services";
-import InputBlank from "@components/bits-utils/InputBlank";
-import { useRouter } from "next/router";
-import { SelectrixBox } from "@components/bits-utils/Selectrix";
+import { Box, Button, Grid, Text, useToast } from '@chakra-ui/react';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { VscSaveAs } from 'react-icons/vsc';
+import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
+import { UpdateUserModel, UserService, UserView } from 'src/services';
+import InputBlank from '@components/bits-utils/InputBlank';
+import { useRouter } from 'next/router';
+import { SelectrixBox } from '@components/bits-utils/Selectrix';
 
 const schema = yup.object().shape({});
 interface PaymentPartnerProps {
@@ -24,7 +24,7 @@ function PaymentPartner({ userProfile }: PaymentPartnerProps) {
         formState: { errors, isSubmitting },
     } = useForm<UpdateUserModel>({
         resolver: yupResolver(schema),
-        mode: "all",
+        mode: 'all',
         defaultValues: {
             id: userProfile?.id,
             isActive: userProfile?.isActive,
@@ -35,7 +35,7 @@ function PaymentPartner({ userProfile }: PaymentPartnerProps) {
     const toast = useToast();
 
     const onSubmit = async (data: UpdateUserModel) => {
-        data.isActive = data.isActive === ("true" as unknown as boolean);
+        // data.isActive = data.isActive === ('true' as unknown as boolean);
         console.log({ data });
         console.log({ userProfile });
         if (data == userProfile) {
@@ -47,27 +47,27 @@ function PaymentPartner({ userProfile }: PaymentPartnerProps) {
             // console.log({ result });
             if (result.status) {
                 toast({
-                    title: "Profile Update Success",
-                    status: "success",
+                    title: 'Profile Update Success',
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 router.reload();
                 return;
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         } catch (error) {
             console.log(error);
             toast({
                 title: `Check your network connection and try again`,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         }
     };
@@ -81,7 +81,7 @@ function PaymentPartner({ userProfile }: PaymentPartnerProps) {
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid
-                    templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                    templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                     gap="1rem 2rem"
                 >
                     <Box>
@@ -90,13 +90,12 @@ function PaymentPartner({ userProfile }: PaymentPartnerProps) {
                             fontSize="1.1rem"
                             mb="3rem"
                             textTransform="capitalize"
-                            fontFamily="Open Sans"
                             color="brand.200"
                         >
                             Basic Info
                         </Text>
                         <Grid
-                            templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                            templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                             gap="1rem 2rem"
                         >
                             <PrimaryInput<UpdateUserModel>
@@ -136,12 +135,12 @@ function PaymentPartner({ userProfile }: PaymentPartnerProps) {
                                 label="Profile Status"
                                 placeholder={
                                     userProfile?.isActive === true
-                                        ? "Active"
-                                        : "Not Active"
+                                        ? 'Active'
+                                        : 'Not Active'
                                 }
                                 options={[
-                                    { id: "true", label: "Active" },
-                                    { id: "false", label: "Not Active" },
+                                    { id: true, label: 'Active' },
+                                    { id: false, label: 'Not Active' },
                                 ]}
                             />
                         </Grid>
@@ -152,7 +151,7 @@ function PaymentPartner({ userProfile }: PaymentPartnerProps) {
                                 error={errors.organizationAddress}
                                 placeholder=""
                                 defaultValue={
-                                    userProfile?.organizationAddress || ""
+                                    userProfile?.organizationAddress || ''
                                 }
                                 register={register}
                             />
@@ -164,13 +163,12 @@ function PaymentPartner({ userProfile }: PaymentPartnerProps) {
                             fontSize="1.1rem"
                             mb="3rem"
                             textTransform="capitalize"
-                            fontFamily="Open Sans"
                             color="brand.200"
                         >
                             Contact Details
                         </Text>
                         <Grid
-                            templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                            templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                             gap="1rem 2rem"
                         >
                             <PrimaryInput<UpdateUserModel>
@@ -209,7 +207,7 @@ function PaymentPartner({ userProfile }: PaymentPartnerProps) {
                     </Box>
                 </Grid>
                 <Grid
-                    templateColumns={["repeat(1,1fr)", "repeat(2,1fr)"]}
+                    templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                     gap="1rem 2rem"
                     my="2rem"
                 >

@@ -1,5 +1,5 @@
-import { Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react";
-import React, { ReactNode } from "react";
+import { Table, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react';
+import React, { ReactNode } from 'react';
 
 interface TablesProps {
     tableHead: string[];
@@ -8,7 +8,7 @@ interface TablesProps {
 
 function Tables({ tableHead, children }: TablesProps) {
     return (
-        <TableContainer maxH="500px" overflowY="hidden">
+        <TableContainer h="auto">
             <Table variant="striped" fontSize="11px">
                 <Thead>
                     <Tr w="full" h="2rem" borderBottom="1px solid #f2f2f2">

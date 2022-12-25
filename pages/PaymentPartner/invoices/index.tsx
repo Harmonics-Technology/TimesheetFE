@@ -1,36 +1,43 @@
-import ViewPayroll from "@components/bits-utils/ViewPayroll";
-import { withPageAuth } from "@components/generics/withPageAuth";
-import ContractList from "@components/subpages/ContractList";
-import { GetServerSideProps } from "next";
-import React from "react";
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
+import { withPageAuth } from '@components/generics/withPageAuth';
+import AdminInvoices from '@components/subpages/AdminInvoices';
+import { GetServerSideProps } from 'next';
+import React from 'react';
 import {
-    ContractService,
-    ContractViewPagedCollectionStandardResponse,
-} from "src/services";
-interface adminProps {
-    adminList: ContractViewPagedCollectionStandardResponse;
+    FinancialService,
+    InvoiceViewPagedCollectionStandardResponse,
+} from 'src/services';
+interface invoiceProps {
+    invoice: InvoiceViewPagedCollectionStandardResponse;
 }
 
-function invoices({ adminList }: adminProps) {
-    return <ViewPayroll adminList={adminList} />;
+function invoices({ invoice }: invoiceProps) {
+    return <AdminInvoices invoiceData={invoice} />;
 }
 
 export default invoices;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
-    try {
-        const data = await ContractService.listContracts();
-        return {
-            props: {
-                adminList: data,
-            },
-        };
-    } catch (error: any) {
-        console.log(error);
-        return {
-            props: {
-                data: [],
-            },
-        };
-    }
-});
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx: any) => {
+        const pagingOptions = filterPagingSearchOptions(ctx);
+        try {
+            const data = await FinancialService.listInvoices(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+            );
+            return {
+                props: {
+                    invoice: data,
+                },
+            };
+        } catch (error: any) {
+            console.log(error);
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);

@@ -52,6 +52,7 @@ interface approveDate {
     chosenDate: string;
     hours?: string;
     checked?: boolean;
+    status?: string;
 }
 
 const schema = yup.object().shape({
@@ -60,9 +61,12 @@ const schema = yup.object().shape({
 
 const TimesheetAdmin = ({
     timeSheets,
+    id,
 }: {
     timeSheets: TimeSheetMonthlyView;
+    id: string;
 }) => {
+    console.log({ id });
     const router = useRouter();
     console.log({ timeSheets });
     const sheet = timeSheets?.timeSheet;
@@ -149,6 +153,7 @@ const TimesheetAdmin = ({
     };
 
     const generatePayroll = async (id) => {
+        console.log({ id });
         try {
             const data = await TimeSheetService.generatePayroll(id);
             if (data.status) {
@@ -162,9 +167,9 @@ const TimesheetAdmin = ({
                 position: 'top-right',
             });
             return;
-        } catch (error) {
+        } catch (error: any) {
             toast({
-                title: 'An error occurred',
+                title: error?.body.message || error.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -179,7 +184,6 @@ const TimesheetAdmin = ({
                 chosenDate,
             );
             if (data.status) {
-                generatePayroll(userId);
                 return;
             }
             toast({
@@ -213,19 +217,24 @@ const TimesheetAdmin = ({
 
     function ApproveAllTimeSheet() {
         const updateSelected = async (callback) => {
-            setAllChecked(!allChecked);
-            monthlyTimesheets?.forEach(async (timeSheet) => {
-                if (timeSheet.employeeInformation) {
+            // setAllChecked(!allChecked);
+            monthlyTimesheets?.forEach(async (timeSheet: TimeSheetView) => {
+                console.log({ timeSheet });
+                if (
+                    timeSheet.employeeInformation &&
+                    timeSheet.status == 'PENDING'
+                ) {
                     setLoading(true);
                     await approveTimeSheetForADay(
                         timeSheet.employeeInformationId,
                         timeSheet.date,
                     );
                 }
-                setLoading(false);
-                callback();
                 return;
             });
+            generatePayroll(id);
+            setLoading(false);
+            callback();
         };
         return (
             <TimeSheetEstimationBtn
@@ -236,20 +245,10 @@ const TimesheetAdmin = ({
             />
         );
     }
+
     function ApproveSelected() {
         const [loading, setLoading] = useState(false);
         const updateSelected = async (callback) => {
-            selected.forEach(async (select) => {
-                if (select.checked === true && select.userId) {
-                    setLoading(true);
-                    await approveTimeSheetForADay(
-                        select.userId,
-                        select.chosenDate,
-                    );
-                }
-                setLoading(false);
-                callback();
-            });
             selectedInput.forEach(async (select) => {
                 if (select.hours !== '' && select.userId !== undefined) {
                     setLoading(true);
@@ -259,9 +258,25 @@ const TimesheetAdmin = ({
                         select.hours,
                     );
                 }
-                setLoading(false);
-                callback();
             });
+            selected.forEach(async (select) => {
+                if (
+                    select.checked === true &&
+                    select.userId &&
+                    select.status == 'PENDING'
+                ) {
+                    setLoading(true);
+                    await approveTimeSheetForADay(
+                        select.userId,
+                        select.chosenDate,
+                    );
+                }
+                // callback();
+            });
+            generatePayroll(id);
+
+            setLoading(false);
+            callback();
         };
         return (
             <TimeSheetEstimationBtn
@@ -397,6 +412,7 @@ const TimesheetAdmin = ({
             )[0];
             const userId = timesheets?.employeeInformationId as string;
             const userDate = moment(timesheets?.date).format('YYYY-MM-DD');
+            const status = timesheets?.status as string;
             const [singleCheck, setSingleCheck] = useState(false);
             const [singleReject, setSingleReject] = useState(false);
             const isApproved = timesheets?.isApproved;
@@ -433,13 +449,14 @@ const TimesheetAdmin = ({
                                         userId: userId,
                                         chosenDate: userDate,
                                         checked: !singleCheck,
+                                        status: status,
                                     });
                                 }}
-                                // disabled={
-                                //     timesheets?.status === 'APPROVED' ||
-                                //     timesheets?.status === 'REJECTED' ||
-                                //     timesheets == undefined
-                                // }
+                                disabled={
+                                    timesheets?.status === 'APPROVED' ||
+                                    timesheets?.status === 'REJECTED' ||
+                                    timesheets == undefined
+                                }
                                 as={Button}
                                 minW="unset"
                                 p="0"
@@ -454,11 +471,11 @@ const TimesheetAdmin = ({
                                     setSingleReject(!singleReject);
                                     showReject(userId, userDate);
                                 }}
-                                // disabled={
-                                //     timesheets?.status === 'APPROVED' ||
-                                //     timesheets?.status === 'REJECTED' ||
-                                //     timesheets == undefined
-                                // }
+                                disabled={
+                                    timesheets?.status === 'APPROVED' ||
+                                    timesheets?.status === 'REJECTED' ||
+                                    timesheets == undefined
+                                }
                                 as={Button}
                                 minW="unset"
                                 p="0"

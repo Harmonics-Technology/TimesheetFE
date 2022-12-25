@@ -1,8 +1,8 @@
-import { withPageAuth } from "@components/generics/withPageAuth";
-import PaymentPartnerDashboard from "@components/subpages/PaymentPartnerDashboard";
+import { withPageAuth } from '@components/generics/withPageAuth';
+import PaymentPartnerDashboard from '@components/subpages/PaymentPartnerDashboard';
 // import SadminDashboard from "@components/subpages/SadminDashboard";
-import { GetServerSideProps } from "next";
-import { DashboardService } from "src/services";
+import { GetServerSideProps } from 'next';
+import { DashboardService } from 'src/services';
 interface DashboardProps {
     metrics: any;
 }
@@ -15,7 +15,7 @@ export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
     try {
-        const data = await DashboardService.getAdminMetrics();
+        const data = await DashboardService.getPayrollManagerMetrics();
         // console.log({ data });
         return {
             props: {

@@ -1,76 +1,94 @@
-import { Box, Grid, Image, Tr, VStack } from "@chakra-ui/react";
-import DashboardCard from "@components/bits-utils/DashboardCard";
-import TableCards from "@components/bits-utils/TableCards";
-import { TableData, TableStatus } from "@components/bits-utils/TableData";
+import { Box, Grid, Image, Tr, VStack } from '@chakra-ui/react';
+import DashboardCard from '@components/bits-utils/DashboardCard';
+import TableCards from '@components/bits-utils/TableCards';
 import {
-    DashboardView,
-    DashboardViewStandardResponse,
-    UserView,
-} from "src/services";
+    TableData,
+    TableState,
+    TableStatus,
+} from '@components/bits-utils/TableData';
+import moment from 'moment';
+import {
+    DashboardPaymentPartnerView,
+    DashboardPaymentPartnerViewStandardResponse,
+    RecentPayrollView,
+} from 'src/services';
 
 interface DashboardProps {
-    metrics: DashboardViewStandardResponse;
+    metrics: DashboardPaymentPartnerViewStandardResponse;
 }
 
 function PaymentPartnerDashboard({ metrics }: DashboardProps) {
-    const adminMetrics = metrics?.data as DashboardView;
+    const adminMetrics = metrics?.data as DashboardPaymentPartnerView;
     return (
         <VStack gap="1rem">
-            <Grid templateColumns={["1fr", "1fr"]} gap="1.2rem" w="full">
+            <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                 <TableCards
-                    title={"Recent Payroll"}
-                    url={"profile-management/clients"}
-                    data={adminMetrics?.recentCLients
-                        ?.slice(0, 4)
-                        .map((x: UserView) => (
-                            <Tr key={x.id}>
-                                <TableData name={x.role} />
-                                <TableData name={x.email} />
-                                <TableData name={x.role} />
-                                <TableData name={x.role} />
-                                <TableData name={x.role} />
-                                <TableData name={x.role} />
-                                <TableStatus name={x.isActive} />
+                    title={'Recent Payroll'}
+                    url={'profile-management/clients'}
+                    data={adminMetrics?.recentPayroll
+                        ?.slice(0, 5)
+                        .map((x: RecentPayrollView, i: any) => (
+                            <Tr key={i}>
+                                <TableData name={x.client} />
+                                <TableData
+                                    name={moment(x.startDate).format(
+                                        'DD/MM/YYYY',
+                                    )}
+                                />
+                                <TableData
+                                    name={moment(x.endDate).format(
+                                        'DD/MM/YYYY',
+                                    )}
+                                />
+                                <TableData name={x.rate} />
+                                <TableData name={x.totalAmount} />
+                                <TableState name={x.status} />
                             </Tr>
                         ))}
                     thead={[
-                        "Client",
-                        "Start date",
-                        "End date",
-                        "Rate",
-                        "Total Amount",
-                        "Status",
-                        "Action",
+                        'Client',
+                        'Start date',
+                        'End date',
+                        'Rate',
+                        'Total Amount',
+                        'Status',
                     ]}
-                    link={"/"}
+                    link={''}
                 />
             </Grid>
-            <Grid templateColumns={["1fr", "1fr"]} gap="1.2rem" w="full">
+            <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                 <TableCards
-                    title={"Recent Invoice"}
-                    url={"profile-management/clients"}
-                    data={adminMetrics?.recentCLients
-                        ?.slice(0, 4)
-                        .map((x: UserView) => (
-                            <Tr key={x.id}>
-                                <TableData name={x.role} />
-                                <TableData name={x.email} />
-                                <TableData name={x.role} />
-                                <TableData name={x.role} />
-                                <TableData name={x.role} />
-                                <TableData name={x.role} />
-                                <TableStatus name={x.isActive} />
+                    title={'Recent Invoice'}
+                    url={'profile-management/clients'}
+                    data={adminMetrics?.recentPayroll
+                        ?.slice(0, 5)
+                        .map((x: RecentPayrollView, i: any) => (
+                            <Tr key={i}>
+                                <TableData name={x.client} />
+                                <TableData
+                                    name={moment(x.startDate).format(
+                                        'DD/MM/YYYY',
+                                    )}
+                                />
+                                <TableData
+                                    name={moment(x.endDate).format(
+                                        'DD/MM/YYYY',
+                                    )}
+                                />
+                                <TableData name={x.rate} />
+                                <TableData name={x.totalAmount} />
+                                <TableState name={x.status} />
                             </Tr>
                         ))}
                     thead={[
-                        "Client",
-                        "Invoice no.",
-                        "Amount",
-                        "Generated on",
-                        "Status",
-                        "Action",
+                        'Client',
+                        'Start date',
+                        'End date',
+                        'Rate',
+                        'Total Amount',
+                        'Status',
                     ]}
-                    link={"/"}
+                    link={''}
                 />
             </Grid>
         </VStack>

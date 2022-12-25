@@ -254,7 +254,6 @@ function MyProfile({ user }: { user: UserView }) {
                             fontSize="1.1rem"
                             mb="2rem"
                             textTransform="capitalize"
-                            fontFamily="Open Sans"
                             color="brand.200"
                         >
                             Personal Information
@@ -307,7 +306,6 @@ function MyProfile({ user }: { user: UserView }) {
                             fontSize="1.1rem"
                             mb="2rem"
                             textTransform="capitalize"
-                            fontFamily="Open Sans"
                             color="brand.200"
                         >
                             Contact Information
@@ -347,7 +345,6 @@ function MyProfile({ user }: { user: UserView }) {
                             fontSize="1.1rem"
                             mb="2rem"
                             textTransform="capitalize"
-                            fontFamily="Open Sans"
                             color="brand.200"
                         >
                             Job Information

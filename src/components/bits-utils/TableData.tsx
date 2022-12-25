@@ -13,7 +13,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { AiOutlineDownload } from 'react-icons/ai';
-import { FaEllipsisH } from 'react-icons/fa';
+import { FaEllipsisH, FaEye } from 'react-icons/fa';
 import {
     FinancialService,
     InitiateResetModel,
@@ -22,19 +22,12 @@ import {
 } from 'src/services';
 import fileDownload from 'js-file-download';
 
-export function TableData({ name }: { name: string | undefined | null }) {
-    return (
-        <Td
-            pl="1rem"
-            fontSize="13px"
-            color="brand.200"
-            fontWeight="400"
-            // textTransform="capitalize"
-            py=".8rem"
-        >
-            {name}
-        </Td>
-    );
+export function TableData({
+    name,
+}: {
+    name: string | number | undefined | null;
+}) {
+    return <td>{name}</td>;
 }
 export function TableStatus({ name }: { name: boolean | undefined }) {
     return (
@@ -55,12 +48,20 @@ export function TableStatus({ name }: { name: boolean | undefined }) {
         </td>
     );
 }
-export function TableState({ name }: { name: string }) {
+export function TableState({ name }: { name: string | undefined | null }) {
     return (
         <td>
             <Box
                 fontSize="10px"
-                bgColor={name == 'ACTIVE' ? 'brand.400' : 'red'}
+                bgColor={
+                    name == 'ACTIVE' || name == 'APPROVED' || name == 'INVOICED'
+                        ? 'brand.400'
+                        : name == 'PENDING'
+                        ? 'brand.700'
+                        : name == 'REVIEWED'
+                        ? 'brand.600'
+                        : 'red'
+                }
                 borderRadius="4px"
                 color="white"
                 fontWeight="bold"
@@ -331,31 +332,64 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
     );
 }
 
-export function ExpenseActions({ id }: { id: any }) {
+export function ExpenseActions({
+    id,
+    manager = false,
+}: {
+    id: any;
+    manager?: boolean;
+}) {
     const toast = useToast();
     const router = useRouter();
     const Approve = async (data: string) => {
         try {
-            const result = await FinancialService.approveExpense(data);
-            if (result.status) {
-                console.log({ result });
+            if (manager) {
+                const result = await FinancialService.approveExpense(data);
+                if (result.status) {
+                    console.log({ result });
+                    toast({
+                        title: result.message,
+                        status: 'success',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                    router.reload();
+                    return;
+                }
                 toast({
                     title: result.message,
-                    status: 'success',
+                    status: 'error',
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
-                return;
+            } else {
+                const result = await FinancialService.reviewExpense(data);
+                if (result.status) {
+                    console.log({ result });
+                    toast({
+                        title: result.message,
+                        status: 'success',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                    router.reload();
+                    return;
+                }
+                toast({
+                    title: result.message,
+                    status: 'error',
+                    isClosable: true,
+                    position: 'top-right',
+                });
             }
+        } catch (error: any) {
+            console.log({ error });
             toast({
-                title: result.message,
+                title: error.body.message || error.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
             });
-        } catch (error) {
-            console.log({ error });
         }
     };
     const Decline = async (data: string) => {
@@ -398,13 +432,39 @@ export function ExpenseActions({ id }: { id: any }) {
                 </MenuButton>
                 <MenuList w="full">
                     <MenuItem onClick={() => Approve(id)} w="full">
-                        Approve
+                        {manager ? 'Approve' : 'Review'}
                     </MenuItem>
                     <MenuItem onClick={() => Decline(id)} w="full">
                         Reject
                     </MenuItem>
                 </MenuList>
             </Menu>
+        </td>
+    );
+}
+export function InvoiceAction({
+    clicked,
+    data,
+    onOpen,
+}: {
+    clicked?: any;
+    data: any;
+    onOpen?: any;
+}) {
+    const showInvoice = (data: any) => {
+        onOpen();
+        clicked(data);
+    };
+
+    return (
+        <td>
+            <Box
+                onClick={() => showInvoice(data)}
+                fontSize="1rem"
+                cursor="pointer"
+            >
+                <FaEye />
+            </Box>
         </td>
     );
 }

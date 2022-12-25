@@ -1,6 +1,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { DashboardPaymentPartnerViewStandardResponse } from '../models/DashboardPaymentPartnerViewStandardResponse';
+import type { DashboardTeamMemberViewStandardResponse } from '../models/DashboardTeamMemberViewStandardResponse';
 import type { DashboardViewStandardResponse } from '../models/DashboardViewStandardResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -22,18 +24,29 @@ export class DashboardService {
 
     /**
      * @param employeeInformationId 
-     * @returns DashboardViewStandardResponse Success
+     * @returns DashboardTeamMemberViewStandardResponse Success
      * @throws ApiError
      */
     public static getTeamMemberMetrics(
 employeeInformationId?: string,
-): CancelablePromise<DashboardViewStandardResponse> {
+): CancelablePromise<DashboardTeamMemberViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Dashboard/team-member-metrics',
             query: {
                 'employeeInformationId': employeeInformationId,
             },
+        });
+    }
+
+    /**
+     * @returns DashboardPaymentPartnerViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getPayrollManagerMetrics(): CancelablePromise<DashboardPaymentPartnerViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Dashboard/payment-partner-metrics',
         });
     }
 

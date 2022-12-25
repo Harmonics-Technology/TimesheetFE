@@ -1,11 +1,11 @@
-import { withPageAuth } from "@components/generics/withPageAuth";
-import TeamTimesheetHistory from "@components/subpages/TeamTimesheetHistory";
-import { GetServerSideProps } from "next";
-import React from "react";
+import { withPageAuth } from '@components/generics/withPageAuth';
+import TeamTimesheetHistory from '@components/subpages/TeamTimesheetHistory';
+import { GetServerSideProps } from 'next';
+import React from 'react';
 import {
     TimeSheetHistoryViewPagedCollectionStandardResponse,
     TimeSheetService,
-} from "src/services";
+} from 'src/services';
 
 function history({
     timeSheets,
@@ -17,20 +17,25 @@ function history({
 
 export default history;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
-    try {
-        const data = await TimeSheetService.listTimeSheetHistories();
-        return {
-            props: {
-                timeSheets: data,
-            },
-        };
-    } catch (error: any) {
-        console.log(error);
-        return {
-            props: {
-                data: [],
-            },
-        };
-    }
-});
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx) => {
+        const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
+        try {
+            const data = await TimeSheetService.listTeamMemberApprovedTimeSheet(
+                id,
+            );
+            return {
+                props: {
+                    timeSheets: data,
+                },
+            };
+        } catch (error: any) {
+            console.log(error);
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);

@@ -30,9 +30,9 @@ export default SingleTimeSheet;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        console.log({
-            ctx: JSON.parse(ctx.req.cookies.user).employeeInformationId,
-        });
+        // console.log({
+        //     ctx: JSON.parse(ctx.req.cookies.user).employeeInformationId,
+        // });
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
         console.log({ id });
 

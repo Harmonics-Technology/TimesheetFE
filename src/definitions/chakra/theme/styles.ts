@@ -1,16 +1,19 @@
-import { ThemeOverride } from "@chakra-ui/react";
+import { ThemeOverride } from '@chakra-ui/react';
 
-type GlobalStyles = Pick<ThemeOverride, "styles">;
+type GlobalStyles = Pick<ThemeOverride, 'styles'>;
 
 export default {
     styles: {
         global: {
             h1: {
                 fontWeight: 500,
-                marginBottom: "0.5em",
+                marginBottom: '0.5em',
             },
             p: {
-                marginBottom: "1em",
+                marginBottom: '1em',
+            },
+            body: {
+                fontFamily: "'Open Sans', sans-serif",
             },
         },
     },

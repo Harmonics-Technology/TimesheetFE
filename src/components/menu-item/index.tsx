@@ -78,7 +78,6 @@ function MenuItem({
                                         : '500'
                                 }
                                 fontSize=".9rem"
-                                fontFamily="Open Sans"
                                 pl=".5rem"
                                 noOfLines={1}
                             >
@@ -163,7 +162,6 @@ function MenuItem({
                                         : '500'
                                 }
                                 fontSize=".9rem"
-                                fontFamily="Open Sans"
                                 pl=".5rem"
                                 noOfLines={1}
                             >

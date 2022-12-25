@@ -1,31 +1,35 @@
-import { withPageAuth } from "@components/generics/withPageAuth";
-import SadminDashboard from "@components/subpages/SadminDashboard";
-import { GetServerSideProps } from "next";
-import { DashboardService } from "src/services";
+import { withPageAuth } from '@components/generics/withPageAuth';
+import TeamDashboard from '@components/subpages/TeamDashboard';
+import { GetServerSideProps } from 'next';
+import { DashboardService } from 'src/services';
 interface DashboardProps {
     metrics: any;
 }
 
 function index({ metrics }: DashboardProps) {
-    return <SadminDashboard metrics={metrics} />;
+    return <TeamDashboard metrics={metrics} />;
 }
 
 export default index;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
-    try {
-        const data = await DashboardService.getAdminMetrics();
-        // console.log({ data });
-        return {
-            props: {
-                metrics: data,
-            },
-        };
-    } catch (error: any) {
-        return {
-            props: {
-                data: [],
-            },
-        };
-    }
-});
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx) => {
+        const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
+        console.log({ id });
+        try {
+            const data = await DashboardService.getTeamMemberMetrics(id);
+            console.log({ data });
+            return {
+                props: {
+                    metrics: data,
+                },
+            };
+        } catch (error: any) {
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);

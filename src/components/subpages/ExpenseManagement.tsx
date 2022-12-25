@@ -33,6 +33,7 @@ import {
     ExpenseModel,
     ExpenseTypeView,
     ExpenseView,
+    ExpenseViewPagedCollectionStandardResponse,
     FinancialService,
     UserView,
 } from 'src/services';
@@ -50,13 +51,14 @@ const schema = yup.object().shape({
     amount: yup.number().required(),
 });
 interface expenseProps {
-    expenses: ExpenseView[];
+    expenses: ExpenseViewPagedCollectionStandardResponse;
     team: UserView[];
     expenseType: ExpenseTypeView[];
 }
 
 function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
     console.log({ expenseType, team, expenses });
+    const expensesList = expenses?.data?.value;
     const {
         register,
         handleSubmit,
@@ -139,11 +141,11 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                         'Amount',
                         'Status',
                         'Action',
-                        '...',
+                        // '...',
                     ]}
                 >
                     <>
-                        {expenses?.map((x: ExpenseView) => (
+                        {expensesList?.map((x: ExpenseView) => (
                             <Tr key={x.id}>
                                 <TableData name={x.teamMember?.fullName} />
                                 <TableData name={x.description} />
@@ -153,8 +155,10 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                                     name={x.amount as unknown as string}
                                 />
                                 <TableState name={x.status as string} />
-                                <ExpenseActions id={x.id} />
-                                <Td>{x.status == 'ACTIVE' && <Checkbox />}</Td>
+                                <ExpenseActions id={x.id}  />
+                                {/* <td>
+                                    {x.status == 'APPROVED' && <Checkbox />}
+                                </td> */}
                             </Tr>
                         ))}
                     </>
@@ -187,7 +191,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                             keys="id"
                             keyLabel="name"
                             label="Expense Type"
-                            options={expenseType.filter(
+                            options={expenseType?.filter(
                                 (x) => x.status == 'ACTIVE',
                             )}
                         />

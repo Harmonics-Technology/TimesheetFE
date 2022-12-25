@@ -1,36 +1,44 @@
-import ViewPayroll from "@components/bits-utils/ViewPayroll";
-import { withPageAuth } from "@components/generics/withPageAuth";
-import ContractList from "@components/subpages/ContractList";
-import { GetServerSideProps } from "next";
-import React from "react";
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
+import { withPageAuth } from '@components/generics/withPageAuth';
+import AdminPayroll from '@components/subpages/AdminPayroll';
+import PaymentPartnerPayroll from '@components/subpages/PaymentPartnerPayroll';
+import { GetServerSideProps } from 'next';
+import React from 'react';
 import {
-    ContractService,
-    ContractViewPagedCollectionStandardResponse,
-} from "src/services";
-interface adminProps {
-    adminList: ContractViewPagedCollectionStandardResponse;
+    FinancialService,
+    PayrollViewPagedCollectionStandardResponse,
+} from 'src/services';
+
+interface PayrollType {
+    payrolls: PayrollViewPagedCollectionStandardResponse;
+}
+function expenses({ payrolls }: PayrollType) {
+    return <PaymentPartnerPayroll payrolls={payrolls} />;
 }
 
-function admin({ adminList }: adminProps) {
-    return <ViewPayroll adminList={adminList} />;
-}
+export default expenses;
 
-export default admin;
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx: any) => {
+        const pagingOptions = filterPagingSearchOptions(ctx);
+        try {
+            const data = await FinancialService.listPayrollsByPaymentPartner(
+                pagingOptions.offset,
+                pagingOptions.limit,
+            );
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
-    try {
-        const data = await ContractService.listContracts();
-        return {
-            props: {
-                adminList: data,
-            },
-        };
-    } catch (error: any) {
-        console.log(error);
-        return {
-            props: {
-                data: [],
-            },
-        };
-    }
-});
+            return {
+                props: {
+                    payrolls: data,
+                },
+            };
+        } catch (error: any) {
+            console.log(error);
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);

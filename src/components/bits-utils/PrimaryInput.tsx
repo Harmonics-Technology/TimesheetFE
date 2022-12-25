@@ -5,9 +5,9 @@ import {
     InputGroup,
     InputRightElement,
     Text,
-} from "@chakra-ui/react";
-import { FieldError, UseFormRegister, Path } from "react-hook-form";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+} from '@chakra-ui/react';
+import { FieldError, UseFormRegister, Path } from 'react-hook-form';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
@@ -25,7 +25,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     borderColor?: string;
     borderRadius?: string;
     placeholderColor?: string;
-    defaultValue: string | number | undefined;
+    defaultValue?: string | number | undefined;
     format?: string;
     value?: string | number | undefined;
     testId?: string;
@@ -42,21 +42,21 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
 export const PrimaryInput = <TFormValues extends Record<string, any>>({
     name,
     required = false,
-    type = "text",
-    label = "",
+    type = 'text',
+    label = '',
     register,
     validate = {},
     error,
     disableLabel = false,
-    placeholder = "",
-    fontSize = ".8rem",
+    placeholder = '',
+    fontSize = '.8rem',
     passwordVisible,
     defaultValue,
     changeVisibility,
     border,
-    borderColor = "gray.300",
+    borderColor = 'gray.300',
     icon,
-    h = "2.6rem",
+    h = '2.6rem',
 }: FormInputProps<TFormValues>) => {
     return (
         <FormControl>
@@ -93,7 +93,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                 )}
             </InputGroup>
             <Text fontSize=".7rem" color="red">
-                {(error?.type === "required" && `${label} is required`) ||
+                {(error?.type === 'required' && `${label} is required`) ||
                     error?.message}
             </Text>
         </FormControl>

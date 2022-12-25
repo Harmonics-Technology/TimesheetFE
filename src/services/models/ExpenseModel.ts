@@ -5,7 +5,7 @@
 export type ExpenseModel = {
     teamMemberId?: string;
     description?: string | null;
-    expenseTypeId?: number;
+    expenseTypeId?: string;
     amount?: number;
     currency?: string | null;
 };

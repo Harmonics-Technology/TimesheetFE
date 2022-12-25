@@ -12,4 +12,5 @@ export type TimeSheetView = {
     employeeInformation?: EmployeeInformationView;
     hours?: number;
     status?: string | null;
+    rejectionReason?: string | null;
 };

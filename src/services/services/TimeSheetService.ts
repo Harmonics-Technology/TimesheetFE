@@ -143,6 +143,23 @@ search?: string,
     }
 
     /**
+     * @param employeeInformationId 
+     * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listTeamMemberApprovedTimeSheet(
+employeeInformationId?: string,
+): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/TimeSheet/team-member/approved',
+            query: {
+                'employeeInformationId': employeeInformationId,
+            },
+        });
+    }
+
+    /**
      * @param requestBody 
      * @returns BooleanStandardResponse Success
      * @throws ApiError

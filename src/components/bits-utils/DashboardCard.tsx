@@ -1,6 +1,6 @@
-import { Box, Flex, HStack, Square, Stack, Text } from "@chakra-ui/react";
-import Link from "next/link";
-import { FaArrowRight, FaUser } from "react-icons/fa";
+import { Box, Flex, HStack, Square, Stack, Text } from '@chakra-ui/react';
+import Link from 'next/link';
+import { FaArrowRight, FaUser } from 'react-icons/fa';
 
 interface DashboardCardProps {
     title: string;
@@ -18,7 +18,7 @@ function DashboardCard({ title, url, value }: DashboardCardProps) {
             align="center"
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
-            <Box fontFamily="Open Sans" color="brand.200">
+            <Box color="brand.200">
                 <Text
                     fontWeight="600"
                     fontSize=".875rem"
@@ -42,18 +42,20 @@ function DashboardCard({ title, url, value }: DashboardCardProps) {
                 >
                     <FaUser />
                 </Square>
-                <Link passHref href={url}>
-                    <HStack
-                        align="center"
-                        color="brand.600"
-                        fontSize=".7rem"
-                        fontWeight="bold"
-                        cursor="pointer"
-                    >
-                        <Text mb="0">View more</Text>
-                        <FaArrowRight />
-                    </HStack>
-                </Link>
+                {url == '' ? null : (
+                    <Link passHref href={url}>
+                        <HStack
+                            align="center"
+                            color="brand.600"
+                            fontSize=".7rem"
+                            fontWeight="bold"
+                            cursor="pointer"
+                        >
+                            <Text mb="0">View more</Text>
+                            <FaArrowRight />
+                        </HStack>
+                    </Link>
+                )}
             </Stack>
         </Flex>
     );

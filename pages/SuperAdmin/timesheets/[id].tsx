@@ -11,14 +11,21 @@ interface Size {
     height: number | undefined;
 }
 
-function SingleTimeSheet({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) {
+function SingleTimeSheet({
+    timeSheets,
+    id,
+}: {
+    timeSheets: TimeSheetMonthlyView;
+    id: string;
+}) {
+    // console.log({ id });
     const size: Size = useWindowSize();
     return (
         <>
             {size.width != null && size.width <= 1245 ? (
                 <HidePage />
             ) : (
-                <TimesheetAdmin timeSheets={timeSheets} />
+                <TimesheetAdmin timeSheets={timeSheets} id={id} />
             )}
         </>
     );
@@ -35,13 +42,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             date = moment(new Date()).format('YYYY-MM-DD');
         }
 
-        console.log({ date });
+        console.log({ id });
         try {
             const data = await TimeSheetService.getTimeSheet(id, date);
             console.log({ data });
             return {
                 props: {
                     timeSheets: data.data,
+                    id,
                 },
             };
         } catch (error: any) {

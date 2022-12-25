@@ -1,9 +1,9 @@
-import { Box, HStack, Stack, Text, Tr } from "@chakra-ui/react";
-import Link from "next/link";
-import React from "react";
-import { FaArrowRight } from "react-icons/fa";
-import { UserView } from "src/services";
-import Tables from "./Tables";
+import { Box, HStack, Stack, Text, Tr } from '@chakra-ui/react';
+import Link from 'next/link';
+import React from 'react';
+import { FaArrowRight } from 'react-icons/fa';
+import { UserView } from 'src/services';
+import Tables from './Tables';
 
 interface TableCardsProps {
     title: string;
@@ -28,7 +28,6 @@ function TableCards({ title, url, data, thead, link }: TableCardsProps) {
                 opacity=".8"
                 mb="1rem"
                 textTransform="capitalize"
-                fontFamily="Open Sans"
                 color="brand.200"
             >
                 {title}
@@ -39,18 +38,20 @@ function TableCards({ title, url, data, thead, link }: TableCardsProps) {
                 </Link>
             </Tables>
             <Stack direction="column" align="flex-end" mt="1rem">
-                <Link passHref href={url}>
-                    <HStack
-                        align="center"
-                        color="brand.600"
-                        fontSize=".7rem"
-                        fontWeight="bold"
-                        cursor="pointer"
-                    >
-                        <Text mb="0">View more</Text>
-                        <FaArrowRight />
-                    </HStack>
-                </Link>
+                {link !== '' && (
+                    <Link passHref href={url}>
+                        <HStack
+                            align="center"
+                            color="brand.600"
+                            fontSize=".7rem"
+                            fontWeight="bold"
+                            cursor="pointer"
+                        >
+                            <Text mb="0">View more</Text>
+                            <FaArrowRight />
+                        </HStack>
+                    </Link>
+                )}
             </Stack>
         </Box>
     );
