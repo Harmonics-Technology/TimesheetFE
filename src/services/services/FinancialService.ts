@@ -388,4 +388,58 @@ limit?: number,
         });
     }
 
+    /**
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @returns InvoiceViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listInvoicesByPaymentPartner(
+offset?: number,
+limit?: number,
+search?: string,
+): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/paymentpartner/invoices',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @returns ExpenseViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listExpensesByPaymentPartner(
+offset?: number,
+limit?: number,
+search?: string,
+): CancelablePromise<ExpenseViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/paymentpartner/expenses',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
 }

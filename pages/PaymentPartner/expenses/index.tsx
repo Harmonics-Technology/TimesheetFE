@@ -21,11 +21,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const listExpenses = await FinancialService.listApprovedExpenses(
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-            );
+            const listExpenses =
+                await FinancialService.listExpensesByPaymentPartner(
+                    pagingOptions.offset,
+                    pagingOptions.limit,
+                    pagingOptions.search,
+                );
             return {
                 props: {
                     listExpenses,

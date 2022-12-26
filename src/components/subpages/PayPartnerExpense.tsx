@@ -32,19 +32,14 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
-            if (
-                selectedId?.length ===
-                expensesList?.filter((x) => x.status == 'APPROVED').length
-            ) {
+            if (selectedId?.length === expensesList?.length) {
                 setSelectedId([]);
                 return;
             }
             const response: string[] = [];
-            expensesList
-                ?.filter((x) => x.status == 'APPROVED')
-                .forEach((x) =>
-                    response.push(x.id as string),
-                ) as unknown as string[];
+            expensesList?.forEach((x) =>
+                response.push(x.id as string),
+            ) as unknown as string[];
             console.log({ response });
             setSelectedId([...response]);
             return;
@@ -120,10 +115,8 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
                     </Box>
                     <Checkbox
                         checked={
-                            expensesList?.filter((x) => x.status == 'APPROVED')
-                                .length !== 0 &&
-                            expensesList?.filter((x) => x.status == 'APPROVED')
-                                .length == selectedId?.length
+                            expensesList?.length !== 0 &&
+                            expensesList?.length == selectedId?.length
                         }
                         onChange={() => toggleSelected('', true)}
                         label="Select All"

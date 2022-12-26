@@ -1,34 +1,35 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import AdminInvoices from '@components/subpages/AdminInvoices';
+import AdminPayslip from '@components/subpages/AdminPayslip';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
     FinancialService,
-    InvoiceViewPagedCollectionStandardResponse,
+    PayrollViewPagedCollectionStandardResponse,
 } from 'src/services';
-interface invoiceProps {
-    invoice: InvoiceViewPagedCollectionStandardResponse;
+
+interface PayrollType {
+    payrolls: PayrollViewPagedCollectionStandardResponse;
+}
+function expenses({ payrolls }: PayrollType) {
+    return <AdminPayslip payrolls={payrolls} />;
 }
 
-function invoices({ invoice }: invoiceProps) {
-    return <AdminInvoices invoiceData={invoice} />;
-}
-
-export default invoices;
+export default expenses;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listInvoicesByPaymentPartner(
+            const data = await FinancialService.listPaySlips(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
             );
+
             return {
                 props: {
-                    invoice: data,
+                    payrolls: data,
                 },
             };
         } catch (error: any) {

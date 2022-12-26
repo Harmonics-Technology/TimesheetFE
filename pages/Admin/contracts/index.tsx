@@ -1,11 +1,11 @@
-import { withPageAuth } from "@components/generics/withPageAuth";
-import ContractList from "@components/subpages/ContractList";
-import { GetServerSideProps } from "next";
-import React from "react";
+import { withPageAuth } from '@components/generics/withPageAuth';
+import ContractList from '@components/subpages/ContractList';
+import { GetServerSideProps } from 'next';
+import React from 'react';
 import {
     ContractService,
     ContractViewPagedCollectionStandardResponse,
-} from "src/services";
+} from 'src/services';
 interface adminProps {
     adminList: ContractViewPagedCollectionStandardResponse;
 }

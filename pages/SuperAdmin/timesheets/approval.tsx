@@ -1,3 +1,4 @@
+import { filterPagingSearchOptions } from "@components/generics/filterPagingSearchOptions";
 import { withPageAuth } from "@components/generics/withPageAuth";
 import TimeSheetApproval from "@components/subpages/TimesheetApproval";
 import { GetServerSideProps } from "next";
@@ -17,9 +18,14 @@ function approval({
 
 export default approval;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
+export const getServerSideProps: GetServerSideProps = withPageAuth(async (ctx) => {
+    const pagingOptions = filterPagingSearchOptions(ctx);
     try {
-        const data = await TimeSheetService.listApprovedTimeSheet();
+        const data = await TimeSheetService.listApprovedTimeSheet(
+            pagingOptions.offset,
+            pagingOptions.limit,
+            pagingOptions.search,
+        );
         return {
             props: {
                 timeSheets: data,

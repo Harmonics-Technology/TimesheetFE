@@ -1,34 +1,40 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import AdminInvoices from '@components/subpages/AdminInvoices';
+import SupervisorManagement from '@components/subpages/SupervisorManagement';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
-    FinancialService,
-    InvoiceViewPagedCollectionStandardResponse,
+    UserService,
+    UserView,
+    UserViewPagedCollectionStandardResponse,
 } from 'src/services';
-interface invoiceProps {
-    invoice: InvoiceViewPagedCollectionStandardResponse;
+interface adminProps {
+    adminList: UserViewPagedCollectionStandardResponse;
+    client: UserView[];
 }
 
-function invoices({ invoice }: invoiceProps) {
-    return <AdminInvoices invoiceData={invoice} />;
+function admin({ adminList, client }: adminProps) {
+    // console.log({ team });
+    return <SupervisorManagement adminList={adminList} client={client} />;
 }
 
-export default invoices;
+export default admin;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listInvoicesByPaymentPartner(
+            const client = await UserService.listUsers('client');
+            const data = await UserService.listUsers(
+                'supervisor',
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
             );
             return {
                 props: {
-                    invoice: data,
+                    adminList: data,
+                    client: client?.data?.value,
                 },
             };
         } catch (error: any) {
