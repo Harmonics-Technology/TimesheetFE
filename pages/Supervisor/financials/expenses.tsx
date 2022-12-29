@@ -46,6 +46,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             return {
                 props: {
                     expenses: data,
+                    //@ts-ignore
                     team: team?.data?.value,
                     expenseType: expenseType.data,
                 },
