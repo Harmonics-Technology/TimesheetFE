@@ -654,19 +654,6 @@ function TeamProfile({
                                     }
                                     register={register}
                                 />
-                                <SelectrixBox<TeamMemberModel>
-                                    control={control}
-                                    name="paymentPartnerId"
-                                    error={errors.paymentPartnerId}
-                                    keys="id"
-                                    keyLabel="fullName"
-                                    label="Payment Partner"
-                                    options={paymentPartner}
-                                    placeholder={
-                                        userProfile?.employeeInformation
-                                            ?.paymentPartner?.fullName as string
-                                    }
-                                />
                             </>
                         ) : (
                             <>
@@ -691,6 +678,19 @@ function TeamProfile({
                                             ?.hoursPerDay as unknown as string
                                     }
                                     register={register}
+                                />
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="paymentPartnerId"
+                                    error={errors.paymentPartnerId}
+                                    keys="id"
+                                    keyLabel="fullName"
+                                    label="Payment Partner"
+                                    options={paymentPartner}
+                                    placeholder={
+                                        userProfile?.employeeInformation
+                                            ?.paymentPartner?.fullName as string
+                                    }
                                 />
                             </>
                         )}

@@ -68,15 +68,15 @@ const schema = yup.object().shape({
         then: yup.string().required(),
     }),
     ratePerHour: yup.string().when('payRollTypeId', {
-        is: 2,
+        is: 1,
         then: yup.string().required(),
     }),
     hstNumber: yup.string().when('payRollTypeId', {
-        is: 2,
+        is: 1,
         then: yup.string().required(),
     }),
     monthlyPayoutRate: yup.string().when('payRollTypeId', {
-        is: 1,
+        is: 2,
         then: yup.string().required(),
     }),
     currency: yup.string().required(),
@@ -727,15 +727,6 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                         type="number"
                                         register={register}
                                     />
-                                    <SelectrixBox<TeamMemberModel>
-                                        control={control}
-                                        name="paymentPartnerId"
-                                        error={errors.paymentPartnerId}
-                                        keys="id"
-                                        keyLabel="fullName"
-                                        label="Payment Partner"
-                                        options={paymentPartner}
-                                    />
                                 </>
                             ) : payroll == 2 ? (
                                 <>
@@ -755,6 +746,15 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                    />
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="paymentPartnerId"
+                                        error={errors.paymentPartnerId}
+                                        keys="id"
+                                        keyLabel="fullName"
+                                        label="Payment Partner"
+                                        options={paymentPartner}
                                     />
                                 </>
                             ) : null}
