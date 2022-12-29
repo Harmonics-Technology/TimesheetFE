@@ -45,6 +45,7 @@ const schema = yup.object().shape({
 
 function SupervisorManagement({ adminList, client }: adminProps) {
     // console.log({ adminList });
+    const clients = client?.filter((x) => x.isActive);
     const {
         register,
         handleSubmit,
@@ -150,7 +151,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
                             keys="id"
                             keyLabel="fullName"
                             label="Client"
-                            options={client}
+                            options={clients}
                         />
                         <PrimaryInput<RegisterModel>
                             label="Email"

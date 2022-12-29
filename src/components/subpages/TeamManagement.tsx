@@ -90,6 +90,7 @@ const schema = yup.object().shape({
 
 function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     console.log({ adminList });
+    const client = clients?.filter((x) => x.isActive);
 
     const {
         register,
@@ -197,7 +198,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             setLoading(false);
             console.log({ data });
             if (data.status) {
-                setSupervisors(data.data);
+                setSupervisors(data.data?.filter((x) => x.isActive));
                 return;
             }
             setLoading(false);
@@ -205,6 +206,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             //
         }
     };
+    console.log({ supervisors });
 
     useEffect(() => {
         getSupervisor(clientId);
@@ -421,7 +423,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                             keys="id"
                             keyLabel="fullName"
                             label="Current Client"
-                            options={clients}
+                            options={client}
                         />
                         {supervisors !== undefined && (
                             <SelectrixBox<TeamMemberModel>
