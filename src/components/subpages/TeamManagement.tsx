@@ -125,6 +125,10 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     const widgetApiC = useRef<any>();
     const widgetApiD = useRef<any>();
 
+    // const resetOnClose = () => {
+
+    // }
+
     const showLoadingStateB = (file) => {
         if (file) {
             file.progress((info) => {
