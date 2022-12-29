@@ -38,7 +38,7 @@ function TimesheetClient({ timeSheets }: adminProps) {
                         'Email',
                         'Total Hours',
                         'No. of Days',
-                        'Approved No. of Hours',
+                        // 'Approved No. of Hours',
                         '',
                     ]}
                 >
@@ -57,11 +57,11 @@ function TimesheetClient({ timeSheets }: adminProps) {
                                         x.numberOfDays as unknown as string
                                     } Days`}
                                 />
-                                <TableData
+                                {/* <TableData
                                     name={`${
                                         x.approvedNumberOfHours as unknown as string
                                     } Hours`}
-                                />
+                                /> */}
 
                                 <TableContractAction
                                     id={x.employeeInformationId}

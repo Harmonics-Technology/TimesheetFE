@@ -1,6 +1,6 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import TimesheetClient from '@components/subpages/TimesheetClientApproval';
+import TimesheetClient from '@components/subpages/TimesheetClientHistory';
 import TimesheetHistory from '@components/subpages/TimesheetHistory';
 import { GetServerSideProps } from 'next';
 import React from 'react';
