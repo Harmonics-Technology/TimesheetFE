@@ -1,13 +1,18 @@
 import { withPageAuth } from '@components/generics/withPageAuth';
 import TeamDashboard from '@components/subpages/TeamDashboard';
 import { GetServerSideProps } from 'next';
-import { DashboardService } from 'src/services';
+import {
+    DashboardService,
+    FinancialService,
+    PaySlipViewPagedCollectionStandardResponse,
+} from 'src/services';
 interface DashboardProps {
     metrics: any;
+    payslips: PaySlipViewPagedCollectionStandardResponse;
 }
 
-function index({ metrics }: DashboardProps) {
-    return <TeamDashboard metrics={metrics} />;
+function index({ metrics, payslips }: DashboardProps) {
+    return <TeamDashboard metrics={metrics} payslip={payslips} />;
 }
 
 export default index;
@@ -18,10 +23,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         console.log({ id });
         try {
             const data = await DashboardService.getTeamMemberMetrics(id);
-            console.log({ data });
+            const payslips = await FinancialService.listPaySlipsByTeamMember();
+            // console.log({ payslips });
             return {
                 props: {
                     metrics: data,
+                    payslips,
                 },
             };
         } catch (error: any) {

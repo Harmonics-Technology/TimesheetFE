@@ -50,4 +50,26 @@ employeeInformationId?: string,
         });
     }
 
+    /**
+     * @returns DashboardPaymentPartnerViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getClientMetrics(): CancelablePromise<DashboardPaymentPartnerViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Dashboard/client-metrics',
+        });
+    }
+
+    /**
+     * @returns DashboardPaymentPartnerViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getSupervisorMetrics(): CancelablePromise<DashboardPaymentPartnerViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Dashboard/supervisor-metrics',
+        });
+    }
+
 }

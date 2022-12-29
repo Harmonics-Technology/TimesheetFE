@@ -10,7 +10,7 @@ import {
     Flex,
 } from '@chakra-ui/react';
 import React, { useContext, useRef, useState } from 'react';
-import { FaUser } from 'react-icons/fa';
+import { FaTimes, FaUser } from 'react-icons/fa';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -28,11 +28,9 @@ import { useRouter } from 'next/router';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 
 const schema = yup.object().shape({
-    // firstName: yup.string().required(),
-    // lastName: yup.string().required(),
-    // role: yup.string().required(),
-    // isActive: yup.string().required(),
-    // id: yup.string().required(),
+    dateOfBirth: yup.string().required(),
+    address: yup.string().required(),
+    phoneNumber: yup.string().required(),
 });
 
 function MyProfile({ user }: { user: UserView }) {
@@ -67,7 +65,7 @@ function MyProfile({ user }: { user: UserView }) {
         setShowLoading(false);
         router.reload();
     };
-    const updatePicture = async (data: UpdateUserModel, info, callback) => {
+    const updatePicture = async (data: UpdateUserModel, info, callback?) => {
         data.firstName = user?.firstName;
         data.lastName = user?.lastName;
         data.isActive = user?.isActive;
@@ -111,6 +109,51 @@ function MyProfile({ user }: { user: UserView }) {
             });
         }
     };
+
+    // const removePicture = async (data: UpdateUserModel, info) => {
+    //     data.firstName = user?.firstName;
+    //     data.lastName = user?.lastName;
+    //     data.isActive = user?.isActive;
+    //     data.id = user?.id;
+    //     data.organizationAddress = user?.organizationAddress;
+    //     data.organizationEmail = user?.organizationEmail;
+    //     data.organizationPhone = user?.organizationPhone;
+    //     data.phoneNumber = user?.phoneNumber;
+    //     data.role = user?.role;
+    //     data.profilePicture = info?.cdnUrl;
+    //     console.log({ data });
+    //     try {
+    //         const result = await UserService.updateUser(data);
+    //         console.log({ result });
+    //         if (result.status) {
+    //             toast({
+    //                 title: 'Profile Picture Update Success',
+    //                 status: 'success',
+    //                 isClosable: true,
+    //                 position: 'top-right',
+    //             });
+    //             Cookies.set('user', JSON.stringify(result.data));
+    //             callback();
+    //             return;
+    //         }
+    //         callback();
+    //         toast({
+    //             title: result.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     } catch (error) {
+    //         callback();
+    //         console.log(error);
+    //         toast({
+    //             title: `Check your network connection and try again`,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
 
     const showLoadingState = (file) => {
         if (file) {
@@ -183,6 +226,11 @@ function MyProfile({ user }: { user: UserView }) {
                             fontSize="2rem"
                             color="white"
                             overflow="hidden"
+                            pos="relative"
+                            role="group"
+                            _hover={{
+                                bgColor: 'rgba(0,0,0,0.2)',
+                            }}
                         >
                             {user?.profilePicture ? (
                                 <Image
@@ -190,9 +238,37 @@ function MyProfile({ user }: { user: UserView }) {
                                     w="full"
                                     h="full"
                                     objectFit="cover"
+                                    _groupHover={{
+                                        opacity: '0.3',
+                                    }}
                                 />
                             ) : (
                                 <FaUser />
+                            )}
+                            {user.profilePicture !== null && (
+                                <Button
+                                    bgColor="transparent"
+                                    color="red"
+                                    fontSize="2rem"
+                                    pos="absolute"
+                                    borderRadius="50%"
+                                    h="2.5rem"
+                                    w="2.5rem"
+                                    opacity={0}
+                                    minW="unset"
+                                    _groupHover={{
+                                        opacity: 1,
+                                    }}
+                                    onClick={() =>
+                                        updatePicture(
+                                            user,
+                                            pictureUrl,
+                                            reloadPage,
+                                        )
+                                    }
+                                >
+                                    <FaTimes />
+                                </Button>
                             )}
                         </Circle>
                         <Box>
@@ -213,6 +289,7 @@ function MyProfile({ user }: { user: UserView }) {
                             bgColor="brand.600"
                             color="white"
                             fontSize=".8rem"
+                            h="2.5rem"
                             borderRadius="0"
                             border="2px solid"
                             // borderColor="brand.600"
@@ -224,6 +301,7 @@ function MyProfile({ user }: { user: UserView }) {
                                 ? 'Add Profile Photo'
                                 : 'Change Profile Photo'}
                         </Button>
+
                         <Box display="none">
                             <Widget
                                 publicKey="fda3a71102659f95625f"

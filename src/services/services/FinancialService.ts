@@ -72,6 +72,60 @@ search?: string,
      * @returns ExpenseViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
+    public static listSuperviseesExpenses(
+offset?: number,
+limit?: number,
+search?: string,
+): CancelablePromise<ExpenseViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/supervisees-expenses',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @returns ExpenseViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listClientTeamMembersExpenses(
+offset?: number,
+limit?: number,
+search?: string,
+): CancelablePromise<ExpenseViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/client/team-member-expenses',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @returns ExpenseViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
     public static listReviewedExpenses(
 offset?: number,
 limit?: number,
@@ -391,6 +445,30 @@ limit?: number,
     /**
      * @param offset 
      * @param limit 
+     * @returns PayrollViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listClientTeamMembersPayroll(
+offset?: number,
+limit?: number,
+): CancelablePromise<PayrollViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/payrolls/client-team-members',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
      * @param search 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -434,6 +512,54 @@ search?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @returns PaySlipViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listPaySlipsByTeamMember(
+offset?: number,
+limit?: number,
+search?: string,
+): CancelablePromise<PaySlipViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/team-member/payslips',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param year 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generatePaymentSchedule(
+year: number,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/schedule/{year}',
+            path: {
+                'year': year,
             },
             errors: {
                 400: `Bad Request`,

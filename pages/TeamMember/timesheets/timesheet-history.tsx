@@ -3,14 +3,14 @@ import TeamTimesheetHistory from '@components/subpages/TeamTimesheetHistory';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
-    TimeSheetHistoryViewPagedCollectionStandardResponse,
+    TimeSheetHistoryViewIEnumerableStandardResponse,
     TimeSheetService,
 } from 'src/services';
 
 function history({
     timeSheets,
 }: {
-    timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
+    timeSheets: TimeSheetHistoryViewIEnumerableStandardResponse;
 }) {
     return <TeamTimesheetHistory timeSheets={timeSheets} />;
 }
@@ -21,9 +21,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
         try {
-            const data = await TimeSheetService.listTeamMemberApprovedTimeSheet(
-                id,
-            );
+            const data = await TimeSheetService.getTeamMemberTimeSheetHistory();
             return {
                 props: {
                     timeSheets: data,

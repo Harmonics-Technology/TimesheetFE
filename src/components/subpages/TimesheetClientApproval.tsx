@@ -2,7 +2,6 @@
 /* eslint-disable no-sparse-arrays */
 import { Box, Flex, Select, Text, HStack, Input, Tr } from '@chakra-ui/react';
 import {
-    TableContract,
     TableContractAction,
     TableData,
 } from '@components/bits-utils/TableData';
@@ -10,17 +9,17 @@ import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
 import {
+    TimeSheetApprovedView,
     TimeSheetHistoryView,
-    TimeSheetHistoryViewIEnumerableStandardResponse,
     TimeSheetHistoryViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 
 interface adminProps {
-    timeSheets: TimeSheetHistoryViewIEnumerableStandardResponse;
+    timeSheets: TimeSheetApprovedView[];
 }
 
-function TeamTimesheetHistory({ timeSheets }: adminProps) {
+function TimesheetClient({ timeSheets }: adminProps) {
     console.log({ timeSheets });
     const router = useRouter();
 
@@ -39,19 +38,29 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
                         'Email',
                         'Total Hours',
                         'No. of Days',
+                        'Approved No. of Hours',
                         '',
                     ]}
                 >
                     <>
-                        {timeSheets?.data?.map((x: TimeSheetHistoryView) => (
+                        {timeSheets?.map((x: TimeSheetApprovedView) => (
                             <Tr key={x.employeeInformationId}>
                                 <TableData name={x.name} />
                                 <TableData name={x.email} />
                                 <TableData
-                                    name={x.totalHours as unknown as string}
+                                    name={`${
+                                        x.totalHours as unknown as string
+                                    } Hours`}
                                 />
                                 <TableData
-                                    name={x.numberOfDays as unknown as string}
+                                    name={`${
+                                        x.numberOfDays as unknown as string
+                                    } Days`}
+                                />
+                                <TableData
+                                    name={`${
+                                        x.approvedNumberOfHours as unknown as string
+                                    } Hours`}
                                 />
 
                                 <TableContractAction
@@ -68,4 +77,4 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
     );
 }
 
-export default TeamTimesheetHistory;
+export default TimesheetClient;

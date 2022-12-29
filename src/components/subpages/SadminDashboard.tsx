@@ -1,12 +1,12 @@
-import { Box, Grid, Image, Tr, VStack } from "@chakra-ui/react";
-import DashboardCard from "@components/bits-utils/DashboardCard";
-import TableCards from "@components/bits-utils/TableCards";
-import { TableData, TableStatus } from "@components/bits-utils/TableData";
+import { Box, Grid, Image, Tr, VStack } from '@chakra-ui/react';
+import DashboardCard from '@components/bits-utils/DashboardCard';
+import TableCards from '@components/bits-utils/TableCards';
+import { TableData, TableStatus } from '@components/bits-utils/TableData';
 import {
     DashboardView,
     DashboardViewStandardResponse,
     UserView,
-} from "src/services";
+} from 'src/services';
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
@@ -17,12 +17,12 @@ function SadminDashboard({ metrics }: DashboardProps) {
     return (
         <VStack gap="1rem">
             <Grid
-                templateColumns={["repeat(1, 1fr)", "repeat(3, 1fr)"]}
+                templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
                 gap="1.2rem"
                 w="full"
             >
                 <DashboardCard
-                    url="/SuperAdmin/profile-management/client"
+                    url="/SuperAdmin/profile-management/clients"
                     title="client"
                     value={adminMetrics?.totalClients}
                 />
@@ -37,10 +37,10 @@ function SadminDashboard({ metrics }: DashboardProps) {
                     value={adminMetrics?.totalDownLines}
                 />
             </Grid>
-            <Grid templateColumns={["1fr", "2fr 1fr"]} gap="1.2rem" w="full">
+            <Grid templateColumns={['1fr', '2fr 1fr']} gap="1.2rem" w="full">
                 <TableCards
-                    title={"Recent Clients"}
-                    url={"profile-management/clients"}
+                    title={'Recent Clients'}
+                    url={'profile-management/clients'}
                     data={adminMetrics?.recentCLients
                         ?.slice(0, 4)
                         .map((x: UserView) => (
@@ -50,8 +50,8 @@ function SadminDashboard({ metrics }: DashboardProps) {
                                 <TableStatus name={x.isActive} />
                             </Tr>
                         ))}
-                    thead={["CLIENT NAME", "EMAIL", "STATUS"]}
-                    link={"/"}
+                    thead={['CLIENT NAME', 'EMAIL', 'STATUS']}
+                    link={'/'}
                 />
                 <Box
                     bgColor="white"

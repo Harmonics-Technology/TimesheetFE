@@ -8,4 +8,5 @@ export type TimeSheetHistoryView = {
     employeeInformationId?: string | null;
     totalHours?: number;
     numberOfDays?: number;
+    date?: string;
 };

@@ -7,4 +7,6 @@ export type RecentTimeSheetView = {
     month?: string | null;
     hours?: number;
     numberOfDays?: number;
+    employeeInformationId?: string;
+    dateCreated?: string;
 };

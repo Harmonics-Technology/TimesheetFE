@@ -21,14 +21,13 @@ import * as yup from 'yup';
 import { RiMailSendFill } from 'react-icons/ri';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
-    adminList: UserViewPagedCollectionStandardResponse;
+    adminList: UserView[];
     clientId: any;
 }
 import {
     RegisterModel,
     UserService,
     UserView,
-    UserViewPagedCollectionStandardResponse,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
@@ -44,7 +43,7 @@ const schema = yup.object().shape({
 });
 
 function SupervisorManagement({ adminList, clientId }: adminProps) {
-    console.log({ clientId });
+    console.log({ adminList, clientId });
     const {
         register,
         handleSubmit,
@@ -117,7 +116,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                     tableHead={['Name', 'Email', 'Role', 'Status', 'Action']}
                 >
                     <>
-                        {adminList?.data?.value?.map((x: UserView) => (
+                        {adminList?.map((x: UserView) => (
                             <Tr key={x.id}>
                                 <TableData name={x.fullName} />
                                 <TableData name={x.email} />

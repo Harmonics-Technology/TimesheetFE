@@ -1,30 +1,22 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import ClientTeamManagement from '@components/subpages/ClientTeamManagement';
-import TeamManagement from '@components/subpages/TeamManagement';
+import SupervisorTeamMember from '@components/subpages/SupervisorTeamMember';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import {
-    UserService,
-    UserView,
-    UserViewPagedCollectionStandardResponse,
-    UserViewStandardResponse,
-} from 'src/services';
+import { UserService, UserView } from 'src/services';
 interface TeamProps {
     teamList: UserView[];
     id: string;
     paymentPartner: UserView[];
-    supervisor: UserView[];
 }
 
-function Team({ teamList, id, paymentPartner, supervisor }: TeamProps) {
+function Team({ teamList, id, paymentPartner }: TeamProps) {
     console.log({ teamList });
     return (
-        <ClientTeamManagement
+        <SupervisorTeamMember
             adminList={teamList}
             id={id}
             paymentPartner={paymentPartner}
-            supervisor={supervisor}
         />
     );
 }
@@ -39,13 +31,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
             );
-            const data = await UserService.getClientTeamMembers();
-            const supervisor = await UserService.getSupervisors(id);
+            const data = await UserService.getSupervisees();
+            console.log({ data });
             return {
                 props: {
-                    teamList: data.data,
+                    teamList: data,
                     id: id,
-                    supervisor: supervisor.data,
                     paymentPartner: paymentPartner?.data?.value,
                 },
             };

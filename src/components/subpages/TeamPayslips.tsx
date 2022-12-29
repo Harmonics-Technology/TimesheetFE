@@ -19,6 +19,7 @@ import {
     PayrollView,
     FinancialService,
     PayrollViewPagedCollectionStandardResponse,
+    PaySlipView,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
@@ -45,7 +46,7 @@ function TeamPayslips({ payrolls }: expenseProps) {
                 <FilterSearch />
                 <Tables
                     tableHead={[
-                        'Name',
+                        // 'Name',
                         'Start Date',
                         'End Date',
                         'Payment Date',
@@ -57,9 +58,9 @@ function TeamPayslips({ payrolls }: expenseProps) {
                     ]}
                 >
                     <>
-                        {payrollsList?.map((x: any) => (
-                            <Tr key={x.payrollId}>
-                                <TableData name={x.name} />
+                        {payrollsList?.map((x: PaySlipView) => (
+                            <Tr key={x.id}>
+                                {/* <TableData name={x.name} /> */}
                                 <TableData
                                     name={moment(x.startDate).format(
                                         'DD-MM-YY',
@@ -74,7 +75,7 @@ function TeamPayslips({ payrolls }: expenseProps) {
                                     )}
                                 />
                                 <TableData name={`${x.totalHours} HRS`} />
-                                <TableData name={x.rate} />
+                                <TableData name={x.paymentRate} />
                                 <TableData name={x.totalAmount} />
                             </Tr>
                         ))}

@@ -4,14 +4,14 @@ import {
     MenuButton,
     MenuItem,
     MenuList,
-    Td,
     useToast,
     Link,
+    Spinner,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 import { AiOutlineDownload } from 'react-icons/ai';
 import { FaEllipsisH, FaEye } from 'react-icons/fa';
 import {
@@ -76,15 +76,17 @@ export function TableState({ name }: { name: string | undefined | null }) {
     );
 }
 export function TableContract({ url }: { url: any }) {
-    console.log({ url });
+    // console.log({ url });
+    const [loading, setLoading] = useState(false);
     const downloadFile = (url: string) => {
-        console.log(url);
+        setLoading(true);
         axios
             .get(url, {
                 responseType: 'blob',
             })
             .then((res) => {
                 fileDownload(res.data, `${url.split(' ').pop()}`);
+                setLoading(false);
             });
     };
     return (
@@ -97,7 +99,7 @@ export function TableContract({ url }: { url: any }) {
                 cursor="pointer"
                 onClick={() => downloadFile(url)}
             >
-                <AiOutlineDownload />
+                {loading ? <Spinner size="sm" /> : <AiOutlineDownload />}
             </Box>
         </td>
     );
@@ -112,9 +114,11 @@ export function TableActions({
     email: any;
 }) {
     const toast = useToast();
+    const [loading, setLoading] = useState(false);
     const resendInvite = async (data: InitiateResetModel) => {
         // console.log(data.email);
         try {
+            setLoading(true);
             const result = await UserService.resendInvite(data);
             if (result.status) {
                 // console.log({ result });
@@ -124,16 +128,24 @@ export function TableActions({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setLoading(false);
                 return;
             }
+            setLoading(false);
             toast({
                 title: result.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
             });
-        } catch (error) {
-            console.log({ error });
+        } catch (err: any) {
+            setLoading(false);
+            toast({
+                title: err?.body?.message || err.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
         }
     };
     return (
@@ -147,7 +159,7 @@ export function TableActions({
                         cursor="pointer"
                         color="brand.300"
                     >
-                        <FaEllipsisH />
+                        {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
@@ -283,9 +295,11 @@ export function TableContractAction({
 export function ToggleStatus({ id, status }: { id: any; status: string }) {
     const toast = useToast();
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const toggleStatus = async (data: string) => {
         // console.log(data.email);
         try {
+            setLoading(true);
             const result = await SettingsService.toggleStatus(data);
             if (result.status) {
                 console.log({ result });
@@ -295,17 +309,26 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
                     isClosable: true,
                     position: 'top-right',
                 });
+                setLoading(false);
                 router.reload();
                 return;
             }
+            setLoading(false);
             toast({
                 title: result.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
             });
-        } catch (error) {
+        } catch (error: any) {
+            setLoading(false);
             console.log({ error });
+            toast({
+                title: error?.body?.message || error?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
         }
     };
     return (
@@ -319,7 +342,7 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
                         cursor="pointer"
                         color="brand.300"
                     >
-                        <FaEllipsisH />
+                        {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
@@ -341,8 +364,10 @@ export function ExpenseActions({
 }) {
     const toast = useToast();
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     const Approve = async (data: string) => {
         try {
+            setLoading(true);
             if (manager) {
                 const result = await FinancialService.approveExpense(data);
                 if (result.status) {
@@ -353,9 +378,11 @@ export function ExpenseActions({
                         isClosable: true,
                         position: 'top-right',
                     });
+                    setLoading(false);
                     router.reload();
                     return;
                 }
+                setLoading(false);
                 toast({
                     title: result.message,
                     status: 'error',
@@ -372,9 +399,11 @@ export function ExpenseActions({
                         isClosable: true,
                         position: 'top-right',
                     });
+                    setLoading(false);
                     router.reload();
                     return;
                 }
+                setLoading(false);
                 toast({
                     title: result.message,
                     status: 'error',
@@ -384,6 +413,7 @@ export function ExpenseActions({
             }
         } catch (error: any) {
             console.log({ error });
+            setLoading(false);
             toast({
                 title: error.body.message || error.message,
                 status: 'error',
@@ -394,6 +424,7 @@ export function ExpenseActions({
     };
     const Decline = async (data: string) => {
         try {
+            setLoading(true);
             const result = await FinancialService.declineExpense(data);
             if (result.status) {
                 console.log({ result });
@@ -403,17 +434,26 @@ export function ExpenseActions({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setLoading(false);
                 router.reload();
                 return;
             }
+            setLoading(false);
             toast({
                 title: result.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
             });
-        } catch (error) {
-            console.log({ error });
+        } catch (err: any) {
+            setLoading(false);
+            console.log({ err });
+            toast({
+                title: err.body.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
         }
     };
     return (
@@ -427,7 +467,7 @@ export function ExpenseActions({
                         cursor="pointer"
                         color="brand.300"
                     >
-                        <FaEllipsisH />
+                        {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
@@ -436,6 +476,77 @@ export function ExpenseActions({
                     </MenuItem>
                     <MenuItem onClick={() => Decline(id)} w="full">
                         Reject
+                    </MenuItem>
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+export function PayrollActions({ id, userId }: { id: any; userId: any }) {
+    const toast = useToast();
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    const Approve = async (data: string) => {
+        try {
+            setLoading(true);
+            const result = await FinancialService.approvePayroll(data);
+            if (result.status) {
+                console.log({ result });
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                setLoading(false);
+                router.reload();
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            console.log({ error });
+            setLoading(false);
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    <MenuItem onClick={() => Approve(id)} w="full">
+                        Approve
+                    </MenuItem>
+                    <MenuItem w="full">
+                        <NextLink
+                            href={`/PayrollManager/timesheets/${userId}`}
+                            passHref
+                        >
+                            <Link width="100%" textDecor="none !important">
+                                View Timesheet
+                            </Link>
+                        </NextLink>
                     </MenuItem>
                 </MenuList>
             </Menu>

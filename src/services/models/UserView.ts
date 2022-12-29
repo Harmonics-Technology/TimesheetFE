@@ -23,5 +23,5 @@ export type UserView = {
     organizationEmail?: string | null;
     organizationPhone?: string | null;
     organizationAddress?: string | null;
-    clentName?: string | null;
+    clientName?: string | null;
 };

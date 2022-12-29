@@ -1,35 +1,35 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import SupervisorManagement from '@components/subpages/ClientSupervisor';
+import AdminPayslip from '@components/subpages/AdminPayslip';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
-    UserService,
-    UserView,
-    UserViewPagedCollectionStandardResponse,
+    FinancialService,
+    PayrollViewPagedCollectionStandardResponse,
 } from 'src/services';
-interface adminProps {
-    adminList: UserView[];
-    clientId: any;
+
+interface PayrollType {
+    payrolls: PayrollViewPagedCollectionStandardResponse;
+}
+function expenses({ payrolls }: PayrollType) {
+    return <AdminPayslip payrolls={payrolls} />;
 }
 
-function admin({ adminList, clientId }: adminProps) {
-    // console.log({ team });
-    return <SupervisorManagement adminList={adminList} clientId={clientId} />;
-}
-
-export default admin;
+export default expenses;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const clientId = JSON.parse(ctx.req.cookies.user).id;
         try {
-            const data = await UserService.getClientSupervisors();
+            const data = await FinancialService.listPaySlips(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+            );
+
             return {
                 props: {
-                    adminList: data.data,
-                    clientId,
+                    payrolls: data,
                 },
             };
         } catch (error: any) {

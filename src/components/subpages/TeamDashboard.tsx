@@ -2,10 +2,13 @@ import { Box, Grid, Image, Tr, VStack } from '@chakra-ui/react';
 import DashboardCard from '@components/bits-utils/DashboardCard';
 import TableCards from '@components/bits-utils/TableCards';
 import { TableData, TableStatus } from '@components/bits-utils/TableData';
+import moment from 'moment';
 import {
     DashboardTeamMemberView,
     DashboardView,
     DashboardViewStandardResponse,
+    PaySlipView,
+    PaySlipViewPagedCollectionStandardResponse,
     RecentTimeSheetView,
     TimeSheetView,
     UserView,
@@ -13,11 +16,17 @@ import {
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
+    payslip?: PaySlipViewPagedCollectionStandardResponse;
+    role?: string;
+}
+interface DashboardClientView {
+    recentInvoice: [] | undefined | null;
 }
 
-function TeamDashboard({ metrics }: DashboardProps) {
+function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
     const adminMetrics = metrics?.data as DashboardTeamMemberView;
-    console.log({ metrics });
+    const clientMetrics = metrics?.data as DashboardClientView;
+    console.log({ metrics, role });
     return (
         <VStack gap="1rem">
             <Grid
@@ -61,28 +70,68 @@ function TeamDashboard({ metrics }: DashboardProps) {
             </Grid>
             <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                 <TableCards
-                    title={'Recent Payslips'}
+                    title={
+                        role == 'client' ? 'Recent Invoices' : 'Recent Payslips'
+                    }
                     url={'profile-management/clients'}
-                    data={adminMetrics?.recentTimeSheet
-                        ?.slice(0, 4)
-                        .map((x: TimeSheetView) => (
-                            <Tr key={x.id}>
-                                {/* <TableData name={x.firstName} />
-                                <TableData name={x.email} />
-                                <TableStatus name={x.isActive} />
-                                <TableData name={x.firstName} />
-                                <TableData name={x.email} />
-                                <TableStatus name={x.isActive} />
-                                <TableData name={x.firstName} /> */}
-                            </Tr>
-                        ))}
+                    data={
+                        role == 'client'
+                            ? clientMetrics?.recentInvoice
+                                  ?.slice(0, 4)
+                                  .map((x: PaySlipView) => (
+                                      <Tr key={x.id}>
+                                          <TableData
+                                              name={moment(x.startDate).format(
+                                                  'YYYY-MM-DD',
+                                              )}
+                                          />
+                                          <TableData
+                                              name={moment(x.endDate).format(
+                                                  'YYYY-MM-DD',
+                                              )}
+                                          />
+                                          <TableData
+                                              name={moment(
+                                                  x.paymentDate,
+                                              ).format('YYYY-MM-DD')}
+                                          />
+                                          <TableData name={x.paymentRate} />
+                                          <TableData name={x.totalHours} />
+                                          <TableData name={x.totalAmount} />
+                                      </Tr>
+                                  ))
+                            : payslip?.data?.value
+                                  ?.slice(0, 4)
+                                  .map((x: PaySlipView) => (
+                                      <Tr key={x.id}>
+                                          <TableData
+                                              name={moment(x.startDate).format(
+                                                  'YYYY-MM-DD',
+                                              )}
+                                          />
+                                          <TableData
+                                              name={moment(x.endDate).format(
+                                                  'YYYY-MM-DD',
+                                              )}
+                                          />
+                                          <TableData
+                                              name={moment(
+                                                  x.paymentDate,
+                                              ).format('YYYY-MM-DD')}
+                                          />
+                                          <TableData name={x.paymentRate} />
+                                          <TableData name={x.totalHours} />
+                                          <TableData name={x.totalAmount} />
+                                      </Tr>
+                                  ))
+                    }
                     thead={[
-                        'Client',
-                        'Invoice no.',
-                        'Amount',
-                        'Generated on',
-                        'Status',
-                        'Action',
+                        'Start Date',
+                        'End Date',
+                        'Payment Date',
+                        'Payment Rate',
+                        'Total Hours',
+                        'Total Amount',
                     ]}
                     link={'/'}
                 />

@@ -22,10 +22,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
         try {
-            const data = await FinancialService.listPaySlips(
+            const data = await FinancialService.listPaySlipsByTeamMember(
                 pagingOptions.offset,
                 pagingOptions.limit,
-                id,
+                pagingOptions.search,
             );
 
             return {

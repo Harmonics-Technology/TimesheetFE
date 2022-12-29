@@ -1,3 +1,4 @@
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import ContractList from '@components/subpages/ContractList';
 import { GetServerSideProps } from 'next';
@@ -16,20 +17,27 @@ function admin({ adminList }: adminProps) {
 
 export default admin;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
-    try {
-        const data = await ContractService.listContracts();
-        return {
-            props: {
-                adminList: data,
-            },
-        };
-    } catch (error: any) {
-        console.log(error);
-        return {
-            props: {
-                data: [],
-            },
-        };
-    }
-});
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx) => {
+        const pagingOptions = filterPagingSearchOptions(ctx);
+        try {
+            const data = await ContractService.listContracts(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+            );
+            return {
+                props: {
+                    adminList: data,
+                },
+            };
+        } catch (error: any) {
+            console.log(error);
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);

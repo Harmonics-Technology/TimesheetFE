@@ -320,4 +320,37 @@ clientId: string,
         });
     }
 
+    /**
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getSupervisees(): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/supervisees',
+        });
+    }
+
+    /**
+     * @returns UserViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static getClientSupervisors(): CancelablePromise<UserViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/client/supervisors',
+        });
+    }
+
+    /**
+     * @returns UserViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static getClientTeamMembers(): CancelablePromise<UserViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/client/team-members',
+        });
+    }
+
 }

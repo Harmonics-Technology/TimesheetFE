@@ -19,7 +19,7 @@ export default history;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
     try {
-        const data = await TimeSheetService.listTimeSheetHistories();
+        const data = await TimeSheetService.getSuperviseesTimeSheet();
         return {
             props: {
                 timeSheets: data,

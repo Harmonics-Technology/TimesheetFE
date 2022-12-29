@@ -3,11 +3,11 @@
 /* eslint-disable */
 
 export type PaySlipView = {
-    paySlipId?: string;
+    id?: string;
     startDate?: string;
     endDate?: string;
     paymentDate?: string;
     totalHours?: number;
-    paymentRate?: string | null;
+    paymentRate?: number;
     totalAmount?: number;
 };

@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import {
     ExpenseActions,
+    PayrollActions,
     TableContractAction,
     TableData,
     TableState,
@@ -169,9 +170,9 @@ function AdminPayroll({ payrolls }: expenseProps) {
                                 <TableData name={`${x.totalHours} HRS`} />
                                 <TableData name={x.rate} />
                                 <TableData name={x.totalAmount} />
-                                <TableContractAction
-                                    id={x.employeeInformationId}
-                                    timeSheets={true}
+                                <PayrollActions
+                                    id={x.payrollId}
+                                    userId={x.employeeInformationId}
                                 />
                                 <td>
                                     <Checkbox

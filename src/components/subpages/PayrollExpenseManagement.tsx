@@ -242,7 +242,10 @@ function PayrollExpenseManagement({
                                     name={x.amount as unknown as string}
                                 />
                                 <TableState name={x.status as string} />
-                                <ExpenseActions id={x.id} manager={true} />
+                                {x.status != 'APPROVED' && (
+                                    <ExpenseActions id={x.id} manager={true} />
+                                )}
+
                                 <td>
                                     {x.status == 'APPROVED' && (
                                         <Checkbox
