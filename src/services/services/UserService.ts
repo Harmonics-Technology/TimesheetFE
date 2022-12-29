@@ -321,13 +321,25 @@ clientId: string,
     }
 
     /**
+     * @param offset 
+     * @param limit 
+     * @param search 
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
-    public static getSupervisees(): CancelablePromise<UserViewStandardResponse> {
+    public static getSupervisees(
+offset?: number,
+limit?: number,
+search?: string,
+): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/supervisees',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+            },
         });
     }
 

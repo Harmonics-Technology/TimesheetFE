@@ -8,6 +8,7 @@ import {
     useToast,
     Image,
     Flex,
+    useDisclosure,
 } from '@chakra-ui/react';
 import React, { useContext, useRef, useState } from 'react';
 import { FaTimes, FaUser } from 'react-icons/fa';
@@ -26,6 +27,8 @@ import moment from 'moment';
 import { Widget } from '@uploadcare/react-widget';
 import { useRouter } from 'next/router';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
+import ConfirmModal from '@components/bits-utils/ConfirmModal';
+import ProfileConfirmModal from '@components/bits-utils/ProfileConfirmModal';
 
 const schema = yup.object().shape({
     dateOfBirth: yup.string().required(),
@@ -63,8 +66,11 @@ function MyProfile({ user }: { user: UserView }) {
 
     const reloadPage = () => {
         setShowLoading(false);
+        setLoading(false);
         router.reload();
     };
+    const [loading, setLoading] = useState(false);
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const updatePicture = async (data: UpdateUserModel, info, callback?) => {
         data.firstName = user?.firstName;
         data.lastName = user?.lastName;
@@ -78,6 +84,7 @@ function MyProfile({ user }: { user: UserView }) {
         data.profilePicture = info?.cdnUrl;
         console.log({ data });
         try {
+            setLoading(true);
             const result = await UserService.updateUser(data);
             console.log({ result });
             if (result.status) {
@@ -109,51 +116,6 @@ function MyProfile({ user }: { user: UserView }) {
             });
         }
     };
-
-    // const removePicture = async (data: UpdateUserModel, info) => {
-    //     data.firstName = user?.firstName;
-    //     data.lastName = user?.lastName;
-    //     data.isActive = user?.isActive;
-    //     data.id = user?.id;
-    //     data.organizationAddress = user?.organizationAddress;
-    //     data.organizationEmail = user?.organizationEmail;
-    //     data.organizationPhone = user?.organizationPhone;
-    //     data.phoneNumber = user?.phoneNumber;
-    //     data.role = user?.role;
-    //     data.profilePicture = info?.cdnUrl;
-    //     console.log({ data });
-    //     try {
-    //         const result = await UserService.updateUser(data);
-    //         console.log({ result });
-    //         if (result.status) {
-    //             toast({
-    //                 title: 'Profile Picture Update Success',
-    //                 status: 'success',
-    //                 isClosable: true,
-    //                 position: 'top-right',
-    //             });
-    //             Cookies.set('user', JSON.stringify(result.data));
-    //             callback();
-    //             return;
-    //         }
-    //         callback();
-    //         toast({
-    //             title: result.message,
-    //             status: 'error',
-    //             isClosable: true,
-    //             position: 'top-right',
-    //         });
-    //     } catch (error) {
-    //         callback();
-    //         console.log(error);
-    //         toast({
-    //             title: `Check your network connection and try again`,
-    //             status: 'error',
-    //             isClosable: true,
-    //             position: 'top-right',
-    //         });
-    //     }
-    // };
 
     const showLoadingState = (file) => {
         if (file) {
@@ -259,13 +221,7 @@ function MyProfile({ user }: { user: UserView }) {
                                     _groupHover={{
                                         opacity: 1,
                                     }}
-                                    onClick={() =>
-                                        updatePicture(
-                                            user,
-                                            pictureUrl,
-                                            reloadPage,
-                                        )
-                                    }
+                                    onClick={onOpen}
                                 >
                                     <FaTimes />
                                 </Button>
@@ -481,6 +437,12 @@ function MyProfile({ user }: { user: UserView }) {
                     </Button>
                 </Box>
             </form>
+            <ProfileConfirmModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onClick={updatePicture(user, pictureUrl, reloadPage)}
+                loading={loading}
+            />
         </Box>
     );
 }

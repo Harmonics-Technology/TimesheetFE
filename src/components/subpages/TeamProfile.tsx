@@ -353,8 +353,8 @@ function TeamProfile({
                                 },
                             ]}
                         />
-                        {(payroll == 'OFFSHORE' && payrolls == undefined) ||
-                        (payroll == 'OFFSHORE' && payrolls == 2) ? (
+                        {(payroll == 'ONSHORE' && payrolls == undefined) ||
+                        (payroll == 'ONSHORE' && payrolls == 1) ? (
                             <>
                                 <PrimaryInput<TeamMemberModel>
                                     label="Rate/Hr"

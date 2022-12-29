@@ -31,7 +31,7 @@ import * as yup from 'yup';
 import { RiMailSendFill } from 'react-icons/ri';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
-    adminList: UserView[];
+    adminList: any;
     id: string;
     paymentPartner: UserView[];
 }
@@ -301,7 +301,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                     ]}
                 >
                     <>
-                        {adminList?.map((x: UserView) => (
+                        {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
                                 <TableData name={x.firstName} />
                                 <TableData
@@ -325,7 +325,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                         ))}
                     </>
                 </Tables>
-                {/* <Pagination data={adminList} /> */}
+                <Pagination data={adminList} />
             </Box>
             <DrawerWrapper
                 onClose={onClose}

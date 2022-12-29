@@ -1,37 +1,39 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import SupervisorDashboard from '@components/subpages/SupervisorDashboard';
+import TimeSheetApproval from '@components/subpages/TimesheetApproval';
 import { GetServerSideProps } from 'next';
-import { DashboardService, FinancialService } from 'src/services';
-interface DashboardProps {
-    metrics: any;
-    expense: any;
+import React from 'react';
+import {
+    TimeSheetHistoryViewPagedCollectionStandardResponse,
+    TimeSheetService,
+} from 'src/services';
+
+function approval({
+    timeSheets,
+}: {
+    timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
+}) {
+    return <TimeSheetApproval timeSheets={timeSheets} />;
 }
 
-function index({ metrics, expense }: DashboardProps) {
-    return <SupervisorDashboard adminMetrics={metrics} expenses={expense} />;
-}
-
-export default index;
+export default approval;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await DashboardService.getSupervisorMetrics();
-            const expense = await FinancialService.listSuperviseesExpenses(
+            const data = await TimeSheetService.getSuperviseesApprovedTimeSheet(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
             );
-            console.log({ data });
             return {
                 props: {
-                    metrics: data.data,
-                    expense: expense.data?.value,
+                    timeSheets: data,
                 },
             };
         } catch (error: any) {
+            console.log(error);
             return {
                 props: {
                     data: [],

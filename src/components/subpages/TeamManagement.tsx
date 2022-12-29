@@ -484,7 +484,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                     },
                                 ]}
                             />
-                            {payroll == 2 ? (
+                            {payroll == 1 ? (
                                 <>
                                     <PrimaryInput<TeamMemberModel>
                                         label="Rate/Hr"
@@ -737,7 +737,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                         options={paymentPartner}
                                     />
                                 </>
-                            ) : payroll == 1 ? (
+                            ) : payroll == 2 ? (
                                 <>
                                     <PrimaryInput<TeamMemberModel>
                                         label="Monthly Payout"
