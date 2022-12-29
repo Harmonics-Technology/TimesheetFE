@@ -66,10 +66,8 @@ function MyProfile({ user }: { user: UserView }) {
 
     const reloadPage = () => {
         setShowLoading(false);
-        setLoading(false);
         router.reload();
     };
-    const [loading, setLoading] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const updatePicture = async (data: UpdateUserModel, info, callback?) => {
         data.firstName = user?.firstName;
@@ -84,7 +82,6 @@ function MyProfile({ user }: { user: UserView }) {
         data.profilePicture = info?.cdnUrl;
         console.log({ data });
         try {
-            setLoading(true);
             const result = await UserService.updateUser(data);
             console.log({ result });
             if (result.status) {
@@ -207,7 +204,7 @@ function MyProfile({ user }: { user: UserView }) {
                             ) : (
                                 <FaUser />
                             )}
-                            {user.profilePicture !== null && (
+                            {user?.profilePicture !== null && (
                                 <Button
                                     bgColor="transparent"
                                     color="red"
@@ -253,7 +250,7 @@ function MyProfile({ user }: { user: UserView }) {
                             onClick={() => widgetApi.current.openDialog()}
                             w={['full', 'inherit']}
                         >
-                            {user.profilePicture == null
+                            {user?.profilePicture == null
                                 ? 'Add Profile Photo'
                                 : 'Change Profile Photo'}
                         </Button>
@@ -440,8 +437,7 @@ function MyProfile({ user }: { user: UserView }) {
             <ProfileConfirmModal
                 isOpen={isOpen}
                 onClose={onClose}
-                onClick={updatePicture(user, pictureUrl, reloadPage)}
-                loading={loading}
+                user={user}
             />
         </Box>
     );

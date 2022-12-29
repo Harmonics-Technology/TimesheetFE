@@ -9,17 +9,68 @@ import {
     Box,
     HStack,
     Flex,
+    useToast,
 } from '@chakra-ui/react';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { FaTimesCircle, FaTrash } from 'react-icons/fa';
+import { UpdateUserModel, UserService } from 'src/services';
 
 type Props = {
     isOpen?: any;
     onClose?: any;
-    onClick?: any;
+    user?: any;
     loading?: any;
 };
 
-const ProfileConfirmModal = ({ isOpen, onClose, onClick, loading }: Props) => {
+const ProfileConfirmModal = ({ isOpen, onClose, user }: Props) => {
+    const [loading, setLoading] = useState(false);
+    const toast = useToast();
+    const router = useRouter();
+    const updatePicture = async (data: UpdateUserModel) => {
+        data.firstName = user?.firstName;
+        data.lastName = user?.lastName;
+        data.isActive = user?.isActive;
+        data.id = user?.id;
+        data.organizationAddress = user?.organizationAddress;
+        data.organizationEmail = user?.organizationEmail;
+        data.organizationPhone = user?.organizationPhone;
+        data.phoneNumber = user?.phoneNumber;
+        data.role = user?.role;
+        data.profilePicture = null;
+        console.log({ data });
+        try {
+            setLoading(true);
+            const result = await UserService.updateUser(data);
+            console.log({ result });
+            if (result.status) {
+                toast({
+                    title: 'Profile Picture Update Success',
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                Cookies.set('user', JSON.stringify(result.data));
+                router.reload();
+                return;
+            }
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error) {
+            console.log(error);
+            toast({
+                title: `Check your network connection and try again`,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
     return (
         <Modal
             isOpen={isOpen}
@@ -50,14 +101,12 @@ const ProfileConfirmModal = ({ isOpen, onClose, onClick, loading }: Props) => {
                             <FaTimesCircle />
                         </Flex>
                         <Text
-                            fontSize="1.1rem"
+                            fontSize="1rem"
                             mb="1rem"
                             px={['1.5rem', '3.3rem']}
-                            fontWeight="500"
+                            fontWeight="600"
                         >
-                            Are you sure you want to terminate this contract?
-                            <br />
-                            This action can not be undone
+                            Are you sure you want to remove profile picture?
                         </Text>
                     </>
                 </ModalHeader>
@@ -95,7 +144,7 @@ const ProfileConfirmModal = ({ isOpen, onClose, onClick, loading }: Props) => {
                                 // }}
 
                                 isLoading={loading}
-                                onClick={onClick}
+                                onClick={() => updatePicture(user)}
                             >
                                 Yes
                             </Button>
