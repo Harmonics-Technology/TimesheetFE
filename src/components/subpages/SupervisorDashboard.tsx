@@ -42,7 +42,7 @@ function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
             <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                 <TableCards
                     title={'Recent Timesheet'}
-                    url={'timesheet/unapproved'}
+                    url={'timesheets/unapproved'}
                     data={adminMetrics.recentTimeSheet
                         ?.slice(0, 4)
                         .map((x: RecentTimeSheetView, i: any) => (
@@ -60,7 +60,7 @@ function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
             <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                 <TableCards
                     title={'Recent Expenses'}
-                    url={'settings/expenses'}
+                    url={'financials/expenses'}
                     data={expenses
                         ?.slice(0, 4)
                         .map((x: ExpenseView, i: any) => (
