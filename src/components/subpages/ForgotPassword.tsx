@@ -15,6 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { InitiateResetModel, UserService } from 'src/services';
 import { useRouter } from 'next/router';
+import BeatLoader from 'react-spinners/BeatLoader';
 const schema = yup.object().shape({
     email: yup.string().required('Email is required'),
 });
@@ -99,6 +100,7 @@ function ForgotPassword() {
                             variant="solid"
                             type="submit"
                             isLoading={isSubmitting}
+                            spinner={<BeatLoader color="white" size="10" />}
                             w="full"
                             p="1.5rem 0"
                             color="white"

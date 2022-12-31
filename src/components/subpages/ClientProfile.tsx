@@ -1,22 +1,53 @@
-import { Box, Button, Grid, Text, useToast } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Flex,
+    Grid,
+    Heading,
+    Text,
+    Tr,
+    useToast,
+} from '@chakra-ui/react';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { VscSaveAs } from 'react-icons/vsc';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
-import { UpdateUserModel, UserService, UserView } from 'src/services';
+import {
+    UpdateUserModel,
+    UserService,
+    UserView,
+    UserViewPagedCollectionStandardResponse,
+} from 'src/services';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { useRouter } from 'next/router';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
+import BeatLoader from 'react-spinners/BeatLoader';
+import {
+    TableActions,
+    TableData,
+    TableStatus,
+} from '@components/bits-utils/TableData';
+import Tables from '@components/bits-utils/Tables';
+import Pagination from '@components/bits-utils/Pagination';
+import Checkbox from '@components/bits-utils/Checkbox';
 
 const schema = yup.object().shape({});
 interface ClientProfileProps {
     userProfile?: UserView;
+    teamList?: UserViewPagedCollectionStandardResponse;
+    supervisorList?: UserViewPagedCollectionStandardResponse;
 }
 
-function ClientProfile({ userProfile }: ClientProfileProps) {
+function ClientProfile({
+    userProfile,
+    teamList,
+    supervisorList,
+}: ClientProfileProps) {
+    const [teamMembers, setTeamMembers] = useState(false);
+    const [supervisors, setSupervisors] = useState(false);
     const {
         register,
         handleSubmit,
@@ -41,35 +72,34 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
         if (data == userProfile) {
             return;
         }
-
-        // try {
-        //     const result = await UserService.adminUpdateUser(data);
-        //     // console.log({ result });
-        //     if (result.status) {
-        //         toast({
-        //             title: 'Profile Update Success',
-        //             status: 'success',
-        //             isClosable: true,
-        //             position: 'top-right',
-        //         });
-        //         router.reload();
-        //         return;
-        //     }
-        //     toast({
-        //         title: result.message,
-        //         status: 'error',
-        //         isClosable: true,
-        //         position: 'top-right',
-        //     });
-        // } catch (error) {
-        //     console.log(error);
-        //     toast({
-        //         title: `Check your network connection and try again`,
-        //         status: 'error',
-        //         isClosable: true,
-        //         position: 'top-right',
-        //     });
-        // }
+        try {
+            const result = await UserService.adminUpdateUser(data);
+            // console.log({ result });
+            if (result.status) {
+                toast({
+                    title: 'Profile Update Success',
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.reload();
+                return;
+            }
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error) {
+            console.log(error);
+            toast({
+                title: `Check your network connection and try again`,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
     };
     return (
         <Box
@@ -84,7 +114,7 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
                     templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                     gap="1rem 2rem"
                 >
-                    <Box>
+                    <Box w="full">
                         <Text
                             fontWeight="600"
                             fontSize="1.1rem"
@@ -144,7 +174,7 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
                                 ]}
                             />
                         </Grid>
-                        <Box mt="1rem">
+                        <Box mt="1rem" w="full">
                             <PrimaryTextarea<UpdateUserModel>
                                 label="Address"
                                 name="organizationAddress"
@@ -161,7 +191,7 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
                         <Text
                             fontWeight="600"
                             fontSize="1.1rem"
-                            mb="3rem"
+                            m="0rem 0 3rem"
                             textTransform="capitalize"
                             color="brand.200"
                         >
@@ -204,8 +234,123 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
                                 register={register}
                             />
                         </Grid>
+                        <Flex
+                            gap="2rem"
+                            // justify="space-between"
+                            h="10rem"
+                            align="center"
+                        >
+                            <Checkbox
+                                label={
+                                    teamMembers
+                                        ? 'Hide Team Members'
+                                        : 'Show Team Members'
+                                }
+                                onChange={() => setTeamMembers(!teamMembers)}
+                                checked={teamMembers}
+                                mb="1rem"
+                            />
+                            <Checkbox
+                                label={
+                                    supervisors
+                                        ? 'Hide Supervisors'
+                                        : 'Show Supervisors'
+                                }
+                                onChange={() => setSupervisors(!supervisors)}
+                                checked={supervisors}
+                                mb="1rem"
+                            />
+                        </Flex>
                     </Box>
                 </Grid>
+                <Box>
+                    <Box
+                        borderY="1px solid"
+                        py="1rem"
+                        my="1rem"
+                        borderColor="gray.300"
+                        display={teamMembers ? 'block' : 'none'}
+                    >
+                        <Text fontWeight="600">Team Members</Text>
+                        <Tables
+                            tableHead={[
+                                'Name',
+                                'Job Title',
+                                'Phone No',
+                                'Role',
+                                'Status',
+                                '',
+                            ]}
+                        >
+                            <>
+                                {teamList?.data?.value?.map((x: UserView) => (
+                                    <Tr key={x.id}>
+                                        <TableData name={x.firstName} />
+                                        <TableData
+                                            name={
+                                                x.employeeInformation?.jobTitle
+                                            }
+                                        />
+                                        <TableData name={x.phoneNumber} />
+                                        <TableData name={x.role} />
+                                        <TableStatus name={x.isActive} />
+                                        <TableActions
+                                            id={x.id}
+                                            route="team-members"
+                                            email={x.email}
+                                        />
+                                    </Tr>
+                                ))}
+                            </>
+                        </Tables>
+                        <Pagination data={teamList} />
+                    </Box>
+                    <Box
+                        borderY="1px solid"
+                        py="1rem"
+                        my="1rem"
+                        borderColor="gray.300"
+                        display={supervisors ? 'block' : 'none'}
+                    >
+                        <Text fontWeight="600">Supervisors</Text>
+                        <Tables
+                            tableHead={[
+                                'Name',
+                                'Job Title',
+                                'Phone No',
+                                'Role',
+                                'Status',
+                                '',
+                            ]}
+                        >
+                            <>
+                                {supervisorList?.data?.value?.map(
+                                    (x: UserView) => (
+                                        <Tr key={x.id}>
+                                            <TableData name={x.firstName} />
+                                            <TableData
+                                                name={
+                                                    x.employeeInformation
+                                                        ?.jobTitle
+                                                }
+                                            />
+                                            <TableData name={x.phoneNumber} />
+                                            <TableData name={x.role} />
+                                            <TableStatus name={x.isActive} />
+                                            <TableActions
+                                                id={x.id}
+                                                route="team-members"
+                                                email={x.email}
+                                            />
+                                        </Tr>
+                                    ),
+                                )}
+                            </>
+                        </Tables>
+                        <Pagination data={supervisorList} />
+                    </Box>
+                </Box>
+
                 <Grid
                     templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                     gap="1rem 2rem"
@@ -228,6 +373,7 @@ function ClientProfile({ userProfile }: ClientProfileProps) {
                         fontSize="14px"
                         type="submit"
                         isLoading={isSubmitting}
+                        spinner={<BeatLoader color="white" size="10" />}
                         boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     >
                         <Box pr=".5rem">

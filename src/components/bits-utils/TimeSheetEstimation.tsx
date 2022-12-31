@@ -1,6 +1,7 @@
 import { Button, Flex, Tooltip, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React from 'react';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 interface TimeProps {
     label: string;
@@ -87,6 +88,7 @@ export function TimeSheetEstimationBtn({
                     width="100"
                     color="white"
                     isLoading={loading}
+                    spinner={<BeatLoader color="white" size="10" />}
                     onClick={click}
                 >
                     {title}

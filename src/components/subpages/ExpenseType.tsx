@@ -12,25 +12,26 @@ import {
     Grid,
     DrawerFooter,
     useToast,
-} from "@chakra-ui/react";
-import DrawerWrapper from "@components/bits-utils/Drawer";
+} from '@chakra-ui/react';
+import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
     TableData,
     TableState,
     ToggleStatus,
-} from "@components/bits-utils/TableData";
-import Tables from "@components/bits-utils/Tables";
-import React from "react";
+} from '@components/bits-utils/TableData';
+import Tables from '@components/bits-utils/Tables';
+import React from 'react';
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { RiMailSendFill } from "react-icons/ri";
-import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
-import { ExpenseTypeView, SettingsService } from "src/services";
-import Pagination from "@components/bits-utils/Pagination";
-import { useRouter } from "next/router";
-import FilterSearch from "@components/bits-utils/FilterSearch";
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { RiMailSendFill } from 'react-icons/ri';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
+import { ExpenseTypeView, SettingsService } from 'src/services';
+import Pagination from '@components/bits-utils/Pagination';
+import { useRouter } from 'next/router';
+import FilterSearch from '@components/bits-utils/FilterSearch';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -50,7 +51,7 @@ function ExpenseType({ expenses }: expenseProps) {
         formState: { errors, isSubmitting },
     } = useForm<ExpenseCreate>({
         resolver: yupResolver(schema),
-        mode: "all",
+        mode: 'all',
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -63,9 +64,9 @@ function ExpenseType({ expenses }: expenseProps) {
             if (result.status) {
                 toast({
                     title: `Successfully created`,
-                    status: "success",
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 onClose();
                 router.reload();
@@ -73,17 +74,17 @@ function ExpenseType({ expenses }: expenseProps) {
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             return;
         } catch (err) {
             toast({
-                title: "An error occurred",
-                status: "error",
+                title: 'An error occurred',
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         }
     };
@@ -121,7 +122,7 @@ function ExpenseType({ expenses }: expenseProps) {
                     +Expense Type
                 </Button>
                 <FilterSearch />
-                <Tables tableHead={["Expense Type", "Status", ""]}>
+                <Tables tableHead={['Expense Type', 'Status', '']}>
                     <>
                         {expenses?.map((x: ExpenseTypeView) => (
                             <Tr key={x.id}>
@@ -140,7 +141,7 @@ function ExpenseType({ expenses }: expenseProps) {
             <DrawerWrapper
                 onClose={onClose}
                 isOpen={isOpen}
-                title={"Add New Expense Type"}
+                title={'Add New Expense Type'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <PrimaryInput<ExpenseCreate>
@@ -176,6 +177,7 @@ function ExpenseType({ expenses }: expenseProps) {
                                 fontSize="14px"
                                 type="submit"
                                 isLoading={isSubmitting}
+                                spinner={<BeatLoader color="white" size="10" />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
                                 <Box pr=".5rem">

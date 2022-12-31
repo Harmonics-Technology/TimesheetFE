@@ -233,14 +233,14 @@ search?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @returns TimeSheetHistoryViewStandardResponse Success
+     * @returns TimeSheetApprovedViewStandardResponse Success
      * @throws ApiError
      */
     public static getSuperviseesApprovedTimeSheet(
 offset?: number,
 limit?: number,
 search?: string,
-): CancelablePromise<TimeSheetHistoryViewStandardResponse> {
+): CancelablePromise<TimeSheetApprovedViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/TimeSheet/supervisees-approved-timesheets',

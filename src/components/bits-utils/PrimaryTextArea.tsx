@@ -51,13 +51,13 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
     value,
     icon,
     testId,
-    w,
+    w = '100%',
     h,
     fontsize = '.8rem',
     padding,
 }: FormInputProps<TFormValues>) => {
     return (
-        <GridItem colSpan={2}>
+        <>
             <FormControl isInvalid={!!error}>
                 <FormLabel color="brand.100" fontSize=".8rem">
                     {label}
@@ -73,6 +73,7 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
                     resize="none"
                     fontSize={fontsize}
                     focusBorderColor="none"
+                    w={w}
                     // bgColor="rgba(25,25,25,.03)"
                     // borderColor="transparent"
                     borderRadius="5px"
@@ -83,6 +84,6 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
                 {(error?.type === 'required' && `${label} is required`) ||
                     error?.message}
             </Text>
-        </GridItem>
+        </>
     );
 };

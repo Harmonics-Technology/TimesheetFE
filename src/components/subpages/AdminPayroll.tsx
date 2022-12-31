@@ -27,6 +27,7 @@ import FilterSearch from '@components/bits-utils/FilterSearch';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import Checkbox from '@components/bits-utils/Checkbox';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 interface expenseProps {
     payrolls: PayrollViewPagedCollectionStandardResponse;
@@ -62,40 +63,41 @@ function AdminPayroll({ payrolls }: expenseProps) {
         setSelectedId([...selectedId, id]);
     };
 
-    const generateInvoice = async () => {
-        try {
-            setLoading(true);
-            const result = await FinancialService.generateInvoicePayroll(
-                selectedId,
-            );
-            if (result.status) {
+    const approvePayrollItems = async () => {
+        selectedId.forEach(async (x) => {
+            try {
+                setLoading(true);
+                const result = await FinancialService.approvePayroll(x);
+                if (result.status) {
+                    console.log({ result });
+                    toast({
+                        title: result.message,
+                        status: 'success',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                    setLoading(false);
+                    router.reload();
+                    return;
+                }
+                setLoading(false);
                 toast({
                     title: result.message,
-                    status: 'success',
+                    status: 'error',
                     isClosable: true,
                     position: 'top-right',
                 });
+            } catch (error: any) {
+                console.log({ error });
                 setLoading(false);
-                router.reload();
-                return;
+                toast({
+                    title: error.body.message || error.message,
+                    status: 'error',
+                    isClosable: true,
+                    position: 'top-right',
+                });
             }
-            setLoading(false);
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
-        } catch (err: any) {
-            setLoading(false);
-            toast({
-                title: err?.body?.message || err?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
+        });
     };
 
     return (
@@ -109,26 +111,29 @@ function AdminPayroll({ payrolls }: expenseProps) {
                 <Flex gap="1rem" justify="space-between">
                     {selectedId.length > 0 && (
                         <Button
-                            bgColor="brand.600"
+                            bgColor="brand.400"
                             color="white"
                             p=".5rem 1.5rem"
                             height="fit-content"
-                            onClick={() => generateInvoice()}
+                            onClick={() => approvePayrollItems()}
                             isLoading={loading}
+                            spinner={<BeatLoader color="white" size="10" />}
                             boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                         >
-                            Generate Invoice
+                            Approve Payroll Item(s)
                         </Button>
                     )}
 
-                    <Checkbox
-                        checked={
-                            payrollsList?.length !== 0 &&
-                            payrollsList?.length == selectedId?.length
-                        }
-                        onChange={() => toggleSelected('', true)}
-                        label="Select All"
-                    />
+                    <Box w="fit-content" ml="auto">
+                        <Checkbox
+                            checked={
+                                payrollsList?.length !== 0 &&
+                                payrollsList?.length == selectedId?.length
+                            }
+                            onChange={() => toggleSelected('', true)}
+                            label="Select All"
+                        />
+                    </Box>
                 </Flex>
                 <FilterSearch />
                 <Tables
@@ -140,7 +145,7 @@ function AdminPayroll({ payrolls }: expenseProps) {
                         'Total Hrs',
                         'Rate',
                         'Total Amount',
-                        '...',
+                        'Actions',
                         '',
                     ]}
                 >

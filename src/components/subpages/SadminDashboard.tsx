@@ -2,6 +2,8 @@ import { Box, Grid, Image, Tr, VStack } from '@chakra-ui/react';
 import DashboardCard from '@components/bits-utils/DashboardCard';
 import TableCards from '@components/bits-utils/TableCards';
 import { TableData, TableStatus } from '@components/bits-utils/TableData';
+import { UserContext } from '@components/context/UserContext';
+import { useContext } from 'react';
 import {
     DashboardView,
     DashboardViewStandardResponse,
@@ -13,6 +15,8 @@ interface DashboardProps {
 }
 
 function SadminDashboard({ metrics }: DashboardProps) {
+    const { user } = useContext(UserContext);
+    const role = user?.role.replace(' ', '');
     const adminMetrics = metrics?.data as DashboardView;
     return (
         <VStack gap="1rem">
@@ -22,17 +26,17 @@ function SadminDashboard({ metrics }: DashboardProps) {
                 w="full"
             >
                 <DashboardCard
-                    url="/SuperAdmin/profile-management/clients"
+                    url={`/${role}/profile-management/clients`}
                     title="client"
                     value={adminMetrics?.totalClients}
                 />
                 <DashboardCard
-                    url="/SuperAdmin/profile-management/team-members"
+                    url={`/${role}/profile-management/team-members`}
                     title="team members"
                     value={adminMetrics?.totalTeamMembers}
                 />
                 <DashboardCard
-                    url="/SuperAdmin/profile-management/admin"
+                    url={`/${role}/profile-management/admin`}
                     title="admins"
                     value={adminMetrics?.totalDownLines}
                 />

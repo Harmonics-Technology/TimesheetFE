@@ -6,15 +6,16 @@ import {
     Button,
     VStack,
     useToast,
-} from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useState } from "react";
-import Link from "next/link";
-import { PrimaryInput } from "@components/bits-utils/PrimaryInput";
-import { PasswordReset, UserService } from "src/services";
-import InputBlank from "@components/bits-utils/InputBlank";
+} from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { useState } from 'react';
+import Link from 'next/link';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
+import { PasswordReset, UserService } from 'src/services';
+import InputBlank from '@components/bits-utils/InputBlank';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const schema = yup.object().shape({
     newPassword: yup.string().required(),
@@ -31,10 +32,10 @@ const CompleteReset = ({ code }: { code: string }) => {
         defaultValues: {
             code: code,
         },
-        mode: "all",
+        mode: 'all',
     });
     const [showSuccess, setShowSuccess] = useState(false);
-    const [confirmPass, setConfirmPass] = useState("");
+    const [confirmPass, setConfirmPass] = useState('');
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [passwordVisibleB, setPasswordVisibleB] = useState<boolean>(false);
     const changeInputType = () => {
@@ -48,10 +49,10 @@ const CompleteReset = ({ code }: { code: string }) => {
     const onSubmit = async (data: PasswordReset) => {
         if (confirmPass !== data.newPassword) {
             toast({
-                title: "Password do not match",
-                status: "error",
+                title: 'Password do not match',
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
             return;
         }
@@ -64,17 +65,17 @@ const CompleteReset = ({ code }: { code: string }) => {
             }
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         } catch (error) {
             console.log(error);
             toast({
                 title: `Check your network connection and try again`,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         }
     };
@@ -83,10 +84,10 @@ const CompleteReset = ({ code }: { code: string }) => {
         <>
             <Flex w="full" h="100vh" justify="center" alignItems="center">
                 <Box
-                    w={["full", "35%"]}
+                    w={['full', '35%']}
                     mx="auto"
                     boxShadow="0 20px 27px 0 rgb(0 0 0 / 10%)"
-                    h={["full", "auto"]}
+                    h={['full', 'auto']}
                     p="1rem 3rem 4rem"
                 >
                     <Box
@@ -100,7 +101,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                     <Text
                         fontSize="35px"
                         fontWeight="bold"
-                        w={["100%", "100%"]}
+                        w={['100%', '100%']}
                         lineHeight="1"
                         textAlign="center"
                     >
@@ -116,14 +117,14 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     fontWeight="500"
                                     textAlign="center"
                                 >
-                                    Password reset completed, you can now{" "}
+                                    Password reset completed, you can now{' '}
                                     <Link href="/login" passHref>
                                         <Text
                                             as="span"
                                             fontWeight="700"
                                             cursor="pointer"
                                         >
-                                            Login{" "}
+                                            Login{' '}
                                         </Text>
                                     </Link>
                                     with new credentials
@@ -137,7 +138,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     error={errors.newPassword}
                                     defaultValue=""
                                     placeholder="*********"
-                                    type={passwordVisible ? "text" : "password"}
+                                    type={passwordVisible ? 'text' : 'password'}
                                     icon={true}
                                     passwordVisible={passwordVisible}
                                     changeVisibility={changeInputType}
@@ -150,7 +151,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     placeholder="*********"
                                     fontSize="1rem"
                                     type={
-                                        passwordVisibleB ? "text" : "password"
+                                        passwordVisibleB ? 'text' : 'password'
                                     }
                                     icon={true}
                                     passwordVisible={passwordVisibleB}
@@ -164,6 +165,9 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     variant="solid"
                                     type="submit"
                                     isLoading={isSubmitting}
+                                    spinner={
+                                        <BeatLoader color="white" size="10" />
+                                    }
                                     w="full"
                                     p="1.5rem 0"
                                     color="white"

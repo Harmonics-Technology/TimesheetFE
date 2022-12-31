@@ -12,7 +12,6 @@ import {
     Grid,
     DrawerFooter,
     useToast,
-    Checkbox,
     Td,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
@@ -22,7 +21,7 @@ import {
     TableState,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -42,6 +41,7 @@ import { useRouter } from 'next/router';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import Checkbox from '@components/bits-utils/Checkbox';
 import BeatLoader from 'react-spinners/BeatLoader';
 
 const schema = yup.object().shape({
@@ -53,13 +53,84 @@ const schema = yup.object().shape({
 });
 interface expenseProps {
     expenses: ExpenseViewPagedCollectionStandardResponse;
-    id: string;
+    team: UserView[];
     expenseType: ExpenseTypeView[];
 }
 
-function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
-    console.log({ expenseType, id, expenses });
+function PayrollExpenseManagementApproved({
+    expenses,
+    team,
+    expenseType,
+}: expenseProps) {
+    console.log({ expenseType, team, expenses });
     const expensesList = expenses?.data?.value;
+    const [loading, setLoading] = useState(false);
+
+    const [selectedId, setSelectedId] = useState<string[]>([]);
+    const toggleSelected = (id: string, all?: boolean) => {
+        if (all) {
+            if (
+                selectedId?.length ===
+                expensesList?.filter((x) => x.status == 'APPROVED').length
+            ) {
+                setSelectedId([]);
+                return;
+            }
+            const response: string[] = [];
+            expensesList
+                ?.filter((x) => x.status == 'APPROVED')
+                .forEach((x) =>
+                    response.push(x.id as string),
+                ) as unknown as string[];
+            console.log({ response });
+            setSelectedId([...response]);
+            return;
+        }
+        const existingValue = selectedId.find((e) => e === id);
+        if (existingValue) {
+            const newArray = selectedId.filter((x) => x !== id);
+            setSelectedId(newArray);
+            return;
+        }
+        setSelectedId([...selectedId, id]);
+    };
+
+    const generateInvoice = async () => {
+        try {
+            setLoading(true);
+            const result = await FinancialService.generateInvoiceExpense(
+                selectedId,
+            );
+            if (result.status) {
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                setLoading(false);
+                router.reload();
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        } catch (err: any) {
+            setLoading(false);
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
     const {
         register,
         handleSubmit,
@@ -68,9 +139,6 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
     } = useForm<ExpenseModel>({
         resolver: yupResolver(schema),
         mode: 'all',
-        defaultValues: {
-            teamMemberId: id,
-        },
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -110,30 +178,47 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
         <>
             <Box
                 bgColor="white"
-                borderRadius="15px"
+                borderRadius="0 0 15px 15px"
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex gap="1rem">
-                    <Button
-                        bgColor="brand.400"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        onClick={onOpen}
-                    >
-                        +Expense
-                    </Button>
-                    {/* <Button
-                        bgColor="brand.600"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                    >
-                        Generate Invoice
-                    </Button> */}
+                <Flex justify="space-between">
+                    <HStack gap="1rem">
+                        <Button
+                            bgColor="brand.400"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            height="fit-content"
+                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                            onClick={onOpen}
+                        >
+                            +Expense
+                        </Button>
+                        {selectedId.length > 0 && (
+                            <Button
+                                bgColor="brand.600"
+                                color="white"
+                                p=".5rem 1.5rem"
+                                height="fit-content"
+                                onClick={() => generateInvoice()}
+                                isLoading={loading}
+                                spinner={<BeatLoader color="white" size="10" />}
+                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                            >
+                                Generate Invoice
+                            </Button>
+                        )}
+                    </HStack>
+                    <Checkbox
+                        checked={
+                            expensesList?.filter((x) => x.status == 'APPROVED')
+                                .length !== 0 &&
+                            expensesList?.filter((x) => x.status == 'APPROVED')
+                                .length == selectedId?.length
+                        }
+                        onChange={() => toggleSelected('', true)}
+                        label="Select All"
+                    />
                 </Flex>
                 <FilterSearch />
                 <Tables
@@ -144,6 +229,8 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                         'Currency',
                         'Amount',
                         'Status',
+                        'Action',
+                        // '...',
                     ]}
                 >
                     <>
@@ -157,6 +244,19 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                                     name={x.amount as unknown as string}
                                 />
                                 <TableState name={x.status as string} />
+
+                                <td>
+                                    <Checkbox
+                                        checked={
+                                            selectedId.find(
+                                                (e) => e === x.id,
+                                            ) || ''
+                                        }
+                                        onChange={(e) =>
+                                            toggleSelected(x.id as string)
+                                        }
+                                    />
+                                </td>
                             </Tr>
                         ))}
                     </>
@@ -169,22 +269,30 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                 title={'Add New Expense'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <SelectrixBox<ExpenseModel>
-                        control={control}
-                        name="expenseTypeId"
-                        error={errors.expenseTypeId}
-                        keys="id"
-                        keyLabel="name"
-                        label="Expense Type"
-                        options={expenseType?.filter(
-                            (x) => x.status == 'ACTIVE',
-                        )}
-                    />
                     <Grid
                         templateColumns={['1fr', 'repeat(2, 1fr)']}
                         gap="1rem 2rem"
-                        mt="1rem"
                     >
+                        <SelectrixBox<ExpenseModel>
+                            control={control}
+                            name="teamMemberId"
+                            error={errors.teamMemberId}
+                            keys="id"
+                            keyLabel="fullName"
+                            label="Team Member"
+                            options={team}
+                        />
+                        <SelectrixBox<ExpenseModel>
+                            control={control}
+                            name="expenseTypeId"
+                            error={errors.expenseTypeId}
+                            keys="id"
+                            keyLabel="name"
+                            label="Expense Type"
+                            options={expenseType?.filter(
+                                (x) => x.status == 'ACTIVE',
+                            )}
+                        />
                         <PrimaryTextarea<ExpenseModel>
                             label="Description"
                             name="description"
@@ -256,4 +364,4 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
     );
 }
 
-export default TeamExpenses;
+export default PayrollExpenseManagementApproved;

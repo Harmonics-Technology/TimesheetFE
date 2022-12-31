@@ -5,19 +5,22 @@ interface ICheckbox {
     checked: any;
     onChange: any;
     label?: string;
+    mb?: string;
 }
 
-function Checkbox({ checked, onChange, label }: ICheckbox) {
+function Checkbox({ checked, onChange, label, mb }: ICheckbox) {
     return (
-        <Flex fontSize=".9rem" gap=".9rem" fontWeight="500">
-            <label>{label}</label>
-            <input
-                type="checkbox"
-                className="formcheck"
-                checked={checked}
-                onChange={onChange}
-                value={checked}
-            />
+        <Flex fontSize=".9rem" gap=".9rem" fontWeight="500" mb={mb}>
+            <label style={{ display: 'flex', cursor: 'pointer' }}>
+                {label}
+                <input
+                    type="checkbox"
+                    className="formcheck"
+                    checked={checked}
+                    onChange={onChange}
+                    value={checked}
+                />
+            </label>
         </Flex>
     );
 }

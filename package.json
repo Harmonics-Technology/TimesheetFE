@@ -18,6 +18,7 @@
         "openapi:codegen": "openapi --input https://insighttimesheetapi.azurewebsites.net/swagger/v1/swagger.json --output ./src/services --client axios"
     },
     "dependencies": {
+        "@chakra-ui/icons": "^2.0.15",
         "@chakra-ui/react": "^2.4.3",
         "@codegena/oapi3ts-cli": "^2.1.10-alpha.8",
         "@emotion/react": "^11.1.4",
@@ -54,6 +55,7 @@
         "react-phone-number-input": "^3.2.13",
         "react-query": "^3.5.16",
         "react-selectrix": "^1.0.17",
+        "react-spinners": "^0.13.7",
         "styled-components": "^5.2.1",
         "styled-system": "^5.1.5",
         "yup": "^0.32.11"

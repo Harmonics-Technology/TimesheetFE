@@ -43,6 +43,7 @@ import { useRouter } from 'next/router';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -285,6 +286,7 @@ function ClientManagement({ adminList }: adminProps) {
                                 fontSize="14px"
                                 type="submit"
                                 isLoading={isSubmitting}
+                                spinner={<BeatLoader color="white" size="10" />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
                                 <Box pr=".5rem">

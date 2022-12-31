@@ -24,16 +24,13 @@ interface adminProps {
     adminList: UserView[];
     clientId: any;
 }
-import {
-    RegisterModel,
-    UserService,
-    UserView,
-} from 'src/services';
+import { RegisterModel, UserService, UserView } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
 import Loading from '@components/bits-utils/Loading';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -195,6 +192,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                             fontSize="14px"
                             type="submit"
                             isLoading={isSubmitting}
+                            spinner={<BeatLoader color="white" size="10" />}
                             boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                         >
                             <Box pr=".5rem">

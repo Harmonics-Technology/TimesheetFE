@@ -324,14 +324,16 @@ clientId: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @returns UserViewStandardResponse Success
+     * @param supervisorId 
+     * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getSupervisees(
 offset?: number,
 limit?: number,
 search?: string,
-): CancelablePromise<UserViewStandardResponse> {
+supervisorId?: string,
+): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/supervisees',
@@ -339,29 +341,42 @@ search?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
+                'supervisorId': supervisorId,
             },
         });
     }
 
     /**
+     * @param clientId 
      * @returns UserViewListStandardResponse Success
      * @throws ApiError
      */
-    public static getClientSupervisors(): CancelablePromise<UserViewListStandardResponse> {
+    public static getClientSupervisors(
+clientId?: string,
+): CancelablePromise<UserViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/client/supervisors',
+            query: {
+                'clientId': clientId,
+            },
         });
     }
 
     /**
+     * @param clientId 
      * @returns UserViewListStandardResponse Success
      * @throws ApiError
      */
-    public static getClientTeamMembers(): CancelablePromise<UserViewListStandardResponse> {
+    public static getClientTeamMembers(
+clientId?: string,
+): CancelablePromise<UserViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/client/team-members',
+            query: {
+                'clientId': clientId,
+            },
         });
     }
 

@@ -42,6 +42,7 @@ import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import Checkbox from '@components/bits-utils/Checkbox';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -94,40 +95,41 @@ function PayrollExpenseManagement({
         setSelectedId([...selectedId, id]);
     };
 
-    const generateInvoice = async () => {
-        try {
-            setLoading(true);
-            const result = await FinancialService.generateInvoiceExpense(
-                selectedId,
-            );
-            if (result.status) {
+    const approveExpenseItems = async () => {
+        selectedId.forEach(async (x) => {
+            try {
+                setLoading(true);
+                const result = await FinancialService.approveExpense(x);
+                if (result.status) {
+                    console.log({ result });
+                    toast({
+                        title: result.message,
+                        status: 'success',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                    setLoading(false);
+                    router.reload();
+                    return;
+                }
+                setLoading(false);
                 toast({
                     title: result.message,
-                    status: 'success',
+                    status: 'error',
                     isClosable: true,
                     position: 'top-right',
                 });
+            } catch (error: any) {
+                console.log({ error });
                 setLoading(false);
-                router.reload();
-                return;
+                toast({
+                    title: error.body.message || error.message,
+                    status: 'error',
+                    isClosable: true,
+                    position: 'top-right',
+                });
             }
-            setLoading(false);
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
-        } catch (err: any) {
-            setLoading(false);
-            toast({
-                title: err?.body?.message || err?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
+        });
     };
 
     const {
@@ -199,11 +201,12 @@ function PayrollExpenseManagement({
                                 color="white"
                                 p=".5rem 1.5rem"
                                 height="fit-content"
-                                onClick={() => generateInvoice()}
+                                onClick={() => approveExpenseItems()}
                                 isLoading={loading}
+                                spinner={<BeatLoader color="white" size="10" />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
-                                Generate Invoice
+                                Approve Expenses
                             </Button>
                         )}
                     </HStack>
@@ -242,23 +245,17 @@ function PayrollExpenseManagement({
                                     name={x.amount as unknown as string}
                                 />
                                 <TableState name={x.status as string} />
-                                {x.status != 'APPROVED' && (
-                                    <ExpenseActions id={x.id} manager={true} />
-                                )}
-
                                 <td>
-                                    {x.status == 'APPROVED' && (
-                                        <Checkbox
-                                            checked={
-                                                selectedId.find(
-                                                    (e) => e === x.id,
-                                                ) || ''
-                                            }
-                                            onChange={(e) =>
-                                                toggleSelected(x.id as string)
-                                            }
-                                        />
-                                    )}
+                                    <Checkbox
+                                        checked={
+                                            selectedId.find(
+                                                (e) => e === x.id,
+                                            ) || ''
+                                        }
+                                        onChange={(e) =>
+                                            toggleSelected(x.id as string)
+                                        }
+                                    />
                                 </td>
                             </Tr>
                         ))}
@@ -351,6 +348,7 @@ function PayrollExpenseManagement({
                                 fontSize="14px"
                                 type="submit"
                                 isLoading={isSubmitting}
+                                spinner={<BeatLoader color="white" size="10" />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
                                 <Box pr=".5rem">

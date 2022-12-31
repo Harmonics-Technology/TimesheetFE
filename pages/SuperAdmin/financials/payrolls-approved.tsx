@@ -3,6 +3,7 @@ import PageTabs from '@components/bits-utils/PageTabs';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import AdminPayroll from '@components/subpages/AdminPayroll';
+import AdminPayrollApproved from '@components/subpages/AdminPayrollApproved';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
@@ -26,7 +27,7 @@ function expenses({ payrolls }: PayrollType) {
                     tabName="Approved"
                 />
             </Flex>
-            <AdminPayroll payrolls={payrolls} />
+            <AdminPayrollApproved payrolls={payrolls} />
         </Box>
     );
 }

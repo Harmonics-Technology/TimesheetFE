@@ -29,6 +29,7 @@ import { useRouter } from 'next/router';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 import ConfirmModal from '@components/bits-utils/ConfirmModal';
 import ProfileConfirmModal from '@components/bits-utils/ProfileConfirmModal';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const schema = yup.object().shape({
     dateOfBirth: yup.string().required(),
@@ -424,6 +425,7 @@ function MyProfile({ user }: { user: UserView }) {
                         fontSize="15px"
                         type="submit"
                         isLoading={isSubmitting}
+                        spinner={<BeatLoader color="white" size="10" />}
                         w="98%"
                         boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     >

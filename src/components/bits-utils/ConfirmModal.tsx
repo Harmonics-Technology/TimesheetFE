@@ -10,11 +10,12 @@ import {
     HStack,
     useToast,
     Flex,
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { FaTimesCircle, FaTrash } from "react-icons/fa";
-import { ContractService } from "src/services";
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { FaTimesCircle, FaTrash } from 'react-icons/fa';
+import BeatLoader from 'react-spinners/BeatLoader';
+import { ContractService } from 'src/services';
 
 type Props = {
     isOpen?: any;
@@ -35,10 +36,10 @@ const ConfirmModal = ({ isOpen, onClose, id }: Props) => {
             const result = await ContractService.terminateContract(data);
             if (result.status) {
                 toast({
-                    title: "Contract Terminated",
-                    status: "success",
+                    title: 'Contract Terminated',
+                    status: 'success',
                     isClosable: true,
-                    position: "top-right",
+                    position: 'top-right',
                 });
                 setLoading(false);
                 router.reload();
@@ -48,9 +49,9 @@ const ConfirmModal = ({ isOpen, onClose, id }: Props) => {
             setLoading(false);
             toast({
                 title: result.message,
-                status: "error",
+                status: 'error',
                 isClosable: true,
-                position: "top-right",
+                position: 'top-right',
             });
         } catch (error) {
             console.log({ error });
@@ -68,7 +69,7 @@ const ConfirmModal = ({ isOpen, onClose, id }: Props) => {
             <ModalContent
                 py={5}
                 borderRadius="0px"
-                w={["88%", "30%"]}
+                w={['88%', '30%']}
                 overflow="hidden"
                 maxH="100vh"
                 pos="fixed"
@@ -88,7 +89,7 @@ const ConfirmModal = ({ isOpen, onClose, id }: Props) => {
                         <Text
                             fontSize="1.1rem"
                             mb="1rem"
-                            px={["1.5rem", "3.3rem"]}
+                            px={['1.5rem', '3.3rem']}
                             fontWeight="500"
                         >
                             Are you sure you want to terminate this contract?
@@ -131,6 +132,7 @@ const ConfirmModal = ({ isOpen, onClose, id }: Props) => {
                                 // }}
 
                                 isLoading={loading}
+                                spinner={<BeatLoader color="white" size="10" />}
                                 onClick={() => terminateContract(id)}
                             >
                                 Yes

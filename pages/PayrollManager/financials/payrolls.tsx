@@ -1,3 +1,5 @@
+import { Box, Flex } from '@chakra-ui/react';
+import PageTabs from '@components/bits-utils/PageTabs';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import AdminPayroll from '@components/subpages/AdminPayroll';
@@ -12,7 +14,21 @@ interface PayrollType {
     payrolls: PayrollViewPagedCollectionStandardResponse;
 }
 function expenses({ payrolls }: PayrollType) {
-    return <AdminPayroll payrolls={payrolls} />;
+    return (
+        <Box>
+            <Flex>
+                <PageTabs
+                    url="/PayrollManager/financials/payrolls"
+                    tabName="Awaiting Approval"
+                />
+                <PageTabs
+                    url="/PayrollManager/financials/payrolls-approved"
+                    tabName="Approved"
+                />
+            </Flex>
+            <AdminPayroll payrolls={payrolls} />
+        </Box>
+    );
 }
 
 export default expenses;

@@ -16,6 +16,7 @@ import Pagination from '@components/bits-utils/Pagination';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 interface expenseProps {
     listExpenses: ExpenseViewPagedCollectionStandardResponse;
@@ -107,6 +108,7 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
                                 height="fit-content"
                                 onClick={() => generateInvoice()}
                                 isLoading={loading}
+                                spinner={<BeatLoader color="white" size="10" />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
                                 Generate Invoice

@@ -1,8 +1,19 @@
 /* eslint-disable no-sparse-arrays */
-import { Box, Button, Flex, Tr, useToast, Td } from '@chakra-ui/react';
 import {
+    Box,
+    Button,
+    Flex,
+    Tr,
+    useDisclosure,
+    useToast,
+    Td,
+} from '@chakra-ui/react';
+import {
+    ExpenseActions,
+    PayrollActions,
     TableContractAction,
     TableData,
+    TableState,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import {
@@ -14,7 +25,7 @@ import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Checkbox from '@components/bits-utils/Checkbox';
 import BeatLoader from 'react-spinners/BeatLoader';
 
@@ -22,7 +33,7 @@ interface expenseProps {
     payrolls: PayrollViewPagedCollectionStandardResponse;
 }
 
-function PaymentPartnerPayroll({ payrolls }: expenseProps) {
+function AdminPayrollApproved({ payrolls }: expenseProps) {
     const payrollsList = payrolls?.data?.value;
     const router = useRouter();
     const toast = useToast();
@@ -97,31 +108,31 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex gap="1rem" justify="space-between">
-                    <Box>
-                        {selectedId.length > 0 && (
-                            <Button
-                                bgColor="brand.600"
-                                color="white"
-                                p=".5rem 1.5rem"
-                                height="fit-content"
-                                onClick={() => generateInvoice()}
-                                isLoading={loading}
-                                spinner={<BeatLoader color="white" size="10" />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                Generate Invoice
-                            </Button>
-                        )}
-                    </Box>
+                    {selectedId.length > 0 && (
+                        <Button
+                            bgColor="brand.600"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            height="fit-content"
+                            onClick={() => generateInvoice()}
+                            isLoading={loading}
+                            spinner={<BeatLoader color="white" size="10" />}
+                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                        >
+                            Generate Invoice
+                        </Button>
+                    )}
 
-                    <Checkbox
-                        checked={
-                            payrollsList?.length !== 0 &&
-                            payrollsList?.length == selectedId?.length
-                        }
-                        onChange={() => toggleSelected('', true)}
-                        label="Select All"
-                    />
+                    <Box w="fit-content" ml="auto">
+                        <Checkbox
+                            checked={
+                                payrollsList?.length !== 0 &&
+                                payrollsList?.length == selectedId?.length
+                            }
+                            onChange={() => toggleSelected('', true)}
+                            label="Select All"
+                        />
+                    </Box>
                 </Flex>
                 <FilterSearch />
                 <Tables
@@ -133,7 +144,7 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                         'Total Hrs',
                         'Rate',
                         'Total Amount',
-                        '...',
+                        'Actions',
                         '',
                     ]}
                 >
@@ -163,9 +174,9 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                                 <TableData name={`${x.totalHours} HRS`} />
                                 <TableData name={x.rate} />
                                 <TableData name={x.totalAmount} />
-                                <TableContractAction
-                                    id={x.employeeInformationId}
-                                    timeSheets={true}
+                                <PayrollActions
+                                    id={x.payrollId}
+                                    userId={x.employeeInformationId}
                                 />
                                 <td>
                                     <Checkbox
@@ -191,4 +202,4 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
     );
 }
 
-export default PaymentPartnerPayroll;
+export default AdminPayrollApproved;

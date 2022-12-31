@@ -486,40 +486,40 @@ export function PayrollActions({ id, userId }: { id: any; userId: any }) {
     const toast = useToast();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const Approve = async (data: string) => {
-        try {
-            setLoading(true);
-            const result = await FinancialService.approvePayroll(data);
-            if (result.status) {
-                console.log({ result });
-                toast({
-                    title: result.message,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                setLoading(false);
-                router.reload();
-                return;
-            }
-            setLoading(false);
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        } catch (error: any) {
-            console.log({ error });
-            setLoading(false);
-            toast({
-                title: error.body.message || error.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    // const Approve = async (data: string) => {
+    //     try {
+    //         setLoading(true);
+    //         const result = await FinancialService.approvePayroll(data);
+    //         if (result.status) {
+    //             console.log({ result });
+    //             toast({
+    //                 title: result.message,
+    //                 status: 'success',
+    //                 isClosable: true,
+    //                 position: 'top-right',
+    //             });
+    //             setLoading(false);
+    //             router.reload();
+    //             return;
+    //         }
+    //         setLoading(false);
+    //         toast({
+    //             title: result.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     } catch (error: any) {
+    //         console.log({ error });
+    //         setLoading(false);
+    //         toast({
+    //             title: error.body.message || error.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
     return (
         <td>
             <Menu>
@@ -535,9 +535,9 @@ export function PayrollActions({ id, userId }: { id: any; userId: any }) {
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
-                    <MenuItem onClick={() => Approve(id)} w="full">
+                    {/* <MenuItem onClick={() => Approve(id)} w="full">
                         Approve
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem w="full">
                         <NextLink
                             href={`/PayrollManager/timesheets/${userId}`}

@@ -1,14 +1,25 @@
-import { withPageAuth } from "@components/generics/withPageAuth";
-import ClientProfile from "@components/subpages/ClientProfile";
-import { GetServerSideProps } from "next";
-import { UserService } from "src/services";
+import { withPageAuth } from '@components/generics/withPageAuth';
+import ClientProfile from '@components/subpages/ClientProfile';
+import { GetServerSideProps } from 'next';
+import {
+    UserService,
+    UserViewPagedCollectionStandardResponse,
+} from 'src/services';
 
 interface pageOptions {
     userProfile: any;
+    teamList: UserViewPagedCollectionStandardResponse;
+    supervisorList: UserViewPagedCollectionStandardResponse;
 }
 
-function ClientDetails({ userProfile }: pageOptions) {
-    return <ClientProfile userProfile={userProfile} />;
+function ClientDetails({ userProfile, teamList, supervisorList }: pageOptions) {
+    return (
+        <ClientProfile
+            userProfile={userProfile}
+            teamList={teamList}
+            supervisorList={supervisorList}
+        />
+    );
 }
 
 export default ClientDetails;
@@ -19,10 +30,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         // console.log({ id });
         try {
             const data = await UserService.getUserById(id);
+            const teamList = await UserService.getClientTeamMembers(id);
+            const supervisorList = await UserService.getClientSupervisors(id);
             // console.log({ data });
             return {
                 props: {
                     userProfile: data.data,
+                    teamList,
+                    supervisorList,
                 },
             };
         } catch (error: any) {

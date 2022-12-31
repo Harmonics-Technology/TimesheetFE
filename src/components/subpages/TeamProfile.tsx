@@ -33,6 +33,7 @@ import { Widget } from '@uploadcare/react-widget';
 import { AiOutlineDownload } from 'react-icons/ai';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const schema = yup.object().shape({});
 interface TeamProfileProps {
@@ -783,6 +784,7 @@ function TeamProfile({
                     // type="submit"
                     onClick={handleSubmit(onSubmit)}
                     isLoading={isSubmitting}
+                    spinner={<BeatLoader color="white" size="10" />}
                     boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                 >
                     <Box pr=".5rem">

@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         try {
             const team = await UserService.listUsers('Team Member');
             const expenseType = await SettingsService.listExpenseTypes();
-            const data = await FinancialService.listReviewedExpenses(
+            const data = await FinancialService.listAllApprovedExpenses(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,

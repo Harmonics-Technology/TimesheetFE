@@ -42,6 +42,7 @@ import { useRouter } from 'next/router';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -155,7 +156,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                                     name={x.amount as unknown as string}
                                 />
                                 <TableState name={x.status as string} />
-                                <ExpenseActions id={x.id}  />
+                                <ExpenseActions id={x.id} />
                                 {/* <td>
                                     {x.status == 'APPROVED' && <Checkbox />}
                                 </td> */}
@@ -250,6 +251,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                                 fontSize="14px"
                                 type="submit"
                                 isLoading={isSubmitting}
+                                spinner={<BeatLoader color="white" size="10" />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
                                 <Box pr=".5rem">

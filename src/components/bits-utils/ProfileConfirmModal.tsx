@@ -15,6 +15,7 @@ import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FaTimesCircle, FaTrash } from 'react-icons/fa';
+import BeatLoader from 'react-spinners/BeatLoader';
 import { UpdateUserModel, UserService } from 'src/services';
 
 type Props = {
@@ -144,6 +145,7 @@ const ProfileConfirmModal = ({ isOpen, onClose, user }: Props) => {
                                 // }}
 
                                 isLoading={loading}
+                                spinner={<BeatLoader color="white" size="10" />}
                                 onClick={() => updatePicture(user)}
                             >
                                 Yes

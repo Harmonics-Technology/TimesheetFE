@@ -46,6 +46,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Button } from '..';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 interface approveDate {
     userId: string;
@@ -514,6 +515,12 @@ const TimesheetAdmin = ({
                                         />
                                         <Button
                                             isLoading={isSubmitting}
+                                            spinner={
+                                                <BeatLoader
+                                                    color="white"
+                                                    size="10"
+                                                />
+                                            }
                                             type="submit"
                                             w="full"
                                             bgColor="brand.600"

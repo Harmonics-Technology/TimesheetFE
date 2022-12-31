@@ -53,6 +53,7 @@ import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 import { DateObject } from 'react-multi-date-picker';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import Loading from '@components/bits-utils/Loading';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -905,6 +906,7 @@ function ClientTeamManagement({
                                 fontSize="14px"
                                 type="submit"
                                 isLoading={isSubmitting}
+                                spinner={<BeatLoader color="white" size="10" />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
                                 <Box pr=".5rem">
