@@ -217,6 +217,15 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['expenses']}
                     />
+                    <MenuItem
+                        linkName="my-profile"
+                        menuTitle="My Profile"
+                        icon={<FaUser opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                    />
                 </VStack>
             ) : role == 'PaymentPartner' ? (
                 <VStack align="left" gap="1.5rem" pr="1rem">
