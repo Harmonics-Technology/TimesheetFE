@@ -234,122 +234,8 @@ function ClientProfile({
                                 register={register}
                             />
                         </Grid>
-                        <Flex
-                            gap="2rem"
-                            // justify="space-between"
-                            h="10rem"
-                            align="center"
-                        >
-                            <Checkbox
-                                label={
-                                    teamMembers
-                                        ? 'Hide Team Members'
-                                        : 'Show Team Members'
-                                }
-                                onChange={() => setTeamMembers(!teamMembers)}
-                                checked={teamMembers}
-                                mb="1rem"
-                            />
-                            <Checkbox
-                                label={
-                                    supervisors
-                                        ? 'Hide Supervisors'
-                                        : 'Show Supervisors'
-                                }
-                                onChange={() => setSupervisors(!supervisors)}
-                                checked={supervisors}
-                                mb="1rem"
-                            />
-                        </Flex>
                     </Box>
                 </Grid>
-                <Box>
-                    <Box
-                        borderY="1px solid"
-                        py="1rem"
-                        my="1rem"
-                        borderColor="gray.300"
-                        display={teamMembers ? 'block' : 'none'}
-                    >
-                        <Text fontWeight="600">Team Members</Text>
-                        <Tables
-                            tableHead={[
-                                'Name',
-                                'Job Title',
-                                'Phone No',
-                                'Role',
-                                'Status',
-                                '',
-                            ]}
-                        >
-                            <>
-                                {teamList?.data?.value?.map((x: UserView) => (
-                                    <Tr key={x.id}>
-                                        <TableData name={x.firstName} />
-                                        <TableData
-                                            name={
-                                                x.employeeInformation?.jobTitle
-                                            }
-                                        />
-                                        <TableData name={x.phoneNumber} />
-                                        <TableData name={x.role} />
-                                        <TableStatus name={x.isActive} />
-                                        <TableActions
-                                            id={x.id}
-                                            route="team-members"
-                                            email={x.email}
-                                        />
-                                    </Tr>
-                                ))}
-                            </>
-                        </Tables>
-                        <Pagination data={teamList} />
-                    </Box>
-                    <Box
-                        borderY="1px solid"
-                        py="1rem"
-                        my="1rem"
-                        borderColor="gray.300"
-                        display={supervisors ? 'block' : 'none'}
-                    >
-                        <Text fontWeight="600">Supervisors</Text>
-                        <Tables
-                            tableHead={[
-                                'Name',
-                                'Job Title',
-                                'Phone No',
-                                'Role',
-                                'Status',
-                                '',
-                            ]}
-                        >
-                            <>
-                                {supervisorList?.data?.value?.map(
-                                    (x: UserView) => (
-                                        <Tr key={x.id}>
-                                            <TableData name={x.firstName} />
-                                            <TableData
-                                                name={
-                                                    x.employeeInformation
-                                                        ?.jobTitle
-                                                }
-                                            />
-                                            <TableData name={x.phoneNumber} />
-                                            <TableData name={x.role} />
-                                            <TableStatus name={x.isActive} />
-                                            <TableActions
-                                                id={x.id}
-                                                route="team-members"
-                                                email={x.email}
-                                            />
-                                        </Tr>
-                                    ),
-                                )}
-                            </>
-                        </Tables>
-                        <Pagination data={supervisorList} />
-                    </Box>
-                </Box>
 
                 <Grid
                     templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
@@ -383,6 +269,115 @@ function ClientProfile({
                     </Button>
                 </Grid>
             </form>
+            <Box>
+                <Flex
+                    gap="2rem"
+                    // justify="space-between"
+                    align="center"
+                    flexDirection={['column', 'row']}
+                >
+                    <Checkbox
+                        label={
+                            supervisors
+                                ? 'Hide Supervisors'
+                                : 'Show Supervisors'
+                        }
+                        onChange={() => setSupervisors(!supervisors)}
+                        checked={supervisors}
+                        mb="1rem"
+                    />
+                    <Checkbox
+                        label={
+                            teamMembers
+                                ? 'Hide Team Members'
+                                : 'Show Team Members'
+                        }
+                        onChange={() => setTeamMembers(!teamMembers)}
+                        checked={teamMembers}
+                        mb="1rem"
+                    />
+                </Flex>
+            </Box>
+            <Box>
+                <Box
+                    borderY="1px solid"
+                    py="1rem"
+                    my="1rem"
+                    borderColor="gray.300"
+                    display={teamMembers ? 'block' : 'none'}
+                >
+                    <Text fontWeight="600">Team Members</Text>
+                    <Tables
+                        tableHead={[
+                            'Name',
+                            'Job Title',
+                            'Phone No',
+                            'Role',
+                            'Status',
+                            '',
+                        ]}
+                    >
+                        <>
+                            {teamList?.data?.value?.map((x: UserView) => (
+                                <Tr key={x.id}>
+                                    <TableData name={x.firstName} />
+                                    <TableData
+                                        name={x.employeeInformation?.jobTitle}
+                                    />
+                                    <TableData name={x.phoneNumber} />
+                                    <TableData name={x.role} />
+                                    <TableStatus name={x.isActive} />
+                                    <TableActions
+                                        id={x.id}
+                                        route="team-members"
+                                        email={x.email}
+                                    />
+                                </Tr>
+                            ))}
+                        </>
+                    </Tables>
+                    <Pagination data={teamList} />
+                </Box>
+                <Box
+                    borderY="1px solid"
+                    py="1rem"
+                    my="1rem"
+                    borderColor="gray.300"
+                    display={supervisors ? 'block' : 'none'}
+                >
+                    <Text fontWeight="600">Supervisors</Text>
+                    <Tables
+                        tableHead={[
+                            'Name',
+                            'Job Title',
+                            'Phone No',
+                            'Role',
+                            'Status',
+                            '',
+                        ]}
+                    >
+                        <>
+                            {supervisorList?.data?.value?.map((x: UserView) => (
+                                <Tr key={x.id}>
+                                    <TableData name={x.firstName} />
+                                    <TableData
+                                        name={x.employeeInformation?.jobTitle}
+                                    />
+                                    <TableData name={x.phoneNumber} />
+                                    <TableData name={x.role} />
+                                    <TableStatus name={x.isActive} />
+                                    <TableActions
+                                        id={x.id}
+                                        route="team-members"
+                                        email={x.email}
+                                    />
+                                </Tr>
+                            ))}
+                        </>
+                    </Tables>
+                    <Pagination data={supervisorList} />
+                </Box>
+            </Box>
         </Box>
     );
 }

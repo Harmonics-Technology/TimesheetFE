@@ -1,3 +1,4 @@
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import ClientProfile from '@components/subpages/ClientProfile';
 import { GetServerSideProps } from 'next';
@@ -28,10 +29,21 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
         // console.log({ id });
+        const pagingOptions = filterPagingSearchOptions(ctx);
         try {
             const data = await UserService.getUserById(id);
-            const teamList = await UserService.getClientTeamMembers(id);
-            const supervisorList = await UserService.getClientSupervisors(id);
+            const teamList = await UserService.getClientTeamMembers(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+                id,
+            );
+            const supervisorList = await UserService.getClientSupervisors(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+                id,
+            );
             // console.log({ data });
             return {
                 props: {

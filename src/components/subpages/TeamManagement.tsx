@@ -52,6 +52,7 @@ import { DateObject } from 'react-multi-date-picker';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import Loading from '@components/bits-utils/Loading';
 import BeatLoader from 'react-spinners/BeatLoader';
+import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -511,7 +512,28 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                         type="number"
                                         register={register}
                                     />
-                                    <Box>
+                                    <UploadCareWidget
+                                        refs={widgetApiB}
+                                        label="Incoporation Document"
+                                        filename={icd?.name}
+                                        loading={showLoadingB}
+                                        uploadFunction={showLoadingStateB}
+                                    />
+                                    <UploadCareWidget
+                                        refs={widgetApiC}
+                                        label="Void Check"
+                                        filename={voidCheck?.name}
+                                        loading={showLoadingC}
+                                        uploadFunction={showLoadingStateC}
+                                    />
+                                    <UploadCareWidget
+                                        refs={widgetApiD}
+                                        label="Issuance Certificate"
+                                        filename={inc?.name}
+                                        loading={showLoadingD}
+                                        uploadFunction={showLoadingStateD}
+                                    />
+                                    {/* <Box>
                                         <FormLabel
                                             textTransform="capitalize"
                                             width="fit-content"
@@ -581,8 +603,8 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                                 }
                                             />
                                         </Box>
-                                    </Box>
-                                    <Box>
+                                    </Box> */}
+                                    {/* <Box>
                                         <FormLabel
                                             textTransform="capitalize"
                                             width="fit-content"
@@ -723,7 +745,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                                 }
                                             />
                                         </Box>
-                                    </Box>
+                                    </Box> */}
 
                                     <PrimaryInput<TeamMemberModel>
                                         label="HST No."
@@ -857,7 +879,14 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 min={new DateObject().add(3, 'days')}
                             />
                         </Grid>
-                        <Box>
+                        <UploadCareWidget
+                            refs={widgetApi}
+                            label="Attach Document"
+                            filename={contract?.name}
+                            loading={showLoading}
+                            uploadFunction={showLoadingState}
+                        />
+                        {/* <Box>
                             <FormLabel
                                 textTransform="capitalize"
                                 width="fit-content"
@@ -916,7 +945,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                     inputAcceptTypes={'.docx,.pdf, .doc'}
                                 />
                             </Box>
-                        </Box>
+                        </Box> */}
                     </Box>
 
                     <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">

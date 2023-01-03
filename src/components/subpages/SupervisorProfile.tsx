@@ -1,16 +1,29 @@
-import { Box, Button, Grid, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Grid, Text, Tr, useToast } from '@chakra-ui/react';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { VscSaveAs } from 'react-icons/vsc';
 import roles from '../generics/roles.json';
-import { UpdateUserModel, UserService, UserView } from 'src/services';
+import {
+    UpdateUserModel,
+    UserService,
+    UserView,
+    UserViewPagedCollectionStandardResponse,
+} from 'src/services';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { useRouter } from 'next/router';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import BeatLoader from 'react-spinners/BeatLoader';
+import Tables from '@components/bits-utils/Tables';
+import {
+    TableActions,
+    TableData,
+    TableStatus,
+} from '@components/bits-utils/TableData';
+import Checkbox from '@components/bits-utils/Checkbox';
+import Pagination from '@components/bits-utils/Pagination';
 
 const schema = yup.object().shape({
     firstName: yup.string().required(),
@@ -21,8 +34,9 @@ const schema = yup.object().shape({
 });
 interface SupervisorProfileProps {
     userProfile?: UserView;
+    teamList?: UserViewPagedCollectionStandardResponse;
 }
-function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
+function SupervisorProfile({ userProfile, teamList }: SupervisorProfileProps) {
     // console.log({ userProfile });
     const {
         register,
@@ -42,6 +56,7 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
 
     const toast = useToast();
     const router = useRouter();
+    const [teamMembers, setTeamMembers] = useState(false);
     const onSubmit = async (data: UpdateUserModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
         console.log({ data });
@@ -148,6 +163,7 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
                         ]}
                     />
                 </Grid>
+
                 <Grid
                     templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                     gap="1rem 2rem"
@@ -180,6 +196,55 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
                     </Button>
                 </Grid>
             </form>
+            <Box mt="1.5rem">
+                <Checkbox
+                    label={
+                        teamMembers ? 'Hide Team Members' : 'Show Team Members'
+                    }
+                    onChange={() => setTeamMembers(!teamMembers)}
+                    checked={teamMembers}
+                    mb="1rem"
+                />
+            </Box>
+            <Box
+                borderY="1px solid"
+                py="1rem"
+                my="1rem"
+                borderColor="gray.300"
+                display={teamMembers ? 'block' : 'none'}
+            >
+                <Text fontWeight="600">Team Members</Text>
+                <Tables
+                    tableHead={[
+                        'Name',
+                        'Job Title',
+                        'Phone No',
+                        'Role',
+                        'Status',
+                        '',
+                    ]}
+                >
+                    <>
+                        {teamList?.data?.value?.map((x: UserView) => (
+                            <Tr key={x.id}>
+                                <TableData name={x.firstName} />
+                                <TableData
+                                    name={x.employeeInformation?.jobTitle}
+                                />
+                                <TableData name={x.phoneNumber} />
+                                <TableData name={x.role} />
+                                <TableStatus name={x.isActive} />
+                                <TableActions
+                                    id={x.id}
+                                    route="team-members"
+                                    email={x.email}
+                                />
+                            </Tr>
+                        ))}
+                    </>
+                </Tables>
+                <Pagination data={teamList} />
+            </Box>
         </Box>
     );
 }

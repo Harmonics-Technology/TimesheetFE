@@ -347,34 +347,52 @@ supervisorId?: string,
     }
 
     /**
+     * @param offset 
+     * @param limit 
+     * @param search 
      * @param clientId 
-     * @returns UserViewListStandardResponse Success
+     * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getClientSupervisors(
+offset?: number,
+limit?: number,
+search?: string,
 clientId?: string,
-): CancelablePromise<UserViewListStandardResponse> {
+): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/client/supervisors',
             query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
                 'clientId': clientId,
             },
         });
     }
 
     /**
+     * @param offset 
+     * @param limit 
+     * @param search 
      * @param clientId 
-     * @returns UserViewListStandardResponse Success
+     * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getClientTeamMembers(
+offset?: number,
+limit?: number,
+search?: string,
 clientId?: string,
-): CancelablePromise<UserViewListStandardResponse> {
+): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/client/team-members',
             query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
                 'clientId': clientId,
             },
         });
