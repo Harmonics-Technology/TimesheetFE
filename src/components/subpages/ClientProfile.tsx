@@ -329,7 +329,7 @@ function ClientProfile({
                                     <TableStatus name={x.isActive} />
                                     <TableActions
                                         id={x.id}
-                                        route="team-members"
+                                        route="/SuperAdmin/profile-management/team-members"
                                         email={x.email}
                                     />
                                 </Tr>
@@ -368,7 +368,7 @@ function ClientProfile({
                                     <TableStatus name={x.isActive} />
                                     <TableActions
                                         id={x.id}
-                                        route="team-members"
+                                        route="/SuperAdmin/profile-management/supervisors"
                                         email={x.email}
                                     />
                                 </Tr>

@@ -236,7 +236,7 @@ function SupervisorProfile({ userProfile, teamList }: SupervisorProfileProps) {
                                 <TableStatus name={x.isActive} />
                                 <TableActions
                                     id={x.id}
-                                    route="team-members"
+                                    route="/SuperAdmin/profile-management/team-members"
                                     email={x.email}
                                 />
                             </Tr>

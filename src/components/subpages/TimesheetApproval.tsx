@@ -44,8 +44,8 @@ function TimeSheetApproval({ timeSheets }: adminProps) {
                 >
                     <>
                         {timeSheets?.data?.value?.map(
-                            (x: TimeSheetApprovedView) => (
-                                <Tr key={x.employeeInformationId}>
+                            (x: TimeSheetApprovedView, i) => (
+                                <Tr key={i}>
                                     <TableData name={x.name} />
                                     <TableData name={x.email} />
                                     <TableData
