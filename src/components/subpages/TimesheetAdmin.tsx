@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
     format,
     startOfWeek,
@@ -27,6 +27,8 @@ import {
     useToast,
     HStack,
     Circle,
+    useDisclosure,
+    Text,
 } from '@chakra-ui/react';
 import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
@@ -47,6 +49,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Button } from '..';
 import BeatLoader from 'react-spinners/BeatLoader';
+import useClickOutside from '@components/generics/useClickOutside';
 
 interface approveDate {
     userId: string;
@@ -105,7 +108,7 @@ const TimesheetAdmin = ({
     const [selected, setSelected] = useState<approveDate[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
     // console.log({ selectedInput });
-    console.log({ selected });
+    // console.log({ selected });
 
     const {
         register,
@@ -383,7 +386,7 @@ const TimesheetAdmin = ({
             );
         }
         return (
-            <div className="weekContainer">
+            <Box className="weekContainer">
                 <Box className="day weekNames" color="red.400">
                     Week
                 </Box>
@@ -391,7 +394,7 @@ const TimesheetAdmin = ({
                 <Box className="day weekNames" color="brand.400">
                     Total
                 </Box>
-            </div>
+            </Box>
         );
     };
     const generateDatesForCurrentWeek = (
@@ -416,7 +419,14 @@ const TimesheetAdmin = ({
             const status = timesheets?.status as string;
             const [singleCheck, setSingleCheck] = useState(false);
             const [singleReject, setSingleReject] = useState(false);
-            const isApproved = timesheets?.isApproved;
+            const {
+                isOpen: isVisible,
+                onClose,
+                onOpen,
+            } = useDisclosure({ defaultIsOpen: false });
+            const close = useCallback(() => onClose(), []);
+            const popover = useRef(null);
+            useClickOutside(popover, close);
             // console.log({ timesheets });
 
             week.push(
@@ -435,7 +445,7 @@ const TimesheetAdmin = ({
                         setSelectedDate(cloneDate);
                     }}
                 >
-                    <Flex>
+                    <Flex pos="relative">
                         <div>{format(currentDate, 'MMM, d')}</div>
                         <HStack gap="0rem" ml=".5rem">
                             <Circle
@@ -455,7 +465,6 @@ const TimesheetAdmin = ({
                                 }}
                                 disabled={
                                     timesheets?.status === 'APPROVED' ||
-                                    timesheets?.status === 'REJECTED' ||
                                     timesheets == undefined
                                 }
                                 as={Button}
@@ -473,7 +482,6 @@ const TimesheetAdmin = ({
                                     showReject(userId, userDate);
                                 }}
                                 disabled={
-                                    timesheets?.status === 'APPROVED' ||
                                     timesheets?.status === 'REJECTED' ||
                                     timesheets == undefined
                                 }
@@ -534,36 +542,40 @@ const TimesheetAdmin = ({
                                 </Box>
                             )}
                         </HStack>
-                        {/* {allChecked ? (
-                            <Checkbox
-                                disabled={!isSameMonth(currentDate, activeDate)}
-                                ml=".5rem"
-                                isChecked={true}
-                            ></Checkbox>
-                        ) : (
-                            <Checkbox
-                                disabled={
-                                    !isSameMonth(currentDate, activeDate) ||
-                                    timesheets?.isApproved
+                        {isVisible && (
+                            <Box
+                                pos="absolute"
+                                w="300px"
+                                h="auto"
+                                // borderRadius="10px"
+                                borderBottom="4px solid"
+                                borderColor={
+                                    timesheets.isApproved == true
+                                        ? 'green'
+                                        : 'red'
                                 }
-                                ml=".5rem"
-                                onChange={() => {
-                                    setSingleCheck(!singleCheck);
-                                    selected.push({
-                                        userId: userId,
-                                        chosenDate: userDate,
-                                        checked: isApproved
-                                            ? singleCheck
-                                            : !singleCheck,
-                                    });
-                                }}
-                                defaultChecked={
-                                    timesheets?.isApproved ||
-                                    singleCheck ||
-                                    false
+                                top="-100px"
+                                p="1rem"
+                                zIndex={800}
+                                bgColor={
+                                    timesheets.isApproved == true
+                                        ? 'green.100'
+                                        : 'red.100'
                                 }
-                            ></Checkbox>
-                        )} */}
+                                ref={popover}
+                            >
+                                <Text fontWeight="700" mb="1rem">
+                                    {timesheets.isApproved == true
+                                        ? 'Approved!'
+                                        : 'Rejected'}
+                                </Text>
+                                <Text fontWeight="500" mb="0">
+                                    {timesheets.isApproved == true
+                                        ? 'Good Job!'
+                                        : timesheets.rejectionReason}
+                                </Text>
+                            </Box>
+                        )}
                     </Flex>
 
                     <InputGroup
@@ -580,11 +592,8 @@ const TimesheetAdmin = ({
                             textAlign="center"
                             h="full"
                             border="0"
-                            disabled={
-                                timesheets?.status === 'APPROVED' ||
-                                timesheets?.status === 'REJECTED' ||
-                                timesheets == undefined
-                            }
+                            readOnly
+                            // disabled={true}
                             onChange={(e) =>
                                 selectedInput.push({
                                     userId: userId,
@@ -593,25 +602,11 @@ const TimesheetAdmin = ({
                                 })
                             }
                         />
-                        {/* {hours !== "" && (
-                            <InputRightElement
-                                h="full"
-                                onClick={() =>
-                                    addHours(userId, userDate, hours)
-                                }
-                                children={
-                                    loading ? (
-                                        <Spinner size="xs" />
-                                    ) : (
-                                        <FaCheckCircle color="brand.400" />
-                                    )
-                                }
-                            />
-                        )} */}
+
                         {timesheets?.status == 'APPROVED' ? (
-                            <FaCheck color="green" />
+                            <FaCheck color="green" onClick={onOpen} />
                         ) : timesheets?.status == 'REJECTED' ? (
-                            <FaTimes color="red" />
+                            <FaTimes color="red" onClick={onOpen} />
                         ) : null}
                     </InputGroup>
                 </Box>,
@@ -679,6 +674,7 @@ const TimesheetAdmin = ({
                     w="full"
                     bgColor="white"
                     p="0rem 2rem 0rem"
+                    // pos="relative"
                     // borderRadius="10px"
                 >
                     {getWeekDaysNames()}

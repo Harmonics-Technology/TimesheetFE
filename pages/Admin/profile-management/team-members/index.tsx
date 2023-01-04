@@ -39,6 +39,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 'Team Member',
                 pagingOptions.offset,
                 pagingOptions.limit,
+                pagingOptions.search,
             );
             return {
                 props: {

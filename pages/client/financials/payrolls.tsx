@@ -24,6 +24,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const data = await FinancialService.listClientTeamMembersPayroll(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                // pagingOptions.search,
             );
 
             return {

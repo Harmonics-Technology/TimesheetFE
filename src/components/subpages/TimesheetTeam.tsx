@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
     format,
     startOfWeek,
@@ -17,13 +17,14 @@ import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { MdArrowDropDown } from 'react-icons/md';
 import {
     Box,
-    Checkbox,
+    Text,
     Flex,
     Grid,
     Select,
     Input,
     InputGroup,
     useToast,
+    useDisclosure,
 } from '@chakra-ui/react';
 import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
@@ -37,6 +38,7 @@ import moment from 'moment';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import Naira from '@components/generics/functions/Naira';
+import useClickOutside from '@components/generics/useClickOutside';
 
 interface approveDate {
     userId: string;
@@ -165,28 +167,6 @@ const TimesheetTeam = ({
             />
         );
     }
-    // const approveTimeSheetForADay = async (userId, chosenDate) => {
-    //     try {
-    //         const data = await TimeSheetService.approveTimeSheetForADay(
-    //             userId,
-    //             chosenDate,
-    //         );
-    //         if (data.status) {
-    //             console.log({ data });
-    //             return;
-    //         }
-    //         toast({
-    //             title: data.message,
-    //             status: "error",
-    //             isClosable: true,
-    //             position: "top-right",
-    //         });
-    //         console.log({ data });
-    //         return;
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
 
     const nextMonth = async () => {
         await router.push({
@@ -312,6 +292,14 @@ const TimesheetTeam = ({
             )[0];
             const userId = timesheets?.employeeInformationId as string;
             const userDate = moment(timesheets?.date).format('YYYY-MM-DD');
+            const {
+                isOpen: isVisible,
+                onClose,
+                onOpen,
+            } = useDisclosure({ defaultIsOpen: false });
+            const close = useCallback(() => onClose(), []);
+            const popover = useRef(null);
+            useClickOutside(popover, close);
 
             week.push(
                 <Box
@@ -329,28 +317,42 @@ const TimesheetTeam = ({
                         setSelectedDate(cloneDate);
                     }}
                 >
-                    <Flex>
+                    <Flex pos="relative">
                         <div>{format(currentDate, 'MMM, d')}</div>
-                        {/* <Checkbox
-                            disabled={!isSameMonth(currentDate, activeDate)}
-                            ml=".5rem"
-                            onChange={() => {
-                                setSingleCheck(!singleCheck);
-                                selected.push({
-                                    userId: userId,
-                                    chosenDate: userDate,
-                                    checked: isApproved
-                                        ? singleCheck
-                                        : !singleCheck,
-                                });
-                            }}
-                            defaultChecked={
-                                timesheets?.isApproved || singleCheck || false
-                            }
-                            // isChecked={
-                            //     singleCheck || timesheets?.isApproved || checked
-                            // }
-                        ></Checkbox> */}
+                        {isVisible && (
+                            <Box
+                                pos="absolute"
+                                w="300px"
+                                h="auto"
+                                // borderRadius="10px"
+                                borderBottom="4px solid"
+                                borderColor={
+                                    timesheets.isApproved == true
+                                        ? 'green'
+                                        : 'red'
+                                }
+                                top="-100px"
+                                p="1rem"
+                                zIndex={800}
+                                bgColor={
+                                    timesheets.isApproved == true
+                                        ? 'green.100'
+                                        : 'red.100'
+                                }
+                                ref={popover}
+                            >
+                                <Text fontWeight="700" mb="1rem">
+                                    {timesheets.isApproved == true
+                                        ? 'Approved!'
+                                        : 'Rejected'}
+                                </Text>
+                                <Text fontWeight="500" mb="0">
+                                    {timesheets.isApproved == true
+                                        ? 'Good Job!'
+                                        : timesheets.rejectionReason}
+                                </Text>
+                            </Box>
+                        )}
                     </Flex>
 
                     <InputGroup
@@ -367,11 +369,8 @@ const TimesheetTeam = ({
                             textAlign="center"
                             h="full"
                             border="0"
-                            disabled={
-                                timesheets?.status === 'APPROVED' ||
-                                timesheets?.status === 'REJECTED' ||
-                                timesheets == undefined
-                            }
+                            readOnly={timesheets?.status === 'APPROVED'}
+                            disabled={timesheets == undefined}
                             onChange={(e) =>
                                 selectedInput.push({
                                     userId: userId,
@@ -380,25 +379,11 @@ const TimesheetTeam = ({
                                 })
                             }
                         />
-                        {/* {hours !== "" && (
-                            <InputRightElement
-                                h="full"
-                                onClick={() =>
-                                    addHours(userId, userDate, hours)
-                                }
-                                children={
-                                    loading ? (
-                                        <Spinner size="xs" />
-                                    ) : (
-                                        <FaCheckCircle color="brand.400" />
-                                    )
-                                }
-                            />
-                        )} */}
+
                         {timesheets?.status == 'APPROVED' ? (
-                            <FaCheck color="green" />
+                            <FaCheck color="green" onClick={onOpen} />
                         ) : timesheets?.status == 'REJECTED' ? (
-                            <FaTimes color="red" />
+                            <FaTimes color="red" onClick={onOpen} />
                         ) : null}
                     </InputGroup>
                 </Box>,

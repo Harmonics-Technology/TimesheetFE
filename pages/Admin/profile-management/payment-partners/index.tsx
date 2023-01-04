@@ -1,12 +1,12 @@
-import { filterPagingSearchOptions } from "@components/generics/filterPagingSearchOptions";
-import { withPageAuth } from "@components/generics/withPageAuth";
-import PaymentPartnerManagement from "@components/subpages/PaymentPartnerManagement";
-import { GetServerSideProps } from "next";
-import React from "react";
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
+import { withPageAuth } from '@components/generics/withPageAuth';
+import PaymentPartnerManagement from '@components/subpages/PaymentPartnerManagement';
+import { GetServerSideProps } from 'next';
+import React from 'react';
 import {
     UserService,
     UserViewPagedCollectionStandardResponse,
-} from "src/services";
+} from 'src/services';
 interface PaymentPartnerProps {
     PaymentPartnerList: UserViewPagedCollectionStandardResponse;
 }
@@ -23,9 +23,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
             const data = await UserService.listUsers(
-                "payment partner",
+                'payment partner',
                 pagingOptions.offset,
                 pagingOptions.limit,
+                pagingOptions.search,
             );
             return {
                 props: {

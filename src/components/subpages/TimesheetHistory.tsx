@@ -43,8 +43,8 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                 >
                     <>
                         {timeSheets?.data?.value?.map(
-                            (x: TimeSheetHistoryView) => (
-                                <Tr key={x.employeeInformationId}>
+                            (x: TimeSheetHistoryView, i) => (
+                                <Tr key={i}>
                                     <TableData name={x.name} />
                                     <TableData name={x.email} />
                                     <TableData
