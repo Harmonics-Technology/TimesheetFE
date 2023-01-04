@@ -49,7 +49,9 @@ function TimeSheetApproval({ timeSheets }: adminProps) {
                                 <Tr key={i}>
                                     <TableData name={x.name} />
                                     <TableData name={x.email} />
-                                    <TableData name={'Frontend Developer'} />
+                                    <TableData
+                                        name={x.employeeInformation?.jobTitle}
+                                    />
                                     <TableData
                                         name={`${
                                             x.totalHours as unknown as string

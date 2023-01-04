@@ -31,7 +31,7 @@ function Pagination({ data }: pageOptions) {
             link = previous?.split('?')[1] ?? false;
             router.push({
                 query: {
-                    url: link,
+                    ...router.query,
                     limit: data.limit,
                     offset: data.previousOffset,
                 },
@@ -41,7 +41,7 @@ function Pagination({ data }: pageOptions) {
             link = next?.split('?')[1] ?? false;
             router.push({
                 query: {
-                    url: link,
+                    ...router.query,
                     limit: data.limit,
                     offset: data.nextOffset,
                 },

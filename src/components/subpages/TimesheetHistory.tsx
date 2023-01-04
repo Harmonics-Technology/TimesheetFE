@@ -36,8 +36,10 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                     tableHead={[
                         'Name',
                         'Email',
+                        'Job Titile',
                         'Total Hours',
                         'No. of Days',
+                        'Approved No of Hours',
                         '',
                     ]}
                 >
@@ -48,11 +50,19 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                                     <TableData name={x.name} />
                                     <TableData name={x.email} />
                                     <TableData
+                                        name={x.employeeInformation?.jobTitle}
+                                    />
+                                    <TableData
                                         name={x.totalHours as unknown as string}
                                     />
                                     <TableData
                                         name={
                                             x.numberOfDays as unknown as string
+                                        }
+                                    />
+                                    <TableData
+                                        name={
+                                            x.approvedNumberOfHours as unknown as string
                                         }
                                     />
 

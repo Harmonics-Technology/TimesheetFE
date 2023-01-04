@@ -1,8 +1,10 @@
 import { Box, Flex, HStack, Input, Select, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 function FilterSearch() {
+    const [search, setSearch] = useState('');
     const router = useRouter();
     function setFilter(filter: string) {
         router.push({
@@ -11,14 +13,20 @@ function FilterSearch() {
             },
         });
     }
-
-    function search(term: string) {
-        router.push({
-            query: {
-                search: term,
-            },
-        });
-    }
+    const debounced = useDebouncedCallback(
+        // function
+        (search) => {
+            setSearch(search);
+            router.push({
+                query: {
+                    ...router.query,
+                    search: search,
+                },
+            });
+        },
+        // delay in ms
+        800,
+    );
     return (
         <Flex
             justify="space-between"
@@ -42,7 +50,7 @@ function FilterSearch() {
                 <Input
                     type="search"
                     placeholder="search"
-                    onChange={(e) => search(e.target.value)}
+                    onChange={(e) => debounced(e.target.value)}
                 />
             </Box>
         </Flex>

@@ -176,7 +176,7 @@ function TeamManagement({ userProfile }: adminProps) {
                         +Contract
                     </Button>
                 </Flex>
-                <FilterSearch />
+                {/* <FilterSearch /> */}
                 <Tables
                     tableHead={[
                         'Name',

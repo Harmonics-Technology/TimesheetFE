@@ -17,7 +17,7 @@ import {
 import FilterSearch from '@components/bits-utils/FilterSearch';
 
 interface adminProps {
-    timeSheets: TimeSheetHistoryViewIEnumerableStandardResponse;
+    timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
 }
 
 function TeamTimesheetHistory({ timeSheets }: adminProps) {
@@ -37,29 +37,45 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
                     tableHead={[
                         'Name',
                         'Email',
+                        'Job Title',
                         'Total Hours',
                         'No. of Days',
+                        'Approved No. of Hours',
                         '',
                     ]}
                 >
                     <>
-                        {timeSheets?.data?.map((x: TimeSheetHistoryView) => (
-                            <Tr key={x.employeeInformationId}>
-                                <TableData name={x.name} />
-                                <TableData name={x.email} />
-                                <TableData
-                                    name={x.totalHours as unknown as string}
-                                />
-                                <TableData
-                                    name={x.numberOfDays as unknown as string}
-                                />
+                        {timeSheets?.data?.value?.map(
+                            (x: TimeSheetHistoryView, i) => (
+                                <Tr key={i}>
+                                    <TableData name={x.name} />
+                                    <TableData name={x.email} />
+                                    <TableData
+                                        name={x.employeeInformation?.jobTitle}
+                                    />
+                                    <TableData
+                                        name={`${
+                                            x.totalHours as unknown as string
+                                        } Hours`}
+                                    />
+                                    <TableData
+                                        name={`${
+                                            x.numberOfDays as unknown as string
+                                        } Days`}
+                                    />
+                                    <TableData
+                                        name={`${
+                                            x.approvedNumberOfHours as unknown as string
+                                        } Hours`}
+                                    />
 
-                                <TableContractAction
-                                    id={x.employeeInformationId}
-                                    timeSheets={true}
-                                />
-                            </Tr>
-                        ))}
+                                    <TableContractAction
+                                        id={x.employeeInformationId}
+                                        timeSheets={true}
+                                    />
+                                </Tr>
+                            ),
+                        )}
                     </>
                 </Tables>
                 <Pagination data={timeSheets} />

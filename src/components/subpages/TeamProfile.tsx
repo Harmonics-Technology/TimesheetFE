@@ -731,13 +731,14 @@ function TeamProfile({
                             keyLabel="label"
                             label="Payment Frequency"
                             options={[
-                                { id: 'weekly', label: 'Weekly' },
-                                { id: 'bi-weekly', label: 'Bi-Weekly' },
-                                { id: 'monthly', label: 'Monthly' },
+                                { id: 'Weekly', label: 'Weekly' },
+                                { id: 'Bi-weekly', label: 'Bi-Weekly' },
+                                { id: 'Monthly', label: 'Monthly' },
                             ]}
                             placeholder={
                                 (userProfile?.employeeInformation
-                                    ?.paymentRate as string) || 'Please select'
+                                    ?.paymentFrequency as string) ||
+                                'Please select'
                             }
                         />
                     </Grid>

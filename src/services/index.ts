@@ -34,6 +34,7 @@ export type { InvoiceViewPagedCollection } from './models/InvoiceViewPagedCollec
 export type { InvoiceViewPagedCollectionStandardResponse } from './models/InvoiceViewPagedCollectionStandardResponse';
 export type { Link } from './models/Link';
 export type { LoginModel } from './models/LoginModel';
+export { OrderType } from './models/OrderType';
 export type { PasswordReset } from './models/PasswordReset';
 export type { PayrollView } from './models/PayrollView';
 export type { PayrollViewPagedCollection } from './models/PayrollViewPagedCollection';
@@ -46,6 +47,7 @@ export type { RecentPayrollView } from './models/RecentPayrollView';
 export type { RecentTimeSheetView } from './models/RecentTimeSheetView';
 export type { RegisterModel } from './models/RegisterModel';
 export type { RejectTimeSheetModel } from './models/RejectTimeSheetModel';
+export { Statuses } from './models/Statuses';
 export type { TeamMemberModel } from './models/TeamMemberModel';
 export type { TimeSheetApprovedView } from './models/TimeSheetApprovedView';
 export type { TimeSheetApprovedViewPagedCollection } from './models/TimeSheetApprovedViewPagedCollection';

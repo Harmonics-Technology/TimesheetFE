@@ -16,7 +16,7 @@ import {
 import FilterSearch from '@components/bits-utils/FilterSearch';
 
 interface adminProps {
-    timeSheets: TimeSheetApprovedView[];
+    timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
 }
 
 function TimesheetClient({ timeSheets }: adminProps) {
@@ -36,39 +36,43 @@ function TimesheetClient({ timeSheets }: adminProps) {
                     tableHead={[
                         'Name',
                         'Email',
+                        'Job Titile',
                         'Total Hours',
                         'No. of Days',
-                        // 'Approved No. of Hours',
+                        'Approved No of Hours',
                         '',
                     ]}
                 >
                     <>
-                        {timeSheets?.map((x: TimeSheetApprovedView) => (
-                            <Tr key={x.employeeInformationId}>
-                                <TableData name={x.name} />
-                                <TableData name={x.email} />
-                                <TableData
-                                    name={`${
-                                        x.totalHours as unknown as string
-                                    } Hours`}
-                                />
-                                <TableData
-                                    name={`${
-                                        x.numberOfDays as unknown as string
-                                    } Days`}
-                                />
-                                {/* <TableData
-                                    name={`${
-                                        x.approvedNumberOfHours as unknown as string
-                                    } Hours`}
-                                /> */}
+                        {timeSheets?.data?.value?.map(
+                            (x: TimeSheetHistoryView, i) => (
+                                <Tr key={i}>
+                                    <TableData name={x.name} />
+                                    <TableData name={x.email} />
+                                    <TableData
+                                        name={x.employeeInformation?.jobTitle}
+                                    />
+                                    <TableData
+                                        name={x.totalHours as unknown as string}
+                                    />
+                                    <TableData
+                                        name={
+                                            x.numberOfDays as unknown as string
+                                        }
+                                    />
+                                    <TableData
+                                        name={
+                                            x.approvedNumberOfHours as unknown as string
+                                        }
+                                    />
 
-                                <TableContractAction
-                                    id={x.employeeInformationId}
-                                    timeSheets={true}
-                                />
-                            </Tr>
-                        ))}
+                                    <TableContractAction
+                                        id={x.employeeInformationId}
+                                        timeSheets={true}
+                                    />
+                                </Tr>
+                            ),
+                        )}
                     </>
                 </Tables>
                 <Pagination data={timeSheets} />
