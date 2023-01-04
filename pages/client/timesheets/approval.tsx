@@ -8,7 +8,11 @@ import {
     TimeSheetService,
 } from 'src/services';
 
-function approval({ timeSheets }: { timeSheets: TimeSheetApprovedView[] }) {
+function approval({
+    timeSheets,
+}: {
+    timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
+}) {
     return <TimesheetClient timeSheets={timeSheets} />;
 }
 

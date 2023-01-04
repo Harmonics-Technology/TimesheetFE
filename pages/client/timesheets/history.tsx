@@ -10,7 +10,11 @@ import {
     TimeSheetService,
 } from 'src/services';
 
-function history({ timeSheets }: { timeSheets: TimeSheetHistoryView[] }) {
+function history({
+    timeSheets,
+}: {
+    timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
+}) {
     return <TimesheetClient timeSheets={timeSheets} />;
 }
 

@@ -3,14 +3,14 @@ import TeamTimesheetHistory from '@components/subpages/TeamTimesheetHistory';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
-    TimeSheetHistoryViewIEnumerableStandardResponse,
+    TimeSheetHistoryViewPagedCollectionStandardResponse,
     TimeSheetService,
 } from 'src/services';
 
 function history({
     timeSheets,
 }: {
-    timeSheets: TimeSheetHistoryViewIEnumerableStandardResponse;
+    timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
 }) {
     return <TeamTimesheetHistory timeSheets={timeSheets} />;
 }
