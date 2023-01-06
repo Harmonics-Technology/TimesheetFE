@@ -53,7 +53,7 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
             <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                 <TableCards
                     title={'Recent Timesheet'}
-                    url={'profile-management/clients'}
+                    url={'timesheets/history'}
                     data={adminMetrics?.recentTimeSheet
                         ?.slice(0, 4)
                         .map((x: RecentTimeSheetView, i: any) => (
@@ -73,7 +73,7 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                     title={
                         role == 'client' ? 'Recent Invoices' : 'Recent Payslips'
                     }
-                    url={'profile-management/clients'}
+                    url={'financials/invoice'}
                     data={
                         role == 'client'
                             ? clientMetrics?.recentInvoice

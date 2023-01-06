@@ -92,8 +92,8 @@ const schema = yup.object().shape({
 });
 
 function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
-    console.log({ adminList });
     const client = clients?.filter((x) => x.isActive);
+    console.log({ client });
 
     const {
         register,
@@ -342,12 +342,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 <TableData
                                     name={x.employeeInformation?.jobTitle}
                                 />
-                                <TableData
-                                    name={
-                                        x.employeeInformation?.client
-                                            ?.organizationName
-                                    }
-                                />
+                                <TableData name={x.clientName} />
                                 <TableData name={x.phoneNumber} />
                                 <TableData name={x.role} />
                                 <TableStatus name={x.isActive} />
@@ -424,7 +419,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                             name="clientId"
                             error={errors.clientId}
                             keys="id"
-                            keyLabel="fullName"
+                            keyLabel="organizationName"
                             label="Current Client"
                             options={client}
                         />

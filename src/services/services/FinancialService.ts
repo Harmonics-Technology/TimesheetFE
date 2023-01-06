@@ -1,11 +1,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AdminPaymentScheduleViewListStandardResponse } from '../models/AdminPaymentScheduleViewListStandardResponse';
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { ExpenseModel } from '../models/ExpenseModel';
 import type { ExpenseViewPagedCollectionStandardResponse } from '../models/ExpenseViewPagedCollectionStandardResponse';
 import type { ExpenseViewStandardResponse } from '../models/ExpenseViewStandardResponse';
 import type { InvoiceViewPagedCollectionStandardResponse } from '../models/InvoiceViewPagedCollectionStandardResponse';
+import type { PaymentScheduleListStandardResponse } from '../models/PaymentScheduleListStandardResponse';
 import type { PayrollViewPagedCollectionStandardResponse } from '../models/PayrollViewPagedCollectionStandardResponse';
 import type { PaySlipViewPagedCollectionStandardResponse } from '../models/PaySlipViewPagedCollectionStandardResponse';
 
@@ -224,6 +226,60 @@ employeeInformationId?: string,
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Financial/payrolls',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'employeeInformationId': employeeInformationId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param employeeInformationId 
+     * @returns PayrollViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listPendingPayrolls(
+offset?: number,
+limit?: number,
+employeeInformationId?: string,
+): CancelablePromise<PayrollViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/payrolls/pending',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'employeeInformationId': employeeInformationId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param employeeInformationId 
+     * @returns PayrollViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listApprovedPayrolls(
+offset?: number,
+limit?: number,
+employeeInformationId?: string,
+): CancelablePromise<PayrollViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/payrolls/approved',
             query: {
                 'Offset': offset,
                 'Limit': limit,
@@ -561,6 +617,84 @@ year: number,
             path: {
                 'year': year,
             },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param year 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateBiweeklyPaymentSchedule(
+year: number,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/schedule/biweekly/{year}',
+            path: {
+                'year': year,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param year 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateWeeklyPaymentSchedule(
+year: number,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/schedule/weekly/{year}',
+            path: {
+                'year': year,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param employeeInformationId 
+     * @returns PaymentScheduleListStandardResponse Success
+     * @throws ApiError
+     */
+    public static getEmployeePaymentSchedule(
+employeeInformationId?: string,
+): CancelablePromise<PaymentScheduleListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/employee/schedule',
+            query: {
+                'employeeInformationId': employeeInformationId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @returns AdminPaymentScheduleViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static getPaymentSchedules(): CancelablePromise<AdminPaymentScheduleViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/admin/schedules',
             errors: {
                 400: `Bad Request`,
                 500: `Server Error`,

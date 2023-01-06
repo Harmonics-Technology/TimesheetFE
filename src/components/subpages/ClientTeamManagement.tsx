@@ -30,12 +30,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { RiMailSendFill } from 'react-icons/ri';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
-interface adminProps {
-    adminList: UserView[];
-    id: string;
-    paymentPartner: UserView[];
-    supervisor: UserView[];
-}
 
 import {
     TeamMemberModel,
@@ -90,6 +84,13 @@ const schema = yup.object().shape({
     endDate: yup.string().required(),
     dateOfBirth: yup.string().required(),
 });
+
+interface adminProps {
+    adminList: UserViewPagedCollectionStandardResponse;
+    id: string;
+    paymentPartner: UserView[];
+    supervisor: UserView[];
+}
 
 function ClientTeamManagement({
     adminList,
@@ -308,7 +309,7 @@ function ClientTeamManagement({
                     ]}
                 >
                     <>
-                        {adminList?.map((x: UserView) => (
+                        {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
                                 <TableData name={x.firstName} />
                                 <TableData
@@ -332,7 +333,7 @@ function ClientTeamManagement({
                         ))}
                     </>
                 </Tables>
-                {/* <Pagination data={adminList} /> */}
+                <Pagination data={adminList} />
             </Box>
             <DrawerWrapper
                 onClose={onClose}

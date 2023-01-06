@@ -31,8 +31,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             return {
                 props: {
-                    //@ts-ignore
-                    timeSheets: data?.data?.value,
+                    timeSheets: data,
                 },
             };
         } catch (error: any) {

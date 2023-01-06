@@ -38,10 +38,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listPayrolls(
+            const data = await FinancialService.listApprovedPayrolls(
                 pagingOptions.offset,
                 pagingOptions.limit,
-                pagingOptions.search,
             );
 
             return {

@@ -7,6 +7,7 @@ import {
     useToast,
     Link,
     Spinner,
+    Th,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import NextLink from 'next/link';
@@ -21,6 +22,14 @@ import {
     UserService,
 } from 'src/services';
 import fileDownload from 'js-file-download';
+
+export function TableHead({
+    name,
+}: {
+    name: string | number | undefined | null;
+}) {
+    return <td>{name}</td>;
+}
 
 export function TableData({
     name,

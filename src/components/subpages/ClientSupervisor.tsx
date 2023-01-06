@@ -21,10 +21,15 @@ import * as yup from 'yup';
 import { RiMailSendFill } from 'react-icons/ri';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
-    adminList: UserView[];
+    adminList: UserViewPagedCollectionStandardResponse;
     clientId: any;
 }
-import { RegisterModel, UserService, UserView } from 'src/services';
+import {
+    RegisterModel,
+    UserService,
+    UserView,
+    UserViewPagedCollectionStandardResponse,
+} from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
 import Loading from '@components/bits-utils/Loading';
@@ -113,7 +118,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                     tableHead={['Name', 'Email', 'Role', 'Status', 'Action']}
                 >
                     <>
-                        {adminList?.map((x: UserView) => (
+                        {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
                                 <TableData name={x.fullName} />
                                 <TableData name={x.email} />

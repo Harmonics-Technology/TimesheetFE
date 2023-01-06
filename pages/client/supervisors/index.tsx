@@ -9,7 +9,7 @@ import {
     UserViewPagedCollectionStandardResponse,
 } from 'src/services';
 interface adminProps {
-    adminList: UserView[];
+    adminList: UserViewPagedCollectionStandardResponse;
     clientId: any;
 }
 
@@ -25,10 +25,15 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const clientId = JSON.parse(ctx.req.cookies.user).id;
         try {
-            const data = await UserService.getClientSupervisors();
+            const data = await UserService.getClientSupervisors(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+                clientId,
+            );
             return {
                 props: {
-                    adminList: data.data,
+                    adminList: data,
                     clientId,
                 },
             };

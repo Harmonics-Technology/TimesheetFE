@@ -1,17 +1,12 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable no-sparse-arrays */
-import { Box, Flex, Select, Text, HStack, Input, Tr } from '@chakra-ui/react';
+import { Box, Tr } from '@chakra-ui/react';
 import {
-    TableContract,
     TableContractAction,
     TableData,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
-import { useRouter } from 'next/router';
 import {
     TimeSheetHistoryView,
-    TimeSheetHistoryViewIEnumerableStandardResponse,
     TimeSheetHistoryViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
@@ -22,7 +17,6 @@ interface adminProps {
 
 function TeamTimesheetHistory({ timeSheets }: adminProps) {
     console.log({ timeSheets });
-    const router = useRouter();
 
     return (
         <>

@@ -2,10 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { AdminPaymentScheduleView } from './AdminPaymentScheduleView';
 import type { HttpStatusCode } from './HttpStatusCode';
-import type { TimeSheetHistoryView } from './TimeSheetHistoryView';
 
-export type TimeSheetHistoryViewStandardResponse = {
+export type AdminPaymentScheduleViewListStandardResponse = {
     href?: string | null;
     relations?: Array<string> | null;
     method?: string | null;
@@ -13,7 +13,7 @@ export type TimeSheetHistoryViewStandardResponse = {
     routeValues?: any;
     status?: boolean;
     message?: string | null;
-    data?: TimeSheetHistoryView;
+    data?: Array<AdminPaymentScheduleView> | null;
     statusCode?: HttpStatusCode;
     errors?: any;
 };

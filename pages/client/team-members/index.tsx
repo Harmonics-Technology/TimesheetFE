@@ -11,7 +11,7 @@ import {
     UserViewStandardResponse,
 } from 'src/services';
 interface TeamProps {
-    teamList: UserView[];
+    teamList: UserViewPagedCollectionStandardResponse;
     id: string;
     paymentPartner: UserView[];
     supervisor: UserView[];
@@ -39,11 +39,21 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
             );
-            const data = await UserService.getClientTeamMembers();
-            const supervisor = await UserService.getSupervisors(id);
+            const data = await UserService.getClientTeamMembers(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+                id,
+            );
+            const supervisor = await UserService.getClientSupervisors(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+                id,
+            );
             return {
                 props: {
-                    teamList: data.data,
+                    teamList: data,
                     id: id,
                     supervisor: supervisor.data,
                     paymentPartner: paymentPartner?.data?.value,

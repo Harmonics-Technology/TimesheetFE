@@ -3,9 +3,9 @@
 /* eslint-disable */
 
 import type { HttpStatusCode } from './HttpStatusCode';
-import type { TimeSheetApprovedView } from './TimeSheetApprovedView';
+import type { PaymentSchedule } from './PaymentSchedule';
 
-export type TimeSheetApprovedViewStandardResponse = {
+export type PaymentScheduleListStandardResponse = {
     href?: string | null;
     relations?: Array<string> | null;
     method?: string | null;
@@ -13,7 +13,7 @@ export type TimeSheetApprovedViewStandardResponse = {
     routeValues?: any;
     status?: boolean;
     message?: string | null;
-    data?: TimeSheetApprovedView;
+    data?: Array<PaymentSchedule> | null;
     statusCode?: HttpStatusCode;
     errors?: any;
 };

@@ -4,10 +4,7 @@
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { RejectTimeSheetModel } from '../models/RejectTimeSheetModel';
 import type { TimeSheetApprovedViewPagedCollectionStandardResponse } from '../models/TimeSheetApprovedViewPagedCollectionStandardResponse';
-import type { TimeSheetApprovedViewStandardResponse } from '../models/TimeSheetApprovedViewStandardResponse';
-import type { TimeSheetHistoryViewIEnumerableStandardResponse } from '../models/TimeSheetHistoryViewIEnumerableStandardResponse';
 import type { TimeSheetHistoryViewPagedCollectionStandardResponse } from '../models/TimeSheetHistoryViewPagedCollectionStandardResponse';
-import type { TimeSheetHistoryViewStandardResponse } from '../models/TimeSheetHistoryViewStandardResponse';
 import type { TimeSheetMonthlyViewIEnumerableStandardResponse } from '../models/TimeSheetMonthlyViewIEnumerableStandardResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -146,17 +143,23 @@ search?: string,
     }
 
     /**
+     * @param offset 
+     * @param limit 
      * @param employeeInformationId 
-     * @returns TimeSheetApprovedViewStandardResponse Success
+     * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static listTeamMemberApprovedTimeSheet(
+offset?: number,
+limit?: number,
 employeeInformationId?: string,
-): CancelablePromise<TimeSheetApprovedViewStandardResponse> {
+): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/TimeSheet/team-member/approved',
             query: {
+                'Offset': offset,
+                'Limit': limit,
                 'employeeInformationId': employeeInformationId,
             },
         });
@@ -196,13 +199,22 @@ employeeInformationId?: string,
     }
 
     /**
-     * @returns TimeSheetHistoryViewIEnumerableStandardResponse Success
+     * @param offset 
+     * @param limit 
+     * @returns TimeSheetHistoryViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
-    public static getTeamMemberTimeSheetHistory(): CancelablePromise<TimeSheetHistoryViewIEnumerableStandardResponse> {
+    public static getTeamMemberTimeSheetHistory(
+offset?: number,
+limit?: number,
+): CancelablePromise<TimeSheetHistoryViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/TimeSheet/team-member/history',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+            },
         });
     }
 
@@ -210,14 +222,14 @@ employeeInformationId?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @returns TimeSheetHistoryViewStandardResponse Success
+     * @returns TimeSheetHistoryViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getSuperviseesTimeSheet(
 offset?: number,
 limit?: number,
 search?: string,
-): CancelablePromise<TimeSheetHistoryViewStandardResponse> {
+): CancelablePromise<TimeSheetHistoryViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/TimeSheet/supervisees-timesheets',
@@ -233,14 +245,14 @@ search?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @returns TimeSheetApprovedViewStandardResponse Success
+     * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getSuperviseesApprovedTimeSheet(
 offset?: number,
 limit?: number,
 search?: string,
-): CancelablePromise<TimeSheetApprovedViewStandardResponse> {
+): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/TimeSheet/supervisees-approved-timesheets',
@@ -253,13 +265,22 @@ search?: string,
     }
 
     /**
-     * @returns TimeSheetApprovedViewStandardResponse Success
+     * @param offset 
+     * @param limit 
+     * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
-    public static getApprovedClientTeamMemberSheet(): CancelablePromise<TimeSheetApprovedViewStandardResponse> {
+    public static getApprovedClientTeamMemberSheet(
+offset?: number,
+limit?: number,
+): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/TimeSheet/client/team-members/approved',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+            },
         });
     }
 
@@ -267,14 +288,14 @@ search?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @returns BooleanStandardResponse Success
+     * @returns TimeSheetHistoryViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getClientTimeSheetHistory(
 offset?: number,
 limit?: number,
 search?: string,
-): CancelablePromise<BooleanStandardResponse> {
+): CancelablePromise<TimeSheetHistoryViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/TimeSheet/client/team-members/history',

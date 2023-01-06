@@ -9,6 +9,13 @@ import {
     Image,
     Flex,
     useDisclosure,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    Spinner,
+    VStack,
+    Tr,
 } from '@chakra-ui/react';
 import React, { useContext, useRef, useState } from 'react';
 import { FaTimes, FaUser } from 'react-icons/fa';
@@ -18,7 +25,14 @@ import * as yup from 'yup';
 import { VscSaveAs } from 'react-icons/vsc';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { UserContext } from '@components/context/UserContext';
-import { UpdateUserModel, UserService, UserView } from 'src/services';
+import {
+    AdminPaymentScheduleViewListStandardResponse,
+    PaymentSchedule,
+    PaymentScheduleListStandardResponse,
+    UpdateUserModel,
+    UserService,
+    UserView,
+} from 'src/services';
 import InputBlank from '@components/bits-utils/InputBlank';
 import Cookies from 'js-cookie';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
@@ -30,6 +44,11 @@ import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 import ConfirmModal from '@components/bits-utils/ConfirmModal';
 import ProfileConfirmModal from '@components/bits-utils/ProfileConfirmModal';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { BsCameraFill } from 'react-icons/bs';
+import TableCards from '@components/bits-utils/TableCards';
+import { TableData } from '@components/bits-utils/TableData';
+import PaymentScheduleModal from '@components/bits-utils/PaymentScheduleModal';
+import AdminPaymentScheduleModal from '@components/bits-utils/AdminPaymentScheduleModal';
 
 const schema = yup.object().shape({
     dateOfBirth: yup.string().required(),
@@ -37,8 +56,14 @@ const schema = yup.object().shape({
     phoneNumber: yup.string().required(),
 });
 
-function MyProfile({ user }: { user: UserView }) {
-    // console.log({ user });
+function MyProfile({
+    user,
+    paymentSchedule,
+}: {
+    user: UserView;
+    paymentSchedule: PaymentScheduleListStandardResponse;
+}) {
+    console.log({ paymentSchedule });
     const {
         register,
         handleSubmit,
@@ -57,6 +82,7 @@ function MyProfile({ user }: { user: UserView }) {
             phoneNumber: user?.phoneNumber,
             organizationName: user?.organizationName,
             profilePicture: user?.profilePicture,
+            dateOfBirth: user?.dateOfBirth,
         },
     });
     const toast = useToast();
@@ -70,6 +96,16 @@ function MyProfile({ user }: { user: UserView }) {
         router.reload();
     };
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isOpened,
+        onOpen: onOpened,
+        onClose: onClosed,
+    } = useDisclosure();
+    const {
+        isOpen: openSchedule,
+        onOpen: onOpenSchedule,
+        onClose: onCloseSchedule,
+    } = useDisclosure();
     const updatePicture = async (data: UpdateUserModel, info, callback?) => {
         data.firstName = user?.firstName;
         data.lastName = user?.lastName;
@@ -181,13 +217,15 @@ function MyProfile({ user }: { user: UserView }) {
                 >
                     <HStack gap="1rem" align="center" mb={['1rem', '0']}>
                         <Circle
-                            bgColor="brand.600"
                             size="4rem"
                             fontSize="2rem"
                             color="white"
-                            overflow="hidden"
+                            // overflow="hidden"
                             pos="relative"
                             role="group"
+                            bgColor={
+                                showLoading ? 'rgba(0,0,0,0.2)' : 'brand.600'
+                            }
                             _hover={{
                                 bgColor: 'rgba(0,0,0,0.2)',
                             }}
@@ -198,6 +236,8 @@ function MyProfile({ user }: { user: UserView }) {
                                     w="full"
                                     h="full"
                                     objectFit="cover"
+                                    borderRadius="50%"
+                                    opacity={showLoading ? 0.3 : 1}
                                     _groupHover={{
                                         opacity: '0.3',
                                     }}
@@ -205,25 +245,65 @@ function MyProfile({ user }: { user: UserView }) {
                             ) : (
                                 <FaUser />
                             )}
-                            {user?.profilePicture !== null && (
-                                <Button
-                                    bgColor="transparent"
-                                    color="red"
-                                    fontSize="2rem"
-                                    pos="absolute"
-                                    borderRadius="50%"
-                                    h="2.5rem"
-                                    w="2.5rem"
-                                    opacity={0}
-                                    minW="unset"
-                                    _groupHover={{
-                                        opacity: 1,
-                                    }}
-                                    onClick={onOpen}
-                                >
-                                    <FaTimes />
-                                </Button>
-                            )}
+                            <Box
+                                w="full"
+                                h="full"
+                                bgColor="rgba(0,0,0,0.2)"
+                                pos="absolute"
+                                borderRadius="50%"
+                                opacity={showLoading ? 1 : 0}
+                                _groupHover={{
+                                    opacity: 1,
+                                }}
+                            >
+                                <Menu>
+                                    <MenuButton
+                                        pos="absolute"
+                                        top="50%"
+                                        left="50%"
+                                        transform="translate(-50%, -50%)"
+                                    >
+                                        <VStack color="white" fontSize="1rem">
+                                            {showLoading ? (
+                                                <Spinner />
+                                            ) : (
+                                                <BsCameraFill />
+                                            )}
+                                            {/* <Text fontSize=".5rem">
+                                                Edit Profile Icon
+                                            </Text> */}
+                                        </VStack>
+                                    </MenuButton>
+                                    <MenuList fontSize=".8rem">
+                                        <MenuItem>
+                                            <Text
+                                                fontWeight="500"
+                                                color="brand.200"
+                                                mb="0"
+                                                onClick={() =>
+                                                    widgetApi.current.openDialog()
+                                                }
+                                            >
+                                                {user?.profilePicture !== null
+                                                    ? 'Change Photo'
+                                                    : 'Upload Photo'}
+                                            </Text>
+                                        </MenuItem>
+                                        <MenuItem>
+                                            <Text
+                                                fontWeight="500"
+                                                color="brand.200"
+                                                mb="0"
+                                                onClick={onOpen}
+                                            >
+                                                {user?.profilePicture !== null
+                                                    ? 'Remove Photo'
+                                                    : ''}
+                                            </Text>
+                                        </MenuItem>
+                                    </MenuList>
+                                </Menu>
+                            </Box>
                         </Circle>
                         <Box>
                             <Text
@@ -246,14 +326,14 @@ function MyProfile({ user }: { user: UserView }) {
                             h="2.5rem"
                             borderRadius="0"
                             border="2px solid"
-                            // borderColor="brand.600"
-                            isLoading={showLoading}
-                            onClick={() => widgetApi.current.openDialog()}
+                            onClick={
+                                user.role == 'Team member'
+                                    ? onOpened
+                                    : onOpenSchedule
+                            }
                             w={['full', 'inherit']}
                         >
-                            {user?.profilePicture == null
-                                ? 'Add Profile Photo'
-                                : 'Change Profile Photo'}
+                            View Payment Schedule
                         </Button>
 
                         <Box display="none">
@@ -385,7 +465,9 @@ function MyProfile({ user }: { user: UserView }) {
                             <InputBlank
                                 label="Company Name"
                                 placeholder=""
-                                defaultValue={user?.organizationName as string}
+                                defaultValue={
+                                    user?.employeeInformation?.client as string
+                                }
                                 disableLabel={true}
                             />
                             <InputBlank
@@ -440,6 +522,18 @@ function MyProfile({ user }: { user: UserView }) {
                 isOpen={isOpen}
                 onClose={onClose}
                 user={user}
+            />
+            <PaymentScheduleModal
+                isOpen={isOpened}
+                onClose={onClosed}
+                paymentSchedule={paymentSchedule}
+            />
+            <AdminPaymentScheduleModal
+                isOpen={openSchedule}
+                onClose={onCloseSchedule}
+                paymentSchedule={
+                    paymentSchedule as AdminPaymentScheduleViewListStandardResponse
+                }
             />
         </Box>
     );
