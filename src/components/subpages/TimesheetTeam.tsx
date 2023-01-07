@@ -11,6 +11,7 @@ import {
     subMonths,
     addMonths,
     lastDayOfMonth,
+    subDays,
 } from 'date-fns';
 
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
@@ -53,7 +54,7 @@ const TimesheetTeam = ({
     timeSheets: TimeSheetMonthlyView;
 }) => {
     const router = useRouter();
-    console.log({ timeSheets });
+    // console.log({ timeSheets });
     const sheet = timeSheets?.timeSheet;
     const { date } = router.query;
     const newDate = new Date(date as unknown as string);
@@ -76,7 +77,7 @@ const TimesheetTeam = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    console.log({ totalHours });
+    // console.log({ totalHours });
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
     const actualPayout =
@@ -186,6 +187,7 @@ const TimesheetTeam = ({
         });
         router.reload();
     };
+    const preventTomorrow = addDays(new Date(), 1).toISOString();
 
     const getHeader = () => {
         return (
@@ -369,7 +371,13 @@ const TimesheetTeam = ({
                             textAlign="center"
                             h="full"
                             border="0"
-                            readOnly={timesheets?.status === 'APPROVED'}
+                            readOnly={
+                                timesheets?.status === 'APPROVED' ||
+                                moment(timesheets?.date).format(
+                                    'YYYY-MM-DD',
+                                ) ===
+                                    moment(preventTomorrow).format('YYYY-MM-DD')
+                            }
                             disabled={timesheets == undefined}
                             onChange={(e) =>
                                 selectedInput.push({

@@ -8,6 +8,7 @@ import {
     Link,
     Spinner,
     Th,
+    Td,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import NextLink from 'next/link';
@@ -25,18 +26,47 @@ import fileDownload from 'js-file-download';
 
 export function TableHead({
     name,
+    border,
+    value,
+    borderColor,
 }: {
     name: string | number | undefined | null;
+    border?: boolean | undefined;
+    value?: string;
+    borderColor?: string;
 }) {
-    return <td>{name}</td>;
+    return (
+        <Th
+            borderRight={border ? value : 0}
+            borderColor={borderColor}
+            borderRightColor={borderColor}
+            color="inherit"
+        >
+            {name}
+        </Th>
+    );
 }
 
 export function TableData({
     name,
+    border,
+    value,
+    borderColor,
 }: {
     name: string | number | undefined | null;
+    border?: boolean | undefined;
+    value?: string;
+    borderColor?: string;
 }) {
-    return <td>{name}</td>;
+    return (
+        <Td
+            borderColor={borderColor}
+            borderRight={border ? value : 0}
+            borderRightColor={borderColor}
+        >
+            {name}
+        </Td>
+    );
 }
 export function TableStatus({ name }: { name: boolean | undefined }) {
     return (

@@ -288,6 +288,20 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        linkName="profile-management"
+                        menuTitle="Profile Management"
+                        icon={<FaUsers opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[
+                            'clients',
+                            'supervisors',
+                            'team members',
+                            'payment partners',
+                        ]}
+                    />
+                    <MenuItem
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}

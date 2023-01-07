@@ -244,7 +244,7 @@ function TeamProfile({
                         name="dateOfBirth"
                         label="Date of Birth"
                         error={errors.dateOfBirth}
-                        placeholder={moment(userProfile?.dateOfBirth).format(
+                        defaultValue={moment(userProfile?.dateOfBirth).format(
                             'DD MM YYYY',
                         )}
                         max={new DateObject().subtract(1, 'days')}

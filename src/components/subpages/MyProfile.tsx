@@ -49,6 +49,7 @@ import TableCards from '@components/bits-utils/TableCards';
 import { TableData } from '@components/bits-utils/TableData';
 import PaymentScheduleModal from '@components/bits-utils/PaymentScheduleModal';
 import AdminPaymentScheduleModal from '@components/bits-utils/AdminPaymentScheduleModal';
+import { subDays } from 'date-fns';
 
 const schema = yup.object().shape({
     dateOfBirth: yup.string().required(),
@@ -63,7 +64,7 @@ function MyProfile({
     user: UserView;
     paymentSchedule: PaymentScheduleListStandardResponse;
 }) {
-    console.log({ paymentSchedule });
+    // console.log({ paymentSchedule });
     const {
         register,
         handleSubmit,
@@ -167,8 +168,25 @@ function MyProfile({
         }
     };
 
+    // const logedInUser = {
+    //     id: user?.id,
+    //     role: user?.role,
+    //     isActive: user?.isActive,
+    //     firstName: user?.firstName,
+    //     lastName: user?.lastName,
+    //     address: user?.address,
+    //     phoneNumber: user?.phoneNumber,
+    //     organizationName: user.organizationName,
+    //     profilePicture: user?.profilePicture,
+    //     dateOfBirth: user?.dateOfBirth,
+    // };
     const onSubmit = async (data: UpdateUserModel) => {
-        console.log({ data });
+        // console.log({ data });
+        // console.log({ logedInUser });
+        // if (data === logedInUser) {
+        //     console.log('Same');
+        //     return;
+        // }
         if (pictureUrl !== '') {
             data.profilePicture = pictureUrl.cdnUrl;
         }
@@ -202,6 +220,7 @@ function MyProfile({
             });
         }
     };
+
     return (
         <Box>
             <Box
@@ -327,7 +346,7 @@ function MyProfile({
                             borderRadius="0"
                             border="2px solid"
                             onClick={
-                                user.role == 'Team member'
+                                user?.role === 'Team Member'
                                     ? onOpened
                                     : onOpenSchedule
                             }
@@ -392,7 +411,7 @@ function MyProfile({
                                 name="isActive"
                                 error={errors.isActive}
                                 placeholder=""
-                                defaultValue={"Adelowomi"}
+                                defaultValue={'Adelowomi'}
                                 register={register}
                             /> */}
                             <PrimaryDate<UpdateUserModel>
@@ -400,10 +419,10 @@ function MyProfile({
                                 name="dateOfBirth"
                                 label="Date of Birth"
                                 error={errors.dateOfBirth}
-                                placeholder={moment(user?.dateOfBirth).format(
+                                defaultValue={moment(user?.dateOfBirth).format(
                                     'DD MM YYYY',
                                 )}
-                                max={new DateObject().subtract(1, 'days')}
+                                max={subDays(new Date(), 1)}
                             />
                         </Grid>
                     </Box>
@@ -465,9 +484,7 @@ function MyProfile({
                             <InputBlank
                                 label="Company Name"
                                 placeholder=""
-                                defaultValue={
-                                    user?.employeeInformation?.client as string
-                                }
+                                defaultValue={user?.clientName as string}
                                 disableLabel={true}
                             />
                             <InputBlank

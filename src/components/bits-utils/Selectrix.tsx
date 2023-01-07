@@ -1,11 +1,13 @@
 import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
 import { Control, Controller, FieldError, Path } from 'react-hook-form';
+import Select from 'react-select';
 interface select {
     options: UserView[];
     customKeys: { key: string | number | boolean; label: string };
     onChange: (value: any) => void;
     placeholder?: string;
     disabled?: boolean;
+    defaultValue?: string;
 }
 import dynamic from 'next/dynamic';
 import { UserView } from 'src/services';
@@ -20,10 +22,11 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     label?: string;
     fontSize?: string;
     options: any;
-    keys: string | number | boolean;
-    keyLabel: string;
+    keyValue: any;
+    keyLabel: any;
     control: Control<TFormValues>;
     disabled?: boolean;
+    defaultValue?: string;
 }
 export const SelectrixBox = <TFormValues extends Record<string, any>>({
     name,
@@ -32,10 +35,11 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
     label = '',
     fontSize = '.8rem',
     options,
-    keys,
+    keyValue,
     keyLabel,
     control,
     disabled,
+    defaultValue,
 }: FormInputProps<TFormValues>) => {
     return (
         <FormControl isInvalid={error?.type === 'required'}>
@@ -47,12 +51,13 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                 {label}
             </FormLabel>
 
-            <Controller
+            {/* <Controller
                 render={({ field: { onChange } }) => (
                     <Selectrix
                         options={options}
                         placeholder={placeholder}
                         disabled={disabled}
+                        defaultValue={defaultValue}
                         customKeys={{
                             key: keys,
                             label: keyLabel,
@@ -63,6 +68,18 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                 name={name}
                 control={control}
                 rules={{ required: true }}
+            /> */}
+            <Controller
+                name={name}
+                control={control}
+                render={({ field }) => (
+                    <Select
+                        {...field}
+                        options={options}
+                        getOptionLabel={keyLabel}
+                        getOptionValue={keyValue}
+                    />
+                )}
             />
 
             <FormErrorMessage fontSize=".7rem">

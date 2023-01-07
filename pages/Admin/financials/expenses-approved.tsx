@@ -3,6 +3,7 @@ import PageTabs from '@components/bits-utils/PageTabs';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import PayrollExpenseManagement from '@components/subpages/PayrollExpenseManagement';
+import PayrollExpenseManagementApproved from '@components/subpages/PayrollExpenseManagementApproved';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
@@ -32,7 +33,7 @@ function expenses({ expenses, team, expenseType }: ExpensesType) {
                     tabName="Approved"
                 />
             </Flex>
-            <PayrollExpenseManagement
+            <PayrollExpenseManagementApproved
                 expenses={expenses}
                 team={team}
                 expenseType={expenseType}
@@ -49,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         try {
             const team = await UserService.listUsers('Team Member');
             const expenseType = await SettingsService.listExpenseTypes();
-            const data = await FinancialService.listReviewedExpenses(
+            const data = await FinancialService.listAllApprovedExpenses(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,

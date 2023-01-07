@@ -1,6 +1,6 @@
-import { FormControl, FormLabel, GridItem, Text } from "@chakra-ui/react";
-import { Controller, Path, FieldError, Control } from "react-hook-form";
-import DatePicker from "react-multi-date-picker";
+import { FormControl, FormLabel, GridItem, Text } from '@chakra-ui/react';
+import { Controller, Path, FieldError, Control } from 'react-hook-form';
+import DatePicker from 'react-multi-date-picker';
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
@@ -13,19 +13,22 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     min?: any;
     max?: any;
     disabled?: boolean;
+    defaultValue?: string;
 }
 
 export const PrimaryDate = <TFormValues extends Record<string, any>>({
     name,
-    label = "",
+    label = '',
     error,
     control,
-    fontSize = ".8rem",
+    fontSize = '.8rem',
     placeholder,
     min,
     max,
     disabled,
+    defaultValue,
 }: FormInputProps<TFormValues>) => {
+    // console.log({ defaultValue });
     return (
         <GridItem>
             <FormControl>
@@ -44,16 +47,16 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                     render={({ field: { onChange, value } }) => (
                         <>
                             <DatePicker
-                                value={value || ""}
+                                value={defaultValue || value || ''}
                                 onChange={(date: any) => {
                                     onChange(
                                         JSON.stringify(
                                             date?.toDate?.(),
-                                        )?.replaceAll('"', ""),
+                                        )?.replaceAll('"', ''),
                                     );
                                 }}
-                                format={"DD/MM/YYYY"}
-                                inputClass={"date"}
+                                format={'DD/MM/YYYY'}
+                                inputClass={'date'}
                                 containerClassName="dateWrapper"
                                 hideOnScroll
                                 placeholder={placeholder}
@@ -66,7 +69,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                 />
             </FormControl>
             <Text fontSize=".7rem" color="red">
-                {(error?.type === "required" && `${label} is required`) ||
+                {(error?.type === 'required' && `${label} is required`) ||
                     error?.message}
             </Text>
         </GridItem>

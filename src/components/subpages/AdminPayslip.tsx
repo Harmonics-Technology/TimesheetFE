@@ -1,38 +1,24 @@
 /* eslint-disable no-sparse-arrays */
-import {
-    Box,
-    Button,
-    Flex,
-    Tr,
-    useDisclosure,
-    useToast,
-    Td,
-} from '@chakra-ui/react';
-import {
-    ExpenseActions,
-    TableContractAction,
-    TableData,
-    TableState,
-} from '@components/bits-utils/TableData';
+import { Box, Tr, useDisclosure } from '@chakra-ui/react';
+import { InvoiceAction, TableData } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import {
-    PayrollView,
-    FinancialService,
     PayrollViewPagedCollectionStandardResponse,
     PaySlipView,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
-import { useRouter } from 'next/router';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
-import Checkbox from '@components/bits-utils/Checkbox';
+import { PayslipModal } from '@components/bits-utils/PayslipModal';
+import { useState } from 'react';
 
 interface expenseProps {
     payrolls: PayrollViewPagedCollectionStandardResponse;
 }
 
 function AdminPayslip({ payrolls }: expenseProps) {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [clicked, setClicked] = useState<PaySlipView>();
     // console.log({ payrolls });
     const payrollsList = payrolls?.data?.value;
 
@@ -54,7 +40,7 @@ function AdminPayslip({ payrolls }: expenseProps) {
                         'Total Hrs',
                         'Rate',
                         'Total Amount',
-                        // '...',
+                        'Action',
                         // '',
                     ]}
                 >
@@ -78,16 +64,18 @@ function AdminPayslip({ payrolls }: expenseProps) {
                                 <TableData name={`${x.totalHours} HRS`} />
                                 <TableData name={x.paymentRate} />
                                 <TableData name={x.totalAmount} />
-                                {/* <TableContractAction
-                                    id={x.payrollId}
-                                    timeSheets={true}
-                                /> */}
+                                <InvoiceAction
+                                    data={x}
+                                    onOpen={onOpen}
+                                    clicked={setClicked}
+                                />
                             </Tr>
                         ))}
                     </>
                 </Tables>
                 <Pagination data={payrolls} />
             </Box>
+            <PayslipModal isOpen={isOpen} onClose={onClose} paySlip={clicked} />
         </>
     );
 }
