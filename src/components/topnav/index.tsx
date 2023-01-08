@@ -23,6 +23,7 @@ import { UserContext } from '@components/context/UserContext';
 import { useContext } from 'react';
 import { MdOutlineArrowBackIos } from 'react-icons/md';
 import { UserView } from 'src/services';
+import { NotificationContext } from '@components/context/NotificationContext';
 interface topnavProps {
     setOpenSidenav: any;
     openSidenav: boolean;
@@ -39,6 +40,10 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     }
     const curPage = router.pathname.split('/').at(-1);
     const idPage = router.pathname.split('/').at(-2);
+    const { messages } = useContext(NotificationContext);
+    const messageCount = messages?.data?.value.filter(
+        (x) => x.isRead == false,
+    ).length;
     return (
         <Box pt="2rem" pos="sticky" top="0" zIndex="800" bgColor="#f6f7f8">
             <Button
@@ -50,7 +55,12 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
             >
                 Back
             </Button>
-            <Flex justify="space-between" pr="1rem" align="center">
+            <Flex
+                justify="space-between"
+                pr="1rem"
+                align="center"
+                pos="relative"
+            >
                 <Box color="brand.200">
                     <Text
                         fontSize=".875rem"
@@ -141,8 +151,30 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                 </MenuItem>
                             </MenuList>
                         </Menu>
-                        <Box>
+                        <Box
+                            cursor="pointer"
+                            pos="relative"
+                            onClick={() =>
+                                router.push(
+                                    `/${role.replace(' ', '')}/dashboard`,
+                                )
+                            }
+                        >
                             <BsBellFill />
+                            <Circle
+                                bgColor={'brand.700'}
+                                size=".8rem"
+                                display={messageCount <= 0 ? 'none' : 'unset'}
+                                fontSize=".5rem"
+                                color="white"
+                                fontWeight="bold"
+                                pos="absolute"
+                                top="-30%"
+                                right="-30%"
+                                border="1px solid white"
+                            >
+                                {messageCount}
+                            </Circle>
                         </Box>
                     </Stack>
                 </VStack>

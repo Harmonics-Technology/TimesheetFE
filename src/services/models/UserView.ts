@@ -18,6 +18,8 @@ export type UserView = {
     address?: string | null;
     dateOfBirth?: string;
     employeeInformation?: EmployeeInformationView;
+    clientId?: string | null;
+    client?: UserView;
     phoneNumber?: string | null;
     organizationName?: string | null;
     organizationEmail?: string | null;

@@ -111,9 +111,9 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
+    // console.log(watch("payRollTypeId"));
     const payroll = watch('payRollTypeId');
     const clientId = watch('clientId');
-    console.log(watch('clientId'));
     console.log({ payroll });
 
     const [contract, setContractFile] = useState<any>('');
@@ -218,7 +218,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     console.log({ supervisors });
 
     useEffect(() => {
-        // getSupervisor(clientId);
+        getSupervisor(clientId);
     }, [clientId]);
 
     console.log({ supervisors });
@@ -424,12 +424,10 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                             control={control}
                             name="clientId"
                             error={errors.clientId}
+                            keys="id"
+                            keyLabel="organizationName"
                             label="Current Client"
                             options={client}
-                            keyLabel={(option: UserView) =>
-                                option.organizationName
-                            }
-                            keyValue={(option: UserView) => option.id}
                         />
                         {supervisors !== undefined && (
                             <SelectrixBox<TeamMemberModel>
