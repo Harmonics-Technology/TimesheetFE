@@ -17,16 +17,16 @@ export const NotificationProvider = ({ children }: { children: any }) => {
             try {
                 const data = await NotificationService.listMyNotifications();
                 if (data.status) {
-                    console.log({ data });
+                    // console.log({ data });
                     setMessages(data);
                 }
             } catch (error: any) {
                 console.log({ error });
-                toast({
-                    position: 'top-right',
-                    status: 'error',
-                    title: error?.body?.message || error.message,
-                });
+                // toast({
+                //     position: 'top-right',
+                //     status: 'error',
+                //     title: error?.body?.message || error.message,
+                // });
             }
         };
         getNotifications();

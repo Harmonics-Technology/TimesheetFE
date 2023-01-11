@@ -38,14 +38,14 @@ import BeatLoader from 'react-spinners/BeatLoader';
 const schema = yup.object().shape({});
 interface TeamProfileProps {
     userProfile?: UserView;
-    clients: UserView[];
+    // clients: UserView[];
     supervisor: UserView[];
     paymentPartner: UserView[];
 }
 
 function TeamProfile({
     userProfile,
-    clients,
+    // clients,
     supervisor,
     paymentPartner,
 }: TeamProfileProps) {
@@ -261,22 +261,22 @@ function TeamProfile({
                                 ?.fullName as string
                         }
                         options={clients}
+                    /> */}
+
+                    <SelectrixBox<TeamMemberModel>
+                        control={control}
+                        name="supervisorId"
+                        error={errors.supervisorId}
+                        keys="id"
+                        keyLabel="fullName"
+                        label="Supervisor"
+                        placeholder={
+                            userProfile?.employeeInformation?.supervisor
+                                ?.fullName as string
+                        }
+                        options={supervisor}
                     />
-                    {supervisors !== undefined && (
-                        <SelectrixBox<TeamMemberModel>
-                            control={control}
-                            name="supervisorId"
-                            error={errors.supervisorId}
-                            keys="id"
-                            keyLabel="fullName"
-                            label="Supervisor"
-                            placeholder={
-                                userProfile?.employeeInformation?.supervisor
-                                    ?.fullName as string
-                            }
-                            options={supervisors}
-                        />
-                    )} */}
+
                     <SelectrixBox<TeamMemberModel>
                         control={control}
                         name="role"
@@ -284,11 +284,14 @@ function TeamProfile({
                         keys="id"
                         keyLabel="label"
                         label="Role"
-                        disabled={true}
+                        // disabled={true}
                         placeholder={userProfile?.role as string}
                         options={[
                             { id: 'Team Member', label: 'Team Member' },
-                            { id: 'Supervisor', label: 'Supervisor/Manager' },
+                            {
+                                id: 'Internal Supervisor',
+                                label: 'Internal Supervisor',
+                            },
                         ]}
                     />
                     <SelectrixBox<TeamMemberModel>
@@ -785,7 +788,7 @@ function TeamProfile({
                     // type="submit"
                     onClick={handleSubmit(onSubmit)}
                     isLoading={isSubmitting}
-                    spinner={<BeatLoader color="white" size="10" />}
+                    spinner={<BeatLoader color="white" size={10} />}
                     boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                 >
                     <Box pr=".5rem">

@@ -164,11 +164,12 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                             <Circle
                                 bgColor={'brand.700'}
                                 size=".8rem"
-                                display={messageCount <= 0 ? 'none' : 'unset'}
+                                display={messageCount <= 0 ? 'none' : 'flex'}
                                 fontSize=".5rem"
                                 color="white"
                                 fontWeight="bold"
                                 pos="absolute"
+                                justifyContent="center"
                                 top="-30%"
                                 right="-30%"
                                 border="1px solid white"

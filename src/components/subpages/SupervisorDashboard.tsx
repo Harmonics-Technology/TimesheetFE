@@ -3,6 +3,8 @@ import DashboardCard from '@components/bits-utils/DashboardCard';
 import { NotificationBox } from '@components/bits-utils/NotificationBox';
 import TableCards from '@components/bits-utils/TableCards';
 import { TableData, TableState } from '@components/bits-utils/TableData';
+import { NotificationContext } from '@components/context/NotificationContext';
+import { useContext } from 'react';
 import {
     DashboardTeamMemberView,
     ExpenseView,
@@ -17,6 +19,7 @@ interface DashboardProps {
 
 function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
     console.log({ adminMetrics, expenses });
+    const { messages } = useContext(NotificationContext);
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">
@@ -87,7 +90,7 @@ function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
                     />
                 </Grid>
             </VStack>
-            <NotificationBox />
+            <NotificationBox data={messages} />
         </Grid>
     );
 }

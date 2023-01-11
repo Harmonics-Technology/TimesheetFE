@@ -88,7 +88,7 @@ export function TimeSheetEstimationBtn({
                     width="100"
                     color="white"
                     isLoading={loading}
-                    spinner={<BeatLoader color="white" size="10" />}
+                    spinner={<BeatLoader color="white" size={10} />}
                     onClick={click}
                 >
                     {title}

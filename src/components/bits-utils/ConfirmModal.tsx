@@ -132,7 +132,7 @@ const ConfirmModal = ({ isOpen, onClose, id }: Props) => {
                                 // }}
 
                                 isLoading={loading}
-                                spinner={<BeatLoader color="white" size="10" />}
+                                spinner={<BeatLoader color="white" size={10} />}
                                 onClick={() => terminateContract(id)}
                             >
                                 Yes

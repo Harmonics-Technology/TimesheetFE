@@ -77,3 +77,29 @@ td {
     border-bottom: 1px solid #edf2f7;
     padding: 0.8rem 1rem;
 }
+.month-year-picker {
+    margin: 0 !important;
+}
+.month-year-picker .caption {
+    display: none !important;
+}
+.month-year-picker .year-picker .controls {
+    justify-content: space-between;
+    width: 100% !important;
+}
+.month-year-picker .year-picker .controls .fa {
+    font-size: 1rem !important;
+    color: #2eafa3 !important;
+}
+.month-year-picker .year-picker span {
+    font-size: 1.5rem !important;
+    font-weight: 600;
+    color: #2eafa3 !important;
+}
+.month-year-picker .month-picker > div > div {
+    color: #000 !important;
+}
+.month-year-picker .month-picker > div > div.selected {
+    color: white !important;
+    background-color: #2eafa3 !important;
+}

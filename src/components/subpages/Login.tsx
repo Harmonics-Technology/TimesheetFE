@@ -72,9 +72,13 @@ function Login() {
                     router.push(path);
                     return;
                 }
-                router.push(
-                    `${result?.data?.role?.replace(' ', '')}/dashboard`,
-                );
+                // router.push(
+                //     `${result?.data?.role?.replace(' ', '')}/dashboard`,
+                // );
+                window.location.href = `${result?.data?.role?.replace(
+                    ' ',
+                    '',
+                )}/dashboard`;
                 return;
             }
             toast({
@@ -145,7 +149,7 @@ function Login() {
                             variant="solid"
                             type="submit"
                             isLoading={isSubmitting}
-                            spinner={<BeatLoader color="white" size="10" />}
+                            spinner={<BeatLoader color="white" size={10} />}
                             w="full"
                             p="1.5rem 0"
                             color="white"

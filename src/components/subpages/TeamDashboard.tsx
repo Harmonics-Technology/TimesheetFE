@@ -3,7 +3,9 @@ import DashboardCard from '@components/bits-utils/DashboardCard';
 import { NotificationBox } from '@components/bits-utils/NotificationBox';
 import TableCards from '@components/bits-utils/TableCards';
 import { TableData, TableStatus } from '@components/bits-utils/TableData';
+import { NotificationContext } from '@components/context/NotificationContext';
 import moment from 'moment';
+import { useContext } from 'react';
 import {
     DashboardTeamMemberView,
     DashboardView,
@@ -27,6 +29,8 @@ interface DashboardClientView {
 function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
     const adminMetrics = metrics?.data as DashboardTeamMemberView;
     const clientMetrics = metrics?.data as DashboardClientView;
+    const { messages } = useContext(NotificationContext);
+
     console.log({ metrics, role });
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
@@ -141,7 +145,7 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                     />
                 </Grid>
             </VStack>
-            <NotificationBox />
+            <NotificationBox data={messages} />
         </Grid>
     );
 }

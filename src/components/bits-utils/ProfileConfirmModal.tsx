@@ -145,7 +145,7 @@ const ProfileConfirmModal = ({ isOpen, onClose, user }: Props) => {
                                 // }}
 
                                 isLoading={loading}
-                                spinner={<BeatLoader color="white" size="10" />}
+                                spinner={<BeatLoader color="white" size={10} />}
                                 onClick={() => updatePicture(user)}
                             >
                                 Yes

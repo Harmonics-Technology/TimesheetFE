@@ -196,14 +196,19 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                                 (x) => x.status == 'ACTIVE',
                             )}
                         />
-                        <PrimaryTextarea<ExpenseModel>
-                            label="Description"
-                            name="description"
-                            error={errors.description}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
+                    </Grid>
+                    <PrimaryTextarea<ExpenseModel>
+                        label="Description"
+                        name="description"
+                        error={errors.description}
+                        placeholder=""
+                        defaultValue=""
+                        register={register}
+                    />
+                    <Grid
+                        templateColumns={['1fr', 'repeat(2, 1fr)']}
+                        gap="1rem 2rem"
+                    >
                         <PrimaryInput<ExpenseModel>
                             label="Amount"
                             name="amount"
@@ -251,7 +256,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                                 fontSize="14px"
                                 type="submit"
                                 isLoading={isSubmitting}
-                                spinner={<BeatLoader color="white" size="10" />}
+                                spinner={<BeatLoader color="white" size={10} />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
                                 <Box pr=".5rem">

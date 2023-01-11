@@ -1,5 +1,6 @@
 import { Box, Divider, Flex, Circle, Text } from '@chakra-ui/react';
 import React from 'react';
+import { NotificationView } from 'src/services';
 
 export const NotificationBox = ({ data }: { data?: any }) => {
     return (
@@ -18,24 +19,46 @@ export const NotificationBox = ({ data }: { data?: any }) => {
                 Notifications
             </Text>
             <Divider my="1rem" borderColor="gray.300" />
-            <Box>
-                <Text fontSize=".7rem" noOfLines={2}>
-                    Temperod hdehehbkjb scjhbksdncd icjdsk avc ajh kbn oacihbkna
+            {data?.data?.value?.length < 1 ? (
+                <Text fontSize=".8rem" color="gray.400">
+                    No notifications!!!
                 </Text>
-                <Flex justify="space-between" align="center">
-                    <Text
-                        mb="0"
-                        fontSize=".7rem"
-                        fontWeight="bold"
-                        cursor="pointer"
-                        color={'brand.400'}
-                    >
-                        Mark as Read
-                    </Text>
-                    <Circle bg={'brand.400'} size=".4rem" />
-                </Flex>
-            </Box>
-            <Divider my="1rem" borderColor="gray.300" />
+            ) : (
+                data?.data?.value?.map((x: NotificationView) => (
+                    <>
+                        <Box>
+                            <Text
+                                fontSize=".6rem"
+                                noOfLines={1}
+                                mb=".2rem"
+                                fontWeight="bold"
+                            >
+                                {x.title}
+                            </Text>
+                            <Text fontSize=".7rem" noOfLines={2}>
+                                {x.message}
+                            </Text>
+                            <Flex justify="space-between" align="center">
+                                <Text
+                                    mb="0"
+                                    fontSize=".7rem"
+                                    fontWeight="bold"
+                                    cursor="pointer"
+                                    // onClick={x.isRead ? }
+                                    color={x.isRead ? 'gray.300' : 'brand.400'}
+                                >
+                                    {x.isRead ? 'Read' : 'Mark as Read'}
+                                </Text>
+                                <Circle
+                                    bg={x.isRead ? 'gray.300' : 'brand.400'}
+                                    size=".4rem"
+                                />
+                            </Flex>
+                        </Box>
+                        <Divider my="1rem" borderColor="gray.300" />
+                    </>
+                ))
+            )}
         </Box>
     );
 };

@@ -117,7 +117,7 @@ function AdminPayrollApproved({ payrolls }: expenseProps) {
                             height="fit-content"
                             onClick={() => generateInvoice()}
                             isLoading={loading}
-                            spinner={<BeatLoader color="white" size="10" />}
+                            spinner={<BeatLoader color="white" size={10} />}
                             boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                         >
                             Generate Invoice

@@ -100,7 +100,7 @@ function ForgotPassword() {
                             variant="solid"
                             type="submit"
                             isLoading={isSubmitting}
-                            spinner={<BeatLoader color="white" size="10" />}
+                            spinner={<BeatLoader color="white" size={10} />}
                             w="full"
                             p="1.5rem 0"
                             color="white"

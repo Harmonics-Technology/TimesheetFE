@@ -14,6 +14,7 @@ import DashboardCard from '@components/bits-utils/DashboardCard';
 import { NotificationBox } from '@components/bits-utils/NotificationBox';
 import TableCards from '@components/bits-utils/TableCards';
 import { TableData, TableStatus } from '@components/bits-utils/TableData';
+import { NotificationContext } from '@components/context/NotificationContext';
 import { UserContext } from '@components/context/UserContext';
 import { useContext } from 'react';
 import {
@@ -29,6 +30,7 @@ interface DashboardProps {
 function SadminDashboard({ metrics }: DashboardProps) {
     const { user } = useContext(UserContext);
     const role = user?.role.replace(' ', '');
+    const { messages } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
@@ -83,7 +85,7 @@ function SadminDashboard({ metrics }: DashboardProps) {
                     </Flex> */}
                 </Grid>
             </VStack>
-            <NotificationBox />
+            <NotificationBox data={messages} />
         </Grid>
     );
 }
