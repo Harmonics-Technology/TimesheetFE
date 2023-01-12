@@ -103,7 +103,12 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                                                       x.paymentDate,
                                                   ).format('YYYY-MM-DD')}
                                               />
-                                              <TableData name={x.paymentRate} />
+                                              <TableData
+                                                  name={
+                                                      x.employeeInformation
+                                                          ?.paymentRate
+                                                  }
+                                              />
                                               <TableData name={x.totalHours} />
                                               <TableData name={x.totalAmount} />
                                           </Tr>
@@ -127,7 +132,12 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                                                       x.paymentDate,
                                                   ).format('YYYY-MM-DD')}
                                               />
-                                              <TableData name={x.paymentRate} />
+                                              <TableData
+                                                  name={
+                                                      x.employeeInformation
+                                                          ?.paymentRate
+                                                  }
+                                              />
                                               <TableData name={x.totalHours} />
                                               <TableData name={x.totalAmount} />
                                           </Tr>

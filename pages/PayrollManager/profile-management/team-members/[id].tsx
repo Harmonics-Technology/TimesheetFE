@@ -19,7 +19,7 @@ function TeamDetails({
     return (
         <TeamProfile
             userProfile={userProfile}
-            clients={clients}
+            // clients={clients}
             supervisor={supervisor}
             paymentPartner={paymentPartner}
         />

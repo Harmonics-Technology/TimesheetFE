@@ -62,7 +62,9 @@ function AdminPayslip({ payrolls }: expenseProps) {
                                     )}
                                 />
                                 <TableData name={`${x.totalHours} HRS`} />
-                                <TableData name={x.paymentRate} />
+                                <TableData
+                                    name={x.employeeInformation?.paymentRate}
+                                />
                                 <TableData name={x.totalAmount} />
                                 <InvoiceAction
                                     data={x}

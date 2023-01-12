@@ -75,7 +75,7 @@ function TeamPayslips({ payrolls }: expenseProps) {
                                     )}
                                 />
                                 <TableData name={`${x.totalHours} HRS`} />
-                                <TableData name={x.paymentRate} />
+                                <TableData name={x.employeeInformation?.paymentRate} />
                                 <TableData name={x.totalAmount} />
                             </Tr>
                         ))}
