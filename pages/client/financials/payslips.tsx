@@ -24,7 +24,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const data = await FinancialService.listPaySlips(
                 pagingOptions.offset,
                 pagingOptions.limit,
-                pagingOptions.search,
+                '',
+                pagingOptions.date,
             );
 
             return {

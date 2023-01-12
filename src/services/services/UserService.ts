@@ -3,10 +3,8 @@
 /* eslint-disable */
 import type { InitiateResetModel } from '../models/InitiateResetModel';
 import type { LoginModel } from '../models/LoginModel';
-import type { OrderType } from '../models/OrderType';
 import type { PasswordReset } from '../models/PasswordReset';
 import type { RegisterModel } from '../models/RegisterModel';
-import type { Statuses } from '../models/Statuses';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
 import type { UpdateUserModel } from '../models/UpdateUserModel';
 import type { UserProfileViewStandardResponse } from '../models/UserProfileViewStandardResponse';
@@ -175,8 +173,7 @@ userId: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param status 
-     * @param order 
+     * @param dateFilter 
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -185,8 +182,7 @@ role: string,
 offset?: number,
 limit?: number,
 search?: string,
-status?: Statuses,
-order?: OrderType,
+dateFilter?: string,
 ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -198,8 +194,7 @@ order?: OrderType,
                 'Offset': offset,
                 'Limit': limit,
                 'Search': search,
-                'Status': status,
-                'Order': order,
+                'dateFilter': dateFilter,
             },
             errors: {
                 401: `Unauthorized`,

@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable no-sparse-arrays */
-import { Box, Tr, useDisclosure } from '@chakra-ui/react';
+import { Box, Tr, useDisclosure, Button, useToast } from '@chakra-ui/react';
 import {
     InvoiceAction,
     TableData,
@@ -10,22 +8,64 @@ import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
 import moment from 'moment';
 import {
-    ContractView,
-    ContractViewPagedCollectionStandardResponse,
+    FinancialService,
+    InvoiceView,
+    InvoiceViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import { useState } from 'react';
 import InvoiceTemplate from './InvoiceTemplate';
+import Checkbox from '@components/bits-utils/Checkbox';
+import { useRouter } from 'next/router';
+import BeatLoader from 'react-spinners/BeatLoader';
 
-interface adminProps {
-    adminList: ContractViewPagedCollectionStandardResponse;
+interface invoiceProps {
+    invoiceList: InvoiceViewPagedCollectionStandardResponse;
 }
 
-function TeamInvoices({ adminList }: adminProps) {
+function TeamInvoices({ invoiceList }: invoiceProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState();
-    console.log({ adminList });
-    console.log({ clicked });
+    const [loading, setLoading] = useState(false);
+    const toast = useToast();
+    const router = useRouter();
+    const [selectedId, setSelectedId] = useState<string>();
+    console.log({ selectedId });
+
+    const submitInvoiceItem = async () => {
+        try {
+            setLoading(true);
+            const result = await FinancialService.submitInvoice(selectedId);
+            if (result.status) {
+                console.log({ result });
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                setLoading(false);
+                router.reload();
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            console.log({ error });
+            setLoading(false);
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
 
     return (
         <>
@@ -35,48 +75,67 @@ function TeamInvoices({ adminList }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <Button
+                    bgColor="brand.400"
+                    color="white"
+                    p=".5rem 1.5rem"
+                    height="fit-content"
+                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                    isLoading={loading}
+                    spinner={<BeatLoader size={10} />}
+                    onClick={() => submitInvoiceItem()}
+                >
+                    Submit Invoice
+                </Button>
                 <FilterSearch />
                 <Tables
                     tableHead={[
                         'Invoice No',
-                        'Created By',
                         'Created on',
+                        'Start Date',
+                        'End Date',
                         'Status',
                         'Action',
                     ]}
                 >
                     <>
-                        {adminList?.data?.value?.map((x: ContractView) => (
+                        {invoiceList?.data?.value?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
-                                <TableData name={x.name} />
-                                <TableData name={x.title} />
+                                <TableData name={'Adeleke john'} />
+                                <TableData
+                                    name={moment(x.dateCreated).format(
+                                        'DD/MM/YYYY',
+                                    )}
+                                />
                                 <TableData
                                     name={moment(x.startDate).format(
                                         'DD/MM/YYYY',
                                     )}
                                 />
+                                <TableData
+                                    name={moment(x.endDate).format(
+                                        'DD/MM/YYYY',
+                                    )}
+                                />
                                 <TableState name={x.status as string} />
                                 <InvoiceAction
-                                    data={'y'}
+                                    data={x}
                                     onOpen={onOpen}
                                     clicked={setClicked}
                                 />
+                                <td>
+                                    <Checkbox
+                                        checked={selectedId || ''}
+                                        onChange={(e) =>
+                                            setSelectedId(x.id as string)
+                                        }
+                                    />
+                                </td>
                             </Tr>
                         ))}
-                        <Tr>
-                            <TableData name={'INV-001'} />
-                            <TableData name={'John Ofilo'} />
-                            <TableData name={'22-01-2022'} />
-                            <TableState name={'Invoiced'} />
-                            <InvoiceAction
-                                data={{ num: 345678 }}
-                                onOpen={onOpen}
-                                clicked={setClicked}
-                            />
-                        </Tr>
                     </>
                 </Tables>
-                <Pagination data={adminList} />
+                <Pagination data={invoiceList} />
             </Box>
             <InvoiceTemplate
                 isOpen={isOpen}

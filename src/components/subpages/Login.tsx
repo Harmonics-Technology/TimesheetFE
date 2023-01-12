@@ -39,65 +39,63 @@ function Login() {
     const changeInputType = () => {
         setPasswordVisible(!passwordVisible);
     };
-    const {
-        handleSubmit,
-        register,
-        formState: { errors, isSubmitting },
-    } = useForm<LoginModel>({
-        resolver: yupResolver(schema),
-        mode: 'all',
-    });
-    // console.log({ user });
+        const {
+            handleSubmit,
+            register,
+            formState: { errors, isSubmitting },
+        } = useForm<LoginModel>({
+            resolver: yupResolver(schema),
+            mode: 'all',
+        });
+        const onSubmit = async (data: LoginModel) => {
+            try {
+                const result = (await UserService.loginUser(
+                    data,
+                )) as UserViewStandardResponse;
+                if (result.status) {
+                    // console.log({ result });
 
-    const onSubmit = async (data: LoginModel) => {
-        try {
-            const result = (await UserService.loginUser(
-                data,
-            )) as UserViewStandardResponse;
-            if (result.status) {
-                // console.log({ result });
-
-                OpenAPI.TOKEN = result?.data?.token as string;
+                    OpenAPI.TOKEN = result?.data?.token as string;
+                    toast({
+                        title: `Login Successful`,
+                        status: 'success',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                    setUser(result.data);
+                    Cookies.set('user', JSON.stringify(result.data));
+                    result.data &&
+                        Cookies.set('token', result.data.token as string);
+                    if (typeof path === 'string' && path.trim().length === 0) {
+                        router.push(path);
+                        return;
+                    }
+                    // router.push(
+                    //     `${result?.data?.role?.replace(' ', '')}/dashboard`,
+                    // );
+                    window.location.href = `${result?.data?.role?.replace(
+                        ' ',
+                        '',
+                    )}/dashboard`;
+                    return;
+                }
                 toast({
-                    title: `Login Successful`,
-                    status: 'success',
+                    title: result.message,
+                    status: 'error',
                     isClosable: true,
                     position: 'top-right',
                 });
-                setUser(result.data);
-                Cookies.set('user', JSON.stringify(result.data));
-                result.data &&
-                    Cookies.set('token', result.data.token as string);
-                if (typeof path === 'string' && path.trim().length === 0) {
-                    router.push(path);
-                    return;
-                }
-                // router.push(
-                //     `${result?.data?.role?.replace(' ', '')}/dashboard`,
-                // );
-                window.location.href = `${result?.data?.role?.replace(
-                    ' ',
-                    '',
-                )}/dashboard`;
                 return;
+            } catch (error) {
+                console.log(error);
+                toast({
+                    title: `Check your network connection and try again`,
+                    status: 'error',
+                    isClosable: true,
+                    position: 'top-right',
+                });
             }
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
-        } catch (error) {
-            console.log(error);
-            toast({
-                title: `Check your network connection and try again`,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+        };
     return (
         <Flex w="full" h="100vh" justify="center" alignItems="center">
             <Box

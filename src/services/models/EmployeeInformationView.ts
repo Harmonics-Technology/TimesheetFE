@@ -6,6 +6,7 @@ import type { ContractView } from './ContractView';
 import type { UserView } from './UserView';
 
 export type EmployeeInformationView = {
+    id?: string;
     clientId?: string | null;
     client?: UserView;
     supervisorId?: string;
@@ -27,4 +28,5 @@ export type EmployeeInformationView = {
     monthlyPayoutRate?: number | null;
     paymentFrequency?: string | null;
     contracts?: Array<ContractView> | null;
+    dateCreated?: string;
 };

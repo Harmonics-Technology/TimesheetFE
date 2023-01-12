@@ -267,12 +267,14 @@ search?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param search 
      * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getApprovedClientTeamMemberSheet(
 offset?: number,
 limit?: number,
+search?: string,
 ): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -280,6 +282,7 @@ limit?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'search': search,
             },
         });
     }

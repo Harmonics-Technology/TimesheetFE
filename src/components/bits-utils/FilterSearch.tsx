@@ -29,7 +29,7 @@ function FilterSearch() {
         month: currentMonth,
     });
     const [openDateFilter, setOpenDateFilter] = useState(false);
-    const selectedDate = date.month + '-' + date.year;
+    const selectedDate = date.month + '/' + date.year;
     const close = useCallback(() => setOpenDateFilter(false), []);
     const popover = useRef(null);
     useClickOutside(popover, close);

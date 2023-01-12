@@ -54,6 +54,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
+                pagingOptions.date,
             );
             // const data = await SettingsService.listExpenseTypes();
 

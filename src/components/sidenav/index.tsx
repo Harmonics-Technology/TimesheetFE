@@ -165,7 +165,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={[
                             'my expenses',
                             'my payslips',
-                            // 'my invoices',
+                            'my invoices',
                             'my contracts',
                         ]}
                     />
