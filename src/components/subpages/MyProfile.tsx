@@ -341,6 +341,12 @@ function MyProfile({
                         <Button
                             bgColor="brand.600"
                             color="white"
+                            display={
+                                user?.role == 'Supervisor' ||
+                                user?.role == 'client'
+                                    ? 'none'
+                                    : 'block'
+                            }
                             fontSize=".8rem"
                             h="2.5rem"
                             borderRadius="0"
@@ -540,18 +546,23 @@ function MyProfile({
                 onClose={onClose}
                 user={user}
             />
-            <PaymentScheduleModal
-                isOpen={isOpened}
-                onClose={onClosed}
-                paymentSchedule={paymentSchedule}
-            />
-            <AdminPaymentScheduleModal
-                isOpen={openSchedule}
-                onClose={onCloseSchedule}
-                paymentSchedule={
-                    paymentSchedule as AdminPaymentScheduleViewListStandardResponse
-                }
-            />
+            {user?.role !== 'Supervisor' && user?.role !== 'client' && (
+                <>
+                    <PaymentScheduleModal
+                        isOpen={isOpened}
+                        onClose={onClosed}
+                        paymentSchedule={paymentSchedule}
+                    />
+
+                    <AdminPaymentScheduleModal
+                        isOpen={openSchedule}
+                        onClose={onCloseSchedule}
+                        paymentSchedule={
+                            paymentSchedule as AdminPaymentScheduleViewListStandardResponse
+                        }
+                    />
+                </>
+            )}
         </Box>
     );
 }
