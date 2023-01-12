@@ -1,7 +1,6 @@
 import { Box, HStack, VStack, Text, Divider, Image } from '@chakra-ui/react';
 import { UserContext } from '@components/context/UserContext';
 import MenuItem from '@components/menu-item';
-import { useDetectClickOutside } from 'react-detect-click-outside';
 import Link from 'next/link';
 import { useContext, useEffect } from 'react';
 import {
@@ -28,7 +27,6 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
     const closeToggle = () => {
         setOpenSidenav(false);
     };
-    const ref = useDetectClickOutside({ onTriggered: closeToggle });
 
     return (
         <Box
