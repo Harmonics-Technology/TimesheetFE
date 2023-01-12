@@ -63,6 +63,14 @@ export function TableData({
             borderColor={borderColor}
             borderRight={border ? value : 0}
             borderRightColor={borderColor}
+            paddingInlineStart="1rem"
+            color={
+                name == 'OFFSHORE'
+                    ? 'brand.700'
+                    : name == 'ONSHORE'
+                    ? 'brand.400'
+                    : 'black'
+            }
         >
             {name}
         </Td>

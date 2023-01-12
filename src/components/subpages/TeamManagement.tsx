@@ -336,6 +336,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                         'Job Title',
                         'Client',
                         'Phone No',
+                        'Payroll Type',
                         'Role',
                         'Status',
                         '',
@@ -350,6 +351,9 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 />
                                 <TableData name={x.clientName} />
                                 <TableData name={x.phoneNumber} />
+                                <TableData
+                                    name={x.employeeInformation?.payrollType}
+                                />
                                 <TableData name={x.role} />
                                 <TableStatus name={x.isActive} />
                                 <TableActions
