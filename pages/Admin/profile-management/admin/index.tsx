@@ -1,28 +1,32 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import TimesheetHistory from '@components/subpages/SupervisorTimeSheetHistory';
+import ProfileManagementAdmin from '@components/subpages/AdminManagement';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
-    TimeSheetHistoryViewPagedCollectionStandardResponse,
-    TimeSheetService,
+    UserService,
+    UserView,
+    UserViewPagedCollectionStandardResponse,
 } from 'src/services';
-
-function history({
-    timeSheets,
-}: {
-    timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
-}) {
-    return <TimesheetHistory timeSheets={timeSheets} />;
+interface adminProps {
+    adminList: UserViewPagedCollectionStandardResponse;
+    team: UserView[];
 }
 
-export default history;
+function admin({ adminList, team }: adminProps) {
+    // console.log({ team });
+    return <ProfileManagementAdmin adminList={adminList} team={team} />;
+}
+
+export default admin;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
-    async (ctx) => {
+    async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await TimeSheetService.getSuperviseesTimeSheet(
+            const team = await UserService.listUsers('Team Member');
+            const data = await UserService.listUsers(
+                'admins',
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
@@ -30,7 +34,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             return {
                 props: {
-                    timeSheets: data,
+                    adminList: data,
+                    team: team?.data?.value,
                 },
             };
         } catch (error: any) {

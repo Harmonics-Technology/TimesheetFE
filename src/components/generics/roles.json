@@ -8,12 +8,16 @@
         "title": "Admin"
     },
     {
+        "id": "internalpm",
+        "title": "Payroll Manager"
+    },
+    {
         "id": "internaladmin",
         "title": "Internal Admin"
     },
     {
-        "id": "internalpm",
-        "title": "Payroll Manager"
+        "id": "internalsupervisor",
+        "title": "Internal Supervisor"
     },
     {
         "id": "businessadm",
@@ -26,10 +30,6 @@
     {
         "id": "supervisor",
         "title": "Supervisor"
-    },
-    {
-        "id": "internalsupervisor",
-        "title": "Internal Supervisor"
     },
     {
         "id": "team",

@@ -125,9 +125,16 @@ const TimesheetTeam = ({
                 chosenDate,
                 hours,
             );
+            console.log({ data });
             if (data.status) {
                 return;
             }
+            toast({
+                status: 'error',
+                title: data.message,
+                position: 'top-right',
+            });
+            return;
         } catch (error) {
             console.log(error);
             toast({
@@ -155,7 +162,7 @@ const TimesheetTeam = ({
                     );
                 }
                 setLoading(false);
-                callback();
+                // callback();
             });
             return;
         };

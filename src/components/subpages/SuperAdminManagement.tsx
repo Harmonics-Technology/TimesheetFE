@@ -19,10 +19,10 @@ const schema = yup.object().shape({
     isActive: yup.string().required(),
     id: yup.string().required(),
 });
-interface AdminProfileProps {
+interface SuperadminProfileProps {
     userProfile?: UserView;
 }
-function AdminProfile({ userProfile }: AdminProfileProps) {
+function SuperadminProfile({ userProfile }: SuperadminProfileProps) {
     // console.log({ userProfile });
     const {
         register,
@@ -104,7 +104,6 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                         placeholder=""
                         defaultValue={userProfile?.firstName as string}
                         register={register}
-                        readonly={true}
                     />
                     <PrimaryInput<UpdateUserModel>
                         label="Last Name"
@@ -113,7 +112,6 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                         placeholder=""
                         defaultValue={userProfile?.lastName as string}
                         register={register}
-                        readonly={true}
                     />
                     <InputBlank
                         label="Email"
@@ -130,7 +128,6 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                         label="Role"
                         placeholder={userProfile?.role as string}
                         options={roles.slice(0, 4)}
-                        disabled={true}
                     />
 
                     <SelectrixBox<UpdateUserModel>
@@ -149,7 +146,6 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                             { id: true, label: 'Active' },
                             { id: false, label: 'Not Active' },
                         ]}
-                        disabled={true}
                     />
                 </Grid>
                 <Grid
@@ -172,7 +168,6 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                         color="white"
                         height="3rem"
                         type="submit"
-                        disabled={true}
                         isLoading={isSubmitting}
                         spinner={<BeatLoader color="white" size={10} />}
                         fontSize="14px"
@@ -189,4 +184,4 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
     );
 }
 
-export default AdminProfile;
+export default SuperadminProfile;

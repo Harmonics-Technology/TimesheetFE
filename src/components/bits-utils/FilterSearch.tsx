@@ -5,6 +5,10 @@ import {
     HStack,
     Icon,
     Input,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
     Select,
     Text,
     Tooltip,
@@ -29,7 +33,7 @@ function FilterSearch() {
         month: currentMonth,
     });
     const [openDateFilter, setOpenDateFilter] = useState(false);
-    const selectedDate = date.month + '/' + date.year;
+    const selectedDate = date.month + '-' + date.year;
     const close = useCallback(() => setOpenDateFilter(false), []);
     const popover = useRef(null);
     useClickOutside(popover, close);
@@ -63,8 +67,13 @@ function FilterSearch() {
             },
         });
     }
+    function clearfilter() {
+        router.push({ query: { date: '' } });
+    }
     // console.log({ selectedDate });
-    const hideDateFilter = router.asPath.includes('timesheets');
+    const hideDateFilter =
+        router.asPath.includes('timesheets/approval') ||
+        router.asPath.includes('timesheets/unapproved');
 
     return (
         <>
@@ -142,11 +151,38 @@ function FilterSearch() {
                                     </Box>
                                 )}
                             </Box>
-                            <Tooltip hasArrow label="Click to apply filter">
-                                <Button onClick={filterByDate} ml=".5rem">
+                            {/* <Tooltip hasArrow label="Click to apply filter"> */}
+                            <Menu>
+                                <MenuButton
+                                    ml=".5rem"
+                                    // bgColor="red"
+                                >
                                     <Icon as={BsFilter} />
-                                </Button>
-                            </Tooltip>
+                                </MenuButton>
+                                <MenuList fontSize=".8rem">
+                                    <MenuItem>
+                                        <Text
+                                            fontWeight="500"
+                                            color="brand.200"
+                                            mb="0"
+                                            onClick={filterByDate}
+                                        >
+                                            Apply filter
+                                        </Text>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <Text
+                                            fontWeight="500"
+                                            color="brand.200"
+                                            mb="0"
+                                            onClick={clearfilter}
+                                        >
+                                            Clear filter
+                                        </Text>
+                                    </MenuItem>
+                                </MenuList>
+                            </Menu>
+                            {/* </Tooltip> */}
                         </Flex>
                     )}
 

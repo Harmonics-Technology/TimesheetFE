@@ -38,6 +38,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     passwordVisible?: boolean;
     changeVisibility?: any;
     h?: string;
+    readonly?: boolean;
 }
 export const PrimaryInput = <TFormValues extends Record<string, any>>({
     name,
@@ -57,6 +58,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
     borderColor = 'gray.300',
     icon,
     h = '2.6rem',
+    readonly = false,
 }: FormInputProps<TFormValues>) => {
     return (
         <FormControl>
@@ -81,6 +83,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                     borderColor={borderColor}
                     borderRadius="0"
                     h={h}
+                    isReadOnly={readonly}
                 />
                 {icon && (
                     <InputRightElement

@@ -124,6 +124,8 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
     const [loading, setLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    const admin = router.asPath.startsWith('/Admin');
+
     const getUserData = async (id: string) => {
         if (id === undefined) {
             setUserDetail({
@@ -204,6 +206,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                     height="fit-content"
                     boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     onClick={onOpen}
+                    display={admin ? 'none' : 'flex'}
                 >
                     +Admin
                 </Button>
@@ -272,7 +275,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                                 keys="title"
                                 keyLabel="title"
                                 label="Role"
-                                options={roles.slice(0, 4)}
+                                options={roles.slice(0, 3)}
                             />
                         </Grid>
                     ) : null}
@@ -364,7 +367,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                                             Role
                                         </FormLabel>
                                         <Selectrix
-                                            options={roles.slice(0, 4)}
+                                            options={roles.slice(3, 5)}
                                             customKeys={{
                                                 key: 'id',
                                                 label: 'title',

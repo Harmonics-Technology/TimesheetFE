@@ -94,10 +94,7 @@ function InvoiceTemplate({
                                     <Box>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             Invoice Number:{' '}
-                                            {`INV - ${clicked?.id?.slice(
-                                                0,
-                                                8,
-                                            )}`}
+                                            {clicked?.invoiceReference}
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             Issued Date:{' '}
@@ -148,7 +145,11 @@ function InvoiceTemplate({
                                         <>
                                             <Tr key={clicked?.id}>
                                                 <TableData
-                                                    name={'Adedayo John'}
+                                                    name={
+                                                        clicked?.clientName ||
+                                                        clicked?.paymentPartnerName ||
+                                                        clicked?.name
+                                                    }
                                                 />
                                                 <TableData
                                                     name={moment(

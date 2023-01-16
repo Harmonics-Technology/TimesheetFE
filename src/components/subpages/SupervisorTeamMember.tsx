@@ -308,12 +308,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                                 <TableData
                                     name={x.employeeInformation?.jobTitle}
                                 />
-                                <TableData
-                                    name={
-                                        x.employeeInformation?.client
-                                            ?.organizationName
-                                    }
-                                />
+                                <TableData name={x.clientName} />
                                 <TableData name={x.phoneNumber} />
                                 <TableData name={x.role} />
                                 <TableStatus name={x.isActive} />

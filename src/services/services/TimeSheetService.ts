@@ -222,6 +222,7 @@ limit?: number,
      * @param offset 
      * @param limit 
      * @param search 
+     * @param dateFilter 
      * @returns TimeSheetHistoryViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -229,6 +230,7 @@ limit?: number,
 offset?: number,
 limit?: number,
 search?: string,
+dateFilter?: string,
 ): CancelablePromise<TimeSheetHistoryViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -237,6 +239,7 @@ search?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
+                'dateFilter': dateFilter,
             },
         });
     }
@@ -245,6 +248,7 @@ search?: string,
      * @param offset 
      * @param limit 
      * @param search 
+     * @param dateFilter 
      * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -252,6 +256,7 @@ search?: string,
 offset?: number,
 limit?: number,
 search?: string,
+dateFilter?: string,
 ): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -260,6 +265,7 @@ search?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
+                'dateFilter': dateFilter,
             },
         });
     }

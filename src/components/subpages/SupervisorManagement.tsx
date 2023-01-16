@@ -150,7 +150,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
                             name="clientId"
                             error={errors.clientId}
                             keys="id"
-                            keyLabel="fullName"
+                            keyLabel="organizationName"
                             label="Client"
                             options={clients}
                         />

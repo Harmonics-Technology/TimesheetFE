@@ -31,7 +31,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
             );
-            const data = await UserService.getSupervisees();
+            const data = await UserService.getSupervisees(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+                pagingOptions.date,
+            );
             console.log({ data });
             return {
                 props: {

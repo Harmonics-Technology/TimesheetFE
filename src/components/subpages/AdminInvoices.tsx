@@ -47,14 +47,19 @@ function AdminInvoices({ invoiceData }: adminProps) {
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
-            if (selectedId?.length === invoice?.length) {
+            if (
+                selectedId?.length ===
+                invoice?.filter((x) => x.status !== 'INVOICED').length
+            ) {
                 setSelectedId([]);
                 return;
             }
             const response: string[] = [];
-            invoice?.forEach((x) =>
-                response.push(x.id as string),
-            ) as unknown as string[];
+            invoice
+                ?.filter((x) => x.status !== 'INVOICED')
+                .forEach((x) =>
+                    response.push(x.id as string),
+                ) as unknown as string[];
             console.log({ response });
             setSelectedId([...response]);
             return;
@@ -134,7 +139,8 @@ function AdminInvoices({ invoiceData }: adminProps) {
                     <Checkbox
                         checked={
                             invoice?.length !== 0 &&
-                            invoice?.length == selectedId?.length
+                            invoice?.filter((x) => x.status !== 'INVOICED')
+                                .length == selectedId?.length
                         }
                         onChange={() => toggleSelected('', true)}
                         label="Select All"
@@ -155,8 +161,14 @@ function AdminInvoices({ invoiceData }: adminProps) {
                     <>
                         {invoiceData?.data?.value?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
-                                <TableData name={'Inv001'} />
-                                <TableData name={'Adeleke john'} />
+                                <TableData name={x.invoiceReference} />
+                                <TableData
+                                    name={
+                                        x.clientName ||
+                                        x.paymentPartnerName ||
+                                        x.name
+                                    }
+                                />
                                 <TableData
                                     name={moment(x.dateCreated).format(
                                         'DD/MM/YYYY',
@@ -178,21 +190,20 @@ function AdminInvoices({ invoiceData }: adminProps) {
                                     onOpen={onOpen}
                                     clicked={setClicked}
                                 />
-                                {x.status !== 'INVOICED' && (
-                                    <td>
-                                        <Checkbox
-                                            checked={
-                                                selectedId.find(
-                                                    (e) => e === x.id,
-                                                ) || ''
-                                            }
-                                            onChange={(e) =>
-                                                toggleSelected(x.id as string)
-                                            }
-                                            disabled={x.status !== 'APPROVED'}
-                                        />
-                                    </td>
-                                )}
+
+                                <td>
+                                    <Checkbox
+                                        checked={
+                                            selectedId.find(
+                                                (e) => e === x.id,
+                                            ) || ''
+                                        }
+                                        onChange={(e) =>
+                                            toggleSelected(x.id as string)
+                                        }
+                                        disabled={x.status === 'INVOICED'}
+                                    />
+                                </td>
                             </Tr>
                         ))}
                     </>

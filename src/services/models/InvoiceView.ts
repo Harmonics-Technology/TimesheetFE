@@ -10,8 +10,12 @@ export type InvoiceView = {
     id?: string;
     employeeInformationId?: string | null;
     employeeInformation?: EmployeeInformationView;
+    name?: string | null;
+    paymentPartnerName?: string | null;
+    clientName?: string | null;
     startDate?: string;
     endDate?: string;
+    invoiceReference?: string | null;
     totalHours?: number;
     totalAmount?: number;
     rate?: string | null;
