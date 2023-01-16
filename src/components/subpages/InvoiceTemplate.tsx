@@ -35,6 +35,7 @@ function InvoiceTemplate({
             ref.current.save();
         }
     }
+    console.log({ clicked });
     return (
         <>
             <Modal
@@ -50,7 +51,7 @@ function InvoiceTemplate({
                 <ModalContent
                     py={5}
                     borderRadius="0"
-                    w={['88%', 'auto']}
+                    w={['88%', '50%']}
                     maxW="unset"
                     overflow="hidden"
                     // maxH="100vh"
@@ -136,120 +137,38 @@ function InvoiceTemplate({
                                     borderX="none"
                                 >
                                     <Tables
-                                        tableHead={
-                                            clicked?.invoiceType == 'EXPENSE'
-                                                ? [
-                                                      'Name',
-                                                      'Amount (₦)',
-                                                      //   'Currency',
-                                                      'Expense Type',
-                                                      //   'Description',
-                                                      'Invoice Type',
-                                                  ]
-                                                : [
-                                                      'Name',
-                                                      'Start Date',
-                                                      'End Date',
-                                                      'Amount (₦)',
-                                                      'Rate',
-                                                      'Invoice Type',
-                                                  ]
-                                        }
+                                        tableHead={[
+                                            'Name',
+                                            'Start Date',
+                                            'End Date',
+                                            'Amount (₦)',
+                                            'Rate',
+                                        ]}
                                     >
                                         <>
-                                            {clicked?.invoiceType ==
-                                            'EXPENSE' ? (
-                                                <>
-                                                    {clicked?.expenses?.map(
-                                                        (x: ExpenseView) => (
-                                                            <Tr key={x.id}>
-                                                                <TableData
-                                                                    name={
-                                                                        x
-                                                                            .teamMember
-                                                                            ?.fullName
-                                                                    }
-                                                                />
-                                                                <TableData
-                                                                    name={
-                                                                        x.currency ==
-                                                                        'NGN'
-                                                                            ? Naira(
-                                                                                  x.amount,
-                                                                              )
-                                                                            : CAD(
-                                                                                  x.amount,
-                                                                              )
-                                                                    }
-                                                                />
-                                                                {/* <TableData
-                                                            name={x.currency}
-                                                        /> */}
-                                                                <TableData
-                                                                    name={
-                                                                        x.expenseType
-                                                                    }
-                                                                />
-                                                                {/* <TableData
-                                                            name={x.description}
-                                                        /> */}
-                                                                <TableData
-                                                                    name={
-                                                                        clicked.invoiceType
-                                                                    }
-                                                                />
-                                                            </Tr>
-                                                        ),
+                                            <Tr key={clicked?.id}>
+                                                <TableData
+                                                    name={'Adedayo John'}
+                                                />
+                                                <TableData
+                                                    name={moment(
+                                                        clicked?.startDate,
+                                                    ).format('DD/MM/YYYY')}
+                                                />
+                                                <TableData
+                                                    name={moment(
+                                                        clicked?.endDate,
+                                                    ).format('DD/MM/YYYY')}
+                                                />
+                                                <TableData
+                                                    name={Naira(
+                                                        clicked?.totalAmount,
                                                     )}
-                                                </>
-                                            ) : (
-                                                <>
-                                                    {clicked?.payrolls?.map(
-                                                        (x: PayrollView) => (
-                                                            <Tr
-                                                                key={
-                                                                    x.payrollId
-                                                                }
-                                                            >
-                                                                <TableData
-                                                                    name={
-                                                                        x.name
-                                                                    }
-                                                                />
-                                                                <TableData
-                                                                    name={moment(
-                                                                        x.startDate,
-                                                                    ).format(
-                                                                        'DD/MM/YYYY',
-                                                                    )}
-                                                                />
-                                                                <TableData
-                                                                    name={moment(
-                                                                        x.endDate,
-                                                                    ).format(
-                                                                        'DD/MM/YYYY',
-                                                                    )}
-                                                                />
-                                                                <TableData
-                                                                    name={Naira(
-                                                                        x.totalAmount,
-                                                                    )}
-                                                                />
-                                                                <TableData
-                                                                    name={
-                                                                        x.rate
-                                                                    }
-                                                                />
-                                                                <TableData
-                                                                    name={
-                                                                        clicked.invoiceType
-                                                                    }
-                                                                />
-                                                            </Tr>
-                                                        ),
-                                                    )}
-                                                </>
-                                            )}
+                                                />
+                                                <TableData
+                                                    name={clicked?.rate}
+                                                />
+                                            </Tr>
                                         </>
                                     </Tables>
                                 </Box>
@@ -260,6 +179,7 @@ function InvoiceTemplate({
                                     >
                                         <InvoiceTotalText
                                             label="Subtotal"
+                                            cur="$"
                                             value={Math.round(
                                                 clicked?.totalAmount as number,
                                             )}
@@ -267,6 +187,7 @@ function InvoiceTemplate({
                                         <InvoiceTotalText
                                             label="Hst"
                                             value={'0'}
+                                            cur="$"
                                         />
                                         <Box
                                             border="2px dashed"
@@ -275,6 +196,7 @@ function InvoiceTemplate({
                                             pt="1em"
                                         >
                                             <InvoiceTotalText
+                                                cur="$"
                                                 label="Total"
                                                 value={Math.round(
                                                     clicked?.totalAmount as number,

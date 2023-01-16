@@ -1,14 +1,21 @@
 /* eslint-disable no-sparse-arrays */
-import { Box, Button, Flex, Tr, useToast, Td } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Flex,
+    Tr,
+    useToast,
+    Td,
+    useDisclosure,
+} from '@chakra-ui/react';
 import {
     TableContractAction,
     TableData,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import {
-    PayrollView,
-    FinancialService,
-    PayrollViewPagedCollectionStandardResponse,
+    InvoiceView,
+    InvoiceViewPagedCollectionStandardResponse,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
@@ -17,9 +24,10 @@ import moment from 'moment';
 import { useState } from 'react';
 import Checkbox from '@components/bits-utils/Checkbox';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { GenerateInvoiceModal } from '@components/bits-utils/GenerateInvoiceModal';
 
 interface expenseProps {
-    payrolls: PayrollViewPagedCollectionStandardResponse;
+    payrolls: InvoiceViewPagedCollectionStandardResponse;
 }
 
 function PaymentPartnerPayroll({ payrolls }: expenseProps) {
@@ -27,66 +35,66 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
     const router = useRouter();
     const toast = useToast();
     const [loading, setLoading] = useState(false);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    console.log({ payrolls });
 
-    const [selectedId, setSelectedId] = useState<string[]>([]);
-    const toggleSelected = (id: string, all?: boolean) => {
+    const [selectedId, setSelectedId] = useState<any[]>([]);
+    const toggleSelected = (x: any, all?: boolean) => {
         if (all) {
             if (selectedId?.length === payrollsList?.length) {
                 setSelectedId([]);
                 return;
             }
-            const response: string[] = [];
-            payrollsList?.forEach((x) =>
-                response.push(x.payrollId as string),
-            ) as unknown as string[];
+            const response: InvoiceView[] = [];
+            payrollsList?.forEach((x) => response.push(x));
             console.log({ response });
             setSelectedId([...response]);
             return;
         }
-        const existingValue = selectedId.find((e) => e === id);
+        const existingValue = selectedId.find((e) => e.id === x.id);
         if (existingValue) {
-            const newArray = selectedId.filter((x) => x !== id);
+            const newArray = selectedId.filter((e) => e.id !== x.id);
             setSelectedId(newArray);
             return;
         }
-        setSelectedId([...selectedId, id]);
+        setSelectedId([...selectedId, x]);
     };
 
-    const generateInvoice = async () => {
-        try {
-            setLoading(true);
-            const result = await FinancialService.generateInvoicePayroll(
-                selectedId,
-            );
-            if (result.status) {
-                toast({
-                    title: result.message,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                setLoading(false);
-                router.reload();
-                return;
-            }
-            setLoading(false);
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
-        } catch (err: any) {
-            setLoading(false);
-            toast({
-                title: err?.body?.message || err?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    // const generateInvoice = async () => {
+    //     try {
+    //         setLoading(true);
+    //         const result = await FinancialService.generateInvoicePayroll(
+    //             selectedId,
+    //         );
+    //         if (result.status) {
+    //             toast({
+    //                 title: result.message,
+    //                 status: 'success',
+    //                 isClosable: true,
+    //                 position: 'top-right',
+    //             });
+    //             setLoading(false);
+    //             router.reload();
+    //             return;
+    //         }
+    //         setLoading(false);
+    //         toast({
+    //             title: result.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //         return;
+    //     } catch (err: any) {
+    //         setLoading(false);
+    //         toast({
+    //             title: err?.body?.message || err?.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
 
     return (
         <>
@@ -98,18 +106,18 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
             >
                 <Flex gap="1rem" justify="space-between">
                     <Box>
-                        {selectedId.length > 0 && (
+                        {selectedId.length !== 0 && (
                             <Button
                                 bgColor="brand.600"
                                 color="white"
                                 p=".5rem 1.5rem"
                                 height="fit-content"
-                                onClick={() => generateInvoice()}
+                                onClick={onOpen}
                                 isLoading={loading}
                                 spinner={<BeatLoader color="white" size={10} />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
-                                Generate Invoice
+                                Create Invoice
                             </Button>
                         )}
                     </Box>
@@ -133,14 +141,14 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                         'Total Hrs',
                         'Rate',
                         'Total Amount',
-                        '...',
+                        // '...',
                         '',
                     ]}
                 >
                     <>
-                        {payrollsList?.map((x: PayrollView) => (
-                            <Tr key={x.payrollId}>
-                                <TableData name={x.name} />
+                        {payrollsList?.map((x: InvoiceView) => (
+                            <Tr key={x.id}>
+                                <TableData name={'Adeleke'} />
                                 <TableData
                                     name={moment(x.startDate).format(
                                         'DD-MM-YY',
@@ -171,14 +179,10 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                                     <Checkbox
                                         checked={
                                             selectedId.find(
-                                                (e) => e === x.payrollId,
+                                                (e) => e.id === x.id,
                                             ) || ''
                                         }
-                                        onChange={() =>
-                                            toggleSelected(
-                                                x.payrollId as string,
-                                            )
-                                        }
+                                        onChange={() => toggleSelected(x)}
                                     />
                                 </td>
                             </Tr>
@@ -187,6 +191,11 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                 </Tables>
                 <Pagination data={payrolls} />
             </Box>
+            <GenerateInvoiceModal
+                isOpen={isOpen}
+                onClose={onClose}
+                clicked={selectedId}
+            />
         </>
     );
 }

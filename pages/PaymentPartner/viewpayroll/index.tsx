@@ -6,11 +6,11 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
     FinancialService,
-    PayrollViewPagedCollectionStandardResponse,
+    InvoiceViewPagedCollectionStandardResponse,
 } from 'src/services';
 
 interface PayrollType {
-    payrolls: PayrollViewPagedCollectionStandardResponse;
+    payrolls: InvoiceViewPagedCollectionStandardResponse;
 }
 function expenses({ payrolls }: PayrollType) {
     return <PaymentPartnerPayroll payrolls={payrolls} />;
@@ -22,10 +22,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listPayrollsByPaymentPartner(
+            const data = await FinancialService.listPaymentPartnerInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
-                // pagingOptions.search,
+                pagingOptions.search,
+                pagingOptions.date,
             );
 
             return {

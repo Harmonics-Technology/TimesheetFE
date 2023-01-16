@@ -36,6 +36,7 @@ export type { InitiateResetModel } from './models/InitiateResetModel';
 export type { InvoiceView } from './models/InvoiceView';
 export type { InvoiceViewPagedCollection } from './models/InvoiceViewPagedCollection';
 export type { InvoiceViewPagedCollectionStandardResponse } from './models/InvoiceViewPagedCollectionStandardResponse';
+export type { InvoiceViewStandardResponse } from './models/InvoiceViewStandardResponse';
 export type { Link } from './models/Link';
 export type { LoginModel } from './models/LoginModel';
 export type { NotificationView } from './models/NotificationView';
@@ -43,6 +44,7 @@ export type { NotificationViewPagedCollection } from './models/NotificationViewP
 export type { NotificationViewPagedCollectionStandardResponse } from './models/NotificationViewPagedCollectionStandardResponse';
 export type { NotificationViewStandardResponse } from './models/NotificationViewStandardResponse';
 export type { PasswordReset } from './models/PasswordReset';
+export type { PaymentPartnerInvoiceModel } from './models/PaymentPartnerInvoiceModel';
 export type { PaymentSchedule } from './models/PaymentSchedule';
 export type { PaymentScheduleListStandardResponse } from './models/PaymentScheduleListStandardResponse';
 export type { PayRollType } from './models/PayRollType';

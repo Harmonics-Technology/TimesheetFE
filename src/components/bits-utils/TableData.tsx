@@ -101,7 +101,10 @@ export function TableState({ name }: { name: string | undefined | null }) {
             <Box
                 fontSize="10px"
                 bgColor={
-                    name == 'ACTIVE' || name == 'APPROVED' || name == 'INVOICED'
+                    name == 'ACTIVE' ||
+                    name == 'APPROVED' ||
+                    name == 'INVOICED' ||
+                    name == 'SUBMITTED'
                         ? 'brand.400'
                         : name == 'PENDING'
                         ? 'brand.700'

@@ -133,6 +133,7 @@ const TimesheetTeam = ({
             toast({
                 status: 'error',
                 title: 'An error occurred, please try again',
+                position: 'top-right',
             });
         }
     };

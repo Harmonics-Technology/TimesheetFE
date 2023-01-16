@@ -5,9 +5,6 @@ export const Button: DeepPartial<Theme['components']['Button']> = {
     baseStyle: {
         // borderRadius: "full",
         // borderRadius: '0',
-        
     },
-    defaultProps:{
-        
-    }
+    defaultProps: {},
 };

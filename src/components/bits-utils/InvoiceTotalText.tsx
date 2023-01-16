@@ -4,9 +4,11 @@ import React from 'react';
 function InvoiceTotalText({
     label,
     value,
+    cur,
 }: {
     label: string;
     value: string | number;
+    cur: any;
 }) {
     return (
         <Flex fontSize=".9rem">
@@ -19,8 +21,9 @@ function InvoiceTotalText({
             >
                 {label}
             </Text>
-            <Text color="black" fontWeight="600">
-                $ {value}
+            <Text color="black" fontWeight="600" w="120px" textAlign="right">
+                {cur}
+                {value}
             </Text>
         </Flex>
     );

@@ -91,16 +91,19 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                 <Tables
                     tableHead={[
                         'Invoice No',
+                        'Name',
                         'Created on',
                         'Start Date',
                         'End Date',
                         'Status',
                         'Action',
+                        '',
                     ]}
                 >
                     <>
                         {invoiceList?.data?.value?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
+                                <TableData name={'Inv001'} />
                                 <TableData name={'Adeleke john'} />
                                 <TableData
                                     name={moment(x.dateCreated).format(
@@ -123,6 +126,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                                     onOpen={onOpen}
                                     clicked={setClicked}
                                 />
+
                                 <td>
                                     <Checkbox
                                         checked={selectedId || ''}

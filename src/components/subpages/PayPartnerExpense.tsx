@@ -115,14 +115,14 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
                             </Button>
                         )}
                     </Box>
-                    <Checkbox
+                    {/* <Checkbox
                         checked={
                             expensesList?.length !== 0 &&
                             expensesList?.length == selectedId?.length
                         }
                         onChange={() => toggleSelected('', true)}
                         label="Select All"
-                    />
+                    /> */}
                 </Flex>
                 <FilterSearch />
                 <Tables
@@ -133,7 +133,7 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
                         'Currency',
                         'Amount',
                         'Status',
-                        '...',
+                        // '...',
                     ]}
                 >
                     <>
@@ -147,7 +147,7 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
                                     name={x.amount as unknown as string}
                                 />
                                 <TableState name={x.status as string} />
-                                <td>
+                                {/* <td>
                                     <Checkbox
                                         checked={
                                             selectedId.find(
@@ -158,7 +158,7 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
                                             toggleSelected(x.id as string)
                                         }
                                     />
-                                </td>
+                                </td> */}
                             </Tr>
                         ))}
                     </>

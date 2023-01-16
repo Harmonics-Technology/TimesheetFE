@@ -1,8 +1,10 @@
 import { Box, Divider, Flex, Circle, Text } from '@chakra-ui/react';
 import React from 'react';
 import { NotificationView } from 'src/services';
+import Pagination from './Pagination';
 
 export const NotificationBox = ({ data }: { data?: any }) => {
+    console.log({ data });
     return (
         <Box
             // pos="absolute"
@@ -24,9 +26,9 @@ export const NotificationBox = ({ data }: { data?: any }) => {
                     No notifications!!!
                 </Text>
             ) : (
-                data?.data?.value?.map((x: NotificationView) => (
+                data?.data?.value?.map((x: NotificationView, i) => (
                     <>
-                        <Box>
+                        <Box key={i}>
                             <Text
                                 fontSize=".6rem"
                                 noOfLines={1}
@@ -59,6 +61,7 @@ export const NotificationBox = ({ data }: { data?: any }) => {
                     </>
                 ))
             )}
+            <Pagination data={data} />
         </Box>
     );
 };

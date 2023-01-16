@@ -21,6 +21,7 @@ function Pagination({ data }: pageOptions) {
     const pageSize = data?.value?.length;
 
     const router = useRouter();
+    const dashboard = router.pathname.includes('/dashboard');
     const next = data?.next?.href;
     const previous = data?.previous?.href;
     const last = data?.last?.href;
@@ -60,13 +61,18 @@ function Pagination({ data }: pageOptions) {
     };
     return (
         <Flex
-            justify="space-between"
+            justify={dashboard ? 'center' : 'space-between'}
             align="center"
             p="1.5rem 0 .5rem"
             gap="1rem"
             flexDirection={['column', 'row']}
         >
-            <Text fontSize=".9rem" color="brand.300" mb="0">
+            <Text
+                fontSize=".9rem"
+                color="brand.300"
+                mb="0"
+                display={dashboard ? 'none' : 'block'}
+            >
                 Showing {current} to {pageSize} of {total} entries
             </Text>
             {totalPages > 1 && (

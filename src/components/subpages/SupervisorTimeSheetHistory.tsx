@@ -48,7 +48,9 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                                 <Tr key={x.employeeInformationId}>
                                     <TableData name={x.name} />
                                     <TableData name={x.email} />
-                                    <TableData name={'Frontend Developer'} />
+                                    <TableData
+                                        name={x.employeeInformation?.jobTitle}
+                                    />
                                     <TableData
                                         name={x.totalHours as unknown as string}
                                     />

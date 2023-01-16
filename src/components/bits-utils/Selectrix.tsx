@@ -1,15 +1,17 @@
 import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
 import { Control, Controller, FieldError, Path } from 'react-hook-form';
-import ReactSelect from 'react-select';
+import Select from 'react-select';
 interface select {
-    options: UserView[];
+    options: [];
     customKeys: { key: string | number | boolean; label: string };
     onChange: (value: any) => void;
     placeholder?: string;
     disabled?: boolean;
+    searchable?: boolean;
 }
 import dynamic from 'next/dynamic';
 import { UserView } from 'src/services';
+import { useState } from 'react';
 const Selectrix = dynamic<select>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -21,8 +23,8 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     label?: string;
     fontSize?: string;
     options: any;
-    keys: string | number | boolean;
-    keyLabel: string;
+    keys: any;
+    keyLabel: any;
     control: Control<TFormValues>;
     disabled?: boolean;
 }
@@ -38,6 +40,12 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
     control,
     disabled,
 }: FormInputProps<TFormValues>) => {
+    const [selected, setSelected] = useState(null);
+
+    const handleChange = (selectedOption) => {
+        setSelected(selectedOption);
+        console.log(`Option selected:`, selectedOption.id);
+    };
     return (
         <FormControl isInvalid={error?.type === 'required'}>
             <FormLabel
@@ -59,6 +67,7 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                             label: keyLabel,
                         }}
                         onChange={(value) => onChange(value.key)}
+                        searchable={false}
                     />
                 )}
                 name={name}
@@ -66,13 +75,19 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                 // rules={{ required: true }}
             />
             {/* <Controller
-                as={ReactSelect}
-                options={options}
-                name={name}
-                isClearable
                 control={control}
+                defaultValue={options.map((c) => c.value)}
+                name={name}
+                render={({ field: { onChange, value, ref } }) => (
+                    <Select
+                        ref={ref}
+                        onChange={(val) => onChange(val)}
+                        options={options}
+                        getOptionLabel={keyLabel}
+                        getOptionValue={keys}
+                    />
+                )}
             /> */}
-
             <FormErrorMessage fontSize=".7rem">
                 {(error?.type === 'required' && `${label} is required`) ||
                     error?.message}

@@ -71,14 +71,14 @@ function PayrollExpenseManagement({
         if (all) {
             if (
                 selectedId?.length ===
-                expensesList?.filter((x) => x.status == 'APPROVED').length
+                expensesList?.filter((x) => x.status == 'REVIEWED').length
             ) {
                 setSelectedId([]);
                 return;
             }
             const response: string[] = [];
             expensesList
-                ?.filter((x) => x.status == 'APPROVED')
+                ?.filter((x) => x.status == 'REVIEWED')
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
@@ -109,7 +109,7 @@ function PayrollExpenseManagement({
                         position: 'top-right',
                     });
                     setLoading(false);
-                    router.reload();
+                    // router.reload();
                     return;
                 }
                 setLoading(false);
@@ -212,9 +212,9 @@ function PayrollExpenseManagement({
                     </HStack>
                     <Checkbox
                         checked={
-                            expensesList?.filter((x) => x.status == 'APPROVED')
+                            expensesList?.filter((x) => x.status == 'REVIEWED')
                                 .length !== 0 &&
-                            expensesList?.filter((x) => x.status == 'APPROVED')
+                            expensesList?.filter((x) => x.status == 'REVIEWED')
                                 .length == selectedId?.length
                         }
                         onChange={() => toggleSelected('', true)}
@@ -245,18 +245,20 @@ function PayrollExpenseManagement({
                                     name={x.amount as unknown as string}
                                 />
                                 <TableState name={x.status as string} />
-                                <td>
-                                    <Checkbox
-                                        checked={
-                                            selectedId.find(
-                                                (e) => e === x.id,
-                                            ) || ''
-                                        }
-                                        onChange={(e) =>
-                                            toggleSelected(x.id as string)
-                                        }
-                                    />
-                                </td>
+                                {x.status === 'REVIEWED' && (
+                                    <td>
+                                        <Checkbox
+                                            checked={
+                                                selectedId.find(
+                                                    (e) => e === x.id,
+                                                ) || ''
+                                            }
+                                            onChange={(e) =>
+                                                toggleSelected(x.id as string)
+                                            }
+                                        />
+                                    </td>
+                                )}
                             </Tr>
                         ))}
                     </>

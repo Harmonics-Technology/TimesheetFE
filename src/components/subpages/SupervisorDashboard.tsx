@@ -48,7 +48,7 @@ function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
                     <TableCards
                         title={'Recent Timesheet'}
                         url={'timesheets/unapproved'}
-                        data={adminMetrics.recentTimeSheet
+                        data={adminMetrics?.recentTimeSheet
                             ?.slice(0, 4)
                             .map((x: RecentTimeSheetView, i: any) => (
                                 <Tr key={i}>

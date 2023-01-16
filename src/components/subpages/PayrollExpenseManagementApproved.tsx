@@ -184,7 +184,7 @@ function PayrollExpenseManagementApproved({
             >
                 <Flex justify="space-between">
                     <HStack gap="1rem">
-                        <Button
+                        {/* <Button
                             bgColor="brand.400"
                             color="white"
                             p=".5rem 1.5rem"
@@ -193,7 +193,7 @@ function PayrollExpenseManagementApproved({
                             onClick={onOpen}
                         >
                             +Expense
-                        </Button>
+                        </Button> */}
                         {selectedId.length > 0 && (
                             <Button
                                 bgColor="brand.600"
@@ -209,7 +209,7 @@ function PayrollExpenseManagementApproved({
                             </Button>
                         )}
                     </HStack>
-                    <Checkbox
+                    {/* <Checkbox
                         checked={
                             expensesList?.filter((x) => x.status == 'APPROVED')
                                 .length !== 0 &&
@@ -218,7 +218,7 @@ function PayrollExpenseManagementApproved({
                         }
                         onChange={() => toggleSelected('', true)}
                         label="Select All"
-                    />
+                    /> */}
                 </Flex>
                 <FilterSearch />
                 <Tables
@@ -229,7 +229,7 @@ function PayrollExpenseManagementApproved({
                         'Currency',
                         'Amount',
                         'Status',
-                        'Action',
+                        // 'Action',
                         // '...',
                     ]}
                 >
@@ -245,7 +245,7 @@ function PayrollExpenseManagementApproved({
                                 />
                                 <TableState name={x.status as string} />
 
-                                <td>
+                                {/* <td>
                                     <Checkbox
                                         checked={
                                             selectedId.find(
@@ -256,7 +256,7 @@ function PayrollExpenseManagementApproved({
                                             toggleSelected(x.id as string)
                                         }
                                     />
-                                </td>
+                                </td> */}
                             </Tr>
                         ))}
                     </>

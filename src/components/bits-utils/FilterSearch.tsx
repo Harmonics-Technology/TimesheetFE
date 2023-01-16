@@ -63,7 +63,8 @@ function FilterSearch() {
             },
         });
     }
-    console.log({ selectedDate });
+    // console.log({ selectedDate });
+    const hideDateFilter = router.asPath.includes('timesheets');
 
     return (
         <>
@@ -85,56 +86,70 @@ function FilterSearch() {
 
                     <Text noOfLines={1}>entries per page</Text>
                 </HStack>
-                <HStack gap="1rem" align="center">
-                    <Flex align="center">
-                        <Box pos="relative" ref={popover}>
-                            <Flex
-                                minW="150px"
-                                px="1rem"
-                                h="2.5rem"
-                                justifyContent="center"
-                                alignItems="center"
-                                border="1px solid"
-                                borderColor="gray.300"
-                                color="gray.500"
-                                boxShadow="sm"
-                                borderRadius="base"
-                                cursor="pointer"
-                                zIndex="2"
-                                onClick={() =>
-                                    setOpenDateFilter(!openDateFilter)
-                                }
-                            >
-                                {selectedDate}
-                                <Icon
-                                    as={RxTriangleDown}
-                                    ml="1rem"
-                                    pos="relative"
-                                />
-                            </Flex>
-                            {openDateFilter && (
-                                <Box pos="absolute" bgColor="white" p="1rem">
-                                    <MonthYearPicker
-                                        selectedMonth={date.month}
-                                        selectedYear={date.year}
-                                        minYear={2022}
-                                        maxYear={currentYear}
-                                        onChangeYear={(year) =>
-                                            setDate({ ...date, year: year })
-                                        }
-                                        onChangeMonth={(month) =>
-                                            setDate({ ...date, month: month })
-                                        }
+                <HStack
+                    gap="1rem"
+                    align={['unset', 'center']}
+                    flexDirection={['column', 'row']}
+                >
+                    {!hideDateFilter && (
+                        <Flex align="center">
+                            <Box pos="relative" ref={popover}>
+                                <Flex
+                                    minW="150px"
+                                    px="1rem"
+                                    h="2.5rem"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                    border="1px solid"
+                                    borderColor="gray.300"
+                                    color="gray.500"
+                                    boxShadow="sm"
+                                    borderRadius="base"
+                                    cursor="pointer"
+                                    zIndex="2"
+                                    onClick={() =>
+                                        setOpenDateFilter(!openDateFilter)
+                                    }
+                                >
+                                    {selectedDate}
+                                    <Icon
+                                        as={RxTriangleDown}
+                                        ml="1rem"
+                                        pos="relative"
                                     />
-                                </Box>
-                            )}
-                        </Box>
-                        <Tooltip hasArrow label="Click to apply filter">
-                            <Button onClick={filterByDate} ml=".5rem">
-                                <Icon as={BsFilter} />
-                            </Button>
-                        </Tooltip>
-                    </Flex>
+                                </Flex>
+                                {openDateFilter && (
+                                    <Box
+                                        pos="absolute"
+                                        bgColor="white"
+                                        p="1rem"
+                                    >
+                                        <MonthYearPicker
+                                            selectedMonth={date.month}
+                                            selectedYear={date.year}
+                                            minYear={2022}
+                                            maxYear={currentYear}
+                                            onChangeYear={(year) =>
+                                                setDate({ ...date, year: year })
+                                            }
+                                            onChangeMonth={(month) =>
+                                                setDate({
+                                                    ...date,
+                                                    month: month,
+                                                })
+                                            }
+                                        />
+                                    </Box>
+                                )}
+                            </Box>
+                            <Tooltip hasArrow label="Click to apply filter">
+                                <Button onClick={filterByDate} ml=".5rem">
+                                    <Icon as={BsFilter} />
+                                </Button>
+                            </Tooltip>
+                        </Flex>
+                    )}
+
                     <Input
                         type="search"
                         placeholder="search"

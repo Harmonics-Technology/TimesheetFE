@@ -65,7 +65,7 @@ function TimeSheetApproval({ timeSheets }: adminProps) {
                                     <TableData
                                         name={`${
                                             x.approvedNumberOfHours as unknown as string
-                                        } Hours`}
+                                        }Hours`}
                                     />
 
                                     <TableContractAction

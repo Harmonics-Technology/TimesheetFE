@@ -31,22 +31,27 @@ export default TeamDetails;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
-        const clientId = ctx.query.clientId;
-        // console.log({ id });
         try {
             const data = await UserService.getUserById(id);
             // const clients = await UserService.listUsers('client');
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
             );
-            const supervisor = await UserService.getClientSupervisors();
-            console.log({ data });
+            const clientId =
+                data?.data?.employeeInformation?.supervisor?.client?.id;
+            console.log({ clientId });
+            const supervisor = await UserService.getClientSupervisors(
+                0,
+                18,
+                '',
+                clientId,
+            );
+            console.log({ supervisor });
             return {
                 props: {
                     userProfile: data.data,
-                    // clients: clients?.data?.value,
                     paymentPartner: paymentPartner?.data?.value,
-                    // supervisor: supervisor?.data?.value,
+                    supervisor: supervisor?.data?.value,
                 },
             };
         } catch (error: any) {
