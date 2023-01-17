@@ -61,7 +61,7 @@ export const NotificationBox = ({ data }: { data?: any }) => {
                     </>
                 ))
             )}
-            <Pagination data={data} />
+            {/* <Pagination data={data} /> */}
         </Box>
     );
 };

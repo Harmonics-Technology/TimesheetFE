@@ -133,6 +133,7 @@ const TimesheetAdmin = ({
         console.log({ chosenDate });
         setReject({ userId, chosenDate });
     };
+    const preventTomorrow = addDays(new Date(), 1).toISOString();
     console.log({ reject });
     const onSubmit = async (data: RejectTimeSheetModel) => {
         data.date = reject.chosenDate;
@@ -465,7 +466,13 @@ const TimesheetAdmin = ({
                                 }}
                                 disabled={
                                     timesheets?.status === 'APPROVED' ||
-                                    timesheets == undefined
+                                    timesheets == undefined ||
+                                    moment(timesheets?.date).format(
+                                        'YYYY-MM-DD',
+                                    ) ===
+                                        moment(preventTomorrow).format(
+                                            'YYYY-MM-DD',
+                                        )
                                 }
                                 as={Button}
                                 minW="unset"
@@ -483,7 +490,13 @@ const TimesheetAdmin = ({
                                 }}
                                 disabled={
                                     timesheets?.status === 'REJECTED' ||
-                                    timesheets == undefined
+                                    timesheets == undefined ||
+                                    moment(timesheets?.date).format(
+                                        'YYYY-MM-DD',
+                                    ) ===
+                                        moment(preventTomorrow).format(
+                                            'YYYY-MM-DD',
+                                        )
                                 }
                                 as={Button}
                                 minW="unset"
@@ -493,7 +506,7 @@ const TimesheetAdmin = ({
                             </Circle>
                             {singleReject && (
                                 <Box
-                                    w="fit-content"
+                                    w="280px"
                                     h="fit-content"
                                     bgColor="white"
                                     pos="absolute"
@@ -518,7 +531,7 @@ const TimesheetAdmin = ({
                                             error={errors.reason}
                                             placeholder=""
                                             defaultValue=""
-                                            h="3rem"
+                                            h="3.5rem"
                                             register={register}
                                         />
                                         <Button

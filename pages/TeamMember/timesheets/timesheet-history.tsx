@@ -1,3 +1,4 @@
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import TeamTimesheetHistory from '@components/subpages/TeamTimesheetHistory';
 import { GetServerSideProps } from 'next';
@@ -20,8 +21,12 @@ export default history;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
+        const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await TimeSheetService.getTeamMemberTimeSheetHistory();
+            const data = await TimeSheetService.getTeamMemberTimeSheetHistory(
+                pagingOptions.offset,
+                pagingOptions.limit,
+            );
             return {
                 props: {
                     timeSheets: data,

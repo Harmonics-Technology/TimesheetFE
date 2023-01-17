@@ -17,7 +17,7 @@ export const NotificationProvider = ({ children }: { children: any }) => {
     //Getting Notification on Page load
     useEffect(() => {
         const offset = router.query.offset || 0;
-        const limit = router.query.limit || 5;
+        const limit = router.query.limit || 6;
 
         console.log({ limit, offset });
         const getNotifications = async () => {
