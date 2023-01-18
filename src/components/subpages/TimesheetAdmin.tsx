@@ -157,31 +157,31 @@ const TimesheetAdmin = ({
         }
     };
 
-    const generatePayroll = async (id) => {
-        console.log({ id });
-        try {
-            const data = await TimeSheetService.generatePayroll(id);
-            if (data.status) {
-                console.log({ data });
-                return;
-            }
-            toast({
-                title: data.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
-        } catch (error: any) {
-            toast({
-                title: error?.body.message || error.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            console.log(error);
-        }
-    };
+    // const generatePayroll = async (id) => {
+    //     console.log({ id });
+    //     try {
+    //         const data = await TimeSheetService.generatePayroll(id);
+    //         if (data.status) {
+    //             console.log({ data });
+    //             return;
+    //         }
+    //         toast({
+    //             title: data.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //         return;
+    //     } catch (error: any) {
+    //         toast({
+    //             title: error?.body.message || error.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //         console.log(error);
+    //     }
+    // };
     const approveTimeSheetForADay = async (userId, chosenDate) => {
         try {
             const data = await TimeSheetService.approveTimeSheetForADay(
@@ -237,7 +237,6 @@ const TimesheetAdmin = ({
                 }
                 return;
             });
-            generatePayroll(id);
             setLoading(false);
             callback();
         };
@@ -267,8 +266,8 @@ const TimesheetAdmin = ({
             selected.forEach(async (select) => {
                 if (
                     select.checked === true &&
-                    select.userId &&
-                    select.status == 'PENDING'
+                    select.userId
+                    // select.status == 'PENDING'
                 ) {
                     setLoading(true);
                     await approveTimeSheetForADay(
@@ -278,10 +277,10 @@ const TimesheetAdmin = ({
                 }
                 // callback();
             });
-            generatePayroll(id);
+            // generatePayroll(id);
 
             setLoading(false);
-            callback();
+            // callback();
         };
         return (
             <TimeSheetEstimationBtn
