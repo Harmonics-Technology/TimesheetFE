@@ -1,16 +1,15 @@
-import { Box, Flex } from '@chakra-ui/react';
-import PageTabs from '@components/bits-utils/PageTabs';
-import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import TeamExpenses from '@components/subpages/TeamExpenses';
 import { GetServerSideProps } from 'next';
-import React, { useContext } from 'react';
+import React from 'react';
 import {
     ExpenseTypeView,
     ExpenseViewPagedCollectionStandardResponse,
     FinancialService,
     SettingsService,
+    UserService,
+    UserView,
 } from 'src/services';
 
 interface ExpensesType {
@@ -20,27 +19,8 @@ interface ExpensesType {
 }
 function expenses({ expenses, id, expenseType }: ExpensesType) {
     console.log({ id });
-    const { user } = useContext(UserContext);
-    const role = user?.role.replace(' ', '');
-
     return (
-        <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/InternalSupervisor/financials/expenses`}
-                    tabName="Team Members Expenses"
-                />
-                <PageTabs
-                    url={`/${role}/InternalSupervisor/financials/my-expense`}
-                    tabName="My Expenses"
-                />
-            </Flex>
-            <TeamExpenses
-                expenses={expenses}
-                id={id}
-                expenseType={expenseType}
-            />
-        </Box>
+        <TeamExpenses expenses={expenses} id={id} expenseType={expenseType} />
     );
 }
 
@@ -53,7 +33,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const employeeId = JSON.parse(
             ctx.req.cookies.user,
         ).employeeInformationId;
-        // console.log({ employeeId });
         try {
             const expenseType = await SettingsService.listExpenseTypes();
             const data = await FinancialService.listExpenses(
@@ -61,6 +40,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.limit,
                 employeeId,
                 pagingOptions.search,
+                pagingOptions.date,
             );
             // const data = await SettingsService.listExpenseTypes();
 
