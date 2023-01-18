@@ -23,9 +23,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await TimeSheetService.getTeamMemberTimeSheetHistory(
+            const data = await TimeSheetService.getTeamMemberRecentTimeSheet(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                pagingOptions.date,
             );
             return {
                 props: {

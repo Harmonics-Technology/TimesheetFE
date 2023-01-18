@@ -224,6 +224,29 @@ limit?: number,
     /**
      * @param offset 
      * @param limit 
+     * @param dateFilter 
+     * @returns TimeSheetHistoryViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static getTeamMemberRecentTimeSheet(
+offset?: number,
+limit?: number,
+dateFilter?: string,
+): CancelablePromise<TimeSheetHistoryViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/TimeSheet/team-member/recent-timesheet',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'dateFilter': dateFilter,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
      * @param search 
      * @param dateFilter 
      * @returns TimeSheetHistoryViewPagedCollectionStandardResponse Success

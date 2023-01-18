@@ -162,7 +162,7 @@ const TimesheetTeam = ({
                     );
                 }
                 setLoading(false);
-                // callback();
+                callback();
             });
             return;
         };

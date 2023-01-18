@@ -6,7 +6,7 @@ import {
 import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
 import {
-    TimeSheetHistoryView,
+    RecentTimeSheetView,
     TimeSheetHistoryViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
@@ -29,47 +29,34 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
                 <FilterSearch />
                 <Tables
                     tableHead={[
-                        'Name',
-                        'Email',
-                        'Job Title',
-                        'Total Hours',
-                        'No. of Days',
+                        'Year',
+                        'Month',
+                        'Number of Days',
                         'Approved No. of Hours',
-                        '',
+                        // '',
                     ]}
                 >
                     <>
-                        {timeSheets?.data?.value?.map(
-                            (x: TimeSheetHistoryView, i) => (
-                                <Tr key={i}>
-                                    <TableData name={x.name} />
-                                    <TableData name={x.email} />
-                                    <TableData
-                                        name={x.employeeInformation?.jobTitle}
-                                    />
-                                    <TableData
-                                        name={`${
-                                            x.totalHours as unknown as string
-                                        } Hours`}
-                                    />
-                                    <TableData
-                                        name={`${
-                                            x.numberOfDays as unknown as string
-                                        } Days`}
-                                    />
-                                    <TableData
-                                        name={`${
-                                            x.approvedNumberOfHours as unknown as string
-                                        } Hours`}
-                                    />
-
-                                    <TableContractAction
-                                        id={x.employeeInformationId}
-                                        timeSheets={true}
-                                    />
-                                </Tr>
-                            ),
-                        )}
+                        {timeSheets?.data?.value?.map((x: any, i) => (
+                            <Tr key={i}>
+                                <TableData name={x.year} />
+                                <TableData name={x.month} />
+                                <TableData
+                                    name={`${
+                                        x.numberOfDays as unknown as string
+                                    } Days`}
+                                />
+                                <TableData
+                                    name={`${
+                                        x.hours as unknown as string
+                                    } Hours`}
+                                />
+                                {/* <TableContractAction
+                                    id={x.employeeInformationId}
+                                    timeSheets={true}
+                                /> */}
+                            </Tr>
+                        ))}
                     </>
                 </Tables>
                 <Pagination data={timeSheets} />
