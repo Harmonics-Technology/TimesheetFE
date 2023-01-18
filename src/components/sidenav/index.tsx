@@ -270,7 +270,12 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         option={true}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                        dropDown={['expenses']}
+                        dropDown={[
+                            'expenses',
+                            'my payslips',
+                            'my invoices',
+                            'my contracts',
+                        ]}
                     />
                     <MenuItem
                         linkName="my-profile"

@@ -75,6 +75,8 @@ function TeamProfile({
             voidCheckUrl: userProfile?.employeeInformation?.voidCheckUrl,
             inCorporationDocumentUrl:
                 userProfile?.employeeInformation?.inCorporationDocumentUrl,
+            paymentFrequency:
+                userProfile?.employeeInformation?.paymentFrequency,
         },
     });
     const router = useRouter();

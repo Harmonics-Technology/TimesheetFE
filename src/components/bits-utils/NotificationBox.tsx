@@ -13,6 +13,7 @@ export const NotificationBox = ({
     markAsRead: any;
     loading: boolean;
 }) => {
+    const unRead = data?.data?.value?.filter((x) => !x.isRead);
     console.log({ data });
     return (
         <Box
@@ -39,7 +40,7 @@ export const NotificationBox = ({
                         No notifications!!!
                     </Text>
                 ) : (
-                    data?.data?.value?.map((x: NotificationView, i) => (
+                    unRead?.map((x: NotificationView, i) => (
                         <Box key={i}>
                             <Box>
                                 <Text

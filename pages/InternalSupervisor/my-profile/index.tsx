@@ -29,13 +29,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         ).employeeInformationId;
         try {
             const data = await UserService.getUserById(id);
-            // const paymentSchedule =
-            //     await FinancialService.getEmployeePaymentSchedule(employeeId);
+            const paymentSchedule =
+                await FinancialService.getEmployeePaymentSchedule(employeeId);
             // console.log({ data });
             return {
                 props: {
                     user: data.data,
-                    // paymentSchedule, 
+                    paymentSchedule,
                 },
             };
         } catch (error: any) {

@@ -1,8 +1,11 @@
+import { Box, Flex } from '@chakra-ui/react';
+import PageTabs from '@components/bits-utils/PageTabs';
+import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import TeamExpenses from '@components/subpages/TeamExpenses';
 import { GetServerSideProps } from 'next';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     ExpenseTypeView,
     ExpenseViewPagedCollectionStandardResponse,
@@ -19,8 +22,27 @@ interface ExpensesType {
 }
 function expenses({ expenses, id, expenseType }: ExpensesType) {
     console.log({ id });
+    const { user } = useContext(UserContext);
+    const role = user?.role.replace(' ', '');
+
     return (
-        <TeamExpenses expenses={expenses} id={id} expenseType={expenseType} />
+        <Box>
+            <Flex>
+                <PageTabs
+                    url={`/${role}/financials/expenses`}
+                    tabName="Team Members Expenses"
+                />
+                <PageTabs
+                    url={`/${role}/financials/my-expense`}
+                    tabName="My Expenses"
+                />
+            </Flex>
+            <TeamExpenses
+                expenses={expenses}
+                id={id}
+                expenseType={expenseType}
+            />
+        </Box>
     );
 }
 

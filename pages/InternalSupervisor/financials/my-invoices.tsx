@@ -21,11 +21,11 @@ function payslips({ invoice }: PayrollType) {
         <Box>
             <Flex>
                 <PageTabs
-                    url={`/${role}/TeamMember/financials/my-invoices`}
+                    url={`/${role}/financials/my-invoices`}
                     tabName="Awaiting Submission"
                 />
                 <PageTabs
-                    url={`/${role}/TeamMember/financials/submitted-invoices`}
+                    url={`/${role}/financials/submitted-invoices`}
                     tabName="Submitted"
                 />
             </Flex>

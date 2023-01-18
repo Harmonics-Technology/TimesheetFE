@@ -1,10 +1,11 @@
 import { Box, Flex } from '@chakra-ui/react';
 import PageTabs from '@components/bits-utils/PageTabs';
+import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import TeamPayslips from '@components/subpages/TeamPayslips';
 import { GetServerSideProps } from 'next';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     FinancialService,
     PayrollViewPagedCollectionStandardResponse,
@@ -14,15 +15,17 @@ interface PayrollType {
     payrolls: PayrollViewPagedCollectionStandardResponse;
 }
 function payslips({ payrolls }: PayrollType) {
+    const { user } = useContext(UserContext);
+    const role = user?.role.replace(' ', '');
     return (
         <Box>
             <Flex>
                 <PageTabs
-                    url="/InternalAdmin/financials/my-payslips"
+                    url={`/${role}/financials/my-payslips`}
                     tabName="My Payslips"
                 />
                 <PageTabs
-                    url="/InternalAdmin/financials/payslips"
+                    url={`/${role}/financials/payslips`}
                     tabName="All Payslips"
                 />
             </Flex>

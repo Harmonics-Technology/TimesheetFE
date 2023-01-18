@@ -343,9 +343,7 @@ function MyProfile({
                             color="white"
                             display={
                                 user?.role === 'Supervisor' ||
-                                user?.role === 'client' ||
-                                user?.role === 'Internal Supervisor' ||
-                                user?.role === 'Internal Admin'
+                                user?.role === 'client'
                                     ? 'none'
                                     : 'block'
                             }
@@ -548,26 +546,23 @@ function MyProfile({
                 onClose={onClose}
                 user={user}
             />
-            {user?.role !== 'Supervisor' &&
-                user?.role !== 'client' &&
-                user?.role !== 'Internal Supervisor' &&
-                user?.role !== 'Internal Admin' && (
-                    <>
-                        <PaymentScheduleModal
-                            isOpen={isOpened}
-                            onClose={onClosed}
-                            paymentSchedule={paymentSchedule}
-                        />
+            {user?.role !== 'Supervisor' && user?.role !== 'client' && (
+                <>
+                    <PaymentScheduleModal
+                        isOpen={isOpened}
+                        onClose={onClosed}
+                        paymentSchedule={paymentSchedule}
+                    />
 
-                        <AdminPaymentScheduleModal
-                            isOpen={openSchedule}
-                            onClose={onCloseSchedule}
-                            paymentSchedule={
-                                paymentSchedule as AdminPaymentScheduleViewListStandardResponse
-                            }
-                        />
-                    </>
-                )}
+                    <AdminPaymentScheduleModal
+                        isOpen={openSchedule}
+                        onClose={onCloseSchedule}
+                        paymentSchedule={
+                            paymentSchedule as AdminPaymentScheduleViewListStandardResponse
+                        }
+                    />
+                </>
+            )}
         </Box>
     );
 }

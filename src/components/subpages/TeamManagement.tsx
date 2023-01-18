@@ -268,15 +268,15 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             });
             return;
         }
-        // if (data.document === undefined || '') {
-        //     toast({
-        //         title: 'Please select a contract document and try again',
-        //         status: 'error',
-        //         isClosable: true,
-        //         position: 'top-right',
-        //     });
-        //     return;
-        // }
+        if (data.document === undefined || '') {
+            toast({
+                title: 'Please select a contract document and try again',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
 
         console.log({ data });
 

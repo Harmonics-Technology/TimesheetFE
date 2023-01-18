@@ -21,11 +21,11 @@ function payrolls({ invoiceData }: InvoiceType) {
         <Box>
             <Flex>
                 <PageTabs
-                    url={`/${role}/PayrollManager/financials/payrolls`}
+                    url={`/${role}/financials/payrolls`}
                     tabName="Onshore"
                 />
                 <PageTabs
-                    url={`/${role}/PayrollManager/financials/payrolls-approved`}
+                    url={`/${role}/financials/payrolls-approved`}
                     tabName="Offshore"
                 />
             </Flex>

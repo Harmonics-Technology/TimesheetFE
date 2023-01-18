@@ -95,16 +95,18 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                 onClose();
                 return;
             }
+            if (!result.status) {
+                toast({
+                    title: result.message,
+                    status: 'error',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                return;
+            }
+        } catch (err: any) {
             toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
-        } catch (err) {
-            toast({
-                title: 'An error occurred',
+                title: err.message || err.body.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',

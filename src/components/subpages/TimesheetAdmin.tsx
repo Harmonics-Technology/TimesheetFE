@@ -275,7 +275,7 @@ const TimesheetAdmin = ({
                         select.chosenDate,
                     );
                 }
-                // callback();
+                callback();
             });
             // generatePayroll(id);
 

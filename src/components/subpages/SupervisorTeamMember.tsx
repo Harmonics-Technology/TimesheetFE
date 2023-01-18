@@ -53,6 +53,7 @@ import { DateObject } from 'react-multi-date-picker';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import Loading from '@components/bits-utils/Loading';
 import BeatLoader from 'react-spinners/BeatLoader';
+import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -60,7 +61,6 @@ const schema = yup.object().shape({
     email: yup.string().email().required(),
     phoneNumber: yup.string().required(),
     jobTitle: yup.string().required(),
-    clientId: yup.string().required(),
     supervisorId: yup.string().required(),
     isActive: yup.boolean().required(),
     hoursPerDay: yup.number().required(),
@@ -70,15 +70,15 @@ const schema = yup.object().shape({
         then: yup.string().required(),
     }),
     ratePerHour: yup.string().when('payRollTypeId', {
-        is: 2,
+        is: 1,
         then: yup.string().required(),
     }),
     hstNumber: yup.string().when('payRollTypeId', {
-        is: 2,
+        is: 1,
         then: yup.string().required(),
     }),
     monthlyPayoutRate: yup.string().when('payRollTypeId', {
-        is: 1,
+        is: 2,
         then: yup.string().required(),
     }),
     currency: yup.string().required(),
@@ -88,10 +88,11 @@ const schema = yup.object().shape({
     startDate: yup.string().required(),
     endDate: yup.string().required(),
     dateOfBirth: yup.string().required(),
+    paymentFrequency: yup.string().required(),
 });
 
 function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
-    console.log({ adminList });
+    // console.log({ adminList });
 
     const {
         register,
@@ -104,6 +105,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
         mode: 'all',
         defaultValues: {
             role: 'Team Member',
+            supervisorId: id,
         },
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -112,7 +114,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
     // console.log(watch("payRollTypeId"));
     const payroll = watch('payRollTypeId');
     const clientId = watch('clientId');
-    console.log({ payroll });
+    // console.log({ payroll });
 
     const [contract, setContractFile] = useState<any>('');
     const [icd, setIcd] = useState<any>('');
@@ -228,15 +230,15 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
             });
             return;
         }
-        // if (data.document === undefined || '') {
-        //     toast({
-        //         title: 'Please select a contract document and try again',
-        //         status: 'error',
-        //         isClosable: true,
-        //         position: 'top-right',
-        //     });
-        //     return;
-        // }
+        if (data.document === undefined || '') {
+            toast({
+                title: 'Please select a contract document and try again',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
 
         console.log({ data });
 
@@ -279,7 +281,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                {/* <Button
+                <Button
                     bgColor="brand.400"
                     color="white"
                     p=".5rem 1.5rem"
@@ -288,7 +290,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                     onClick={onOpen}
                 >
                     +Team Member
-                </Button> */}
+                </Button>
                 <FilterSearch />
                 <Tables
                     tableHead={[
@@ -443,7 +445,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                                     },
                                 ]}
                             />
-                            {payroll == 2 ? (
+                            {payroll == 1 ? (
                                 <>
                                     <PrimaryInput<TeamMemberModel>
                                         label="Rate/Hr"
@@ -463,220 +465,27 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                                         type="number"
                                         register={register}
                                     />
-                                    <Box>
-                                        <FormLabel
-                                            textTransform="capitalize"
-                                            width="fit-content"
-                                            fontSize=".8rem"
-                                        >
-                                            Incorporation Document
-                                        </FormLabel>
-
-                                        <Flex
-                                            outline="1px solid"
-                                            outlineColor="gray.300"
-                                            h="2.6rem"
-                                            align="center"
-                                            pr="1rem"
-                                            w="full"
-                                            // justifyContent="space-between"
-                                        >
-                                            <Flex
-                                                bgColor="#f5f5f5"
-                                                fontSize=".8rem"
-                                                px="1rem"
-                                                h="full"
-                                                align="center"
-                                                cursor="pointer"
-                                                my="auto"
-                                                fontWeight="600"
-                                                onClick={() =>
-                                                    widgetApiB.current.openDialog()
-                                                }
-                                            >
-                                                <Text noOfLines={1} mb="0">
-                                                    Choose File
-                                                </Text>
-                                            </Flex>
-
-                                            {showLoadingB ? (
-                                                <Flex align="center">
-                                                    <Text
-                                                        mb="0"
-                                                        fontStyle="italic"
-                                                        mr="1rem"
-                                                    >
-                                                        ...loading data info
-                                                    </Text>
-                                                    <Spinner />
-                                                </Flex>
-                                            ) : (
-                                                <Text
-                                                    noOfLines={1}
-                                                    my="auto"
-                                                    px=".5rem"
-                                                >
-                                                    {icd?.name ||
-                                                        'No File Chosen'}
-                                                </Text>
-                                            )}
-                                        </Flex>
-                                        <Box display="none">
-                                            <Widget
-                                                publicKey="fda3a71102659f95625f"
-                                                clearable
-                                                onFileSelect={showLoadingStateB}
-                                                ref={widgetApiB}
-                                                systemDialog={true}
-                                                inputAcceptTypes={
-                                                    '.docx,.pdf, .doc'
-                                                }
-                                            />
-                                        </Box>
-                                    </Box>
-                                    <Box>
-                                        <FormLabel
-                                            textTransform="capitalize"
-                                            width="fit-content"
-                                            fontSize=".8rem"
-                                        >
-                                            Void check
-                                        </FormLabel>
-
-                                        <Flex
-                                            outline="1px solid"
-                                            outlineColor="gray.300"
-                                            h="2.6rem"
-                                            align="center"
-                                            pr="1rem"
-                                            w="full"
-                                            // justifyContent="space-between"
-                                        >
-                                            <Flex
-                                                bgColor="#f5f5f5"
-                                                fontSize=".8rem"
-                                                px="1rem"
-                                                h="full"
-                                                align="center"
-                                                cursor="pointer"
-                                                my="auto"
-                                                fontWeight="600"
-                                                onClick={() =>
-                                                    widgetApiC.current.openDialog()
-                                                }
-                                            >
-                                                <Text noOfLines={1} mb="0">
-                                                    Choose File
-                                                </Text>
-                                            </Flex>
-
-                                            {showLoadingC ? (
-                                                <Flex align="center">
-                                                    <Text
-                                                        mb="0"
-                                                        fontStyle="italic"
-                                                        mr="1rem"
-                                                    >
-                                                        ...loading data info
-                                                    </Text>
-                                                    <Spinner />
-                                                </Flex>
-                                            ) : (
-                                                <Text
-                                                    noOfLines={1}
-                                                    my="auto"
-                                                    px=".5rem"
-                                                >
-                                                    {voidCheck?.name ||
-                                                        'No File Chosen'}
-                                                </Text>
-                                            )}
-                                        </Flex>
-                                        <Box display="none">
-                                            <Widget
-                                                publicKey="fda3a71102659f95625f"
-                                                clearable
-                                                onFileSelect={showLoadingStateC}
-                                                ref={widgetApiC}
-                                                systemDialog={true}
-                                                inputAcceptTypes={
-                                                    '.docx,.pdf, .doc'
-                                                }
-                                            />
-                                        </Box>
-                                    </Box>
-                                    <Box>
-                                        <FormLabel
-                                            textTransform="capitalize"
-                                            width="fit-content"
-                                            fontSize=".8rem"
-                                        >
-                                            Issuance Certificate
-                                        </FormLabel>
-
-                                        <Flex
-                                            outline="1px solid"
-                                            outlineColor="gray.300"
-                                            h="2.6rem"
-                                            align="center"
-                                            pr="1rem"
-                                            w="full"
-                                            // justifyContent="space-between"
-                                        >
-                                            <Flex
-                                                bgColor="#f5f5f5"
-                                                fontSize=".8rem"
-                                                px="1rem"
-                                                h="full"
-                                                align="center"
-                                                cursor="pointer"
-                                                my="auto"
-                                                fontWeight="600"
-                                                onClick={() =>
-                                                    widgetApiD.current.openDialog()
-                                                }
-                                            >
-                                                <Text noOfLines={1} mb="0">
-                                                    Choose File
-                                                </Text>
-                                            </Flex>
-
-                                            {showLoadingD ? (
-                                                <Flex align="center">
-                                                    <Text
-                                                        mb="0"
-                                                        fontStyle="italic"
-                                                        mr="1rem"
-                                                    >
-                                                        ...loading data info
-                                                    </Text>
-                                                    <Spinner />
-                                                </Flex>
-                                            ) : (
-                                                <Text
-                                                    noOfLines={1}
-                                                    my="auto"
-                                                    px=".5rem"
-                                                >
-                                                    {inc?.name ||
-                                                        'No File Chosen'}
-                                                </Text>
-                                            )}
-                                        </Flex>
-                                        <Box display="none">
-                                            <Widget
-                                                publicKey="fda3a71102659f95625f"
-                                                clearable
-                                                onFileSelect={showLoadingStateD}
-                                                ref={widgetApiD}
-                                                systemDialog={true}
-                                                inputAcceptTypes={
-                                                    '.docx,.pdf, .doc'
-                                                }
-                                            />
-                                        </Box>
-                                    </Box>
-
+                                    <UploadCareWidget
+                                        refs={widgetApiB}
+                                        label="Incoporation Document"
+                                        filename={icd?.name}
+                                        loading={showLoadingB}
+                                        uploadFunction={showLoadingStateB}
+                                    />
+                                    <UploadCareWidget
+                                        refs={widgetApiC}
+                                        label="Void Check"
+                                        filename={voidCheck?.name}
+                                        loading={showLoadingC}
+                                        uploadFunction={showLoadingStateC}
+                                    />
+                                    <UploadCareWidget
+                                        refs={widgetApiD}
+                                        label="Issuance Certificate"
+                                        filename={inc?.name}
+                                        loading={showLoadingD}
+                                        uploadFunction={showLoadingStateD}
+                                    />
                                     <PrimaryInput<TeamMemberModel>
                                         label="HST No."
                                         name="hstNumber"
@@ -686,17 +495,8 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                                         type="number"
                                         register={register}
                                     />
-                                    <SelectrixBox<TeamMemberModel>
-                                        control={control}
-                                        name="paymentPartnerId"
-                                        error={errors.paymentPartnerId}
-                                        keys="id"
-                                        keyLabel="fullName"
-                                        label="Payment Partner"
-                                        options={paymentPartner}
-                                    />
                                 </>
-                            ) : payroll == 1 ? (
+                            ) : payroll == 2 ? (
                                 <>
                                     <PrimaryInput<TeamMemberModel>
                                         label="Monthly Payout"
@@ -714,6 +514,15 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                    />
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="paymentPartnerId"
+                                        error={errors.paymentPartnerId}
+                                        keys="id"
+                                        keyLabel="fullName"
+                                        label="Payment Partner"
+                                        options={paymentPartner}
                                     />
                                 </>
                             ) : null}

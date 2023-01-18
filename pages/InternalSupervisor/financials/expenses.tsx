@@ -28,11 +28,11 @@ function expenses({ expenses, team, expenseType }: ExpensesType) {
         <Box>
             <Flex>
                 <PageTabs
-                    url={`/${role}/InternalSupervisor/financials/expenses`}
+                    url={`/${role}/financials/expenses`}
                     tabName="Team Members Expenses"
                 />
                 <PageTabs
-                    url={`/${role}/InternalSupervisor/financials/my-expense`}
+                    url={`/${role}/financials/my-expense`}
                     tabName="My Expenses"
                 />
             </Flex>
