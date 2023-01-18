@@ -1,5 +1,3 @@
-import { Box, Flex } from '@chakra-ui/react';
-import PageTabs from '@components/bits-utils/PageTabs';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import AdminPayslip from '@components/subpages/AdminPayslip';
@@ -14,21 +12,7 @@ interface PayrollType {
     payrolls: PayrollViewPagedCollectionStandardResponse;
 }
 function expenses({ payrolls }: PayrollType) {
-    return (
-        <Box>
-            <Flex>
-                <PageTabs
-                    url="/InternalAdmin/financials/my-payslips"
-                    tabName="My Payslips"
-                />
-                <PageTabs
-                    url="/InternalAdmin/financials/payslips"
-                    tabName="All Payslips"
-                />
-            </Flex>
-            <AdminPayslip payrolls={payrolls} />
-        </Box>
-    );
+    return <AdminPayslip payrolls={payrolls} />;
 }
 
 export default expenses;
@@ -41,7 +25,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
-                pagingOptions.date,
             );
 
             return {

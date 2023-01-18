@@ -30,7 +30,7 @@ interface DashboardProps {
 function SadminDashboard({ metrics }: DashboardProps) {
     const { user } = useContext(UserContext);
     const role = user?.role.replace(' ', '');
-    const { messages } = useContext(NotificationContext);
+    const { messages, markAsRead, loading } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
@@ -85,7 +85,11 @@ function SadminDashboard({ metrics }: DashboardProps) {
                     </Flex> */}
                 </Grid>
             </VStack>
-            <NotificationBox data={messages} />
+            <NotificationBox
+                data={messages}
+                markAsRead={markAsRead}
+                loading={loading}
+            />
         </Grid>
     );
 }

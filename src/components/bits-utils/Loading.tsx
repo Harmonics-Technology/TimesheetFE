@@ -12,7 +12,7 @@ function Loading({ loading }: { loading: boolean }) {
             align="center"
             left="0"
             top="0"
-            zIndex="888"
+            zIndex="988"
             pointerEvents="none"
             display={loading ? 'flex' : 'none'}
         >

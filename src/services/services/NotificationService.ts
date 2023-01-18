@@ -53,4 +53,24 @@ id: string,
         });
     }
 
+    /**
+     * @param id 
+     * @returns NotificationViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static markAsRead(
+id: string,
+): CancelablePromise<NotificationViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/Notification/{id}/mark-as-read',
+            path: {
+                'id': id,
+            },
+            errors: {
+                400: `Bad Request`,
+            },
+        });
+    }
+
 }

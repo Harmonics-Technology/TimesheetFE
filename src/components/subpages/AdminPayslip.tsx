@@ -30,10 +30,10 @@ function AdminPayslip({ payrolls }: expenseProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <FilterSearch />
+                <FilterSearch hide={true} />
                 <Tables
                     tableHead={[
-                        // 'Name',
+                        'Name',
                         'Start Date',
                         'End Date',
                         'Payment Date',
@@ -47,7 +47,7 @@ function AdminPayslip({ payrolls }: expenseProps) {
                     <>
                         {payrollsList?.map((x: PaySlipView) => (
                             <Tr key={x.id}>
-                                {/* <TableData name={x.name} /> */}
+                                <TableData name={x.name} />
                                 <TableData
                                     name={moment(x.startDate).format(
                                         'DD-MM-YY',

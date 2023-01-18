@@ -5,11 +5,12 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
     FinancialService,
-    PayrollViewPagedCollectionStandardResponse,
+    PaySlipService,
+    PaySlipViewPagedCollectionStandardResponse,
 } from 'src/services';
 
 interface PayrollType {
-    payrolls: PayrollViewPagedCollectionStandardResponse;
+    payrolls: PaySlipViewPagedCollectionStandardResponse;
 }
 function payslips({ payrolls }: PayrollType) {
     return <TeamPayslips payrolls={payrolls} />;
@@ -22,10 +23,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
         try {
-            const data = await FinancialService.listPaySlipsByTeamMember(
+            const data = await PaySlipService.getTeamMembersPaySlips(
+                id,
                 pagingOptions.offset,
                 pagingOptions.limit,
-                pagingOptions.search,
             );
 
             return {

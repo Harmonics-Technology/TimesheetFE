@@ -1,32 +1,35 @@
 import { Box, Flex } from '@chakra-ui/react';
 import PageTabs from '@components/bits-utils/PageTabs';
+import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import AdminPayroll from '@components/subpages/AdminPayroll';
+import AdminInvoices from '@components/subpages/AdminInvoices';
 import { GetServerSideProps } from 'next';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     FinancialService,
-    PayrollViewPagedCollectionStandardResponse,
+    InvoiceViewPagedCollectionStandardResponse,
 } from 'src/services';
 
-interface PayrollType {
-    payrolls: PayrollViewPagedCollectionStandardResponse;
+interface InvoiceType {
+    invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
-function expenses({ payrolls }: PayrollType) {
+function expenses({ invoiceData }: InvoiceType) {
+    const { user } = useContext(UserContext);
+    const role = user?.role.replace(' ', '');
     return (
         <Box>
             <Flex>
                 <PageTabs
-                    url="/InternalAdmin/financials/payrolls"
-                    tabName="Awaiting Approval"
+                    url={`/${role}/PayrollManager/financials/payrolls`}
+                    tabName="Onshore"
                 />
                 <PageTabs
-                    url="/InternalAdmin/financials/payrolls-approved"
-                    tabName="Approved"
+                    url={`/${role}/PayrollManager/financials/payrolls-approved`}
+                    tabName="Offshore"
                 />
             </Flex>
-            <AdminPayroll payrolls={payrolls} />
+            <AdminInvoices invoiceData={invoiceData} />
         </Box>
     );
 }
@@ -37,13 +40,16 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listPendingPayrolls(
+            const data = await FinancialService.listSubmittedOnshoreInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                pagingOptions.search,
+                pagingOptions.date,
             );
+
             return {
                 props: {
-                    payrolls: data,
+                    invoiceData: data,
                 },
             };
         } catch (error: any) {

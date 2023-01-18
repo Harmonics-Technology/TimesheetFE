@@ -19,7 +19,7 @@ interface DashboardProps {
 
 function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
     console.log({ adminMetrics, expenses });
-    const { messages } = useContext(NotificationContext);
+    const { messages, markAsRead, loading } = useContext(NotificationContext);
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">
@@ -90,7 +90,11 @@ function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
                     />
                 </Grid>
             </VStack>
-            <NotificationBox data={messages} />
+            <NotificationBox
+                data={messages}
+                markAsRead={markAsRead}
+                loading={loading}
+            />
         </Grid>
     );
 }

@@ -22,7 +22,7 @@ import { RxTriangleDown } from 'react-icons/rx';
 import { BsFilter } from 'react-icons/bs';
 import useClickOutside from '@components/generics/useClickOutside';
 
-function FilterSearch() {
+function FilterSearch({ hide = false }: { hide?: boolean }) {
     const [search, setSearch] = useState('');
     const router = useRouter();
     const currentYear = moment(new Date()).format('YYYY');
@@ -71,9 +71,9 @@ function FilterSearch() {
         router.push({ query: { date: '' } });
     }
     // console.log({ selectedDate });
-    const hideDateFilter =
-        router.asPath.includes('timesheets/approval') ||
-        router.asPath.includes('timesheets/unapproved');
+    // const hideDateFilter =
+    //     router.asPath.includes('timesheets/approval') ||
+    //     router.asPath.includes('timesheets/unapproved');
 
     return (
         <>
@@ -100,91 +100,85 @@ function FilterSearch() {
                     align={['unset', 'center']}
                     flexDirection={['column', 'row']}
                 >
-                    {!hideDateFilter && (
-                        <Flex align="center">
-                            <Box pos="relative" ref={popover}>
-                                <Flex
-                                    minW="150px"
-                                    px="1rem"
-                                    h="2.5rem"
-                                    justifyContent="center"
-                                    alignItems="center"
-                                    border="1px solid"
-                                    borderColor="gray.300"
-                                    color="gray.500"
-                                    boxShadow="sm"
-                                    borderRadius="base"
-                                    cursor="pointer"
-                                    zIndex="2"
-                                    onClick={() =>
-                                        setOpenDateFilter(!openDateFilter)
-                                    }
-                                >
-                                    {selectedDate}
-                                    <Icon
-                                        as={RxTriangleDown}
-                                        ml="1rem"
-                                        pos="relative"
+                    <Flex align="center" display={hide ? 'none' : 'flex'}>
+                        <Box pos="relative" ref={popover}>
+                            <Flex
+                                minW="150px"
+                                px="1rem"
+                                h="2.5rem"
+                                justifyContent="center"
+                                alignItems="center"
+                                border="1px solid"
+                                borderColor="gray.300"
+                                color="gray.500"
+                                boxShadow="sm"
+                                borderRadius="base"
+                                cursor="pointer"
+                                zIndex="2"
+                                onClick={() =>
+                                    setOpenDateFilter(!openDateFilter)
+                                }
+                            >
+                                {selectedDate}
+                                <Icon
+                                    as={RxTriangleDown}
+                                    ml="1rem"
+                                    pos="relative"
+                                />
+                            </Flex>
+                            {openDateFilter && (
+                                <Box pos="absolute" bgColor="white" p="1rem">
+                                    <MonthYearPicker
+                                        selectedMonth={date.month}
+                                        selectedYear={date.year}
+                                        minYear={2022}
+                                        maxYear={currentYear}
+                                        onChangeYear={(year) =>
+                                            setDate({ ...date, year: year })
+                                        }
+                                        onChangeMonth={(month) =>
+                                            setDate({
+                                                ...date,
+                                                month: month,
+                                            })
+                                        }
                                     />
-                                </Flex>
-                                {openDateFilter && (
-                                    <Box
-                                        pos="absolute"
-                                        bgColor="white"
-                                        p="1rem"
+                                </Box>
+                            )}
+                        </Box>
+                        {/* <Tooltip hasArrow label="Click to apply filter"> */}
+                        <Menu>
+                            <MenuButton
+                                ml=".5rem"
+                                // bgColor="red"
+                            >
+                                <Icon as={BsFilter} />
+                            </MenuButton>
+                            <MenuList fontSize=".8rem">
+                                <MenuItem>
+                                    <Text
+                                        fontWeight="500"
+                                        color="brand.200"
+                                        mb="0"
+                                        onClick={filterByDate}
                                     >
-                                        <MonthYearPicker
-                                            selectedMonth={date.month}
-                                            selectedYear={date.year}
-                                            minYear={2022}
-                                            maxYear={currentYear}
-                                            onChangeYear={(year) =>
-                                                setDate({ ...date, year: year })
-                                            }
-                                            onChangeMonth={(month) =>
-                                                setDate({
-                                                    ...date,
-                                                    month: month,
-                                                })
-                                            }
-                                        />
-                                    </Box>
-                                )}
-                            </Box>
-                            {/* <Tooltip hasArrow label="Click to apply filter"> */}
-                            <Menu>
-                                <MenuButton
-                                    ml=".5rem"
-                                    // bgColor="red"
-                                >
-                                    <Icon as={BsFilter} />
-                                </MenuButton>
-                                <MenuList fontSize=".8rem">
-                                    <MenuItem>
-                                        <Text
-                                            fontWeight="500"
-                                            color="brand.200"
-                                            mb="0"
-                                            onClick={filterByDate}
-                                        >
-                                            Apply filter
-                                        </Text>
-                                    </MenuItem>
-                                    <MenuItem>
-                                        <Text
-                                            fontWeight="500"
-                                            color="brand.200"
-                                            mb="0"
-                                            onClick={clearfilter}
-                                        >
-                                            Clear filter
-                                        </Text>
-                                    </MenuItem>
-                                </MenuList>
-                            </Menu>
-                            {/* </Tooltip> */}
-                        </Flex>
-                    )}
+                                        Apply filter
+                                    </Text>
+                                </MenuItem>
+                                <MenuItem>
+                                    <Text
+                                        fontWeight="500"
+                                        color="brand.200"
+                                        mb="0"
+                                        onClick={clearfilter}
+                                    >
+                                        Clear filter
+                                    </Text>
+                                </MenuItem>
+                            </MenuList>
+                        </Menu>
+                        {/* </Tooltip> */}
+                    </Flex>
 
                     <Input
                         type="search"

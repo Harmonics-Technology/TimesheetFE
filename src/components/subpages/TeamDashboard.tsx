@@ -29,7 +29,7 @@ interface DashboardClientView {
 function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
     const adminMetrics = metrics?.data as DashboardTeamMemberView;
     const clientMetrics = metrics?.data as DashboardClientView;
-    const { messages } = useContext(NotificationContext);
+    const { messages, markAsRead, loading } = useContext(NotificationContext);
 
     console.log({ metrics, role });
     return (
@@ -155,7 +155,11 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                     />
                 </Grid>
             </VStack>
-            <NotificationBox data={messages} />
+            <NotificationBox
+                data={messages}
+                markAsRead={markAsRead}
+                loading={loading}
+            />
         </Grid>
     );
 }

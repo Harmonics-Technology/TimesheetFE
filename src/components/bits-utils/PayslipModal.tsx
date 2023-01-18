@@ -27,62 +27,62 @@ import numWords from 'num-words';
 type Props = {
     isOpen?: any;
     onClose?: any;
-    paySlip: any;
+    paySlip?: PaySlipView;
 };
 
 export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
-    const exportPDF = () => {
-        const unit = 'pt';
-        const size = 'A4'; // Use A1, A2, A3 or A4
-        const orientation = 'portrait'; // portrait or landscape
+    // const exportPDF = () => {
+    //     const unit = 'pt';
+    //     const size = 'A4'; // Use A1, A2, A3 or A4
+    //     const orientation = 'portrait'; // portrait or landscape
 
-        const marginLeft = 40;
-        const doc = new jsPDF(orientation, unit, size);
+    //     const marginLeft = 40;
+    //     const doc = new jsPDF(orientation, unit, size);
 
-        doc.setFontSize(15);
+    //     doc.setFontSize(15);
 
-        const title = 'Payment Schedule';
-        const headers = [
-            [
-                'S/N',
-                'FIRST WORK DAY',
-                'LAST WORK DAY',
-                'APPROVAL DATE',
-                'PAYMENT DATE',
-            ],
-        ];
+    //     const title = 'Payment Schedule';
+    //     const headers = [
+    //         [
+    //             'S/N',
+    //             'FIRST WORK DAY',
+    //             'LAST WORK DAY',
+    //             'APPROVAL DATE',
+    //             'PAYMENT DATE',
+    //         ],
+    //     ];
 
-        const data = paySlip?.data?.map((x: any, i) => [
-            ++i,
-            moment(x.weekDate).format('DD/MM/YYYY'),
-            moment(x.lastWorkDayOfCycle).format('DD/MM/YYYY'),
-            moment(x.approvalDate).format('DD/MM/YYYY'),
-            moment(x.paymentDate).format('DD/MM/YYYY'),
-        ]);
+    //     const data = paySlip?.data?.map((x: any, i) => [
+    //         ++i,
+    //         moment(x.weekDate).format('DD/MM/YYYY'),
+    //         moment(x.lastWorkDayOfCycle).format('DD/MM/YYYY'),
+    //         moment(x.approvalDate).format('DD/MM/YYYY'),
+    //         moment(x.paymentDate).format('DD/MM/YYYY'),
+    //     ]);
 
-        const content = {
-            headStyles: {
-                fillColor: [46, 175, 163],
-                minCellHeight: 30,
-                valign: 'middle',
-                cellPadding: [0, 10, 0, 10],
-            },
-            bodyStyles: {
-                minCellHeight: 30,
-                valign: 'middle',
-                cellPadding: [0, 10, 0, 10],
-            },
-            theme: 'striped',
-            startY: 50,
-            head: headers,
-            body: data,
-        };
+    //     const content = {
+    //         headStyles: {
+    //             fillColor: [46, 175, 163],
+    //             minCellHeight: 30,
+    //             valign: 'middle',
+    //             cellPadding: [0, 10, 0, 10],
+    //         },
+    //         bodyStyles: {
+    //             minCellHeight: 30,
+    //             valign: 'middle',
+    //             cellPadding: [0, 10, 0, 10],
+    //         },
+    //         theme: 'striped',
+    //         startY: 50,
+    //         head: headers,
+    //         body: data,
+    //     };
 
-        doc.text(title, marginLeft, 40);
-        //@ts-ignore
-        doc.autoTable(content);
-        doc.save('schedule.pdf');
-    };
+    //     doc.text(title, marginLeft, 40);
+    //     //@ts-ignore
+    //     doc.autoTable(content);
+    //     doc.save('schedule.pdf');
+    // };
     return (
         <Modal
             isOpen={isOpen}
@@ -132,7 +132,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                     variant="outline"
                                     borderColor="brand.400"
                                     color="brand.400"
-                                    onClick={exportPDF}
+                                    // onClick={exportPDF}
                                     _hover={{
                                         bgColor: 'brand.400',
                                         color: 'white',
@@ -145,43 +145,58 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                 <VStack align="flex-start" spacing="1rem">
                                     <PayslipInfoTag
                                         title={'Company Name'}
-                                        value={'ABC INC'}
+                                        value={paySlip?.companyName}
                                     />
                                     <PayslipInfoTag
                                         title={'Name'}
-                                        value={'John Doe'}
+                                        value={paySlip?.name}
                                     />{' '}
                                     <PayslipInfoTag
                                         title={'Employee id'}
-                                        value={'32158'}
+                                        value={
+                                            paySlip?.employeeInformation?.id?.split(
+                                                '-',
+                                            )[0]
+                                        }
                                     />{' '}
                                     <PayslipInfoTag
                                         title={'Designation'}
-                                        value={'Product designer'}
+                                        value={
+                                            paySlip?.employeeInformation
+                                                ?.jobTitle
+                                        }
                                     />{' '}
                                     <PayslipInfoTag
                                         title={'Address'}
-                                        value={
-                                            'Isaac John, GRA Ikeja Lagos State'
-                                        }
+                                        value={paySlip?.address}
                                     />
                                 </VStack>
                                 <VStack align="flex-start" spacing="1rem">
                                     <PayslipInfoTag
                                         title={'Join Date'}
-                                        value={'1 Jan 2022'}
+                                        value={moment(
+                                            paySlip?.employeeInformation
+                                                ?.dateCreated,
+                                        ).format('YYYY-MM-DD')}
                                     />
                                     <PayslipInfoTag
                                         title={'Pay Period'}
-                                        value={'1 July 2022 - 31 July 2022'}
+                                        value={moment(
+                                            paySlip?.paymentDate,
+                                        ).format('YYYY-MM-DD')}
                                     />
                                     <PayslipInfoTag
                                         title={'Pay Date'}
-                                        value={'4 Aug 2022'}
+                                        value={moment(
+                                            paySlip?.paymentDate,
+                                        ).format('Do-MMM-YYYY')}
                                     />
                                     <PayslipInfoTag
                                         title={'Pay Frequency'}
-                                        value={'Monthly'}
+                                        value={
+                                            paySlip?.employeeInformation
+                                                ?.paymentFrequency
+                                        }
                                     />
                                 </VStack>
                             </Flex>
@@ -216,7 +231,9 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                             value="1px solid"
                                             borderColor="gray.200"
                                         />
-                                        <TableData name={'3,250.00'} />
+                                        <TableData
+                                            name={paySlip?.totalAmount}
+                                        />
                                     </Tr>
                                     <Tr color="brand.400" fontWeight="600">
                                         <TableData
@@ -242,7 +259,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                             </Table>
                         </TableContainer>
                         <Flex align="center" justify="space-between" mt="2rem">
-                            <Text mb="0">Net Pay: 3250.00</Text>
+                            <Text mb="0">Net Pay: {paySlip?.totalAmount}</Text>
                             <Box
                                 border="1px solid"
                                 borderColor="gray.200"
@@ -251,7 +268,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                             >
                                 <Text mb=".5rem">In Words</Text>
                                 <Text mb="0" textTransform="capitalize">
-                                    {numWords(3250)}
+                                    {numWords(paySlip?.totalAmount)}
                                 </Text>
                             </Box>
                         </Flex>

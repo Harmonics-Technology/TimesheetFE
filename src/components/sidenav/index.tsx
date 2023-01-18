@@ -39,7 +39,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
             pl="2rem"
             transition="left .3s ease-out"
             pt="2rem"
-            zIndex="999"
+            zIndex="985"
             overflowY="auto"
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             // ref={ref}

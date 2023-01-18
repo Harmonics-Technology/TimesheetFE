@@ -84,6 +84,7 @@ export { ContractService } from './services/ContractService';
 export { DashboardService } from './services/DashboardService';
 export { FinancialService } from './services/FinancialService';
 export { NotificationService } from './services/NotificationService';
+export { PaySlipService } from './services/PaySlipService';
 export { SettingsService } from './services/SettingsService';
 export { TimeSheetService } from './services/TimeSheetService';
 export { UserService } from './services/UserService';

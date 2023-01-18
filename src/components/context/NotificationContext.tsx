@@ -13,6 +13,27 @@ export const NotificationProvider = ({ children }: { children: any }) => {
         useState<NotificationViewPagedCollectionStandardResponse>();
     const toast = useToast();
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
+
+    //Mark as read
+    const markAsRead = async (id) => {
+        try {
+            setLoading(true);
+            const data = await NotificationService.markAsRead(id);
+            // console.log({ data });
+            if (data.status) {
+                setLoading(false);
+                router.reload();
+            }
+        } catch (error: any) {
+            setLoading(false);
+            toast({
+                title: error.body.message || error.message,
+                position: 'top-right',
+                status: 'error',
+            });
+        }
+    };
 
     //Getting Notification on Page load
     useEffect(() => {
@@ -42,7 +63,7 @@ export const NotificationProvider = ({ children }: { children: any }) => {
         getNotifications();
     }, []);
 
-    const contextValues = { messages, setMessages };
+    const contextValues = { messages, setMessages, markAsRead, loading };
     return (
         <NotificationContext.Provider value={contextValues}>
             {children}

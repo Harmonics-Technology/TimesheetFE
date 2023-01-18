@@ -1,10 +1,11 @@
 import { Box, Flex } from '@chakra-ui/react';
 import PageTabs from '@components/bits-utils/PageTabs';
+import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import AdminInvoices from '@components/subpages/AdminInvoices';
 import { GetServerSideProps } from 'next';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     FinancialService,
     InvoiceViewPagedCollectionStandardResponse,
@@ -14,15 +15,17 @@ interface InvoiceType {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
 function payrolls({ invoiceData }: InvoiceType) {
+    const { user } = useContext(UserContext);
+    const role = user?.role.replace(' ', '');
     return (
         <Box>
             <Flex>
                 <PageTabs
-                    url="/PayrollManager/financials/payrolls"
+                    url={`/${role}/PayrollManager/financials/payrolls`}
                     tabName="Onshore"
                 />
                 <PageTabs
-                    url="/PayrollManager/financials/payrolls-approved"
+                    url={`/${role}/PayrollManager/financials/payrolls-approved`}
                     tabName="Offshore"
                 />
             </Flex>

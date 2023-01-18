@@ -1,11 +1,12 @@
 import { Box, Flex } from '@chakra-ui/react';
 import PageTabs from '@components/bits-utils/PageTabs';
+import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import PayrollExpenseManagement from '@components/subpages/PayrollExpenseManagement';
 import PayrollExpenseManagementApproved from '@components/subpages/PayrollExpenseManagementApproved';
 import { GetServerSideProps } from 'next';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     ExpenseTypeView,
     ExpenseViewPagedCollectionStandardResponse,
@@ -21,20 +22,18 @@ interface ExpensesType {
     expenseType: ExpenseTypeView[];
 }
 function expenses({ expenses, team, expenseType }: ExpensesType) {
+    const { user } = useContext(UserContext);
+    const role = user?.role.replace(' ', '');
     return (
         <Box>
             <Flex>
                 <PageTabs
-                    url="/InternalAdmin/financials/expenses"
+                    url={`/${role}/financials/expenses`}
                     tabName="Reviewed"
                 />
                 <PageTabs
-                    url="/InternalAdmin/financials/expenses-approved"
+                    url={`/${role}/financials/expenses-approved`}
                     tabName="Approved"
-                />
-                <PageTabs
-                    url="/InternalAdmin/financials/my-expenses"
-                    tabName="My Expenses"
                 />
             </Flex>
             <PayrollExpenseManagementApproved
@@ -58,7 +57,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
-                pagingOptions.date,
             );
             // const data = await SettingsService.listExpenseTypes();
 

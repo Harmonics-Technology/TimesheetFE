@@ -1,11 +1,12 @@
 import { Box, Flex } from '@chakra-ui/react';
 import PageTabs from '@components/bits-utils/PageTabs';
+import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import TeamInvoices from '@components/subpages/TeamInvoices';
 import TeamInvoicesSubmitted from '@components/subpages/TeamInvoicesSubmitted';
 import { GetServerSideProps } from 'next';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     FinancialService,
     InvoiceViewPagedCollectionStandardResponse,
@@ -15,19 +16,21 @@ interface PayrollType {
     invoice: InvoiceViewPagedCollectionStandardResponse;
 }
 function payslips({ invoice }: PayrollType) {
+    const { user } = useContext(UserContext);
+    const role = user?.role.replace(' ', '');
     return (
         <Box>
             <Flex>
                 <PageTabs
-                    url="/TeamMember/financials/my-invoices"
+                    url={`/${role}/TeamMember/financials/my-invoices`}
                     tabName="Awaiting Submission"
                 />
                 <PageTabs
-                    url="/TeamMember/financials/submitted-invoices"
+                    url={`/${role}/TeamMember/financials/submitted-invoices`}
                     tabName="Submitted"
                 />
             </Flex>
-            <TeamInvoicesSubmitted invoiceList={invoice} />
+            <TeamInvoices invoiceList={invoice} />
         </Box>
     );
 }

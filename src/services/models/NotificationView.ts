@@ -5,6 +5,7 @@
 import type { User } from './User';
 
 export type NotificationView = {
+    id?: string;
     title?: string | null;
     message?: string | null;
     type?: string | null;
