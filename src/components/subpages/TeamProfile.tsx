@@ -347,7 +347,7 @@ function TeamProfile({
                             keys="id"
                             keyLabel="label"
                             label="Payroll Type"
-                            // disabled={true}
+                            disabled={true}
                             placeholder={
                                 (userProfile?.employeeInformation
                                     ?.payrollType as string) || 'Please Select'
@@ -364,7 +364,8 @@ function TeamProfile({
                             ]}
                         />
                         {(payroll == 'ONSHORE' && payrolls == undefined) ||
-                        (payroll == 'ONSHORE' && payrolls == 1) ? (
+                        payroll == 'ONSHORE' ||
+                        payrolls == 1 ? (
                             <>
                                 <PrimaryInput<TeamMemberModel>
                                     label="Rate/Hr"

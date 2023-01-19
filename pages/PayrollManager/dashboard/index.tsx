@@ -39,6 +39,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.search,
                 pagingOptions.date,
             );
+            console.log({ payslips, invoices });
             return {
                 props: {
                     metrics: data,

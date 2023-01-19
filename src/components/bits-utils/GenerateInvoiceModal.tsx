@@ -74,7 +74,7 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
     const allInvoiceTotal = clicked.reduce((a, b) => a + b.totalAmount, 0);
     const hst = 300 * exchangeRate;
     const total = Math.round((allInvoiceTotal + hst) / exchangeRate);
-    console.log({ total });
+    console.log({ exchangeRate });
 
     const onSubmit = async (data: PaymentPartnerInvoiceModel) => {
         (data.invoiceIds = invoicesId), (data.totalAmount = total);
@@ -157,7 +157,7 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                         label="Client"
                                         options={[
                                             {
-                                                id: '08dae21c-327a-4d2f-83d9-19b49cfc1ba1',
+                                                id: '08daf98a-c037-4cb6-86c9-aac6c6b64440',
                                                 label: 'Pro Insight Technology',
                                             },
                                             {
@@ -181,13 +181,13 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                             'Start Date',
                                             'End Date',
                                             'Amount (₦)',
-                                            'Rate',
+                                            // 'Amount ($)',
                                         ]}
                                     >
                                         <>
                                             {clicked?.map((x: InvoiceView) => (
                                                 <Tr key={x.id}>
-                                                    <TableData name={x.rate} />
+                                                    <TableData name={x.name} />
                                                     <TableData
                                                         name={moment(
                                                             x.startDate,
@@ -203,7 +203,13 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                                             x.totalAmount,
                                                         )}
                                                     />
-                                                    <TableData name={x.rate} />
+                                                    {/* <TableData
+                                                        name={
+                                                            Number(
+                                                                x.totalAmount,
+                                                            ) / exchangeRate
+                                                        }
+                                                    /> */}
                                                 </Tr>
                                             ))}
                                         </>
@@ -237,6 +243,11 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                             value={hst}
                                             cur={'₦'}
                                         />
+                                        <InvoiceTotalText
+                                            label="Total (₦)"
+                                            value={allInvoiceTotal + hst}
+                                            cur={'₦'}
+                                        />
                                         <Box
                                             // border="2px dashed"
                                             borderColor="gray.300"
@@ -244,7 +255,7 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                             // pt="1em"
                                         >
                                             <InvoiceTotalText
-                                                label="Total"
+                                                label="Total ($)"
                                                 value={
                                                     isNaN(total) ? '0' : total
                                                 }

@@ -22,6 +22,8 @@ interface adminProps {
 function TimesheetHistory({ timeSheets }: adminProps) {
     console.log({ timeSheets });
     const router = useRouter();
+    const date = router.query.date as string;
+    const structureDate = date?.split('-')[1] + '-' + date?.split('-')[0];
 
     return (
         <>
@@ -63,6 +65,7 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                                     <TableContractAction
                                         id={x.employeeInformationId}
                                         supervisor={true}
+                                        date={structureDate}
                                     />
                                 </Tr>
                             ),

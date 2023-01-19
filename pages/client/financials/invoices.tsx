@@ -1,6 +1,6 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import AdminInvoices from '@components/subpages/AdminInvoices';
+import ClientInvoices from '@components/subpages/ClientInvoices';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
@@ -12,7 +12,7 @@ interface invoiceType {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
 function Invoices({ invoiceData }: invoiceType) {
-    return <AdminInvoices invoiceData={invoiceData} />;
+    return <ClientInvoices invoiceData={invoiceData} />;
 }
 
 export default Invoices;

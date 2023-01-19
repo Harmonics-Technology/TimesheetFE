@@ -81,7 +81,7 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                                 ? 'Recent Invoices'
                                 : 'Recent Payslips'
                         }
-                        url={'financials/invoice'}
+                        url={'financials/invoices'}
                         data={
                             role == 'client'
                                 ? clientMetrics?.recentInvoice

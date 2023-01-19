@@ -1,12 +1,12 @@
-import { filterPagingSearchOptions } from "@components/generics/filterPagingSearchOptions";
-import { withPageAuth } from "@components/generics/withPageAuth";
-import ClientManagement from "@components/subpages/ClientManagement";
-import { GetServerSideProps } from "next";
-import React from "react";
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
+import { withPageAuth } from '@components/generics/withPageAuth';
+import ClientManagement from '@components/subpages/ClientManagement';
+import { GetServerSideProps } from 'next';
+import React from 'react';
 import {
     UserService,
     UserViewPagedCollectionStandardResponse,
-} from "src/services";
+} from 'src/services';
 interface clientProps {
     adminList: UserViewPagedCollectionStandardResponse;
 }
@@ -23,10 +23,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
             const data = await UserService.listUsers(
-                "client",
+                'client',
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
+                pagingOptions.date,
             );
             return {
                 props: {

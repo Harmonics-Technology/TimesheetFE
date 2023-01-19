@@ -13,6 +13,8 @@ export class PaySlipService {
      * @param employeeInformationId 
      * @param offset 
      * @param limit 
+     * @param search 
+     * @param dateFilter 
      * @returns PaySlipViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -20,6 +22,8 @@ export class PaySlipService {
 employeeInformationId: string,
 offset?: number,
 limit?: number,
+search?: string,
+dateFilter?: string,
 ): CancelablePromise<PaySlipViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -30,6 +34,8 @@ limit?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'search': search,
+                'dateFilter': dateFilter,
             },
             errors: {
                 400: `Bad Request`,
@@ -41,6 +47,7 @@ limit?: number,
      * @param offset 
      * @param limit 
      * @param search 
+     * @param dateFilter 
      * @returns PaySlipViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -48,6 +55,7 @@ limit?: number,
 offset?: number,
 limit?: number,
 search?: string,
+dateFilter?: string,
 ): CancelablePromise<PaySlipViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -56,6 +64,7 @@ search?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
+                'dateFilter': dateFilter,
             },
             errors: {
                 400: `Bad Request`,

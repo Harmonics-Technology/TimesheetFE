@@ -74,7 +74,7 @@ function PayrollManagerDashboard({
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Payslip'}
-                        url={'financial/payslips'}
+                        url={'financials/payslips'}
                         data={payslips?.data?.value
                             ?.slice(0, 5)
                             .map((x: PaySlipView, i) => (
@@ -113,7 +113,7 @@ function PayrollManagerDashboard({
                             'Rate',
                             'Total Amount',
                         ]}
-                        link={''}
+                        link={'/'}
                     />
                 </Grid>
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
@@ -158,7 +158,7 @@ function PayrollManagerDashboard({
                             'End Date',
                             'Status',
                         ]}
-                        link={''}
+                        link={'/'}
                     />
                 </Grid>
             </VStack>

@@ -287,10 +287,12 @@ export function TableContractAction({
     id,
     timeSheets,
     supervisor,
+    date,
 }: {
     id: any;
     timeSheets?: boolean;
     supervisor?: boolean;
+    date?: any;
 }) {
     return (
         <td>
@@ -310,7 +312,11 @@ export function TableContractAction({
                     <MenuItem>
                         {timeSheets === true ? (
                             <NextLink
-                                href={`/SuperAdmin/timesheets/${id}`}
+                                href={
+                                    date !== undefined
+                                        ? `/SuperAdmin/timesheets/${id}?date=${date}`
+                                        : `/SuperAdmin/timesheets/${id}`
+                                }
                                 passHref
                             >
                                 <Link width="100%" textDecor="none !important">

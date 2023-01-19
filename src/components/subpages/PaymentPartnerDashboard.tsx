@@ -30,7 +30,7 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Payroll'}
-                        url={'profile-management/clients'}
+                        url={'viewpayroll'}
                         data={adminMetrics?.recentPayroll
                             ?.slice(0, 5)
                             .map((x: RecentPayrollView, i: any) => (
@@ -65,7 +65,7 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Invoice'}
-                        url={'profile-management/clients'}
+                        url={'invoice'}
                         data={adminMetrics?.recentPayroll
                             ?.slice(0, 5)
                             .map((x: RecentPayrollView, i: any) => (

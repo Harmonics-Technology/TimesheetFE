@@ -568,6 +568,36 @@ dateFilter?: string,
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
+    public static listSubmittedInvoices(
+offset?: number,
+limit?: number,
+search?: string,
+dateFilter?: string,
+): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/invoices/submitted',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+                'dateFilter': dateFilter,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @param dateFilter 
+     * @returns InvoiceViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
     public static listPendingInvoiceForPaymentPartner(
 offset?: number,
 limit?: number,
@@ -655,6 +685,7 @@ dateFilter?: string,
      * @param limit 
      * @param search 
      * @param dateFilter 
+     * @param status 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -663,6 +694,7 @@ offset?: number,
 limit?: number,
 search?: string,
 dateFilter?: string,
+status?: number,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -672,6 +704,7 @@ dateFilter?: string,
                 'Limit': limit,
                 'search': search,
                 'dateFilter': dateFilter,
+                'status': status,
             },
             errors: {
                 400: `Bad Request`,
@@ -1018,6 +1051,39 @@ dateFilter?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'search': search,
+                'dateFilter': dateFilter,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param clientId 
+     * @param search 
+     * @param dateFilter 
+     * @returns InvoiceViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listClientTeamMemberInvoices(
+offset?: number,
+limit?: number,
+clientId?: string,
+search?: string,
+dateFilter?: string,
+): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/client/team-members/invoices',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'clientId': clientId,
                 'search': search,
                 'dateFilter': dateFilter,
             },

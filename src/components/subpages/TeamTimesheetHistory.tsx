@@ -33,7 +33,7 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
                         'Month',
                         'Number of Days',
                         'Approved No. of Hours',
-                        // '',
+                        '',
                     ]}
                 >
                     <>
@@ -51,10 +51,11 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
                                         x.hours as unknown as string
                                     } Hours`}
                                 />
-                                {/* <TableContractAction
+                                <TableContractAction
                                     id={x.employeeInformationId}
                                     timeSheets={true}
-                                /> */}
+                                    date={`${x.year}-${x.month}`}
+                                />
                             </Tr>
                         ))}
                     </>

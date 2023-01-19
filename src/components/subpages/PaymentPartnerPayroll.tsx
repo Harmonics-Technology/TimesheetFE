@@ -148,7 +148,7 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                     <>
                         {payrollsList?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
-                                <TableData name={'Adeleke'} />
+                                <TableData name={x.name} />
                                 <TableData
                                     name={moment(x.startDate).format(
                                         'DD-MM-YY',
@@ -171,10 +171,10 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                                 <TableData name={`${x.totalHours} HRS`} />
                                 <TableData name={x.rate} />
                                 <TableData name={x.totalAmount} />
-                                <TableContractAction
+                                {/* <TableContractAction
                                     id={x.employeeInformationId}
                                     timeSheets={true}
-                                />
+                                /> */}
                                 <td>
                                     <Checkbox
                                         checked={

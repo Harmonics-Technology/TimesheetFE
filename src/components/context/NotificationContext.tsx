@@ -40,7 +40,7 @@ export const NotificationProvider = ({ children }: { children: any }) => {
         const offset = router.query.offset || 0;
         const limit = router.query.limit || 6;
 
-        console.log({ limit, offset });
+        // console.log({ limit, offset });
         const getNotifications = async () => {
             try {
                 const data = await NotificationService.listMyNotifications(

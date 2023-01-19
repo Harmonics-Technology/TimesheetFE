@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable no-sparse-arrays */
 import {
     Box,
+    Button,
+    Flex,
+    HStack,
     Tr,
     useDisclosure,
-    Button,
     useToast,
-    Flex,
 } from '@chakra-ui/react';
 import {
     InvoiceAction,
@@ -22,32 +25,41 @@ import {
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import { useState } from 'react';
 import InvoiceTemplate from './InvoiceTemplate';
+import BeatLoader from 'react-spinners/BeatLoader';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
-import BeatLoader from 'react-spinners/BeatLoader';
 
-interface invoiceProps {
-    invoiceList: InvoiceViewPagedCollectionStandardResponse;
+interface adminProps {
+    invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
 
-function TeamInvoices({ invoiceList }: invoiceProps) {
+function PayPartnerInvoice({ invoiceData }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [clicked, setClicked] = useState();
+    const [clicked, setClicked] = useState<InvoiceView>();
+    console.log({ invoiceData });
+    const invoice = invoiceData?.data?.value;
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
-    const invoice = invoiceList?.data?.value;
+    const offshore = router.pathname.includes('financials/payrolls-approved');
+    const payment = router.pathname.includes('financials/invoices-payment');
+    // console.log({ clicked });
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
-            if (selectedId?.length === invoice?.length) {
+            if (
+                selectedId?.length ===
+                invoice?.filter((x) => x.status !== 'INVOICED').length
+            ) {
                 setSelectedId([]);
                 return;
             }
             const response: string[] = [];
-            invoice?.forEach((x) =>
-                response.push(x.id as string),
-            ) as unknown as string[];
+            invoice
+                ?.filter((x) => x.status !== 'INVOICED')
+                .forEach((x) =>
+                    response.push(x.id as string),
+                ) as unknown as string[];
             console.log({ response });
             setSelectedId([...response]);
             return;
@@ -60,14 +72,11 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
         }
         setSelectedId([...selectedId, id]);
     };
-    console.log({ selectedId });
-    const submitted = router.asPath.includes('submitted-invoices');
-
-    const submitInvoiceItem = async () => {
+    const approveInvoiceItems = async () => {
         selectedId.forEach(async (x) => {
             try {
                 setLoading(true);
-                const result = await FinancialService.submitInvoice(x);
+                const result = await FinancialService.treatSubmittedInvoice(x);
                 if (result.status) {
                     console.log({ result });
                     toast({
@@ -108,30 +117,34 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex align="center" justify="space-between">
-                    <Button
-                        bgColor="brand.400"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        display={submitted ? 'none' : 'flex'}
-                        height="fit-content"
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        isLoading={loading}
-                        spinner={<BeatLoader size={10} />}
-                        onClick={() => submitInvoiceItem()}
-                    >
-                        Submit Invoice
-                    </Button>
-                    {!submitted && (
-                        <Checkbox
-                            checked={
-                                invoice?.length !== 0 &&
-                                invoice?.length == selectedId?.length
-                            }
-                            onChange={() => toggleSelected('', true)}
-                            label="Select All"
-                        />
-                    )}
+                <Flex justify="space-between">
+                    <HStack gap="1rem">
+                        {selectedId.length > 0 && (
+                            <Button
+                                bgColor="brand.600"
+                                color="white"
+                                p=".5rem 1.5rem"
+                                height="fit-content"
+                                onClick={() => approveInvoiceItems()}
+                                isLoading={loading}
+                                spinner={<BeatLoader color="white" size={10} />}
+                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                            >
+                                {offshore || payment
+                                    ? 'Approve'
+                                    : 'Mark as Paid'}
+                            </Button>
+                        )}
+                    </HStack>
+                    {/* <Checkbox
+                        checked={
+                            invoice?.length !== 0 &&
+                            invoice?.filter((x) => x.status !== 'INVOICED')
+                                .length == selectedId?.length
+                        }
+                        onChange={() => toggleSelected('', true)}
+                        label="Select All"
+                    /> */}
                 </Flex>
                 <FilterSearch />
                 <Tables
@@ -143,18 +156,17 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                         'End Date',
                         'Status',
                         'Action',
-                        // '',
                     ]}
                 >
                     <>
-                        {invoice?.map((x: InvoiceView) => (
+                        {invoiceData?.data?.value?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
                                 <TableData name={x.invoiceReference} />
                                 <TableData
                                     name={
                                         x.clientName ||
-                                        x.name ||
-                                        x.paymentPartnerName
+                                        x.paymentPartnerName ||
+                                        x.name
                                     }
                                 />
                                 <TableData
@@ -179,25 +191,24 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                                     clicked={setClicked}
                                 />
 
-                                {x.status === 'PENDING' && (
-                                    <td>
-                                        <Checkbox
-                                            checked={
-                                                selectedId.find(
-                                                    (e) => e === x.id,
-                                                ) || ''
-                                            }
-                                            onChange={(e) =>
-                                                toggleSelected(x.id as string)
-                                            }
-                                        />
-                                    </td>
-                                )}
+                                <td>
+                                    <Checkbox
+                                        checked={
+                                            selectedId.find(
+                                                (e) => e === x.id,
+                                            ) || ''
+                                        }
+                                        onChange={(e) =>
+                                            toggleSelected(x.id as string)
+                                        }
+                                        disabled={x.status !== 'APPROVED'}
+                                    />
+                                </td>
                             </Tr>
                         ))}
                     </>
                 </Tables>
-                <Pagination data={invoiceList} />
+                <Pagination data={invoiceData} />
             </Box>
             <InvoiceTemplate
                 isOpen={isOpen}
@@ -208,4 +219,4 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
     );
 }
 
-export default TeamInvoices;
+export default PayPartnerInvoice;
