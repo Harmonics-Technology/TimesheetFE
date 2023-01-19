@@ -68,7 +68,8 @@
         "styled-components": "^5.2.1",
         "styled-system": "^5.1.5",
         "use-debounce": "^9.0.2",
-        "yup": "^0.32.11"
+        "yup": "^0.32.11",
+        "yup-password": "^0.2.2"
     },
     "devDependencies": {
         "@svgr/cli": "^5.5.0",

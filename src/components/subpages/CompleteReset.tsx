@@ -16,9 +16,16 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { PasswordReset, UserService } from 'src/services';
 import InputBlank from '@components/bits-utils/InputBlank';
 import BeatLoader from 'react-spinners/BeatLoader';
+import YupPassword from 'yup-password';
+YupPassword(yup);
 
 const schema = yup.object().shape({
-    newPassword: yup.string().required(),
+    newPassword: yup
+        .string()
+        .minUppercase(1, 'Password must contain atleast one uppercase')
+        .min(8, 'Password must contain atleast 8 characters')
+        .minNumbers(1, 'Password must contain atleast one number')
+        .minSymbols(1, 'Password must contain atleast one symbol'),
     code: yup.string(),
 });
 
@@ -129,6 +136,17 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     </Link>
                                     with new credentials
                                 </Text>
+                                <Link href="/login" passHref>
+                                    <Button
+                                        w="full"
+                                        p="1.5rem 0"
+                                        color="white"
+                                        bgColor="brand.400"
+                                        // mt={["2rem", "0"]}
+                                    >
+                                        Login
+                                    </Button>
+                                </Link>
                             </Flex>
                         ) : (
                             <VStack w="full" spacing=".7rem">
