@@ -13,15 +13,18 @@ import { useContext } from 'react';
 import {
     DashboardPaymentPartnerView,
     DashboardPaymentPartnerViewStandardResponse,
+    InvoiceView,
+    InvoiceViewPagedCollectionStandardResponse,
     RecentPayrollView,
 } from 'src/services';
 
 interface DashboardProps {
-    metrics: DashboardPaymentPartnerViewStandardResponse;
+    payroll: InvoiceViewPagedCollectionStandardResponse;
+    invoices: InvoiceViewPagedCollectionStandardResponse;
 }
 
-function PaymentPartnerDashboard({ metrics }: DashboardProps) {
-    const adminMetrics = metrics?.data as DashboardPaymentPartnerView;
+function PaymentPartnerDashboard({ invoices, payroll }: DashboardProps) {
+    // const adminMetrics = metrics?.data as DashboardPaymentPartnerView;
     const { messages, markAsRead, loading } = useContext(NotificationContext);
 
     return (
@@ -31,11 +34,22 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                     <TableCards
                         title={'Recent Payroll'}
                         url={'viewpayroll'}
-                        data={adminMetrics?.recentPayroll
+                        data={payroll?.data?.value
                             ?.slice(0, 5)
-                            .map((x: RecentPayrollView, i: any) => (
+                            .map((x: InvoiceView, i) => (
                                 <Tr key={i}>
-                                    <TableData name={x.client} />
+                                    <TableData
+                                        name={
+                                            x.clientName ||
+                                            x.paymentPartnerName ||
+                                            x.name
+                                        }
+                                    />
+                                    <TableData
+                                        name={moment(x.dateCreated).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                    />
                                     <TableData
                                         name={moment(x.startDate).format(
                                             'DD/MM/YYYY',
@@ -46,31 +60,40 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                                             'DD/MM/YYYY',
                                         )}
                                     />
-                                    <TableData name={x.rate} />
-                                    <TableData name={x.totalAmount} />
-                                    <TableState name={x.status} />
+                                    <TableState name={x.status as string} />
                                 </Tr>
                             ))}
                         thead={[
-                            'Client',
-                            'Start date',
-                            'End date',
-                            'Rate',
-                            'Total Amount',
+                            'Name',
+                            'Created on',
+                            'Start Date',
+                            'End Date',
                             'Status',
                         ]}
-                        link={''}
+                        link={'/'}
                     />
                 </Grid>
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Invoice'}
                         url={'invoice'}
-                        data={adminMetrics?.recentPayroll
+                        data={invoices?.data?.value
                             ?.slice(0, 5)
-                            .map((x: RecentPayrollView, i: any) => (
+                            .map((x: InvoiceView, i: any) => (
                                 <Tr key={i}>
-                                    <TableData name={x.client} />
+                                    <TableData name={x.invoiceReference} />
+                                    <TableData
+                                        name={
+                                            x.clientName ||
+                                            x.paymentPartnerName ||
+                                            x.name
+                                        }
+                                    />
+                                    <TableData
+                                        name={moment(x.dateCreated).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                    />
                                     <TableData
                                         name={moment(x.startDate).format(
                                             'DD/MM/YYYY',
@@ -81,17 +104,15 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                                             'DD/MM/YYYY',
                                         )}
                                     />
-                                    <TableData name={x.rate} />
-                                    <TableData name={x.totalAmount} />
-                                    <TableState name={x.status} />
+                                    <TableState name={x.status as string} />
                                 </Tr>
                             ))}
                         thead={[
-                            'Client',
-                            'Start date',
-                            'End date',
-                            'Rate',
-                            'Total Amount',
+                            'Invoice No',
+                            'Name',
+                            'Created on',
+                            'Start Date',
+                            'End Date',
                             'Status',
                         ]}
                         link={''}

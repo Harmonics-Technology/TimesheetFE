@@ -95,12 +95,7 @@ function PayrollManagerDashboard({
                                             'DD-MM-YY',
                                         )}
                                     />
-                                    <TableData name={`${x.totalHours} HRS`} />
-                                    <TableData
-                                        name={
-                                            x.employeeInformation?.paymentRate
-                                        }
-                                    />
+
                                     <TableData name={x.totalAmount} />
                                 </Tr>
                             ))}
@@ -109,8 +104,6 @@ function PayrollManagerDashboard({
                             'Start Date',
                             'End Date',
                             'Payment Date',
-                            'Total Hrs',
-                            'Rate',
                             'Total Amount',
                         ]}
                         link={'/'}

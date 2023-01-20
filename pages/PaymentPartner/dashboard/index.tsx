@@ -1,32 +1,47 @@
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import PaymentPartnerDashboard from '@components/subpages/PaymentPartnerDashboard';
 // import SadminDashboard from "@components/subpages/SadminDashboard";
 import { GetServerSideProps } from 'next';
-import { DashboardService } from 'src/services';
+import { DashboardService, FinancialService } from 'src/services';
 interface DashboardProps {
-    metrics: any;
+    payroll: any;
+    invoices: any;
 }
 
-function index({ metrics }: DashboardProps) {
-    return <PaymentPartnerDashboard metrics={metrics} />;
+function index({ payroll, invoices }: DashboardProps) {
+    return <PaymentPartnerDashboard payroll={payroll} invoices={invoices} />;
 }
 
 export default index;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
-    try {
-        const data = await DashboardService.getPayrollManagerMetrics();
-        // console.log({ data });
-        return {
-            props: {
-                metrics: data,
-            },
-        };
-    } catch (error: any) {
-        return {
-            props: {
-                data: [],
-            },
-        };
-    }
-});
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx) => {
+        const pagingOptions = filterPagingSearchOptions(ctx);
+        try {
+            // const data = await DashboardService.getPayrollManagerMetrics();
+            const payroll = await FinancialService.listPaymentPartnerInvoices(
+                pagingOptions.offset,
+                pagingOptions.limit,
+            );
+            const invoices =
+                await FinancialService.listInvoicesByPaymentPartner(
+                    pagingOptions.offset,
+                    pagingOptions.limit,
+                );
+            // console.log({ data });
+            return {
+                props: {
+                    payroll,
+                    invoices,
+                },
+            };
+        } catch (error: any) {
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);
