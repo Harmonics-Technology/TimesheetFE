@@ -33,7 +33,7 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                     <TableCards
                         title={'Recent Payroll'}
                         url={'viewpayroll'}
-                        data={metrics.data?.recentApprovedInvoice
+                        data={metrics?.data?.recentApprovedInvoice
                             ?.slice(0, 5)
                             .map((x: InvoiceView, i) => (
                                 <Tr key={i}>
@@ -76,7 +76,7 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                     <TableCards
                         title={'Recent Invoice'}
                         url={'invoice'}
-                        data={metrics.data?.recentInvoicedInvoice
+                        data={metrics?.data?.recentInvoicedInvoice
                             ?.slice(0, 5)
                             .map((x: InvoiceView, i: any) => (
                                 <Tr key={i}>

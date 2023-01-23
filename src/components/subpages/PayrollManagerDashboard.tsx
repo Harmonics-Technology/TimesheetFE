@@ -66,7 +66,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                     <TableCards
                         title={'Recent payrolls'}
                         url={'financials/payrolls'}
-                        data={metrics.data?.recentPayrolls
+                        data={metrics?.data?.recentPayrolls
                             ?.slice(0, 5)
                             .map((x: InvoiceView, i) => (
                                 <Tr key={i}>
@@ -109,7 +109,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                     <TableCards
                         title={'Recent Payslip'}
                         url={'financials/payslips'}
-                        data={metrics.data?.recentPayslips
+                        data={metrics?.data?.recentPayslips
                             ?.slice(0, 5)
                             .map((x: PaySlipView, i) => (
                                 <Tr key={i}>
@@ -147,7 +147,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                     <TableCards
                         title={'Recent Invoice'}
                         url={'financials/invoices'}
-                        data={metrics.data?.recentInvoiced
+                        data={metrics?.data?.recentInvoiced
                             ?.slice(0, 5)
                             .map((x: InvoiceView, i) => (
                                 <Tr key={i}>
