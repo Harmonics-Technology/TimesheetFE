@@ -26,23 +26,14 @@ import {
     DashboardView,
     DashboardViewStandardResponse,
     InvoiceView,
-    InvoiceViewPagedCollectionStandardResponse,
     PaySlipView,
-    PaySlipViewPagedCollectionStandardResponse,
-    UserView,
 } from 'src/services';
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
-    invoices: InvoiceViewPagedCollectionStandardResponse;
-    payslips: PaySlipViewPagedCollectionStandardResponse;
 }
 
-function PayrollManagerDashboard({
-    metrics,
-    payslips,
-    invoices,
-}: DashboardProps) {
+function PayrollManagerDashboard({ metrics }: DashboardProps) {
     const { user } = useContext(UserContext);
     const role = user?.role.replace(' ', '');
     const { messages, markAsRead, loading } = useContext(NotificationContext);
@@ -73,51 +64,12 @@ function PayrollManagerDashboard({
                 </Grid>
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
-                        title={'Recent Payslip'}
-                        url={'financials/payslips'}
-                        data={payslips?.data?.value
-                            ?.slice(0, 5)
-                            .map((x: PaySlipView, i) => (
-                                <Tr key={i}>
-                                    <TableData name={x.name} />
-                                    <TableData
-                                        name={moment(x.startDate).format(
-                                            'DD-MM-YY',
-                                        )}
-                                    />
-                                    <TableData
-                                        name={moment(x.endDate).format(
-                                            'DD-MM-YY',
-                                        )}
-                                    />
-                                    <TableData
-                                        name={moment(x.paymentDate).format(
-                                            'DD-MM-YY',
-                                        )}
-                                    />
-
-                                    <TableData name={x.totalAmount} />
-                                </Tr>
-                            ))}
-                        thead={[
-                            'Name',
-                            'Start Date',
-                            'End Date',
-                            'Payment Date',
-                            'Total Amount',
-                        ]}
-                        link={'/'}
-                    />
-                </Grid>
-                <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
-                    <TableCards
-                        title={'Recent Invoice'}
-                        url={'financials/invoices'}
-                        data={invoices?.data?.value
+                        title={'Recent payrolls'}
+                        url={'financials/payrolls'}
+                        data={metrics.data?.recentPayrolls
                             ?.slice(0, 5)
                             .map((x: InvoiceView, i) => (
                                 <Tr key={i}>
-                                    <TableData name={x.invoiceReference} />
                                     <TableData
                                         name={
                                             x.clientName ||
@@ -144,12 +96,92 @@ function PayrollManagerDashboard({
                                 </Tr>
                             ))}
                         thead={[
-                            'Invoice No',
                             'Name',
                             'Created on',
                             'Start Date',
                             'End Date',
                             'Status',
+                        ]}
+                        link={'/'}
+                    />
+                </Grid>
+                <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
+                    <TableCards
+                        title={'Recent Payslip'}
+                        url={'financials/payslips'}
+                        data={metrics.data?.recentPayslips
+                            ?.slice(0, 5)
+                            .map((x: PaySlipView, i) => (
+                                <Tr key={i}>
+                                    <TableData name={x.invoice?.name} />
+                                    <TableData
+                                        name={moment(
+                                            x.invoice?.startDate,
+                                        ).format('DD-MM-YY')}
+                                    />
+                                    <TableData
+                                        name={moment(x.invoice?.endDate).format(
+                                            'DD-MM-YY',
+                                        )}
+                                    />
+                                    <TableData
+                                        name={moment(
+                                            x?.invoice?.paymentDate,
+                                        ).format('DD-MM-YY')}
+                                    />
+
+                                    <TableData name={x?.invoice?.totalAmount} />
+                                </Tr>
+                            ))}
+                        thead={[
+                            'Name',
+                            'Start Date',
+                            'End Date',
+                            'Payment Date',
+                            'Total Amount',
+                        ]}
+                        link={'/'}
+                    />
+                </Grid>
+                <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
+                    <TableCards
+                        title={'Recent Invoice'}
+                        url={'financials/invoices'}
+                        data={metrics.data?.recentInvoiced
+                            ?.slice(0, 5)
+                            .map((x: InvoiceView, i) => (
+                                <Tr key={i}>
+                                    <TableData name={x.invoiceReference} />
+                                    <TableData
+                                        name={
+                                            x.clientName ||
+                                            x.paymentPartnerName ||
+                                            x.name
+                                        }
+                                    />
+                                    <TableData
+                                        name={moment(x.dateCreated).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                    />
+                                    <TableData
+                                        name={moment(x.startDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                    />
+                                    <TableData
+                                        name={moment(x.endDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                    />
+                                </Tr>
+                            ))}
+                        thead={[
+                            'Invoice No',
+                            'Name',
+                            'Created on',
+                            'Start Date',
+                            'End Date',
                         ]}
                         link={'/'}
                     />

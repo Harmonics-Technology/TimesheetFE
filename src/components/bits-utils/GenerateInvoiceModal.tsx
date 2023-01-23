@@ -72,8 +72,9 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
     const exchangeRate = Number(watch('rate'));
     const invoicesId: string[] = clicked.map((x) => x.id);
     const allInvoiceTotal = clicked.reduce((a, b) => a + b.totalAmount, 0);
-    const hst = 300 * exchangeRate;
-    const total = Math.round((allInvoiceTotal + hst) / exchangeRate);
+    const hst = 300;
+    const hstNaira = hst * exchangeRate;
+    const total = Math.round((allInvoiceTotal + hstNaira) / exchangeRate);
     console.log({ exchangeRate });
 
     const onSubmit = async (data: PaymentPartnerInvoiceModel) => {
@@ -241,7 +242,7 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                         <InvoiceTotalText
                                             label="Hst"
                                             value={hst}
-                                            cur={'₦'}
+                                            cur={'$'}
                                         />
                                         <InvoiceTotalText
                                             label="Total (₦)"

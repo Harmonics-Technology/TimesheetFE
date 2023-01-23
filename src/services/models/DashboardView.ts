@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { InvoiceView } from './InvoiceView';
+import type { PaySlipView } from './PaySlipView';
 import type { UserView } from './UserView';
 
 export type DashboardView = {
@@ -9,4 +11,7 @@ export type DashboardView = {
     totalTeamMembers?: number;
     totalDownLines?: number;
     recentCLients?: Array<UserView> | null;
+    recentPayrolls?: Array<InvoiceView> | null;
+    recentInvoiced?: Array<InvoiceView> | null;
+    recentPayslips?: Array<PaySlipView> | null;
 };

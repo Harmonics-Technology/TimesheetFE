@@ -19,11 +19,10 @@ import {
 } from 'src/services';
 
 interface DashboardProps {
-    payroll: InvoiceViewPagedCollectionStandardResponse;
-    invoices: InvoiceViewPagedCollectionStandardResponse;
+    metrics: DashboardPaymentPartnerViewStandardResponse;
 }
 
-function PaymentPartnerDashboard({ invoices, payroll }: DashboardProps) {
+function PaymentPartnerDashboard({ metrics }: DashboardProps) {
     // const adminMetrics = metrics?.data as DashboardPaymentPartnerView;
     const { messages, markAsRead, loading } = useContext(NotificationContext);
 
@@ -34,7 +33,7 @@ function PaymentPartnerDashboard({ invoices, payroll }: DashboardProps) {
                     <TableCards
                         title={'Recent Payroll'}
                         url={'viewpayroll'}
-                        data={payroll?.data?.value
+                        data={metrics.data?.recentApprovedInvoice
                             ?.slice(0, 5)
                             .map((x: InvoiceView, i) => (
                                 <Tr key={i}>
@@ -77,7 +76,7 @@ function PaymentPartnerDashboard({ invoices, payroll }: DashboardProps) {
                     <TableCards
                         title={'Recent Invoice'}
                         url={'invoice'}
-                        data={invoices?.data?.value
+                        data={metrics.data?.recentInvoicedInvoice
                             ?.slice(0, 5)
                             .map((x: InvoiceView, i: any) => (
                                 <Tr key={i}>

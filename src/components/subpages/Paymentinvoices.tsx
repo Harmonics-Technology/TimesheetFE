@@ -20,7 +20,7 @@ import { ExpenseView, InvoiceView, PayrollView } from 'src/services';
 import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { PDFExport } from '@progress/kendo-react-pdf';
 
-function InvoiceTemplate({
+function Paymentinvoices({
     isOpen,
     onClose,
     clicked,
@@ -35,7 +35,13 @@ function InvoiceTemplate({
             ref.current.save();
         }
     }
-    // console.log({ clicked });
+    const exchangeRate = clicked?.rate as unknown as number;
+    const allInvoiceTotal = (
+        clicked?.children as unknown as InvoiceView[]
+    )?.reduce((a, b) => a + (b?.totalAmount as number), 0);
+    const hst = 300;
+    const hstNaira = hst * exchangeRate;
+    console.log({ clicked });
     return (
         <>
             <Modal
@@ -51,7 +57,7 @@ function InvoiceTemplate({
                 <ModalContent
                     py={5}
                     borderRadius="0"
-                    w={['88%', '50%']}
+                    w={['88%', '60%']}
                     maxW="unset"
                     overflow="hidden"
                     // maxH="100vh"
@@ -138,78 +144,41 @@ function InvoiceTemplate({
                                             'Name',
                                             'Start Date',
                                             'End Date',
-                                            'Type',
-                                            `Amount (${clicked?.employeeInformation?.currency})`,
+                                            'Amount (₦)',
+                                            'Amount ($)',
+                                            'Rate',
                                         ]}
                                     >
                                         <>
-                                            <Tr key={clicked?.id}>
-                                                <TableData
-                                                    name={
-                                                        clicked?.clientName ||
-                                                        clicked?.paymentPartnerName ||
-                                                        clicked?.name
-                                                    }
-                                                />
-                                                <TableData
-                                                    name={moment(
-                                                        clicked?.startDate,
-                                                    ).format('DD/MM/YYYY')}
-                                                />
-                                                <TableData
-                                                    name={moment(
-                                                        clicked?.endDate,
-                                                    ).format('DD/MM/YYYY')}
-                                                />
-                                                <TableData
-                                                    name={clicked?.invoiceType}
-                                                />
-                                                <TableData
-                                                    name={`${
-                                                        clicked
-                                                            ?.employeeInformation
-                                                            ?.currency
-                                                    } ${CUR(
-                                                        clicked?.totalAmount,
-                                                    )}`}
-                                                />
-                                            </Tr>
-                                            {clicked?.expenses?.length !==
-                                                0 && (
-                                                <>
-                                                    {clicked?.expenses?.map(
-                                                        (x) => (
-                                                            <Tr key={x?.id}>
-                                                                <TableData
-                                                                    name={
-                                                                        x
-                                                                            .teamMember
-                                                                            ?.fullName
-                                                                    }
-                                                                />
-                                                                <TableData
-                                                                    name={
-                                                                        x.description
-                                                                    }
-                                                                />
-
-                                                                <TableData
-                                                                    name={
-                                                                        x?.expenseType
-                                                                    }
-                                                                />
-                                                                <TableData
-                                                                    name={`${
-                                                                        x?.currency
-                                                                    } ${CUR(
-                                                                        x?.amount,
-                                                                    )}`}
-                                                                />
-                                                            </Tr>
-                                                        ),
-                                                    )}
-                                                </>
-                                            )}
+                                            {clicked?.children?.map((x, i) => (
+                                                <Tr key={i}>
+                                                    <TableData name={x?.name} />
+                                                    <TableData
+                                                        name={moment(
+                                                            x?.startDate,
+                                                        ).format('DD/MM/YYYY')}
+                                                    />
+                                                    <TableData
+                                                        name={moment(
+                                                            x?.endDate,
+                                                        ).format('DD/MM/YYYY')}
+                                                    />
+                                                    <TableData
+                                                        name={Naira(
+                                                            x?.totalAmount,
+                                                        )}
+                                                    />
+                                                    <TableData
+                                                        name={CAD(
+                                                            (x?.totalAmount as number) /
+                                                                exchangeRate,
+                                                        )}
+                                                    />
+                                                    <TableData
+                                                        name={CAD(exchangeRate)}
+                                                    />
+                                                </Tr>
+                                            ))}
                                         </>
                                     </Tables>
                                 </Box>
@@ -218,21 +187,21 @@ function InvoiceTemplate({
                                         flexDirection="column"
                                         w="fit-content"
                                     >
-                                        {/* <InvoiceTotalText
+                                        <InvoiceTotalText
                                             label="Subtotal"
                                             cur={
                                                 clicked?.employeeInformation
                                                     ?.currency
                                             }
                                             value={CUR(
-                                                clicked?.totalAmount as number,
+                                                allInvoiceTotal as number,
                                             )}
-                                        /> */}
-                                        {/* <InvoiceTotalText
+                                        />
+                                        <InvoiceTotalText
                                             label="Hst"
-                                            value={200}
+                                            value={hst}
                                             cur="$"
-                                        /> */}
+                                        />
                                         <Box
                                             border="2px dashed"
                                             borderColor="gray.300"
@@ -240,11 +209,11 @@ function InvoiceTemplate({
                                             pt="1em"
                                         >
                                             <InvoiceTotalText
-                                                label="Total"
                                                 cur={
                                                     clicked?.employeeInformation
                                                         ?.currency
                                                 }
+                                                label="Total"
                                                 value={CUR(
                                                     clicked?.totalAmount as number,
                                                 )}
@@ -252,7 +221,7 @@ function InvoiceTemplate({
                                         </Box>
                                     </Flex>
                                 </Box>
-                                {/* <Text
+                                <Text
                                     textAlign="center"
                                     fontSize=".7rem"
                                     my="2rem"
@@ -261,7 +230,7 @@ function InvoiceTemplate({
                                     {moment(new Date()).format(
                                         'YYYY-MM-DD HH:mm:ss',
                                     )}
-                                </Text> */}
+                                </Text>
                             </PDFExport>
                         </Box>
                         <Button
@@ -278,4 +247,4 @@ function InvoiceTemplate({
         </>
     );
 }
-export default InvoiceTemplate;
+export default Paymentinvoices;

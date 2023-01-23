@@ -6,18 +6,10 @@ import { GetServerSideProps } from 'next';
 import { DashboardService, FinancialService } from 'src/services';
 interface DashboardProps {
     metrics: any;
-    payslips: any;
-    invoices: any;
 }
 
-function index({ metrics, payslips, invoices }: DashboardProps) {
-    return (
-        <PayrollManagerDashboard
-            metrics={metrics}
-            payslips={payslips}
-            invoices={invoices}
-        />
-    );
+function index({ metrics }: DashboardProps) {
+    return <PayrollManagerDashboard metrics={metrics} />;
 }
 
 export default index;
@@ -28,23 +20,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
 
         try {
             const data = await DashboardService.getAdminMetrics();
-            const payslips = await FinancialService.listPaySlips(
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-            );
-            const invoices = await FinancialService.listInvoicedInvoices(
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-                pagingOptions.date,
-            );
-            console.log({ payslips, invoices });
+
             return {
                 props: {
                     metrics: data,
-                    payslips,
-                    invoices,
                 },
             };
         } catch (error: any) {

@@ -24,5 +24,6 @@ export type InvoiceView = {
     invoiceType?: string | null;
     payrolls?: Array<PayrollView> | null;
     expenses?: Array<ExpenseView> | null;
+    children?: Array<InvoiceView> | null;
     dateCreated?: string;
 };

@@ -5,12 +5,11 @@ import PaymentPartnerDashboard from '@components/subpages/PaymentPartnerDashboar
 import { GetServerSideProps } from 'next';
 import { DashboardService, FinancialService } from 'src/services';
 interface DashboardProps {
-    payroll: any;
-    invoices: any;
+    metrics: any;
 }
 
-function index({ payroll, invoices }: DashboardProps) {
-    return <PaymentPartnerDashboard payroll={payroll} invoices={invoices} />;
+function index({ metrics }: DashboardProps) {
+    return <PaymentPartnerDashboard metrics={metrics} />;
 }
 
 export default index;
@@ -19,21 +18,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            // const data = await DashboardService.getPayrollManagerMetrics();
-            const payroll = await FinancialService.listPaymentPartnerInvoices(
-                pagingOptions.offset,
-                pagingOptions.limit,
-            );
-            const invoices =
-                await FinancialService.listInvoicesByPaymentPartner(
-                    pagingOptions.offset,
-                    pagingOptions.limit,
-                );
-            // console.log({ data });
+            const metrics = await DashboardService.getPayrollManagerMetrics();
+
             return {
                 props: {
-                    payroll,
-                    invoices,
+                    metrics,
                 },
             };
         } catch (error: any) {

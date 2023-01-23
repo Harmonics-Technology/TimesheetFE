@@ -2,17 +2,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { EmployeeInformationView } from './EmployeeInformationView';
+import type { InvoiceView } from './InvoiceView';
 
 export type PaySlipView = {
     id?: string;
-    companyName?: string | null;
-    name?: string | null;
-    address?: string | null;
-    employeeInformation?: EmployeeInformationView;
-    startDate?: string;
-    endDate?: string;
-    paymentDate?: string;
-    totalHours?: number;
-    totalAmount?: number;
+    invoiceId?: string;
+    invoice?: InvoiceView;
+    dateCreated?: string;
+    totalEarnings?: number;
 };

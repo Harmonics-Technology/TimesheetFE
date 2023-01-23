@@ -135,11 +135,11 @@ const TimesheetTeam = ({
                 position: 'top-right',
             });
             return;
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
             toast({
                 status: 'error',
-                title: 'An error occurred, please try again',
+                title: error.body.message || error.message,
                 position: 'top-right',
             });
         }

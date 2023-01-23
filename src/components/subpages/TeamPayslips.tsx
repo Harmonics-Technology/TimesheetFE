@@ -5,15 +5,18 @@ import Tables from '@components/bits-utils/Tables';
 import {
     PaySlipView,
     PaySlipViewPagedCollectionStandardResponse,
+    PayslipUserView,
+    PayslipUserViewPagedCollectionStandardResponse,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import moment from 'moment';
 import { useState } from 'react';
 import { PayslipModal } from '@components/bits-utils/PayslipModal';
+import Naira, { CAD } from '@components/generics/functions/Naira';
 
 interface expenseProps {
-    payrolls: PaySlipViewPagedCollectionStandardResponse;
+    payrolls: PayslipUserViewPagedCollectionStandardResponse;
 }
 
 function TeamPayslips({ payrolls }: expenseProps) {
@@ -29,7 +32,7 @@ function TeamPayslips({ payrolls }: expenseProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <FilterSearch hide={true} />
+                <FilterSearch hide={false} />
                 <Tables
                     tableHead={[
                         'Name',
@@ -37,34 +40,50 @@ function TeamPayslips({ payrolls }: expenseProps) {
                         'End Date',
                         'Payment Date',
                         'Total Hrs',
-                        'Rate',
                         'Total Amount',
                         // '...',
                         // '',
                     ]}
                 >
                     <>
-                        {payrollsList?.map((x: PaySlipView) => (
-                            <Tr key={x.id}>
-                                <TableData name={x.name} />
+                        {payrollsList?.map((x: PayslipUserView, i) => (
+                            <Tr key={i}>
                                 <TableData
-                                    name={moment(x.startDate).format(
-                                        'DD-MM-YY',
-                                    )}
+                                    name={x?.payslipView?.invoice?.name}
                                 />
                                 <TableData
-                                    name={moment(x.endDate).format('DD-MM-YY')}
+                                    name={moment(
+                                        x.payslipView?.invoice?.startDate,
+                                    ).format('DD-MM-YY')}
                                 />
                                 <TableData
-                                    name={moment(x.paymentDate).format(
-                                        'DD-MM-YY',
-                                    )}
+                                    name={moment(
+                                        x.payslipView?.invoice?.endDate,
+                                    ).format('DD-MM-YY')}
                                 />
-                                <TableData name={`${x.totalHours} HRS`} />
                                 <TableData
-                                    name={x.employeeInformation?.paymentRate}
+                                    name={moment(
+                                        x.payslipView?.invoice?.paymentDate,
+                                    ).format('DD-MM-YY')}
                                 />
-                                <TableData name={x.totalAmount} />
+                                <TableData
+                                    name={`${x.payslipView?.invoice?.totalHours} HRS`}
+                                />
+                                <TableData
+                                    name={
+                                        x.payslipView   ?.invoice
+                                            ?.employeeInformation?.currency ==
+                                        'CAD'
+                                            ? CAD(
+                                                  x?.payslipView?.invoice
+                                                      ?.totalAmount,
+                                              )
+                                            : Naira(
+                                                  x?.payslipView?.invoice
+                                                      ?.totalAmount,
+                                              )
+                                    }
+                                />
                                 <InvoiceAction
                                     data={x}
                                     onOpen={onOpen}

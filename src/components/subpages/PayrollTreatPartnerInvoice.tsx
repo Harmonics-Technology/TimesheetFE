@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable no-sparse-arrays */
 import {
     Box,
     Button,
@@ -28,12 +26,14 @@ import InvoiceTemplate from './InvoiceTemplate';
 import BeatLoader from 'react-spinners/BeatLoader';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
+import Paymentinvoices from './Paymentinvoices';
+import Naira, { CAD } from '@components/generics/functions/Naira';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
 
-function PayPartnerInvoice({ invoiceData }: adminProps) {
+function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
     console.log({ invoiceData });
@@ -49,14 +49,14 @@ function PayPartnerInvoice({ invoiceData }: adminProps) {
         if (all) {
             if (
                 selectedId?.length ===
-                invoice?.filter((x) => x.status !== 'INVOICED').length
+                invoice?.filter((x) => x.status === 'PENDING').length
             ) {
                 setSelectedId([]);
                 return;
             }
             const response: string[] = [];
             invoice
-                ?.filter((x) => x.status !== 'INVOICED')
+                ?.filter((x) => x.status === 'PENDING')
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
@@ -136,15 +136,17 @@ function PayPartnerInvoice({ invoiceData }: adminProps) {
                             </Button>
                         )}
                     </HStack>
-                    {/* <Checkbox
+                    <Checkbox
                         checked={
                             invoice?.length !== 0 &&
-                            invoice?.filter((x) => x.status !== 'INVOICED')
+                            invoice?.filter((x) => x.status === 'PENDING')
+                                .length !== 0 &&
+                            invoice?.filter((x) => x.status === 'PENDING')
                                 .length == selectedId?.length
                         }
                         onChange={() => toggleSelected('', true)}
                         label="Select All"
-                    /> */}
+                    />
                 </Flex>
                 <FilterSearch />
                 <Tables
@@ -152,8 +154,8 @@ function PayPartnerInvoice({ invoiceData }: adminProps) {
                         'Invoice No',
                         'Name',
                         'Created on',
-                        'Start Date',
-                        'End Date',
+                        'Amount ($)',
+                        'Amount (₦)',
                         'Status',
                         'Action',
                     ]}
@@ -174,14 +176,11 @@ function PayPartnerInvoice({ invoiceData }: adminProps) {
                                         'DD/MM/YYYY',
                                     )}
                                 />
+                                <TableData name={CAD(x.totalAmount)} />
                                 <TableData
-                                    name={moment(x.startDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
-                                <TableData
-                                    name={moment(x.endDate).format(
-                                        'DD/MM/YYYY',
+                                    name={Naira(
+                                        (x.totalAmount as number) *
+                                            (x.rate as unknown as number),
                                     )}
                                 />
                                 <TableState name={x.status as string} />
@@ -201,7 +200,7 @@ function PayPartnerInvoice({ invoiceData }: adminProps) {
                                         onChange={(e) =>
                                             toggleSelected(x.id as string)
                                         }
-                                        disabled={x.status !== 'APPROVED'}
+                                        disabled={x.status !== 'PENDING'}
                                     />
                                 </td>
                             </Tr>
@@ -210,7 +209,7 @@ function PayPartnerInvoice({ invoiceData }: adminProps) {
                 </Tables>
                 <Pagination data={invoiceData} />
             </Box>
-            <InvoiceTemplate
+            <Paymentinvoices
                 isOpen={isOpen}
                 onClose={onClose}
                 clicked={clicked}
@@ -219,4 +218,4 @@ function PayPartnerInvoice({ invoiceData }: adminProps) {
     );
 }
 
-export default PayPartnerInvoice;
+export default PayrollTreatPartnerInvoice;
