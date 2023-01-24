@@ -34,7 +34,7 @@ function expenses({ expenses, team, expenseType }: ExpensesType) {
                     url={`/${role}/financials/expenses-approved`}
                     tabName="Approved"
                 />
-                 <PageTabs
+                <PageTabs
                     url={`/${role}/financials/my-expenses`}
                     tabName="My Expenses"
                 />

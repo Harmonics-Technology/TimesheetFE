@@ -6,10 +6,11 @@ import React from 'react';
 import {
     FinancialService,
     PayrollViewPagedCollectionStandardResponse,
+    PayslipUserViewPagedCollectionStandardResponse,
 } from 'src/services';
 
 interface PayrollType {
-    payrolls: PayrollViewPagedCollectionStandardResponse;
+    payrolls: PayslipUserViewPagedCollectionStandardResponse;
 }
 function expenses({ payrolls }: PayrollType) {
     return <AdminPayslip payrolls={payrolls} />;

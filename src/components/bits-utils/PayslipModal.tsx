@@ -34,7 +34,14 @@ type Props = {
 };
 
 export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
-    // console.log({ paySlip });
+    console.log({ paySlip });
+    const allExpenseTotal = paySlip?.payslipView?.invoice?.expenses?.reduce(
+        (a, b) => a + (b?.amount as number),
+        0,
+    );
+    const payTotal = paySlip?.payslipView?.invoice?.totalAmount;
+    const netPay = (payTotal as number) + (allExpenseTotal as number);
+
     const ref = useRef<any>(null);
     function downloadInvoice() {
         if (ref.current) {
@@ -232,18 +239,26 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                         ?.invoice
                                                         ?.employeeInformation
                                                         ?.currency == 'CAD'
-                                                        ? CAD(
-                                                              paySlip
-                                                                  ?.payslipView
-                                                                  ?.invoice
-                                                                  ?.totalAmount,
-                                                          )
-                                                        : Naira(
-                                                              paySlip
-                                                                  ?.payslipView
-                                                                  ?.invoice
-                                                                  ?.totalAmount,
-                                                          )
+                                                        ? CAD(payTotal)
+                                                        : Naira(payTotal)
+                                                }
+                                            />
+                                        </Tr>
+                                        <Tr>
+                                            <TableData
+                                                name={'Expense'}
+                                                border
+                                                value="1px solid"
+                                                borderColor="gray.200"
+                                            />
+                                            <TableData
+                                                name={
+                                                    paySlip?.payslipView
+                                                        ?.invoice
+                                                        ?.employeeInformation
+                                                        ?.currency == 'CAD'
+                                                        ? CAD(allExpenseTotal)
+                                                        : Naira(allExpenseTotal)
                                                 }
                                             />
                                         </Tr>
@@ -268,7 +283,16 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                 value="1px solid"
                                                 borderColor="gray.200"
                                             />
-                                            <TableData name={'3,250.00'} />
+                                            <TableData
+                                                name={
+                                                    paySlip?.payslipView
+                                                        ?.invoice
+                                                        ?.employeeInformation
+                                                        ?.currency == 'CAD'
+                                                        ? CAD(netPay)
+                                                        : Naira(netPay)
+                                                }
+                                            />
                                         </Tr>
                                         <Tr fontWeight="600">
                                             <TableData
@@ -306,14 +330,8 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                     Net Pay:{' '}
                                     {paySlip?.payslipView?.invoice
                                         ?.employeeInformation?.currency == 'CAD'
-                                        ? CAD(
-                                              paySlip?.payslipView?.invoice
-                                                  ?.totalAmount,
-                                          )
-                                        : Naira(
-                                              paySlip?.payslipView?.invoice
-                                                  ?.totalAmount,
-                                          )}
+                                        ? CAD(netPay)
+                                        : Naira(netPay)}
                                 </Text>
                                 <Box
                                     border="1px solid"
@@ -323,15 +341,12 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                 >
                                     <Text mb=".5rem">In Words</Text>
                                     <Text mb="0" textTransform="capitalize">
-                                        {numWords(
-                                            paySlip?.payslipView?.invoice
-                                                ?.totalAmount,
-                                        )}{' '}
+                                        {numWords(netPay)}{' '}
                                         {paySlip?.payslipView?.invoice
                                             ?.employeeInformation?.currency ==
                                         'CAD'
-                                            ? 'dollars '
-                                            : 'naira '}
+                                            ? 'Dollars '
+                                            : 'Naira '}
                                         only
                                     </Text>
                                 </Box>

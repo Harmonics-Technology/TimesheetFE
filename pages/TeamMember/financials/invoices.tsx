@@ -17,20 +17,29 @@ interface PayrollType {
 }
 function payslips({ invoice }: PayrollType) {
     const { user } = useContext(UserContext);
+    console.log({ user });
     const role = user?.role.replace(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/my-invoices`}
-                    tabName="Awaiting Submission"
-                />
-                <PageTabs
-                    url={`/${role}/financials/submitted-invoices`}
-                    tabName="Submitted"
-                />
-            </Flex>
-            <TeamInvoices invoiceList={invoice} />
+            {user?.payrollType === 'OFFSHORE' ? (
+                <>
+                    <TeamInvoices invoiceList={invoice} />
+                </>
+            ) : (
+                <>
+                    <Flex>
+                        <PageTabs
+                            url={`/${role}/financials/my-invoices`}
+                            tabName="Awaiting Submission"
+                        />
+                        <PageTabs
+                            url={`/${role}/financials/invoices`}
+                            tabName="Submitted"
+                        />
+                    </Flex>
+                    <TeamInvoices invoiceList={invoice} />
+                </>
+            )}
         </Box>
     );
 }

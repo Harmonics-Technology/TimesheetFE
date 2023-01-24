@@ -1,36 +1,41 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import AdminPayslip from '@components/subpages/AdminPayslip';
+import ProfileManagementAdmin from '@components/subpages/AdminManagement';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
-    FinancialService,
-    PayslipUserViewPagedCollectionStandardResponse,
+    UserService,
+    UserView,
+    UserViewPagedCollectionStandardResponse,
 } from 'src/services';
-
-interface PayrollType {
-    payrolls: PayslipUserViewPagedCollectionStandardResponse;
-}
-function expenses({ payrolls }: PayrollType) {
-    return <AdminPayslip payrolls={payrolls} />;
+interface adminProps {
+    adminList: UserViewPagedCollectionStandardResponse;
+    team: UserView[];
 }
 
-export default expenses;
+function admin({ adminList, team }: adminProps) {
+    // console.log({ team });
+    return <ProfileManagementAdmin adminList={adminList} team={team} />;
+}
+
+export default admin;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listPaySlips(
+            const team = await UserService.listUsers('Team Member');
+            const data = await UserService.listUsers(
+                'admins',
                 pagingOptions.offset,
                 pagingOptions.limit,
-                '',
+                pagingOptions.search,
                 pagingOptions.date,
             );
-
             return {
                 props: {
-                    payrolls: data,
+                    adminList: data,
+                    team: team?.data?.value,
                 },
             };
         } catch (error: any) {

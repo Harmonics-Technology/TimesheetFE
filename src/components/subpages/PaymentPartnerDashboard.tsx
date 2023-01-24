@@ -25,6 +25,7 @@ interface DashboardProps {
 function PaymentPartnerDashboard({ metrics }: DashboardProps) {
     // const adminMetrics = metrics?.data as DashboardPaymentPartnerView;
     const { messages, markAsRead, loading } = useContext(NotificationContext);
+    console.log({ metrics });
 
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">

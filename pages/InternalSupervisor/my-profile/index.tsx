@@ -9,14 +9,8 @@ import {
     UserView,
 } from 'src/services';
 
-function index({
-    user,
-    paymentSchedule,
-}: {
-    user: UserView;
-    paymentSchedule: PaymentScheduleListStandardResponse;
-}) {
-    return <MyProfile user={user} paymentSchedule={paymentSchedule} />;
+function index({ user }: { user: UserView }) {
+    return <MyProfile user={user} />;
 }
 
 export default index;
@@ -24,18 +18,13 @@ export default index;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const id = JSON.parse(ctx.req.cookies.user).id;
-        const employeeId = JSON.parse(
-            ctx.req.cookies.user,
-        ).employeeInformationId;
         try {
             const data = await UserService.getUserById(id);
-            const paymentSchedule =
-                await FinancialService.getEmployeePaymentSchedule(employeeId);
-            // console.log({ data });
+
+            console.log({ data });
             return {
                 props: {
                     user: data.data,
-                    paymentSchedule,
                 },
             };
         } catch (error: any) {

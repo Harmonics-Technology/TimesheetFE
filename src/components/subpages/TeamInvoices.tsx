@@ -61,7 +61,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
         setSelectedId([...selectedId, id]);
     };
     console.log({ selectedId });
-    const submitted = router.asPath.includes('submitted-invoices');
+    const submitted = router.asPath.includes('TeamMember/financials/invoices');
 
     const submitInvoiceItem = async () => {
         selectedId.forEach(async (x) => {

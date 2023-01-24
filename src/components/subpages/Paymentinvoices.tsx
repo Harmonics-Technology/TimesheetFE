@@ -39,9 +39,14 @@ function Paymentinvoices({
     const allInvoiceTotal = (
         clicked?.children as unknown as InvoiceView[]
     )?.reduce((a, b) => a + (b?.totalAmount as number), 0);
+    const allExpenseTotal = clicked?.children
+        ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
+        ?.reduce((a: any, b: any) => a + b, 0);
     const hst = 300;
     const hstNaira = hst * exchangeRate;
     console.log({ clicked });
+    const total = useRef();
+    console.log(allExpenseTotal);
     return (
         <>
             <Modal
@@ -151,33 +156,66 @@ function Paymentinvoices({
                                     >
                                         <>
                                             {clicked?.children?.map((x, i) => (
-                                                <Tr key={i}>
-                                                    <TableData name={x?.name} />
-                                                    <TableData
-                                                        name={moment(
-                                                            x?.startDate,
-                                                        ).format('DD/MM/YYYY')}
-                                                    />
-                                                    <TableData
-                                                        name={moment(
-                                                            x?.endDate,
-                                                        ).format('DD/MM/YYYY')}
-                                                    />
-                                                    <TableData
-                                                        name={Naira(
-                                                            x?.totalAmount,
-                                                        )}
-                                                    />
-                                                    <TableData
-                                                        name={CAD(
-                                                            (x?.totalAmount as number) /
+                                                <>
+                                                    <Tr key={i}>
+                                                        <TableData
+                                                            name={x?.name}
+                                                        />
+                                                        <TableData
+                                                            name={moment(
+                                                                x?.startDate,
+                                                            ).format(
+                                                                'DD/MM/YYYY',
+                                                            )}
+                                                        />
+                                                        <TableData
+                                                            name={moment(
+                                                                x?.endDate,
+                                                            ).format(
+                                                                'DD/MM/YYYY',
+                                                            )}
+                                                        />
+                                                        <TableData
+                                                            name={Naira(
+                                                                (x?.totalAmount as number) +
+                                                                    (
+                                                                        x?.expenses as unknown as ExpenseView[]
+                                                                    )?.reduce(
+                                                                        (
+                                                                            a,
+                                                                            b,
+                                                                        ) =>
+                                                                            a +
+                                                                            (b?.amount as number),
+                                                                        0,
+                                                                    ),
+                                                            )}
+                                                            id={total}
+                                                        />
+                                                        <TableData
+                                                            name={CAD(
+                                                                ((x?.totalAmount as number) +
+                                                                    (
+                                                                        x?.expenses as unknown as ExpenseView[]
+                                                                    )?.reduce(
+                                                                        (
+                                                                            a,
+                                                                            b,
+                                                                        ) =>
+                                                                            a +
+                                                                            (b?.amount as number),
+                                                                        0,
+                                                                    )) /
+                                                                    exchangeRate,
+                                                            )}
+                                                        />
+                                                        <TableData
+                                                            name={CAD(
                                                                 exchangeRate,
-                                                        )}
-                                                    />
-                                                    <TableData
-                                                        name={CAD(exchangeRate)}
-                                                    />
-                                                </Tr>
+                                                            )}
+                                                        />
+                                                    </Tr>
+                                                </>
                                             ))}
                                         </>
                                     </Tables>
@@ -189,12 +227,11 @@ function Paymentinvoices({
                                     >
                                         <InvoiceTotalText
                                             label="Subtotal"
-                                            cur={
-                                                clicked?.employeeInformation
-                                                    ?.currency
-                                            }
+                                            cur={'$'}
                                             value={CUR(
-                                                allInvoiceTotal as number,
+                                                (allInvoiceTotal +
+                                                    allExpenseTotal) /
+                                                    exchangeRate,
                                             )}
                                         />
                                         <InvoiceTotalText
@@ -209,19 +246,19 @@ function Paymentinvoices({
                                             pt="1em"
                                         >
                                             <InvoiceTotalText
-                                                cur={
-                                                    clicked?.employeeInformation
-                                                        ?.currency
-                                                }
+                                                cur={'$'}
                                                 label="Total"
                                                 value={CUR(
-                                                    clicked?.totalAmount as number,
+                                                    (allInvoiceTotal +
+                                                        allExpenseTotal +
+                                                        hstNaira) /
+                                                        exchangeRate,
                                                 )}
                                             />
                                         </Box>
                                     </Flex>
                                 </Box>
-                                <Text
+                                {/* <Text
                                     textAlign="center"
                                     fontSize=".7rem"
                                     my="2rem"
@@ -230,7 +267,7 @@ function Paymentinvoices({
                                     {moment(new Date()).format(
                                         'YYYY-MM-DD HH:mm:ss',
                                     )}
-                                </Text>
+                                </Text> */}
                             </PDFExport>
                         </Box>
                         <Button

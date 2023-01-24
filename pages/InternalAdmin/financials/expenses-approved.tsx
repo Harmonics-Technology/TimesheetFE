@@ -40,7 +40,7 @@ function expenses({ expenses, team, expenseType }: ExpensesType) {
                     tabName="My Expenses"
                 />
             </Flex>
-            <PayrollExpenseManagement
+            <PayrollExpenseManagementApproved
                 expenses={expenses}
                 team={team}
                 expenseType={expenseType}

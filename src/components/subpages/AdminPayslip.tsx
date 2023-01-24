@@ -3,7 +3,9 @@ import { Box, Tr, useDisclosure } from '@chakra-ui/react';
 import { InvoiceAction, TableData } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import {
-    PayrollViewPagedCollectionStandardResponse,
+    ExpenseView,
+    PayslipUserView,
+    PayslipUserViewPagedCollectionStandardResponse,
     PaySlipView,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
@@ -11,9 +13,10 @@ import FilterSearch from '@components/bits-utils/FilterSearch';
 import moment from 'moment';
 import { PayslipModal } from '@components/bits-utils/PayslipModal';
 import { useState } from 'react';
+import Naira, { CAD } from '@components/generics/functions/Naira';
 
 interface expenseProps {
-    payrolls: PayrollViewPagedCollectionStandardResponse;
+    payrolls: PayslipUserViewPagedCollectionStandardResponse;
 }
 
 function AdminPayslip({ payrolls }: expenseProps) {
@@ -38,34 +41,70 @@ function AdminPayslip({ payrolls }: expenseProps) {
                         'End Date',
                         'Payment Date',
                         'Total Hrs',
-                        'Rate',
                         'Total Amount',
                         'Action',
                         // '',
                     ]}
                 >
                     <>
-                        {payrollsList?.map((x: PaySlipView) => (
-                            <Tr key={x.id}>
-                                <TableData name={x.name} />
+                        {payrollsList?.map((x: PayslipUserView, i) => (
+                            <Tr key={i}>
                                 <TableData
-                                    name={moment(x.startDate).format(
-                                        'DD-MM-YY',
-                                    )}
+                                    name={x?.payslipView?.invoice?.name}
                                 />
                                 <TableData
-                                    name={moment(x.endDate).format('DD-MM-YY')}
+                                    name={moment(
+                                        x.payslipView?.invoice?.startDate,
+                                    ).format('DD-MM-YY')}
                                 />
                                 <TableData
-                                    name={moment(x.paymentDate).format(
-                                        'DD-MM-YY',
-                                    )}
+                                    name={moment(
+                                        x.payslipView?.invoice?.endDate,
+                                    ).format('DD-MM-YY')}
                                 />
-                                <TableData name={`${x.totalHours} HRS`} />
                                 <TableData
-                                    name={x.employeeInformation?.paymentRate}
+                                    name={moment(
+                                        x.payslipView?.invoice?.paymentDate,
+                                    ).format('DD-MM-YY')}
                                 />
-                                <TableData name={x.totalAmount} />
+                                <TableData
+                                    name={`${x.payslipView?.invoice?.totalHours} HRS`}
+                                />
+                                <TableData
+                                    name={
+                                        x.payslipView?.invoice
+                                            ?.employeeInformation?.currency ==
+                                        'CAD'
+                                            ? CAD(
+                                                  (x?.payslipView?.invoice
+                                                      ?.totalAmount as number) +
+                                                      (
+                                                          x?.payslipView
+                                                              ?.invoice
+                                                              ?.expenses as unknown as ExpenseView[]
+                                                      )?.reduce(
+                                                          (a, b) =>
+                                                              a +
+                                                              (b?.amount as number),
+                                                          0,
+                                                      ),
+                                              )
+                                            : Naira(
+                                                  (x?.payslipView?.invoice
+                                                      ?.totalAmount as number) +
+                                                      (
+                                                          x?.payslipView
+                                                              ?.invoice
+                                                              ?.expenses as unknown as ExpenseView[]
+                                                      )?.reduce(
+                                                          (a, b) =>
+                                                              a +
+                                                              (b?.amount as number),
+                                                          0,
+                                                      ),
+                                              )
+                                    }
+                                />
                                 <InvoiceAction
                                     data={x}
                                     onOpen={onOpen}

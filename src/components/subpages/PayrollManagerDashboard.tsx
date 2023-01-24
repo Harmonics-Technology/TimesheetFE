@@ -25,8 +25,10 @@ import { useContext } from 'react';
 import {
     DashboardView,
     DashboardViewStandardResponse,
+    ExpenseView,
     InvoiceView,
     PaySlipView,
+    PayslipUserView,
 } from 'src/services';
 
 interface DashboardProps {
@@ -38,6 +40,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
     const role = user?.role.replace(' ', '');
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
+    console.log({ metrics });
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">
@@ -113,16 +116,16 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                             ?.slice(0, 5)
                             .map((x: PaySlipView, i) => (
                                 <Tr key={i}>
-                                    <TableData name={x.invoice?.name} />
+                                    <TableData name={x?.invoice?.name} />
                                     <TableData
                                         name={moment(
-                                            x.invoice?.startDate,
+                                            x?.invoice?.startDate,
                                         ).format('DD-MM-YY')}
                                     />
                                     <TableData
-                                        name={moment(x.invoice?.endDate).format(
-                                            'DD-MM-YY',
-                                        )}
+                                        name={moment(
+                                            x?.invoice?.endDate,
+                                        ).format('DD-MM-YY')}
                                     />
                                     <TableData
                                         name={moment(
@@ -130,7 +133,20 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                         ).format('DD-MM-YY')}
                                     />
 
-                                    <TableData name={x?.invoice?.totalAmount} />
+                                    <TableData
+                                        name={
+                                            (x?.invoice
+                                                ?.totalAmount as number) +
+                                            (
+                                                x?.invoice
+                                                    ?.expenses as unknown as ExpenseView[]
+                                            )?.reduce(
+                                                (a, b) =>
+                                                    a + (b?.amount as number),
+                                                0,
+                                            )
+                                        }
+                                    />
                                 </Tr>
                             ))}
                         thead={[

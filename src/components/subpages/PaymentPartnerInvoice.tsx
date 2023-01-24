@@ -41,22 +41,20 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
-    const offshore = router.pathname.includes('financials/payrolls-approved');
-    const payment = router.pathname.includes('financials/invoices-payment');
     // console.log({ clicked });
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
             if (
                 selectedId?.length ===
-                invoice?.filter((x) => x.status === 'PENDING').length
+                invoice?.filter((x) => x.status === 'APPROVED').length
             ) {
                 setSelectedId([]);
                 return;
             }
             const response: string[] = [];
             invoice
-                ?.filter((x) => x.status === 'PENDING')
+                ?.filter((x) => x.status === 'APPROVED')
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
@@ -130,18 +128,16 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                                 spinner={<BeatLoader color="white" size={10} />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
-                                {offshore || payment
-                                    ? 'Approve'
-                                    : 'Mark as Paid'}
+                                Mark as Paid
                             </Button>
                         )}
                     </HStack>
                     <Checkbox
                         checked={
                             invoice?.length !== 0 &&
-                            invoice?.filter((x) => x.status === 'PENDING')
+                            invoice?.filter((x) => x.status === 'APPROVED')
                                 .length !== 0 &&
-                            invoice?.filter((x) => x.status === 'PENDING')
+                            invoice?.filter((x) => x.status === 'APPROVED')
                                 .length == selectedId?.length
                         }
                         onChange={() => toggleSelected('', true)}
@@ -200,7 +196,7 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                                         onChange={(e) =>
                                             toggleSelected(x.id as string)
                                         }
-                                        disabled={x.status !== 'PENDING'}
+                                        disabled={x.status !== 'APPROVED'}
                                     />
                                 </td>
                             </Tr>

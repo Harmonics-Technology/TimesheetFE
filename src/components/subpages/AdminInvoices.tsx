@@ -100,7 +100,7 @@ function AdminInvoices({ invoiceData }: adminProps) {
                 console.log({ error });
                 setLoading(false);
                 toast({
-                    title: error.body.message || error.message,
+                    title: error?.body?.message || error?.message,
                     status: 'error',
                     isClosable: true,
                     position: 'top-right',

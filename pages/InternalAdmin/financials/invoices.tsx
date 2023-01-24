@@ -29,7 +29,7 @@ function Invoices({ invoiceData }: invoiceType) {
                     tabName="Payment Partners"
                 />
                 <PageTabs
-                    url={`/${role}/financials/invoices-client`}
+                    url={`/${role}/PayrollManager/financials/invoices-client`}
                     tabName="Clients"
                 />
             </Flex>

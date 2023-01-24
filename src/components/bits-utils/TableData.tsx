@@ -52,11 +52,13 @@ export function TableData({
     border,
     value,
     borderColor,
+    id,
 }: {
     name: string | number | undefined | null;
     border?: boolean | undefined;
     value?: string;
     borderColor?: string;
+    id?: any;
 }) {
     return (
         <Td
@@ -71,6 +73,7 @@ export function TableData({
                     ? 'brand.400'
                     : 'black'
             }
+            ref={id}
         >
             {name}
         </Td>

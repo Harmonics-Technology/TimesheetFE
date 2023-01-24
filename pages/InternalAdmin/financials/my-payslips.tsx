@@ -8,11 +8,11 @@ import { GetServerSideProps } from 'next';
 import React, { useContext } from 'react';
 import {
     FinancialService,
-    PayrollViewPagedCollectionStandardResponse,
+    PayslipUserViewPagedCollectionStandardResponse,
 } from 'src/services';
 
 interface PayrollType {
-    payrolls: PayrollViewPagedCollectionStandardResponse;
+    payrolls: PayslipUserViewPagedCollectionStandardResponse;
 }
 function payslips({ payrolls }: PayrollType) {
     const { user } = useContext(UserContext);

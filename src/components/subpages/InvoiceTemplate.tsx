@@ -35,7 +35,10 @@ function InvoiceTemplate({
             ref.current.save();
         }
     }
-    // console.log({ clicked });
+    const allExpenseTotal = clicked?.expenses?.reduce(
+        (a, b) => a + (b?.amount as number),
+        0,
+    );
     return (
         <>
             <Modal
@@ -199,6 +202,11 @@ function InvoiceTemplate({
                                                                     }
                                                                 />
                                                                 <TableData
+                                                                    name={
+                                                                        'EXPENSE'
+                                                                    }
+                                                                />
+                                                                <TableData
                                                                     name={`${
                                                                         x?.currency
                                                                     } ${CUR(
@@ -246,7 +254,8 @@ function InvoiceTemplate({
                                                         ?.currency
                                                 }
                                                 value={CUR(
-                                                    clicked?.totalAmount as number,
+                                                    (clicked?.totalAmount as number) +
+                                                        (allExpenseTotal as number),
                                                 )}
                                             />
                                         </Box>

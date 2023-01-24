@@ -25,7 +25,7 @@ function payslips({ invoice }: PayrollType) {
                     tabName="Awaiting Submission"
                 />
                 <PageTabs
-                    url={`/${role}/financials/submitted-invoices`}
+                    url={`/${role}/financials/invoices`}
                     tabName="Submitted"
                 />
             </Flex>

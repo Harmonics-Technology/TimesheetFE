@@ -62,7 +62,7 @@ function MyProfile({
     paymentSchedule,
 }: {
     user: UserView;
-    paymentSchedule: PaymentScheduleListStandardResponse;
+    paymentSchedule?: PaymentScheduleListStandardResponse;
 }) {
     console.log({ user });
     const {
@@ -342,10 +342,7 @@ function MyProfile({
                             bgColor="brand.600"
                             color="white"
                             display={
-                                user?.role === 'Supervisor' ||
-                                user?.role === 'client'
-                                    ? 'none'
-                                    : 'block'
+                                paymentSchedule == undefined ? 'none' : 'block'
                             }
                             fontSize=".8rem"
                             h="2.5rem"
@@ -546,12 +543,14 @@ function MyProfile({
                 onClose={onClose}
                 user={user}
             />
-            {user?.role !== 'Supervisor' && user?.role !== 'client' && (
+            {paymentSchedule !== undefined && (
                 <>
                     <PaymentScheduleModal
                         isOpen={isOpened}
                         onClose={onClosed}
-                        paymentSchedule={paymentSchedule}
+                        paymentSchedule={
+                            paymentSchedule as PaymentScheduleListStandardResponse
+                        }
                     />
 
                     <AdminPaymentScheduleModal

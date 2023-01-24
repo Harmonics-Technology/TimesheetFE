@@ -21,15 +21,15 @@ function Invoices({ invoiceData }: invoiceType) {
         <Box>
             <Flex>
                 <PageTabs
-                    url={`/${role}/financials/invoices`}
+                    url={`/${role}/PayrollManager/financials/invoices`}
                     tabName="Team Members"
                 />
                 <PageTabs
-                    url={`/${role}/financials/invoices-payment`}
+                    url={`/${role}/PayrollManager/financials/invoices-payment`}
                     tabName="Payment Partners"
                 />
                 <PageTabs
-                    url={`/${role}/financials/invoices-client`}
+                    url={`/${role}/PayrollManager/financials/invoices-client`}
                     tabName="Clients"
                 />
             </Flex>

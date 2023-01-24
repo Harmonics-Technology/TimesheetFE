@@ -1,3 +1,4 @@
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import TimesheetHistory from '@components/subpages/SupervisorTimeSheetHistory';
 import { GetServerSideProps } from 'next';
@@ -17,20 +18,28 @@ function history({
 
 export default history;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
-    try {
-        const data = await TimeSheetService.getSuperviseesTimeSheet();
-        return {
-            props: {
-                timeSheets: data,
-            },
-        };
-    } catch (error: any) {
-        console.log(error);
-        return {
-            props: {
-                data: [],
-            },
-        };
-    }
-});
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx) => {
+        const pagingOptions = filterPagingSearchOptions(ctx);
+        try {
+            const data = await TimeSheetService.getSuperviseesTimeSheet(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+                pagingOptions.date,
+            );
+            return {
+                props: {
+                    timeSheets: data,
+                },
+            };
+        } catch (error: any) {
+            console.log(error);
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);

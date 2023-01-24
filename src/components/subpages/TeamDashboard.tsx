@@ -10,6 +10,8 @@ import {
     DashboardTeamMemberView,
     DashboardView,
     DashboardViewStandardResponse,
+    ExpenseView,
+    InvoiceView,
     PaySlipView,
     PaySlipViewPagedCollectionStandardResponse,
     RecentTimeSheetView,
@@ -86,7 +88,7 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                             role == 'client'
                                 ? clientMetrics?.recentInvoice
                                       ?.slice(0, 4)
-                                      .map((x: PaySlipView) => (
+                                      .map((x: InvoiceView) => (
                                           <Tr key={x.id}>
                                               <TableData
                                                   name={moment(
@@ -119,27 +121,38 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                                           <Tr key={x.id}>
                                               <TableData
                                                   name={moment(
-                                                      x.startDate,
+                                                      x?.invoice?.startDate,
                                                   ).format('YYYY-MM-DD')}
                                               />
                                               <TableData
                                                   name={moment(
-                                                      x.endDate,
+                                                      x?.invoice?.endDate,
                                                   ).format('YYYY-MM-DD')}
                                               />
                                               <TableData
                                                   name={moment(
-                                                      x.paymentDate,
+                                                      x?.invoice?.paymentDate,
                                                   ).format('YYYY-MM-DD')}
+                                              />
+
+                                              <TableData
+                                                  name={x?.invoice?.totalHours}
                                               />
                                               <TableData
                                                   name={
-                                                      x.employeeInformation
-                                                          ?.paymentRate
+                                                      (x?.invoice
+                                                          ?.totalAmount as number) +
+                                                      (
+                                                          x?.invoice
+                                                              ?.expenses as unknown as ExpenseView[]
+                                                      )?.reduce(
+                                                          (a, b) =>
+                                                              a +
+                                                              (b?.amount as number),
+                                                          0,
+                                                      )
                                                   }
                                               />
-                                              <TableData name={x.totalHours} />
-                                              <TableData name={x.totalAmount} />
                                           </Tr>
                                       ))
                         }
@@ -147,7 +160,6 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                             'Start Date',
                             'End Date',
                             'Payment Date',
-                            'Payment Rate',
                             'Total Hours',
                             'Total Amount',
                         ]}

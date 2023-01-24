@@ -20,6 +20,7 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import {
+    ExpenseView,
     FinancialService,
     InvoiceView,
     InvoiceViewStandardResponse,
@@ -34,7 +35,7 @@ import { PayslipInfoTag } from './PayslipInfoTag';
 import numWords from 'num-words';
 import Tables from './Tables';
 import InvoiceTotalText from './InvoiceTotalText';
-import Naira from '@components/generics/functions/Naira';
+import Naira, { CUR } from '@components/generics/functions/Naira';
 import { SelectrixBox } from './Selectrix';
 import { PrimaryInput } from './PrimaryInput';
 import { useForm } from 'react-hook-form';
@@ -72,9 +73,12 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
     const exchangeRate = Number(watch('rate'));
     const invoicesId: string[] = clicked.map((x) => x.id);
     const allInvoiceTotal = clicked.reduce((a, b) => a + b.totalAmount, 0);
+    const allExpenseTotal = clicked?.children
+        ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
+        ?.reduce((a: any, b: any) => a + b, 0);
     const hst = 300;
     const hstNaira = hst * exchangeRate;
-    const total = Math.round((allInvoiceTotal + hstNaira) / exchangeRate);
+    const total = (allInvoiceTotal + allExpenseTotal + hstNaira) / exchangeRate;
     console.log({ exchangeRate });
 
     const onSubmit = async (data: PaymentPartnerInvoiceModel) => {
@@ -201,7 +205,15 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                                     />
                                                     <TableData
                                                         name={Naira(
-                                                            x.totalAmount,
+                                                            (x?.totalAmount as number) +
+                                                                (
+                                                                    x?.expenses as unknown as ExpenseView[]
+                                                                )?.reduce(
+                                                                    (a, b) =>
+                                                                        a +
+                                                                        (b?.amount as number),
+                                                                    0,
+                                                                ),
                                                         )}
                                                     />
                                                     {/* <TableData
@@ -237,18 +249,18 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                         <InvoiceTotalText
                                             label="Subtotal"
                                             value={allInvoiceTotal}
-                                            cur={'₦'}
+                                            cur={'$'}
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
                                             value={hst}
                                             cur={'$'}
                                         />
-                                        <InvoiceTotalText
+                                        {/* <InvoiceTotalText
                                             label="Total (₦)"
                                             value={allInvoiceTotal + hst}
                                             cur={'₦'}
-                                        />
+                                        /> */}
                                         <Box
                                             // border="2px dashed"
                                             borderColor="gray.300"
@@ -257,9 +269,12 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                         >
                                             <InvoiceTotalText
                                                 label="Total ($)"
-                                                value={
-                                                    isNaN(total) ? '0' : total
-                                                }
+                                                value={CUR(
+                                                    (allInvoiceTotal +
+                                                        allExpenseTotal +
+                                                        hstNaira) /
+                                                        exchangeRate,
+                                                )}
                                                 cur={'$'}
                                             />
                                         </Box>

@@ -9,14 +9,8 @@ import {
     UserView,
 } from 'src/services';
 
-function index({
-    user,
-    paymentSchedule,
-}: {
-    user: UserView;
-    paymentSchedule: PaymentScheduleListStandardResponse;
-}) {
-    return <MyProfile user={user} paymentSchedule={paymentSchedule} />;
+function index({ user }: { user: UserView }) {
+    return <MyProfile user={user} />;
 }
 
 export default index;

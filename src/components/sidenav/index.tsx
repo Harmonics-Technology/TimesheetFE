@@ -163,7 +163,11 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={[
                             'my expenses',
                             'my payslips',
-                            'my invoices',
+                            `${
+                                user?.payrollType === 'OFFSHORE'
+                                    ? 'invoices'
+                                    : 'my invoices'
+                            }`,
                             'my contracts',
                         ]}
                     />

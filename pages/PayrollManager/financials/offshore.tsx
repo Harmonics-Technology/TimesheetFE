@@ -25,7 +25,7 @@ function payrolls({ invoiceData }: InvoiceType) {
                     tabName="Onshore"
                 />
                 <PageTabs
-                    url={`/${role}/financials/payrolls-approved`}
+                    url={`/${role}/financials/offshore`}
                     tabName="Offshore"
                 />
             </Flex>
