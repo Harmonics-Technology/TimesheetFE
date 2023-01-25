@@ -139,7 +139,7 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                         'End Date',
                         'Payment Date',
                         'Total Hrs',
-                        'Rate',
+                        // 'Rate',
                         'Total Amount',
                         // '...',
                         '',
@@ -169,7 +169,7 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                                     }
                                 />
                                 <TableData name={`${x.totalHours} HRS`} />
-                                <TableData name={x.rate} />
+                                {/* <TableData name={x.rate} /> */}
                                 <TableData name={x.totalAmount} />
                                 {/* <TableContractAction
                                     id={x.employeeInformationId}

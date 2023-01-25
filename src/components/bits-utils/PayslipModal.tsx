@@ -40,7 +40,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
         0,
     );
     const payTotal = paySlip?.payslipView?.invoice?.totalAmount;
-    const netPay = (payTotal as number) + (allExpenseTotal as number);
+    const netPay = (payTotal as number) - (allExpenseTotal as number);
 
     const ref = useRef<any>(null);
     function downloadInvoice() {
@@ -239,8 +239,8 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                         ?.invoice
                                                         ?.employeeInformation
                                                         ?.currency == 'CAD'
-                                                        ? CAD(payTotal)
-                                                        : Naira(payTotal)
+                                                        ? CAD(netPay)
+                                                        : Naira(netPay)
                                                 }
                                             />
                                         </Tr>
@@ -289,8 +289,8 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                         ?.invoice
                                                         ?.employeeInformation
                                                         ?.currency == 'CAD'
-                                                        ? CAD(netPay)
-                                                        : Naira(netPay)
+                                                        ? CAD(payTotal)
+                                                        : Naira(payTotal)
                                                 }
                                             />
                                         </Tr>
@@ -330,8 +330,8 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                     Net Pay:{' '}
                                     {paySlip?.payslipView?.invoice
                                         ?.employeeInformation?.currency == 'CAD'
-                                        ? CAD(netPay)
-                                        : Naira(netPay)}
+                                        ? CAD(payTotal)
+                                        : Naira(payTotal)}
                                 </Text>
                                 <Box
                                     border="1px solid"
@@ -341,7 +341,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                 >
                                     <Text mb=".5rem">In Words</Text>
                                     <Text mb="0" textTransform="capitalize">
-                                        {numWords(netPay)}{' '}
+                                        {numWords(payTotal)}{' '}
                                         {paySlip?.payslipView?.invoice
                                             ?.employeeInformation?.currency ==
                                         'CAD'

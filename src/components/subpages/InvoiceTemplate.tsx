@@ -173,7 +173,8 @@ function InvoiceTemplate({
                                                             ?.employeeInformation
                                                             ?.currency
                                                     } ${CUR(
-                                                        clicked?.totalAmount,
+                                                        (clicked?.totalAmount as number) -
+                                                            (allExpenseTotal as number),
                                                     )}`}
                                                 />
                                             </Tr>
@@ -254,8 +255,7 @@ function InvoiceTemplate({
                                                         ?.currency
                                                 }
                                                 value={CUR(
-                                                    (clicked?.totalAmount as number) +
-                                                        (allExpenseTotal as number),
+                                                    clicked?.totalAmount as number,
                                                 )}
                                             />
                                         </Box>

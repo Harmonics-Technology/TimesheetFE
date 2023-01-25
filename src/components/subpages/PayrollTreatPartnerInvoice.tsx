@@ -28,6 +28,7 @@ import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
 import Paymentinvoices from './Paymentinvoices';
 import Naira, { CAD } from '@components/generics/functions/Naira';
+import PayrollInvoice from './PayrollInvoice';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -205,7 +206,7 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                 </Tables>
                 <Pagination data={invoiceData} />
             </Box>
-            <Paymentinvoices
+            <PayrollInvoice
                 isOpen={isOpen}
                 onClose={onClose}
                 clicked={clicked}

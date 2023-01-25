@@ -41,8 +41,6 @@ function AdminInvoices({ invoiceData }: adminProps) {
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
-    const offshore = router.pathname.includes('financials/payrolls-approved');
-    const payment = router.pathname.includes('financials/invoices-payment');
     // console.log({ clicked });
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
@@ -130,9 +128,7 @@ function AdminInvoices({ invoiceData }: adminProps) {
                                 spinner={<BeatLoader color="white" size={10} />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
-                                {offshore || payment
-                                    ? 'Approve'
-                                    : 'Mark as Paid'}
+                                Approve
                             </Button>
                         )}
                     </HStack>

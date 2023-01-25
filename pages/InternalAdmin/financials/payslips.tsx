@@ -4,7 +4,7 @@ import AdminPayslip from '@components/subpages/AdminPayslip';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
-    FinancialService,
+    PaySlipService,
     PayslipUserViewPagedCollectionStandardResponse,
 } from 'src/services';
 
@@ -21,10 +21,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listPaySlips(
+            const data = await PaySlipService.getAllPaySlips(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
+                pagingOptions.date,
             );
 
             return {

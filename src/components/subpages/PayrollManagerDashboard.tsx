@@ -29,6 +29,7 @@ import {
     InvoiceView,
     PaySlipView,
     PayslipUserView,
+    RecentTimeSheetView,
 } from 'src/services';
 
 interface DashboardProps {
@@ -65,6 +66,24 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                         value={adminMetrics?.totalDownLines}
                     />
                 </Grid>
+                {/* <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
+                    <TableCards
+                        title={'Recent Timesheets'}
+                        url={'timesheets/approval'}
+                        data={metrics?.data?.recentTimesheets
+                            ?.slice(0, 5)
+                            .map((x: RecentTimeSheetView, i) => (
+                                <Tr key={i}>
+                                    <TableData name={x.year} />
+                                    <TableData name={x.month} />
+                                    <TableData name={x.hours} />
+                                    <TableData name={x.numberOfDays} />
+                                </Tr>
+                            ))}
+                        thead={['Year', 'Month', 'Hours', 'No. of Days']}
+                        link={'/'}
+                    />
+                </Grid> */}
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent payrolls'}

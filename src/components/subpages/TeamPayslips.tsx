@@ -76,32 +76,12 @@ function TeamPayslips({ payrolls }: expenseProps) {
                                             ?.employeeInformation?.currency ==
                                         'CAD'
                                             ? CAD(
-                                                  (x?.payslipView?.invoice
-                                                      ?.totalAmount as number) +
-                                                      (
-                                                          x?.payslipView
-                                                              ?.invoice
-                                                              ?.expenses as unknown as ExpenseView[]
-                                                      )?.reduce(
-                                                          (a, b) =>
-                                                              a +
-                                                              (b?.amount as number),
-                                                          0,
-                                                      ),
+                                                  x?.payslipView?.invoice
+                                                      ?.totalAmount as number,
                                               )
                                             : Naira(
-                                                  (x?.payslipView?.invoice
-                                                      ?.totalAmount as number) +
-                                                      (
-                                                          x?.payslipView
-                                                              ?.invoice
-                                                              ?.expenses as unknown as ExpenseView[]
-                                                      )?.reduce(
-                                                          (a, b) =>
-                                                              a +
-                                                              (b?.amount as number),
-                                                          0,
-                                                      ),
+                                                  x?.payslipView?.invoice
+                                                      ?.totalAmount as number,
                                               )
                                     }
                                 />

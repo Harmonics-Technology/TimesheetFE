@@ -103,3 +103,21 @@ td {
     color: white !important;
     background-color: #2eafa3 !important;
 }
+.green {
+    /* color: #2eafa3 !important; */
+    position: relative;
+}
+.green::after {
+    content: 'EXPENSE';
+    color: white;
+    padding: 0rem 0.5rem;
+    display: flex;
+    align-items: center;
+    height: 1rem;
+    font-size: 0.5rem;
+    border-radius: 10px;
+    background-color: #2eafa3 !important;
+    position: absolute;
+    top: 8%;
+    right: 25%;
+}

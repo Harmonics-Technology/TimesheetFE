@@ -12,19 +12,26 @@ import {
     Text,
     Tr,
     useDisclosure,
+    useToast,
 } from '@chakra-ui/react';
 import InvoiceTotalText from '@components/bits-utils/InvoiceTotalText';
 import { TableData } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import moment from 'moment';
-import { useRef } from 'react';
-import { ExpenseView, InvoiceView, PayrollView } from 'src/services';
+import { useRef, useState } from 'react';
+import {
+    ExpenseView,
+    FinancialService,
+    InvoiceView,
+    PayrollView,
+} from 'src/services';
 import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import RejectInvoiceModal from '@components/bits-utils/RejectInvoiceModal';
-import RejectedMessage from '@components/bits-utils/RejectedMessage';
+import { useRouter } from 'next/router';
+import BeatLoader from 'react-spinners/BeatLoader';
 
-function Paymentinvoices({
+function PayrollInvoice({
     isOpen,
     onClose,
     clicked,
@@ -49,7 +56,48 @@ function Paymentinvoices({
     //     ?.reduce((a: any, b: any) => a + b, 0);
     const hst = 300;
     const hstNaira = hst * exchangeRate;
-    const status = clicked?.status;
+    // console.log({ clicked });
+    const [loading, setLoading] = useState<boolean>(false);
+    const toast = useToast();
+    const router = useRouter();
+
+    const approveInvoiceItems = async () => {
+        try {
+            setLoading(true);
+            const result = await FinancialService.treatSubmittedInvoice(
+                clicked?.id,
+            );
+            if (result.status) {
+                console.log({ result });
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                onClose();
+                setLoading(false);
+                router.reload();
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            console.log({ error });
+            setLoading(false);
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
     return (
         <>
             <Modal
@@ -283,7 +331,7 @@ function Paymentinvoices({
                         </Box>
                         <HStack justify="center" mt="4rem">
                             <Button
-                                bgColor="brand.400"
+                                bgColor="brand.600"
                                 color="white"
                                 fontSize=".8rem"
                                 onClick={downloadInvoice}
@@ -293,28 +341,34 @@ function Paymentinvoices({
                                 Download Invoice
                             </Button>
                             <Button
-                                bgColor={
-                                    status == 'REJECTED'
-                                        ? 'red.600'
-                                        : status == 'PENDING'
-                                        ? 'brand.700'
-                                        : status == 'APPROVED'
-                                        ? 'brand.600'
-                                        : 'brand.400'
-                                }
+                                bgColor="brand.400"
+                                color="white"
+                                fontSize=".8rem"
+                                isLoading={loading}
+                                spinner={<BeatLoader color="white" size={10} />}
+                                onClick={approveInvoiceItems}
+                                disabled={clicked?.status !== 'PENDING'}
+                                borderRadius="0"
+                                // h="3rem"
+                            >
+                                Approve This Invoice
+                            </Button>
+                            <Button
+                                bgColor="red.600"
                                 color="white"
                                 fontSize=".8rem"
                                 onClick={onOpen}
                                 borderRadius="0"
+                                disabled={clicked?.status !== 'PENDING'}
                                 // h="3rem"
                             >
-                                {status}
+                                Reject This Invoice
                             </Button>
                         </HStack>
                     </ModalBody>
                 </ModalContent>
             </Modal>
-            <RejectedMessage
+            <RejectInvoiceModal
                 isOpen={isOpened}
                 onClose={onClosed}
                 clicked={clicked}
@@ -322,4 +376,4 @@ function Paymentinvoices({
         </>
     );
 }
-export default Paymentinvoices;
+export default PayrollInvoice;

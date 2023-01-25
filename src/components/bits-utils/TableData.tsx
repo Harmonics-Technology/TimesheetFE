@@ -52,13 +52,13 @@ export function TableData({
     border,
     value,
     borderColor,
-    id,
+    classes,
 }: {
     name: string | number | undefined | null;
     border?: boolean | undefined;
     value?: string;
     borderColor?: string;
-    id?: any;
+    classes?: any;
 }) {
     return (
         <Td
@@ -66,6 +66,7 @@ export function TableData({
             borderRight={border ? value : 0}
             borderRightColor={borderColor}
             paddingInlineStart="1rem"
+            className={classes}
             color={
                 name == 'OFFSHORE'
                     ? 'brand.700'
@@ -73,7 +74,6 @@ export function TableData({
                     ? 'brand.400'
                     : 'black'
             }
-            ref={id}
         >
             {name}
         </Td>

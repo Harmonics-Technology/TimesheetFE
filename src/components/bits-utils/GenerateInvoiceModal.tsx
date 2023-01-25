@@ -70,15 +70,15 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
     });
     console.log(watch('cLientId'));
 
-    const exchangeRate = Number(watch('rate'));
+    const exchangeRate = Number(watch('rate')) || 0;
     const invoicesId: string[] = clicked.map((x) => x.id);
     const allInvoiceTotal = clicked.reduce((a, b) => a + b.totalAmount, 0);
-    const allExpenseTotal = clicked?.children
-        ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
-        ?.reduce((a: any, b: any) => a + b, 0);
+    // const allExpenseTotal = clicked?.children
+    //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
+    //     ?.reduce((a: any, b: any) => a + b, 0);
     const hst = 300;
     const hstNaira = hst * exchangeRate;
-    const total = (allInvoiceTotal + allExpenseTotal + hstNaira) / exchangeRate;
+    const total = (allInvoiceTotal + hstNaira) / exchangeRate;
     console.log({ exchangeRate });
 
     const onSubmit = async (data: PaymentPartnerInvoiceModel) => {
@@ -204,8 +204,8 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                                         ).format('DD/MM/YYYY')}
                                                     />
                                                     <TableData
-                                                        name={Naira(
-                                                            (x?.totalAmount as number) +
+                                                        name={`${Naira(
+                                                            (x?.totalAmount as number) -
                                                                 (
                                                                     x?.expenses as unknown as ExpenseView[]
                                                                 )?.reduce(
@@ -214,7 +214,28 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                                                         (b?.amount as number),
                                                                     0,
                                                                 ),
-                                                        )}
+                                                        )} ${
+                                                            x?.expenses
+                                                                ?.length !== 0
+                                                                ? `+ ${Naira(
+                                                                      x.expenses?.reduce(
+                                                                          (
+                                                                              a,
+                                                                              b,
+                                                                          ) =>
+                                                                              a +
+                                                                              (b?.amount as number),
+                                                                          0,
+                                                                      ),
+                                                                  )}`
+                                                                : ''
+                                                        }`}
+                                                        classes={
+                                                            x?.expenses
+                                                                ?.length !== 0
+                                                                ? 'green'
+                                                                : ''
+                                                        }
                                                     />
                                                     {/* <TableData
                                                         name={
@@ -248,7 +269,9 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                     >
                                         <InvoiceTotalText
                                             label="Subtotal"
-                                            value={allInvoiceTotal}
+                                            value={
+                                                allInvoiceTotal / exchangeRate
+                                            }
                                             cur={'$'}
                                         />
                                         <InvoiceTotalText
@@ -269,12 +292,7 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                         >
                                             <InvoiceTotalText
                                                 label="Total ($)"
-                                                value={CUR(
-                                                    (allInvoiceTotal +
-                                                        allExpenseTotal +
-                                                        hstNaira) /
-                                                        exchangeRate,
-                                                )}
+                                                value={CUR(total)}
                                                 cur={'$'}
                                             />
                                         </Box>
