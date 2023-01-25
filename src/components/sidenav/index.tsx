@@ -411,6 +411,100 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                 </VStack>
+            ) : role == 'InternalPayrollManager' ? (
+                <VStack align="left" gap="1.5rem" pr="1rem">
+                    <MenuItem
+                        linkName="dashboard"
+                        menuTitle="Dashboard"
+                        icon={<FaHome opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                    />
+                    <MenuItem
+                        linkName="profile-management"
+                        menuTitle="Profile Management"
+                        icon={<FaUsers opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[
+                            'clients',
+                            'supervisors',
+                            'team members',
+                            'payment partners',
+                        ]}
+                    />
+                    <MenuItem
+                        linkName="timesheets"
+                        menuTitle="Timesheets"
+                        icon={<FaCalendar opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['approval', 'history']}
+                    />
+                    <MenuItem
+                        linkName="my-timesheets"
+                        menuTitle="Manage Timesheets"
+                        icon={<FaCalendar opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['my timesheet', 'timesheet history']}
+                    />
+                    <MenuItem
+                        linkName="my-financials"
+                        menuTitle="My Financials"
+                        icon={<RiLineChartFill opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[
+                            'expenses',
+                            'my payslips',
+                            `${
+                                user?.payrollType === 'OFFSHORE'
+                                    ? 'invoices'
+                                    : 'my invoices'
+                            }`,
+                            'my contracts',
+                        ]}
+                    />
+                    <MenuItem
+                        linkName="financials"
+                        menuTitle="Financials"
+                        icon={<RiLineChartFill opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[
+                            'expenses',
+                            'payrolls',
+                            'payslips',
+                            'invoices',
+                        ]}
+                    />
+                    <MenuItem
+                        linkName="contracts"
+                        menuTitle="Contracts"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                    />
+                    <MenuItem
+                        linkName="my-profile"
+                        menuTitle="My Profile"
+                        icon={<FaUser opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                    />
+                </VStack>
             ) : role == 'Admin' ? (
                 <VStack align="left" gap="1.5rem" pr="1rem">
                     <MenuItem

@@ -298,6 +298,10 @@ function TeamProfile({
                                 id: 'Internal Admin',
                                 label: 'Internal Admin',
                             },
+                            {
+                                id: 'Internal Payroll Manager',
+                                label: 'Internal Payroll Manager',
+                            },
                         ]}
                     />
                     <SelectrixBox<TeamMemberModel>

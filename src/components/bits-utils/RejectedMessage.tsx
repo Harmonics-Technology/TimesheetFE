@@ -73,14 +73,14 @@ function RejectedMessage({
                         </Text>
                         <Text fontWeight="500" mb="0" fontSize=".9rem">
                             Hello {user?.fullName}, Invoice with ID{' '}
-                            <strong>{clicked?.invoiceReference}</strong>{' '}
+                            <strong>{clicked?.invoiceReference}</strong> has{' '}
                             {status == 'APPROVED'
-                                ? ` has been viewed and approved by a payroll manager, you can now proceed to mark it as paid. Cheers!`
+                                ? `been viewed and approved by a payroll manager, you can now proceed to mark it as paid. Cheers!`
                                 : status == 'PENDING'
-                                ? "has been submitted to a payroll manager and is pending approval, you'll be notified when the status changes. Cheers!"
+                                ? "been submitted to a payroll manager and is pending approval, you'll be notified when the status changes. Cheers!"
                                 : status == 'INVOICED'
-                                ? 'has been invoiced by you, no more actions need to be performed. Cheers!'
-                                : ''}
+                                ? 'been invoiced by you, no more actions need to be performed. Cheers!'
+                                : clicked?.rejectionReason}
                         </Text>
                         <Button
                             w="full"

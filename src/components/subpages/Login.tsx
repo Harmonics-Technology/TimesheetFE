@@ -73,7 +73,7 @@ function Login() {
                 // router.push(
                 //     `${result?.data?.role?.replace(' ', '')}/dashboard`,
                 // );
-                window.location.href = `${result?.data?.role?.replace(
+                window.location.href = `${result?.data?.role?.replaceAll(
                     ' ',
                     '',
                 )}/dashboard`;

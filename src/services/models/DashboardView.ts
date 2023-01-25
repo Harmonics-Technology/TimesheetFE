@@ -4,6 +4,7 @@
 
 import type { InvoiceView } from './InvoiceView';
 import type { PaySlipView } from './PaySlipView';
+import type { TimeSheetView } from './TimeSheetView';
 import type { UserView } from './UserView';
 
 export type DashboardView = {
@@ -14,4 +15,5 @@ export type DashboardView = {
     recentPayrolls?: Array<InvoiceView> | null;
     recentInvoiced?: Array<InvoiceView> | null;
     recentPayslips?: Array<PaySlipView> | null;
+    recentTimeSheet?: Array<TimeSheetView> | null;
 };

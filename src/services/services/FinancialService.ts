@@ -12,6 +12,7 @@ import type { PaymentPartnerInvoiceModel } from '../models/PaymentPartnerInvoice
 import type { PaymentScheduleListStandardResponse } from '../models/PaymentScheduleListStandardResponse';
 import type { PayrollViewPagedCollectionStandardResponse } from '../models/PayrollViewPagedCollectionStandardResponse';
 import type { PaySlipViewPagedCollectionStandardResponse } from '../models/PaySlipViewPagedCollectionStandardResponse';
+import type { RejectPaymentPartnerInvoiceModel } from '../models/RejectPaymentPartnerInvoiceModel';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -744,6 +745,22 @@ invoiceId?: string,
             query: {
                 'invoiceId': invoiceId,
             },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static rejectPaymentPartnerInvoice(
+requestBody?: RejectPaymentPartnerInvoiceModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/invoice/payment-partner/reject',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
         });
     }
 

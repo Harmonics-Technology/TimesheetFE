@@ -132,7 +132,7 @@ function AdminInvoices({ invoiceData }: adminProps) {
                             </Button>
                         )}
                     </HStack>
-                    <Checkbox
+                    {/* <Checkbox
                         checked={
                             invoice?.length !== 0 &&
                             invoice?.filter((x) => x.status !== 'INVOICED')
@@ -140,7 +140,7 @@ function AdminInvoices({ invoiceData }: adminProps) {
                         }
                         onChange={() => toggleSelected('', true)}
                         label="Select All"
-                    />
+                    /> */}
                 </Flex>
                 <FilterSearch />
                 <Tables
@@ -151,7 +151,7 @@ function AdminInvoices({ invoiceData }: adminProps) {
                         'Start Date',
                         'End Date',
                         'Status',
-                        'Action',
+                        // 'Action',
                     ]}
                 >
                     <>
@@ -187,7 +187,7 @@ function AdminInvoices({ invoiceData }: adminProps) {
                                     clicked={setClicked}
                                 />
 
-                                <td>
+                                {/* <td>
                                     <Checkbox
                                         checked={
                                             selectedId.find(
@@ -199,7 +199,7 @@ function AdminInvoices({ invoiceData }: adminProps) {
                                         }
                                         disabled={x.status === 'INVOICED'}
                                     />
-                                </td>
+                                </td> */}
                             </Tr>
                         ))}
                     </>

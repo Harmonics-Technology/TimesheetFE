@@ -61,6 +61,7 @@ export type { ProblemDetails } from './models/ProblemDetails';
 export type { RecentPayrollView } from './models/RecentPayrollView';
 export type { RecentTimeSheetView } from './models/RecentTimeSheetView';
 export type { RegisterModel } from './models/RegisterModel';
+export type { RejectPaymentPartnerInvoiceModel } from './models/RejectPaymentPartnerInvoiceModel';
 export type { RejectTimeSheetModel } from './models/RejectTimeSheetModel';
 export type { Status } from './models/Status';
 export type { TeamMemberModel } from './models/TeamMemberModel';

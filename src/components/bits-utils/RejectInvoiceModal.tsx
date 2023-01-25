@@ -1,37 +1,27 @@
 import {
-    Box,
     Button,
     Flex,
-    HStack,
     Icon,
     Modal,
     ModalBody,
-    ModalCloseButton,
     ModalContent,
     ModalHeader,
     ModalOverlay,
     Text,
-    Tr,
+    useToast,
 } from '@chakra-ui/react';
-import InvoiceTotalText from '@components/bits-utils/InvoiceTotalText';
-import { TableData } from '@components/bits-utils/TableData';
-import Tables from '@components/bits-utils/Tables';
-import moment from 'moment';
-import { useRef } from 'react';
 import {
-    ExpenseView,
+    FinancialService,
     InvoiceView,
-    PayrollView,
-    RejectTimeSheetModel,
+    RejectPaymentPartnerInvoiceModel,
 } from 'src/services';
-import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
-import { PDFExport } from '@progress/kendo-react-pdf';
 import { PrimaryTextarea } from './PrimaryTextArea';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { GrClose } from 'react-icons/gr';
+import { useRouter } from 'next/router';
 
 function RejectInvoiceModal({
     isOpen,
@@ -43,39 +33,43 @@ function RejectInvoiceModal({
     clicked: InvoiceView | undefined;
 }) {
     const schema = yup.object().shape({
-        reason: yup.string().required(),
+        rejectionReason: yup.string().required(),
     });
 
     const {
         handleSubmit,
         register,
         formState: { errors, isSubmitting },
-    } = useForm<RejectTimeSheetModel>({
+    } = useForm<RejectPaymentPartnerInvoiceModel>({
         resolver: yupResolver(schema),
         mode: 'all',
     });
 
     console.log({ clicked });
+    const router = useRouter();
+    const toast = useToast();
 
-    const onSubmit = async (data: RejectTimeSheetModel) => {
-        // data.id = clicked.id;
-        // console.log({ data });
-        // try {
-        //     const result = await TimeSheetService.rejectTimeSheetForADay(data);
-        //     if (result.status) {
-        //         console.log({ result });
-        //         router.reload();
-        //         return;
-        //     }
-        //     console.log({ result });
-        // } catch (error) {
-        //     console.log({ error });
-        //     toast({
-        //         title: 'An error occured',
-        //         status: 'error',
-        //         position: 'top-right',
-        //     });
-        // }
+    const onSubmit = async (data: RejectPaymentPartnerInvoiceModel) => {
+        data.invoiceId = clicked?.id;
+        console.log({ data });
+        try {
+            const result = await FinancialService.rejectPaymentPartnerInvoice(
+                data,
+            );
+            if (result.status) {
+                console.log({ result });
+                router.reload();
+                return;
+            }
+            console.log({ result });
+        } catch (error) {
+            console.log({ error });
+            toast({
+                title: 'An error occured',
+                status: 'error',
+                position: 'top-right',
+            });
+        }
     };
     return (
         <>
@@ -118,10 +112,10 @@ function RejectInvoiceModal({
                     </ModalHeader>
                     <ModalBody>
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <PrimaryTextarea<RejectTimeSheetModel>
+                            <PrimaryTextarea<RejectPaymentPartnerInvoiceModel>
                                 label="Reason"
-                                name="reason"
-                                error={errors.reason}
+                                name="rejectionReason"
+                                error={errors.rejectionReason}
                                 placeholder=""
                                 defaultValue=""
                                 h="5.5rem"
