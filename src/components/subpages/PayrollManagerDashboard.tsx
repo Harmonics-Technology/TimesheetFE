@@ -66,30 +66,36 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                         value={adminMetrics?.totalDownLines}
                     />
                 </Grid>
-                {/* <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
+                <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Timesheets'}
                         url={'timesheets/approval'}
-                        data={metrics?.data?.recentTimesheets
-                            ?.slice(0, 5)
-                            .map((x: RecentTimeSheetView, i) => (
+                        data={metrics?.data?.recentTimeSheet
+                            ?.slice(0, 4)
+                            .map((x: any, i) => (
                                 <Tr key={i}>
-                                    <TableData name={x.year} />
-                                    <TableData name={x.month} />
+                                    <TableData name={x?.name} />
+                                    <TableData
+                                        name={
+                                            x.isApproved == false
+                                                ? 'Not Approved'
+                                                : 'Approved'
+                                        }
+                                    />
                                     <TableData name={x.hours} />
-                                    <TableData name={x.numberOfDays} />
+                                    <TableState name={x.status} />
                                 </Tr>
                             ))}
-                        thead={['Year', 'Month', 'Hours', 'No. of Days']}
+                        thead={['Name', 'Approved', 'Hours', 'Status']}
                         link={'/'}
                     />
-                </Grid> */}
+                </Grid>
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent payrolls'}
                         url={'financials/payrolls'}
                         data={metrics?.data?.recentPayrolls
-                            ?.slice(0, 5)
+                            ?.slice(0, 4)
                             .map((x: InvoiceView, i) => (
                                 <Tr key={i}>
                                     <TableData
@@ -132,7 +138,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                         title={'Recent Payslip'}
                         url={'financials/payslips'}
                         data={metrics?.data?.recentPayslips
-                            ?.slice(0, 5)
+                            ?.slice(0, 4)
                             .map((x: PaySlipView, i) => (
                                 <Tr key={i}>
                                     <TableData name={x?.invoice?.name} />

@@ -10,6 +10,7 @@ import {
     ModalHeader,
     ModalOverlay,
     Text,
+    Tooltip,
     Tr,
     useDisclosure,
 } from '@chakra-ui/react';
@@ -292,24 +293,26 @@ function Paymentinvoices({
                             >
                                 Download Invoice
                             </Button>
-                            <Button
-                                bgColor={
-                                    status == 'REJECTED'
-                                        ? 'red.600'
-                                        : status == 'PENDING'
-                                        ? 'brand.700'
-                                        : status == 'APPROVED'
-                                        ? 'brand.600'
-                                        : 'brand.400'
-                                }
-                                color="white"
-                                fontSize=".8rem"
-                                onClick={onOpen}
-                                borderRadius="0"
-                                // h="3rem"
-                            >
-                                {status}
-                            </Button>
+                            <Tooltip label="Click to view message" hasArrow>
+                                <Button
+                                    bgColor={
+                                        status == 'REJECTED'
+                                            ? 'red.600'
+                                            : status == 'PENDING'
+                                            ? 'brand.700'
+                                            : status == 'APPROVED'
+                                            ? 'brand.600'
+                                            : 'brand.400'
+                                    }
+                                    color="white"
+                                    fontSize=".8rem"
+                                    onClick={onOpen}
+                                    borderRadius="0"
+                                    // h="3rem"
+                                >
+                                    {status}
+                                </Button>
+                            </Tooltip>
                         </HStack>
                     </ModalBody>
                 </ModalContent>
