@@ -74,7 +74,11 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                             ?.slice(0, 4)
                             .map((x: any, i) => (
                                 <Tr key={i}>
-                                    <TableData name={x?.name} />
+                                    <TableData
+                                        name={
+                                            x?.employeeInformation.user.fullName
+                                        }
+                                    />
                                     <TableData
                                         name={
                                             x.isApproved == false
