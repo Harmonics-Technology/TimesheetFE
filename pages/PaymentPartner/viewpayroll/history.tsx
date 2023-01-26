@@ -5,6 +5,7 @@ import { filterPagingSearchOptions } from '@components/generics/filterPagingSear
 import { withPageAuth } from '@components/generics/withPageAuth';
 import AdminPayroll from '@components/subpages/AdminPayroll';
 import PaymentPartnerPayroll from '@components/subpages/PaymentPartnerPayroll';
+import PaymentPayrollHistory from '@components/subpages/PaymentPayrollHistory';
 import { GetServerSideProps } from 'next';
 import React, { useContext } from 'react';
 import {
@@ -30,7 +31,7 @@ function expenses({ payrolls }: PayrollType) {
                     tabName="Payroll History"
                 />
             </Flex>
-            <PaymentPartnerPayroll payrolls={payrolls} />
+            <PaymentPayrollHistory payrolls={payrolls} />
         </Box>
     );
 }
@@ -41,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listPaymentPartnerInvoices(
+            const data = await FinancialService.listInvoicesHistories(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,

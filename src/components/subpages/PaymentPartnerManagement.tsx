@@ -82,8 +82,7 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
             same
                 ? ((data.firstName = data.organizationName),
                   (data.email = data.organizationEmail),
-                  (data.phoneNumber = data.organizationPhone),
-                  (data.lastName = data.organizationName))
+                  (data.phoneNumber = data.organizationPhone))
                 : null;
         }
         console.log({ data });

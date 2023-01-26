@@ -308,6 +308,7 @@ function Paymentinvoices({
                                     fontSize=".8rem"
                                     onClick={onOpen}
                                     borderRadius="0"
+                                    textTransform="capitalize"
                                     // h="3rem"
                                 >
                                     {status}

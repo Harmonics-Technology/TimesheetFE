@@ -7,6 +7,8 @@ import type { UserView } from './UserView';
 
 export type EmployeeInformationView = {
     id?: string;
+    userId?: string;
+    user?: UserView;
     clientId?: string | null;
     client?: UserView;
     supervisorId?: string;

@@ -11,6 +11,7 @@ import {
 import {
     TableContractAction,
     TableData,
+    TableState,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import {
@@ -30,7 +31,7 @@ interface expenseProps {
     payrolls: InvoiceViewPagedCollectionStandardResponse;
 }
 
-function PaymentPartnerPayroll({ payrolls }: expenseProps) {
+function PaymentPayrollHistory({ payrolls }: expenseProps) {
     const payrollsList = payrolls?.data?.value;
     const router = useRouter();
     const toast = useToast();
@@ -86,14 +87,14 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                         )}
                     </Box>
 
-                    <Checkbox
+                    {/* <Checkbox
                         checked={
                             payrollsList?.length !== 0 &&
                             payrollsList?.length == selectedId?.length
                         }
                         onChange={() => toggleSelected('', true)}
                         label="Select All"
-                    />
+                    /> */}
                 </Flex>
                 <FilterSearch />
                 <Tables
@@ -106,7 +107,7 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                         // 'Rate',
                         'Total Amount',
                         // '...',
-                        '',
+                        'Status',
                     ]}
                 >
                     <>
@@ -133,22 +134,12 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                                     }
                                 />
                                 <TableData name={`${x.totalHours} HRS`} />
-                                {/* <TableData name={x.rate} /> */}
                                 <TableData name={x.totalAmount} />
+                                <TableState name={x.status} />
                                 {/* <TableContractAction
                                     id={x.employeeInformationId}
                                     timeSheets={true}
                                 /> */}
-                                <td>
-                                    <Checkbox
-                                        checked={
-                                            selectedId.find(
-                                                (e) => e.id === x.id,
-                                            ) || ''
-                                        }
-                                        onChange={() => toggleSelected(x)}
-                                    />
-                                </td>
                             </Tr>
                         ))}
                     </>
@@ -164,4 +155,4 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
     );
 }
 
-export default PaymentPartnerPayroll;
+export default PaymentPayrollHistory;

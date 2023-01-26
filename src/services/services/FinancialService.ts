@@ -1056,6 +1056,36 @@ dateFilter?: string,
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
+    public static listInvoicesHistories(
+offset?: number,
+limit?: number,
+search?: string,
+dateFilter?: string,
+): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/invoices/history',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+                'dateFilter': dateFilter,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @param dateFilter 
+     * @returns InvoiceViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
     public static listPaymentPartnerInvoicesForPayrollManagers(
 offset?: number,
 limit?: number,

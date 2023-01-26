@@ -67,6 +67,10 @@ export function TableData({
             borderRightColor={borderColor}
             paddingInlineStart="1rem"
             className={classes}
+            maxW="120px"
+            textOverflow=""
+            overflow="hidden"
+            // noOfLines={1}
             color={
                 name == 'OFFSHORE'
                     ? 'brand.700'

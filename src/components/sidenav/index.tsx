@@ -306,6 +306,15 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                     />
+                    <MenuItem
+                        linkName="team-members"
+                        menuTitle="My Team"
+                        icon={<FaUsers opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                    />
 
                     <MenuItem
                         linkName="expenses"

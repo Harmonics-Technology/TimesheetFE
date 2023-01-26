@@ -401,4 +401,30 @@ clientId?: string,
         });
     }
 
+    /**
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @param paymentPartnerId 
+     * @returns UserViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static getPaymentPartnerTeamMembers(
+offset?: number,
+limit?: number,
+search?: string,
+paymentPartnerId?: string,
+): CancelablePromise<UserViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/payment-partner/team-members',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+                'paymentPartnerId': paymentPartnerId,
+            },
+        });
+    }
+
 }
