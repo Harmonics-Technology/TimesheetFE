@@ -23,7 +23,7 @@ interface ExpensesType {
 }
 function expenses({ expenses, team, expenseType }: ExpensesType) {
     const { user } = useContext(UserContext);
-    const role = user?.role.replace(' ', '');
+    const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
             <Flex>
@@ -35,10 +35,10 @@ function expenses({ expenses, team, expenseType }: ExpensesType) {
                     url={`/${role}/financials/expenses-approved`}
                     tabName="Approved"
                 />
-                <PageTabs
+                {/* <PageTabs
                     url={`/${role}/financials/my-expenses`}
                     tabName="My Expenses"
-                />
+                /> */}
             </Flex>
             <PayrollExpenseManagementApproved
                 expenses={expenses}

@@ -1,37 +1,19 @@
-import { Box, Flex } from '@chakra-ui/react';
-import PageTabs from '@components/bits-utils/PageTabs';
-import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import TeamPayslips from '@components/subpages/TeamPayslips';
 import { GetServerSideProps } from 'next';
-import React, { useContext } from 'react';
+import React from 'react';
 import {
     FinancialService,
-    PayslipUserViewPagedCollectionStandardResponse,
+    PaySlipService,
+    PaySlipViewPagedCollectionStandardResponse,
 } from 'src/services';
 
 interface PayrollType {
-    payrolls: PayslipUserViewPagedCollectionStandardResponse;
+    payrolls: PaySlipViewPagedCollectionStandardResponse;
 }
 function payslips({ payrolls }: PayrollType) {
-    const { user } = useContext(UserContext);
-    const role = user?.role.replace(' ', '');
-    return (
-        <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/my-payslips`}
-                    tabName="My Payslips"
-                />
-                <PageTabs
-                    url={`/${role}/financials/payslips`}
-                    tabName="All Payslips"
-                />
-            </Flex>
-            <TeamPayslips payrolls={payrolls} />
-        </Box>
-    );
+    return <TeamPayslips payrolls={payrolls} />;
 }
 
 export default payslips;
@@ -41,10 +23,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
         try {
-            const data = await FinancialService.listPaySlipsByTeamMember(
+            const data = await PaySlipService.getTeamMembersPaySlips(
+                id,
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
+                pagingOptions.date,
             );
 
             return {

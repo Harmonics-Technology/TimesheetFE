@@ -16,7 +16,7 @@ interface invoiceType {
 }
 function Invoices({ invoiceData }: invoiceType) {
     const { user } = useContext(UserContext);
-    const role = user?.role.replace(' ', '');
+    const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
             <Flex>

@@ -38,7 +38,7 @@ interface DashboardProps {
 
 function PayrollManagerDashboard({ metrics }: DashboardProps) {
     const { user } = useContext(UserContext);
-    const role = user?.role.replace(' ', '');
+    const role = user?.role.replaceAll(' ', '');
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
     console.log({ metrics });
@@ -76,7 +76,8 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                 <Tr key={i}>
                                     <TableData
                                         name={
-                                            x?.employeeInformation.user.fullName
+                                            x?.employeeInformation?.user
+                                                ?.fullName
                                         }
                                     />
                                     <TableData

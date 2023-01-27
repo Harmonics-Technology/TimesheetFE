@@ -22,6 +22,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
+        // console.log(ctx);
         try {
             const data = await PaySlipService.getTeamMembersPaySlips(
                 id,

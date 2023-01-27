@@ -16,16 +16,16 @@ interface InvoiceType {
 }
 function expenses({ invoiceData }: InvoiceType) {
     const { user } = useContext(UserContext);
-    const role = user?.role.replace(' ', '');
+    const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
             <Flex>
                 <PageTabs
-                    url={`/${role}/PayrollManager/financials/payrolls`}
+                    url={`/${role}/financials/payrolls`}
                     tabName="Onshore"
                 />
                 <PageTabs
-                    url={`/${role}/PayrollManager/financials/payrolls-approved`}
+                    url={`/${role}/financials/payrolls-approved`}
                     tabName="Offshore"
                 />
             </Flex>

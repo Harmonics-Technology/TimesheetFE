@@ -16,17 +16,17 @@ interface PayrollType {
 }
 function payslips({ invoice }: PayrollType) {
     const { user } = useContext(UserContext);
-    const role = user?.role.replace(' ', '');
+    const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
             <Flex>
                 <PageTabs
                     url={`/${role}/financials/my-invoices`}
-                    tabName="My Invoices"
+                    tabName="Awaiting Submission"
                 />
                 <PageTabs
                     url={`/${role}/financials/invoices`}
-                    tabName="All Invoices"
+                    tabName="Submitted"
                 />
             </Flex>
             <TeamInvoices invoiceList={invoice} />
@@ -46,6 +46,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.limit,
                 pagingOptions.search,
                 pagingOptions.date,
+                1,
             );
 
             return {

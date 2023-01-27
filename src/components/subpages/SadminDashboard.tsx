@@ -29,7 +29,7 @@ interface DashboardProps {
 
 function SadminDashboard({ metrics }: DashboardProps) {
     const { user } = useContext(UserContext);
-    const role = user?.role.replace(' ', '');
+    const role = user?.role.replaceAll(' ', '');
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
     return (

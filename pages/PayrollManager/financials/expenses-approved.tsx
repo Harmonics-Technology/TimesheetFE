@@ -23,7 +23,7 @@ interface ExpensesType {
 }
 function expenses({ expenses, team, expenseType }: ExpensesType) {
     const { user } = useContext(UserContext);
-    const role = user?.role.replace(' ', '');
+    const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
             <Flex>

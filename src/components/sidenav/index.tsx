@@ -471,7 +471,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            'expenses',
+                            'my expenses',
                             'my payslips',
                             `${
                                 user?.payrollType === 'OFFSHORE'
@@ -607,7 +607,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     />
                     <MenuItem
-                        linkName="my timesheets"
+                        linkName="my-timesheets"
                         menuTitle="Manage Timesheets"
                         icon={<FaCalendar opacity=".8" />}
                         option={true}
@@ -636,6 +636,24 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                             'payrolls',
                             'payslips',
                             'invoices',
+                        ]}
+                    />
+                    <MenuItem
+                        linkName="my-financials"
+                        menuTitle="My Financials"
+                        icon={<RiLineChartFill opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[
+                            'my expenses',
+                            'my payslips',
+                            `${
+                                user?.payrollType === 'OFFSHORE'
+                                    ? 'invoices'
+                                    : 'my invoices'
+                            }`,
+                            'my contracts',
                         ]}
                     />
                     <MenuItem

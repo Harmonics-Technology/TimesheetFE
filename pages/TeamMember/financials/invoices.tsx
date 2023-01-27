@@ -18,7 +18,7 @@ interface PayrollType {
 function payslips({ invoice }: PayrollType) {
     const { user } = useContext(UserContext);
     console.log({ user });
-    const role = user?.role.replace(' ', '');
+    const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
             {user?.payrollType === 'OFFSHORE' ? (

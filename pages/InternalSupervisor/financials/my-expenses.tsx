@@ -23,7 +23,7 @@ interface ExpensesType {
 function expenses({ expenses, id, expenseType }: ExpensesType) {
     console.log({ id });
     const { user } = useContext(UserContext);
-    const role = user?.role.replace(' ', '');
+    const role = user?.role.replaceAll(' ', '');
 
     return (
         <Box>
