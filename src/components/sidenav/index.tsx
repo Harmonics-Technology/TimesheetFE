@@ -23,7 +23,7 @@ interface sidenavProps {
 function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
     const { user } = useContext(UserContext);
     // console.log({ user });
-    const role = user?.role?.replace(' ', '');
+    const role = user?.role?.replaceAll(' ', '');
     const closeToggle = () => {
         setOpenSidenav(false);
     };
