@@ -29,9 +29,10 @@ import { GenerateInvoiceModal } from '@components/bits-utils/GenerateInvoiceModa
 
 interface expenseProps {
     payrolls: InvoiceViewPagedCollectionStandardResponse;
+    id: number;
 }
 
-function PaymentPayrollHistory({ payrolls }: expenseProps) {
+function PaymentPayrollHistory({ payrolls, id }: expenseProps) {
     const payrollsList = payrolls?.data?.value;
     const router = useRouter();
     const toast = useToast();
@@ -150,6 +151,7 @@ function PaymentPayrollHistory({ payrolls }: expenseProps) {
                 isOpen={isOpen}
                 onClose={onClose}
                 clicked={selectedId}
+                id={id}
             />
         </>
     );

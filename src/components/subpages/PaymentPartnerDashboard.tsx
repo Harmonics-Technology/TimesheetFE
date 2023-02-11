@@ -87,7 +87,7 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                                 <Tr key={i}>
                                     <TableData
                                         name={
-                                            x.clientName ||
+                                            x.payrollGroupName ||
                                             x.paymentPartnerName ||
                                             x.name
                                         }
@@ -131,7 +131,7 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                                     <TableData name={x.invoiceReference} />
                                     <TableData
                                         name={
-                                            x.clientName ||
+                                            x.payrollGroupName ||
                                             x.paymentPartnerName ||
                                             x.name
                                         }

@@ -18,9 +18,10 @@ import { MdOutlineSupervisorAccount } from 'react-icons/md';
 interface sidenavProps {
     openSidenav: boolean;
     setOpenSidenav: any;
+    change: any;
 }
 
-function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
+function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
     const { user } = useContext(UserContext);
     // console.log({ user });
     const role = user?.role?.replaceAll(' ', '');
@@ -30,7 +31,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
 
     return (
         <Box
-            bgColor="brand.400"
+            bgColor={change ? 'brand.400' : 'white'}
             // borderRadius="30px"
             h="100vh"
             w={['50%', '17%']}
@@ -47,17 +48,30 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
             <Link href="/" passHref>
                 <HStack>
                     <Box h="2rem">
-                        <Image src="/assets/logo.png" h="full" />
+                        {change ? (
+                            <Image src="/assets/logob.png" h="full" />
+                        ) : (
+                            <Image src="/assets/logo.png" h="full" />
+                        )}
                     </Box>
-                    <Text fontWeight="600" fontSize=".875rem" color="white">
+                    <Text
+                        fontWeight="600"
+                        fontSize=".875rem"
+                        color={change ? 'white' : 'brand.200'}
+                    >
                         Admin Timesheet
                     </Text>
                 </HStack>
             </Link>
             <Divider my="2rem" />
             {role == 'SuperAdmin' ? (
-                <VStack align="left" gap=".5rem" pr="1rem">
+                <VStack
+                    align="left"
+                    gap={change ? '.5rem' : '1.5rem'}
+                    pr="1rem"
+                >
                     <MenuItem
+                        change={change}
                         linkName="dashboard"
                         menuTitle="Dashboard"
                         icon={<FaHome opacity=".8" />}
@@ -67,6 +81,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="profile-management"
                         menuTitle="Profile Management"
                         icon={<FaUsers opacity=".8" />}
@@ -82,6 +97,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     />
                     <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -91,6 +107,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={['approval', 'history']}
                     />
                     <MenuItem
+                        change={change}
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -105,6 +122,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     />
                     <MenuItem
+                        change={change}
                         linkName="contracts"
                         menuTitle="Contracts"
                         icon={<FaFile opacity=".8" />}
@@ -114,6 +132,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         role={role}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -123,6 +142,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         role={role}
                     />
                     <MenuItem
+                        change={change}
                         linkName="settings"
                         menuTitle="Settings"
                         icon={<FaCogs opacity=".8" />}
@@ -133,8 +153,13 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                     />
                 </VStack>
             ) : role == 'TeamMember' ? (
-                <VStack align="left" gap="1.5rem" pr="1rem">
+                <VStack
+                    align="left"
+                    gap={change ? '.5rem' : '1.5rem'}
+                    pr="1rem"
+                >
                     <MenuItem
+                        change={change}
                         linkName="dashboard"
                         menuTitle="Dashboard"
                         icon={<FaHome opacity=".8" />}
@@ -145,6 +170,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                     />
 
                     <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Manage Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -154,6 +180,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={['my timesheet', 'timesheet history']}
                     />
                     <MenuItem
+                        change={change}
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -172,6 +199,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -182,8 +210,13 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                     />
                 </VStack>
             ) : role == 'Supervisor' ? (
-                <VStack align="left" gap="1.5rem" pr="1rem">
+                <VStack
+                    align="left"
+                    gap={change ? '.5rem' : '1.5rem'}
+                    pr="1rem"
+                >
                     <MenuItem
+                        change={change}
                         linkName="dashboard"
                         menuTitle="Dashboard"
                         icon={<FaHome opacity=".8" />}
@@ -193,6 +226,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         role={role}
                     />
                     <MenuItem
+                        change={change}
                         linkName="team-members"
                         menuTitle="My Team"
                         icon={<FaUsers opacity=".8" />}
@@ -202,6 +236,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -211,6 +246,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={['unapproved', 'history']}
                     />
                     <MenuItem
+                        change={change}
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -220,6 +256,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={['expenses']}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -230,8 +267,13 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                     />
                 </VStack>
             ) : role == 'InternalSupervisor' ? (
-                <VStack align="left" gap="1.5rem" pr="1rem">
+                <VStack
+                    align="left"
+                    gap={change ? '.5rem' : '1.5rem'}
+                    pr="1rem"
+                >
                     <MenuItem
+                        change={change}
                         linkName="dashboard"
                         menuTitle="Dashboard"
                         icon={<FaHome opacity=".8" />}
@@ -241,6 +283,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         role={role}
                     />
                     <MenuItem
+                        change={change}
                         linkName="team-members"
                         menuTitle="My Team"
                         icon={<FaUsers opacity=".8" />}
@@ -250,6 +293,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-timesheets"
                         menuTitle="Manage Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -259,6 +303,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={['my timesheet', 'timesheet history']}
                     />
                     <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -268,6 +313,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={['unapproved', 'history']}
                     />
                     <MenuItem
+                        change={change}
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -286,6 +332,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -296,8 +343,13 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                     />
                 </VStack>
             ) : role == 'PaymentPartner' ? (
-                <VStack align="left" gap="1.5rem" pr="1rem">
+                <VStack
+                    align="left"
+                    gap={change ? '.5rem' : '1.5rem'}
+                    pr="1rem"
+                >
                     <MenuItem
+                        change={change}
                         linkName="dashboard"
                         menuTitle="Dashboard"
                         icon={<FaHome opacity=".8" />}
@@ -307,6 +359,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="team-members"
                         menuTitle="My Team"
                         icon={<FaUsers opacity=".8" />}
@@ -317,6 +370,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                     />
 
                     <MenuItem
+                        change={change}
                         linkName="expenses"
                         menuTitle="Expenses"
                         icon={<FaCreditCard opacity=".8" />}
@@ -326,6 +380,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="viewpayroll"
                         menuTitle="View Payroll"
                         icon={<FaMoneyBill opacity=".8" />}
@@ -335,6 +390,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="invoices"
                         menuTitle="Invoice"
                         icon={<FaFile opacity=".8" />}
@@ -344,6 +400,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="profile"
                         menuTitle="Profile"
                         icon={<FaUser opacity=".8" />}
@@ -354,8 +411,13 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                     />
                 </VStack>
             ) : role == 'PayrollManager' ? (
-                <VStack align="left" gap="1.5rem" pr="1rem">
+                <VStack
+                    align="left"
+                    gap={change ? '.5rem' : '1.5rem'}
+                    pr="1rem"
+                >
                     <MenuItem
+                        change={change}
                         linkName="dashboard"
                         menuTitle="Dashboard"
                         icon={<FaHome opacity=".8" />}
@@ -364,7 +426,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                     />
-                    {/* <MenuItem
+                    {/* <MenuItem change={change}
                         linkName="profile-management"
                         menuTitle="Profile Management"
                         icon={<FaUsers opacity=".8" />}
@@ -379,6 +441,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     /> */}
                     <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -388,6 +451,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={['approval', 'history']}
                     />
                     <MenuItem
+                        change={change}
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -402,6 +466,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     />
                     <MenuItem
+                        change={change}
                         linkName="contracts"
                         menuTitle="Contracts"
                         icon={<FaFile opacity=".8" />}
@@ -411,6 +476,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -421,8 +487,13 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                     />
                 </VStack>
             ) : role == 'InternalPayrollManager' ? (
-                <VStack align="left" gap="1.5rem" pr="1rem">
+                <VStack
+                    align="left"
+                    gap={change ? '.5rem' : '1.5rem'}
+                    pr="1rem"
+                >
                     <MenuItem
+                        change={change}
                         linkName="dashboard"
                         menuTitle="Dashboard"
                         icon={<FaHome opacity=".8" />}
@@ -431,7 +502,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                     />
-                    {/* <MenuItem
+                    {/* <MenuItem change={change}
                         linkName="profile-management"
                         menuTitle="Profile Management"
                         icon={<FaUsers opacity=".8" />}
@@ -446,6 +517,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     /> */}
                     <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -455,6 +527,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={['approval', 'history']}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-timesheets"
                         menuTitle="Manage Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -464,6 +537,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={['my timesheet', 'timesheet history']}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-financials"
                         menuTitle="My Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -482,6 +556,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     />
                     <MenuItem
+                        change={change}
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -496,6 +571,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     />
                     <MenuItem
+                        change={change}
                         linkName="contracts"
                         menuTitle="Contracts"
                         icon={<FaFile opacity=".8" />}
@@ -505,6 +581,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -515,8 +592,13 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                     />
                 </VStack>
             ) : role == 'Admin' ? (
-                <VStack align="left" gap="1.5rem" pr="1rem">
+                <VStack
+                    align="left"
+                    gap={change ? '.5rem' : '1.5rem'}
+                    pr="1rem"
+                >
                     <MenuItem
+                        change={change}
                         linkName="dashboard"
                         menuTitle="Dashboard"
                         icon={<FaHome opacity=".8" />}
@@ -526,6 +608,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="profile-management"
                         menuTitle="Profile Management"
                         icon={<FaUsers opacity=".8" />}
@@ -540,6 +623,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     />
                     <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -548,7 +632,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['approval', 'history']}
                     />
-                    {/* <MenuItem
+                    {/* <MenuItem change={change}
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -563,6 +647,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     /> */}
                     <MenuItem
+                        change={change}
                         linkName="contracts"
                         menuTitle="Contracts"
                         icon={<FaFile opacity=".8" />}
@@ -572,6 +657,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -582,8 +668,13 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                     />
                 </VStack>
             ) : role == 'InternalAdmin' ? (
-                <VStack align="left" gap="1.5rem" pr="1rem">
+                <VStack
+                    align="left"
+                    gap={change ? '.5rem' : '1.5rem'}
+                    pr="1rem"
+                >
                     <MenuItem
+                        change={change}
                         linkName="dashboard"
                         menuTitle="Dashboard"
                         icon={<FaHome opacity=".8" />}
@@ -593,6 +684,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="profile-management"
                         menuTitle="Profile Management"
                         icon={<FaUsers opacity=".8" />}
@@ -607,6 +699,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-timesheets"
                         menuTitle="Manage Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -616,6 +709,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={['my timesheet', 'timesheet history']}
                     />
                     <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -624,7 +718,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['approval', 'history']}
                     />
-                    {/* <MenuItem
+                    {/* <MenuItem change={change}
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -639,6 +733,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     /> */}
                     <MenuItem
+                        change={change}
                         linkName="my-financials"
                         menuTitle="My Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -657,6 +752,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         ]}
                     />
                     <MenuItem
+                        change={change}
                         linkName="contracts"
                         menuTitle="Contracts"
                         icon={<FaFile opacity=".8" />}
@@ -666,6 +762,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -676,8 +773,13 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                     />
                 </VStack>
             ) : role == 'client' ? (
-                <VStack align="left" gap="1.5rem" pr="1rem">
+                <VStack
+                    align="left"
+                    gap={change ? '.5rem' : '1.5rem'}
+                    pr="1rem"
+                >
                     <MenuItem
+                        change={change}
                         linkName="dashboard"
                         menuTitle="Dashboard"
                         icon={<FaHome opacity=".8" />}
@@ -687,6 +789,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="team-members"
                         menuTitle="My Team"
                         icon={<FaUsers opacity=".8" />}
@@ -696,6 +799,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="supervisors"
                         menuTitle="My Supervisors"
                         icon={<MdOutlineSupervisorAccount opacity=".8" />}
@@ -705,6 +809,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                     />
                     <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -714,6 +819,7 @@ function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
                         dropDown={['approval', 'history']}
                     />
                     <MenuItem
+                        change={change}
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -794,7 +900,7 @@ export default SideNav;
 //             <Divider my="2rem" />
 //             {role == 'SuperAdmin' ? (
 //                 <VStack align="left" gap="1.5rem" pr="1rem">
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="dashboard"
 //                         menuTitle="Dashboard"
 //                         icon={<FaHome opacity=".8" />}
@@ -803,7 +909,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="profile-management"
 //                         menuTitle="Profile Management"
 //                         icon={<FaUsers opacity=".8" />}
@@ -818,7 +924,7 @@ export default SideNav;
 //                             'payment partners',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="timesheets"
 //                         menuTitle="Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -827,7 +933,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['approval', 'history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="financials"
 //                         menuTitle="Financials"
 //                         icon={<RiLineChartFill opacity=".8" />}
@@ -841,7 +947,7 @@ export default SideNav;
 //                             'invoices',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="contracts"
 //                         menuTitle="Contracts"
 //                         icon={<FaFile opacity=".8" />}
@@ -850,7 +956,7 @@ export default SideNav;
 //                         dropDown={[]}
 //                         role={role}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-profile"
 //                         menuTitle="My Profile"
 //                         icon={<FaUser opacity=".8" />}
@@ -859,7 +965,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         role={role}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="settings"
 //                         menuTitle="Settings"
 //                         icon={<FaCogs opacity=".8" />}
@@ -871,7 +977,7 @@ export default SideNav;
 //                 </VStack>
 //             ) : role == 'TeamMember' ? (
 //                 <VStack align="left" gap="1.5rem" pr="1rem">
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="dashboard"
 //                         menuTitle="Dashboard"
 //                         icon={<FaHome opacity=".8" />}
@@ -881,7 +987,7 @@ export default SideNav;
 //                         role={role}
 //                     />
 
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="timesheets"
 //                         menuTitle="Manage Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -890,7 +996,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['my timesheet', 'timesheet history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="financials"
 //                         menuTitle="Financials"
 //                         icon={<RiLineChartFill opacity=".8" />}
@@ -908,7 +1014,7 @@ export default SideNav;
 //                             'my contracts',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-profile"
 //                         menuTitle="My Profile"
 //                         icon={<FaUser opacity=".8" />}
@@ -920,7 +1026,7 @@ export default SideNav;
 //                 </VStack>
 //             ) : role == 'Supervisor' ? (
 //                 <VStack align="left" gap="1.5rem" pr="1rem">
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="dashboard"
 //                         menuTitle="Dashboard"
 //                         icon={<FaHome opacity=".8" />}
@@ -929,7 +1035,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         role={role}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="team-members"
 //                         menuTitle="My Team"
 //                         icon={<FaUsers opacity=".8" />}
@@ -938,7 +1044,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="timesheets"
 //                         menuTitle="Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -947,7 +1053,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['unapproved', 'history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="financials"
 //                         menuTitle="Financials"
 //                         icon={<RiLineChartFill opacity=".8" />}
@@ -956,7 +1062,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['expenses']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-profile"
 //                         menuTitle="My Profile"
 //                         icon={<FaUser opacity=".8" />}
@@ -968,7 +1074,7 @@ export default SideNav;
 //                 </VStack>
 //             ) : role == 'InternalSupervisor' ? (
 //                 <VStack align="left" gap="1.5rem" pr="1rem">
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="dashboard"
 //                         menuTitle="Dashboard"
 //                         icon={<FaHome opacity=".8" />}
@@ -977,7 +1083,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         role={role}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="team-members"
 //                         menuTitle="My Team"
 //                         icon={<FaUsers opacity=".8" />}
@@ -986,7 +1092,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-timesheets"
 //                         menuTitle="Manage Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -995,7 +1101,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['my timesheet', 'timesheet history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="timesheets"
 //                         menuTitle="Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -1004,7 +1110,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['unapproved', 'history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="financials"
 //                         menuTitle="Financials"
 //                         icon={<RiLineChartFill opacity=".8" />}
@@ -1022,7 +1128,7 @@ export default SideNav;
 //                             'my contracts',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-profile"
 //                         menuTitle="My Profile"
 //                         icon={<FaUser opacity=".8" />}
@@ -1034,7 +1140,7 @@ export default SideNav;
 //                 </VStack>
 //             ) : role == 'PaymentPartner' ? (
 //                 <VStack align="left" gap="1.5rem" pr="1rem">
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="dashboard"
 //                         menuTitle="Dashboard"
 //                         icon={<FaHome opacity=".8" />}
@@ -1043,7 +1149,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="team-members"
 //                         menuTitle="My Team"
 //                         icon={<FaUsers opacity=".8" />}
@@ -1053,7 +1159,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
 
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="expenses"
 //                         menuTitle="Expenses"
 //                         icon={<FaCreditCard opacity=".8" />}
@@ -1062,7 +1168,7 @@ export default SideNav;
 //                         dropDown={[]}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="viewpayroll"
 //                         menuTitle="View Payroll"
 //                         icon={<FaMoneyBill opacity=".8" />}
@@ -1071,7 +1177,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="invoices"
 //                         menuTitle="Invoice"
 //                         icon={<FaFile opacity=".8" />}
@@ -1080,7 +1186,7 @@ export default SideNav;
 //                         dropDown={[]}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="profile"
 //                         menuTitle="Profile"
 //                         icon={<FaUser opacity=".8" />}
@@ -1092,7 +1198,7 @@ export default SideNav;
 //                 </VStack>
 //             ) : role == 'PayrollManager' ? (
 //                 <VStack align="left" gap="1.5rem" pr="1rem">
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="dashboard"
 //                         menuTitle="Dashboard"
 //                         icon={<FaHome opacity=".8" />}
@@ -1101,7 +1207,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="profile-management"
 //                         menuTitle="Profile Management"
 //                         icon={<FaUsers opacity=".8" />}
@@ -1115,7 +1221,7 @@ export default SideNav;
 //                             'payment partners',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="timesheets"
 //                         menuTitle="Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -1124,7 +1230,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['approval', 'history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="financials"
 //                         menuTitle="Financials"
 //                         icon={<RiLineChartFill opacity=".8" />}
@@ -1138,7 +1244,7 @@ export default SideNav;
 //                             'invoices',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="contracts"
 //                         menuTitle="Contracts"
 //                         icon={<FaFile opacity=".8" />}
@@ -1147,7 +1253,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-profile"
 //                         menuTitle="My Profile"
 //                         icon={<FaUser opacity=".8" />}
@@ -1159,7 +1265,7 @@ export default SideNav;
 //                 </VStack>
 //             ) : role == 'InternalPayrollManager' ? (
 //                 <VStack align="left" gap="1.5rem" pr="1rem">
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="dashboard"
 //                         menuTitle="Dashboard"
 //                         icon={<FaHome opacity=".8" />}
@@ -1168,7 +1274,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="profile-management"
 //                         menuTitle="Profile Management"
 //                         icon={<FaUsers opacity=".8" />}
@@ -1182,7 +1288,7 @@ export default SideNav;
 //                             'payment partners',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="timesheets"
 //                         menuTitle="Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -1191,7 +1297,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['approval', 'history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-timesheets"
 //                         menuTitle="Manage Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -1200,7 +1306,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['my timesheet', 'timesheet history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-financials"
 //                         menuTitle="My Financials"
 //                         icon={<RiLineChartFill opacity=".8" />}
@@ -1218,7 +1324,7 @@ export default SideNav;
 //                             'my contracts',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="financials"
 //                         menuTitle="Financials"
 //                         icon={<RiLineChartFill opacity=".8" />}
@@ -1232,7 +1338,7 @@ export default SideNav;
 //                             'invoices',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="contracts"
 //                         menuTitle="Contracts"
 //                         icon={<FaFile opacity=".8" />}
@@ -1241,7 +1347,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-profile"
 //                         menuTitle="My Profile"
 //                         icon={<FaUser opacity=".8" />}
@@ -1253,7 +1359,7 @@ export default SideNav;
 //                 </VStack>
 //             ) : role == 'Admin' ? (
 //                 <VStack align="left" gap="1.5rem" pr="1rem">
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="dashboard"
 //                         menuTitle="Dashboard"
 //                         icon={<FaHome opacity=".8" />}
@@ -1262,7 +1368,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="profile-management"
 //                         menuTitle="Profile Management"
 //                         icon={<FaUsers opacity=".8" />}
@@ -1276,7 +1382,7 @@ export default SideNav;
 //                             'payment partners',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="timesheets"
 //                         menuTitle="Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -1285,7 +1391,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['approval', 'history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="financials"
 //                         menuTitle="Financials"
 //                         icon={<RiLineChartFill opacity=".8" />}
@@ -1299,7 +1405,7 @@ export default SideNav;
 //                             'invoices',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="contracts"
 //                         menuTitle="Contracts"
 //                         icon={<FaFile opacity=".8" />}
@@ -1308,7 +1414,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-profile"
 //                         menuTitle="My Profile"
 //                         icon={<FaUser opacity=".8" />}
@@ -1320,7 +1426,7 @@ export default SideNav;
 //                 </VStack>
 //             ) : role == 'InternalAdmin' ? (
 //                 <VStack align="left" gap="1.5rem" pr="1rem">
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="dashboard"
 //                         menuTitle="Dashboard"
 //                         icon={<FaHome opacity=".8" />}
@@ -1329,7 +1435,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="profile-management"
 //                         menuTitle="Profile Management"
 //                         icon={<FaUsers opacity=".8" />}
@@ -1343,7 +1449,7 @@ export default SideNav;
 //                             'payment partners',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-timesheets"
 //                         menuTitle="Manage Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -1352,7 +1458,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['my timesheet', 'timesheet history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="timesheets"
 //                         menuTitle="Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -1361,7 +1467,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['approval', 'history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="financials"
 //                         menuTitle="Financials"
 //                         icon={<RiLineChartFill opacity=".8" />}
@@ -1375,7 +1481,7 @@ export default SideNav;
 //                             'invoices',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-financials"
 //                         menuTitle="My Financials"
 //                         icon={<RiLineChartFill opacity=".8" />}
@@ -1393,7 +1499,7 @@ export default SideNav;
 //                             'my contracts',
 //                         ]}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="contracts"
 //                         menuTitle="Contracts"
 //                         icon={<FaFile opacity=".8" />}
@@ -1402,7 +1508,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="my-profile"
 //                         menuTitle="My Profile"
 //                         icon={<FaUser opacity=".8" />}
@@ -1414,7 +1520,7 @@ export default SideNav;
 //                 </VStack>
 //             ) : role == 'client' ? (
 //                 <VStack align="left" gap="1.5rem" pr="1rem">
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="dashboard"
 //                         menuTitle="Dashboard"
 //                         icon={<FaHome opacity=".8" />}
@@ -1423,7 +1529,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="team-members"
 //                         menuTitle="My Team"
 //                         icon={<FaUsers opacity=".8" />}
@@ -1432,7 +1538,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="supervisors"
 //                         menuTitle="My Supervisors"
 //                         icon={<MdOutlineSupervisorAccount opacity=".8" />}
@@ -1441,7 +1547,7 @@ export default SideNav;
 //                         role={role}
 //                         setOpenSidenav={setOpenSidenav}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="timesheets"
 //                         menuTitle="Timesheets"
 //                         icon={<FaCalendar opacity=".8" />}
@@ -1450,7 +1556,7 @@ export default SideNav;
 //                         setOpenSidenav={setOpenSidenav}
 //                         dropDown={['approval', 'history']}
 //                     />
-//                     <MenuItem
+//                     <MenuItem change={change}
 //                         linkName="financials"
 //                         menuTitle="Financials"
 //                         icon={<RiLineChartFill opacity=".8" />}

@@ -164,7 +164,7 @@ function ClientInvoices({ invoiceData }: adminProps) {
                                 <TableData name={x.invoiceReference} />
                                 <TableData
                                     name={
-                                        x.clientName ||
+                                        x.payrollGroupName ||
                                         x.paymentPartnerName ||
                                         x.name
                                     }

@@ -601,7 +601,7 @@ export function PayrollActions({ id, userId }: { id: any; userId: any }) {
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
-                    {/* <MenuItem onClick={() => Approve(id)} w="full">
+                    {/* <MenuItem  onClick={() => Approve(id)} w="full">
                         Approve
                     </MenuItem> */}
                     <MenuItem w="full">

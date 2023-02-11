@@ -19,7 +19,7 @@ function PageTabs({
             align="center"
             pl="2rem"
             w="full"
-            h="3rem"
+            h="3.5rem"
             bgColor={isActive ? 'white' : 'gray.100'}
             onClick={() => router.push(url)}
             color={isActive ? 'brand.400' : 'gray.500'}

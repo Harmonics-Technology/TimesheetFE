@@ -28,9 +28,10 @@ import { GenerateInvoiceModal } from '@components/bits-utils/GenerateInvoiceModa
 
 interface expenseProps {
     payrolls: InvoiceViewPagedCollectionStandardResponse;
+    id: number;
 }
 
-function PaymentPartnerPayroll({ payrolls }: expenseProps) {
+function PaymentPartnerPayroll({ payrolls, id }: expenseProps) {
     const payrollsList = payrolls?.data?.value;
     const router = useRouter();
     const toast = useToast();
@@ -68,9 +69,9 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex gap="1rem" justify="space-between">
-                    <Box>
-                        {selectedId.length !== 0 && (
+                {selectedId.length !== 0 && (
+                    <Flex gap="1rem" justify="space-between" mb="1rem">
+                        <Box>
                             <Button
                                 bgColor="brand.600"
                                 color="white"
@@ -83,18 +84,18 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                             >
                                 Create Invoice
                             </Button>
-                        )}
-                    </Box>
+                        </Box>
 
-                    <Checkbox
-                        checked={
-                            payrollsList?.length !== 0 &&
-                            payrollsList?.length == selectedId?.length
-                        }
-                        onChange={() => toggleSelected('', true)}
-                        label="Select All"
-                    />
-                </Flex>
+                        <Checkbox
+                            checked={
+                                payrollsList?.length !== 0 &&
+                                payrollsList?.length == selectedId?.length
+                            }
+                            onChange={() => toggleSelected('', true)}
+                            label="Select All"
+                        />
+                    </Flex>
+                )}
                 <FilterSearch />
                 <Tables
                     tableHead={[
@@ -159,6 +160,7 @@ function PaymentPartnerPayroll({ payrolls }: expenseProps) {
                 isOpen={isOpen}
                 onClose={onClose}
                 clicked={selectedId}
+                id={id}
             />
         </>
     );

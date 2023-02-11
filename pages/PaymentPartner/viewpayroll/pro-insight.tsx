@@ -5,7 +5,6 @@ import { filterPagingSearchOptions } from '@components/generics/filterPagingSear
 import { withPageAuth } from '@components/generics/withPageAuth';
 import AdminPayroll from '@components/subpages/AdminPayroll';
 import PaymentPartnerPayroll from '@components/subpages/PaymentPartnerPayroll';
-import PaymentPayrollHistory from '@components/subpages/PaymentPayrollHistory';
 import { GetServerSideProps } from 'next';
 import React, { useContext } from 'react';
 import {
@@ -15,23 +14,24 @@ import {
 
 interface PayrollType {
     payrolls: InvoiceViewPagedCollectionStandardResponse;
+    payrollGroupId: number;
 }
-function expenses({ payrolls }: PayrollType) {
+function expenses({ payrolls, payrollGroupId }: PayrollType) {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
             <Flex>
                 <PageTabs
-                    url={`/${role}/viewpayroll`}
-                    tabName="Pending Payroll"
+                    url={`/${role}/viewpayroll/pro-insight`}
+                    tabName="Pro-insight consulting"
                 />
                 <PageTabs
-                    url={`/${role}/viewpayroll/history`}
-                    tabName="Payroll History"
+                    url={`/${role}/viewpayroll/Olade`}
+                    tabName="Olade Consulting"
                 />
             </Flex>
-            <PaymentPayrollHistory payrolls={payrolls} />
+            <PaymentPartnerPayroll payrolls={payrolls} id={payrollGroupId} />
         </Box>
     );
 }
@@ -41,8 +41,10 @@ export default expenses;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const payrollGroupId = 1;
         try {
-            const data = await FinancialService.listInvoicesHistories(
+            const data = await FinancialService.listPayrollGroupInvoices(
+                payrollGroupId,
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
@@ -53,6 +55,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             return {
                 props: {
                     payrolls: data,
+                    payrollGroupId,
                 },
             };
         } catch (error: any) {
