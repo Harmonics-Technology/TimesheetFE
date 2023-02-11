@@ -27,4 +27,5 @@ export type UserView = {
     organizationAddress?: string | null;
     clientName?: string | null;
     payrollType?: string | null;
+    payrollGroup?: string | null;
 };

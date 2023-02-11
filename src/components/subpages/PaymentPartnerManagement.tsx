@@ -131,6 +131,7 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                     height="fit-content"
                     boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     onClick={onOpen}
+                    mb="1rem"
                 >
                     +Payment Partner
                 </Button>

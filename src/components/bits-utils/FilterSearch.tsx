@@ -21,19 +21,27 @@ import MonthYearPicker from 'react-month-year-picker';
 import { RxTriangleDown } from 'react-icons/rx';
 import { BsFilter } from 'react-icons/bs';
 import useClickOutside from '@components/generics/useClickOutside';
+import DatePicker, { DateObject } from 'react-multi-date-picker';
+import { FaRegCalendarAlt } from 'react-icons/fa';
 
-function FilterSearch({ hide = false }: { hide?: boolean }) {
+function FilterSearch({
+    hide = false,
+    hides = false,
+}: {
+    hide?: boolean;
+    hides?: boolean;
+}) {
     const [search, setSearch] = useState('');
     const router = useRouter();
-    const currentYear = moment(new Date()).format('YYYY');
-    const currentMonth = moment(new Date()).format('M');
 
-    const [date, setDate] = useState({
-        year: currentYear,
-        month: currentMonth,
-    });
+    const [date, setDate] = useState<any>([
+        new DateObject().subtract(4, 'days'),
+        new DateObject().add(4, 'days'),
+    ]);
     const [openDateFilter, setOpenDateFilter] = useState(false);
-    const selectedDate = date.month + '-' + date.year;
+    const selectedDate = date.map((x) => x.year + '-' + x.month + '-' + x.day);
+
+    console.log({ selectedDate, date });
     const close = useCallback(() => setOpenDateFilter(false), []);
     const popover = useRef(null);
     useClickOutside(popover, close);
@@ -63,37 +71,57 @@ function FilterSearch({ hide = false }: { hide?: boolean }) {
     function filterByDate() {
         router.push({
             query: {
-                date: selectedDate,
+                from: selectedDate[0],
+                to: selectedDate[1],
             },
         });
     }
     function clearfilter() {
         router.push({ query: { date: '' } });
     }
-    // console.log({ selectedDate });
-    // const hideDateFilter =
-    //     router.asPath.includes('timesheets/approval') ||
-    //     router.asPath.includes('timesheets/unapproved');
 
     return (
         <>
             <Flex
                 justify="space-between"
                 align={['unset', 'center']}
-                my="2.5rem"
+                mb="1.5rem"
                 flexDirection={['column', 'row']}
             >
-                <HStack fontSize=".8rem" w="fit-content" mb={['1rem', '0']}>
-                    <Select
+                <HStack>
+                    <Box
+                        fontSize=".8rem"
                         w="fit-content"
-                        onChange={(e) => setFilter(e.target.value)}
+                        mb={['1rem', '0']}
+                        display={hides ? 'box' : 'none'}
                     >
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                    </Select>
+                        <Text noOfLines={1} mb="0">
+                            Filter By
+                        </Text>
+                        <Select
+                            w="fit-content"
+                            onChange={(e) => debounced(e.target.value)}
+                            borderRadius="0"
+                            fontSize=".8rem"
+                        >
+                            <option value="onshore">Onshore</option>
+                            <option value="offshore">Offshore</option>
+                        </Select>
+                    </Box>
+                    <HStack fontSize=".8rem" w="fit-content" mb={['1rem', '0']}>
+                        <Select
+                            w="fit-content"
+                            onChange={(e) => setFilter(e.target.value)}
+                            borderRadius="0"
+                            fontSize=".8rem"
+                        >
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </Select>
 
-                    <Text noOfLines={1}>entries per page</Text>
+                        <Text noOfLines={1}>entries per page</Text>
+                    </HStack>
                 </HStack>
                 <HStack
                     gap="1rem"
@@ -101,51 +129,41 @@ function FilterSearch({ hide = false }: { hide?: boolean }) {
                     flexDirection={['column', 'row']}
                 >
                     <Flex align="center" display={hide ? 'none' : 'flex'}>
-                        <Box pos="relative" ref={popover}>
-                            <Flex
-                                minW="150px"
-                                px="1rem"
-                                h="2.5rem"
-                                justifyContent="center"
-                                alignItems="center"
-                                border="1px solid"
-                                borderColor="gray.300"
-                                color="gray.500"
-                                boxShadow="sm"
-                                borderRadius="base"
-                                cursor="pointer"
-                                zIndex="2"
-                                onClick={() =>
-                                    setOpenDateFilter(!openDateFilter)
-                                }
-                            >
-                                {selectedDate}
-                                <Icon
-                                    as={RxTriangleDown}
-                                    ml="1rem"
-                                    pos="relative"
-                                />
-                            </Flex>
-                            {openDateFilter && (
-                                <Box pos="absolute" bgColor="white" p="1rem">
-                                    <MonthYearPicker
-                                        selectedMonth={date.month}
-                                        selectedYear={date.year}
-                                        minYear={2022}
-                                        maxYear={currentYear}
-                                        onChangeYear={(year) =>
-                                            setDate({ ...date, year: year })
-                                        }
-                                        onChangeMonth={(month) =>
-                                            setDate({
-                                                ...date,
-                                                month: month,
-                                            })
-                                        }
-                                    />
-                                </Box>
-                            )}
-                        </Box>
+                        <DatePicker
+                            value={date}
+                            onChange={setDate}
+                            range
+                            format="MMM DD, YYYY"
+                            render={(stringDates, openCalendar) => {
+                                const from = stringDates[0] || '';
+                                const to = stringDates[1] || '';
+                                const value =
+                                    from && to ? from + ' - ' + to : from;
+                                return (
+                                    <HStack
+                                        w="fit-content"
+                                        px="1rem"
+                                        h="2.5rem"
+                                        justifyContent="center"
+                                        alignItems="center"
+                                        border="1px solid"
+                                        borderColor="gray.300"
+                                        color="gray.500"
+                                        boxShadow="sm"
+                                        borderRadius="0"
+                                        cursor="pointer"
+                                        fontSize=".9rem"
+                                        onClick={openCalendar}
+                                    >
+                                        <Text mb="0" whiteSpace="nowrap">
+                                            {value}
+                                        </Text>
+                                        <Icon as={FaRegCalendarAlt} />
+                                    </HStack>
+                                );
+                            }}
+                        />
+
                         {/* <Tooltip hasArrow label="Click to apply filter"> */}
                         <Menu>
                             <MenuButton
@@ -184,6 +202,7 @@ function FilterSearch({ hide = false }: { hide?: boolean }) {
                         type="search"
                         placeholder="search"
                         onChange={(e) => debounced(e.target.value)}
+                        borderRadius="0"
                     />
                 </HStack>
             </Flex>

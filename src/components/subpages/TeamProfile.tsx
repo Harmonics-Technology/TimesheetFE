@@ -4,12 +4,14 @@ import {
     Flex,
     FormLabel,
     Grid,
+    Select,
     Spinner,
     Text,
+    useDisclosure,
     useToast,
 } from '@chakra-ui/react';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
-import React, { useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -34,7 +36,22 @@ import { AiOutlineDownload } from 'react-icons/ai';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 import BeatLoader from 'react-spinners/BeatLoader';
+import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import dynamic from 'next/dynamic';
+import ConfirmChangeModal from '@components/bits-utils/ConfirmChangeModal';
 
+interface select {
+    options: any;
+    customKeys: { key: string | number | boolean; label: string };
+    onChange: (value: any) => void;
+    placeholder?: string;
+    disabled?: boolean;
+    searchable?: boolean;
+}
+const Selectrix = dynamic<select>(() => import('react-selectrix'), {
+    ssr: false,
+});
 const schema = yup.object().shape({});
 interface TeamProfileProps {
     userProfile?: UserView;
@@ -77,6 +94,11 @@ function TeamProfile({
                 userProfile?.employeeInformation?.inCorporationDocumentUrl,
             paymentFrequency:
                 userProfile?.employeeInformation?.paymentFrequency,
+            fixedAmount: userProfile?.employeeInformation?.fixedAmount,
+            onBordingFee: userProfile?.employeeInformation?.onBoradingFee,
+            monthlyPayoutRate:
+                userProfile?.employeeInformation?.monthlyPayoutRate,
+            // payrollGroupId: userProfile?.employeeInformation?.payrollGroup,
         },
     });
     const router = useRouter();
@@ -84,6 +106,7 @@ function TeamProfile({
     console.log({ userProfile });
     const payroll = userProfile?.employeeInformation?.payrollType;
     const payrolls = watch('payRollTypeId');
+    const onboarding = watch('fixedAmount');
 
     const [icd, setIcd] = useState<any>('');
     const [voidCheck, setVoidCheck] = useState<any>('');
@@ -145,9 +168,12 @@ function TeamProfile({
                 fileDownload(res.data, `${url.split(' ').pop()}`);
             });
     };
-
+    const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);
     const onSubmit = async (data: TeamMemberModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
+        if (data.fixedAmount == true) {
+            data.onBordingFee = fixedAmount;
+        }
         if (icd !== '') {
             data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
         }
@@ -189,6 +215,23 @@ function TeamProfile({
             });
         }
     };
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [agree, setAgree] = useState<boolean>(false);
+    const [selected, setSelected] = useState(userProfile?.role as string);
+    console.log({ selected, agree });
+    const changeUserRole = async (e) => {
+        await onOpen();
+        if (agree) {
+            setSelected(e.target.value);
+        } else {
+            setSelected(userProfile?.role as string);
+        }
+    };
+    // useEffect(() => {
+    //     window.onbeforeunload = function () {
+    //         return 'Data will be lost if you leave the page, are you sure?';
+    //     };
+    // }, []);
     return (
         <Box
             bgColor="white"
@@ -231,16 +274,6 @@ function TeamProfile({
                         placeholder={userProfile?.phoneNumber as string}
                         control={control}
                     />
-                    <PrimaryInput<TeamMemberModel>
-                        label="Job Title"
-                        name="jobTitle"
-                        error={errors.jobTitle}
-                        placeholder=""
-                        defaultValue={
-                            userProfile?.employeeInformation?.jobTitle as string
-                        }
-                        register={register}
-                    />
                     <PrimaryDate<TeamMemberModel>
                         control={control}
                         name="dateOfBirth"
@@ -250,59 +283,6 @@ function TeamProfile({
                             'DD MM YYYY',
                         )}
                         max={new DateObject().subtract(1, 'days')}
-                    />
-                    {/* <SelectrixBox<TeamMemberModel>
-                        control={control}
-                        name="clientId"
-                        error={errors.clientId}
-                        keys="id"
-                        keyLabel="fullName"
-                        label="Current Client"
-                        placeholder={
-                            userProfile?.employeeInformation?.client
-                                ?.fullName as string
-                        }
-                        options={clients}
-                    /> */}
-
-                    <SelectrixBox<TeamMemberModel>
-                        control={control}
-                        name="supervisorId"
-                        error={errors.supervisorId}
-                        keys="id"
-                        keyLabel="fullName"
-                        label="Supervisor"
-                        placeholder={
-                            userProfile?.employeeInformation?.supervisor
-                                ?.fullName as string
-                        }
-                        options={supervisor}
-                    />
-
-                    <SelectrixBox<TeamMemberModel>
-                        control={control}
-                        name="role"
-                        error={errors.role}
-                        keys="id"
-                        keyLabel="label"
-                        label="Role"
-                        // disabled={true}
-                        placeholder={userProfile?.role as string}
-                        options={[
-                            { id: 'Team Member', label: 'Team Member' },
-                            {
-                                id: 'Internal Supervisor',
-                                label: 'Internal Supervisor',
-                            },
-                            {
-                                id: 'Internal Admin',
-                                label: 'Internal Admin',
-                            },
-                            {
-                                id: 'Internal Payroll Manager',
-                                label: 'Internal Payroll Manager',
-                            },
-                        ]}
                     />
                     <SelectrixBox<TeamMemberModel>
                         control={control}
@@ -322,6 +302,16 @@ function TeamProfile({
                         ]}
                     />
                 </Grid>
+                <Box mt="1rem">
+                    <PrimaryInput<TeamMemberModel>
+                        label="Address"
+                        name="address"
+                        error={errors.address}
+                        placeholder=""
+                        defaultValue={userProfile?.address as string}
+                        register={register}
+                    />
+                </Box>
                 <Box w="full">
                     <Flex
                         justify="space-between"
@@ -344,6 +334,90 @@ function TeamProfile({
                         templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                         gap="1rem 2rem"
                     >
+                        <PrimaryInput<TeamMemberModel>
+                            label="Job Title"
+                            name="jobTitle"
+                            error={errors.jobTitle}
+                            placeholder=""
+                            defaultValue={
+                                userProfile?.employeeInformation
+                                    ?.jobTitle as string
+                            }
+                            register={register}
+                        />
+                        <SelectrixBox<TeamMemberModel>
+                            control={control}
+                            name="clientId"
+                            error={errors.clientId}
+                            keys="id"
+                            keyLabel="fullName"
+                            label="Current Client"
+                            disabled
+                            placeholder={userProfile?.clientName as string}
+                            options={[]}
+                        />
+                        <SelectrixBox<TeamMemberModel>
+                            control={control}
+                            name="supervisorId"
+                            error={errors.supervisorId}
+                            keys="id"
+                            keyLabel="fullName"
+                            label="Supervisor"
+                            placeholder={
+                                userProfile?.employeeInformation?.supervisor
+                                    ?.fullName as string
+                            }
+                            options={supervisor}
+                        />
+                        {/* <SelectrixBox<TeamMemberModel>
+                            control={control}
+                            name="role"
+                            error={errors.role}
+                            keys="id"
+                            keyLabel="label"
+                            label="Role"
+                            // disabled={true}
+                            placeholder={userProfile?.role as string}
+                            options={[
+                                { id: 'Team Member', label: 'Team Member' },
+                                {
+                                    id: 'Internal Supervisor',
+                                    label: 'Internal Supervisor',
+                                },
+                                {
+                                    id: 'Internal Admin',
+                                    label: 'Internal Admin',
+                                },
+                                {
+                                    id: 'Internal Payroll Manager',
+                                    label: 'Internal Payroll Manager',
+                                },
+                            ]}
+                        /> */}
+                        <Box>
+                            <FormLabel fontSize=".8rem">Role</FormLabel>
+                            <Select
+                                placeholder={userProfile?.role as string}
+                                borderRadius="0"
+                                fontSize=".9rem"
+                                color="gray.500"
+                                borderColor="gray.300"
+                                value={selected}
+                                onChange={changeUserRole}
+                            >
+                                <option value="Team Member">Team Member</option>
+                                <option value="Internal Supervisor">
+                                    Internal Supervisor
+                                </option>
+                                <option value="Internal Admin">
+                                    Internal Admin
+                                </option>{' '}
+                                <option value="Internal Payroll Manager">
+                                    Internal Payroll Manager
+                                </option>
+                            </Select>
+                        </Box>
+
                         <SelectrixBox<TeamMemberModel>
                             control={control}
                             name="payRollTypeId"
@@ -416,70 +490,13 @@ function TeamProfile({
                                         </Box>
                                     </Flex>
 
-                                    <Flex
-                                        outline="1px solid"
-                                        outlineColor="gray.300"
-                                        h="2.6rem"
-                                        align="center"
-                                        pr="1rem"
-                                        w="full"
-                                        // justifyContent="space-between"
-                                    >
-                                        <Flex
-                                            bgColor="#f5f5f5"
-                                            fontSize=".8rem"
-                                            px="1rem"
-                                            h="full"
-                                            align="center"
-                                            cursor="pointer"
-                                            my="auto"
-                                            fontWeight="600"
-                                            onClick={() =>
-                                                widgetApiB.current.openDialog()
-                                            }
-                                        >
-                                            <Text noOfLines={1} mb="0">
-                                                Choose File
-                                            </Text>
-                                        </Flex>
-
-                                        {showLoadingB ? (
-                                            <Flex align="center">
-                                                <Text
-                                                    mb="0"
-                                                    fontStyle="italic"
-                                                    mr="1rem"
-                                                >
-                                                    ...loading data info
-                                                </Text>
-                                                <Spinner />
-                                            </Flex>
-                                        ) : (
-                                            <Text
-                                                noOfLines={1}
-                                                my="auto"
-                                                px=".5rem"
-                                            >
-                                                {icd?.name ||
-                                                    userProfile?.employeeInformation?.inCorporationDocumentUrl
-                                                        ?.split(' ')
-                                                        ?.pop() ||
-                                                    'No File Chosen'}
-                                            </Text>
-                                        )}
-                                    </Flex>
-                                    <Box display="none">
-                                        <Widget
-                                            publicKey="fda3a71102659f95625f"
-                                            clearable
-                                            onFileSelect={showLoadingStateB}
-                                            ref={widgetApiB}
-                                            systemDialog={true}
-                                            inputAcceptTypes={
-                                                '.docx,.pdf, .doc'
-                                            }
-                                        />
-                                    </Box>
+                                    <UploadCareWidget
+                                        refs={widgetApiB}
+                                        label=""
+                                        filename={icd?.name}
+                                        loading={showLoadingB}
+                                        uploadFunction={showLoadingStateB}
+                                    />
                                 </Box>
                                 <Box>
                                     <Flex>
@@ -504,70 +521,13 @@ function TeamProfile({
                                         </Box>
                                     </Flex>
 
-                                    <Flex
-                                        outline="1px solid"
-                                        outlineColor="gray.300"
-                                        h="2.6rem"
-                                        align="center"
-                                        pr="1rem"
-                                        w="full"
-                                        // justifyContent="space-between"
-                                    >
-                                        <Flex
-                                            bgColor="#f5f5f5"
-                                            fontSize=".8rem"
-                                            px="1rem"
-                                            h="full"
-                                            align="center"
-                                            cursor="pointer"
-                                            my="auto"
-                                            fontWeight="600"
-                                            onClick={() =>
-                                                widgetApiC.current.openDialog()
-                                            }
-                                        >
-                                            <Text noOfLines={1} mb="0">
-                                                Choose File
-                                            </Text>
-                                        </Flex>
-
-                                        {showLoadingC ? (
-                                            <Flex align="center">
-                                                <Text
-                                                    mb="0"
-                                                    fontStyle="italic"
-                                                    mr="1rem"
-                                                >
-                                                    ...loading data info
-                                                </Text>
-                                                <Spinner />
-                                            </Flex>
-                                        ) : (
-                                            <Text
-                                                noOfLines={1}
-                                                my="auto"
-                                                px=".5rem"
-                                            >
-                                                {voidCheck?.name ||
-                                                    userProfile?.employeeInformation?.voidCheckUrl
-                                                        ?.split(' ')
-                                                        ?.pop() ||
-                                                    'No File Chosen'}
-                                            </Text>
-                                        )}
-                                    </Flex>
-                                    <Box display="none">
-                                        <Widget
-                                            publicKey="fda3a71102659f95625f"
-                                            clearable
-                                            onFileSelect={showLoadingStateC}
-                                            ref={widgetApiC}
-                                            systemDialog={true}
-                                            inputAcceptTypes={
-                                                '.docx,.pdf, .doc'
-                                            }
-                                        />
-                                    </Box>
+                                    <UploadCareWidget
+                                        refs={widgetApiC}
+                                        label=""
+                                        filename={voidCheck?.name}
+                                        loading={showLoadingC}
+                                        uploadFunction={showLoadingStateC}
+                                    />
                                 </Box>
                                 <Box>
                                     <Flex>
@@ -592,70 +552,13 @@ function TeamProfile({
                                         </Box>
                                     </Flex>
 
-                                    <Flex
-                                        outline="1px solid"
-                                        outlineColor="gray.300"
-                                        h="2.6rem"
-                                        align="center"
-                                        pr="1rem"
-                                        w="full"
-                                        // justifyContent="space-between"
-                                    >
-                                        <Flex
-                                            bgColor="#f5f5f5"
-                                            fontSize=".8rem"
-                                            px="1rem"
-                                            h="full"
-                                            align="center"
-                                            cursor="pointer"
-                                            my="auto"
-                                            fontWeight="600"
-                                            onClick={() =>
-                                                widgetApiD.current.openDialog()
-                                            }
-                                        >
-                                            <Text noOfLines={1} mb="0">
-                                                Choose File
-                                            </Text>
-                                        </Flex>
-
-                                        {showLoadingD ? (
-                                            <Flex align="center">
-                                                <Text
-                                                    mb="0"
-                                                    fontStyle="italic"
-                                                    mr="1rem"
-                                                >
-                                                    ...loading data info
-                                                </Text>
-                                                <Spinner />
-                                            </Flex>
-                                        ) : (
-                                            <Text
-                                                noOfLines={1}
-                                                my="auto"
-                                                px=".5rem"
-                                            >
-                                                {inc?.name ||
-                                                    userProfile?.employeeInformation?.insuranceDocumentUrl
-                                                        ?.split(' ')
-                                                        ?.pop() ||
-                                                    'No File Chosen'}
-                                            </Text>
-                                        )}
-                                    </Flex>
-                                    <Box display="none">
-                                        <Widget
-                                            publicKey="fda3a71102659f95625f"
-                                            clearable
-                                            onFileSelect={showLoadingStateD}
-                                            ref={widgetApiD}
-                                            systemDialog={true}
-                                            inputAcceptTypes={
-                                                '.docx,.pdf, .doc'
-                                            }
-                                        />
-                                    </Box>
+                                    <UploadCareWidget
+                                        refs={widgetApiD}
+                                        label="Issuance Certificate"
+                                        filename={inc?.name}
+                                        loading={showLoadingD}
+                                        uploadFunction={showLoadingStateD}
+                                    />
                                 </Box>
 
                                 <PrimaryInput<TeamMemberModel>
@@ -707,9 +610,31 @@ function TeamProfile({
                                             ?.paymentPartner?.fullName as string
                                     }
                                 />
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="payrollGroupId"
+                                    error={errors.payrollGroupId}
+                                    keys="id"
+                                    keyLabel="label"
+                                    label="Payroll Group"
+                                    placeholder={
+                                        (userProfile?.employeeInformation
+                                            ?.payrollGroup as string) ||
+                                        'Please select'
+                                    }
+                                    options={[
+                                        {
+                                            id: 1,
+                                            label: 'Pro-insight Technology',
+                                        },
+                                        {
+                                            id: 2,
+                                            label: 'Olade consulting',
+                                        },
+                                    ]}
+                                />
                             </>
                         )}
-
                         <PrimaryInput<TeamMemberModel>
                             label="Client Rate"
                             name="ratePerHour"
@@ -755,24 +680,67 @@ function TeamProfile({
                                 'Please select'
                             }
                         />
-                    </Grid>
-                    <Box my=".8rem">
-                        <PrimaryRadio<TeamMemberModel>
-                            name="fixedAmount"
+                        <SelectrixBox<TeamMemberModel>
                             control={control}
+                            name="fixedAmount"
                             error={errors.fixedAmount}
-                            value={
+                            keys="id"
+                            keyLabel="label"
+                            label="Onboarding fee type"
+                            placeholder={
                                 userProfile?.employeeInformation?.fixedAmount ==
                                 true
-                                    ? 'true'
-                                    : 'false'
+                                    ? 'Fixed Amount'
+                                    : 'Percentage'
                             }
-                            radios={[
-                                { label: 'Fixed amount', val: 'true' },
-                                { label: 'Percentage', val: 'false' },
+                            options={[
+                                { id: true, label: 'Fixed amount' },
+                                { id: false, label: 'Percentage' },
                             ]}
                         />
-                    </Box>
+                        {userProfile?.employeeInformation?.fixedAmount ==
+                            false || onboarding == false ? (
+                            <SelectrixBox<TeamMemberModel>
+                                control={control}
+                                name="onBordingFee"
+                                error={errors.onBordingFee}
+                                keys="fee"
+                                keyLabel="fee"
+                                label="Onboarding fee"
+                                placeholder={
+                                    userProfile?.employeeInformation
+                                        ?.onBoradingFee as unknown as string
+                                }
+                                options={percentageAmount}
+                            />
+                        ) : (
+                            // : onboarding == true &&
+                            //   fixedAmount !== undefined ? (
+                            //     <Box pos="relative">
+                            //         <PrimaryInput<TeamMemberModel>
+                            //             label="Onboarding fee"
+                            //             name="onBordingFee"
+                            //             error={errors.onBordingFee}
+                            //             placeholder=""
+                            //             value={fixedAmount}
+                            //             register={register}
+                            //             readonly
+                            //         />
+                            //         <Text
+                            //             pos="absolute"
+                            //             mb="0"
+                            //             left="8%"
+                            //             top="50%"
+                            //             transform="translateY(-15%)"
+                            //             bgColor="white"
+                            //         >
+                            //             {fixedAmount}
+                            //         </Text>
+                            //     </Box>
+                            // )
+                            ''
+                        )}
+                    </Grid>
                 </Box>
                 <ContractTable userProfile={userProfile} />
             </form>
@@ -808,6 +776,11 @@ function TeamProfile({
                     <Box>Update Profile</Box>
                 </Button>
             </Grid>
+            <ConfirmChangeModal
+                isOpen={isOpen}
+                onClose={onClose}
+                setAgree={setAgree}
+            />
         </Box>
     );
 }

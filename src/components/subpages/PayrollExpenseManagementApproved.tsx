@@ -43,6 +43,7 @@ import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import Checkbox from '@components/bits-utils/Checkbox';
 import BeatLoader from 'react-spinners/BeatLoader';
+import moment from 'moment';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -226,6 +227,7 @@ function PayrollExpenseManagementApproved({
                         'Name',
                         'Description',
                         'Expense Type',
+                        'Expense Date',
                         'Currency',
                         'Amount',
                         'Status',
@@ -239,6 +241,11 @@ function PayrollExpenseManagementApproved({
                                 <TableData name={x.teamMember?.fullName} />
                                 <TableData name={x.description} />
                                 <TableData name={x.expenseType} />
+                                <TableData
+                                    name={moment(x?.expenseDate).format(
+                                        'MMM DD, YYYY',
+                                    )}
+                                />
                                 <TableData name={x.currency} />
                                 <TableData
                                     name={x.amount as unknown as string}

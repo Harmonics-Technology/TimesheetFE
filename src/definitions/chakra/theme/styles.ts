@@ -8,12 +8,13 @@ export default {
             h1: {
                 fontWeight: 500,
                 marginBottom: '0.5em',
+                fontFamily: "'Rubik', sans-serif",
             },
             p: {
                 marginBottom: '1em',
             },
             body: {
-                fontFamily: "'Open Sans', sans-serif",
+                fontFamily: "'Rubik', sans-serif",
             },
         },
     },

@@ -12,7 +12,7 @@ export type InvoiceView = {
     employeeInformation?: EmployeeInformationView;
     name?: string | null;
     paymentPartnerName?: string | null;
-    clientName?: string | null;
+    payrollGroupName?: string | null;
     startDate?: string;
     endDate?: string;
     invoiceReference?: string | null;

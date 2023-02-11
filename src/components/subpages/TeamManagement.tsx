@@ -4,17 +4,13 @@ import {
     Box,
     Button,
     Flex,
-    Select,
     Text,
-    HStack,
-    Input,
     Tr,
     useDisclosure,
     Grid,
     DrawerFooter,
     useToast,
-    Spinner,
-    FormLabel,
+    Tooltip,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -23,8 +19,7 @@ import {
     TableStatus,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React, { useEffect, useRef, useState } from 'react';
-import { Widget } from '@uploadcare/react-widget';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -47,12 +42,12 @@ import { useRouter } from 'next/router';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
-import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 import { DateObject } from 'react-multi-date-picker';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import Loading from '@components/bits-utils/Loading';
 import BeatLoader from 'react-spinners/BeatLoader';
 import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -95,6 +90,8 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     const client = clients?.filter((x) => x.isActive);
     console.log({ client });
 
+    const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);
+
     const {
         register,
         handleSubmit,
@@ -106,13 +103,16 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
         mode: 'all',
         defaultValues: {
             role: 'Team Member',
+            onBordingFee: fixedAmount,
         },
     });
+    console.log(watch('onBordingFee'));
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
     // console.log(watch("payRollTypeId"));
     const payroll = watch('payRollTypeId');
+    const onboarding = watch('fixedAmount');
     const clientId = watch('clientId');
     console.log({ payroll });
 
@@ -224,6 +224,9 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     console.log({ supervisors });
 
     const onSubmit = async (data: TeamMemberModel) => {
+        if (data.fixedAmount == true) {
+            data.onBordingFee = fixedAmount;
+        }
         if (contract !== '') {
             data.document = `${contract.cdnUrl} ${contract.name}`;
         }
@@ -326,18 +329,19 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                     height="fit-content"
                     boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     onClick={onOpen}
+                    mb="1rem"
                 >
                     +Team Member
                 </Button>
                 <FilterSearch />
                 <Tables
                     tableHead={[
-                        'Name',
+                        'Full Name',
                         'Job Title',
-                        'Client',
-                        'Phone No',
+                        'Client Name',
+                        // 'Phone No',
                         'Payroll Type',
-                        'Role',
+                        // 'Role',
                         'Status',
                         '',
                     ]}
@@ -345,16 +349,18 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
-                                <TableData name={x.firstName} />
+                                <TableData name={x.fullName} />
                                 <TableData
                                     name={x.employeeInformation?.jobTitle}
                                 />
+
                                 <TableData name={x.clientName} />
-                                <TableData name={x.phoneNumber} />
+
+                                {/* <TableData name={x.phoneNumber} /> */}
                                 <TableData
                                     name={x.employeeInformation?.payrollType}
                                 />
-                                <TableData name={x.role} />
+                                {/* <TableData name={x.role} /> */}
                                 <TableStatus name={x.isActive} />
                                 <TableActions
                                     id={x.id}
@@ -409,14 +415,6 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                             placeholder="Phone No."
                             control={control}
                         />
-                        <PrimaryInput<TeamMemberModel>
-                            label="Job Title"
-                            name="jobTitle"
-                            error={errors.jobTitle}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
                         <PrimaryDate<TeamMemberModel>
                             control={control}
                             name="dateOfBirth"
@@ -424,26 +422,6 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                             error={errors.dateOfBirth}
                             max={new DateObject().subtract(1, 'days')}
                         />
-                        <SelectrixBox<TeamMemberModel>
-                            control={control}
-                            name="clientId"
-                            error={errors.clientId}
-                            keys="id"
-                            keyLabel="organizationName"
-                            label="Current Client"
-                            options={client}
-                        />
-                        {supervisors !== undefined && (
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="supervisorId"
-                                error={errors.supervisorId}
-                                keys="id"
-                                keyLabel="fullName"
-                                label="Supervisor"
-                                options={supervisors}
-                            />
-                        )}
 
                         <SelectrixBox<TeamMemberModel>
                             control={control}
@@ -458,6 +436,16 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                             ]}
                         />
                     </Grid>
+                    <Box mt="1rem">
+                        <PrimaryInput<TeamMemberModel>
+                            label="Address"
+                            name="address"
+                            error={errors.address}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
+                    </Box>
                     <Box w="full">
                         <Flex
                             justify="space-between"
@@ -480,6 +468,34 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                             templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
                         >
+                            <PrimaryInput<TeamMemberModel>
+                                label="Job Title"
+                                name="jobTitle"
+                                error={errors.jobTitle}
+                                placeholder=""
+                                defaultValue=""
+                                register={register}
+                            />
+                            <SelectrixBox<TeamMemberModel>
+                                control={control}
+                                name="clientId"
+                                error={errors.clientId}
+                                keys="id"
+                                keyLabel="organizationName"
+                                label="Current Client"
+                                options={client}
+                            />
+                            {supervisors !== undefined && (
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="supervisorId"
+                                    error={errors.supervisorId}
+                                    keys="id"
+                                    keyLabel="fullName"
+                                    label="Supervisor"
+                                    options={supervisors}
+                                />
+                            )}
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
                                 name="payRollTypeId"
@@ -577,6 +593,24 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                         label="Payment Partner"
                                         options={paymentPartner}
                                     />
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="payrollGroupId"
+                                        error={errors.payrollGroupId}
+                                        keys="id"
+                                        keyLabel="label"
+                                        label="Payroll Group"
+                                        options={[
+                                            {
+                                                id: 1,
+                                                label: 'Pro-insight Technology',
+                                            },
+                                            {
+                                                id: 2,
+                                                label: 'Olade consulting',
+                                            },
+                                        ]}
+                                    />
                                 </>
                             ) : null}
 
@@ -613,18 +647,56 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                     { id: 'monthly', label: 'Monthly' },
                                 ]}
                             />
-                        </Grid>
-                        <Box my=".8rem">
-                            <PrimaryRadio<TeamMemberModel>
-                                name="fixedAmount"
+                            <SelectrixBox<TeamMemberModel>
                                 control={control}
+                                name="fixedAmount"
                                 error={errors.fixedAmount}
-                                radios={[
-                                    { label: 'Fixed amount', val: 'true' },
-                                    { label: 'Percentage', val: 'false' },
+                                keys="id"
+                                keyLabel="label"
+                                label="Onboarding fee type"
+                                options={[
+                                    { id: true, label: 'Fixed amount' },
+                                    { id: false, label: 'Percentage' },
                                 ]}
                             />
-                        </Box>
+                            {onboarding == false ? (
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="onBordingFee"
+                                    error={errors.onBordingFee}
+                                    keys="fee"
+                                    keyLabel="fee"
+                                    label="Onboarding fee"
+                                    options={percentageAmount}
+                                />
+                            ) : (
+                                // : onboarding == true &&
+                                //   fixedAmount !== undefined ? (
+                                //     <Box pos="relative">
+                                //         <PrimaryInput<TeamMemberModel>
+                                //             label="Onboarding fee"
+                                //             name="onBordingFee"
+                                //             error={errors.onBordingFee}
+                                //             placeholder=""
+                                //             value={fixedAmount}
+                                //             register={register}
+                                //             readonly
+                                //         />
+                                //         <Text
+                                //             pos="absolute"
+                                //             mb="0"
+                                //             left="8%"
+                                //             top="50%"
+                                //             transform="translateY(-15%)"
+                                //             bgColor="white"
+                                //         >
+                                //             {fixedAmount}
+                                //         </Text>
+                                //     </Box>
+                                // )
+                                ''
+                            )}
+                        </Grid>
                     </Box>
                     <Box w="full">
                         <Flex
@@ -678,66 +750,6 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                             loading={showLoading}
                             uploadFunction={showLoadingState}
                         />
-                        {/* <Box>
-                            <FormLabel
-                                textTransform="capitalize"
-                                width="fit-content"
-                                fontSize=".8rem"
-                            >
-                                Attach Document
-                            </FormLabel>
-
-                            <Flex
-                                outline="1px solid"
-                                outlineColor="gray.300"
-                                h="2.6rem"
-                                align="center"
-                                pr="1rem"
-                                w={['100%', '63%']}
-                                // justifyContent="space-between"
-                            >
-                                <Flex
-                                    bgColor="#f5f5f5"
-                                    fontSize=".8rem"
-                                    px="2rem"
-                                    h="full"
-                                    align="center"
-                                    cursor="pointer"
-                                    my="auto"
-                                    fontWeight="600"
-                                    onClick={() =>
-                                        widgetApi.current.openDialog()
-                                    }
-                                >
-                                    Choose File
-                                </Flex>
-                                <Text noOfLines={1} my="auto" px=".5rem">
-                                    {contract.name}
-                                </Text>
-                                {showLoading && (
-                                    <Flex align="center">
-                                        <Text
-                                            mb="0"
-                                            fontStyle="italic"
-                                            mr="1rem"
-                                        >
-                                            ...loading data info
-                                        </Text>
-                                        <Spinner />
-                                    </Flex>
-                                )}
-                            </Flex>
-                            <Box display="none">
-                                <Widget
-                                    publicKey="fda3a71102659f95625f"
-                                    clearable
-                                    onFileSelect={showLoadingState}
-                                    ref={widgetApi}
-                                    systemDialog={true}
-                                    inputAcceptTypes={'.docx,.pdf, .doc'}
-                                />
-                            </Box>
-                        </Box> */}
                     </Box>
 
                     <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">

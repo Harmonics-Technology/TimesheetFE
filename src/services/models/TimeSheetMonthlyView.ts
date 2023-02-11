@@ -11,4 +11,6 @@ export type TimeSheetMonthlyView = {
     totalHoursWorked?: number;
     fullName?: string | null;
     currency?: string | null;
+    startDate?: string;
+    endDate?: string;
 };

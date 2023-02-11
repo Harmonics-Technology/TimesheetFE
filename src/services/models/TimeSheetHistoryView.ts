@@ -13,4 +13,6 @@ export type TimeSheetHistoryView = {
     numberOfDays?: number;
     approvedNumberOfHours?: number;
     date?: string;
+    startDate?: string;
+    endDate?: string;
 };

@@ -209,6 +209,8 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                     boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     onClick={onOpen}
                     display={admin ? 'none' : 'flex'}
+                    mb="1rem"
+                    borderRadius="0"
                 >
                     +Admin
                 </Button>

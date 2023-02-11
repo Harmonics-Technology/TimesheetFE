@@ -44,6 +44,7 @@ import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { SelectrixBox } from '@components/bits-utils/Selectrix';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -55,6 +56,8 @@ const schema = yup.object().shape({
     organizationName: yup.string().required(),
     organizationAddress: yup.string().required(),
     organizationPhone: yup.number().required(),
+    invoiceGenerationFrequency: yup.string().required(),
+    term: yup.number().required(),
 });
 
 function ClientManagement({ adminList }: adminProps) {
@@ -133,6 +136,7 @@ function ClientManagement({ adminList }: adminProps) {
                     height="fit-content"
                     boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     onClick={onOpen}
+                    mb="1rem"
                 >
                     +Client
                 </Button>
@@ -258,6 +262,47 @@ function ClientManagement({ adminList }: adminProps) {
                                 error={errors.phoneNumber}
                                 placeholder=""
                                 control={control}
+                            />
+                        </Grid>
+                    </Box>
+                    <Box w="full">
+                        <Flex
+                            justify="space-between"
+                            align="center"
+                            my="1rem"
+                            py="1rem"
+                            borderY="1px solid"
+                            borderColor="gray.300"
+                        >
+                            <Text
+                                textTransform="uppercase"
+                                mb="0"
+                                fontSize="1.3rem"
+                                fontWeight="500"
+                            >
+                                Work Data
+                            </Text>
+                        </Flex>
+                        <Grid templateColumns="repeat(2,1fr)" gap="1rem 2rem">
+                            <SelectrixBox<RegisterModel>
+                                control={control}
+                                name="invoiceGenerationFrequency"
+                                error={errors.invoiceGenerationFrequency}
+                                keys="id"
+                                keyLabel="label"
+                                label="Payment Frequency"
+                                options={[
+                                    { id: 'bi-weekly', label: 'Bi-Weekly' },
+                                    { id: 'monthly', label: 'Monthly' },
+                                ]}
+                            />
+                            <PrimaryInput<RegisterModel>
+                                label="Term"
+                                name="term"
+                                error={errors.term}
+                                placeholder=""
+                                defaultValue={''}
+                                register={register}
                             />
                         </Grid>
                     </Box>

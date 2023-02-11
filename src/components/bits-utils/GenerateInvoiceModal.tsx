@@ -39,22 +39,28 @@ import Naira, { CUR } from '@components/generics/functions/Naira';
 import { SelectrixBox } from './Selectrix';
 import { PrimaryInput } from './PrimaryInput';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 type Props = {
     isOpen?: any;
     onClose?: any;
     clicked: any;
+    id: any;
 };
 const schema = yup.object().shape({
     rate: yup.string().required(),
-    cLientId: yup.string().required(),
 });
 
-export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
+export const GenerateInvoiceModal = ({
+    isOpen,
+    onClose,
+    clicked,
+    id,
+}: Props) => {
     const toast = useToast();
     const router = useRouter();
 
@@ -67,16 +73,24 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
     } = useForm<PaymentPartnerInvoiceModel>({
         resolver: yupResolver(schema),
         mode: 'all',
+        defaultValues: {
+            payrollGroupId: id,
+        },
     });
-    console.log(watch('cLientId'));
 
     const exchangeRate = Number(watch('rate')) || 0;
     const invoicesId: string[] = clicked.map((x) => x.id);
+
     const allInvoiceTotal = clicked.reduce((a, b) => a + b.totalAmount, 0);
     // const allExpenseTotal = clicked?.children
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
-    const hst = 300;
+    const { hstAmount } = useContext(OnboardingFeeContext);
+    function calculatePercentage(num, per) {
+        return (num / 100) * per;
+    }
+    const hst =
+        calculatePercentage(allInvoiceTotal, hstAmount?.fee) / exchangeRate;
     const hstNaira = hst * exchangeRate;
     const total = (allInvoiceTotal + hstNaira) / exchangeRate;
     console.log({ exchangeRate });
@@ -153,7 +167,7 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                         <Box overflowY="auto" px={5} maxH="80vh">
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <Box w="30%">
-                                    <SelectrixBox<PaymentPartnerInvoiceModel>
+                                    {/* <SelectrixBox<PaymentPartnerInvoiceModel>
                                         control={control}
                                         name="cLientId"
                                         error={errors.cLientId}
@@ -170,7 +184,7 @@ export const GenerateInvoiceModal = ({ isOpen, onClose, clicked }: Props) => {
                                                 label: 'Olade',
                                             },
                                         ]}
-                                    />
+                                    /> */}
                                 </Box>
                                 {/* <Text>Pro Insight Technology</Text> */}
 

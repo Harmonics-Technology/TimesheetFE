@@ -7,6 +7,7 @@ export type TeamMemberModel = {
     lastName?: string | null;
     email?: string | null;
     password?: string | null;
+    address?: string | null;
     clientId?: string | null;
     role: string;
     phoneNumber?: string | null;
@@ -14,8 +15,11 @@ export type TeamMemberModel = {
     organizationEmail?: string | null;
     organizationPhone?: string | null;
     organizationAddress?: string | null;
+    invoiceGenerationFrequency?: string | null;
+    term?: number | null;
     id?: string;
     payRollTypeId?: number;
+    payrollGroupId?: number;
     supervisorId?: string | null;
     ratePerHour?: number;
     dateOfBirth?: string;
@@ -37,4 +41,5 @@ export type TeamMemberModel = {
     monthlyPayoutRate?: number | null;
     paymentFrequency?: string | null;
     isActive?: boolean;
+    onBordingFee?: number;
 };

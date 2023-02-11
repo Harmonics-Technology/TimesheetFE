@@ -60,6 +60,7 @@ function ClientProfile({
             id: userProfile?.id,
             isActive: userProfile?.isActive,
             role: userProfile?.role,
+            // invoiceGenerationFrequency: userProfile?.clien
         },
     });
     const router = useRouter();

@@ -9,6 +9,7 @@ import {
     Spinner,
     Th,
     Td,
+    Tooltip,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import NextLink from 'next/link';
@@ -54,7 +55,7 @@ export function TableData({
     borderColor,
     classes,
 }: {
-    name: string | number | undefined | null;
+    name: any;
     border?: boolean | undefined;
     value?: string;
     borderColor?: string;
@@ -67,9 +68,9 @@ export function TableData({
             borderRightColor={borderColor}
             paddingInlineStart="1rem"
             className={classes}
-            maxW="120px"
-            textOverflow=""
-            overflow="hidden"
+            // maxW="120px"
+            // textOverflow=""
+            // overflow="hidden"
             // noOfLines={1}
             color={
                 name == 'OFFSHORE'
@@ -79,7 +80,9 @@ export function TableData({
                     : 'black'
             }
         >
-            {name}
+            <Tooltip label={name} hasArrow>
+                {name?.toString()?.substring(0, 50) || ''}
+            </Tooltip>
         </Td>
     );
 }

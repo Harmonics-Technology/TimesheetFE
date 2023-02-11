@@ -4,6 +4,7 @@ import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import AdminInvoices from '@components/subpages/AdminInvoices';
+import OnshoreSubmittedInvoice from '@components/subpages/OnshoreSubmittedInvoice';
 import { GetServerSideProps } from 'next';
 import React, { useContext } from 'react';
 import {
@@ -33,7 +34,7 @@ function Invoices({ invoiceData }: invoiceType) {
                     tabName="Clients"
                 />
             </Flex>
-            <AdminInvoices invoiceData={invoiceData} />
+            <OnshoreSubmittedInvoice invoiceData={invoiceData} />
         </Box>
     );
 }
@@ -44,11 +45,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listInvoicedInvoices(
+            const data = await FinancialService.listSubmittedOnshoreInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
-                pagingOptions.date,
+                pagingOptions.from,
+                pagingOptions.to,
             );
 
             return {

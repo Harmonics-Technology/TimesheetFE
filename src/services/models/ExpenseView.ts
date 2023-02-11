@@ -13,4 +13,6 @@ export type ExpenseView = {
     amount?: number;
     currency?: string | null;
     status?: string | null;
+    dateCreated?: string;
+    expenseDate?: string | null;
 };

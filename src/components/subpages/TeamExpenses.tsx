@@ -43,6 +43,8 @@ import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
+import { DateObject } from 'react-multi-date-picker';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -179,6 +181,13 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                         options={expenseType?.filter(
                             (x) => x.status == 'ACTIVE',
                         )}
+                    />
+                    <PrimaryDate<ExpenseModel>
+                        control={control}
+                        name="expenseDate"
+                        label="Date of Expense"
+                        error={errors.expenseDate}
+                        max={new DateObject().subtract(1, 'days')}
                     />
                     <PrimaryTextarea<ExpenseModel>
                         label="Description"

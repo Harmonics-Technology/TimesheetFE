@@ -6,5 +6,5 @@ export type PaymentPartnerInvoiceModel = {
     invoiceIds?: Array<string> | null;
     totalAmount?: number;
     rate?: string | null;
-    cLientId?: string;
+    payrollGroupId?: number;
 };

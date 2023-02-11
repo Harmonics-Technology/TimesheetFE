@@ -112,13 +112,13 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
         <>
             <Box
                 bgColor="white"
-                borderRadius="15px"
+                // borderRadius="15px"
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between">
-                    <HStack gap="1rem">
-                        {selectedId.length > 0 && (
+                {selectedId.length > 0 && (
+                    <Flex justify="space-between" mb="1rem">
+                        <HStack gap="1rem">
                             <Button
                                 bgColor="brand.600"
                                 color="white"
@@ -126,25 +126,26 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                                 height="fit-content"
                                 onClick={() => approveInvoiceItems()}
                                 isLoading={loading}
+                                borderRadius="0"
                                 spinner={<BeatLoader color="white" size={10} />}
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
                                 Approve
                             </Button>
-                        )}
-                    </HStack>
-                    <Checkbox
-                        checked={
-                            invoice?.length !== 0 &&
-                            invoice?.filter((x) => x.status === 'PENDING')
-                                .length !== 0 &&
-                            invoice?.filter((x) => x.status === 'PENDING')
-                                .length == selectedId?.length
-                        }
-                        onChange={() => toggleSelected('', true)}
-                        label="Select All"
-                    />
-                </Flex>
+                        </HStack>
+                        <Checkbox
+                            checked={
+                                invoice?.length !== 0 &&
+                                invoice?.filter((x) => x.status === 'PENDING')
+                                    .length !== 0 &&
+                                invoice?.filter((x) => x.status === 'PENDING')
+                                    .length == selectedId?.length
+                            }
+                            onChange={() => toggleSelected('', true)}
+                            label="Select All"
+                        />
+                    </Flex>
+                )}
                 <FilterSearch />
                 <Tables
                     tableHead={[
@@ -163,7 +164,7 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                                 <TableData name={x.invoiceReference} />
                                 <TableData
                                     name={
-                                        x.clientName ||
+                                        x.payrollGroupName ||
                                         x.paymentPartnerName ||
                                         x.name
                                     }

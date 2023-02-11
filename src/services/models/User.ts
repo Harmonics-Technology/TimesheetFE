@@ -41,6 +41,8 @@ export type User = {
     isActive?: boolean;
     employeeInformationId?: string | null;
     employeeInformation?: EmployeeInformation;
+    invoiceGenerationFrequency?: string | null;
+    term?: number | null;
     createdById?: string | null;
     createdBy?: User;
     supervisors?: Array<User> | null;

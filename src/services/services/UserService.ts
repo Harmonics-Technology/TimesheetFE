@@ -173,7 +173,8 @@ userId: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -182,7 +183,8 @@ role: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -194,7 +196,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'Search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 401: `Unauthorized`,
@@ -287,6 +290,23 @@ requestBody?: TeamMemberModel,
             url: '/api/User/add-team-member',
             body: requestBody,
             mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param id 
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static activateTeamMember(
+id: string,
+): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/activate-team-member/{id}',
+            path: {
+                'id': id,
+            },
         });
     }
 

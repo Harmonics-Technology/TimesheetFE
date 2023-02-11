@@ -48,7 +48,7 @@ function TimeSheetApproval({ timeSheets }: adminProps) {
                             (x: TimeSheetApprovedView, i) => (
                                 <Tr key={i}>
                                     <TableData name={x.name} />
-                                    <TableData name={x.email} />
+                                    {/* <TableData name={x.email} /> */}
                                     <TableData
                                         name={x.employeeInformation?.jobTitle}
                                     />

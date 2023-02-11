@@ -14,7 +14,9 @@ export class PaySlipService {
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
+     * @param payrollTypeFilter 
      * @returns PayslipUserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -23,7 +25,9 @@ employeeInformationId: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
+payrollTypeFilter?: number,
 ): CancelablePromise<PayslipUserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -35,7 +39,9 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
+                'payrollTypeFilter': payrollTypeFilter,
             },
             errors: {
                 400: `Bad Request`,
@@ -47,7 +53,9 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
+     * @param payrollTypeFilter 
      * @returns PayslipUserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -55,7 +63,9 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
+payrollTypeFilter?: number,
 ): CancelablePromise<PayslipUserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -64,7 +74,9 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
+                'payrollTypeFilter': payrollTypeFilter,
             },
             errors: {
                 400: `Bad Request`,

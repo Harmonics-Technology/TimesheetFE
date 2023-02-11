@@ -8,4 +8,5 @@ export type ExpenseModel = {
     expenseTypeId?: string;
     amount?: number;
     currency?: string | null;
+    expenseDate?: string | null;
 };

@@ -18,12 +18,14 @@ import InvoiceTotalText from '@components/bits-utils/InvoiceTotalText';
 import { TableData } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import moment from 'moment';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import { ExpenseView, InvoiceView, PayrollView } from 'src/services';
 import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import RejectInvoiceModal from '@components/bits-utils/RejectInvoiceModal';
 import RejectedMessage from '@components/bits-utils/RejectedMessage';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import InputBlank from '@components/bits-utils/InputBlank';
 
 function Paymentinvoices({
     isOpen,
@@ -48,7 +50,12 @@ function Paymentinvoices({
     // const allExpenseTotal = clicked?.children
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
-    const hst = 300;
+    const { hstAmount } = useContext(OnboardingFeeContext);
+    function calculatePercentage(num, per) {
+        return (num / 100) * per;
+    }
+    const hst =
+        calculatePercentage(allInvoiceTotal, hstAmount?.fee) / exchangeRate;
     const hstNaira = hst * exchangeRate;
     const status = clicked?.status;
     return (
@@ -76,7 +83,7 @@ function Paymentinvoices({
                     <ModalHeader>
                         <Text
                             color="black"
-                            fontSize="1.1rem"
+                            fontSize="1rem"
                             textAlign="left"
                             fontWeight="semibold"
                             px={5}
@@ -98,7 +105,7 @@ function Paymentinvoices({
                                 )}.pdf`}
                                 author="KendoReact Team"
                             >
-                                <Text>Pro Insight Technology</Text>
+                                {/* <Text>{clicked?.paymentPartnerName}</Text> */}
                                 <Flex
                                     bgColor="brand.400"
                                     color="white"
@@ -133,7 +140,7 @@ function Paymentinvoices({
                                             Billed To
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
-                                            Pro insight technology <br />
+                                            {clicked?.payrollGroupName} <br />
                                             201 New York Ibeju Leki, 201
                                             New-York Ibeju Leki
                                         </Text>
@@ -155,7 +162,7 @@ function Paymentinvoices({
                                             'End Date',
                                             'Amount (₦)',
                                             'Amount ($)',
-                                            'Rate',
+                                            'Fee',
                                         ]}
                                     >
                                         <>
@@ -225,15 +232,34 @@ function Paymentinvoices({
                                                             )}
                                                         />
                                                         <TableData
-                                                            name={Naira(
-                                                                exchangeRate,
-                                                            )}
+                                                            name={`${
+                                                                x
+                                                                    ?.employeeInformation
+                                                                    ?.onBoradingFee
+                                                            }${
+                                                                x
+                                                                    .employeeInformation
+                                                                    ?.fixedAmount ==
+                                                                false
+                                                                    ? '%'
+                                                                    : 'flat'
+                                                            }`}
                                                         />
                                                     </Tr>
                                                 </>
                                             ))}
                                         </>
                                     </Tables>
+                                </Box>
+                                <Box w="30%">
+                                    <InputBlank
+                                        defaultValue={
+                                            exchangeRate as unknown as string
+                                        }
+                                        placeholder=""
+                                        label="Exchange Rate"
+                                        fontSize=".8rem"
+                                    />
                                 </Box>
                                 <Box w="fit-content" ml="auto">
                                     <Flex
@@ -249,7 +275,7 @@ function Paymentinvoices({
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={hst}
+                                            value={CUR(hst)}
                                             cur="$"
                                         />
                                         <Box

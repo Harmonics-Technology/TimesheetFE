@@ -136,6 +136,13 @@ function InvoiceTemplate({
                                     borderColor="gray.300"
                                     borderX="none"
                                 >
+                                    {/* <Text
+                                        fontSize=".7rem"
+                                        fontWeight="600"
+                                        mt="1rem"
+                                    >
+                                        Payroll
+                                    </Text> */}
                                     <Tables
                                         tableHead={[
                                             'Name',
@@ -149,7 +156,7 @@ function InvoiceTemplate({
                                             <Tr key={clicked?.id}>
                                                 <TableData
                                                     name={
-                                                        clicked?.clientName ||
+                                                        clicked?.payrollGroupName ||
                                                         clicked?.paymentPartnerName ||
                                                         clicked?.name
                                                     }
@@ -178,49 +185,74 @@ function InvoiceTemplate({
                                                     )}`}
                                                 />
                                             </Tr>
-                                            {clicked?.expenses?.length !==
-                                                0 && (
-                                                <>
-                                                    {clicked?.expenses?.map(
-                                                        (x) => (
-                                                            <Tr key={x?.id}>
-                                                                <TableData
-                                                                    name={
-                                                                        x
-                                                                            .teamMember
-                                                                            ?.fullName
-                                                                    }
-                                                                />
-                                                                <TableData
-                                                                    name={
-                                                                        x.description
-                                                                    }
-                                                                />
-
-                                                                <TableData
-                                                                    name={
-                                                                        x?.expenseType
-                                                                    }
-                                                                />
-                                                                <TableData
-                                                                    name={
-                                                                        'EXPENSE'
-                                                                    }
-                                                                />
-                                                                <TableData
-                                                                    name={`${
-                                                                        x?.currency
-                                                                    } ${CUR(
-                                                                        x?.amount,
-                                                                    )}`}
-                                                                />
-                                                            </Tr>
-                                                        ),
-                                                    )}
-                                                </>
-                                            )}
                                         </>
                                     </Tables>
+
+                                    <>
+                                        {clicked?.expenses?.length !== 0 && (
+                                            <>
+                                                <Text
+                                                    fontSize=".7rem"
+                                                    fontWeight="600"
+                                                    mt="1rem"
+                                                    pl="1rem"
+                                                >
+                                                    Expenses
+                                                </Text>
+                                                <Tables
+                                                    tableHead={[
+                                                        'Full Name',
+                                                        'Expense Date',
+                                                        'Created on',
+                                                        'Description',
+                                                        `Amount`,
+                                                    ]}
+                                                >
+                                                    <>
+                                                        {clicked?.expenses?.map(
+                                                            (x) => (
+                                                                <Tr key={x?.id}>
+                                                                    <TableData
+                                                                        name={
+                                                                            x
+                                                                                .teamMember
+                                                                                ?.fullName
+                                                                        }
+                                                                    />
+                                                                    <TableData
+                                                                        name={moment(
+                                                                            x.expenseDate,
+                                                                        ).format(
+                                                                            'MMM DD, YYYY',
+                                                                        )}
+                                                                    />
+                                                                    <TableData
+                                                                        name={moment(
+                                                                            x.dateCreated,
+                                                                        ).format(
+                                                                            'MMM DD, YYYY',
+                                                                        )}
+                                                                    />
+                                                                    <TableData
+                                                                        name={
+                                                                            x.description
+                                                                        }
+                                                                    />
+                                                                    <TableData
+                                                                        name={`${
+                                                                            x?.currency
+                                                                        } ${CUR(
+                                                                            x?.amount,
+                                                                        )}`}
+                                                                    />
+                                                                </Tr>
+                                                            ),
+                                                        )}
+                                                    </>
+                                                </Tables>
+                                            </>
+                                        )}
+                                    </>
                                 </Box>
                                 <Box w="fit-content" ml="auto">
                                     <Flex

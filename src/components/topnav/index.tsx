@@ -46,7 +46,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     ).length;
     return (
         <Box pt="2rem" pos="sticky" top="0" zIndex="800" bgColor="#f6f7f8">
-            <Button
+            {/* <Button
                 onClick={() => router.back()}
                 variant="solid"
                 mb="1rem"
@@ -54,7 +54,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                 leftIcon={<MdOutlineArrowBackIos />}
             >
                 Back
-            </Button>
+            </Button> */}
             <Flex
                 justify="space-between"
                 pr="1rem"

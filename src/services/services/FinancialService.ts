@@ -45,7 +45,8 @@ requestBody?: ExpenseModel,
      * @param limit 
      * @param employeeInformationId 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns ExpenseViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -54,7 +55,8 @@ offset?: number,
 limit?: number,
 employeeInformationId?: string,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<ExpenseViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -64,7 +66,8 @@ dateFilter?: string,
                 'Limit': limit,
                 'employeeInformationId': employeeInformationId,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -77,7 +80,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns ExpenseViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -85,7 +89,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<ExpenseViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -94,7 +99,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -107,7 +113,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns ExpenseViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -115,7 +122,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<ExpenseViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -124,7 +132,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -137,7 +146,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns ExpenseViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -145,7 +155,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<ExpenseViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -154,7 +165,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -328,7 +340,8 @@ payrollId?: string,
      * @param offset 
      * @param limit 
      * @param employeeInformationId 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns PaySlipViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -336,7 +349,8 @@ payrollId?: string,
 offset?: number,
 limit?: number,
 employeeInformationId?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<PaySlipViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -345,7 +359,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'employeeInformationId': employeeInformationId,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -375,7 +390,8 @@ payrollId?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns ExpenseViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -383,7 +399,8 @@ payrollId?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<ExpenseViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -392,7 +409,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -445,7 +463,8 @@ requestBody?: Array<string>,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns ExpenseViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -453,7 +472,8 @@ requestBody?: Array<string>,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<ExpenseViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -462,7 +482,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -475,7 +496,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -483,7 +505,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -492,7 +515,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -505,7 +529,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -513,7 +538,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -522,7 +548,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -535,7 +562,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -543,7 +571,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -552,7 +581,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -565,7 +595,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -573,7 +604,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -582,7 +614,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -595,7 +628,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -603,7 +637,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -612,7 +647,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -625,7 +661,9 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
+     * @param payrollTypeFilter 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -633,7 +671,9 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
+payrollTypeFilter?: number,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -642,7 +682,9 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
+                'payrollTypeFilter': payrollTypeFilter,
             },
             errors: {
                 400: `Bad Request`,
@@ -655,7 +697,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -663,7 +706,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -672,7 +716,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -685,7 +730,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @param status 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -694,7 +740,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 status?: number,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -704,7 +751,8 @@ status?: number,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
                 'status': status,
             },
             errors: {
@@ -816,7 +864,8 @@ limit?: number,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -824,7 +873,8 @@ limit?: number,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -833,7 +883,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -846,7 +897,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns ExpenseViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -854,7 +906,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<ExpenseViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -863,7 +916,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -1022,7 +1076,8 @@ requestBody?: PaymentPartnerInvoiceModel,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -1030,7 +1085,8 @@ requestBody?: PaymentPartnerInvoiceModel,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -1039,7 +1095,44 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param payrollGroupId 
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @param startDate 
+     * @param endDate 
+     * @returns InvoiceViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listPayrollGroupInvoices(
+payrollGroupId?: number,
+offset?: number,
+limit?: number,
+search?: string,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/payroll-group/invoices',
+            query: {
+                'payrollGroupId': payrollGroupId,
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -1052,7 +1145,41 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
+     * @returns InvoiceViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listClientInvoices(
+offset?: number,
+limit?: number,
+search?: string,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/client/invoices',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+                'StartDate': startDate,
+                'EndDate': endDate,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @param startDate 
+     * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -1060,7 +1187,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -1069,7 +1197,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -1082,7 +1211,8 @@ dateFilter?: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -1090,7 +1220,8 @@ dateFilter?: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -1099,7 +1230,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -1113,7 +1245,8 @@ dateFilter?: string,
      * @param limit 
      * @param clientId 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -1122,7 +1255,8 @@ offset?: number,
 limit?: number,
 clientId?: string,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -1132,7 +1266,8 @@ dateFilter?: string,
                 'Limit': limit,
                 'clientId': clientId,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,

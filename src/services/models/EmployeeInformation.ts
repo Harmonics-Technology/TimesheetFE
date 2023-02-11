@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 import type { Contract } from './Contract';
+import type { PayrollGroup } from './PayrollGroup';
 import type { PayRollType } from './PayRollType';
 import type { User } from './User';
 
@@ -33,5 +34,8 @@ export type EmployeeInformation = {
     clientRate?: number | null;
     monthlyPayoutRate?: number | null;
     paymentFrequency?: string | null;
+    onBoradingFee?: number;
+    payrollGroupId?: number | null;
+    payrollGroup?: PayrollGroup;
     contracts?: Array<Contract> | null;
 };

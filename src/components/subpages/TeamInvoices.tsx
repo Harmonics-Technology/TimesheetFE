@@ -152,7 +152,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                                 <TableData name={x.invoiceReference} />
                                 <TableData
                                     name={
-                                        x.clientName ||
+                                        x.payrollGroupName ||
                                         x.name ||
                                         x.paymentPartnerName
                                     }

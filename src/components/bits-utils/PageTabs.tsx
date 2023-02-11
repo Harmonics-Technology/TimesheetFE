@@ -17,9 +17,10 @@ function PageTabs({
         <Flex
             justify="center"
             align="center"
+            pl="2rem"
             w="full"
-            h="4rem"
-            bgColor={isActive ? 'white' : 'brand.100'}
+            h="3rem"
+            bgColor={isActive ? 'white' : 'gray.100'}
             onClick={() => router.push(url)}
             color={isActive ? 'brand.400' : 'gray.500'}
             // borderRadius="8px"

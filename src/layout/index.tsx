@@ -15,17 +15,19 @@ const Layout = ({ children }: LayoutProps) => {
         router.pathname.startsWith('/login') ||
         router.pathname.startsWith('/password') ||
         router.pathname.startsWith('/forgot-password');
+    // ||
+    // router.pathname.startsWith('/user/activate');
     const [openSidenav, setOpenSidenav] = useState(false);
 
     return (
         <>
             {!noSideBar ? (
-                <Flex pos="relative" p="1rem" bg="#f6f7f8">
+                <Flex pos="relative" p="0rem" bg="#f6f7f8">
                     <SideNav
                         openSidenav={openSidenav}
                         setOpenSidenav={setOpenSidenav}
                     />
-                    <Box w={['full', '82%']} as="main" ml="auto" minH="95vh">
+                    <Box w={['full', '83%']} as="main" ml="auto" minH="95vh">
                         <Box as="div" w="95%" mx="auto" mb="3rem">
                             <TopNav
                                 setOpenSidenav={setOpenSidenav}

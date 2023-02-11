@@ -23,11 +23,12 @@ import {
     InvoiceViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import InvoiceTemplate from './InvoiceTemplate';
 import BeatLoader from 'react-spinners/BeatLoader';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
+import { UserContext } from '@components/context/UserContext';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -106,18 +107,24 @@ function AdminInvoices({ invoiceData }: adminProps) {
             }
         });
     };
+    const { user } = useContext(UserContext);
+    const role = user?.role.replaceAll(' ', '');
+    const hideCheckbox = router.asPath.startsWith(
+        `/${role}/financials/offshore`,
+    );
+    console.log({ hideCheckbox });
 
     return (
         <>
             <Box
                 bgColor="white"
-                borderRadius="15px"
+                // borderRadius="15px"
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between">
-                    <HStack gap="1rem">
-                        {selectedId.length > 0 && (
+                {selectedId.length > 0 && (
+                    <Flex justify="space-between" mb="1rem">
+                        <HStack gap="1rem">
                             <Button
                                 bgColor="brand.600"
                                 color="white"
@@ -130,18 +137,21 @@ function AdminInvoices({ invoiceData }: adminProps) {
                             >
                                 Approve
                             </Button>
+                        </HStack>
+                        {!hideCheckbox && (
+                            <Checkbox
+                                checked={
+                                    invoice?.length !== 0 &&
+                                    invoice?.filter(
+                                        (x) => x.status !== 'INVOICED',
+                                    ).length == selectedId?.length
+                                }
+                                onChange={() => toggleSelected('', true)}
+                                label="Select All"
+                            />
                         )}
-                    </HStack>
-                    {/* <Checkbox
-                        checked={
-                            invoice?.length !== 0 &&
-                            invoice?.filter((x) => x.status !== 'INVOICED')
-                                .length == selectedId?.length
-                        }
-                        onChange={() => toggleSelected('', true)}
-                        label="Select All"
-                    /> */}
-                </Flex>
+                    </Flex>
+                )}
                 <FilterSearch />
                 <Tables
                     tableHead={[
@@ -160,7 +170,7 @@ function AdminInvoices({ invoiceData }: adminProps) {
                                 <TableData name={x.invoiceReference} />
                                 <TableData
                                     name={
-                                        x.clientName ||
+                                        x.payrollGroupName ||
                                         x.paymentPartnerName ||
                                         x.name
                                     }
@@ -186,20 +196,21 @@ function AdminInvoices({ invoiceData }: adminProps) {
                                     onOpen={onOpen}
                                     clicked={setClicked}
                                 />
-
-                                {/* <td>
-                                    <Checkbox
-                                        checked={
-                                            selectedId.find(
-                                                (e) => e === x.id,
-                                            ) || ''
-                                        }
-                                        onChange={(e) =>
-                                            toggleSelected(x.id as string)
-                                        }
-                                        disabled={x.status === 'INVOICED'}
-                                    />
-                                </td> */}
+                                {!hideCheckbox && (
+                                    <td>
+                                        <Checkbox
+                                            checked={
+                                                selectedId.find(
+                                                    (e) => e === x.id,
+                                                ) || ''
+                                            }
+                                            onChange={(e) =>
+                                                toggleSelected(x.id as string)
+                                            }
+                                            disabled={x.status === 'INVOICED'}
+                                        />
+                                    </td>
+                                )}
                             </Tr>
                         ))}
                     </>

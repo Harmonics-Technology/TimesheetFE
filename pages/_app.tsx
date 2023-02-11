@@ -14,6 +14,7 @@ import Cookies from 'js-cookie';
 import { OpenAPI } from 'src/services';
 import NextNProgress from 'nextjs-progressbar';
 import { NotificationProvider } from '@components/context/NotificationContext';
+import { OnboardingFeeProvider } from '@components/context/OnboardingFeeContext';
 
 function MyApp({
     Component,
@@ -36,14 +37,16 @@ function MyApp({
                 <QueryClientProvider client={queryClient}>
                     <Hydrate state={pageProps.dehydratedState}>
                         <RootStoreProvider>
-                            <NotificationProvider>
-                                <UserProvider>
-                                    <NextNProgress color="#2EAFA3" />
-                                    <Layout>
-                                        <Component {...pageProps} />
-                                    </Layout>
-                                </UserProvider>
-                            </NotificationProvider>
+                            <OnboardingFeeProvider>
+                                <NotificationProvider>
+                                    <UserProvider>
+                                        <NextNProgress color="#2EAFA3" />
+                                        <Layout>
+                                            <Component {...pageProps} />
+                                        </Layout>
+                                    </UserProvider>
+                                </NotificationProvider>
+                            </OnboardingFeeProvider>
                         </RootStoreProvider>
                     </Hydrate>
                 </QueryClientProvider>

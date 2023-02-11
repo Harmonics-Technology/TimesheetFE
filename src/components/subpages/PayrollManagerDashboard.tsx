@@ -45,7 +45,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">
-                <Grid
+                {/* <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
                     gap="1.2rem"
                     w="full"
@@ -65,7 +65,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                         title="admins"
                         value={adminMetrics?.totalDownLines}
                     />
-                </Grid>
+                </Grid> */}
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Timesheets'}
@@ -82,6 +82,18 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                     />
                                     <TableData
                                         name={
+                                            x?.employeeInformation?.supervisor
+                                                .firstName
+                                        }
+                                    />
+                                    <TableData
+                                        name={
+                                            x?.employeeInformation?.supervisor
+                                                .firstName
+                                        }
+                                    />
+                                    <TableData
+                                        name={
                                             x.isApproved == false
                                                 ? 'Not Approved'
                                                 : 'Approved'
@@ -91,7 +103,16 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                     <TableState name={x.status} />
                                 </Tr>
                             ))}
-                        thead={['Name', 'Approved', 'Hours', 'Status']}
+                        thead={[
+                            'Name',
+                            'Supervisor Name',
+                            'Expected Hours',
+                            'Total Hours',
+                            'Expected Payout',
+                            'Actual Payout',
+                            'Status',
+                            'Action',
+                        ]}
                         link={'/'}
                     />
                 </Grid>
@@ -105,7 +126,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                 <Tr key={i}>
                                     <TableData
                                         name={
-                                            x.clientName ||
+                                            x.payrollGroupName ||
                                             x.paymentPartnerName ||
                                             x.name
                                         }
@@ -130,15 +151,17 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                             ))}
                         thead={[
                             'Name',
-                            'Created on',
-                            'Start Date',
-                            'End Date',
+                            'Job Role',
+                            'Pay Period',
+                            'Salary',
+                            'Total Salary Paid',
                             'Status',
+                            'Action',
                         ]}
                         link={'/'}
                     />
                 </Grid>
-                <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
+                {/* <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Payslip'}
                         url={'financials/payslips'}
@@ -188,7 +211,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                         ]}
                         link={'/'}
                     />
-                </Grid>
+                </Grid> */}
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Invoice'}
@@ -200,7 +223,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                     <TableData name={x.invoiceReference} />
                                     <TableData
                                         name={
-                                            x.clientName ||
+                                            x.payrollGroupName ||
                                             x.paymentPartnerName ||
                                             x.name
                                         }
@@ -223,11 +246,12 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                 </Tr>
                             ))}
                         thead={[
+                            'Client Name',
                             'Invoice No',
-                            'Name',
-                            'Created on',
-                            'Start Date',
-                            'End Date',
+                            'Amount',
+                            'Generated on',
+                            'Status',
+                            'Action',
                         ]}
                         link={'/'}
                     />

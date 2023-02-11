@@ -18,7 +18,7 @@ import InvoiceTotalText from '@components/bits-utils/InvoiceTotalText';
 import { TableData } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import moment from 'moment';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import {
     ExpenseView,
     FinancialService,
@@ -30,6 +30,8 @@ import { PDFExport } from '@progress/kendo-react-pdf';
 import RejectInvoiceModal from '@components/bits-utils/RejectInvoiceModal';
 import { useRouter } from 'next/router';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import InputBlank from '@components/bits-utils/InputBlank';
 
 function PayrollInvoice({
     isOpen,
@@ -54,8 +56,14 @@ function PayrollInvoice({
     // const allExpenseTotal = clicked?.children
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
-    const hst = 300;
+    const { hstAmount } = useContext(OnboardingFeeContext);
+    function calculatePercentage(num, per) {
+        return (num / 100) * per;
+    }
+    const hst =
+        calculatePercentage(allInvoiceTotal, hstAmount?.fee) / exchangeRate;
     const hstNaira = hst * exchangeRate;
+    // console.log({ allInvoiceTotal, hst, hstNaira });
     // console.log({ clicked });
     const [loading, setLoading] = useState<boolean>(false);
     const toast = useToast();
@@ -123,7 +131,7 @@ function PayrollInvoice({
                     <ModalHeader>
                         <Text
                             color="black"
-                            fontSize="1.1rem"
+                            fontSize="1rem"
                             textAlign="left"
                             fontWeight="semibold"
                             px={5}
@@ -145,7 +153,7 @@ function PayrollInvoice({
                                 )}.pdf`}
                                 author="KendoReact Team"
                             >
-                                <Text>Pro Insight Technology</Text>
+                                {/* <Text>{clicked?.paymentPartnerName}</Text> */}
                                 <Flex
                                     bgColor="brand.400"
                                     color="white"
@@ -180,7 +188,7 @@ function PayrollInvoice({
                                             Billed To
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
-                                            Pro insight technology <br />
+                                            {clicked?.payrollGroupName} <br />
                                             201 New York Ibeju Leki, 201
                                             New-York Ibeju Leki
                                         </Text>
@@ -272,15 +280,34 @@ function PayrollInvoice({
                                                             )}
                                                         />
                                                         <TableData
-                                                            name={Naira(
-                                                                exchangeRate,
-                                                            )}
+                                                            name={`${
+                                                                x
+                                                                    ?.employeeInformation
+                                                                    ?.onBoradingFee
+                                                            }${
+                                                                x
+                                                                    .employeeInformation
+                                                                    ?.fixedAmount ==
+                                                                false
+                                                                    ? '%'
+                                                                    : 'flat'
+                                                            }`}
                                                         />
                                                     </Tr>
                                                 </>
                                             ))}
                                         </>
                                     </Tables>
+                                </Box>
+                                <Box w="30%">
+                                    <InputBlank
+                                        defaultValue={
+                                            exchangeRate as unknown as string
+                                        }
+                                        placeholder=""
+                                        label="Exchange Rate"
+                                        fontSize=".8rem"
+                                    />
                                 </Box>
                                 <Box w="fit-content" ml="auto">
                                     <Flex
@@ -296,7 +323,7 @@ function PayrollInvoice({
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={hst}
+                                            value={CUR(hst)}
                                             cur="$"
                                         />
                                         <Box

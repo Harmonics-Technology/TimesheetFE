@@ -79,11 +79,11 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
                     borderRadius="5px"
                     // boxShadow="0px 0px 9px rgba(0, 127, 130, 0.37)"
                 />
+                <Text fontSize=".7rem" color="red">
+                    {(error?.type === 'required' && `${label} is required`) ||
+                        error?.message}
+                </Text>
             </FormControl>
-            <Text fontSize=".7rem" color="red">
-                {(error?.type === 'required' && `${label} is required`) ||
-                    error?.message}
-            </Text>
         </>
     );
 };

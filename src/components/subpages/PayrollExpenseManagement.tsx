@@ -15,6 +15,7 @@ import {
     Td,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
+import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import {
     ExpenseActions,
     TableData,
@@ -43,6 +44,7 @@ import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import Checkbox from '@components/bits-utils/Checkbox';
 import BeatLoader from 'react-spinners/BeatLoader';
+import moment from 'moment';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -192,6 +194,7 @@ function PayrollExpenseManagement({
                             height="fit-content"
                             boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             onClick={onOpen}
+                            mb="1rem"
                         >
                             +Expense
                         </Button>
@@ -227,6 +230,7 @@ function PayrollExpenseManagement({
                         'Name',
                         'Description',
                         'Expense Type',
+                        'Expense Date',
                         'Currency',
                         'Amount',
                         'Status',
@@ -240,6 +244,11 @@ function PayrollExpenseManagement({
                                 <TableData name={x.teamMember?.fullName} />
                                 <TableData name={x.description} />
                                 <TableData name={x.expenseType} />
+                                <TableData
+                                    name={moment(x?.expenseDate).format(
+                                        'MMM DD, YYYY',
+                                    )}
+                                />
                                 <TableData name={x.currency} />
                                 <TableData
                                     name={x.amount as unknown as string}
@@ -295,6 +304,8 @@ function PayrollExpenseManagement({
                                 (x) => x.status == 'ACTIVE',
                             )}
                         />
+                    </Grid>
+                    <Box my="1rem" w="full">
                         <PrimaryTextarea<ExpenseModel>
                             label="Description"
                             name="description"
@@ -303,6 +314,11 @@ function PayrollExpenseManagement({
                             defaultValue=""
                             register={register}
                         />
+                    </Box>
+                    <Grid
+                        templateColumns={['1fr', 'repeat(2, 1fr)']}
+                        gap="1rem 2rem"
+                    >
                         <PrimaryInput<ExpenseModel>
                             label="Amount"
                             name="amount"
@@ -323,6 +339,12 @@ function PayrollExpenseManagement({
                                 { id: 'CAD', label: 'CAD' },
                                 { id: 'NGN', label: 'NGN' },
                             ]}
+                        />
+                        <PrimaryDate<ExpenseModel>
+                            control={control}
+                            name="expenseDate"
+                            label="Date of Expense"
+                            error={errors.expenseDate}
                         />
                     </Grid>
 

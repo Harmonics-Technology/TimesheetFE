@@ -22,11 +22,11 @@ function payrolls({ invoiceData }: InvoiceType) {
             <Flex>
                 <PageTabs
                     url={`/${role}/financials/payrolls`}
-                    tabName="Onshore"
+                    tabName="Pending"
                 />
                 <PageTabs
                     url={`/${role}/financials/offshore`}
-                    tabName="Offshore"
+                    tabName="Approved"
                 />
             </Flex>
             <AdminInvoices invoiceData={invoiceData} />
@@ -40,11 +40,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listSubmittedOffshoreInvoices(
+            const data = await FinancialService.listInvoicedInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
-                pagingOptions.date,
+                pagingOptions.from,
+                pagingOptions.to,
+                2,
             );
 
             return {
