@@ -708,7 +708,7 @@ const TimesheetPayrollManager = ({
                 // borderRadius="10px"
                 p="1rem 2rem"
             >
-                <Grid templateColumns="repeat(6,1fr)" w="100%" mr="auto">
+                <Grid templateColumns="repeat(5,1fr)" w="100%" mr="auto">
                     <TimeSheetEstimation
                         label="Expected Total Hours"
                         data={`${expectedHours} HR`}

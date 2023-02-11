@@ -486,11 +486,11 @@ const TimesheetTeam = ({
                         data={`${expectedHours} HR`}
                         tip="Number of hours you are expected to work this month"
                     />
-                    <TimeSheetEstimation
+                    {/* <TimeSheetEstimation
                         label="Total Hours Worked"
                         data={`${totalHours} HR`}
                         tip="Number of hours you worked this month"
-                    />
+                    /> */}
                     <TimeSheetEstimation
                         label="Total Hours Approved"
                         data={`${totalHours} HR`}
