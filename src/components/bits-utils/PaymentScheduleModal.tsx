@@ -22,6 +22,7 @@ import { TableData, TableHead } from './TableData';
 import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 type Props = {
     isOpen?: any;
@@ -53,10 +54,10 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
 
         const data = paymentSchedule?.data?.map((x: PaymentSchedule, i) => [
             ++i,
-            moment(x.weekDate).format('DD/MM/YYYY'),
-            moment(x.lastWorkDayOfCycle).format('DD/MM/YYYY'),
-            moment(x.approvalDate).format('DD/MM/YYYY'),
-            moment(x.paymentDate).format('DD/MM/YYYY'),
+            moment(x.weekDate),
+            moment(x.lastWorkDayOfCycle),
+            moment(x.approvalDate),
+            moment(x.paymentDate),
         ]);
 
         const content = {
@@ -142,24 +143,24 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
                                         (x: PaymentSchedule, i) => (
                                             <Tr key={i}>
                                                 <TableData
-                                                    name={moment(
+                                                    name={formatDate(
                                                         x.weekDate,
-                                                    ).format('DD/MM/YYYY')}
+                                                    )}
                                                 />
                                                 <TableData
-                                                    name={moment(
+                                                    name={formatDate(
                                                         x.lastWorkDayOfCycle,
-                                                    ).format('DD/MM/YYYY')}
+                                                    )}
                                                 />
                                                 <TableData
-                                                    name={moment(
+                                                    name={formatDate(
                                                         x.approvalDate,
-                                                    ).format('DD/MM/YYYY')}
+                                                    )}
                                                 />
                                                 <TableData
-                                                    name={moment(
+                                                    name={formatDate(
                                                         x.paymentDate,
-                                                    ).format('DD/MM/YYYY')}
+                                                    )}
                                                 />
                                             </Tr>
                                         ),

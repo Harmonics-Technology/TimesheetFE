@@ -63,6 +63,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
+    // console.log({ adminList });
 
     const onSubmit = async (data: RegisterModel) => {
         try {
@@ -116,13 +117,21 @@ function SupervisorManagement({ adminList, client }: adminProps) {
                 </Button>
                 <FilterSearch />
                 <Tables
-                    tableHead={['Name', 'Email', 'Role', 'Status', 'Action']}
+                    tableHead={[
+                        'Name',
+                        'Email',
+                        // 'Client Assigned',
+                        'Role',
+                        'Status',
+                        'Action',
+                    ]}
                 >
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
                                 <TableData name={x.fullName} />
                                 <TableData name={x.email} />
+                                {/* <TableData name={x.clientName} /> */}
                                 <TableData name={x.role} />
                                 <TableStatus name={x.isActive} />
                                 <TableActions

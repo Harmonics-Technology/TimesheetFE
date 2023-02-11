@@ -10,6 +10,8 @@ import {
     TimeSheetHistoryViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import moment from 'moment';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
@@ -31,9 +33,10 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
                     tableHead={[
                         'Year',
                         'Month',
-                        'Number of Days',
-                        'Approved No. of Hours',
-                        '',
+                        'Begining Period',
+                        'Ending Period',
+                        'Approved Hours',
+                        'Action',
                     ]}
                 >
                     <>
@@ -41,11 +44,8 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
                             <Tr key={i}>
                                 <TableData name={x.year} />
                                 <TableData name={x.month} />
-                                <TableData
-                                    name={`${
-                                        x.numberOfDays as unknown as string
-                                    } Days`}
-                                />
+                                <TableData name={formatDate(x.startDate)} />
+                                <TableData name={formatDate(x.endDate)} />
                                 <TableData
                                     name={`${
                                         x.hours as unknown as string

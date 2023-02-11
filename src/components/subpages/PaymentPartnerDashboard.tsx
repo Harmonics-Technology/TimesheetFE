@@ -20,6 +20,7 @@ import {
     TableStatus,
 } from '@components/bits-utils/TableData';
 import { NotificationContext } from '@components/context/NotificationContext';
+import { formatDate } from '@components/generics/functions/formatDate';
 import axios from 'axios';
 import moment from 'moment';
 import { useContext, useEffect, useState } from 'react';
@@ -93,20 +94,10 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                                         }
                                     />
                                     <TableData
-                                        name={moment(x.dateCreated).format(
-                                            'DD/MM/YYYY',
-                                        )}
+                                        name={formatDate(x.dateCreated)}
                                     />
-                                    <TableData
-                                        name={moment(x.startDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
-                                    />
-                                    <TableData
-                                        name={moment(x.endDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
-                                    />
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
                                     <TableState name={x.status as string} />
                                 </Tr>
                             ))}
@@ -137,20 +128,10 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                                         }
                                     />
                                     <TableData
-                                        name={moment(x.dateCreated).format(
-                                            'DD/MM/YYYY',
-                                        )}
+                                        name={formatDate(x.dateCreated)}
                                     />
-                                    <TableData
-                                        name={moment(x.startDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
-                                    />
-                                    <TableData
-                                        name={moment(x.endDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
-                                    />
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
                                     <TableState name={x.status as string} />
                                 </Tr>
                             ))}

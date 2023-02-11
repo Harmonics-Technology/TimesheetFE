@@ -19,6 +19,7 @@ import { useRef } from 'react';
 import { ExpenseView, InvoiceView, PayrollView } from 'src/services';
 import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { PDFExport } from '@progress/kendo-react-pdf';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 function InvoiceTemplate({
     isOpen,
@@ -101,15 +102,11 @@ function InvoiceTemplate({
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             Issued Date:{' '}
-                                            {moment(clicked?.startDate).format(
-                                                'DD/MM/YYYY',
-                                            )}
+                                            {formatDate(clicked?.startDate)}
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             Due Date:{' '}
-                                            {moment(clicked?.endDate).format(
-                                                'DD/MM/YYYY',
-                                            )}
+                                            {formatDate(clicked?.endDate)}
                                         </Text>
                                     </Box>
                                     <Box maxW="35%" textAlign="right">
@@ -162,14 +159,14 @@ function InvoiceTemplate({
                                                     }
                                                 />
                                                 <TableData
-                                                    name={moment(
+                                                    name={formatDate(
                                                         clicked?.startDate,
-                                                    ).format('DD/MM/YYYY')}
+                                                    )}
                                                 />
                                                 <TableData
-                                                    name={moment(
+                                                    name={formatDate(
                                                         clicked?.endDate,
-                                                    ).format('DD/MM/YYYY')}
+                                                    )}
                                                 />
                                                 <TableData
                                                     name={clicked?.invoiceType}
@@ -220,17 +217,13 @@ function InvoiceTemplate({
                                                                         }
                                                                     />
                                                                     <TableData
-                                                                        name={moment(
+                                                                        name={formatDate(
                                                                             x.expenseDate,
-                                                                        ).format(
-                                                                            'MMM DD, YYYY',
                                                                         )}
                                                                     />
                                                                     <TableData
-                                                                        name={moment(
+                                                                        name={formatDate(
                                                                             x.dateCreated,
-                                                                        ).format(
-                                                                            'MMM DD, YYYY',
                                                                         )}
                                                                     />
                                                                     <TableData
@@ -299,7 +292,7 @@ function InvoiceTemplate({
                                     my="2rem"
                                 >
                                     Generated on{' '}
-                                    {moment(new Date()).format(
+                                    {formatDate(new Date()).format(
                                         'YYYY-MM-DD HH:mm:ss',
                                     )}
                                 </Text> */}

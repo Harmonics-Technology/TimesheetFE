@@ -25,6 +25,7 @@ import { useState } from 'react';
 import Checkbox from '@components/bits-utils/Checkbox';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { GenerateInvoiceModal } from '@components/bits-utils/GenerateInvoiceModal';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface expenseProps {
     payrolls: InvoiceViewPagedCollectionStandardResponse;
@@ -114,23 +115,15 @@ function PaymentPartnerPayroll({ payrolls, id }: expenseProps) {
                         {payrollsList?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
                                 <TableData name={x.name} />
-                                <TableData
-                                    name={moment(x.startDate).format(
-                                        'DD-MM-YY',
-                                    )}
-                                />
-                                <TableData
-                                    name={moment(x.endDate).format('DD-MM-YY')}
-                                />
+                                <TableData name={formatDate(x.startDate)} />
+                                <TableData name={formatDate(x.endDate)} />
                                 <TableData
                                     name={
                                         moment(x.paymentDate).format(
                                             'DD-MM-YY',
                                         ) == '01-01-01'
                                             ? '------'
-                                            : moment(x.paymentDate).format(
-                                                  'DD-MM-YY',
-                                              )
+                                            : formatDate(x.paymentDate)
                                     }
                                 />
                                 <TableData name={`${x.totalHours} HRS`} />

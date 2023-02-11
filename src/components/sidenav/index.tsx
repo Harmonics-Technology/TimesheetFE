@@ -243,7 +243,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         option={true}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                        dropDown={['unapproved', 'history']}
+                        dropDown={['approval', 'history']}
                     />
                     <MenuItem
                         change={change}

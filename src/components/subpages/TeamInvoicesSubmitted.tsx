@@ -14,6 +14,7 @@ import {
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import { useState } from 'react';
 import InvoiceTemplate from './InvoiceTemplate';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface invoiceProps {
     invoiceList: InvoiceViewPagedCollectionStandardResponse;
@@ -48,21 +49,9 @@ function TeamInvoicesSubmitted({ invoiceList }: invoiceProps) {
                             <Tr key={x.id}>
                                 <TableData name={'Inv001'} />
                                 <TableData name={'Adeleke john'} />
-                                <TableData
-                                    name={moment(x.dateCreated).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
-                                <TableData
-                                    name={moment(x.startDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
-                                <TableData
-                                    name={moment(x.endDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
+                                <TableData name={formatDate(x.dateCreated)} />
+                                <TableData name={formatDate(x.startDate)} />
+                                <TableData name={formatDate(x.endDate)} />
                                 <TableState name={x.status as string} />
                                 <InvoiceAction
                                     data={x}

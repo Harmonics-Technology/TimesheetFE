@@ -16,6 +16,7 @@ import {
     ContractViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     adminList: ContractViewPagedCollectionStandardResponse;
@@ -32,6 +33,7 @@ function ContractList({ adminList }: adminProps) {
                 borderRadius="15px"
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
+                mb="1rem"
             >
                 <FilterSearch />
                 <Tables
@@ -51,16 +53,8 @@ function ContractList({ adminList }: adminProps) {
                             <Tr key={x.id}>
                                 <TableData name={x.name} />
                                 <TableData name={x.title} />
-                                <TableData
-                                    name={moment(x.startDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
-                                <TableData
-                                    name={moment(x.endDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
+                                <TableData name={formatDate(x.startDate)} />
+                                <TableData name={formatDate(x.endDate)} />
                                 <TableData
                                     name={x.tenor as unknown as string}
                                 />

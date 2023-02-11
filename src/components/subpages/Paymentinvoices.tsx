@@ -26,6 +26,7 @@ import RejectInvoiceModal from '@components/bits-utils/RejectInvoiceModal';
 import RejectedMessage from '@components/bits-utils/RejectedMessage';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import InputBlank from '@components/bits-utils/InputBlank';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 function Paymentinvoices({
     isOpen,
@@ -120,15 +121,11 @@ function Paymentinvoices({
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             Issued Date:{' '}
-                                            {moment(clicked?.startDate).format(
-                                                'DD/MM/YYYY',
-                                            )}
+                                            {formatDate(clicked?.startDate)}
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             Due Date:{' '}
-                                            {moment(clicked?.endDate).format(
-                                                'DD/MM/YYYY',
-                                            )}
+                                            {formatDate(clicked?.endDate)}
                                         </Text>
                                     </Box>
                                     <Box maxW="35%" textAlign="right">
@@ -173,17 +170,13 @@ function Paymentinvoices({
                                                             name={x?.name}
                                                         />
                                                         <TableData
-                                                            name={moment(
+                                                            name={formatDate(
                                                                 x?.startDate,
-                                                            ).format(
-                                                                'DD/MM/YYYY',
                                                             )}
                                                         />
                                                         <TableData
-                                                            name={moment(
+                                                            name={formatDate(
                                                                 x?.endDate,
-                                                            ).format(
-                                                                'DD/MM/YYYY',
                                                             )}
                                                         />
                                                         <TableData
@@ -302,7 +295,7 @@ function Paymentinvoices({
                                     my="2rem"
                                 >
                                     Generated on{' '}
-                                    {moment(new Date()).format(
+                                    {formatDate(new Date()).format(
                                         'YYYY-MM-DD HH:mm:ss',
                                     )}
                                 </Text> */}

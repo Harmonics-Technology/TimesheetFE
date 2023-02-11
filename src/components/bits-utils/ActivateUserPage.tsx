@@ -37,6 +37,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { BsPersonCheck } from 'react-icons/bs';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import UploadCareWidget from './UploadCareWidget';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 const schema = yup.object().shape({});
 interface ActivateUserPageProps {
@@ -287,9 +288,7 @@ function ActivateUserPage({
                         name="dateOfBirth"
                         label="Date of Birth"
                         error={errors.dateOfBirth}
-                        defaultValue={moment(userProfile?.dateOfBirth).format(
-                            'DD MM YYYY',
-                        )}
+                        defaultValue={formatDate(userProfile?.dateOfBirth)}
                         max={new DateObject().subtract(1, 'days')}
                     />
                     <SelectrixBox<TeamMemberModel>

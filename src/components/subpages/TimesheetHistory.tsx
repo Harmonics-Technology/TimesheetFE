@@ -14,6 +14,8 @@ import {
     TimeSheetHistoryViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import moment from 'moment';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
@@ -38,12 +40,12 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                 <Tables
                     tableHead={[
                         'Name',
-                        'Email',
-                        'Job Titile',
+                        'Job Title',
+                        'Begining Period',
+                        'Ending Period',
                         'Total Hours',
-                        'No. of Days',
-                        'Approved No of Hours',
-                        '',
+                        'Approved Hours',
+                        'Action',
                     ]}
                 >
                     <>
@@ -51,18 +53,19 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                             (x: TimeSheetHistoryView, i) => (
                                 <Tr key={i}>
                                     <TableData name={x.name} />
-                                    <TableData name={x.email} />
                                     <TableData
                                         name={x.employeeInformation?.jobTitle}
                                     />
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
                                     <TableData
                                         name={x.totalHours as unknown as string}
                                     />
-                                    <TableData
+                                    {/* <TableData
                                         name={
                                             x.numberOfDays as unknown as string
                                         }
-                                    />
+                                    /> */}
                                     <TableData
                                         name={
                                             x.approvedNumberOfHours as unknown as string

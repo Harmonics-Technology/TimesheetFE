@@ -4,6 +4,7 @@ import { NotificationBox } from '@components/bits-utils/NotificationBox';
 import TableCards from '@components/bits-utils/TableCards';
 import { TableData, TableStatus } from '@components/bits-utils/TableData';
 import { NotificationContext } from '@components/context/NotificationContext';
+import { formatDate } from '@components/generics/functions/formatDate';
 import moment from 'moment';
 import { useContext } from 'react';
 import {
@@ -91,19 +92,19 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                                       .map((x: InvoiceView) => (
                                           <Tr key={x.id}>
                                               <TableData
-                                                  name={moment(
+                                                  name={formatDate(
                                                       x.startDate,
-                                                  ).format('YYYY-MM-DD')}
+                                                  )}
                                               />
                                               <TableData
-                                                  name={moment(
+                                                  name={formatDate(
                                                       x.endDate,
-                                                  ).format('YYYY-MM-DD')}
+                                                  )}
                                               />
                                               <TableData
-                                                  name={moment(
+                                                  name={formatDate(
                                                       x.paymentDate,
-                                                  ).format('YYYY-MM-DD')}
+                                                  )}
                                               />
                                               <TableData
                                                   name={
@@ -120,19 +121,19 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                                       .map((x: PaySlipView) => (
                                           <Tr key={x.id}>
                                               <TableData
-                                                  name={moment(
+                                                  name={formatDate(
                                                       x?.invoice?.startDate,
-                                                  ).format('YYYY-MM-DD')}
+                                                  )}
                                               />
                                               <TableData
-                                                  name={moment(
+                                                  name={formatDate(
                                                       x?.invoice?.endDate,
-                                                  ).format('YYYY-MM-DD')}
+                                                  )}
                                               />
                                               <TableData
-                                                  name={moment(
+                                                  name={formatDate(
                                                       x?.invoice?.paymentDate,
-                                                  ).format('YYYY-MM-DD')}
+                                                  )}
                                               />
 
                                               <TableData

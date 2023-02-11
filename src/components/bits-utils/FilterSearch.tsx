@@ -41,7 +41,7 @@ function FilterSearch({
     const [openDateFilter, setOpenDateFilter] = useState(false);
     const selectedDate = date.map((x) => x.year + '-' + x.month + '-' + x.day);
 
-    console.log({ selectedDate, date });
+    // console.log({ selectedDate, date });
     const close = useCallback(() => setOpenDateFilter(false), []);
     const popover = useRef(null);
     useClickOutside(popover, close);
@@ -88,7 +88,7 @@ function FilterSearch({
                 mb="1.5rem"
                 flexDirection={['column', 'row']}
             >
-                <HStack>
+                <HStack align="flex-end">
                     <Box
                         fontSize=".8rem"
                         w="fit-content"

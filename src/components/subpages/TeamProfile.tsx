@@ -40,6 +40,7 @@ import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import dynamic from 'next/dynamic';
 import ConfirmChangeModal from '@components/bits-utils/ConfirmChangeModal';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface select {
     options: any;
@@ -279,9 +280,7 @@ function TeamProfile({
                         name="dateOfBirth"
                         label="Date of Birth"
                         error={errors.dateOfBirth}
-                        defaultValue={moment(userProfile?.dateOfBirth).format(
-                            'DD MM YYYY',
-                        )}
+                        defaultValue={formatDate(userProfile?.dateOfBirth)}
                         max={new DateObject().subtract(1, 'days')}
                     />
                     <SelectrixBox<TeamMemberModel>

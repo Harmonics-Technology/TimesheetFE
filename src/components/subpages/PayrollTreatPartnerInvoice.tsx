@@ -29,6 +29,7 @@ import { useRouter } from 'next/router';
 import Paymentinvoices from './Paymentinvoices';
 import Naira, { CAD } from '@components/generics/functions/Naira';
 import PayrollInvoice from './PayrollInvoice';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -170,9 +171,7 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                                     }
                                 />
                                 <TableData
-                                    name={moment(x.dateCreated).format(
-                                        'DD/MM/YYYY',
-                                    )}
+                                    name={formatDate(x.dateCreated)}
                                 />
                                 <TableData name={CAD(x.totalAmount)} />
                                 <TableData

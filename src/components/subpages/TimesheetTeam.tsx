@@ -117,7 +117,7 @@ const TimesheetTeam = ({
     // }
 
     const addHours = async (userId, chosenDate, hours) => {
-        console.log({ userId, chosenDate, hours });
+        // console.log({ userId, chosenDate, hours });
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(

@@ -11,6 +11,7 @@ import Pagination from '@components/bits-utils/Pagination';
 import moment from 'moment';
 import { ContractView, UserViewStandardResponse } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     adminList: UserViewStandardResponse;
@@ -47,14 +48,10 @@ function TeamContractList({ adminList }: adminProps) {
                                     <TableData name={x.name} />
                                     <TableData name={x.title} />
                                     <TableData
-                                        name={moment(x.startDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
+                                        name={formatDate(x.startDate)}
                                     />
                                     <TableData
-                                        name={moment(x.endDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
+                                        name={formatDate(x.endDate)}
                                     />
                                     <TableData
                                         name={x.tenor as unknown as string}

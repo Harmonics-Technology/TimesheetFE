@@ -65,10 +65,10 @@ const AdminPaymentScheduleModal = ({
 
         const data = type?.schedules?.map((x: PaymentSchedule, i) => [
             ++i,
-            moment(x.weekDate).format('DD/MM/YYYY'),
-            moment(x.lastWorkDayOfCycle).format('DD/MM/YYYY'),
-            moment(x.approvalDate).format('DD/MM/YYYY'),
-            moment(x.paymentDate).format('DD/MM/YYYY'),
+            moment(x.weekDate),
+            moment(x.lastWorkDayOfCycle),
+            moment(x.approvalDate),
+            moment(x.paymentDate),
         ]);
 
         const content = {

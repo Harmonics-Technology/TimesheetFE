@@ -34,6 +34,7 @@ import {
     PaySlipView,
     PayslipUserView,
     RecentTimeSheetView,
+    UserView,
 } from 'src/services';
 import PayrollInvoice from './PayrollInvoice';
 import { formatDate } from '@components/generics/functions/formatDate';
@@ -42,7 +43,7 @@ interface DashboardProps {
     metrics: DashboardViewStandardResponse;
 }
 
-function PayrollManagerDashboard({ metrics }: DashboardProps) {
+function SuperAdminDashboard({ metrics }: DashboardProps) {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,7 +54,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">
-                {/* <Grid
+                <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
                     gap="1.2rem"
                     w="full"
@@ -73,7 +74,24 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                         title="admins"
                         value={adminMetrics?.totalDownLines}
                     />
-                </Grid> */}
+                </Grid>
+                <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
+                    <TableCards
+                        title={'Recent Clients'}
+                        url={'profile-management/clients'}
+                        data={adminMetrics?.recentCLients
+                            ?.slice(0, 4)
+                            .map((x: UserView) => (
+                                <Tr key={x.id}>
+                                    <TableData name={x.firstName} />
+                                    <TableData name={x.email} />
+                                    <TableStatus name={x.isActive} />
+                                </Tr>
+                            ))}
+                        thead={['CLIENT NAME', 'EMAIL', 'STATUS']}
+                        link={'/'}
+                    />
+                </Grid>
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Timesheets'}
@@ -263,4 +281,4 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
     );
 }
 
-export default PayrollManagerDashboard;
+export default SuperAdminDashboard;

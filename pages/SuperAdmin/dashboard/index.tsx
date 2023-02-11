@@ -1,13 +1,13 @@
-import { withPageAuth } from "@components/generics/withPageAuth";
-import SadminDashboard from "@components/subpages/SadminDashboard";
-import { GetServerSideProps } from "next";
-import { DashboardService } from "src/services";
+import { withPageAuth } from '@components/generics/withPageAuth';
+import SuperAdminDashboard from '@components/subpages/SuperAdminDashboard';
+import { GetServerSideProps } from 'next';
+import { DashboardService } from 'src/services';
 interface DashboardProps {
     metrics: any;
 }
 
 function index({ metrics }: DashboardProps) {
-    return <SadminDashboard metrics={metrics} />;
+    return <SuperAdminDashboard metrics={metrics} />;
 }
 
 export default index;

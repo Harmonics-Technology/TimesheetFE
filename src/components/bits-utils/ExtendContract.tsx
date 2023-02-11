@@ -26,6 +26,7 @@ import { PrimaryInput } from './PrimaryInput';
 import * as yup from 'yup';
 import { useRouter } from 'next/router';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface contractProps {
     extend: any;
@@ -171,9 +172,7 @@ function ExtendContract({ extend, setExtend, clickedItem }: contractProps) {
                             label="Start Date"
                             error={errors.startDate}
                             min={new Date()}
-                            placeholder={moment(clickedItem?.startDate).format(
-                                'DD MM YYYY',
-                            )}
+                            placeholder={formatDate(clickedItem?.startDate)}
                             disabled={true}
                         />
                         <PrimaryDate<ContractModel>
@@ -182,9 +181,7 @@ function ExtendContract({ extend, setExtend, clickedItem }: contractProps) {
                             label="End Date"
                             error={errors.endDate}
                             min={new DateObject().add(3, 'days')}
-                            placeholder={moment(clickedItem.endDate).format(
-                                'DD MM YYYY',
-                            )}
+                            placeholder={formatDate(clickedItem.endDate)}
                         />
                         <Box>
                             <Flex>

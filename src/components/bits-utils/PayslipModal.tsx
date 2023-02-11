@@ -26,6 +26,7 @@ import numWords from 'num-words';
 import Naira, { CAD } from '@components/generics/functions/Naira';
 import { useRef } from 'react';
 import { PDFExport } from '@progress/kendo-react-pdf';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 type Props = {
     isOpen?: any;
@@ -105,9 +106,9 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                             scale={0.7}
                             margin={40}
                             fileName={`Payslip for the month of
-                            ${moment(
+                            ${formatDate(
                                 paySlip?.payslipView?.invoice?.paymentDate,
-                            ).format('MMMM YYYY')}.pdf`}
+                            )}.pdf`}
                         >
                             <Box>
                                 <Box mb="2rem">
@@ -116,10 +117,10 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                     </Text>
                                     <Text fontSize=".9rem">
                                         Payslip for the month of{' '}
-                                        {moment(
+                                        {formatDate(
                                             paySlip?.payslipView?.invoice
                                                 ?.paymentDate,
-                                        ).format('MMMM YYYY')}
+                                        )}
                                     </Text>
                                 </Box>
 
@@ -169,28 +170,28 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                     <VStack align="flex-start" spacing="1rem">
                                         <PayslipInfoTag
                                             title={'Join Date'}
-                                            value={moment(
+                                            value={formatDate(
                                                 paySlip?.payslipView?.invoice
                                                     ?.employeeInformation
                                                     ?.dateCreated,
-                                            ).format('Do MMM YYYY')}
+                                            )}
                                         />
                                         <PayslipInfoTag
                                             title={'Pay Period'}
-                                            value={`${moment(
+                                            value={`${formatDate(
                                                 paySlip?.payslipView?.invoice
                                                     ?.startDate,
-                                            ).format('Do MMM YYYY')} - ${moment(
+                                            )} - ${formatDate(
                                                 paySlip?.payslipView?.invoice
                                                     ?.endDate,
-                                            ).format('Do MMM YYYY')} `}
+                                            )} `}
                                         />
                                         <PayslipInfoTag
                                             title={'Pay Date'}
-                                            value={moment(
+                                            value={formatDate(
                                                 paySlip?.payslipView?.invoice
                                                     ?.paymentDate,
-                                            ).format('Do MMM YYYY')}
+                                            )}
                                         />
                                         <PayslipInfoTag
                                             title={'Pay Frequency'}

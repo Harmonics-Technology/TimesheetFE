@@ -29,6 +29,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -176,19 +177,13 @@ function AdminInvoices({ invoiceData }: adminProps) {
                                     }
                                 />
                                 <TableData
-                                    name={moment(x.dateCreated).format(
-                                        'DD/MM/YYYY',
-                                    )}
+                                    name={formatDate(x.dateCreated)}
                                 />
                                 <TableData
-                                    name={moment(x.startDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
+                                    name={formatDate(x.startDate)}
                                 />
                                 <TableData
-                                    name={moment(x.endDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
+                                    name={formatDate(x.endDate)}
                                 />
                                 <TableState name={x.status as string} />
                                 <InvoiceAction

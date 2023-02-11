@@ -50,6 +50,7 @@ import { TableData } from '@components/bits-utils/TableData';
 import PaymentScheduleModal from '@components/bits-utils/PaymentScheduleModal';
 import AdminPaymentScheduleModal from '@components/bits-utils/AdminPaymentScheduleModal';
 import { subDays } from 'date-fns';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 const schema = yup.object().shape({
     dateOfBirth: yup.string().required(),
@@ -422,9 +423,7 @@ function MyProfile({
                                 name="dateOfBirth"
                                 label="Date of Birth"
                                 error={errors.dateOfBirth}
-                                defaultValue={moment(user?.dateOfBirth).format(
-                                    'DD MM YYYY',
-                                )}
+                                defaultValue={formatDate(user?.dateOfBirth)}
                                 max={subDays(new Date(), 1)}
                             />
                         </Grid>

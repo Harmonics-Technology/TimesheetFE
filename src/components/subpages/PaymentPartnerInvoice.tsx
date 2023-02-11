@@ -28,6 +28,7 @@ import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
 import Paymentinvoices from './Paymentinvoices';
 import Naira, { CAD } from '@components/generics/functions/Naira';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -168,11 +169,7 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                                         x.name
                                     }
                                 />
-                                <TableData
-                                    name={moment(x.dateCreated).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
+                                <TableData name={formatDate(x.dateCreated)} />
                                 <TableData name={CAD(x.totalAmount)} />
                                 <TableData
                                     name={Naira(

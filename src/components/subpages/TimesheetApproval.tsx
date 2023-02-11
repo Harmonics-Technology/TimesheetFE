@@ -14,6 +14,8 @@ import {
     TimeSheetHistoryViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import moment from 'moment';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
@@ -35,12 +37,12 @@ function TimeSheetApproval({ timeSheets }: adminProps) {
                 <Tables
                     tableHead={[
                         'Name',
-                        'Email',
                         'Job Title',
+                        'Begining Period',
+                        'Ending Period',
                         'Total Hours',
-                        'No. of Days',
-                        'Approved No. of Hours',
-                        '',
+                        'Approved Hours',
+                        'Action',
                     ]}
                 >
                     <>
@@ -52,15 +54,12 @@ function TimeSheetApproval({ timeSheets }: adminProps) {
                                     <TableData
                                         name={x.employeeInformation?.jobTitle}
                                     />
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
                                     <TableData
                                         name={`${
                                             x.totalHours as unknown as string
                                         } Hours`}
-                                    />
-                                    <TableData
-                                        name={`${
-                                            x.numberOfDays as unknown as string
-                                        } Days`}
                                     />
                                     <TableData
                                         name={`${

@@ -12,6 +12,7 @@ import moment from 'moment';
 import React from 'react';
 import { AdminPaymentScheduleView, PaymentSchedule } from 'src/services';
 import { TableHead, TableData } from './TableData';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 export const ScheduleTable = ({
     paymentSchedule,
@@ -48,25 +49,15 @@ export const ScheduleTable = ({
                             (x: PaymentSchedule, i) => (
                                 <Tr key={i}>
                                     <TableData name={++i} />
+                                    <TableData name={formatDate(x.weekDate)} />
                                     <TableData
-                                        name={moment(x.weekDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
+                                        name={formatDate(x.lastWorkDayOfCycle)}
                                     />
                                     <TableData
-                                        name={moment(
-                                            x.lastWorkDayOfCycle,
-                                        ).format('DD/MM/YYYY')}
+                                        name={formatDate(x.approvalDate)}
                                     />
                                     <TableData
-                                        name={moment(x.approvalDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
-                                    />
-                                    <TableData
-                                        name={moment(x.paymentDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
+                                        name={formatDate(x.paymentDate)}
                                     />
                                 </Tr>
                             ),

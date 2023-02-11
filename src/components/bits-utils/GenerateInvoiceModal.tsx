@@ -44,6 +44,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 type Props = {
     isOpen?: any;
@@ -164,6 +165,18 @@ export const GenerateInvoiceModal = ({
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
+                        <Text
+                            color="black"
+                            fontSize="1rem"
+                            textAlign="left"
+                            fontWeight="semibold"
+                            px={5}
+                        >
+                            For{' '}
+                            {id == 1
+                                ? 'Pro-Insight Consulting'
+                                : 'Olade Consulting'}
+                        </Text>
                         <Box overflowY="auto" px={5} maxH="80vh">
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <Box w="30%">
@@ -208,14 +221,14 @@ export const GenerateInvoiceModal = ({
                                                 <Tr key={x.id}>
                                                     <TableData name={x.name} />
                                                     <TableData
-                                                        name={moment(
+                                                        name={formatDate(
                                                             x.startDate,
-                                                        ).format('DD/MM/YYYY')}
+                                                        )}
                                                     />
                                                     <TableData
-                                                        name={moment(
+                                                        name={formatDate(
                                                             x.endDate,
-                                                        ).format('DD/MM/YYYY')}
+                                                        )}
                                                     />
                                                     <TableData
                                                         name={`${Naira(
@@ -318,7 +331,7 @@ export const GenerateInvoiceModal = ({
                                     my="2rem"
                                 >
                                     Generated on{' '}
-                                    {moment(new Date()).format(
+                                    {formatDate(new Date()).format(
                                         'YYYY-MM-DD HH:mm:ss',
                                     )}
                                 </Text> */}

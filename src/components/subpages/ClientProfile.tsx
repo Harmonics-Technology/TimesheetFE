@@ -33,6 +33,7 @@ import {
 import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
 import Checkbox from '@components/bits-utils/Checkbox';
+import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 
 const schema = yup.object().shape({});
 interface ClientProfileProps {
@@ -147,15 +148,14 @@ function ClientProfile({
                                 }
                                 disableLabel={true}
                             />
-                            <PrimaryInput<UpdateUserModel>
+                            <PrimaryPhoneInput<UpdateUserModel>
                                 label="Phone Number"
                                 name="phoneNumber"
                                 error={errors.organizationPhone}
-                                placeholder=""
-                                defaultValue={
+                                control={control}
+                                placeholder={
                                     userProfile?.organizationPhone as string
                                 }
-                                register={register}
                             />
                             <SelectrixBox<UpdateUserModel>
                                 control={control}
@@ -224,15 +224,12 @@ function ClientProfile({
                                 defaultValue={userProfile?.email as string}
                                 disableLabel={true}
                             />
-                            <PrimaryInput<UpdateUserModel>
+                            <PrimaryPhoneInput<UpdateUserModel>
                                 label="Contact Phone Number"
                                 name="phoneNumber"
                                 error={errors.phoneNumber}
-                                placeholder=""
-                                defaultValue={
-                                    userProfile?.phoneNumber as string
-                                }
-                                register={register}
+                                control={control}
+                                placeholder={userProfile?.phoneNumber as string}
                             />
                         </Grid>
                     </Box>

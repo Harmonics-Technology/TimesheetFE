@@ -50,6 +50,7 @@ import ModifyContract from './ModifyContract';
 import ConfirmModal from './ConfirmModal';
 import FilterSearch from './FilterSearch';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 const schema = yup.object().shape({
     title: yup.string().required(),
@@ -195,16 +196,8 @@ function TeamManagement({ userProfile }: adminProps) {
                                 <Tr key={x.title}>
                                     <TableData name={userProfile?.fullName} />
                                     <TableData name={x.title} />
-                                    <TableData
-                                        name={moment(x.startDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
-                                    />
-                                    <TableData
-                                        name={moment(x.endDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
-                                    />
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
                                     <TableData
                                         name={x.tenor as unknown as string}
                                     />

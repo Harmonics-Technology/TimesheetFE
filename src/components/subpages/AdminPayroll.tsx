@@ -28,6 +28,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import Checkbox from '@components/bits-utils/Checkbox';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface expenseProps {
     payrolls: PayrollViewPagedCollectionStandardResponse;
@@ -153,23 +154,15 @@ function AdminPayroll({ payrolls }: expenseProps) {
                         {payrollsList?.map((x: PayrollView) => (
                             <Tr key={x.payrollId}>
                                 <TableData name={x.name} />
-                                <TableData
-                                    name={moment(x.startDate).format(
-                                        'DD-MM-YY',
-                                    )}
-                                />
-                                <TableData
-                                    name={moment(x.endDate).format('DD-MM-YY')}
-                                />
+                                <TableData name={formatDate(x.startDate)} />
+                                <TableData name={formatDate(x.endDate)} />
                                 <TableData
                                     name={
                                         moment(x.paymentDate).format(
                                             'DD-MM-YY',
                                         ) == '01-01-01'
                                             ? '------'
-                                            : moment(x.paymentDate).format(
-                                                  'DD-MM-YY',
-                                              )
+                                            : formatDate(x.paymentDate)
                                     }
                                 />
                                 <TableData name={`${x.totalHours} HRS`} />

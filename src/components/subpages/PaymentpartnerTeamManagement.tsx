@@ -328,6 +328,7 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                     height="fit-content"
                     boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     onClick={onOpen}
+                    mb="1rem"
                 >
                     +Team Member
                 </Button>
@@ -337,11 +338,11 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                         'Name',
                         'Job Title',
                         'Client',
-                        'Phone No',
+                        // 'Phone No',
                         'Payroll Type',
                         'Role',
                         'Status',
-                        '',
+                        'Action',
                     ]}
                 >
                     <>
@@ -352,7 +353,7 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                                     name={x.employeeInformation?.jobTitle}
                                 />
                                 <TableData name={x.clientName} />
-                                <TableData name={x.phoneNumber} />
+                                {/* <TableData name={x.phoneNumber} /> */}
                                 <TableData
                                     name={x.employeeInformation?.payrollType}
                                 />

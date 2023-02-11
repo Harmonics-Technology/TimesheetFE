@@ -19,11 +19,10 @@ const Layout = ({ children }: LayoutProps) => {
     // ||
     // router.pathname.startsWith('/user/activate');
     const [openSidenav, setOpenSidenav] = useState(false);
-    const [change, setChange] = useState<boolean>(true);
+    const [change, setChange] = useState<boolean>(false);
 
     useEffect(() => {
         const savedChange = localStorage.getItem('timesheet-sidebar');
-        console.log({ savedChange });
         setChange(savedChange === null ? true : savedChange === 'true');
     }, []);
 

@@ -16,6 +16,7 @@ import {
     ContractViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from './FilterSearch';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     adminList: ContractViewPagedCollectionStandardResponse;
@@ -52,21 +53,9 @@ function ViewPayroll({ adminList }: adminProps) {
                                 <TableData name={x.name} />
                                 <TableData name={x.title} />
                                 <TableData name={x.title} />
-                                <TableData
-                                    name={moment(x.startDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
-                                <TableData
-                                    name={moment(x.endDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
-                                <TableData
-                                    name={moment(x.endDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
+                                <TableData name={formatDate(x.startDate)} />
+                                <TableData name={formatDate(x.endDate)} />
+                                <TableData name={formatDate(x.endDate)} />
                                 <TableState name={x.status as string} />
                                 <TableContractAction id={x.userId} />
                             </Tr>

@@ -14,16 +14,18 @@ import {
 import axios from 'axios';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AiOutlineDownload } from 'react-icons/ai';
 import { FaEllipsisH, FaEye } from 'react-icons/fa';
 import {
     FinancialService,
     InitiateResetModel,
+    InvoiceView,
     SettingsService,
     UserService,
 } from 'src/services';
 import fileDownload from 'js-file-download';
+import { UserContext } from '@components/context/UserContext';
 
 export function TableHead({
     name,
@@ -304,6 +306,8 @@ export function TableContractAction({
     supervisor?: boolean;
     date?: any;
 }) {
+    const { user } = useContext(UserContext);
+    const role = user?.role.replaceAll(' ', '');
     return (
         <td>
             <Menu>
@@ -324,8 +328,8 @@ export function TableContractAction({
                             <NextLink
                                 href={
                                     date !== undefined
-                                        ? `/SuperAdmin/timesheets/${id}?date=${date}`
-                                        : `/SuperAdmin/timesheets/${id}`
+                                        ? `/${role}/timesheets/${id}?date=${date}`
+                                        : `/${role}/timesheets/${id}`
                                 }
                                 passHref
                             >
@@ -642,6 +646,81 @@ export function InvoiceAction({
             >
                 <FaEye />
             </Box>
+        </td>
+    );
+}
+export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
+    const toast = useToast();
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    const approveInvoiceItems = async () => {
+        try {
+            setLoading(true);
+            const result = await FinancialService.treatSubmittedInvoice(id);
+            if (result.status) {
+                console.log({ result });
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                setLoading(false);
+                router.reload();
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            console.log({ error });
+            setLoading(false);
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    <MenuItem
+                        onClick={
+                            x?.status == 'APPROVED'
+                                ? () => void 0
+                                : () => approveInvoiceItems()
+                        }
+                        w="full"
+                    >
+                        Treat item
+                    </MenuItem>
+                    {/* <MenuItem w="full">
+                        <NextLink href={`${route}/${id}`} passHref>
+                            <Link width="100%" textDecor="none !important">
+                                View Profile
+                            </Link>
+                        </NextLink>
+                    </MenuItem> */}
+                </MenuList>
+            </Menu>
         </td>
     );
 }

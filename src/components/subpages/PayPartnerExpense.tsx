@@ -17,6 +17,8 @@ import FilterSearch from '@components/bits-utils/FilterSearch';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { formatDate } from '@components/generics/functions/formatDate';
+import { CUR } from '@components/generics/functions/Naira';
 
 interface expenseProps {
     listExpenses: ExpenseViewPagedCollectionStandardResponse;
@@ -130,9 +132,11 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
                         'Name',
                         'Description',
                         'Expense Type',
-                        'Currency',
+                        'Expense Date',
+                        'Created on',
                         'Amount',
                         'Status',
+                        'Action',
                         // '...',
                     ]}
                 >
@@ -142,22 +146,17 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
                                 <TableData name={x.teamMember?.fullName} />
                                 <TableData name={x.description} />
                                 <TableData name={x.expenseType} />
-                                <TableData name={x.currency} />
+                                <TableData name={formatDate(x.expenseDate)} />
+                                <TableData name={formatDate(x.dateCreated)} />
                                 <TableData
-                                    name={x.amount as unknown as string}
+                                    name={`${x.currency}${CUR(
+                                        x.amount as unknown as string,
+                                    )}`}
                                 />
                                 <TableState name={x.status as string} />
+                                <ExpenseActions id={x.id} />
                                 {/* <td>
-                                    <Checkbox
-                                        checked={
-                                            selectedId.find(
-                                                (e) => e === x.id,
-                                            ) || ''
-                                        }
-                                        onChange={(e) =>
-                                            toggleSelected(x.id as string)
-                                        }
-                                    />
+                                    {x.status == 'APPROVED' && <Checkbox />}
                                 </td> */}
                             </Tr>
                         ))}

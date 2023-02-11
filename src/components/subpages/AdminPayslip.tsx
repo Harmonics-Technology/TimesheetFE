@@ -14,6 +14,7 @@ import moment from 'moment';
 import { PayslipModal } from '@components/bits-utils/PayslipModal';
 import { useState } from 'react';
 import Naira, { CAD } from '@components/generics/functions/Naira';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface expenseProps {
     payrolls: PayslipUserViewPagedCollectionStandardResponse;
@@ -53,19 +54,19 @@ function AdminPayslip({ payrolls }: expenseProps) {
                                     name={x?.payslipView?.invoice?.name}
                                 />
                                 <TableData
-                                    name={moment(
+                                    name={formatDate(
                                         x.payslipView?.invoice?.startDate,
-                                    ).format('DD-MM-YY')}
+                                    )}
                                 />
                                 <TableData
-                                    name={moment(
+                                    name={formatDate(
                                         x.payslipView?.invoice?.endDate,
-                                    ).format('DD-MM-YY')}
+                                    )}
                                 />
                                 <TableData
-                                    name={moment(
+                                    name={formatDate(
                                         x.payslipView?.invoice?.paymentDate,
-                                    ).format('DD-MM-YY')}
+                                    )}
                                 />
                                 <TableData
                                     name={`${x.payslipView?.invoice?.totalHours} HRS`}

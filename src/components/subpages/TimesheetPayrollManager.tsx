@@ -204,7 +204,7 @@ const TimesheetPayrollManager = ({
     // };
 
     const addHours = async (userId, chosenDate, hours) => {
-        console.log({ userId, chosenDate, hours });
+        // console.log({ userId, chosenDate, hours });
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
@@ -212,11 +212,23 @@ const TimesheetPayrollManager = ({
                 chosenDate,
                 hours,
             );
+            console.log({ data });
             if (data.status) {
                 return;
             }
-        } catch (error) {
+            toast({
+                status: 'error',
+                title: data.message,
+                position: 'top-right',
+            });
+            return;
+        } catch (error: any) {
             console.log(error);
+            toast({
+                status: 'error',
+                title: error.body.message || error.message,
+                position: 'top-right',
+            });
         }
     };
 
@@ -262,25 +274,10 @@ const TimesheetPayrollManager = ({
                         select.hours,
                     );
                 }
+                setLoading(false);
+                callback();
             });
-            // selected.forEach(async (select) => {
-            //     if (
-            //         select.checked === true &&
-            //         select.userId
-            //         // select.status == 'PENDING'
-            //     ) {
-            //         setLoading(true);
-            //         await approveTimeSheetForADay(
-            //             select.userId,
-            //             select.chosenDate,
-            //         );
-            //     }
-            //     callback();
-            // });
-            // generatePayroll(id);
-
-            setLoading(false);
-            callback();
+            return;
         };
         return (
             <TimeSheetEstimationBtn
@@ -288,7 +285,7 @@ const TimesheetPayrollManager = ({
                 loading={loading}
                 title="Update TimeSheet"
                 click={() => updateSelected(reloadPage)}
-                bg="brand.200"
+                bg="brand.400"
             />
         );
     }
@@ -715,9 +712,9 @@ const TimesheetPayrollManager = ({
                         tip="Number of hours you are expected to work this month"
                     />
                     <TimeSheetEstimation
-                        label="Total Hours Worked"
+                        label="Total Hours Approved"
                         data={`${totalHours} HR`}
-                        tip="Number of hours worked this month"
+                        tip="Number of hours approved by supervisor"
                     />
                     <TimeSheetEstimation
                         label="Expected Payout"

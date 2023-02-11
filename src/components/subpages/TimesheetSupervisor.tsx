@@ -715,7 +715,7 @@ const TimesheetSupervisor = ({
                     />
                     <TimeSheetEstimation
                         label="Total Approved Hours"
-                        data={`${timeSheets.totalHoursWorked} HR`}
+                        data={`${timeSheets?.totalHoursWorked} HR`}
                         tip="Number of hours approved by you"
                     />
                     {/* <TimeSheetEstimation

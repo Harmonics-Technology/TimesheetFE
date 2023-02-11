@@ -45,12 +45,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listSubmittedOnshoreInvoices(
+            const data = await FinancialService.listInvoicedInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,
+                1,
             );
 
             return {
