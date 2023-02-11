@@ -24,7 +24,7 @@ const Layout = ({ children }: LayoutProps) => {
     useEffect(() => {
         const savedChange = localStorage.getItem('timesheet-sidebar');
         console.log({ savedChange });
-        setChange(savedChange === undefined ? true : savedChange === 'true');
+        setChange(savedChange === null ? true : savedChange === 'true');
     }, []);
 
     return (
