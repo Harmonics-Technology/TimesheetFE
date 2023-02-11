@@ -63,7 +63,7 @@ const schema = yup.object().shape({
     reason: yup.string().required(),
 });
 
-const TimesheetAdmin = ({
+const TimesheetSupervisor = ({
     timeSheets,
     id,
 }: {
@@ -711,9 +711,14 @@ const TimesheetAdmin = ({
                     <TimeSheetEstimation
                         label="Total Hours Worked"
                         data={`${totalHours} HR`}
-                        tip="Number of hours you worked this month"
+                        tip="Number of hours user filled this month"
                     />
                     <TimeSheetEstimation
+                        label="Total Approved Hours"
+                        data={`${timeSheets.totalHoursWorked} HR`}
+                        tip="Number of hours approved by you"
+                    />
+                    {/* <TimeSheetEstimation
                         label="Expected Payout"
                         data={
                             currency === 'NGN'
@@ -730,7 +735,7 @@ const TimesheetAdmin = ({
                                 : CAD(actualPayout)
                         }
                         tip="Number of hours you worked this month x Rate per hour"
-                    />
+                    /> */}
 
                     <ApproveSelected />
                     <ApproveAllTimeSheet />
@@ -740,4 +745,4 @@ const TimesheetAdmin = ({
     );
 };
 
-export default TimesheetAdmin;
+export default TimesheetSupervisor;

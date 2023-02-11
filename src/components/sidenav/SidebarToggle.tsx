@@ -14,7 +14,7 @@ const SidebarToggle = ({ setChange, change }: sidebarProps) => {
         localStorage.setItem('timesheet-sidebar', !change as unknown as string);
     };
     return (
-        <Box pos="absolute" right="0" zIndex="999">
+        <Box pos="fixed" right="0" zIndex="999">
             <IconButton
                 aria-label="Toggle sidebar"
                 icon={<AiFillSetting />}

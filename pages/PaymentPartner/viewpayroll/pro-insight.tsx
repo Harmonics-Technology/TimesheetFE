@@ -27,7 +27,7 @@ function expenses({ payrolls, payrollGroupId }: PayrollType) {
                     tabName="Pro-insight consulting"
                 />
                 <PageTabs
-                    url={`/${role}/viewpayroll/Olade`}
+                    url={`/${role}/viewpayroll/olade`}
                     tabName="Olade Consulting"
                 />
             </Flex>

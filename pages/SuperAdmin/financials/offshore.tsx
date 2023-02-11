@@ -22,11 +22,11 @@ function payrolls({ invoiceData }: InvoiceType) {
             <Flex>
                 <PageTabs
                     url={`/${role}/financials/payrolls`}
-                    tabName="Pending"
+                    tabName="Pending Payrolls"
                 />
                 <PageTabs
                     url={`/${role}/financials/offshore`}
-                    tabName="Approved"
+                    tabName="Processed Payrolls"
                 />
             </Flex>
             <AdminInvoices invoiceData={invoiceData} />

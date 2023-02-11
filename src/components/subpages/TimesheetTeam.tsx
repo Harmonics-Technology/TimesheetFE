@@ -492,6 +492,11 @@ const TimesheetTeam = ({
                         tip="Number of hours you worked this month"
                     />
                     <TimeSheetEstimation
+                        label="Total Hours Approved"
+                        data={`${totalHours} HR`}
+                        tip="Number of hours approved by your supervisor"
+                    />
+                    <TimeSheetEstimation
                         label="Expected Payout"
                         data={Naira(expectedPay)}
                         tip="Total amount you are expected to be paid this month"
