@@ -68,7 +68,7 @@ function ClientDashboard({
                     <DashboardCard
                         url="supervisors"
                         title="Supervisors"
-                        value={team?.data?.size}
+                        value={supervisor?.data?.size}
                     />
                     <DashboardCard
                         url="financials/invoices"
