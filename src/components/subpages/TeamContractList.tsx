@@ -35,7 +35,7 @@ function TeamContractList({ adminList }: adminProps) {
                         'Job Title',
                         'Start Date',
                         'End Date',
-                        'Tenor',
+                        'Tenure',
                         'Contract',
                         'Status',
                         // 'Action',
@@ -47,12 +47,8 @@ function TeamContractList({ adminList }: adminProps) {
                                 <Tr key={x.id}>
                                     <TableData name={x.name} />
                                     <TableData name={x.title} />
-                                    <TableData
-                                        name={formatDate(x.startDate)}
-                                    />
-                                    <TableData
-                                        name={formatDate(x.endDate)}
-                                    />
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
                                     <TableData
                                         name={x.tenor as unknown as string}
                                     />

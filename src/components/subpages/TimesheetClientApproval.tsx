@@ -14,6 +14,7 @@ import {
     TimeSheetHistoryViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
@@ -35,12 +36,12 @@ function TimesheetClient({ timeSheets }: adminProps) {
                 <Tables
                     tableHead={[
                         'Name',
-                        'Email',
                         'Job Title',
+                        'Begining Period',
+                        'Ending Period',
                         'Total Hours',
-                        'No. of Days',
-                        'Approved No. of Hours',
-                        '',
+                        'Approved Hours',
+                        'Action',
                     ]}
                 >
                     <>
@@ -48,24 +49,18 @@ function TimesheetClient({ timeSheets }: adminProps) {
                             (x: TimeSheetApprovedView, i) => (
                                 <Tr key={i}>
                                     <TableData name={x.name} />
-                                    <TableData name={x.email} />
                                     <TableData
                                         name={x.employeeInformation?.jobTitle}
                                     />
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
                                     <TableData
-                                        name={`${
-                                            x.totalHours as unknown as string
-                                        } Hours`}
+                                        name={x.totalHours as unknown as string}
                                     />
                                     <TableData
-                                        name={`${
-                                            x.numberOfDays as unknown as string
-                                        } Days`}
-                                    />
-                                    <TableData
-                                        name={`${
+                                        name={
                                             x.approvedNumberOfHours as unknown as string
-                                        } Hours`}
+                                        }
                                     />
 
                                     <TableContractAction

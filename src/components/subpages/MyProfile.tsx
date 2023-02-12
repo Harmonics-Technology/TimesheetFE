@@ -423,7 +423,9 @@ function MyProfile({
                                 name="dateOfBirth"
                                 label="Date of Birth"
                                 error={errors.dateOfBirth}
-                                defaultValue={formatDate(user?.dateOfBirth)}
+                                defaultValue={moment(user?.dateOfBirth).format(
+                                    'DD MM YYYY',
+                                )}
                                 max={subDays(new Date(), 1)}
                             />
                         </Grid>

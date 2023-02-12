@@ -42,7 +42,7 @@ function ContractList({ adminList }: adminProps) {
                         'Job Title',
                         'Start Date',
                         'End Date',
-                        'Tenor',
+                        'Tenure',
                         'Contract',
                         'Status',
                         'Action',

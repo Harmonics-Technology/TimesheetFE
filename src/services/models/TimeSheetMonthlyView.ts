@@ -9,6 +9,7 @@ export type TimeSheetMonthlyView = {
     expectedPay?: number | null;
     expectedWorkHours?: number;
     totalHoursWorked?: number;
+    totalApprovedHours?: number;
     fullName?: string | null;
     currency?: string | null;
     startDate?: string;

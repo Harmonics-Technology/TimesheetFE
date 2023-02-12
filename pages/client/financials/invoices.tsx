@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data = await FinancialService.listInvoices(
+            const data = await FinancialService.listClientInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,

@@ -97,11 +97,12 @@ const TimesheetAdmin = ({
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
     // console.log({ totalHours });
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
+    const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
     const currency = timeSheets?.currency;
     const actualPayout =
-        Math.round((expectedPay * totalHours) / expectedHours) || 0;
-
+        Math.round((expectedPay * approvedHours) / expectedHours) || 0;
+        
     const [loading, setLoading] = useState(false);
     const [allChecked, setAllChecked] = useState<boolean>(false);
     // console.log({ allChecked });
@@ -709,8 +710,8 @@ const TimesheetAdmin = ({
                         tip="Number of hours you are expected to work this month"
                     />
                     <TimeSheetEstimation
-                        label="Total Hours Worked"
-                        data={`${totalHours} HR`}
+                        label="Total Hours Approved"
+                        data={`${timeSheets?.totalApprovedHours} HR`}
                         tip="Number of hours you worked this month"
                     />
                     <TimeSheetEstimation

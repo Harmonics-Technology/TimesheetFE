@@ -53,8 +53,9 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
                                 />
                                 <TableContractAction
                                     id={x.employeeInformationId}
-                                    timeSheets={true}
                                     date={`${x.year}-${x.month}`}
+                                    team={true}
+                                    timeSheets={false}
                                 />
                             </Tr>
                         ))}

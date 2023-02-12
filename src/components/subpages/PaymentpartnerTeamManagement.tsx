@@ -23,7 +23,7 @@ import {
     TableStatus,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Widget } from '@uploadcare/react-widget';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -53,6 +53,7 @@ import FilterSearch from '@components/bits-utils/FilterSearch';
 import Loading from '@components/bits-utils/Loading';
 import BeatLoader from 'react-spinners/BeatLoader';
 import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -94,6 +95,7 @@ const schema = yup.object().shape({
 function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
     const client = clients?.filter((x) => x.isActive);
     console.log({ client });
+    const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);
 
     const {
         register,
@@ -116,7 +118,8 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
     // console.log(watch("payRollTypeId"));
     const payroll = watch('payRollTypeId');
     const clientId = watch('clientId');
-    console.log({ payroll });
+    const onboarding = watch('fixedAmount');
+    // console.log({ payroll });
 
     const [contract, setContractFile] = useState<any>('');
     const [icd, setIcd] = useState<any>('');
@@ -226,6 +229,9 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
     console.log({ supervisors });
 
     const onSubmit = async (data: TeamMemberModel) => {
+        if (data.fixedAmount == true) {
+            data.onBordingFee = fixedAmount;
+        }
         if (contract !== '') {
             data.document = `${contract.cdnUrl} ${contract.name}`;
         }
@@ -348,7 +354,7 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
-                                <TableData name={x.firstName} />
+                                <TableData name={x.fullName} />
                                 <TableData
                                     name={x.employeeInformation?.jobTitle}
                                 />
@@ -412,14 +418,6 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                             placeholder="Phone No."
                             control={control}
                         />
-                        <PrimaryInput<TeamMemberModel>
-                            label="Job Title"
-                            name="jobTitle"
-                            error={errors.jobTitle}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
                         <PrimaryDate<TeamMemberModel>
                             control={control}
                             name="dateOfBirth"
@@ -427,27 +425,6 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                             error={errors.dateOfBirth}
                             max={new DateObject().subtract(1, 'days')}
                         />
-                        <SelectrixBox<TeamMemberModel>
-                            control={control}
-                            name="clientId"
-                            error={errors.clientId}
-                            keys="id"
-                            keyLabel="organizationName"
-                            label="Current Client"
-                            options={client}
-                        />
-                        {supervisors !== undefined && (
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="supervisorId"
-                                error={errors.supervisorId}
-                                keys="id"
-                                keyLabel="fullName"
-                                label="Supervisor"
-                                options={supervisors}
-                            />
-                        )}
-
                         <SelectrixBox<TeamMemberModel>
                             control={control}
                             name="isActive"
@@ -461,6 +438,16 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                             ]}
                         />
                     </Grid>
+                    <Box mt="1rem">
+                        <PrimaryInput<TeamMemberModel>
+                            label="Address"
+                            name="address"
+                            error={errors.address}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
+                    </Box>
                     <Box w="full">
                         <Flex
                             justify="space-between"
@@ -483,6 +470,34 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                             templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
                         >
+                            <PrimaryInput<TeamMemberModel>
+                                label="Job Title"
+                                name="jobTitle"
+                                error={errors.jobTitle}
+                                placeholder=""
+                                defaultValue=""
+                                register={register}
+                            />
+                            <SelectrixBox<TeamMemberModel>
+                                control={control}
+                                name="clientId"
+                                error={errors.clientId}
+                                keys="id"
+                                keyLabel="organizationName"
+                                label="Current Client"
+                                options={client}
+                            />
+                            {supervisors !== undefined && (
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="supervisorId"
+                                    error={errors.supervisorId}
+                                    keys="id"
+                                    keyLabel="fullName"
+                                    label="Supervisor"
+                                    options={supervisors}
+                                />
+                            )}
                             {/* <SelectrixBox<TeamMemberModel>
                                 control={control}
                                 name="payRollTypeId"
@@ -616,18 +631,56 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                                     { id: 'monthly', label: 'Monthly' },
                                 ]}
                             />
-                        </Grid>
-                        <Box my=".8rem">
-                            <PrimaryRadio<TeamMemberModel>
-                                name="fixedAmount"
+                            <SelectrixBox<TeamMemberModel>
                                 control={control}
+                                name="fixedAmount"
                                 error={errors.fixedAmount}
-                                radios={[
-                                    { label: 'Fixed amount', val: 'true' },
-                                    { label: 'Percentage', val: 'false' },
+                                keys="id"
+                                keyLabel="label"
+                                label="Onboarding fee type"
+                                options={[
+                                    { id: true, label: 'Fixed amount' },
+                                    { id: false, label: 'Percentage' },
                                 ]}
                             />
-                        </Box>
+                            {onboarding == false ? (
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="onBordingFee"
+                                    error={errors.onBordingFee}
+                                    keys="fee"
+                                    keyLabel="fee"
+                                    label="Onboarding fee"
+                                    options={percentageAmount}
+                                />
+                            ) : (
+                                // : onboarding == true &&
+                                //   fixedAmount !== undefined ? (
+                                //     <Box pos="relative">
+                                //         <PrimaryInput<TeamMemberModel>
+                                //             label="Onboarding fee"
+                                //             name="onBordingFee"
+                                //             error={errors.onBordingFee}
+                                //             placeholder=""
+                                //             value={fixedAmount}
+                                //             register={register}
+                                //             readonly
+                                //         />
+                                //         <Text
+                                //             pos="absolute"
+                                //             mb="0"
+                                //             left="8%"
+                                //             top="50%"
+                                //             transform="translateY(-15%)"
+                                //             bgColor="white"
+                                //         >
+                                //             {fixedAmount}
+                                //         </Text>
+                                //     </Box>
+                                // )
+                                ''
+                            )}
+                        </Grid>
                     </Box>
                     <Box w="full">
                         <Flex

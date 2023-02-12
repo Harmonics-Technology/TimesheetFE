@@ -20,6 +20,7 @@ import {
     TableStatus,
 } from '@components/bits-utils/TableData';
 import { NotificationContext } from '@components/context/NotificationContext';
+import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
 import axios from 'axios';
 import moment from 'moment';
@@ -35,9 +36,10 @@ import {
 
 interface DashboardProps {
     metrics: DashboardPaymentPartnerViewStandardResponse;
+    pendingPayrolls: InvoiceViewPagedCollectionStandardResponse;
 }
 
-function PaymentPartnerDashboard({ metrics }: DashboardProps) {
+function PaymentPartnerDashboard({ metrics, pendingPayrolls }: DashboardProps) {
     // const adminMetrics = metrics?.data as DashboardPaymentPartnerView;
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     console.log({ metrics });
@@ -82,7 +84,7 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                     <TableCards
                         title={'Recent Payroll'}
                         url={'viewpayroll'}
-                        data={metrics?.data?.recentApprovedInvoice
+                        data={pendingPayrolls?.data?.value
                             ?.slice(0, 5)
                             .map((x: InvoiceView, i) => (
                                 <Tr key={i}>
@@ -119,7 +121,6 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                             ?.slice(0, 5)
                             .map((x: InvoiceView, i: any) => (
                                 <Tr key={i}>
-                                    <TableData name={x.invoiceReference} />
                                     <TableData
                                         name={
                                             x.payrollGroupName ||
@@ -127,20 +128,28 @@ function PaymentPartnerDashboard({ metrics }: DashboardProps) {
                                             x.name
                                         }
                                     />
+                                    <TableData name={x.invoiceReference} />
                                     <TableData
                                         name={formatDate(x.dateCreated)}
                                     />
-                                    <TableData name={formatDate(x.startDate)} />
-                                    <TableData name={formatDate(x.endDate)} />
+                                    <TableData name={CAD(x.totalAmount)} />
+                                    <TableData
+                                        name={Naira(
+                                            Math.round(
+                                                (x.totalAmount as number) *
+                                                    (x.rate as unknown as number),
+                                            ),
+                                        )}
+                                    />
                                     <TableState name={x.status as string} />
                                 </Tr>
                             ))}
                         thead={[
+                            'Name on Invoice',
                             'Invoice No',
-                            'Name',
                             'Created on',
-                            'Start Date',
-                            'End Date',
+                            'Amount ($)',
+                            'Amount (₦)',
                             'Status',
                         ]}
                         link={'/'}

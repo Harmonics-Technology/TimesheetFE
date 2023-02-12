@@ -12,6 +12,7 @@ import {
     addMonths,
     lastDayOfMonth,
     subDays,
+    isWeekend,
 } from 'date-fns';
 
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
@@ -79,9 +80,11 @@ const TimesheetTeam = ({
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
     // console.log({ totalHours });
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
+    const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
+    const currency = timeSheets?.currency;
     const actualPayout =
-        Math.round((expectedPay * totalHours) / expectedHours) || 0;
+        Math.round((expectedPay * approvedHours) / expectedHours) || 0;
 
     const [selected, setSelected] = useState<approveDate[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
@@ -374,7 +377,13 @@ const TimesheetTeam = ({
                     >
                         <Input
                             type="number"
-                            defaultValue={timesheets?.hours}
+                            defaultValue={
+                                isWeekend(
+                                    new Date(timesheets?.date as string),
+                                ) || timesheets?.hours === 0
+                                    ? '---'
+                                    : timesheets?.hours
+                            }
                             placeholder="---"
                             textAlign="center"
                             h="full"
@@ -386,7 +395,10 @@ const TimesheetTeam = ({
                                 ) ===
                                     moment(preventTomorrow).format('YYYY-MM-DD')
                             }
-                            disabled={timesheets == undefined}
+                            disabled={
+                                timesheets == undefined ||
+                                isWeekend(new Date(timesheets.date as string))
+                            }
                             onChange={(e) =>
                                 selectedInput.push({
                                     userId: userId,
@@ -493,7 +505,7 @@ const TimesheetTeam = ({
                     /> */}
                     <TimeSheetEstimation
                         label="Total Hours Approved"
-                        data={`${totalHours} HR`}
+                        data={`${timeSheets?.totalApprovedHours} HR`}
                         tip="Number of hours approved by your supervisor"
                     />
                     <TimeSheetEstimation

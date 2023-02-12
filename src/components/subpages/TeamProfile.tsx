@@ -4,6 +4,7 @@ import {
     Flex,
     FormLabel,
     Grid,
+    HStack,
     Select,
     Spinner,
     Text,
@@ -228,11 +229,12 @@ function TeamProfile({
             setSelected(userProfile?.role as string);
         }
     };
-    // useEffect(() => {
-    //     window.onbeforeunload = function () {
-    //         return 'Data will be lost if you leave the page, are you sure?';
-    //     };
-    // }, []);
+    const show = router.asPath.startsWith('/clients/team-members');
+    useEffect(() => {
+        window.onbeforeunload = function () {
+            return 'Data will be lost if you leave the page, are you sure?';
+        };
+    }, []);
     return (
         <Box
             bgColor="white"
@@ -280,7 +282,9 @@ function TeamProfile({
                         name="dateOfBirth"
                         label="Date of Birth"
                         error={errors.dateOfBirth}
-                        defaultValue={formatDate(userProfile?.dateOfBirth)}
+                        defaultValue={moment(userProfile?.dateOfBirth).format(
+                            'DD MM YYYY',
+                        )}
                         max={new DateObject().subtract(1, 'days')}
                     />
                     <SelectrixBox<TeamMemberModel>
@@ -553,7 +557,7 @@ function TeamProfile({
 
                                     <UploadCareWidget
                                         refs={widgetApiD}
-                                        label="Issuance Certificate"
+                                        label=""
                                         filename={inc?.name}
                                         loading={showLoadingD}
                                         uploadFunction={showLoadingStateD}
@@ -743,8 +747,9 @@ function TeamProfile({
                 </Box>
                 <ContractTable userProfile={userProfile} />
             </form>
-            <Grid
-                templateColumns={['repeat(2,1fr)', 'repeat(2,1fr)']}
+            <HStack
+                flexDir={['column', 'row']}
+                spacing={0}
                 gap="1rem 2rem"
                 my="2rem"
             >
@@ -753,28 +758,32 @@ function TeamProfile({
                     color="white"
                     height="3rem"
                     fontSize="14px"
+                    w="full"
                     boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     onClick={() => router.back()}
                 >
                     Back
                 </Button>
-                <Button
-                    bgColor="brand.400"
-                    color="white"
-                    height="3rem"
-                    fontSize="14px"
-                    // type="submit"
-                    onClick={handleSubmit(onSubmit)}
-                    isLoading={isSubmitting}
-                    spinner={<BeatLoader color="white" size={10} />}
-                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                >
-                    <Box pr=".5rem">
-                        <VscSaveAs />
-                    </Box>
-                    <Box>Update Profile</Box>
-                </Button>
-            </Grid>
+                {show && (
+                    <Button
+                        bgColor="brand.400"
+                        color="white"
+                        height="3rem"
+                        fontSize="14px"
+                        w="full"
+                        // type="submit"
+                        onClick={handleSubmit(onSubmit)}
+                        isLoading={isSubmitting}
+                        spinner={<BeatLoader color="white" size={10} />}
+                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                    >
+                        <Box pr=".5rem">
+                            <VscSaveAs />
+                        </Box>
+                        <Box>Update Profile</Box>
+                    </Button>
+                )}
+            </HStack>
             <ConfirmChangeModal
                 isOpen={isOpen}
                 onClose={onClose}

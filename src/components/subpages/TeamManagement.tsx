@@ -106,7 +106,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             onBordingFee: fixedAmount,
         },
     });
-    console.log(watch('onBordingFee'));
+    // console.log(watch('onBordingFee'));
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
@@ -221,7 +221,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
         getSupervisor(clientId);
     }, [clientId]);
 
-    console.log({ supervisors });
+    // console.log({ supervisors });
 
     const onSubmit = async (data: TeamMemberModel) => {
         if (data.fixedAmount == true) {
@@ -341,7 +341,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                         'Client Name',
                         // 'Phone No',
                         'Payroll Type',
-                        // 'Role',
+                        'Role',
                         'Status',
                         '',
                     ]}
@@ -360,7 +360,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 <TableData
                                     name={x.employeeInformation?.payrollType}
                                 />
-                                {/* <TableData name={x.role} /> */}
+                                <TableData name={x.role} />
                                 <TableStatus name={x.isActive} />
                                 <TableActions
                                     id={x.id}

@@ -286,22 +286,23 @@ function ClientTeamManagement({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Button
+                {/* <Button
                     bgColor="brand.400"
                     color="white"
                     p=".5rem 1.5rem"
                     height="fit-content"
                     boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                     onClick={onOpen}
+                    mb="1rem"
                 >
                     +Team Member
-                </Button>
+                </Button> */}
                 <FilterSearch />
                 <Tables
                     tableHead={[
                         'Name',
                         'Job Title',
-                        'Client',
+                        // 'Client',
                         'Phone No',
                         'Role',
                         'Status',
@@ -311,16 +312,16 @@ function ClientTeamManagement({
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
-                                <TableData name={x.firstName} />
+                                <TableData name={x.fullName} />
                                 <TableData
                                     name={x.employeeInformation?.jobTitle}
                                 />
-                                <TableData
+                                {/* <TableData
                                     name={
                                         x.employeeInformation?.client
                                             ?.organizationName
                                     }
-                                />
+                                /> */}
                                 <TableData name={x.phoneNumber} />
                                 <TableData name={x.role} />
                                 <TableStatus name={x.isActive} />

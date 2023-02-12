@@ -187,16 +187,16 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         option={true}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                        dropDown={[
-                            'my expenses',
-                            'my payslips',
-                            `${
-                                user?.payrollType === 'OFFSHORE'
-                                    ? 'invoices'
-                                    : 'my invoices'
-                            }`,
-                            'my contracts',
-                        ]}
+                        dropDown={
+                            user?.payrollType === 'OFFSHORE'
+                                ? ['my expenses', 'my payslips', 'my contracts']
+                                : [
+                                      'my expenses',
+                                      'my payslips',
+                                      'my invoices',
+                                      'my contracts',
+                                  ]
+                        }
                     />
                     <MenuItem
                         change={change}
@@ -828,10 +828,20 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
                             'expenses',
-                            'payrolls',
-                            'payslips',
+                            // 'payrolls',
+                            // 'payslips',
                             'invoices',
                         ]}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="profile"
+                        menuTitle="My Profile"
+                        icon={<FaUser opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
                     />
                 </VStack>
             ) : null}

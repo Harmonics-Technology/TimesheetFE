@@ -65,6 +65,26 @@ date?: string,
     /**
      * @param employeeInformationId 
      * @param date 
+     * @returns TimeSheetMonthlyViewIEnumerableStandardResponse Success
+     * @throws ApiError
+     */
+    public static getTimeSheet2(
+employeeInformationId?: string,
+date?: string,
+): CancelablePromise<TimeSheetMonthlyViewIEnumerableStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/TimeSheet/monthly2',
+            query: {
+                'employeeInformationId': employeeInformationId,
+                'date': date,
+            },
+        });
+    }
+
+    /**
+     * @param employeeInformationId 
+     * @param date 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */

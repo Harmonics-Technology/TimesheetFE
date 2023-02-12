@@ -18,6 +18,7 @@ import React, { useContext, useState } from 'react';
 import { AiOutlineDownload } from 'react-icons/ai';
 import { FaEllipsisH, FaEye } from 'react-icons/fa';
 import {
+    ExpenseView,
     FinancialService,
     InitiateResetModel,
     InvoiceView,
@@ -113,15 +114,14 @@ export function TableState({ name }: { name: string | undefined | null }) {
             <Box
                 fontSize="10px"
                 bgColor={
-                    name == 'ACTIVE' ||
-                    name == 'APPROVED' ||
-                    name == 'INVOICED' ||
-                    name == 'SUBMITTED'
+                    name == 'ACTIVE' || name == 'APPROVED'
                         ? 'brand.400'
                         : name == 'PENDING'
                         ? 'brand.700'
-                        : name == 'REVIEWED'
+                        : name == 'REVIEWED' || name == 'SUBMITTED'
                         ? 'brand.600'
+                        : name == 'INVOICED'
+                        ? 'purple'
                         : 'red'
                 }
                 borderRadius="4px"
@@ -300,11 +300,13 @@ export function TableContractAction({
     timeSheets,
     supervisor,
     date,
+    team,
 }: {
     id: any;
     timeSheets?: boolean;
     supervisor?: boolean;
     date?: any;
+    team?: boolean;
 }) {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
@@ -346,9 +348,22 @@ export function TableContractAction({
                                     View Timesheet
                                 </Link>
                             </NextLink>
+                        ) : team === true ? (
+                            <NextLink
+                                href={
+                                    date !== undefined
+                                        ? `/${role}/timesheets/my-timesheet?date=${date}`
+                                        : `/${role}/timesheets/my-timesheet`
+                                }
+                                passHref
+                            >
+                                <Link width="100%" textDecor="none !important">
+                                    View Timesheet
+                                </Link>
+                            </NextLink>
                         ) : (
                             <NextLink
-                                href={`/SuperAdmin/profile-management/team-members/${id}`}
+                                href={`/${role}/profile-management/team-members/${id}`}
                                 passHref
                             >
                                 <Link width="100%" textDecor="none !important">
@@ -429,7 +444,7 @@ export function ExpenseActions({
     id,
     manager = false,
 }: {
-    id: any;
+    id: ExpenseView;
     manager?: boolean;
 }) {
     const toast = useToast();
@@ -541,10 +556,16 @@ export function ExpenseActions({
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
-                    <MenuItem onClick={() => Approve(id)} w="full">
-                        {manager ? 'Approve' : 'Review'}
-                    </MenuItem>
-                    <MenuItem onClick={() => Decline(id)} w="full">
+                    {(manager && id.status !== 'APPROVED') ||
+                        (id.status === 'PENDING' && (
+                            <MenuItem
+                                onClick={() => Approve(id.id as string)}
+                                w="full"
+                            >
+                                {manager ? 'Approve' : 'Review'}
+                            </MenuItem>
+                        ))}
+                    <MenuItem onClick={() => Decline(id.id as string)} w="full">
                         Reject
                     </MenuItem>
                 </MenuList>

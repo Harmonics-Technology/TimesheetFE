@@ -38,6 +38,7 @@ import {
 } from 'src/services';
 import PayrollInvoice from './PayrollInvoice';
 import { formatDate } from '@components/generics/functions/formatDate';
+import InvoiceTemplate from './InvoiceTemplate';
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
@@ -47,6 +48,11 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isOpened,
+        onOpen: onOpened,
+        onClose: onClosed,
+    } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
@@ -250,7 +256,11 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                                     <TableState name={x.status as string} />
                                     <InvoiceAction
                                         data={x}
-                                        onOpen={onOpen}
+                                        onOpen={
+                                            x.invoiceType == 'PAYROLL'
+                                                ? onOpened
+                                                : onOpen
+                                        }
                                         clicked={setClicked}
                                     />
                                 </Tr>
@@ -275,6 +285,11 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
             <PayrollInvoice
                 isOpen={isOpen}
                 onClose={onClose}
+                clicked={clicked}
+            />
+            <InvoiceTemplate
+                isOpen={isOpened}
+                onClose={onClosed}
                 clicked={clicked}
             />
         </Grid>

@@ -45,6 +45,8 @@ import FilterSearch from '@components/bits-utils/FilterSearch';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { DateObject } from 'react-multi-date-picker';
+import { CUR } from '@components/generics/functions/Naira';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -124,6 +126,7 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                         height="fit-content"
                         boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                         onClick={onOpen}
+                        mb="1rem"
                     >
                         +Expense
                     </Button>
@@ -143,7 +146,8 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                         'Name',
                         'Description',
                         'Expense Type',
-                        'Currency',
+                        'Expense Date',
+                        'Created on',
                         'Amount',
                         'Status',
                     ]}
@@ -154,9 +158,12 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                                 <TableData name={x.teamMember?.fullName} />
                                 <TableData name={x.description} />
                                 <TableData name={x.expenseType} />
-                                <TableData name={x.currency} />
+                                <TableData name={formatDate(x.expenseDate)} />
+                                <TableData name={formatDate(x.dateCreated)} />
                                 <TableData
-                                    name={x.amount as unknown as string}
+                                    name={`${x.currency}${CUR(
+                                        x.amount as unknown as string,
+                                    )}`}
                                 />
                                 <TableState name={x.status as string} />
                             </Tr>
@@ -171,24 +178,30 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                 title={'Add New Expense'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <SelectrixBox<ExpenseModel>
-                        control={control}
-                        name="expenseTypeId"
-                        error={errors.expenseTypeId}
-                        keys="id"
-                        keyLabel="name"
-                        label="Expense Type"
-                        options={expenseType?.filter(
-                            (x) => x.status == 'ACTIVE',
-                        )}
-                    />
-                    <PrimaryDate<ExpenseModel>
-                        control={control}
-                        name="expenseDate"
-                        label="Date of Expense"
-                        error={errors.expenseDate}
-                        max={new DateObject().subtract(1, 'days')}
-                    />
+                    <Grid
+                        templateColumns={['1fr', 'repeat(2, 1fr)']}
+                        gap="1rem 2rem"
+                        mt="1rem"
+                    >
+                        <SelectrixBox<ExpenseModel>
+                            control={control}
+                            name="expenseTypeId"
+                            error={errors.expenseTypeId}
+                            keys="id"
+                            keyLabel="name"
+                            label="Expense Type"
+                            options={expenseType?.filter(
+                                (x) => x.status == 'ACTIVE',
+                            )}
+                        />
+                        <PrimaryDate<ExpenseModel>
+                            control={control}
+                            name="expenseDate"
+                            label="Date of Expense"
+                            error={errors.expenseDate}
+                            max={new DateObject().subtract(1, 'days')}
+                        />
+                    </Grid>
                     <PrimaryTextarea<ExpenseModel>
                         label="Description"
                         name="description"

@@ -154,7 +154,7 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
                                     )}`}
                                 />
                                 <TableState name={x.status as string} />
-                                <ExpenseActions id={x.id} />
+                                <ExpenseActions id={x} />
                                 {/* <td>
                                     {x.status == 'APPROVED' && <Checkbox />}
                                 </td> */}

@@ -97,7 +97,8 @@ id: string,
      * @param offset 
      * @param limit 
      * @param search 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns ContractViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -105,7 +106,8 @@ id: string,
 offset?: number,
 limit?: number,
 search?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<ContractViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -114,7 +116,8 @@ dateFilter?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -125,20 +128,23 @@ dateFilter?: string,
 
     /**
      * @param employeeInformationId 
-     * @param dateFilter 
+     * @param startDate 
+     * @param endDate 
      * @returns ContractViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static listTeamMemberContracts(
 employeeInformationId?: string,
-dateFilter?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<ContractViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Contract/team-member/contracts',
             query: {
                 'employeeInformationId': employeeInformationId,
-                'dateFilter': dateFilter,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,

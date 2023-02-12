@@ -37,6 +37,7 @@ import {
 } from 'src/services';
 import PayrollInvoice from './PayrollInvoice';
 import { formatDate } from '@components/generics/functions/formatDate';
+import InvoiceTemplate from './InvoiceTemplate';
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
@@ -46,6 +47,11 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isOpened,
+        onOpen: onOpened,
+        onClose: onClosed,
+    } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
@@ -56,7 +62,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                 {/* <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
                     gap="1.2rem"
-                    w="full"
+                w="full"
                 >
                     <DashboardCard
                         url={`/${role}/profile-management/clients`}
@@ -232,7 +238,11 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                     <TableState name={x.status as string} />
                                     <InvoiceAction
                                         data={x}
-                                        onOpen={onOpen}
+                                        onOpen={
+                                            x.invoiceType == 'PAYROLL'
+                                                ? onOpened
+                                                : onOpen
+                                        }
                                         clicked={setClicked}
                                     />
                                 </Tr>
@@ -257,6 +267,11 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
             <PayrollInvoice
                 isOpen={isOpen}
                 onClose={onClose}
+                clicked={clicked}
+            />
+            <InvoiceTemplate
+                isOpen={isOpened}
+                onClose={onClosed}
                 clicked={clicked}
             />
         </Grid>

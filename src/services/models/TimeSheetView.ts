@@ -13,4 +13,8 @@ export type TimeSheetView = {
     hours?: number;
     status?: string | null;
     rejectionReason?: string | null;
+    expectedHours?: number | null;
+    totalHours?: number | null;
+    expectedPayout?: number | null;
+    actualPayout?: number | null;
 };

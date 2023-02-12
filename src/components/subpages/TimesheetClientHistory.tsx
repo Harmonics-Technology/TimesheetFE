@@ -14,6 +14,7 @@ import {
     TimeSheetHistoryViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
@@ -22,6 +23,7 @@ interface adminProps {
 function TimesheetClient({ timeSheets }: adminProps) {
     console.log({ timeSheets });
     const router = useRouter();
+    const date = router.query.from as string;
 
     return (
         <>
@@ -35,12 +37,12 @@ function TimesheetClient({ timeSheets }: adminProps) {
                 <Tables
                     tableHead={[
                         'Name',
-                        'Email',
-                        'Job Titile',
+                        'Job Title',
+                        'Begining Period',
+                        'Ending Period',
                         'Total Hours',
-                        'No. of Days',
-                        'Approved No of Hours',
-                        '',
+                        'Approved Hours',
+                        'Action',
                     ]}
                 >
                     <>
@@ -48,17 +50,13 @@ function TimesheetClient({ timeSheets }: adminProps) {
                             (x: TimeSheetHistoryView, i) => (
                                 <Tr key={i}>
                                     <TableData name={x.name} />
-                                    <TableData name={x.email} />
                                     <TableData
                                         name={x.employeeInformation?.jobTitle}
                                     />
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
                                     <TableData
                                         name={x.totalHours as unknown as string}
-                                    />
-                                    <TableData
-                                        name={
-                                            x.numberOfDays as unknown as string
-                                        }
                                     />
                                     <TableData
                                         name={
@@ -68,7 +66,8 @@ function TimesheetClient({ timeSheets }: adminProps) {
 
                                     <TableContractAction
                                         id={x.employeeInformationId}
-                                        timeSheets={true}
+                                        supervisor={true}
+                                        date={date}
                                     />
                                 </Tr>
                             ),

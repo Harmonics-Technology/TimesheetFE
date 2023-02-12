@@ -663,6 +663,39 @@ endDate?: string,
      * @param search 
      * @param startDate 
      * @param endDate 
+     * @returns InvoiceViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listPendingInvoicedInvoicesForPaymentPartner(
+offset?: number,
+limit?: number,
+search?: string,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/invoices/payment-partner/pending-invoiced',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+                'StartDate': startDate,
+                'EndDate': endDate,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @param startDate 
+     * @param endDate 
      * @param payrollTypeFilter 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError

@@ -2,8 +2,13 @@ import { Box, Grid, Image, Tr, VStack } from '@chakra-ui/react';
 import DashboardCard from '@components/bits-utils/DashboardCard';
 import { NotificationBox } from '@components/bits-utils/NotificationBox';
 import TableCards from '@components/bits-utils/TableCards';
-import { TableData, TableStatus } from '@components/bits-utils/TableData';
+import {
+    TableContractAction,
+    TableData,
+    TableStatus,
+} from '@components/bits-utils/TableData';
 import { NotificationContext } from '@components/context/NotificationContext';
+import { CUR } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
 import moment from 'moment';
 import { useContext } from 'react';
@@ -71,9 +76,21 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                                     <TableData name={x.month} />
                                     <TableData name={x.hours} />
                                     <TableData name={x.numberOfDays} />
+                                    <TableContractAction
+                                        id={x.employeeInformationId}
+                                        date={`${x.year}-${x.month}-01`}
+                                        team={true}
+                                        timeSheets={false}
+                                    />
                                 </Tr>
                             ))}
-                        thead={['Year', 'Month', 'Hours', 'No. of Days']}
+                        thead={[
+                            'Year',
+                            'Month',
+                            'Approved Hrs',
+                            'No. of Days',
+                            'Action',
+                        ]}
                         link={'/'}
                     />
                 </Grid>
@@ -92,14 +109,10 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                                       .map((x: InvoiceView) => (
                                           <Tr key={x.id}>
                                               <TableData
-                                                  name={formatDate(
-                                                      x.startDate,
-                                                  )}
+                                                  name={formatDate(x.startDate)}
                                               />
                                               <TableData
-                                                  name={formatDate(
-                                                      x.endDate,
-                                                  )}
+                                                  name={formatDate(x.endDate)}
                                               />
                                               <TableData
                                                   name={formatDate(
@@ -113,7 +126,14 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                                                   }
                                               />
                                               <TableData name={x.totalHours} />
-                                              <TableData name={x.totalAmount} />
+                                              <TableData
+                                                  name={`${
+                                                      x.employeeInformation
+                                                          ?.currency
+                                                  }${CUR(
+                                                      x.totalAmount as unknown as string,
+                                                  )}`}
+                                              />
                                           </Tr>
                                       ))
                                 : payslip?.data?.value
@@ -140,6 +160,16 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                                                   name={x?.invoice?.totalHours}
                                               />
                                               <TableData
+                                                  name={`${
+                                                      x.invoice
+                                                          ?.employeeInformation
+                                                          ?.currency
+                                                  }${CUR(
+                                                      x.invoice
+                                                          ?.totalAmount as unknown as string,
+                                                  )}`}
+                                              />
+                                              {/* <TableData
                                                   name={
                                                       (x?.invoice
                                                           ?.totalAmount as number) +
@@ -153,7 +183,7 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                                                           0,
                                                       )
                                                   }
-                                              />
+                                              /> */}
                                           </Tr>
                                       ))
                         }

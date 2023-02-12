@@ -55,10 +55,16 @@ function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
                                     <TableData name={x.year} />
                                     <TableData name={x.month} />
                                     <TableData name={x.hours} />
+                                    {/* <TableData name={x.} /> */}
                                     <TableData name={x.numberOfDays} />
                                 </Tr>
                             ))}
-                        thead={['Year', 'Month', 'Hours', 'No. of Days']}
+                        thead={[
+                            'Year',
+                            'Month',
+                            'Approved Hours',
+                            'No. of Days',
+                        ]}
                         link={'/'}
                     />
                 </Grid>

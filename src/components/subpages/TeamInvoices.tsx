@@ -20,12 +20,13 @@ import {
     InvoiceViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import InvoiceTemplate from './InvoiceTemplate';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { UserContext } from '@components/context/UserContext';
 
 interface invoiceProps {
     invoiceList: InvoiceViewPagedCollectionStandardResponse;
@@ -100,6 +101,9 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
             }
         });
     };
+    const { user } = useContext(UserContext);
+    const role = user?.role.replaceAll(' ', '');
+    const sub = router.asPath == `/${role}/financials/invoices`;
 
     return (
         <>
@@ -109,43 +113,56 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex align="center" justify="space-between">
-                    <Button
-                        bgColor="brand.400"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        display={submitted ? 'none' : 'flex'}
-                        height="fit-content"
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        isLoading={loading}
-                        spinner={<BeatLoader size={10} />}
-                        onClick={() => submitInvoiceItem()}
-                    >
-                        Submit Invoice
-                    </Button>
-                    {!submitted && (
-                        <Checkbox
-                            checked={
-                                invoice?.length !== 0 &&
-                                invoice?.length == selectedId?.length
-                            }
-                            onChange={() => toggleSelected('', true)}
-                            label="Select All"
-                        />
-                    )}
-                </Flex>
+                {selectedId?.length > 0 && (
+                    <Flex align="center" justify="space-between" mb="1rem">
+                        <Button
+                            bgColor="brand.400"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            display={submitted ? 'none' : 'flex'}
+                            height="fit-content"
+                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                            isLoading={loading}
+                            spinner={<BeatLoader size={10} />}
+                            onClick={() => submitInvoiceItem()}
+                        >
+                            Submit Invoice
+                        </Button>
+                        {!submitted && (
+                            <Checkbox
+                                checked={
+                                    invoice?.length !== 0 &&
+                                    invoice?.length == selectedId?.length
+                                }
+                                onChange={() => toggleSelected('', true)}
+                                label="Select All"
+                            />
+                        )}
+                    </Flex>
+                )}
                 <FilterSearch />
                 <Tables
-                    tableHead={[
-                        'Invoice No',
-                        'Name',
-                        'Created on',
-                        'Start Date',
-                        'End Date',
-                        'Status',
-                        'Action',
-                        // '',
-                    ]}
+                    tableHead={
+                        sub
+                            ? [
+                                  'Invoice No',
+                                  'Name',
+                                  'Created on',
+                                  'Start Date',
+                                  'End Date',
+                                  'Status',
+                                  'Action',
+                                  // '',
+                              ]
+                            : [
+                                  'Invoice No',
+                                  'Name',
+                                  'Created on',
+                                  'Start Date',
+                                  'End Date',
+                                  'Action',
+                              ]
+                    }
                 >
                     <>
                         {invoice?.map((x: InvoiceView) => (
@@ -161,7 +178,9 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                                 <TableData name={formatDate(x.dateCreated)} />
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />
-                                <TableState name={x.status as string} />
+                                {sub && (
+                                    <TableState name={x.status as string} />
+                                )}
                                 <InvoiceAction
                                     data={x}
                                     onOpen={onOpen}

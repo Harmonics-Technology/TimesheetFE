@@ -149,8 +149,8 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                 <FilterSearch />
                 <Tables
                     tableHead={[
+                        'Name on Invoice',
                         'Invoice No',
-                        'Name',
                         'Created on',
                         'Amount ($)',
                         'Amount (₦)',
@@ -161,7 +161,6 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                     <>
                         {invoiceData?.data?.value?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
-                                <TableData name={x.invoiceReference} />
                                 <TableData
                                     name={
                                         x.payrollGroupName ||
@@ -169,6 +168,7 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                                         x.name
                                     }
                                 />
+                                <TableData name={x.invoiceReference} />
                                 <TableData name={formatDate(x.dateCreated)} />
                                 <TableData name={CAD(x.totalAmount)} />
                                 <TableData

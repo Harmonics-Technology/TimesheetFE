@@ -14,6 +14,7 @@ import {
     TimeSheetHistoryViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
@@ -22,8 +23,7 @@ interface adminProps {
 function TimesheetHistory({ timeSheets }: adminProps) {
     console.log({ timeSheets });
     const router = useRouter();
-    const date = router.query.date as string;
-    const structureDate = date?.split('-')[1] + '-' + date?.split('-')[0];
+    const date = router.query.from as string;
 
     return (
         <>
@@ -37,11 +37,12 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                 <Tables
                     tableHead={[
                         'Name',
-                        'Email',
                         'Job Title',
+                        'Begining Period',
+                        'Ending Period',
                         'Total Hours',
-                        'No. of Days',
-                        '',
+                        'Approved Hours',
+                        'Action',
                     ]}
                 >
                     <>
@@ -49,23 +50,24 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                             (x: TimeSheetHistoryView) => (
                                 <Tr key={x.employeeInformationId}>
                                     <TableData name={x.name} />
-                                    <TableData name={x.email} />
                                     <TableData
                                         name={x.employeeInformation?.jobTitle}
                                     />
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
                                     <TableData
                                         name={x.totalHours as unknown as string}
                                     />
                                     <TableData
                                         name={
-                                            x.numberOfDays as unknown as string
+                                            x.approvedNumberOfHours as unknown as string
                                         }
                                     />
 
                                     <TableContractAction
                                         id={x.employeeInformationId}
                                         supervisor={true}
-                                        date={structureDate}
+                                        date={date}
                                     />
                                 </Tr>
                             ),
