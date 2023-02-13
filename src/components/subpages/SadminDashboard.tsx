@@ -56,34 +56,31 @@ function SadminDashboard({ metrics }: DashboardProps) {
                         value={adminMetrics?.totalDownLines}
                     />
                 </Grid>
-                <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
-                    <TableCards
-                        title={'Recent Clients'}
-                        url={'profile-management/clients'}
-                        data={adminMetrics?.recentCLients
-                            ?.slice(0, 4)
-                            .map((x: UserView) => (
-                                <Tr key={x.id}>
-                                    <TableData name={x.firstName} />
-                                    <TableData name={x.email} />
-                                    <TableStatus name={x.isActive} />
-                                </Tr>
-                            ))}
-                        thead={['CLIENT NAME', 'EMAIL', 'STATUS']}
-                        link={'/'}
-                    />
-                    {/* <Flex
-                        bgColor="white"
-                        borderRadius="15px"
-                        padding="1.5rem"
-                        w="full"
-                        justify="center"
-                        align="center"
-                        boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
-                    >
-                        <Image src="/assets/dash.png" w="full" mx="auto" />
-                    </Flex> */}
-                </Grid>
+                <TableCards
+                    title={'Recent Clients'}
+                    url={'profile-management/clients'}
+                    data={adminMetrics?.recentCLients
+                        ?.slice(0, 4)
+                        .map((x: UserView) => (
+                            <Tr key={x.id}>
+                                <TableData name={x.organizationName} />
+                                <TableData name={x.organizationEmail} />
+                                <TableData name={x.organizationPhone} />
+                                <TableData
+                                    name={x.invoiceGenerationFrequency}
+                                />
+                                <TableStatus name={x.isActive} />
+                            </Tr>
+                        ))}
+                    thead={[
+                        'CLIENT NAME',
+                        'EMAIL',
+                        'Phone',
+                        'Invoice Schedule',
+                        'STATUS',
+                    ]}
+                    link={'/'}
+                />
             </VStack>
             <NotificationBox
                 data={messages}

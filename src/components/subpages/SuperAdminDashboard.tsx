@@ -89,12 +89,22 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                             ?.slice(0, 4)
                             .map((x: UserView) => (
                                 <Tr key={x.id}>
-                                    <TableData name={x.firstName} />
-                                    <TableData name={x.email} />
+                                    <TableData name={x.organizationName} />
+                                    <TableData name={x.organizationEmail} />
+                                    <TableData name={x.organizationPhone} />
+                                    <TableData
+                                        name={x.invoiceGenerationFrequency}
+                                    />
                                     <TableStatus name={x.isActive} />
                                 </Tr>
                             ))}
-                        thead={['CLIENT NAME', 'EMAIL', 'STATUS']}
+                        thead={[
+                            'CLIENT NAME',
+                            'EMAIL',
+                            'Phone',
+                            'Invoice Schedule',
+                            'STATUS',
+                        ]}
                         link={'/'}
                     />
                 </Grid>

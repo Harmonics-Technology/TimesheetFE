@@ -43,6 +43,8 @@ import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import UploadCareWidget from './UploadCareWidget';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { useLeavePageConfirmation } from '@components/generics/useLeavePageConfirmation';
+import Link from 'next/link';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({});
 interface ActivateUserPageProps {
@@ -217,7 +219,7 @@ function ActivateUserPage({
             if (result.status) {
                 setLoading(false);
                 toast({
-                    title: result.message,
+                    title: 'User has beeen succesfully activated',
                     status: 'success',
                     position: 'top-right',
                 });
@@ -240,15 +242,24 @@ function ActivateUserPage({
         }
     };
     useLeavePageConfirmation(isDirty && !isSubmitting);
+    const { user } = useContext(UserContext);
+    const role = user?.role.replaceAll(' ', '');
     return (
         <>
             {userProfile?.isActive && (
                 <Alert status="info" variant="left-accent" mb="1rem">
                     <AlertIcon />
-                    <AlertTitle>Account Activated!</AlertTitle>
-                    <AlertDescription>
-                        This user has already been activated by an admin
-                    </AlertDescription>
+                    <Flex justify="space-between" w="full" align="center">
+                        <Box>
+                            <AlertTitle>Account Activated!</AlertTitle>
+                            <AlertDescription>
+                                This user has already been activated by an admin
+                            </AlertDescription>
+                        </Box>
+                        <Link passHref href={`/${role}/dashboard`}>
+                            <Button>Go to Dashboard</Button>
+                        </Link>
+                    </Flex>
                 </Alert>
             )}
             <Box
