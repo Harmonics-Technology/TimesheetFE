@@ -42,6 +42,7 @@ import { BsPersonCheck } from 'react-icons/bs';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import UploadCareWidget from './UploadCareWidget';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { useLeavePageConfirmation } from '@components/generics/useLeavePageConfirmation';
 
 const schema = yup.object().shape({});
 interface ActivateUserPageProps {
@@ -62,7 +63,7 @@ function ActivateUserPage({
         handleSubmit,
         control,
         watch,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isDirty },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(schema),
         mode: 'all',
@@ -236,11 +237,7 @@ function ActivateUserPage({
         //     });
         // }
     };
-    useEffect(() => {
-        window.onbeforeunload = function () {
-            return 'Data will be lost if you leave the page, are you sure?';
-        };
-    }, []);
+    useLeavePageConfirmation(isDirty && !isSubmitting);
     return (
         <>
             {userProfile?.isActive && (
