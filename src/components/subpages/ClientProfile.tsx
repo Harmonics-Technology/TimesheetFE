@@ -85,7 +85,7 @@ function ClientProfile({
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                // router.reload();
                 return;
             }
             toast({

@@ -142,7 +142,15 @@ function ClientManagement({ adminList }: adminProps) {
                 </Button>
                 <FilterSearch searchOptions="Search by: Name, Email, Role, or Status " />
                 <Tables
-                    tableHead={['Name', 'Email', 'Role', 'Status', 'Action']}
+                    tableHead={[
+                        'Name',
+                        'Email',
+                        'Role',
+                        'Phone',
+                        'Invoice Schedule',
+                        'Status',
+                        'Action',
+                    ]}
                 >
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
@@ -150,6 +158,10 @@ function ClientManagement({ adminList }: adminProps) {
                                 <TableData name={x.firstName} />
                                 <TableData name={x.email} />
                                 <TableData name={x.role} />
+                                <TableData name={x.organizationPhone} />
+                                <TableData
+                                    name={x.invoiceGenerationFrequency}
+                                />
                                 <TableStatus name={x.isActive} />
                                 <TableActions
                                     id={x.id}

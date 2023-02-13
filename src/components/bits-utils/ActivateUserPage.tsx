@@ -317,7 +317,7 @@ function ActivateUserPage({
                             ).format('DD MM YYYY')}
                             max={new DateObject().subtract(1, 'days')}
                         />
-                        <SelectrixBox<TeamMemberModel>
+                        {/* <SelectrixBox<TeamMemberModel>
                             control={control}
                             name="isActive"
                             error={errors.isActive}
@@ -333,7 +333,7 @@ function ActivateUserPage({
                                 { id: 'true', label: 'Active' },
                                 { id: 'false', label: 'Not Active' },
                             ]}
-                        />
+                        /> */}
                     </Grid>
                     <Box mt="1rem">
                         <PrimaryInput<TeamMemberModel>
