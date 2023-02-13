@@ -44,6 +44,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.limit,
                 pagingOptions.search,
                 id,
+                pagingOptions.from,
+                pagingOptions.to,
             );
             const supervisor = await UserService.getClientSupervisors(
                 pagingOptions.offset,

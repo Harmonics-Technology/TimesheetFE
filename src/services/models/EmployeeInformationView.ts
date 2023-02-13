@@ -16,6 +16,7 @@ export type EmployeeInformationView = {
     supervisor?: UserView;
     payrollType?: string | null;
     payrollGroup?: string | null;
+    payrollGroupId?: number;
     ratePerHour?: number;
     jobTitle?: string | null;
     hoursPerDay?: number;

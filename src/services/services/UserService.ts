@@ -348,6 +348,8 @@ clientId: string,
      * @param limit 
      * @param search 
      * @param supervisorId 
+     * @param startDate 
+     * @param endDate 
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -356,6 +358,8 @@ offset?: number,
 limit?: number,
 search?: string,
 supervisorId?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -365,6 +369,8 @@ supervisorId?: string,
                 'Limit': limit,
                 'search': search,
                 'supervisorId': supervisorId,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
         });
     }
@@ -374,6 +380,8 @@ supervisorId?: string,
      * @param limit 
      * @param search 
      * @param clientId 
+     * @param startDate 
+     * @param endDate 
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -382,6 +390,8 @@ offset?: number,
 limit?: number,
 search?: string,
 clientId?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -391,6 +401,8 @@ clientId?: string,
                 'Limit': limit,
                 'search': search,
                 'clientId': clientId,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
         });
     }
@@ -400,6 +412,8 @@ clientId?: string,
      * @param limit 
      * @param search 
      * @param clientId 
+     * @param startDate 
+     * @param endDate 
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -408,6 +422,8 @@ offset?: number,
 limit?: number,
 search?: string,
 clientId?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -417,6 +433,8 @@ clientId?: string,
                 'Limit': limit,
                 'search': search,
                 'clientId': clientId,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
         });
     }
@@ -426,6 +444,8 @@ clientId?: string,
      * @param limit 
      * @param search 
      * @param paymentPartnerId 
+     * @param startDate 
+     * @param endDate 
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -434,6 +454,8 @@ offset?: number,
 limit?: number,
 search?: string,
 paymentPartnerId?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -443,6 +465,8 @@ paymentPartnerId?: string,
                 'Limit': limit,
                 'search': search,
                 'paymentPartnerId': paymentPartnerId,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
         });
     }

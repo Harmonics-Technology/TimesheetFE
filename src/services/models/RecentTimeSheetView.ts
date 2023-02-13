@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 export type RecentTimeSheetView = {
+    name?: string | null;
     year?: string | null;
     month?: string | null;
     hours?: number;

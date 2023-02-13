@@ -27,9 +27,11 @@ import { FaRegCalendarAlt } from 'react-icons/fa';
 function FilterSearch({
     hide = false,
     hides = false,
+    searchOptions,
 }: {
     hide?: boolean;
     hides?: boolean;
+    searchOptions?: string;
 }) {
     const [search, setSearch] = useState('');
     const router = useRouter();
@@ -100,12 +102,19 @@ function FilterSearch({
                         </Text>
                         <Select
                             w="fit-content"
-                            onChange={(e) => debounced(e.target.value)}
+                            onChange={(e) =>
+                                router.push({
+                                    query: {
+                                        paySlipFilter: e.target.value,
+                                    },
+                                })
+                            }
                             borderRadius="0"
                             fontSize=".8rem"
                         >
-                            <option value="onshore">Onshore</option>
-                            <option value="offshore">Offshore</option>
+                            <option value="">All</option>
+                            <option value={1}>Onshore</option>
+                            <option value={2}>Offshore</option>
                         </Select>
                     </Box>
                     <HStack fontSize=".8rem" w="fit-content" mb={['1rem', '0']}>
@@ -198,12 +207,14 @@ function FilterSearch({
                         {/* </Tooltip> */}
                     </Flex>
 
-                    <Input
-                        type="search"
-                        placeholder="search"
-                        onChange={(e) => debounced(e.target.value)}
-                        borderRadius="0"
-                    />
+                    <Tooltip label={searchOptions} hasArrow fontSize=".8rem">
+                        <Input
+                            type="search"
+                            placeholder="search"
+                            onChange={(e) => debounced(e.target.value)}
+                            borderRadius="0"
+                        />
+                    </Tooltip>
                 </HStack>
             </Flex>
         </>

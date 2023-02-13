@@ -66,17 +66,19 @@ function Login() {
                 Cookies.set('user', JSON.stringify(result.data));
                 result.data &&
                     Cookies.set('token', result.data.token as string);
-                if (typeof path === 'string' && path.trim().length === 0) {
-                    router.push(path);
-                    return;
-                }
-                // router.push(
-                //     `${result?.data?.role?.replace(' ', '')}/dashboard`,
-                // );
-                window.location.href = `${result?.data?.role?.replaceAll(
-                    ' ',
-                    '',
-                )}/dashboard`;
+                router.query.from
+                    ? (window.location.href = decodeURIComponent(
+                          router.query.from as unknown as string,
+                      ))
+                    : (window.location.href = `${result?.data?.role?.replaceAll(
+                          ' ',
+                          '',
+                      )}/dashboard`);
+
+                // window.location.href = `${result?.data?.role?.replaceAll(
+                //     ' ',
+                //     '',
+                // )}/dashboard`;
                 return;
             }
             toast({

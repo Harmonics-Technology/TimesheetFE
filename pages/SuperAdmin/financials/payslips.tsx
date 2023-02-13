@@ -27,6 +27,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,
+                pagingOptions.paySlipFilter,
             );
 
             return {

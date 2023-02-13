@@ -28,4 +28,7 @@ export type UserView = {
     clientName?: string | null;
     payrollType?: string | null;
     payrollGroup?: string | null;
+    payrollGroupId?: number;
+    invoiceGenerationFrequency?: string | null;
+    term?: number | null;
 };

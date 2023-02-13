@@ -18,6 +18,7 @@ function Tables({ tableHead, children }: TablesProps) {
                                 fontSize="12px"
                                 color="brand.200"
                                 fontWeight="700"
+                                // color="gray.500"
                                 // textTransform="capitalize"
                                 key={i}
                             >

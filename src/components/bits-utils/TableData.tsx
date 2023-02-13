@@ -84,7 +84,7 @@ export function TableData({
             }
         >
             <Tooltip label={name} hasArrow>
-                {name?.toString()?.substring(0, 50) || ''}
+                {name?.toString()?.substring(0, 20) || ''}
             </Tooltip>
         </Td>
     );
@@ -121,7 +121,7 @@ export function TableState({ name }: { name: string | undefined | null }) {
                         : name == 'REVIEWED' || name == 'SUBMITTED'
                         ? 'brand.600'
                         : name == 'INVOICED'
-                        ? 'purple'
+                        ? '#28a3ef'
                         : 'red'
                 }
                 borderRadius="4px"

@@ -355,6 +355,8 @@ search?: string,
      * @param offset 
      * @param limit 
      * @param search 
+     * @param startDate 
+     * @param endDate 
      * @returns TimeSheetHistoryViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -362,6 +364,8 @@ search?: string,
 offset?: number,
 limit?: number,
 search?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<TimeSheetHistoryViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -370,6 +374,8 @@ search?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
         });
     }

@@ -115,7 +115,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
                 >
                     +Supervisor
                 </Button>
-                <FilterSearch />
+                <FilterSearch searchOptions="Search by: Name, Email, Role, or Status " />
                 <Tables
                     tableHead={[
                         'Name',

@@ -16,4 +16,6 @@ export type UpdateUserModel = {
     organizationPhone?: string | null;
     organizationAddress?: string | null;
     profilePicture?: string | null;
+    invoiceGenerationFrequency?: string | null;
+    term?: number | null;
 };

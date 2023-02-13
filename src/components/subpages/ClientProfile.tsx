@@ -61,8 +61,8 @@ function ClientProfile({
             id: userProfile?.id,
             isActive: userProfile?.isActive,
             role: userProfile?.role,
-            // invoiceGenerationFrequency: userProfile?.invoiceGenerationFrequency;
-            // term: userProfile?.term,
+            invoiceGenerationFrequency: userProfile?.invoiceGenerationFrequency,
+            term: userProfile?.term,
         },
     });
     const router = useRouter();
@@ -232,27 +232,29 @@ function ClientProfile({
                                 control={control}
                                 placeholder={userProfile?.phoneNumber as string}
                             />
-                            {/* <SelectrixBox<RegisterModel>
+                            <SelectrixBox<UpdateUserModel>
                                 control={control}
                                 name="invoiceGenerationFrequency"
                                 error={errors.invoiceGenerationFrequency}
                                 keys="id"
                                 keyLabel="label"
                                 label="Payment Frequency"
-                                placeholder={userProfile?.term as string}
+                                placeholder={
+                                    userProfile?.invoiceGenerationFrequency as string
+                                }
                                 options={[
-                                    { id: 'bi-weekly', label: 'Bi-Weekly' },
-                                    { id: 'monthly', label: 'Monthly' },
+                                    { id: 'Bi-weekly', label: 'Bi-Weekly' },
+                                    { id: 'Monthly', label: 'Monthly' },
                                 ]}
-                            /> */}
-                            {/* <PrimaryInput<UpdateUserModel>
+                            />
+                            <PrimaryInput<UpdateUserModel>
                                 label="Term"
                                 name="term"
                                 error={errors.term}
                                 placeholder=""
-                                defaultValue={userProfile?.lastName as string}
+                                defaultValue={userProfile?.term as number}
                                 register={register}
-                            /> */}
+                            />
                         </Grid>
                     </Box>
                 </Grid>

@@ -22,38 +22,34 @@ function ActivateUser({ user, supervisor, paymentPartner }: pageOptions) {
 
 export default ActivateUser;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(
-    async (ctx: any) => {
-        const { id } = ctx.query;
-        try {
-            const data = await UserService.getUserById(id);
-            const paymentPartner = await UserService.listUsers(
-                'payment partner',
-            );
-            const clientId =
-                data?.data?.employeeInformation?.supervisor?.client?.id;
-            console.log({ clientId });
-            const supervisor = await UserService.getClientSupervisors(
-                0,
-                18,
-                '',
-                clientId,
-            );
+export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
+    const { id } = ctx.query;
+    try {
+        const data = await UserService.getUserById(id);
+        const paymentPartner = await UserService.listUsers('payment partner');
+        const clientId =
+            data?.data?.employeeInformation?.supervisor?.client?.id;
+        console.log({ clientId });
+        const supervisor = await UserService.getClientSupervisors(
+            0,
+            18,
+            '',
+            clientId,
+        );
 
-            return {
-                props: {
-                    user: data.data,
-                    paymentPartner: paymentPartner?.data?.value,
-                    supervisor: supervisor?.data?.value,
-                },
-            };
-        } catch (error: any) {
-            console.log(error);
-            return {
-                props: {
-                    user: {},
-                },
-            };
-        }
-    },
-);
+        return {
+            props: {
+                user: data.data,
+                paymentPartner: paymentPartner?.data?.value,
+                supervisor: supervisor?.data?.value,
+            },
+        };
+    } catch (error: any) {
+        console.log(error);
+        return {
+            props: {
+                user: {},
+            },
+        };
+    }
+};

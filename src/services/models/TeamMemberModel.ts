@@ -19,7 +19,7 @@ export type TeamMemberModel = {
     term?: number | null;
     id?: string;
     payRollTypeId?: number;
-    payrollGroupId?: number;
+    payrollGroupId?: number | null;
     supervisorId?: string | null;
     ratePerHour?: number;
     dateOfBirth?: string;

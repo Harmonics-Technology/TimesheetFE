@@ -42,6 +42,7 @@ import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import dynamic from 'next/dynamic';
 import ConfirmChangeModal from '@components/bits-utils/ConfirmChangeModal';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { useLeavePageConfirmation } from '@components/generics/useLeavePageConfirmation';
 
 interface select {
     options: any;
@@ -73,7 +74,7 @@ function TeamProfile({
         handleSubmit,
         control,
         watch,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isDirty },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(schema),
         mode: 'all',
@@ -100,7 +101,7 @@ function TeamProfile({
             onBordingFee: userProfile?.employeeInformation?.onBoradingFee,
             monthlyPayoutRate:
                 userProfile?.employeeInformation?.monthlyPayoutRate,
-            // payrollGroupId: userProfile?.employeeInformation?.payrollGroup,
+            payrollGroupId: userProfile?.employeeInformation?.payrollGroupId,
         },
     });
     const router = useRouter();
@@ -222,19 +223,17 @@ function TeamProfile({
     const [selected, setSelected] = useState(userProfile?.role as string);
     console.log({ selected, agree });
     const changeUserRole = async (e) => {
-        await onOpen();
+        onOpen();
         if (agree) {
             setSelected(e.target.value);
-        } else {
-            setSelected(userProfile?.role as string);
+            return;
         }
+        setSelected(userProfile?.role as string);
     };
     const show = router.asPath.startsWith('/clients/team-members');
-    useEffect(() => {
-        window.onbeforeunload = function () {
-            return 'Data will be lost if you leave the page, are you sure?';
-        };
-    }, []);
+    console.log({ isDirty });
+
+    useLeavePageConfirmation(isDirty && !isSubmitting);
     return (
         <Box
             bgColor="white"
@@ -407,6 +406,7 @@ function TeamProfile({
                                 borderColor="gray.300"
                                 value={selected}
                                 onChange={changeUserRole}
+                                // id={select}
                             >
                                 <option value="Team Member">Team Member</option>
                                 <option value="Internal Supervisor">
@@ -621,9 +621,8 @@ function TeamProfile({
                                     keyLabel="label"
                                     label="Payroll Group"
                                     placeholder={
-                                        (userProfile?.employeeInformation
-                                            ?.payrollGroup as string) ||
-                                        'Please select'
+                                        userProfile?.employeeInformation
+                                            ?.payrollGroup || 'Please select'
                                     }
                                     options={[
                                         {
@@ -764,7 +763,7 @@ function TeamProfile({
                 >
                     Back
                 </Button>
-                {show && (
+                {!show && (
                     <Button
                         bgColor="brand.400"
                         color="white"

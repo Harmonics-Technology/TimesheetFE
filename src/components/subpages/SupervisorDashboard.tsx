@@ -4,6 +4,8 @@ import { NotificationBox } from '@components/bits-utils/NotificationBox';
 import TableCards from '@components/bits-utils/TableCards';
 import { TableData, TableState } from '@components/bits-utils/TableData';
 import { NotificationContext } from '@components/context/NotificationContext';
+import { CUR } from '@components/generics/functions/Naira';
+import { formatDate } from '@components/generics/functions/formatDate';
 import { useContext } from 'react';
 import {
     DashboardTeamMemberView,
@@ -52,22 +54,26 @@ function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
                             ?.slice(0, 4)
                             .map((x: RecentTimeSheetView, i: any) => (
                                 <Tr key={i}>
+                                    <TableData name={x.name} />
                                     <TableData name={x.year} />
                                     <TableData name={x.month} />
+                                    {/* <TableData name={x.hours} /> */}
                                     <TableData name={x.hours} />
-                                    {/* <TableData name={x.} /> */}
                                     <TableData name={x.numberOfDays} />
                                 </Tr>
                             ))}
                         thead={[
+                            'Name',
                             'Year',
                             'Month',
-                            'Approved Hours',
-                            'No. of Days',
+                            // 'Expected Hours',
+                            'Total Hours',
+                            'Days',
                         ]}
                         link={'/'}
                     />
                 </Grid>
+
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Expenses'}
@@ -78,8 +84,12 @@ function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
                                 <Tr key={i}>
                                     <TableData name={x.teamMember?.fullName} />
                                     <TableData name={x.description} />
-                                    <TableData name={x.amount} />
-                                    <TableData name={x.currency} />
+                                    <TableData
+                                        name={CUR(`${x.currency}${x.amount}`)}
+                                    />
+                                    <TableData
+                                        name={formatDate(x.expenseDate)}
+                                    />
                                     <TableData name={x.expenseType} />
                                     <TableState name={x.status} />
                                 </Tr>
@@ -88,7 +98,7 @@ function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
                             'Name',
                             'Desc',
                             'Amount',
-                            'Currency',
+                            'Expense Date',
                             'Expense Type',
                             'Status',
                         ]}

@@ -8,7 +8,6 @@ import {
     Tr,
     useDisclosure,
     useToast,
-    Text,
 } from '@chakra-ui/react';
 import {
     InvoiceAction,
@@ -30,94 +29,91 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
-import Link from 'next/link';
 import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
 
-function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
+function ClientInvoice({ invoiceData }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
     console.log({ invoiceData });
-    const invoice = invoiceData?.data?.value;
-    const [loading, setLoading] = useState(false);
-    const toast = useToast();
-    const router = useRouter();
+    // const invoice = invoiceData?.data?.value;
+    // const [loading, setLoading] = useState(false);
+    // const toast = useToast();
+    // const router = useRouter();
     // console.log({ clicked });
-    const [selectedId, setSelectedId] = useState<string[]>([]);
-    const toggleSelected = (id: string, all?: boolean) => {
-        if (all) {
-            if (
-                selectedId?.length ===
-                invoice?.filter((x) => x.status !== 'INVOICED').length
-            ) {
-                setSelectedId([]);
-                return;
-            }
-            const response: string[] = [];
-            invoice
-                ?.filter((x) => x.status !== 'INVOICED')
-                .forEach((x) =>
-                    response.push(x.id as string),
-                ) as unknown as string[];
-            console.log({ response });
-            setSelectedId([...response]);
-            return;
-        }
-        const existingValue = selectedId.find((e) => e === id);
-        if (existingValue) {
-            const newArray = selectedId.filter((x) => x !== id);
-            setSelectedId(newArray);
-            return;
-        }
-        setSelectedId([...selectedId, id]);
-    };
-    const approveInvoiceItems = async () => {
-        selectedId.forEach(async (x) => {
-            try {
-                setLoading(true);
-                const result = await FinancialService.treatSubmittedInvoice(x);
-                if (result.status) {
-                    console.log({ result });
-                    toast({
-                        title: result.message,
-                        status: 'success',
-                        isClosable: true,
-                        position: 'top-right',
-                    });
-                    setLoading(false);
-                    router.reload();
-                    return;
-                }
-                setLoading(false);
-                toast({
-                    title: result.message,
-                    status: 'error',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-            } catch (error: any) {
-                console.log({ error });
-                setLoading(false);
-                toast({
-                    title: error?.body?.message || error?.message,
-                    status: 'error',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-            }
-        });
-    };
-    const { user } = useContext(UserContext);
-    const role = user?.role.replaceAll(' ', '');
-    const hideCheckbox = router.asPath.startsWith(
-        `/${role}/financials/treatedinvoice`,
-    );
-    const pending = `/${role}/financials/invoices`;
-    const approved = `/${role}/financials/treatedinvoice`;
-    console.log({ hideCheckbox });
+    // const [selectedId, setSelectedId] = useState<string[]>([]);
+    // const toggleSelected = (id: string, all?: boolean) => {
+    //     if (all) {
+    //         if (
+    //             selectedId?.length ===
+    //             invoice?.filter((x) => x.status !== 'INVOICED').length
+    //         ) {
+    //             setSelectedId([]);
+    //             return;
+    //         }
+    //         const response: string[] = [];
+    //         invoice
+    //             ?.filter((x) => x.status !== 'INVOICED')
+    //             .forEach((x) =>
+    //                 response.push(x.id as string),
+    //             ) as unknown as string[];
+    //         console.log({ response });
+    //         setSelectedId([...response]);
+    //         return;
+    //     }
+    //     const existingValue = selectedId.find((e) => e === id);
+    //     if (existingValue) {
+    //         const newArray = selectedId.filter((x) => x !== id);
+    //         setSelectedId(newArray);
+    //         return;
+    //     }
+    //     setSelectedId([...selectedId, id]);
+    // };
+    // const approveInvoiceItems = async () => {
+    //     selectedId.forEach(async (x) => {
+    //         try {
+    //             setLoading(true);
+    //             const result = await FinancialService.treatSubmittedInvoice(x);
+    //             if (result.status) {
+    //                 console.log({ result });
+    //                 toast({
+    //                     title: result.message,
+    //                     status: 'success',
+    //                     isClosable: true,
+    //                     position: 'top-right',
+    //                 });
+    //                 setLoading(false);
+    //                 router.reload();
+    //                 return;
+    //             }
+    //             setLoading(false);
+    //             toast({
+    //                 title: result.message,
+    //                 status: 'error',
+    //                 isClosable: true,
+    //                 position: 'top-right',
+    //             });
+    //         } catch (error: any) {
+    //             console.log({ error });
+    //             setLoading(false);
+    //             toast({
+    //                 title: error?.body?.message || error?.message,
+    //                 status: 'error',
+    //                 isClosable: true,
+    //                 position: 'top-right',
+    //             });
+    //         }
+    //     });
+    // };
+    // const { user } = useContext(UserContext);
+    // const role = user?.role.replaceAll(' ', '');
+    // const hideCheckbox = router.asPath.startsWith(
+    //     `/${role}/financials/offshore`,
+    // );
+    // console.log({ hideCheckbox });
 
     return (
         <>
@@ -127,58 +123,7 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <HStack
-                    mb="1rem"
-                    bgColor="gray.50"
-                    w="fit-content"
-                    p=".3rem 0rem"
-                >
-                    <Link href={pending} passHref>
-                        <Text
-                            bgColor={
-                                router.asPath == pending
-                                    ? 'gray.200'
-                                    : 'transparent'
-                            }
-                            color={
-                                router.asPath == pending
-                                    ? 'brand.400'
-                                    : 'gray.500'
-                            }
-                            mb="0"
-                            p=".5rem 1rem"
-                            cursor="pointer"
-                            fontWeight={
-                                router.asPath == pending ? '600' : '400'
-                            }
-                        >
-                            Pending Approval
-                        </Text>
-                    </Link>
-                    <Link href={approved} passHref>
-                        <Text
-                            bgColor={
-                                router.asPath == approved
-                                    ? 'gray.200'
-                                    : 'transparent'
-                            }
-                            color={
-                                router.asPath == approved
-                                    ? 'brand.400'
-                                    : 'gray.500'
-                            }
-                            mb="0"
-                            p=".5rem 1rem"
-                            cursor="pointer"
-                            fontWeight={
-                                router.asPath == approved ? '600' : '400'
-                            }
-                        >
-                            All Processed
-                        </Text>
-                    </Link>
-                </HStack>
-                {selectedId.length > 0 && (
+                {/* {selectedId.length > 0 && (
                     <Flex justify="space-between" mb="1rem">
                         <HStack gap="1rem">
                             <Button
@@ -189,7 +134,6 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
                                 onClick={() => approveInvoiceItems()}
                                 isLoading={loading}
                                 spinner={<BeatLoader color="white" size={10} />}
-                                borderRadius="0"
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
                                 Approve
@@ -208,9 +152,8 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
                             />
                         )}
                     </Flex>
-                )}
+                )} */}
                 <FilterSearch />
-
                 <Tables
                     tableHead={[
                         'Invoice No',
@@ -242,7 +185,7 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
                                     onOpen={onOpen}
                                     clicked={setClicked}
                                 />
-                                {!hideCheckbox && (
+                                {/* {!hideCheckbox && (
                                     <td>
                                         <Checkbox
                                             checked={
@@ -256,7 +199,7 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
                                             disabled={x.status === 'INVOICED'}
                                         />
                                     </td>
-                                )}
+                                )} */}
                             </Tr>
                         ))}
                     </>
@@ -272,4 +215,4 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
     );
 }
 
-export default OnshoreSubmittedInvoice;
+export default ClientInvoice;

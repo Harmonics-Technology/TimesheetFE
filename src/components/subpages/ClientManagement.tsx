@@ -140,7 +140,7 @@ function ClientManagement({ adminList }: adminProps) {
                 >
                     +Client
                 </Button>
-                <FilterSearch />
+                <FilterSearch searchOptions="Search by: Name, Email, Role, or Status " />
                 <Tables
                     tableHead={['Name', 'Email', 'Role', 'Status', 'Action']}
                 >

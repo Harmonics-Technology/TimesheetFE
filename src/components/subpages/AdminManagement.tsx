@@ -214,7 +214,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                 >
                     +Admin
                 </Button>
-                <FilterSearch />
+                <FilterSearch searchOptions="Search by: Name, Email, Role, or Status " />
                 <Tables
                     tableHead={['Name', 'Email', 'Role', 'Status', 'Action']}
                 >

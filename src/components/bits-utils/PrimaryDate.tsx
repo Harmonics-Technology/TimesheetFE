@@ -1,4 +1,5 @@
 import { FormControl, FormLabel, GridItem, Text } from '@chakra-ui/react';
+import useWindowSize from '@components/generics/useWindowSize';
 import { Controller, Path, FieldError, Control } from 'react-hook-form';
 import DatePicker from 'react-multi-date-picker';
 
@@ -16,6 +17,11 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     defaultValue?: string;
 }
 
+interface Size {
+    width: number | undefined;
+    height: number | undefined;
+}
+
 export const PrimaryDate = <TFormValues extends Record<string, any>>({
     name,
     label = '',
@@ -29,6 +35,8 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
     defaultValue,
 }: FormInputProps<TFormValues>) => {
     // console.log({ defaultValue });
+    const size: Size = useWindowSize();
+    const isMobile = size.width != null && size.width <= 750;
     return (
         <GridItem>
             <FormControl>
@@ -58,7 +66,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                                 format={'DD/MM/YYYY'}
                                 inputClass={'date'}
                                 containerClassName="dateWrapper"
-                                hideOnScroll
+                                hideOnScroll={isMobile ? false : true}
                                 placeholder={placeholder}
                                 minDate={min}
                                 maxDate={max}

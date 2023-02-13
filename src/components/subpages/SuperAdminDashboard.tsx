@@ -115,13 +115,18 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                                     <TableData
                                         name={
                                             x?.employeeInformation?.supervisor
-                                                .fullName
+                                                ?.fullName
                                         }
                                     />
-                                    <TableData name={`${120} hours`} />
-                                    <TableData name={`${x.hours} hours`} />
-                                    <TableData name={20} />
-                                    <TableState name={x.status} />
+                                    <TableData
+                                        name={`${x.expectedHours} hours`}
+                                    />
+                                    <TableData name={`${x.totalHours} hours`} />
+                                    <TableData
+                                        name={`${CUR(x.expectedPayout)}`}
+                                    />
+                                    <TableData name={CUR(x.actualPayout)} />
+                                    {/* <TableState name={x.status} /> */}
                                 </Tr>
                             ))}
                         thead={[
@@ -129,9 +134,9 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                             'Supervisor Name',
                             'Expected Hrs',
                             'Total Hrs',
-                            // 'Expected Payout',
+                            'Expected Payout',
                             'Payout',
-                            'Status',
+                            // 'Status',
                             // 'Action',
                         ]}
                         link={'/'}

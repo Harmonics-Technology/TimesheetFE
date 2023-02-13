@@ -12,6 +12,9 @@ export type TimeSheetApprovedView = {
     totalHours?: number;
     numberOfDays?: number;
     approvedNumberOfHours?: number;
+    expectedHours?: number;
+    expectedPayout?: number | null;
+    actualPayout?: number | null;
     date?: string;
     startDate?: string;
     endDate?: string;

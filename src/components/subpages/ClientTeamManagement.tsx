@@ -297,7 +297,7 @@ function ClientTeamManagement({
                 >
                     +Team Member
                 </Button> */}
-                <FilterSearch />
+                <FilterSearch searchOptions="Search by: Name, Email, Role, or Status " />
                 <Tables
                     tableHead={[
                         'Name',

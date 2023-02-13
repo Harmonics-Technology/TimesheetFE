@@ -333,7 +333,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                 >
                     +Team Member
                 </Button>
-                <FilterSearch />
+                <FilterSearch searchOptions="Search by: Full Name, Job Title, Role, Payroll Type or Status" />
                 <Tables
                     tableHead={[
                         'Full Name',
@@ -642,9 +642,9 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 keyLabel="label"
                                 label="Payment Frequency"
                                 options={[
-                                    { id: 'weekly', label: 'Weekly' },
-                                    { id: 'bi-weekly', label: 'Bi-Weekly' },
-                                    { id: 'monthly', label: 'Monthly' },
+                                    { id: 'Weekly', label: 'Weekly' },
+                                    { id: 'Bi-weekly', label: 'Bi-Weekly' },
+                                    { id: 'Monthly', label: 'Monthly' },
                                 ]}
                             />
                             <SelectrixBox<TeamMemberModel>

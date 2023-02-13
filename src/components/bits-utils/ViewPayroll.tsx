@@ -34,7 +34,7 @@ function ViewPayroll({ adminList }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <FilterSearch />
+                <FilterSearch searchOptions="Search by: Rate, Total Amount, or Status " />
                 <Tables
                     tableHead={[
                         'Total Hrs',
