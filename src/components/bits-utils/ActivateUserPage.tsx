@@ -209,33 +209,35 @@ function ActivateUserPage({
     };
     const [loading, setLoading] = useState<boolean>(false);
     const ActivateUserProfile = async () => {
-        // try {
-        //     setLoading(true);
-        //     const result = await (userProfile?.id);
-        //     if (result.status) {
-        //         setLoading(false);
-        //         toast({
-        //             title: result.message,
-        //             status: 'success',
-        //             position: 'top-right',
-        //         });
-        //         router.reload();
-        //         return;
-        //     }
-        //     setLoading(false);
-        //     toast({
-        //         title: result.message,
-        //         status: 'error',
-        //         position: 'top-right',
-        //     });
-        //     return;
-        // } catch (err: any) {
-        //     toast({
-        //         position: 'top-right',
-        //         title: err?.body?.message || err.message,
-        //         status: 'error',
-        //     });
-        // }
+        try {
+            setLoading(true);
+            const result = await UserService.activateTeamMember(
+                userProfile?.id as string,
+            );
+            if (result.status) {
+                setLoading(false);
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    position: 'top-right',
+                });
+                router.reload();
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                position: 'top-right',
+            });
+            return;
+        } catch (err: any) {
+            toast({
+                position: 'top-right',
+                title: err?.body?.message || err.message,
+                status: 'error',
+            });
+        }
     };
     useLeavePageConfirmation(isDirty && !isSubmitting);
     return (
