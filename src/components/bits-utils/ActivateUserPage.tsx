@@ -50,6 +50,7 @@ interface ActivateUserPageProps {
     // clients: UserView[];
     supervisor: UserView[];
     paymentPartner: UserView[];
+    id: string;
 }
 
 function ActivateUserPage({
@@ -57,6 +58,7 @@ function ActivateUserPage({
     // clients,
     supervisor,
     paymentPartner,
+    id,
 }: ActivateUserPageProps) {
     const {
         register,
@@ -211,9 +213,7 @@ function ActivateUserPage({
     const ActivateUserProfile = async () => {
         try {
             setLoading(true);
-            const result = await UserService.activateTeamMember(
-                userProfile?.id as string,
-            );
+            const result = await UserService.activateTeamMember(id);
             if (result.status) {
                 setLoading(false);
                 toast({
@@ -301,7 +301,9 @@ function ActivateUserPage({
                             name="dateOfBirth"
                             label="Date of Birth"
                             error={errors.dateOfBirth}
-                            defaultValue={formatDate(userProfile?.dateOfBirth)}
+                            defaultValue={moment(
+                                userProfile?.dateOfBirth,
+                            ).format('DD MM YYYY')}
                             max={new DateObject().subtract(1, 'days')}
                         />
                         <SelectrixBox<TeamMemberModel>
