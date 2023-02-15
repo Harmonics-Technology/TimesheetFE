@@ -1,7 +1,7 @@
 import { FormControl, FormLabel, GridItem, Text } from '@chakra-ui/react';
 import useWindowSize from '@components/generics/useWindowSize';
 import { Controller, Path, FieldError, Control } from 'react-hook-form';
-import DatePicker from 'react-multi-date-picker';
+import DatePicker, { DateObject } from 'react-multi-date-picker';
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
@@ -55,7 +55,9 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                     render={({ field: { onChange, value } }) => (
                         <>
                             <DatePicker
-                                value={defaultValue || value || ''}
+                                value={
+                                    defaultValue || value || new DateObject()
+                                }
                                 onChange={(date: any) => {
                                     onChange(
                                         JSON.stringify(

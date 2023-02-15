@@ -61,7 +61,7 @@ export const OnboardingFee = ({ data }: { data: OnboardingFeeView }) => {
                 w="fit-content"
                 p=".3rem .5rem"
             >
-                <Link href={`/${role}/settings/hst`} passHref>
+                {/* <Link href={`/${role}/settings/hst`} passHref>
                     <Text
                         // bgColor="white"
                         mb="0"
@@ -70,7 +70,7 @@ export const OnboardingFee = ({ data }: { data: OnboardingFeeView }) => {
                     >
                         HST Settings
                     </Text>
-                </Link>
+                </Link> */}
                 <Link href={`/${role}/settings/onboarding-fee`} passHref>
                     <Text
                         bgColor="white"
@@ -79,7 +79,7 @@ export const OnboardingFee = ({ data }: { data: OnboardingFeeView }) => {
                         cursor="pointer"
                         fontWeight="600"
                     >
-                        Fixed Fee Settings
+                       Flat Rate Settings
                     </Text>
                 </Link>
                 <Link href={`/${role}/settings/onboarding-percent`} passHref>

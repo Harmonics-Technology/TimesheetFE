@@ -113,6 +113,7 @@ function AdminInvoices({ invoiceData }: adminProps) {
     const hideCheckbox = router.asPath.startsWith(
         `/${role}/financials/offshore`,
     );
+    const pays = router.asPath.startsWith(`/${role}/financials/payrolls`);
     console.log({ hideCheckbox });
 
     return (
@@ -155,20 +156,38 @@ function AdminInvoices({ invoiceData }: adminProps) {
                 )}
                 <FilterSearch />
                 <Tables
-                    tableHead={[
-                        'Invoice No',
-                        'Name',
-                        'Created on',
-                        'Start Date',
-                        'End Date',
-                        'Status',
-                        // 'Action',
-                    ]}
+                    tableHead={
+                        hideCheckbox || pays
+                            ? [
+                                  'Payroll Group',
+                                  'Name',
+                                  'Created on',
+                                  'Start Date',
+                                  'End Date',
+                                  'Status',
+                                  // 'Action',
+                              ]
+                            : [
+                                  'Invoice No',
+                                  'Name',
+                                  'Created on',
+                                  'Start Date',
+                                  'End Date',
+                                  'Status',
+                                  // 'Action',
+                              ]
+                    }
                 >
                     <>
                         {invoiceData?.data?.value?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
-                                <TableData name={x.invoiceReference} />
+                                <TableData
+                                    name={
+                                        hideCheckbox || pays
+                                            ? x.payrollGroupName
+                                            : x.invoiceReference
+                                    }
+                                />
                                 <TableData
                                     name={
                                         x.payrollGroupName ||
@@ -176,15 +195,9 @@ function AdminInvoices({ invoiceData }: adminProps) {
                                         x.name
                                     }
                                 />
-                                <TableData
-                                    name={formatDate(x.dateCreated)}
-                                />
-                                <TableData
-                                    name={formatDate(x.startDate)}
-                                />
-                                <TableData
-                                    name={formatDate(x.endDate)}
-                                />
+                                <TableData name={formatDate(x.dateCreated)} />
+                                <TableData name={formatDate(x.startDate)} />
+                                <TableData name={formatDate(x.endDate)} />
                                 <TableState name={x.status as string} />
                                 <InvoiceAction
                                     data={x}

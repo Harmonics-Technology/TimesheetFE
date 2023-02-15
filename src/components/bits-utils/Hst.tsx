@@ -55,7 +55,7 @@ export const Hst = ({ data }: { data: OnboardingFeeView }) => {
             p="2rem 2rem"
             boxShadow="sm"
         >
-            <HStack
+            {/* <HStack
                 mb="3rem"
                 bgColor="gray.300"
                 w="fit-content"
@@ -92,7 +92,7 @@ export const Hst = ({ data }: { data: OnboardingFeeView }) => {
                         Percentage Fee Settings
                     </Text>
                 </Link>
-            </HStack>
+            </HStack> */}
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Box w="20%">
                     <Text fontWeight="600" fontSize=".9rem" mb="0">

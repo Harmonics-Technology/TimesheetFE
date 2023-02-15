@@ -11,7 +11,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
         redirect: {
             permanent: false,
-            destination: '/SuperAdmin/settings/hst',
+            destination: '/SuperAdmin/settings/onboarding-fee',
         },
         props: {},
     };

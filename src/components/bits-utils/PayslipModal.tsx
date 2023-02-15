@@ -141,22 +141,22 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                     ?.name
                                             }
                                         />{' '}
-                                        <PayslipInfoTag
+                                        {/* <PayslipInfoTag
                                             title={'Employee id'}
                                             value={
                                                 paySlip?.payslipView?.invoice?.employeeInformation?.id?.split(
                                                     '-',
                                                 )[0]
                                             }
-                                        />{' '}
-                                        <PayslipInfoTag
+                                        />{' '} */}
+                                        {/* <PayslipInfoTag
                                             title={'Designation'}
                                             value={
                                                 paySlip?.payslipView?.invoice
                                                     ?.employeeInformation
                                                     ?.jobTitle
                                             }
-                                        />{' '}
+                                        />{' '} */}
                                         <PayslipInfoTag
                                             title={'Address'}
                                             value={
@@ -168,14 +168,14 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                         />
                                     </VStack>
                                     <VStack align="flex-start" spacing="1rem">
-                                        <PayslipInfoTag
+                                        {/* <PayslipInfoTag
                                             title={'Join Date'}
                                             value={formatDate(
                                                 paySlip?.payslipView?.invoice
                                                     ?.employeeInformation
                                                     ?.dateCreated,
                                             )}
-                                        />
+                                        /> */}
                                         <PayslipInfoTag
                                             title={'Pay Period'}
                                             value={`${formatDate(

@@ -339,7 +339,7 @@ function MyProfile({
                         </Box>
                     </HStack>
                     <Box>
-                        <Button
+                        {/* <Button
                             bgColor="brand.600"
                             color="white"
                             display={
@@ -357,7 +357,7 @@ function MyProfile({
                             w={['full', 'inherit']}
                         >
                             View Payment Schedule
-                        </Button>
+                        </Button> */}
 
                         <Box display="none">
                             <Widget

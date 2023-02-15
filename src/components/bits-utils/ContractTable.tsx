@@ -184,7 +184,7 @@ function TeamManagement({ userProfile }: adminProps) {
                         'Contract Title',
                         'Start Date',
                         'End Date',
-                        'Tenure',
+                        'Duration',
                         'Contract',
                         'Status',
                         'Action',

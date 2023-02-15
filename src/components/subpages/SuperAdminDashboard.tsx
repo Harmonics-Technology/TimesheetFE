@@ -197,6 +197,33 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                         link={'/'}
                     />
                 </Grid>
+                <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
+                    <TableCards
+                        title={'Recent Clients'}
+                        url={'profile-management/clients'}
+                        data={adminMetrics?.recentCLients
+                            ?.slice(0, 4)
+                            .map((x: UserView) => (
+                                <Tr key={x.id}>
+                                    <TableData name={x.organizationName} />
+                                    <TableData name={x.organizationEmail} />
+                                    <TableData name={x.organizationPhone} />
+                                    <TableData
+                                        name={x.invoiceGenerationFrequency}
+                                    />
+                                    <TableStatus name={x.isActive} />
+                                </Tr>
+                            ))}
+                        thead={[
+                            'CLIENT NAME',
+                            'EMAIL',
+                            'Phone',
+                            'Invoice Schedule',
+                            'STATUS',
+                        ]}
+                        link={'/'}
+                    />
+                </Grid>
                 {/* <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Payslip'}

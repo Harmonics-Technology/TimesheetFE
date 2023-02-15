@@ -1,31 +1,43 @@
-import { withPageAuth } from "@components/generics/withPageAuth";
-import SadminDashboard from "@components/subpages/SadminDashboard";
-import { GetServerSideProps } from "next";
-import { DashboardService } from "src/services";
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
+import { withPageAuth } from '@components/generics/withPageAuth';
+import SadminDashboard from '@components/subpages/SadminDashboard';
+import { GetServerSideProps } from 'next';
+import { DashboardService, UserService } from 'src/services';
 interface DashboardProps {
     metrics: any;
+    team: any;
 }
 
-function index({ metrics }: DashboardProps) {
-    return <SadminDashboard metrics={metrics} />;
+function index({ metrics, team }: DashboardProps) {
+    return <SadminDashboard metrics={metrics} team={team} />;
 }
 
 export default index;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
-    try {
-        const data = await DashboardService.getAdminMetrics();
-        // console.log({ data });
-        return {
-            props: {
-                metrics: data,
-            },
-        };
-    } catch (error: any) {
-        return {
-            props: {
-                data: [],
-            },
-        };
-    }
-});
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx) => {
+        const pagingOptions = filterPagingSearchOptions(ctx);
+        try {
+            const data = await DashboardService.getAdminMetrics();
+            const team = await UserService.listUsers(
+                'Team Member',
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+            );
+            // console.log({ data });
+            return {
+                props: {
+                    metrics: data,
+                    team,
+                },
+            };
+        } catch (error: any) {
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);

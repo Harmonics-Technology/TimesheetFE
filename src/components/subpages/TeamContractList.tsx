@@ -35,7 +35,7 @@ function TeamContractList({ adminList }: adminProps) {
                         'Job Title',
                         'Start Date',
                         'End Date',
-                        'Tenure',
+                        'Duration',
                         'Contract',
                         'Status',
                         // 'Action',

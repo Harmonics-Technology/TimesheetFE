@@ -7,13 +7,17 @@ import {
     FinancialService,
     PaySlipService,
     PaySlipViewPagedCollectionStandardResponse,
+    PaymentScheduleListStandardResponse,
 } from 'src/services';
 
 interface PayrollType {
     payrolls: PaySlipViewPagedCollectionStandardResponse;
+    paymentSchedule: PaymentScheduleListStandardResponse;
 }
-function payslips({ payrolls }: PayrollType) {
-    return <TeamPayslips payrolls={payrolls} />;
+function payslips({ payrolls, paymentSchedule }: PayrollType) {
+    return (
+        <TeamPayslips payrolls={payrolls} paymentSchedule={paymentSchedule} />
+    );
 }
 
 export default payslips;
@@ -31,10 +35,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
+            const paymentSchedule =
+                await FinancialService.getEmployeePaymentSchedule(id);
+            console.log({ data });
 
             return {
                 props: {
                     payrolls: data,
+                    paymentSchedule,
                 },
             };
         } catch (error: any) {

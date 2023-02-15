@@ -4,15 +4,20 @@ import AdminPayslip from '@components/subpages/AdminPayslip';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
+    AdminPaymentScheduleViewListStandardResponse,
+    FinancialService,
     PaySlipService,
     PayslipUserViewPagedCollectionStandardResponse,
 } from 'src/services';
 
 interface PayrollType {
     payrolls: PayslipUserViewPagedCollectionStandardResponse;
+    paymentSchedule: AdminPaymentScheduleViewListStandardResponse;
 }
-function expenses({ payrolls }: PayrollType) {
-    return <AdminPayslip payrolls={payrolls} />;
+function expenses({ payrolls, paymentSchedule }: PayrollType) {
+    return (
+        <AdminPayslip payrolls={payrolls} paymentSchedule={paymentSchedule} />
+    );
 }
 
 export default expenses;
@@ -29,10 +34,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.to,
                 pagingOptions.paySlipFilter,
             );
+            const paymentSchedule =
+                await FinancialService.getPaymentSchedules();
 
             return {
                 props: {
                     payrolls: data,
+                    paymentSchedule,
                 },
             };
         } catch (error: any) {

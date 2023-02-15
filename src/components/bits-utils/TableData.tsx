@@ -84,7 +84,7 @@ export function TableData({
             }
         >
             <Tooltip label={name} hasArrow>
-                {name?.toString()?.substring(0, 20) || ''}
+                {name?.toString()?.substring(0, 40) || ''}
             </Tooltip>
         </Td>
     );

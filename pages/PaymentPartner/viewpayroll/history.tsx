@@ -32,8 +32,8 @@ function expenses({ payrolls, payrollGroupId }: PayrollType) {
                     tabName="Olade Consulting"
                 />
             </Flex>
-            <PaymentPartnerPayroll payrolls={payrolls} id={payrollGroupId} />
-            {/* <PaymentPayrollHistory payrolls={payrolls} id={payrollGroupId} /> */}
+            {/* <PaymentPartnerPayroll payrolls={payrolls} id={payrollGroupId} /> */}
+            <PaymentPayrollHistory payrolls={payrolls} id={payrollGroupId} />
         </Box>
     );
 }
@@ -45,8 +45,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const payrollGroupId = 2;
         try {
-            const data = await FinancialService.listPayrollGroupInvoices(
-                payrollGroupId,
+            const data = await FinancialService.listPaymentPartnerInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,

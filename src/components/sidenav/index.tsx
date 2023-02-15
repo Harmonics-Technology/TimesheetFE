@@ -147,7 +147,11 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         menuTitle="Settings"
                         icon={<FaCogs opacity=".8" />}
                         option={true}
-                        dropDown={['expense type', 'fees']}
+                        dropDown={[
+                            'expense type',
+                            'onboarding-fees',
+                            'hst-settings',
+                        ]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
                     />
@@ -190,13 +194,18 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={
                             user?.payrollType === 'OFFSHORE'
                                 ? ['my expenses', 'my payslips', 'my contracts']
-                                : [
-                                      'my expenses',
-                                      'my payslips',
-                                      'my invoices',
-                                      'my contracts',
-                                  ]
+                                : ['my expenses', 'my payslips', 'my invoices']
                         }
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="my-contracts"
+                        menuTitle="My Contracts"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
                     />
                     <MenuItem
                         change={change}

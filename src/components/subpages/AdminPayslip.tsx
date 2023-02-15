@@ -1,9 +1,11 @@
 /* eslint-disable no-sparse-arrays */
-import { Box, Tr, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Tr, useDisclosure } from '@chakra-ui/react';
 import { InvoiceAction, TableData } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import {
+    AdminPaymentScheduleViewListStandardResponse,
     ExpenseView,
+    PaymentScheduleListStandardResponse,
     PayslipUserView,
     PayslipUserViewPagedCollectionStandardResponse,
     PaySlipView,
@@ -15,16 +17,24 @@ import { PayslipModal } from '@components/bits-utils/PayslipModal';
 import { useState } from 'react';
 import Naira, { CAD } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
+import AdminPaymentScheduleModal from '@components/bits-utils/AdminPaymentScheduleModal';
 
 interface expenseProps {
     payrolls: PayslipUserViewPagedCollectionStandardResponse;
+    paymentSchedule: AdminPaymentScheduleViewListStandardResponse;
 }
 
-function AdminPayslip({ payrolls }: expenseProps) {
+function AdminPayslip({ payrolls, paymentSchedule }: expenseProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<PaySlipView>();
+
     // console.log({ payrolls });
     const payrollsList = payrolls?.data?.value;
+    const {
+        isOpen: isOpened,
+        onOpen: onOpened,
+        onClose: onClosed,
+    } = useDisclosure();
 
     return (
         <>
@@ -34,6 +44,20 @@ function AdminPayslip({ payrolls }: expenseProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <Button
+                    bgColor="brand.600"
+                    color="white"
+                    display={paymentSchedule == undefined ? 'none' : 'block'}
+                    fontSize=".8rem"
+                    h="2.5rem"
+                    borderRadius="0"
+                    border="2px solid"
+                    onClick={onOpened}
+                    w={['full', 'inherit']}
+                    mb="1rem"
+                >
+                    View Payment Schedule
+                </Button>
                 <FilterSearch hides={true} />
                 <Tables
                     tableHead={[
@@ -98,6 +122,13 @@ function AdminPayslip({ payrolls }: expenseProps) {
                 <Pagination data={payrolls} />
             </Box>
             <PayslipModal isOpen={isOpen} onClose={onClose} paySlip={clicked} />
+            <AdminPaymentScheduleModal
+                isOpen={isOpened}
+                onClose={onClosed}
+                paymentSchedule={
+                    paymentSchedule as AdminPaymentScheduleViewListStandardResponse
+                }
+            />
         </>
     );
 }

@@ -207,7 +207,7 @@ function PayrollInvoice({
                                             'End Date',
                                             'Amount (₦)',
                                             'Amount ($)',
-                                            'Rate',
+                                            'Fees',
                                         ]}
                                     >
                                         <>
@@ -273,18 +273,42 @@ function PayrollInvoice({
                                                             )}
                                                         />
                                                         <TableData
-                                                            name={`${
+                                                            name={CAD(
                                                                 x
-                                                                    ?.employeeInformation
-                                                                    ?.onBoradingFee
-                                                            }${
+                                                                    .employeeInformation
+                                                                    ?.fixedAmount ==
+                                                                    false
+                                                                    ? calculatePercentage(
+                                                                          (x?.totalAmount as number) /
+                                                                              exchangeRate,
+                                                                          x
+                                                                              ?.employeeInformation
+                                                                              ?.onBoradingFee,
+                                                                      )
+                                                                    : x
+                                                                          ?.employeeInformation
+                                                                          ?.onBoradingFee,
+                                                            )}
+                                                        />
+                                                        <TableData
+                                                            name={
                                                                 x
                                                                     .employeeInformation
                                                                     ?.fixedAmount ==
                                                                 false
-                                                                    ? '%'
-                                                                    : 'flat'
-                                                            }`}
+                                                                    ? calculatePercentage(
+                                                                          (x?.totalAmount as number) /
+                                                                              exchangeRate,
+                                                                          x
+                                                                              ?.employeeInformation
+                                                                              ?.onBoradingFee,
+                                                                      ) +
+                                                                      (x?.totalAmount as number)
+                                                                    : (x
+                                                                          ?.employeeInformation
+                                                                          ?.onBoradingFee as number) +
+                                                                      (x?.totalAmount as number)
+                                                            }
                                                         />
                                                     </Tr>
                                                 </>

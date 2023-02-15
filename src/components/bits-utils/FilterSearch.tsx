@@ -36,17 +36,15 @@ function FilterSearch({
     const [search, setSearch] = useState('');
     const router = useRouter();
 
-    const [date, setDate] = useState<any>([
+    // const [date, setDate] = useState<any>([
+    //     new DateObject().subtract(4, 'days'),
+    //     new DateObject().add(4, 'days'),
+    // ]);
+    const [fromDate, setFromDate] = useState<any>(
         new DateObject().subtract(4, 'days'),
-        new DateObject().add(4, 'days'),
-    ]);
-    const [openDateFilter, setOpenDateFilter] = useState(false);
-    const selectedDate = date.map((x) => x.year + '-' + x.month + '-' + x.day);
-
-    // console.log({ selectedDate, date });
-    const close = useCallback(() => setOpenDateFilter(false), []);
-    const popover = useRef(null);
-    useClickOutside(popover, close);
+    );
+    const [toDate, setToDate] = useState<any>(new DateObject().add(4, 'days'));
+    console.log({ fromDate: fromDate.format('YYYY-MM-DD') });
 
     function setFilter(filter: string) {
         router.push({
@@ -73,8 +71,8 @@ function FilterSearch({
     function filterByDate() {
         router.push({
             query: {
-                from: selectedDate[0],
-                to: selectedDate[1],
+                from: fromDate.format('YYYY-MM-DD'),
+                to: toDate.format('YYYY-MM-DD'),
             },
         });
     }
@@ -138,7 +136,87 @@ function FilterSearch({
                     flexDirection={['column', 'row']}
                 >
                     <Flex align="center" display={hide ? 'none' : 'flex'}>
-                        <DatePicker
+                        <HStack>
+                            <HStack>
+                                <Text mb="0" fontSize=".8rem" fontWeight="600">
+                                    From
+                                </Text>
+
+                                <DatePicker
+                                    value={fromDate}
+                                    onChange={setFromDate}
+                                    format="MMM DD, YYYY"
+                                    render={(value, openCalendar) => {
+                                        return (
+                                            <HStack
+                                                w="fit-content"
+                                                px="1rem"
+                                                h="2.5rem"
+                                                justifyContent="center"
+                                                alignItems="center"
+                                                border="1px solid"
+                                                borderColor="gray.300"
+                                                color="gray.500"
+                                                boxShadow="sm"
+                                                borderRadius="0"
+                                                cursor="pointer"
+                                                fontSize=".9rem"
+                                                onClick={(value) =>
+                                                    openCalendar(value)
+                                                }
+                                            >
+                                                <Text
+                                                    mb="0"
+                                                    whiteSpace="nowrap"
+                                                >
+                                                    {value}
+                                                </Text>
+                                                <Icon as={FaRegCalendarAlt} />
+                                            </HStack>
+                                        );
+                                    }}
+                                />
+                            </HStack>
+                            <HStack>
+                                <Text mb="0" fontSize=".8rem" fontWeight="600">
+                                    To
+                                </Text>
+
+                                <DatePicker
+                                    value={toDate}
+                                    onChange={setToDate}
+                                    format="MMM DD, YYYY"
+                                    render={(value, openCalendar) => {
+                                        return (
+                                            <HStack
+                                                w="fit-content"
+                                                px="1rem"
+                                                h="2.5rem"
+                                                justifyContent="center"
+                                                alignItems="center"
+                                                border="1px solid"
+                                                borderColor="gray.300"
+                                                color="gray.500"
+                                                boxShadow="sm"
+                                                borderRadius="0"
+                                                cursor="pointer"
+                                                fontSize=".9rem"
+                                                onClick={openCalendar}
+                                            >
+                                                <Text
+                                                    mb="0"
+                                                    whiteSpace="nowrap"
+                                                >
+                                                    {value}
+                                                </Text>
+                                                <Icon as={FaRegCalendarAlt} />
+                                            </HStack>
+                                        );
+                                    }}
+                                />
+                            </HStack>
+                        </HStack>
+                        {/* <DatePicker
                             value={date}
                             onChange={setDate}
                             range
@@ -171,7 +249,7 @@ function FilterSearch({
                                     </HStack>
                                 );
                             }}
-                        />
+                        /> */}
 
                         {/* <Tooltip hasArrow label="Click to apply filter"> */}
                         <Menu>
