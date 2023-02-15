@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from '@definitions/chakra/theme';
@@ -15,6 +15,7 @@ import { OpenAPI } from 'src/services';
 import NextNProgress from 'nextjs-progressbar';
 import { NotificationProvider } from '@components/context/NotificationContext';
 import { OnboardingFeeProvider } from '@components/context/OnboardingFeeContext';
+import Router, { useRouter } from 'next/router';
 
 function MyApp({
     Component,
@@ -23,6 +24,25 @@ function MyApp({
     const queryClient = new QueryClient();
     OpenAPI.BASE = process.env.NEXT_PUBLIC_API_BASEURL as string;
     OpenAPI.TOKEN = Cookies.get('token') as string;
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const loader = document.getElementById('globalLoader');
+            if (loader)
+                setTimeout(() => {
+                    loader.remove();
+                }, 1000);
+        }
+    }, []);
+    // Router.events.on('routeChangeStart', (url) => {
+    //     setLoading(true);
+    // });
+
+    // Router.events.on('routeChangeComplete', (url) => {
+    //     setLoading(false);
+    // });
     return (
         <ChakraProvider theme={theme}>
             <Head>
@@ -37,16 +57,24 @@ function MyApp({
                 <QueryClientProvider client={queryClient}>
                     <Hydrate state={pageProps.dehydratedState}>
                         <RootStoreProvider>
-                            <OnboardingFeeProvider>
-                                <NotificationProvider>
-                                    <UserProvider>
-                                        <NextNProgress color="#2EAFA3" />
-                                        <Layout>
-                                            <Component {...pageProps} />
-                                        </Layout>
-                                    </UserProvider>
-                                </NotificationProvider>
-                            </OnboardingFeeProvider>
+                            <>
+                                {loading ? (
+                                    <div id="globalLoader">
+                                        <img src="/assets/splash.gif" alt="" />
+                                    </div>
+                                ) : (
+                                    <OnboardingFeeProvider>
+                                        <NotificationProvider>
+                                            <UserProvider>
+                                                <NextNProgress color="#2EAFA3" />
+                                                <Layout>
+                                                    <Component {...pageProps} />
+                                                </Layout>
+                                            </UserProvider>
+                                        </NotificationProvider>
+                                    </OnboardingFeeProvider>
+                                )}
+                            </>
                         </RootStoreProvider>
                     </Hydrate>
                 </QueryClientProvider>
