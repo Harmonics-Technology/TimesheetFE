@@ -62,7 +62,7 @@ function ClientProfile({
             isActive: userProfile?.isActive,
             role: userProfile?.role,
             invoiceGenerationFrequency: userProfile?.invoiceGenerationFrequency,
-            term: userProfile?.term,
+            term: userProfile?.term as number,
         },
     });
     const router = useRouter();

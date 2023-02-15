@@ -62,7 +62,7 @@ function MyProfile({
     user,
     paymentSchedule,
 }: {
-    user: UserView;
+    user: any;
     paymentSchedule?: PaymentScheduleListStandardResponse;
 }) {
     console.log({ user });

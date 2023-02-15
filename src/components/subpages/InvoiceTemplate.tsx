@@ -145,8 +145,10 @@ function InvoiceTemplate({
                                             'Name',
                                             'Start Date',
                                             'End Date',
-                                            'Type',
+                                            // 'Type',
                                             `Amount (${clicked?.employeeInformation?.currency})`,
+                                            'Onboarding fee',
+                                            'Total',
                                         ]}
                                     >
                                         <>
@@ -168,9 +170,9 @@ function InvoiceTemplate({
                                                         clicked?.endDate,
                                                     )}
                                                 />
-                                                <TableData
+                                                {/* <TableData
                                                     name={clicked?.invoiceType}
-                                                />
+                                                /> */}
                                                 <TableData
                                                     name={`${
                                                         clicked
@@ -180,6 +182,9 @@ function InvoiceTemplate({
                                                         (clicked?.totalAmount as number) -
                                                             (allExpenseTotal as number),
                                                     )}`}
+                                                />
+                                                 <TableData
+                                                    name={clicked?.invoiceType}
                                                 />
                                             </Tr>
                                         </>
