@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Flex,
+    FormControl,
     FormLabel,
     Grid,
     HStack,
@@ -13,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { VscSaveAs } from 'react-icons/vsc';
@@ -43,6 +44,8 @@ import dynamic from 'next/dynamic';
 import ConfirmChangeModal from '@components/bits-utils/ConfirmChangeModal';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { useLeavePageConfirmation } from '@components/generics/useLeavePageConfirmation';
+import { keys } from 'mobx';
+import error from 'next/error';
 
 interface select {
     options: any;
@@ -74,6 +77,8 @@ function TeamProfile({
         handleSubmit,
         control,
         watch,
+        setValue,
+        getValues,
         formState: { errors, isSubmitting, isDirty },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(schema),
@@ -106,7 +111,7 @@ function TeamProfile({
     });
     const router = useRouter();
     const toast = useToast();
-    console.log({ userProfile });
+    // console.log(watch('role'));
     const payroll = userProfile?.employeeInformation?.payrollType;
     const payrolls = watch('payRollTypeId');
     const onboarding = watch('fixedAmount');
@@ -172,8 +177,15 @@ function TeamProfile({
             });
     };
     const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [selected, setSelected] = useState(userProfile?.role as string);
+    const changeUserRole = async (val) => {
+        setSelected(val);
+        onOpen();
+    };
     const onSubmit = async (data: TeamMemberModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
+        // data.role = selected;
         if (data.fixedAmount == true) {
             data.onBordingFee = fixedAmount;
         }
@@ -218,18 +230,7 @@ function TeamProfile({
             });
         }
     };
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [agree, setAgree] = useState<boolean>(false);
-    const [selected, setSelected] = useState(userProfile?.role as string);
-    console.log({ selected, agree });
-    const changeUserRole = async (e) => {
-        onOpen();
-        if (agree) {
-            setSelected(e.target.value);
-            return;
-        }
-        setSelected(userProfile?.role as string);
-    };
+
     const show = router.asPath.startsWith('/clients/team-members');
     // console.log({ isDirty });
 
@@ -371,7 +372,8 @@ function TeamProfile({
                             }
                             options={supervisor}
                         />
-                        {/* <SelectrixBox<TeamMemberModel>
+
+                        <SelectrixBox<TeamMemberModel>
                             control={control}
                             name="role"
                             error={errors.role}
@@ -380,6 +382,10 @@ function TeamProfile({
                             label="Role"
                             // disabled={true}
                             placeholder={userProfile?.role as string}
+                            customOnchange={(value) =>
+                                changeUserRole(value.key)
+                            }
+                            renderSelection={getValues('role')}
                             options={[
                                 { id: 'Team Member', label: 'Team Member' },
                                 {
@@ -395,31 +401,7 @@ function TeamProfile({
                                     label: 'Internal Payroll Manager',
                                 },
                             ]}
-                        /> */}
-                        <Box>
-                            <FormLabel fontSize=".8rem">Role</FormLabel>
-                            <Select
-                                placeholder={userProfile?.role as string}
-                                borderRadius="0"
-                                fontSize=".9rem"
-                                color="gray.500"
-                                borderColor="gray.300"
-                                value={selected}
-                                onChange={changeUserRole}
-                                // id={select}
-                            >
-                                <option value="Team Member">Team Member</option>
-                                <option value="Internal Supervisor">
-                                    Internal Supervisor
-                                </option>
-                                <option value="Internal Admin">
-                                    Internal Admin
-                                </option>{' '}
-                                <option value="Internal Payroll Manager">
-                                    Internal Payroll Manager
-                                </option>
-                            </Select>
-                        </Box>
+                        />
 
                         <SelectrixBox<TeamMemberModel>
                             control={control}
@@ -786,7 +768,8 @@ function TeamProfile({
             <ConfirmChangeModal
                 isOpen={isOpen}
                 onClose={onClose}
-                setAgree={setAgree}
+                selected={selected}
+                setValue={setValue}
             />
         </Box>
     );

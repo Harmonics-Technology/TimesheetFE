@@ -63,7 +63,7 @@ function TeamManagement({ userProfile }: adminProps) {
     const [modify, setModify] = useState<boolean>(false);
     const [extend, setExtend] = useState<boolean>(false);
     const [clickedItem, setClickedItem] = useState<ContractView>({});
-    console.log({ clickedItem });
+    // console.log({ clickedItem });
     const {
         register,
         handleSubmit,

@@ -467,6 +467,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                         <Grid
                             templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
+                            minW="0"
                         >
                             <PrimaryInput<TeamMemberModel>
                                 label="Job Title"

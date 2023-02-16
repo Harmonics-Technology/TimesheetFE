@@ -1,4 +1,9 @@
-import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
+import {
+    Box,
+    FormControl,
+    FormErrorMessage,
+    FormLabel,
+} from '@chakra-ui/react';
 import { Control, Controller, FieldError, Path } from 'react-hook-form';
 import Select from 'react-select';
 interface select {
@@ -8,6 +13,7 @@ interface select {
     placeholder?: string;
     disabled?: boolean;
     searchable?: boolean;
+    onRenderSelection?: any;
 }
 import dynamic from 'next/dynamic';
 import { UserView } from 'src/services';
@@ -27,6 +33,8 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     keyLabel: any;
     control: Control<TFormValues>;
     disabled?: boolean;
+    renderSelection?: any;
+    customOnchange?: any;
 }
 export const SelectrixBox = <TFormValues extends Record<string, any>>({
     name,
@@ -39,15 +47,12 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
     keyLabel,
     control,
     disabled,
+    renderSelection,
+    customOnchange,
 }: FormInputProps<TFormValues>) => {
-    const [selected, setSelected] = useState(null);
-
-    const handleChange = (selectedOption) => {
-        setSelected(selectedOption);
-        console.log(`Option selected:`, selectedOption.id);
-    };
+    // console.log({ customOnchange });
     return (
-        <FormControl isInvalid={error?.type === 'required'}>
+        <FormControl isInvalid={error?.type === 'required'} minW="0">
             <FormLabel
                 htmlFor={label}
                 textTransform="capitalize"
@@ -66,8 +71,21 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                             key: keys,
                             label: keyLabel,
                         }}
-                        onChange={(value) => onChange(value.key)}
+                        onChange={
+                            customOnchange
+                                ? customOnchange
+                                : (value) => onChange(value.key)
+                        }
                         searchable={false}
+                        onRenderSelection={
+                            renderSelection
+                                ? () => (
+                                      <Box className="react-selectrix rs-toggle">
+                                          {renderSelection}
+                                      </Box>
+                                  )
+                                : false
+                        }
                     />
                 )}
                 name={name}

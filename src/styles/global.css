@@ -143,3 +143,8 @@ select option {
     align-items: center;
     display: flex;
 }
+.react-selectrix .rs-toggle.rs-focused {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

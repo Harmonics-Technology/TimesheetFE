@@ -20,10 +20,15 @@ import { ContractService } from 'src/services';
 type Props = {
     isOpen?: any;
     onClose?: any;
-    setAgree: any;
+    selected: any;
+    setValue: any;
 };
 
-const ConfirmChangeModal = ({ isOpen, onClose, setAgree }: Props) => {
+const ConfirmChangeModal = ({ isOpen, onClose, selected, setValue }: Props) => {
+    const setTeamValue = () => {
+        setValue('role', selected);
+        onClose();
+    };
     return (
         <Modal
             isOpen={isOpen}
@@ -72,7 +77,6 @@ const ConfirmChangeModal = ({ isOpen, onClose, setAgree }: Props) => {
                                 height="3rem"
                                 width="full"
                                 onClick={() => {
-                                    setAgree(false);
                                     onClose();
                                 }}
                             >
@@ -85,8 +89,7 @@ const ConfirmChangeModal = ({ isOpen, onClose, setAgree }: Props) => {
                                 bgColor="red"
                                 color="white"
                                 onClick={() => {
-                                    setAgree(true);
-                                    onClose();
+                                    setTeamValue();
                                 }}
                             >
                                 Yes
