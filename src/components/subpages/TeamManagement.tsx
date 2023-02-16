@@ -84,6 +84,9 @@ const schema = yup.object().shape({
     endDate: yup.string().required(),
     dateOfBirth: yup.string().required(),
     paymentFrequency: yup.string().required(),
+    address: yup.string().required(),
+    clientRate: yup.string().required(),
+    // onBordingFee: yup.string().required(),
 });
 
 function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
