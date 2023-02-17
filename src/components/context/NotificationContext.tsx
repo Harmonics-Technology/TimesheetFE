@@ -50,14 +50,19 @@ export const NotificationProvider = ({ children }: { children: any }) => {
                 if (data.status) {
                     // console.log({ data });
                     setMessages(data);
+                    // toast({
+                    //     position: 'top-right',
+                    //     status: 'success',
+                    //     title: 'Notification up to date',
+                    // });
                 }
             } catch (error: any) {
                 console.log({ error });
-                // toast({
-                //     position: 'top-right',
-                //     status: 'error',
-                //     title: error?.body?.message || error.message,
-                // });
+                toast({
+                    position: 'top-right',
+                    status: 'error',
+                    title: error?.body?.message || error.message,
+                });
             }
         };
         getNotifications();

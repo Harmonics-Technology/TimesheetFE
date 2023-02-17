@@ -8,14 +8,11 @@ import { Hydrate } from 'react-query/hydration';
 import { RootStoreProvider } from '@mobx';
 import '../src/styles/global.css';
 import Layout from 'src/layout';
-import { UserProvider } from '@components/context/UserContext';
 import Head from 'next/head';
 import Cookies from 'js-cookie';
 import { OpenAPI } from 'src/services';
 import NextNProgress from 'nextjs-progressbar';
-import { NotificationProvider } from '@components/context/NotificationContext';
-import { OnboardingFeeProvider } from '@components/context/OnboardingFeeContext';
-import Router, { useRouter } from 'next/router';
+import { UserProvider } from '@components/context/UserContext';
 
 function MyApp({
     Component,
@@ -24,8 +21,6 @@ function MyApp({
     const queryClient = new QueryClient();
     OpenAPI.BASE = process.env.NEXT_PUBLIC_API_BASEURL as string;
     OpenAPI.TOKEN = Cookies.get('token') as string;
-    const router = useRouter();
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -36,13 +31,6 @@ function MyApp({
                 }, 1000);
         }
     }, []);
-    // Router.events.on('routeChangeStart', (url) => {
-    //     setLoading(true);
-    // });
-
-    // Router.events.on('routeChangeComplete', (url) => {
-    //     setLoading(false);
-    // });
     return (
         <ChakraProvider theme={theme}>
             <Head>
@@ -57,24 +45,13 @@ function MyApp({
                 <QueryClientProvider client={queryClient}>
                     <Hydrate state={pageProps.dehydratedState}>
                         <RootStoreProvider>
-                            <>
-                                {loading ? (
-                                    <div id="globalLoader">
-                                        <img src="/assets/splash.gif" alt="" />
-                                    </div>
-                                ) : (
-                                    <OnboardingFeeProvider>
-                                        <NotificationProvider>
-                                            <UserProvider>
-                                                <NextNProgress color="#2EAFA3" />
-                                                <Layout>
-                                                    <Component {...pageProps} />
-                                                </Layout>
-                                            </UserProvider>
-                                        </NotificationProvider>
-                                    </OnboardingFeeProvider>
-                                )}
-                            </>
+                            <UserProvider>
+                                <NextNProgress color="#2EAFA3" />
+                                <Layout>
+                                    <Component {...pageProps} />
+                                </Layout>
+                            </UserProvider>
+                            =
                         </RootStoreProvider>
                     </Hydrate>
                 </QueryClientProvider>

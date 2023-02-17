@@ -59,7 +59,7 @@ function PayrollInvoice({
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
     const { hstAmount } = useContext(OnboardingFeeContext);
-   
+
     const hst =
         calculatePercentage(allInvoiceTotal, hstAmount?.fee) / exchangeRate;
     const hstNaira = hst * exchangeRate;
@@ -202,11 +202,11 @@ function PayrollInvoice({
                                     <Tables
                                         tableHead={[
                                             'Name',
-                                            'Start Date',
-                                            'End Date',
+                                            'Pay Period',
                                             'Amount (₦)',
                                             'Amount ($)',
                                             'Fees',
+                                            'Total',
                                         ]}
                                     >
                                         <>
@@ -217,14 +217,11 @@ function PayrollInvoice({
                                                             name={x?.name}
                                                         />
                                                         <TableData
-                                                            name={formatDate(
+                                                            name={`${formatDate(
                                                                 x?.startDate,
-                                                            )}
-                                                        />
-                                                        <TableData
-                                                            name={formatDate(
+                                                            )} - ${formatDate(
                                                                 x?.endDate,
-                                                            )}
+                                                            )}`}
                                                         />
                                                         <TableData
                                                             name={`${Naira(
@@ -339,12 +336,15 @@ function PayrollInvoice({
                                             label="Subtotal"
                                             cur={'$'}
                                             value={CUR(
-                                                allInvoiceTotal / exchangeRate,
+                                                Math.floor(
+                                                    allInvoiceTotal /
+                                                        exchangeRate,
+                                                ),
                                             )}
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={CUR(hst)}
+                                            value={CUR(Math.floor(hst))}
                                             cur="$"
                                         />
                                         <Box
@@ -357,9 +357,11 @@ function PayrollInvoice({
                                                 cur={'$'}
                                                 label="Total"
                                                 value={CUR(
-                                                    (allInvoiceTotal +
-                                                        hstNaira) /
-                                                        exchangeRate,
+                                                    Math.floor(
+                                                        (allInvoiceTotal +
+                                                            hstNaira) /
+                                                            exchangeRate,
+                                                    ),
                                                 )}
                                             />
                                         </Box>

@@ -105,14 +105,13 @@ function MenuItem({
                                             : 'rotate(0deg)'
                                     }
                                     transition="all .35s ease-in-out"
+                                    color={
+                                        router.pathname.startsWith(url)
+                                            ? 'brand.200'
+                                            : 'white'
+                                    }
                                 >
-                                    <FaAngleDown
-                                        color={
-                                            router.pathname.startsWith(url)
-                                                ? 'brand.200'
-                                                : 'white'
-                                        }
-                                    />
+                                    <FaAngleDown />
                                 </Box>
                             </Flex>
                             <UnorderedList pl="1rem" mt=".4rem !important">

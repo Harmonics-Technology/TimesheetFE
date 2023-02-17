@@ -145,12 +145,11 @@ function InvoiceTemplate({
                                     <Tables
                                         tableHead={[
                                             'Name',
-                                            'Start Date',
-                                            'End Date',
-                                            // 'Type',
+                                            'Pay Period',
+                                            'Type',
                                             `Pay (${clicked?.employeeInformation?.currency})`,
-                                            'Fee',
-                                            'Total',
+                                            // 'Fee',
+                                            // 'Total',
                                         ]}
                                     >
                                         <>
@@ -163,14 +162,14 @@ function InvoiceTemplate({
                                                     }
                                                 />
                                                 <TableData
-                                                    name={formatDate(
+                                                    name={`${formatDate(
                                                         clicked?.startDate,
-                                                    )}
+                                                    )} - ${formatDate(
+                                                        clicked?.endDate,
+                                                    )}`}
                                                 />
                                                 <TableData
-                                                    name={formatDate(
-                                                        clicked?.endDate,
-                                                    )}
+                                                    name={clicked?.invoiceType}
                                                 />
                                                 <TableData
                                                     name={`${
@@ -182,7 +181,7 @@ function InvoiceTemplate({
                                                             (allExpenseTotal as number),
                                                     )}`}
                                                 />
-                                                <TableData
+                                                {/* <TableData
                                                     name={CAD(
                                                         clicked
                                                             ?.employeeInformation
@@ -202,7 +201,7 @@ function InvoiceTemplate({
                                                 />
                                                 <TableData
                                                     name={clicked?.totalPay}
-                                                />
+                                                /> */}
                                             </Tr>
                                         </>
                                     </Tables>
