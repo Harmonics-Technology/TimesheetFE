@@ -27,4 +27,5 @@ export type InvoiceView = {
     expenses?: Array<ExpenseView> | null;
     children?: Array<InvoiceView> | null;
     dateCreated?: string;
+    totalPay?: number;
 };

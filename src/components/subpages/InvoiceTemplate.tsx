@@ -20,6 +20,7 @@ import { ExpenseView, InvoiceView, PayrollView } from 'src/services';
 import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import { formatDate } from '@components/generics/functions/formatDate';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
 
 function InvoiceTemplate({
     isOpen,
@@ -40,6 +41,7 @@ function InvoiceTemplate({
         (a, b) => a + (b?.amount as number),
         0,
     );
+    const exchangeRate = clicked?.rate as unknown as number;
     return (
         <>
             <Modal
@@ -146,7 +148,7 @@ function InvoiceTemplate({
                                             'Start Date',
                                             'End Date',
                                             // 'Type',
-                                            `Amount (${clicked?.employeeInformation?.currency})`,
+                                            `Pay (${clicked?.employeeInformation?.currency})`,
                                             'Fee',
                                             'Total',
                                         ]}
@@ -170,9 +172,6 @@ function InvoiceTemplate({
                                                         clicked?.endDate,
                                                     )}
                                                 />
-                                                {/* <TableData
-                                                    name={clicked?.invoiceType}
-                                                /> */}
                                                 <TableData
                                                     name={`${
                                                         clicked
@@ -184,7 +183,25 @@ function InvoiceTemplate({
                                                     )}`}
                                                 />
                                                 <TableData
-                                                    name={clicked?.invoiceType}
+                                                    name={CAD(
+                                                        clicked
+                                                            ?.employeeInformation
+                                                            ?.fixedAmount ==
+                                                            false
+                                                            ? calculatePercentage(
+                                                                  (clicked?.totalAmount as number) /
+                                                                      exchangeRate,
+                                                                  clicked
+                                                                      ?.employeeInformation
+                                                                      ?.onBoradingFee,
+                                                              )
+                                                            : clicked
+                                                                  ?.employeeInformation
+                                                                  ?.onBoradingFee,
+                                                    )}
+                                                />
+                                                <TableData
+                                                    name={clicked?.totalPay}
                                                 />
                                             </Tr>
                                         </>

@@ -33,6 +33,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { formatDate } from '@components/generics/functions/formatDate';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
 
 function PayrollInvoice({
     isOpen,
@@ -53,14 +54,12 @@ function PayrollInvoice({
     const exchangeRate = clicked?.rate as unknown as number;
     const allInvoiceTotal = (
         clicked?.children as unknown as InvoiceView[]
-    )?.reduce((a, b) => a + (b?.totalAmount as number), 0);
+    )?.reduce((a, b) => a + (b?.totalPay as number), 0);
     // const allExpenseTotal = clicked?.children
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
     const { hstAmount } = useContext(OnboardingFeeContext);
-    function calculatePercentage(num, per) {
-        return (num / 100) * per;
-    }
+   
     const hst =
         calculatePercentage(allInvoiceTotal, hstAmount?.fee) / exchangeRate;
     const hstNaira = hst * exchangeRate;
@@ -290,7 +289,7 @@ function PayrollInvoice({
                                                                           ?.onBoradingFee,
                                                             )}
                                                         />
-                                                        <TableData
+                                                        {/* <TableData
                                                             name={
                                                                 x
                                                                     .employeeInformation
@@ -308,6 +307,11 @@ function PayrollInvoice({
                                                                           ?.employeeInformation
                                                                           ?.onBoradingFee as number) +
                                                                       (x?.totalAmount as number)
+                                                            }
+                                                        /> */}
+                                                        <TableData
+                                                            name={
+                                                                clicked?.totalPay
                                                             }
                                                         />
                                                     </Tr>

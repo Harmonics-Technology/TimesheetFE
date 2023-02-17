@@ -4,7 +4,7 @@ import React from 'react';
 
 function UploadCareWidget({ refs, filename, loading, uploadFunction, label }) {
     return (
-        <Box>
+        <Box minW='0'>
             <FormLabel
                 textTransform="capitalize"
                 width="fit-content"
