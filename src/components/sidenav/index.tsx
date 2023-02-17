@@ -90,7 +90,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
                             'admin',
-                            'clients',
+                            // 'clients',
                             'supervisors',
                             'team members',
                             'payment partners',
@@ -626,7 +626,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            'clients',
+                            // 'clients',
                             'supervisors',
                             'team members',
                             'payment partners',
