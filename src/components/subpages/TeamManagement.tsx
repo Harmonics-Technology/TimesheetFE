@@ -107,6 +107,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
         defaultValues: {
             role: 'Team Member',
             onBordingFee: fixedAmount,
+            payRollTypeId: 1,
         },
     });
     // console.log(watch('onBordingFee'));
@@ -500,7 +501,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                     options={supervisors}
                                 />
                             )}
-                            <SelectrixBox<TeamMemberModel>
+                            {/* <SelectrixBox<TeamMemberModel>
                                 control={control}
                                 name="payRollTypeId"
                                 error={errors.payRollTypeId}
@@ -517,7 +518,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                         label: 'Offshore contract',
                                     },
                                 ]}
-                            />
+                            /> */}
                             {payroll == 1 ? (
                                 <>
                                     <PrimaryInput<TeamMemberModel>

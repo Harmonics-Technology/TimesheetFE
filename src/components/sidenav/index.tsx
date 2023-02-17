@@ -93,7 +93,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'clients',
                             'supervisors',
                             'team members',
-                            'payment partners',
+                            // 'payment partners',
                         ]}
                     />
                     <MenuItem
@@ -116,7 +116,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
                             'expenses',
-                            'payrolls',
+                            // 'payrolls',
                             'payslips',
                             'invoices',
                         ]}
@@ -629,7 +629,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'clients',
                             'supervisors',
                             'team members',
-                            'payment partners',
+                            // 'payment partners',
                         ]}
                     />
                     <MenuItem
