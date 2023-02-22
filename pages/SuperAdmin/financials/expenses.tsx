@@ -28,7 +28,7 @@ function expenses({ expenses, team, expenseType }: ExpensesType) {
             <Flex>
                 <PageTabs
                     url={`/${role}/financials/expenses`}
-                    tabName="Awaiting Approval"
+                    tabName="Reviewed"
                 />
                 <PageTabs
                     url={`/${role}/financials/expenses-approved`}

@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import { OpenAPI } from 'src/services';
 import NextNProgress from 'nextjs-progressbar';
 import { UserProvider } from '@components/context/UserContext';
+import axios from 'axios';
 
 function MyApp({
     Component,
@@ -21,6 +22,8 @@ function MyApp({
     const queryClient = new QueryClient();
     OpenAPI.BASE = process.env.NEXT_PUBLIC_API_BASEURL as string;
     OpenAPI.TOKEN = Cookies.get('token') as string;
+    // const header = (axios.defaults.headers.common['Accept-Language'] = 'fr');
+    // OpenAPI.HEADERS = { header };
 
     useEffect(() => {
         if (typeof window !== 'undefined') {

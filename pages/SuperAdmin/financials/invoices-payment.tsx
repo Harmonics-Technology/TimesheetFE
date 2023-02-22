@@ -20,10 +20,10 @@ function Invoices({ invoiceData }: invoiceType) {
     return (
         <Box>
             <Flex>
-                <PageTabs
+                {/* <PageTabs
                     url={`/${role}/financials/invoices`}
                     tabName="Team Members"
-                />
+                /> */}
                 <PageTabs
                     url={`/${role}/financials/invoices-payment`}
                     tabName="Payment Partners"

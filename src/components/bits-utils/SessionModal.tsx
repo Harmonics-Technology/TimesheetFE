@@ -59,6 +59,7 @@ const SessionModal = ({ isOpen, onClose, route }: Props) => {
                             px={['1.5rem', '3.3rem']}
                             fontWeight="500"
                             userSelect="none"
+                            color="black"
                         >
                             Your session has expired
                             <br />

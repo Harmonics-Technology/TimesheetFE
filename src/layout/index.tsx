@@ -39,7 +39,7 @@ const Layout = ({ children }: LayoutProps) => {
     const urlRoute = router.asPath.split('/')[1];
     const loggedInUser = user?.role?.replaceAll(' ', '');
     useEffect(() => {
-        if (urlRoute !== loggedInUser) {
+        if (urlRoute !== loggedInUser || loggedInUser === undefined) {
             onOpen();
         }
     }, [urlRoute, loggedInUser]);
