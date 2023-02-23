@@ -132,9 +132,10 @@ function TeamManagement({ userProfile }: adminProps) {
                 position: 'top-right',
             });
             return;
-        } catch (err) {
+        } catch (err: any) {
+            console.log({ err });
             toast({
-                title: 'An error occurred',
+                title: err?.body?.message || err?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',

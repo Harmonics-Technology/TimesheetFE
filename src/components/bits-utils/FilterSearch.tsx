@@ -50,6 +50,7 @@ function FilterSearch({
         router.push({
             query: {
                 limit: filter,
+                // offset: 0,
             },
         });
     }
