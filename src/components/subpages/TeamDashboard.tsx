@@ -67,7 +67,7 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Timesheet'}
-                        url={'timesheets/history'}
+                        url={'timesheets/timesheet-history'}
                         data={adminMetrics?.recentTimeSheet
                             ?.slice(0, 4)
                             .map((x: RecentTimeSheetView, i: any) => (
