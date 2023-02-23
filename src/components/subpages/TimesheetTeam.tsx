@@ -39,7 +39,7 @@ import {
 import moment from 'moment';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import { useRouter } from 'next/router';
-import Naira from '@components/generics/functions/Naira';
+import Naira, { CAD } from '@components/generics/functions/Naira';
 import useClickOutside from '@components/generics/useClickOutside';
 
 interface approveDate {
@@ -510,12 +510,20 @@ const TimesheetTeam = ({
                     />
                     <TimeSheetEstimation
                         label="Expected Payout"
-                        data={Naira(expectedPay)}
+                        data={
+                            currency === 'NGN'
+                                ? Naira(expectedPay)
+                                : CAD(expectedPay)
+                        }
                         tip="Total amount you are expected to be paid this month"
                     />
                     <TimeSheetEstimation
                         label="Actual Payout"
-                        data={Naira(actualPayout)}
+                        data={
+                            currency === 'NGN'
+                                ? Naira(actualPayout)
+                                : CAD(actualPayout)
+                        }
                         tip="Number of hours you worked this month x Rate per hour"
                     />
 
