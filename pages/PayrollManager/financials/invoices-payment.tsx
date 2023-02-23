@@ -28,10 +28,10 @@ function Invoices({ invoiceData }: invoiceType) {
                     url={`/${role}/financials/invoices-payment`}
                     tabName="Payment Partners"
                 />
-                <PageTabs
+                {/* <PageTabs
                     url={`/${role}/financials/invoices-client`}
                     tabName="Clients"
-                />
+                /> */}
             </Flex>
             <PayrollTreatPartnerInvoice invoiceData={invoiceData} />
         </Box>
