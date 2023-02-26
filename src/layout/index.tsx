@@ -35,7 +35,7 @@ const Layout = ({ children }: LayoutProps) => {
         user = JSON.parse(user);
     }
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const route = `/login?from=${encodeURIComponent(router.asPath)}`;
+    const route = `/login`;
     const urlRoute = router.asPath.split('/')[1];
     const loggedInUser = user?.role?.replaceAll(' ', '');
     useEffect(() => {
