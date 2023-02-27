@@ -32,6 +32,7 @@ import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
 import Link from 'next/link';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { MiniTabs } from '@components/bits-utils/MiniTabs';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -133,50 +134,8 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
                     w="fit-content"
                     p=".3rem 0rem"
                 >
-                    <Link href={pending} passHref>
-                        <Text
-                            bgColor={
-                                router.asPath == pending
-                                    ? 'gray.200'
-                                    : 'transparent'
-                            }
-                            color={
-                                router.asPath == pending
-                                    ? 'brand.400'
-                                    : 'gray.500'
-                            }
-                            mb="0"
-                            p=".5rem 1rem"
-                            cursor="pointer"
-                            fontWeight={
-                                router.asPath == pending ? '600' : '400'
-                            }
-                        >
-                            Pending Approval
-                        </Text>
-                    </Link>
-                    <Link href={approved} passHref>
-                        <Text
-                            bgColor={
-                                router.asPath == approved
-                                    ? 'gray.200'
-                                    : 'transparent'
-                            }
-                            color={
-                                router.asPath == approved
-                                    ? 'brand.400'
-                                    : 'gray.500'
-                            }
-                            mb="0"
-                            p=".5rem 1rem"
-                            cursor="pointer"
-                            fontWeight={
-                                router.asPath == approved ? '600' : '400'
-                            }
-                        >
-                            All Processed
-                        </Text>
-                    </Link>
+                    <MiniTabs url={pending} text={'Pending Approval'} />
+                    <MiniTabs url={approved} text={'All Processed'} />
                 </HStack>
                 {selectedId.length > 0 && (
                     <Flex justify="space-between" mb="1rem">

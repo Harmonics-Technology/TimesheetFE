@@ -21,7 +21,7 @@ import {
     InvoiceViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import InvoiceTemplate from './InvoiceTemplate';
 import BeatLoader from 'react-spinners/BeatLoader';
 import Checkbox from '@components/bits-utils/Checkbox';
@@ -30,6 +30,8 @@ import Paymentinvoices from './Paymentinvoices';
 import Naira, { CAD } from '@components/generics/functions/Naira';
 import PayrollInvoice from './PayrollInvoice';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { MiniTabs } from '@components/bits-utils/MiniTabs';
+import { UserContext } from '@components/context/UserContext';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -109,6 +111,11 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
         });
     };
 
+    const { user } = useContext(UserContext);
+    const role = user?.role.replaceAll(' ', '');
+    const pending = `/${role}/financials/invoices-payment`;
+    const approved = `/${role}/financials/invoices-payment-2`;
+
     return (
         <>
             <Box
@@ -117,6 +124,15 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <HStack
+                    mb="1rem"
+                    bgColor="gray.50"
+                    w="fit-content"
+                    p=".3rem 0rem"
+                >
+                    <MiniTabs url={pending} text={'Proinsight Technology'} />
+                    <MiniTabs url={approved} text={'Olade Consulting'} />
+                </HStack>
                 {selectedId.length > 0 && (
                     <Flex justify="space-between" mb="1rem">
                         <HStack gap="1rem">
@@ -170,9 +186,7 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                                         x.name
                                     }
                                 />
-                                <TableData
-                                    name={formatDate(x.dateCreated)}
-                                />
+                                <TableData name={formatDate(x.dateCreated)} />
                                 <TableData name={CAD(x.totalAmount)} />
                                 <TableData
                                     name={Naira(

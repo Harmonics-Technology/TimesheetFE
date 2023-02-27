@@ -18,4 +18,5 @@ export type TimeSheetApprovedView = {
     date?: string;
     startDate?: string;
     endDate?: string;
+    dateModified?: string | null;
 };

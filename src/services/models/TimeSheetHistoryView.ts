@@ -15,4 +15,5 @@ export type TimeSheetHistoryView = {
     date?: string;
     startDate?: string;
     endDate?: string;
+    dateModified?: string | null;
 };

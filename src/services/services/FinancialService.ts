@@ -628,6 +628,7 @@ endDate?: string,
      * @param offset 
      * @param limit 
      * @param search 
+     * @param payrollGroupId 
      * @param startDate 
      * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
@@ -637,6 +638,7 @@ endDate?: string,
 offset?: number,
 limit?: number,
 search?: string,
+payrollGroupId?: number,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -647,6 +649,7 @@ endDate?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
+                'payrollGroupId': payrollGroupId,
                 'StartDate': startDate,
                 'EndDate': endDate,
             },
@@ -897,6 +900,7 @@ limit?: number,
      * @param offset 
      * @param limit 
      * @param search 
+     * @param payrollGroupId 
      * @param startDate 
      * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
@@ -906,6 +910,7 @@ limit?: number,
 offset?: number,
 limit?: number,
 search?: string,
+payrollGroupId?: number,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -916,6 +921,7 @@ endDate?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
+                'payrollGroupId': payrollGroupId,
                 'StartDate': startDate,
                 'EndDate': endDate,
             },
@@ -1109,6 +1115,7 @@ requestBody?: PaymentPartnerInvoiceModel,
      * @param offset 
      * @param limit 
      * @param search 
+     * @param payrollGroupId 
      * @param startDate 
      * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
@@ -1118,6 +1125,7 @@ requestBody?: PaymentPartnerInvoiceModel,
 offset?: number,
 limit?: number,
 search?: string,
+payrollGroupId?: number,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -1128,6 +1136,7 @@ endDate?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
+                'payrollGroupId': payrollGroupId,
                 'StartDate': startDate,
                 'EndDate': endDate,
             },
@@ -1244,6 +1253,7 @@ endDate?: string,
      * @param offset 
      * @param limit 
      * @param search 
+     * @param payrollGroupId 
      * @param startDate 
      * @param endDate 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
@@ -1253,6 +1263,7 @@ endDate?: string,
 offset?: number,
 limit?: number,
 search?: string,
+payrollGroupId?: number,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -1263,6 +1274,7 @@ endDate?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'search': search,
+                'payrollGroupId': payrollGroupId,
                 'StartDate': startDate,
                 'EndDate': endDate,
             },
