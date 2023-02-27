@@ -164,7 +164,7 @@ const TimesheetTeam = ({
     };
 
     const reloadPage = () => {
-        // router.reload();
+        router.reload();
     };
 
     function ApproveSelected() {
