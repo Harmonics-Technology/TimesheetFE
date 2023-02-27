@@ -88,6 +88,21 @@ const TimesheetTeam = ({
 
     const [selected, setSelected] = useState<approveDate[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
+
+    const fillTimeInDate = (item: approveDate) => {
+        const existingValue = selectedInput.find(
+            (e) => e.chosenDate == item.chosenDate,
+        );
+        if (existingValue) {
+            const newArray = selectedInput.filter(
+                (x) => x.chosenDate !== item.chosenDate,
+            );
+            setSelectedInput([...newArray, item]);
+            return;
+        }
+        setSelectedInput([...selectedInput, item]);
+    };
+
     // console.log({ selectedInput });
     // console.log({ selected });
 
@@ -149,7 +164,7 @@ const TimesheetTeam = ({
     };
 
     const reloadPage = () => {
-        router.reload();
+        // router.reload();
     };
 
     function ApproveSelected() {
@@ -400,7 +415,7 @@ const TimesheetTeam = ({
                                 isWeekend(new Date(timesheets.date as string))
                             }
                             onChange={(e) =>
-                                selectedInput.push({
+                                fillTimeInDate({
                                     userId: userId,
                                     chosenDate: userDate,
                                     hours: e.target.value,

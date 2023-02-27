@@ -597,6 +597,7 @@ endDate?: string,
      * @param search 
      * @param startDate 
      * @param endDate 
+     * @param payrollTypeFilter 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -606,6 +607,7 @@ limit?: number,
 search?: string,
 startDate?: string,
 endDate?: string,
+payrollTypeFilter?: number,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -616,6 +618,7 @@ endDate?: string,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'payrollTypeFilter': payrollTypeFilter,
             },
             errors: {
                 400: `Bad Request`,
