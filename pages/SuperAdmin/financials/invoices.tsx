@@ -1,70 +1,20 @@
-import { Box, Flex } from '@chakra-ui/react';
-import PageTabs from '@components/bits-utils/PageTabs';
-import { UserContext } from '@components/context/UserContext';
-import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
-import { withPageAuth } from '@components/generics/withPageAuth';
-import AdminInvoices from '@components/subpages/AdminInvoices';
-import OnshoreSubmittedInvoice from '@components/subpages/OnshoreSubmittedInvoice';
 import { GetServerSideProps } from 'next';
-import React, { useContext } from 'react';
-import {
-    FinancialService,
-    InvoiceViewPagedCollectionStandardResponse,
-} from 'src/services';
+import React from 'react';
 
-interface invoiceType {
-    invoiceData: InvoiceViewPagedCollectionStandardResponse;
-}
-function Invoices({ invoiceData }: invoiceType) {
-    const { user } = useContext(UserContext);
-    const role = user?.role.replaceAll(' ', '');
-    return (
-        <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/invoices`}
-                    tabName="Team Members"
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices-payment`}
-                    tabName="Payment Partners"
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices-client`}
-                    tabName="Clients"
-                />
-            </Flex>
-            <OnshoreSubmittedInvoice invoiceData={invoiceData} />
-        </Box>
-    );
-}
+const invoices = () => {
+    return <div>invoices</div>;
+};
 
-export default Invoices;
+export default invoices;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(
-    async (ctx: any) => {
-        const pagingOptions = filterPagingSearchOptions(ctx);
-        try {
-            const data = await FinancialService.listSubmittedOnshoreInvoices(
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-            );
-
-            return {
-                props: {
-                    invoiceData: data,
-                },
-            };
-        } catch (error: any) {
-            console.log(error);
-            return {
-                props: {
-                    data: [],
-                },
-            };
-        }
-    },
-);
+export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
+    const role = JSON.parse(ctx.req.cookies.user).role.replaceAll(' ', '');
+    // console.log(role);
+    return {
+        redirect: {
+            permanent: false,
+            destination: `/${role}/financials/invoices-team`,
+        },
+        props: {},
+    };
+};

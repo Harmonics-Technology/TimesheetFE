@@ -3,7 +3,9 @@ import PageTabs from '@components/bits-utils/PageTabs';
 import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import PayrollTreatPartnerInvoice from '@components/subpages/PayrollTreatPartnerInvoice';
+import AdminPayroll from '@components/subpages/AdminPayroll';
+import PaymentPartnerInvoice from '@components/subpages/PaymentPartnerInvoice';
+import PaymentPartnerPayroll from '@components/subpages/PaymentPartnerPayroll';
 import { GetServerSideProps } from 'next';
 import React, { useContext } from 'react';
 import {
@@ -11,52 +13,46 @@ import {
     InvoiceViewPagedCollectionStandardResponse,
 } from 'src/services';
 
-interface invoiceType {
-    invoiceData: InvoiceViewPagedCollectionStandardResponse;
+interface PayrollType {
+    invoice: InvoiceViewPagedCollectionStandardResponse;
 }
-function Invoices({ invoiceData }: invoiceType) {
+function expenses({ invoice }: PayrollType) {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
             <Flex>
                 <PageTabs
-                    url={`/${role}/financials/invoices-team`}
-                    tabName="Team Members"
+                    url={`/${role}/invoices/pro-insight`}
+                    tabName="Pro-insight consulting"
                 />
                 <PageTabs
-                    url={`/${role}/financials/invoices-payment`}
-                    tabName="Payment Partners"
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices-client`}
-                    tabName="Clients"
+                    url={`/${role}/invoices/olade`}
+                    tabName="Olade Consulting"
                 />
             </Flex>
-            <PayrollTreatPartnerInvoice invoiceData={invoiceData} />
+            <PaymentPartnerInvoice invoiceData={invoice} />
         </Box>
     );
 }
 
-export default Invoices;
+export default expenses;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const data =
-                await FinancialService.listPaymentPartnerInvoicesForPayrollManagers(
-                    pagingOptions.offset,
-                    pagingOptions.limit,
-                    pagingOptions.search,
-                    2,
-                    pagingOptions.from,
-                    pagingOptions.to,
-                );
-
+            const data = await FinancialService.listInvoicesByPaymentPartner(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+                2,
+                pagingOptions.from,
+                pagingOptions.to,
+            );
             return {
                 props: {
-                    invoiceData: data,
+                    invoice: data,
                 },
             };
         } catch (error: any) {

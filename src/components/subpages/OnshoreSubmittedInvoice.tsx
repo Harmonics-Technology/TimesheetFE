@@ -116,8 +116,8 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
     const hideCheckbox = router.asPath.startsWith(
         `/${role}/financials/treatedinvoice`,
     );
-    const pending = `/${role}/financials/invoices`;
-    const approved = `/${role}/financials/treatedinvoice`;
+    const pending = `/${role}/financials/invoices-team`;
+    const approved = `/${role}/financials/invoices-team-treatedinvoice`;
     console.log({ hideCheckbox });
 
     return (

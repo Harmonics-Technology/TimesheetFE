@@ -21,7 +21,7 @@ function Invoices({ invoiceData }: invoiceType) {
         <Box>
             <Flex>
                 <PageTabs
-                    url={`/${role}/financials/invoices`}
+                    url={`/${role}/financials/invoices-team`}
                     tabName="Team Members"
                 />
                 <PageTabs

@@ -13,6 +13,7 @@ function PageTabs({
 }) {
     const router = useRouter();
     const isActive = router.pathname.startsWith(url);
+    // console.log({ url });
     return (
         <Flex
             justify="center"
