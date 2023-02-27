@@ -37,9 +37,10 @@ const Layout = ({ children }: LayoutProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const route = `/login`;
     const urlRoute = router.asPath.split('/')[1];
+    // console.log({ urlRoute });
     const loggedInUser = user?.role?.replaceAll(' ', '');
     useEffect(() => {
-        if (urlRoute !== loggedInUser) {
+        if (urlRoute !== loggedInUser && urlRoute !== 'user') {
             onOpen();
         }
     }, [urlRoute, loggedInUser]);
