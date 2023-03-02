@@ -8,6 +8,7 @@ import {
     Flex,
     FormLabel,
     Grid,
+    HStack,
     Spinner,
     Text,
     useToast,
@@ -248,16 +249,23 @@ function ActivateUserPage({
         <>
             {userProfile?.isActive && (
                 <Alert status="info" variant="left-accent" mb="1rem">
-                    <AlertIcon />
-                    <Flex justify="space-between" w="full" align="center">
+                    <Flex
+                        justify="space-between"
+                        w="full"
+                        align="center"
+                        flexDir={['column', 'row']}
+                    >
                         <Box>
-                            <AlertTitle>Account Activated!</AlertTitle>
-                            <AlertDescription>
+                            <HStack>
+                                <AlertIcon />
+                                <AlertTitle>Account Activated!</AlertTitle>
+                            </HStack>
+                            <AlertDescription textAlign="center" as="p">
                                 This user has already been activated by an admin
                             </AlertDescription>
                         </Box>
                         <Link passHref href={`/${role}/dashboard`}>
-                            <Button>Go to Dashboard</Button>
+                            <Button ml="auto">Go to Dashboard</Button>
                         </Link>
                     </Flex>
                 </Alert>

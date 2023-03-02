@@ -89,7 +89,11 @@ function FilterSearch({
                 mb="1.5rem"
                 flexDirection={['column', 'row']}
             >
-                <HStack align="flex-end">
+                <HStack
+                    align="flex-end"
+                    mb={['.5rem', 'auto']}
+                    spacing={['0', 'inherit']}
+                >
                     <Box
                         fontSize=".8rem"
                         w="fit-content"
@@ -135,52 +139,80 @@ function FilterSearch({
                     gap="1rem"
                     align={['unset', 'center']}
                     flexDirection={['column', 'row']}
+                    spacing={['0', 'inherit']}
                 >
                     <Flex align="center" display={hide ? 'none' : 'flex'}>
-                        <HStack>
+                        <HStack spacing={['0', '.5rem']}>
                             <HStack>
-                                <Text mb="0" fontSize=".8rem" fontWeight="600">
+                                <Text
+                                    mb="0"
+                                    fontSize=".8rem"
+                                    fontWeight="600"
+                                    display={['none', 'block']}
+                                >
                                     From
                                 </Text>
 
-                                <DatePicker
-                                    value={fromDate}
-                                    onChange={setFromDate}
-                                    format="MMM DD, YYYY"
-                                    render={(value, openCalendar) => {
-                                        return (
-                                            <HStack
-                                                w="fit-content"
-                                                px="1rem"
-                                                h="2.5rem"
-                                                justifyContent="center"
-                                                alignItems="center"
-                                                border="1px solid"
-                                                borderColor="gray.300"
-                                                color="gray.500"
-                                                boxShadow="sm"
-                                                borderRadius="0"
-                                                cursor="pointer"
-                                                fontSize=".9rem"
-                                                onClick={(value) =>
-                                                    openCalendar(value)
-                                                }
-                                            >
-                                                <Text
-                                                    mb="0"
-                                                    whiteSpace="nowrap"
+                                <Box
+                                    marginInlineStart={[
+                                        '0 !important',
+                                        '.5rem !important',
+                                    ]}
+                                >
+                                    <DatePicker
+                                        value={fromDate}
+                                        onChange={setFromDate}
+                                        format="MMM DD, YYYY"
+                                        render={(value, openCalendar) => {
+                                            return (
+                                                <HStack
+                                                    w="fit-content"
+                                                    px="1rem"
+                                                    h="2.5rem"
+                                                    justifyContent="center"
+                                                    alignItems="center"
+                                                    border="1px solid"
+                                                    borderColor="gray.300"
+                                                    color="gray.500"
+                                                    boxShadow="sm"
+                                                    borderRadius="0"
+                                                    cursor="pointer"
+                                                    fontSize=".9rem"
+                                                    onClick={(value) =>
+                                                        openCalendar(value)
+                                                    }
                                                 >
-                                                    {value}
-                                                </Text>
-                                                <Icon as={FaRegCalendarAlt} />
-                                            </HStack>
-                                        );
-                                    }}
-                                />
+                                                    <Text
+                                                        mb="0"
+                                                        whiteSpace="nowrap"
+                                                    >
+                                                        {value}
+                                                    </Text>
+                                                    <Icon
+                                                        as={FaRegCalendarAlt}
+                                                    />
+                                                </HStack>
+                                            );
+                                        }}
+                                    />
+                                </Box>
                             </HStack>
                             <HStack>
-                                <Text mb="0" fontSize=".8rem" fontWeight="600">
+                                <Text
+                                    mb="0"
+                                    fontSize=".8rem"
+                                    fontWeight="600"
+                                    display={['none', 'block']}
+                                >
                                     To
+                                </Text>
+                                <Text
+                                    mb="0"
+                                    fontSize=".8rem"
+                                    fontWeight="600"
+                                    display={['block', 'none']}
+                                >
+                                    -
                                 </Text>
 
                                 <DatePicker

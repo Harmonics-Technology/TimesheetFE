@@ -25,18 +25,14 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
     const { user } = useContext(UserContext);
     // console.log({ user });
     const role = user?.role?.replaceAll(' ', '');
-    const closeToggle = () => {
-        setOpenSidenav(false);
-    };
-
     return (
         <Box
             bgColor={change ? 'brand.400' : 'white'}
             // borderRadius="30px"
             h="100vh"
-            w={['50%', '17%']}
+            w={['60%', '17%']}
             pos="fixed"
-            left={[openSidenav ? '2%' : '-50%', 'unset']}
+            left={[openSidenav ? '0%' : '-70%', 'unset']}
             pl="2rem"
             transition="left .3s ease-out"
             pt="2rem"

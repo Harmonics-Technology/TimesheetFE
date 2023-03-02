@@ -51,7 +51,6 @@ function MyApp({
                                     <Component {...pageProps} />
                                 </Layout>
                             </UserProvider>
-                            =
                         </RootStoreProvider>
                     </Hydrate>
                 </QueryClientProvider>
