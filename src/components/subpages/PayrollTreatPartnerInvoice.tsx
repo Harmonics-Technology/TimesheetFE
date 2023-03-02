@@ -187,11 +187,17 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                                     }
                                 />
                                 <TableData name={formatDate(x.dateCreated)} />
-                                <TableData name={CAD(x.totalAmount)} />
+                                <TableData
+                                    name={CAD(
+                                        Math.ceil(x.totalAmount as number),
+                                    )}
+                                />
                                 <TableData
                                     name={Naira(
-                                        (x.totalAmount as number) *
-                                            (x.rate as unknown as number),
+                                        Math.ceil(
+                                            (x.totalAmount as number) *
+                                                (x.rate as unknown as number),
+                                        ),
                                     )}
                                 />
                                 <TableState name={x.status as string} />

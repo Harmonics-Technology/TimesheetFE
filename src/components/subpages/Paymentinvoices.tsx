@@ -263,12 +263,15 @@ function Paymentinvoices({
                                             label="Subtotal"
                                             cur={'$'}
                                             value={CUR(
-                                                allInvoiceTotal / exchangeRate,
+                                                Math.ceil(
+                                                    allInvoiceTotal /
+                                                        exchangeRate,
+                                                ),
                                             )}
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={CUR(hst)}
+                                            value={CUR(Math.ceil(hst))}
                                             cur="$"
                                         />
                                         <Box
@@ -281,9 +284,11 @@ function Paymentinvoices({
                                                 cur={'$'}
                                                 label="Total"
                                                 value={CUR(
-                                                    (allInvoiceTotal +
-                                                        hstNaira) /
-                                                        exchangeRate,
+                                                    Math.ceil(
+                                                        (allInvoiceTotal +
+                                                            hstNaira) /
+                                                            exchangeRate,
+                                                    ),
                                                 )}
                                             />
                                         </Box>

@@ -24,6 +24,7 @@ import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
 import axios from 'axios';
 import moment from 'moment';
+import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { RiExchangeLine } from 'react-icons/ri';
 import {
@@ -37,12 +38,18 @@ import {
 interface DashboardProps {
     metrics: DashboardPaymentPartnerViewStandardResponse;
     pendingPayrolls: InvoiceViewPagedCollectionStandardResponse;
+    result: any;
 }
 
-function PaymentPartnerDashboard({ metrics, pendingPayrolls }: DashboardProps) {
+function PaymentPartnerDashboard({
+    metrics,
+    pendingPayrolls,
+    result,
+}: DashboardProps) {
     // const adminMetrics = metrics?.data as DashboardPaymentPartnerView;
     const { messages, markAsRead, loading } = useContext(NotificationContext);
-    console.log({ metrics });
+    const router = useRouter();
+    // console.log({ metrics });
     const toast = useToast();
     const [exchange, setExchange] = useState<any>();
 
@@ -71,12 +78,6 @@ function PaymentPartnerDashboard({ metrics, pendingPayrolls }: DashboardProps) {
         }
     };
 
-    useEffect(() => {
-        if (localStorage.getItem('rate')) {
-            setExchange(localStorage.getItem('rate'));
-        }
-    }, []);
-
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">
@@ -84,9 +85,9 @@ function PaymentPartnerDashboard({ metrics, pendingPayrolls }: DashboardProps) {
                     <TableCards
                         title={'Recent Payroll'}
                         url={'viewpayroll'}
-                        data={pendingPayrolls?.data?.value
+                        data={metrics.data?.recentPayroll
                             ?.slice(0, 5)
-                            .map((x: InvoiceView, i) => (
+                            .map((x: any, i) => (
                                 <Tr key={i}>
                                     <TableData
                                         name={
@@ -190,14 +191,14 @@ function PaymentPartnerDashboard({ metrics, pendingPayrolls }: DashboardProps) {
                     >
                         <Text mb="0">1 CAD</Text>
                         <Icon as={RiExchangeLine} />{' '}
-                        <Text mb="0">{exchange} NGN</Text>
+                        <Text mb="0">{result.data.rate - 12} NGN</Text>
                     </HStack>
                     <Button
                         fontSize=".8rem"
                         color="white"
                         w="full"
                         bgColor="black"
-                        onClick={getExchangeRate}
+                        onClick={() => router.reload()}
                         // h="2rem"
                         // borderRadius="0"
                     >

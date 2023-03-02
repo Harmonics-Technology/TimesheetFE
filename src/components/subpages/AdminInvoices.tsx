@@ -184,7 +184,8 @@ function AdminInvoices({ invoiceData }: adminProps) {
                                 <TableData
                                     name={
                                         hideCheckbox || pays
-                                            ? x.payrollGroupName
+                                            ? x.employeeInformation
+                                                  ?.payrollGroup
                                             : x.invoiceReference
                                     }
                                 />

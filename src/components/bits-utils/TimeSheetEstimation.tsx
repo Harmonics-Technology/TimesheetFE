@@ -60,12 +60,14 @@ export function TimeSheetEstimationBtn({
     title,
     click,
     bg = 'brand.400',
+    disabled,
 }: {
     id: any;
     loading: boolean;
     title: string;
     click?: any;
     bg?: string;
+    disabled?: boolean;
 }) {
     const router = useRouter();
     return (
@@ -88,6 +90,7 @@ export function TimeSheetEstimationBtn({
                     width="100"
                     color="white"
                     isLoading={loading}
+                    disabled={disabled}
                     spinner={<BeatLoader color="white" size={10} />}
                     onClick={click}
                 >

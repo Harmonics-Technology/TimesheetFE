@@ -79,10 +79,14 @@ export const GenerateInvoiceModal = ({
         },
     });
 
-    const exchangeRate = Number(watch('rate')) || 0;
+    const exchangeRate = isNaN(Number(watch('rate')))
+        ? 0
+        : Number(watch('rate'));
     const invoicesId: string[] = clicked.map((x) => x.id);
 
-    const allInvoiceTotal = clicked.reduce((a, b) => a + b.totalAmount, 0);
+    const allInvoiceTotal = Number(
+        clicked.reduce((a, b) => a + b.totalAmount, 0),
+    );
     // const allExpenseTotal = clicked?.children
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
@@ -91,10 +95,18 @@ export const GenerateInvoiceModal = ({
         return (num / 100) * per;
     }
     const hst =
-        calculatePercentage(allInvoiceTotal, hstAmount?.fee) / exchangeRate;
-    const hstNaira = hst * exchangeRate;
-    const total = (allInvoiceTotal + hstNaira) / exchangeRate;
-    console.log({ exchangeRate });
+        Number(
+            calculatePercentage(allInvoiceTotal, hstAmount?.fee) / exchangeRate,
+        ) || 0;
+    const hstNaira = Number(hst * exchangeRate);
+    const total = Number((allInvoiceTotal + hstNaira) / exchangeRate) || 0;
+    // console.log({
+    //     exchangeRate,
+    //     total,
+    //     allInvoiceTotal,
+    //     hstNaira,
+    //     hst,
+    // });
 
     const onSubmit = async (data: PaymentPartnerInvoiceModel) => {
         (data.invoiceIds = invoicesId), (data.totalAmount = total);
@@ -297,13 +309,24 @@ export const GenerateInvoiceModal = ({
                                         <InvoiceTotalText
                                             label="Subtotal"
                                             value={
-                                                allInvoiceTotal / exchangeRate
+                                                allInvoiceTotal /
+                                                    exchangeRate ==
+                                                Infinity
+                                                    ? 0
+                                                    : Math.ceil(
+                                                          allInvoiceTotal /
+                                                              exchangeRate,
+                                                      )
                                             }
                                             cur={'$'}
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={hst}
+                                            value={
+                                                hst == Infinity
+                                                    ? 0
+                                                    : Math.ceil(hst)
+                                            }
                                             cur={'$'}
                                         />
                                         {/* <InvoiceTotalText
@@ -319,7 +342,7 @@ export const GenerateInvoiceModal = ({
                                         >
                                             <InvoiceTotalText
                                                 label="Total ($)"
-                                                value={CUR(total)}
+                                                value={CUR(Math.ceil(total))}
                                                 cur={'$'}
                                             />
                                         </Box>

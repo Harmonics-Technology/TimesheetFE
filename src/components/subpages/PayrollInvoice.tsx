@@ -205,8 +205,8 @@ function PayrollInvoice({
                                             'Pay Period',
                                             'Amount (₦)',
                                             'Amount ($)',
-                                            'Fees',
-                                            'Total',
+                                            // 'Fees',
+                                            // 'Total',
                                         ]}
                                     >
                                         <>
@@ -262,13 +262,16 @@ function PayrollInvoice({
                                                                     : ''
                                                             }
                                                         />
+
                                                         <TableData
                                                             name={CAD(
-                                                                (x?.totalAmount as number) /
-                                                                    exchangeRate,
+                                                                Math.ceil(
+                                                                    (x?.totalAmount as number) /
+                                                                        exchangeRate,
+                                                                ),
                                                             )}
                                                         />
-                                                        <TableData
+                                                        {/* <TableData
                                                             name={CAD(
                                                                 x
                                                                     .employeeInformation
@@ -285,7 +288,7 @@ function PayrollInvoice({
                                                                           ?.employeeInformation
                                                                           ?.onBoradingFee,
                                                             )}
-                                                        />
+                                                        /> */}
                                                         {/* <TableData
                                                             name={
                                                                 x
@@ -306,11 +309,11 @@ function PayrollInvoice({
                                                                       (x?.totalAmount as number)
                                                             }
                                                         /> */}
-                                                        <TableData
+                                                        {/* <TableData
                                                             name={
                                                                 clicked?.totalPay
                                                             }
-                                                        />
+                                                        /> */}
                                                     </Tr>
                                                 </>
                                             ))}
@@ -336,7 +339,7 @@ function PayrollInvoice({
                                             label="Subtotal"
                                             cur={'$'}
                                             value={CUR(
-                                                Math.floor(
+                                                Math.ceil(
                                                     allInvoiceTotal /
                                                         exchangeRate,
                                                 ),
@@ -344,7 +347,7 @@ function PayrollInvoice({
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={CUR(Math.floor(hst))}
+                                            value={CUR(Math.ceil(hst))}
                                             cur="$"
                                         />
                                         <Box
@@ -357,7 +360,7 @@ function PayrollInvoice({
                                                 cur={'$'}
                                                 label="Total"
                                                 value={CUR(
-                                                    Math.floor(
+                                                    Math.ceil(
                                                         (allInvoiceTotal +
                                                             hstNaira) /
                                                             exchangeRate,

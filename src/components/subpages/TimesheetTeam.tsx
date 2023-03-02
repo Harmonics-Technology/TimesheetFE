@@ -134,14 +134,14 @@ const TimesheetTeam = ({
     //     );
     // }
 
-    const addHours = async (userId, chosenDate, hours) => {
+    const addHours = async (item) => {
         // console.log({ userId, chosenDate, hours });
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
-                userId,
-                chosenDate,
-                hours,
+                item.userId,
+                item.chosenDate,
+                item.hours,
             );
             console.log({ data });
             if (data.status) {
@@ -163,25 +163,25 @@ const TimesheetTeam = ({
         }
     };
 
-    const reloadPage = () => {
-        router.reload();
+    const asyncForEach = async (array, callback) => {
+        for (let index = 0; index < array.length; index++) {
+            await callback(array[index], index, array);
+        }
     };
-
     function ApproveSelected() {
         const [loading, setLoading] = useState(false);
-        const updateSelected = async (callback) => {
-            selectedInput.forEach(async (select) => {
-                if (select.hours !== '' && select.userId !== undefined) {
-                    setLoading(true);
-                    await addHours(
-                        select.userId,
-                        select.chosenDate,
-                        select.hours,
-                    );
-                }
-                setLoading(false);
-                callback();
+        const updateSelected = async () => {
+            await asyncForEach(selected, async (num) => {
+                setLoading(true);
+                await addHours(num);
             });
+            setLoading(false);
+            toast({
+                status: 'success',
+                title: 'Successful',
+                position: 'top-right',
+            });
+            router.reload();
             return;
         };
         return (
@@ -189,7 +189,8 @@ const TimesheetTeam = ({
                 id={1}
                 loading={loading}
                 title="Update TimeSheet"
-                click={() => updateSelected(reloadPage)}
+                click={() => updateSelected()}
+                disabled={selectedInput.length < 1}
                 bg="brand.400"
             />
         );
@@ -395,7 +396,11 @@ const TimesheetTeam = ({
                             defaultValue={
                                 isWeekend(
                                     new Date(timesheets?.date as string),
-                                ) || timesheets?.hours === 0
+                                ) ||
+                                moment(timesheets?.date).format(
+                                    'DD/MM/YYYY',
+                                ) ===
+                                    moment(preventTomorrow).format('DD/MM/YYYY')
                                     ? '---'
                                     : timesheets?.hours
                             }
@@ -403,16 +408,16 @@ const TimesheetTeam = ({
                             textAlign="center"
                             h="full"
                             border="0"
-                            readOnly={
-                                timesheets?.status === 'APPROVED' ||
-                                moment(timesheets?.date).format(
-                                    'YYYY-MM-DD',
-                                ) ===
-                                    moment(preventTomorrow).format('YYYY-MM-DD')
-                            }
+                            readOnly
                             disabled={
                                 timesheets == undefined ||
-                                isWeekend(new Date(timesheets.date as string))
+                                isWeekend(
+                                    new Date(timesheets?.date as string),
+                                ) ||
+                                moment(timesheets?.date).format(
+                                    'DD/MM/YYYY',
+                                ) ===
+                                    moment(preventTomorrow).format('DD/MM/YYYY')
                             }
                             onChange={(e) =>
                                 fillTimeInDate({
