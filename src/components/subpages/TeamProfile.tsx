@@ -190,7 +190,11 @@ function TeamProfile({
     };
     const onSubmit = async (data: TeamMemberModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
-        data.payrollGroupId == 0 ? null : data.payrollGroupId;
+
+        data.payrollGroupId == 0
+            ? (data.payrollGroupId = null)
+            : data.payrollGroupId;
+
         if (data.fixedAmount == true) {
             data.onBordingFee = fixedAmount;
         }
