@@ -286,7 +286,7 @@ const TimesheetPayrollManager = ({
     function ApproveSelected() {
         const [loading, setLoading] = useState(false);
         const updateSelected = async () => {
-            await asyncForEach(selected, async (num) => {
+            await asyncForEach(selectedInput, async (num) => {
                 setLoading(true);
                 await addHours(num);
             });
@@ -445,6 +445,8 @@ const TimesheetPayrollManager = ({
             const close = useCallback(() => onClose(), []);
             const popover = useRef(null);
             useClickOutside(popover, close);
+            const notFilled =
+                moment(timesheets?.date) > moment(timesheets?.dateModified);
             // console.log({ timesheets });
 
             week.push(
@@ -624,7 +626,10 @@ const TimesheetPayrollManager = ({
                                 moment(timesheets?.date).format(
                                     'DD/MM/YYYY',
                                 ) ===
-                                    moment(preventTomorrow).format('DD/MM/YYYY')
+                                    moment(preventTomorrow).format(
+                                        'DD/MM/YYYY',
+                                    ) ||
+                                (notFilled && timesheets?.hours == 0)
                                     ? '---'
                                     : timesheets?.hours
                             }
@@ -632,7 +637,7 @@ const TimesheetPayrollManager = ({
                             textAlign="center"
                             h="full"
                             border="0"
-                            readOnly
+                            readOnly={timesheets?.status == 'APPROVED'}
                             disabled={
                                 timesheets == undefined ||
                                 isWeekend(
