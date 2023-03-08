@@ -32,7 +32,6 @@ import {
     DashboardPaymentPartnerViewStandardResponse,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
-    RecentPayrollView,
 } from 'src/services';
 
 interface DashboardProps {
