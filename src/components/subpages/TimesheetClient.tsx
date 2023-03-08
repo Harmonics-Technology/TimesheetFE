@@ -11,51 +11,69 @@ import {
     subMonths,
     addMonths,
     lastDayOfMonth,
-    subDays,
     isWeekend,
 } from 'date-fns';
 
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
-import { MdArrowDropDown } from 'react-icons/md';
+import { MdArrowDropDown, MdOutlineBookmarkAdd } from 'react-icons/md';
+import { BiX, BiCheck } from 'react-icons/bi';
 import {
     Box,
-    Text,
     Flex,
     Grid,
     Select,
     Input,
     InputGroup,
     useToast,
+    HStack,
+    Circle,
     useDisclosure,
+    Text,
 } from '@chakra-ui/react';
 import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
 } from '@components/bits-utils/TimeSheetEstimation';
 import {
+    RejectTimeSheetModel,
     TimeSheetMonthlyView,
     TimeSheetService,
     TimeSheetView,
 } from 'src/services';
 import moment from 'moment';
-import { FaCheck, FaTimes } from 'react-icons/fa';
+import { FaCheck, FaCheckCircle, FaTimes } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import Naira, { CAD } from '@components/generics/functions/Naira';
+import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Button } from '..';
+import BeatLoader from 'react-spinners/BeatLoader';
 import useClickOutside from '@components/generics/useClickOutside';
+import Checkbox from '@components/bits-utils/Checkbox';
 
 interface approveDate {
     userId: string;
     chosenDate: string;
     hours?: string;
     checked?: boolean;
+    status?: string;
 }
 
-const TimesheetTeam = ({
+const schema = yup.object().shape({
+    reason: yup.string().required(),
+});
+
+const TimesheetClient = ({
     timeSheets,
+    id,
 }: {
     timeSheets: TimeSheetMonthlyView;
+    id: string;
 }) => {
+    console.log({ id });
     const router = useRouter();
-    // console.log({ timeSheets });
+    console.log({ timeSheets });
     const sheet = timeSheets?.timeSheet;
     const { date } = router.query;
     const newDate = new Date(date as unknown as string);
@@ -67,9 +85,9 @@ const TimesheetTeam = ({
     const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
         sheet as TimeSheetView[],
     );
+    // const [checked, setChecked] = useState(false);
     const toast = useToast();
-
-    let hoursWorked: any[] = [] || 0;
+    let hoursWorked: any[] = [];
     monthlyTimesheets?.forEach((x) => {
         hoursWorked.push(x.hours);
     });
@@ -86,80 +104,115 @@ const TimesheetTeam = ({
     const actualPayout =
         Math.round((expectedPay * approvedHours) / expectedHours) || 0;
 
-    const [selected, setSelected] = useState<approveDate[]>([]);
+    const preventTomorrow = addDays(new Date(), 1).toISOString();
+    console.log({ preventTomorrow });
+    const [selected, setSelected] = useState<TimeSheetView[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
 
-    const fillTimeInDate = (item: approveDate) => {
-        const existingValue = selectedInput.find(
-            (e) => e.chosenDate == item.chosenDate,
-        );
+    const timesheetALl = monthlyTimesheets?.filter(
+        (x) =>
+            moment(x.date).format('DD/MM/YYYY') !=
+            moment(preventTomorrow).format('DD/MM/YYYY'),
+    );
+    // console.log({ selectedInput });
+    const fillSelectedDate = (item: TimeSheetView) => {
+        const existingValue = selected.find((e) => e.date == item.date);
         if (existingValue) {
-            const newArray = selectedInput.filter(
-                (x) => x.chosenDate !== item.chosenDate,
-            );
-            setSelectedInput([...newArray, item]);
+            const newArray = selected.filter((x) => x.date !== item.date);
+            setSelected(newArray);
             return;
         }
-        setSelectedInput([...selectedInput, item]);
+        setSelected([...selected, item]);
     };
 
-    // console.log({ selectedInput });
-    console.log({ timeSheets });
+    const fillAllDate = () => {
+        const exists = timesheetALl.length === selected.length;
+        if (exists) {
+            setSelected([]);
+            return;
+        }
+        setSelected(timesheetALl);
+    };
+    console.log({ selected });
 
-    // function ApproveAllTimeSheet() {
-    //     const [loading, setLoading] = useState(false);
-    //     const updateSelected = async () => {
-    //         // setChecked(!checked);
-    //         await monthlyTimesheets.forEach(async (timeSheet) => {
-    //             if (timeSheet.employeeInformation) {
-    //                 setLoading(true);
-    //                 await approveTimeSheetForADay(
-    //                     timeSheet.employeeInformationId,
-    //                     timeSheet.date,
-    //                 );
-    //             }
-    //             setLoading(false);
-    //             return;
-    //         });
-    //         router.reload();
-    //     };
-    //     // console.log({ loading });
-    //     return (
-    //         <TimeSheetEstimationBtn
-    //             id={1}
-    //             loading={loading}
-    //             title="Approve all TimeSheet"
-    //             click={() => updateSelected()}
-    //         />
-    //     );
-    // }
+    const {
+        register,
+        handleSubmit,
+        control,
+        formState: { errors, isSubmitting },
+    } = useForm<RejectTimeSheetModel>({
+        resolver: yupResolver(schema),
+        mode: 'all',
+        defaultValues: {},
+    });
 
-    const addHours = async (item) => {
-        // console.log({ userId, chosenDate, hours });
+    const [reject, setReject] = useState<approveDate>({
+        userId: '',
+        chosenDate: '',
+    });
+    const showReject = (userId, chosenDate) => {
+        console.log({ chosenDate });
+        setReject({ userId, chosenDate });
+    };
 
+    const onSubmit = async (data: RejectTimeSheetModel) => {
+        data.date = reject.chosenDate;
+        data.employeeInformationId = reject.userId;
+        console.log({ data });
         try {
-            const data = await TimeSheetService.addWorkHoursForADay(
-                item.userId,
-                item.chosenDate,
-                item.hours,
+            const result = await TimeSheetService.rejectTimeSheetForADay(data);
+            if (result.status) {
+                console.log({ result });
+                router.reload();
+                return;
+            }
+            console.log({ result });
+        } catch (error) {
+            console.log({ error });
+            toast({
+                title: 'An error occured',
+                status: 'error',
+                position: 'top-right',
+            });
+        }
+    };
+
+    const approveTimeSheetForADay = async (userId, chosenDate) => {
+        // console.log({ item });
+        try {
+            const data = await TimeSheetService.approveTimeSheetForADay(
+                userId,
+                chosenDate,
             );
-            console.log({ data });
             if (data.status) {
                 return;
             }
             toast({
-                status: 'error',
                 title: data.message,
+                status: 'error',
+                isClosable: true,
                 position: 'top-right',
             });
             return;
-        } catch (error: any) {
+        } catch (error) {
             console.log(error);
-            toast({
-                status: 'error',
-                title: error.body.message || error.message,
-                position: 'top-right',
-            });
+        }
+    };
+
+    const addHours = async (userId, chosenDate, hours) => {
+        console.log({ userId, chosenDate, hours });
+
+        try {
+            const data = await TimeSheetService.addWorkHoursForADay(
+                userId,
+                chosenDate,
+                hours,
+            );
+            if (data.status) {
+                return;
+            }
+        } catch (error) {
+            console.log(error);
         }
     };
 
@@ -168,12 +221,16 @@ const TimesheetTeam = ({
             await callback(array[index], index, array);
         }
     };
+
     function ApproveSelected() {
         const [loading, setLoading] = useState(false);
-        const updateSelected = async () => {
-            await asyncForEach(selectedInput, async (num) => {
+        const start = async () => {
+            await asyncForEach(selected, async (select: TimeSheetView) => {
                 setLoading(true);
-                await addHours(num);
+                await approveTimeSheetForADay(
+                    select.employeeInformationId,
+                    select.date,
+                );
             });
             setLoading(false);
             toast({
@@ -182,16 +239,15 @@ const TimesheetTeam = ({
                 position: 'top-right',
             });
             router.reload();
-            return;
         };
         return (
             <TimeSheetEstimationBtn
                 id={1}
                 loading={loading}
-                title="Update TimeSheet"
-                click={() => updateSelected()}
-                disabled={selectedInput.length < 1}
-                bg="brand.400"
+                title="Approve TimeSheet"
+                click={() => start()}
+                disabled={selected?.length < 1}
+                // bg="brand.200"
             />
         );
     }
@@ -214,7 +270,6 @@ const TimesheetTeam = ({
         });
         router.reload();
     };
-    const preventTomorrow = addDays(new Date(), 1).toISOString();
 
     const getHeader = () => {
         return (
@@ -231,7 +286,7 @@ const TimesheetTeam = ({
                 <Select
                     border="0"
                     w="fit-content"
-                    fontSize="1.3rem"
+                    fontSize={['.8rem', '1.3rem']}
                     fontWeight="600"
                     icon={<MdArrowDropDown />}
                     className="select"
@@ -250,7 +305,7 @@ const TimesheetTeam = ({
                     <Box
                         borderRadius="15px"
                         bgColor="#f5f5ff"
-                        p=".3rem .8rem"
+                        p={['.3rem .5rem', '.3rem .8rem']}
                         color="#000"
                     >
                         {`${format(activeDate, 'MMM 01')} - ${format(
@@ -273,7 +328,7 @@ const TimesheetTeam = ({
                     align="center"
                     // ml="6rem"
                 >
-                    {`Viewing ${'My'} Timesheet`}
+                    {`Viewing ${timeSheets?.fullName || ''} Timesheet`}
                 </Flex>
             </div>
         );
@@ -290,7 +345,7 @@ const TimesheetTeam = ({
             );
         }
         return (
-            <div className="weekContainer">
+            <Box className="weekContainer">
                 <Box className="day weekNames" color="red.400">
                     Week
                 </Box>
@@ -298,10 +353,9 @@ const TimesheetTeam = ({
                 <Box className="day weekNames" color="brand.400">
                     Total
                 </Box>
-            </div>
+            </Box>
         );
     };
-
     const generateDatesForCurrentWeek = (
         date,
         selectedDate,
@@ -320,7 +374,8 @@ const TimesheetTeam = ({
                     currentDate.toLocaleDateString(),
             )[0];
             const userId = timesheets?.employeeInformationId as string;
-            const userDate = moment(timesheets?.date).format('YYYY-MM-DD');
+            const userDate = timesheets?.date;
+            const [singleReject, setSingleReject] = useState(false);
             const {
                 isOpen: isVisible,
                 onClose,
@@ -331,7 +386,6 @@ const TimesheetTeam = ({
             useClickOutside(popover, close);
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
-
             // console.log({ notFilled });
 
             week.push(
@@ -352,6 +406,118 @@ const TimesheetTeam = ({
                 >
                     <Flex pos="relative">
                         <div>{format(currentDate, 'MMM, d')}</div>
+                        {/* <HStack gap="0rem" ml=".5rem">
+                            <Circle
+                                size="1rem"
+                                bgColor={
+                                    selected?.find((x) => x.date === userDate)
+                                        ? 'green.500'
+                                        : 'gray.400'
+                                }
+                                color="white"
+                                onClick={() => {
+                                    fillSelectedDate({
+                                        employeeInformationId: userId,
+                                        date: userDate,
+                                    });
+                                }}
+                                disabled={
+                                    timesheets?.status === 'APPROVED' ||
+                                    timesheets == undefined ||
+                                    isWeekend(
+                                        new Date(timesheets?.date as string),
+                                    ) ||
+                                    moment(timesheets?.date).format(
+                                        'YYYY-MM-DD',
+                                    ) ===
+                                        moment(preventTomorrow).format(
+                                            'YYYY-MM-DD',
+                                        )
+                                }
+                                as={Button}
+                                minW="unset"
+                                p="0"
+                            >
+                                <BiCheck />
+                            </Circle>
+                            <Circle
+                                size="1rem"
+                                bgColor={!singleReject ? 'gray.400' : 'red.500'}
+                                color="white"
+                                onClick={() => {
+                                    setSingleReject(!singleReject);
+                                    showReject(userId, userDate);
+                                }}
+                                disabled={
+                                    timesheets?.status === 'REJECTED' ||
+                                    timesheets == undefined ||
+                                    isWeekend(
+                                        new Date(timesheets?.date as string),
+                                    ) ||
+                                    moment(timesheets?.date).format(
+                                        'YYYY-MM-DD',
+                                    ) ===
+                                        moment(preventTomorrow).format(
+                                            'YYYY-MM-DD',
+                                        )
+                                }
+                                as={Button}
+                                minW="unset"
+                                p="0"
+                            >
+                                <BiX />
+                            </Circle>
+                            {singleReject && (
+                                <Box
+                                    w="280px"
+                                    h="fit-content"
+                                    bgColor="white"
+                                    pos="absolute"
+                                    p=".5rem 1rem .8rem"
+                                    zIndex="300"
+                                    borderRadius="8px"
+                                    // top="12rem"
+                                    boxShadow="0px 3px 10px 5px rgba(0,0,0,0.2)"
+                                >
+                                    <Flex
+                                        justify="flex-end"
+                                        onClick={() =>
+                                            setSingleReject(!singleReject)
+                                        }
+                                    >
+                                        <FaTimes />
+                                    </Flex>
+                                    <form onSubmit={handleSubmit(onSubmit)}>
+                                        <PrimaryTextarea<RejectTimeSheetModel>
+                                            label="Reason"
+                                            name="reason"
+                                            error={errors.reason}
+                                            placeholder=""
+                                            defaultValue=""
+                                            h="3.5rem"
+                                            register={register}
+                                        />
+                                        <Button
+                                            isLoading={isSubmitting}
+                                            spinner={
+                                                <BeatLoader
+                                                    color="white"
+                                                    size="10"
+                                                />
+                                            }
+                                            type="submit"
+                                            w="full"
+                                            bgColor="brand.600"
+                                            color="white"
+                                            h="2rem"
+                                            fontSize=".8rem"
+                                        >
+                                            Reject
+                                        </Button>
+                                    </form>
+                                </Box>
+                            )}
+                        </HStack> */}
                         {isVisible && (
                             <Box
                                 pos="absolute"
@@ -415,7 +581,7 @@ const TimesheetTeam = ({
                             textAlign="center"
                             h="full"
                             border="0"
-                            readOnly={timesheets?.status == 'APPROVED'}
+                            readOnly
                             disabled={
                                 timesheets == undefined ||
                                 isWeekend(
@@ -425,13 +591,6 @@ const TimesheetTeam = ({
                                     'DD/MM/YYYY',
                                 ) ===
                                     moment(preventTomorrow).format('DD/MM/YYYY')
-                            }
-                            onChange={(e) =>
-                                fillTimeInDate({
-                                    userId: userId,
-                                    chosenDate: userDate,
-                                    hours: e.target.value,
-                                })
                             }
                         />
 
@@ -445,9 +604,10 @@ const TimesheetTeam = ({
             );
             currentDate = addDays(currentDate, 1);
             const dayHour = timesheets?.hours as number;
-            total.push(timesheets?.hours == undefined ? 0 : dayHour);
+            total.push(dayHour == undefined ? 0 : dayHour);
             sumOfHours = total.reduce((a, b) => a + b, 0);
         }
+
         return (
             <>
                 <Flex
@@ -496,14 +656,23 @@ const TimesheetTeam = ({
 
         return <div className="dayContainer">{allWeeks}</div>;
     };
+
     return (
         <Box>
-            <Box>
+            <Box bg="white">
                 {getHeader()}
+                {/* <Box m="1rem 2rem 0">
+                    <Checkbox
+                        checked={selected?.length == timesheetALl.length}
+                        onChange={() => fillAllDate()}
+                        label="Select All"
+                    />
+                </Box> */}
                 <Box
                     w="full"
                     bgColor="white"
                     p="0rem 2rem 0rem"
+                    // pos="relative"
                     // borderRadius="10px"
                 >
                     {getWeekDaysNames()}
@@ -511,6 +680,7 @@ const TimesheetTeam = ({
                 </Box>
                 {/* <Box></Box> */}
             </Box>
+
             <Box
                 w="100%"
                 ml="auto"
@@ -525,17 +695,17 @@ const TimesheetTeam = ({
                         data={`${expectedHours} HR`}
                         tip="Number of hours you are expected to work this month"
                     />
-                    {/* <TimeSheetEstimation
-                        label="Total Hours Worked"
-                        data={`${totalHours} HR`}
-                        tip="Number of hours you worked this month"
-                    /> */}
                     <TimeSheetEstimation
-                        label="Total Hours Approved"
-                        data={`${timeSheets?.totalApprovedHours} HR`}
-                        tip="Number of hours approved by your supervisor"
+                        label="Total Hours Filled"
+                        data={`${totalHours} HR`}
+                        tip="Number of hours user filled this month"
                     />
                     <TimeSheetEstimation
+                        label="Total Approved Hours"
+                        data={`${timeSheets?.totalApprovedHours} HR`}
+                        tip="Number of hours approved by you"
+                    />
+                    {/* <TimeSheetEstimation
                         label="Expected Payout"
                         data={
                             currency === 'NGN'
@@ -552,9 +722,9 @@ const TimesheetTeam = ({
                                 : CAD(actualPayout)
                         }
                         tip="Number of hours you worked this month x Rate per hour"
-                    />
+                    /> */}
 
-                    <ApproveSelected />
+                    {/* <ApproveSelected /> */}
                     {/* <ApproveAllTimeSheet /> */}
                 </Grid>
             </Box>
@@ -562,4 +732,4 @@ const TimesheetTeam = ({
     );
 };
 
-export default TimesheetTeam;
+export default TimesheetClient;

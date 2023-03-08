@@ -22,7 +22,7 @@ import {
     TableState,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -47,6 +47,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { CUR } from '@components/generics/functions/Naira';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { DateObject } from 'react-multi-date-picker';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -107,6 +108,8 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
             });
         }
     };
+    const { user } = useContext(UserContext);
+    const role = user?.role.replaceAll(' ', '');
     return (
         <>
             <Box
@@ -115,7 +118,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex gap="1rem">
+                <Flex gap="1rem" display={role == 'client' ? 'none' : 'flex'}>
                     <Button
                         bgColor="brand.400"
                         color="white"
