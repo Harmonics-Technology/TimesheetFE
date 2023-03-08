@@ -46,6 +46,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { useLeavePageConfirmation } from '@components/generics/useLeavePageConfirmation';
 import { keys } from 'mobx';
 import error from 'next/error';
+import { UserContext } from '@components/context/UserContext';
 
 interface select {
     options: any;
@@ -72,6 +73,10 @@ function TeamProfile({
     supervisor,
     paymentPartner,
 }: TeamProfileProps) {
+    console.log({ userProfile });
+
+    const { user } = useContext(UserContext);
+    console.log({ user });
     const {
         register,
         handleSubmit,
@@ -89,7 +94,7 @@ function TeamProfile({
             phoneNumber: userProfile?.phoneNumber,
             email: userProfile?.email,
             dateOfBirth: userProfile?.dateOfBirth,
-            clientId: userProfile?.employeeInformation?.clientId,
+            clientId: userProfile?.employeeInformation?.client?.id,
             supervisorId: userProfile?.employeeInformation?.supervisorId,
             paymentPartnerId:
                 userProfile?.employeeInformation?.paymentPartnerId,
@@ -185,7 +190,7 @@ function TeamProfile({
     };
     const onSubmit = async (data: TeamMemberModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
-        // data.role = selected;
+        data.payrollGroupId == 0 ? null : data.payrollGroupId;
         if (data.fixedAmount == true) {
             data.onBordingFee = fixedAmount;
         }
@@ -198,7 +203,7 @@ function TeamProfile({
         if (inc !== '') {
             data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
         }
-        data.clientId = null;
+        // data.clientId = null;
         console.log({ data });
 
         try {

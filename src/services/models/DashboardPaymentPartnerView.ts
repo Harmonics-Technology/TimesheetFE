@@ -3,10 +3,9 @@
 /* eslint-disable */
 
 import type { InvoiceView } from './InvoiceView';
-import type { RecentPayrollView } from './RecentPayrollView';
 
 export type DashboardPaymentPartnerView = {
-    recentPayroll?: Array<RecentPayrollView> | null;
+    recentPayroll?: Array<InvoiceView> | null;
     recentApprovedInvoice?: Array<InvoiceView> | null;
     recentInvoicedInvoice?: Array<InvoiceView> | null;
 };

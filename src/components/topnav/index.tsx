@@ -24,6 +24,7 @@ import { useContext } from 'react';
 import { MdOutlineArrowBackIos } from 'react-icons/md';
 import { UserView } from 'src/services';
 import { NotificationContext } from '@components/context/NotificationContext';
+import { Logout } from '@components/bits-utils/LogUserOut';
 interface topnavProps {
     setOpenSidenav: any;
     openSidenav: boolean;
@@ -33,11 +34,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     const router = useRouter();
     const { user } = useContext(UserContext);
     const role = user?.role;
-    function Logout() {
-        Cookies.remove('user');
-        Cookies.remove('token');
-        router.push('/login');
-    }
+
     const curPage = router.pathname.split('/').at(-1);
     const idPage = router.pathname.split('/').at(-2);
     const { messages } = useContext(NotificationContext);
@@ -136,7 +133,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                             </Text> */}
                                     <Flex
                                         align="center"
-                                        onClick={() => Logout()}
+                                        onClick={() => Logout('/login')}
                                     >
                                         <FiLogOut />
                                         <Text

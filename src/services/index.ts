@@ -65,7 +65,6 @@ export type { PaySlipView } from './models/PaySlipView';
 export type { PaySlipViewPagedCollection } from './models/PaySlipViewPagedCollection';
 export type { PaySlipViewPagedCollectionStandardResponse } from './models/PaySlipViewPagedCollectionStandardResponse';
 export type { ProblemDetails } from './models/ProblemDetails';
-export type { RecentPayrollView } from './models/RecentPayrollView';
 export type { RecentTimeSheetView } from './models/RecentTimeSheetView';
 export type { RegisterModel } from './models/RegisterModel';
 export type { RejectPaymentPartnerInvoiceModel } from './models/RejectPaymentPartnerInvoiceModel';

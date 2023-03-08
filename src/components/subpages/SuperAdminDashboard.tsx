@@ -265,7 +265,11 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                                         }
                                     />
                                     <TableData name={x.invoiceReference} />
-                                    <TableData name={CUR(x.totalAmount)} />
+                                    <TableData
+                                        name={CUR(
+                                            Math.ceil(x.totalAmount as number),
+                                        )}
+                                    />
                                     <TableData
                                         name={formatDate(x.dateCreated)}
                                     />

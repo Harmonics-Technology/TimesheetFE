@@ -10,6 +10,7 @@ import SessionModal from '@components/bits-utils/SessionModal';
 import { NotificationProvider } from '@components/context/NotificationContext';
 import { OnboardingFeeProvider } from '@components/context/OnboardingFeeContext';
 import { UserProvider } from '@components/context/UserContext';
+import { Logout } from '@components/bits-utils/LogUserOut';
 
 type LayoutProps = {
     children: ReactNode;
@@ -41,7 +42,8 @@ const Layout = ({ children }: LayoutProps) => {
     const loggedInUser = user?.role?.replaceAll(' ', '');
     useEffect(() => {
         if (urlRoute !== loggedInUser && urlRoute !== 'user') {
-            onOpen();
+            // onOpen();
+            Logout('/login');
         }
     }, [urlRoute, loggedInUser]);
 

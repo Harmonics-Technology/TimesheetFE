@@ -104,7 +104,7 @@ const TimesheetTeam = ({
     };
 
     // console.log({ selectedInput });
-    // console.log({ selected });
+    console.log({ timeSheets });
 
     // function ApproveAllTimeSheet() {
     //     const [loading, setLoading] = useState(false);
@@ -171,7 +171,7 @@ const TimesheetTeam = ({
     function ApproveSelected() {
         const [loading, setLoading] = useState(false);
         const updateSelected = async () => {
-            await asyncForEach(selected, async (num) => {
+            await asyncForEach(selectedInput, async (num) => {
                 setLoading(true);
                 await addHours(num);
             });
@@ -329,6 +329,10 @@ const TimesheetTeam = ({
             const close = useCallback(() => onClose(), []);
             const popover = useRef(null);
             useClickOutside(popover, close);
+            const notFilled =
+                moment(timesheets?.date) > moment(timesheets?.dateModified);
+
+            console.log({ notFilled });
 
             week.push(
                 <Box
@@ -400,7 +404,10 @@ const TimesheetTeam = ({
                                 moment(timesheets?.date).format(
                                     'DD/MM/YYYY',
                                 ) ===
-                                    moment(preventTomorrow).format('DD/MM/YYYY')
+                                    moment(preventTomorrow).format(
+                                        'DD/MM/YYYY',
+                                    ) ||
+                                (notFilled && timesheets?.hours == 0)
                                     ? '---'
                                     : timesheets?.hours
                             }
@@ -408,7 +415,7 @@ const TimesheetTeam = ({
                             textAlign="center"
                             h="full"
                             border="0"
-                            readOnly
+                            readOnly={timesheets?.status == 'APPROVED'}
                             disabled={
                                 timesheets == undefined ||
                                 isWeekend(
