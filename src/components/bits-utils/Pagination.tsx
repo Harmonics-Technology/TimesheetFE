@@ -18,7 +18,8 @@ function Pagination({ data }: pageOptions) {
         (data?.offset as unknown as number)) /
         (data?.limit as unknown as number)) as number;
     const total = data?.size;
-    const pageSize = data?.value?.length;
+    // const pageSize = data?.value?.length;
+    const pageSize = data.nextOffset;
 
     const router = useRouter();
     const dashboard = router.pathname.includes('/dashboard');
