@@ -42,7 +42,7 @@
 
 .day {
     /* margin: 12px; */
-    height: 4rem;
+    /* height: 4rem; */
     /* padding-top: 1rem;  */
     width: 100%;
     cursor: pointer;
@@ -52,7 +52,7 @@
     justify-content: center;
     /* align-items: center; */
     /* border-radius: 50%; */
-    border: 1px solid #e5e5e5;
+    /* border: 1px solid #e5e5e5; */
     flex-direction: column;
 }
 

@@ -19,14 +19,10 @@ function SingleTimeSheet({
     id: string;
 }) {
     // console.log({ id });
-    const size: Size = useWindowSize();
+    // const size: Size = useWindowSize();
     return (
         <>
-            {size.width != null && size.width <= 1245 ? (
-                <HidePage />
-            ) : (
-                <TimesheetAdmin timeSheets={timeSheets} id={id} />
-            )}
+            <TimesheetAdmin timeSheets={timeSheets} id={id} />
         </>
     );
 }

@@ -22,11 +22,7 @@ function SingleTimeSheet({
     const size: Size = useWindowSize();
     return (
         <>
-            {size.width != null && size.width <= 1245 ? (
-                <HidePage />
-            ) : (
-                <TimesheetSupervisor timeSheets={timeSheets} id={id} />
-            )}
+            <TimesheetSupervisor timeSheets={timeSheets} id={id} />
         </>
     );
 }

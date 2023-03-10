@@ -39,6 +39,7 @@ import {
 import PayrollInvoice from './PayrollInvoice';
 import { formatDate } from '@components/generics/functions/formatDate';
 import InvoiceTemplate from './InvoiceTemplate';
+import { Round } from '@components/generics/functions/Round';
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
@@ -267,7 +268,7 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                                     <TableData name={x.invoiceReference} />
                                     <TableData
                                         name={CUR(
-                                            Math.ceil(x.totalAmount as number),
+                                            Round(x.totalAmount as number),
                                         )}
                                     />
                                     <TableData

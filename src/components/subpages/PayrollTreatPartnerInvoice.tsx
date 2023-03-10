@@ -32,6 +32,7 @@ import PayrollInvoice from './PayrollInvoice';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { MiniTabs } from '@components/bits-utils/MiniTabs';
 import { UserContext } from '@components/context/UserContext';
+import { Round } from '@components/generics/functions/Round';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -188,13 +189,11 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                                 />
                                 <TableData name={formatDate(x.dateCreated)} />
                                 <TableData
-                                    name={CAD(
-                                        Math.ceil(x.totalAmount as number),
-                                    )}
+                                    name={CAD(Round(x.totalAmount as number))}
                                 />
                                 <TableData
                                     name={Naira(
-                                        Math.ceil(
+                                        Round(
                                             (x.totalAmount as number) *
                                                 (x.rate as unknown as number),
                                         ),

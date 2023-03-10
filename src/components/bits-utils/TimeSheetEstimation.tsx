@@ -12,12 +12,12 @@ export default function TimeSheetEstimation({ label, data, tip }: TimeProps) {
     return (
         <Flex
             flexDirection="column"
-            fontSize=".8rem"
-            width="100%"
+            fontSize={['.75rem', '.8rem']}
+            width={['47%', '100%']}
             cursor="default"
         >
             <Flex
-                border="1px solid"
+                border={['none', '1px solid #e5e5e5']}
                 m="0"
                 py="1rem"
                 px=".5rem"
@@ -25,7 +25,7 @@ export default function TimeSheetEstimation({ label, data, tip }: TimeProps) {
                 justify="center"
                 align="center"
                 fontWeight="500"
-                borderColor="#e5e5e5"
+                // borderColor="#e5e5e5"
             >
                 <Text mb="0" noOfLines={1}>
                     {label}
@@ -41,12 +41,12 @@ export default function TimeSheetEstimation({ label, data, tip }: TimeProps) {
                 <Flex
                     border="1px solid"
                     m="0"
-                    h="3rem"
+                    h={['2rem', '3rem']}
                     w="full"
                     justify="center"
                     align="center"
                     fontWeight="500"
-                    borderColor="#e5e5e5"
+                    borderColor={['gray.500', '#e5e5e5']}
                 >
                     {data}
                 </Flex>
@@ -71,23 +71,23 @@ export function TimeSheetEstimationBtn({
 }) {
     const router = useRouter();
     return (
-        <Flex flexDirection="column" fontSize="1rem" width="100%">
+        <Flex flexDirection="column" width="100%">
             <Flex
-                border="1px solid"
+                border={['none', '1px solid #e5e5e5']}
                 m="0"
                 h="full"
                 w="full"
                 justify="center"
                 align="center"
                 fontWeight="500"
-                borderColor="#e5e5e5"
-                p="1.5rem .8rem"
+                p={['1rem .8rem', '1.5rem .8rem']}
             >
                 <Button
                     bgColor={bg}
                     borderRadius="0"
-                    h="full"
-                    width="100"
+                    h={['2.5rem', '3rem']}
+                    width={['80%', 'auto']}
+                    fontSize={['.9rem', '1rem']}
                     color="white"
                     isLoading={loading}
                     disabled={disabled}

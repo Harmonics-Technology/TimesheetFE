@@ -94,7 +94,7 @@ function TeamProfile({
             phoneNumber: userProfile?.phoneNumber,
             email: userProfile?.email,
             dateOfBirth: userProfile?.dateOfBirth,
-            clientId: userProfile?.employeeInformation?.client?.id,
+            // clientId: userProfile?.employeeInformation?.clientId,
             supervisorId: userProfile?.employeeInformation?.supervisorId,
             paymentPartnerId:
                 userProfile?.employeeInformation?.paymentPartnerId,
@@ -207,7 +207,7 @@ function TeamProfile({
         if (inc !== '') {
             data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
         }
-        // data.clientId = null;
+        // data.clientId = userProfile?.employeeInformation?.client?.id;
         console.log({ data });
 
         try {

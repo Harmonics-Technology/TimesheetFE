@@ -152,9 +152,11 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                             cursor="pointer"
                             pos="relative"
                             onClick={() =>
-                                router.push(
-                                    `/${role.replace(' ', '')}/dashboard`,
-                                )
+                                router.asPath.includes('/dashboard')
+                                    ? () => void 0
+                                    : router.push(
+                                          `/${role.replace(' ', '')}/dashboard`,
+                                      )
                             }
                         >
                             <BsBellFill />

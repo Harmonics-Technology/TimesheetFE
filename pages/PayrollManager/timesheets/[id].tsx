@@ -20,14 +20,10 @@ function SingleTimeSheet({
     id: string;
 }) {
     // console.log({ id });
-    const size: Size = useWindowSize();
+    // const size: Size = useWindowSize();
     return (
         <>
-            {size.width != null && size.width <= 1245 ? (
-                <HidePage />
-            ) : (
-                <TimesheetPayrollManager timeSheets={timeSheets} id={id} />
-            )}
+            <TimesheetPayrollManager timeSheets={timeSheets} id={id} />
         </>
     );
 }

@@ -51,6 +51,7 @@ import { Button } from '..';
 import BeatLoader from 'react-spinners/BeatLoader';
 import useClickOutside from '@components/generics/useClickOutside';
 import Checkbox from '@components/bits-utils/Checkbox';
+import { Round } from '@components/generics/functions/Round';
 
 interface approveDate {
     userId: string;
@@ -102,7 +103,7 @@ const TimesheetAdmin = ({
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
     const currency = timeSheets?.currency;
     const actualPayout =
-        Math.round((expectedPay * approvedHours) / expectedHours) || 0;
+        Round((expectedPay * approvedHours) / expectedHours) || 0;
 
     const [loading, setLoading] = useState(false);
     const [allChecked, setAllChecked] = useState<boolean>(false);
@@ -330,7 +331,14 @@ const TimesheetAdmin = ({
 
     const getHeader = () => {
         return (
-            <div className="header">
+            <Flex
+                align="center"
+                justify="space-between"
+                bgColor={['white', 'brand.400']}
+                h="4rem"
+                px={['0rem', '1rem']}
+                color="white"
+            >
                 {/* <div
                     className="todayButton"
                     onClick={() => {
@@ -346,7 +354,8 @@ const TimesheetAdmin = ({
                     fontSize={['.8rem', '1.3rem']}
                     fontWeight="600"
                     icon={<MdArrowDropDown />}
-                    className="select"
+                    bgColor="brand.400"
+                    h="1.8rem"
                     _focus={{
                         border: 0,
                     }}
@@ -354,7 +363,11 @@ const TimesheetAdmin = ({
                     <option value="">Monthly Activities</option>
                     <option value="">Weekly Activities</option>
                 </Select>
-                <Flex align="center">
+                <Flex
+                    align="center"
+                    color={['black', 'white']}
+                    fontSize={['.8rem', '1rem']}
+                >
                     <AiOutlineLeft
                         className="navIcon"
                         onClick={() => prevMonth()}
@@ -362,6 +375,7 @@ const TimesheetAdmin = ({
                     <Box
                         borderRadius="15px"
                         bgColor="#f5f5ff"
+                        border={['1px solid gray', 'none']}
                         p={['.3rem .5rem', '.3rem .8rem']}
                         color="#000"
                     >
@@ -383,34 +397,89 @@ const TimesheetAdmin = ({
                     fontSize="1rem"
                     h="2.8rem"
                     align="center"
+                    display={['none', 'flex']}
                     // ml="6rem"
                 >
                     {`Viewing ${timeSheets?.fullName || ''} Timesheet`}
                 </Flex>
-            </div>
+            </Flex>
         );
     };
 
-    const getWeekDaysNames = () => {
+    const getWeekDaysNames = (weekNumber?: any) => {
         const weekStartDate = startOfWeek(activeDate);
         const weekDays: any[] = [];
         for (let day = 0; day < 7; day++) {
             weekDays.push(
-                <div className="day weekNames" key={day}>
+                <Flex
+                    key={day}
+                    w="full"
+                    align="center"
+                    justify={['center', 'center']}
+                    fontSize={['.6rem', '.8rem']}
+                    cursor="pointer"
+                    fontWeight={['600', '600']}
+                    color={['gray.500', 'black']}
+                    textTransform={['uppercase', 'uppercase']}
+                    mb={['.5rem', '0']}
+                    mt={['0', '1rem']}
+                    border={['0', '1px solid #e5e5e5']}
+                    h={['auto', '3rem']}
+                >
                     {format(addDays(weekStartDate, day), 'E')}
-                </div>,
+                </Flex>,
             );
         }
         return (
-            <Box className="weekContainer">
-                <Box className="day weekNames" color="red.400">
-                    Week
+            <>
+                <Box
+                    className="day weekNames"
+                    color="black"
+                    display={['block', 'none']}
+                    textTransform="uppercase"
+                    fontWeight="600"
+                    mb=".5rem"
+                    p="0 .6rem"
+                >
+                    Week {weekNumber}
                 </Box>
-                {weekDays}
-                <Box className="day weekNames" color="brand.400">
-                    Total
-                </Box>
-            </Box>
+                <Grid templateColumns={['repeat(8,1fr)', 'repeat(9,1fr)']}>
+                    <Flex
+                        w="full"
+                        display={['none', 'flex']}
+                        align="center"
+                        justify={['center', 'center']}
+                        fontSize={['.6rem', '.8rem']}
+                        cursor="pointer"
+                        fontWeight={['600', '600']}
+                        color={['gray.500', 'red.400']}
+                        textTransform={['uppercase', 'uppercase']}
+                        mb={['.5rem', '0']}
+                        mt={['0', '1rem']}
+                        border={['0', '1px solid #e5e5e5']}
+                        h={['auto', '3rem']}
+                    >
+                        Week
+                    </Flex>
+                    {weekDays}
+                    <Flex
+                        w="full"
+                        align="center"
+                        justify={['center', 'center']}
+                        fontSize={['.6rem', '.8rem']}
+                        cursor="pointer"
+                        fontWeight={['600', '500']}
+                        color={['gray.500', 'brand.400']}
+                        textTransform={['uppercase', 'uppercase']}
+                        mb={['.5rem', '0']}
+                        mt={['0', '1rem']}
+                        border={['0', '1px solid #e5e5e5']}
+                        h={['auto', '3rem']}
+                    >
+                        Total
+                    </Flex>
+                </Grid>
+            </>
         );
     };
     const generateDatesForCurrentWeek = (
@@ -444,7 +513,12 @@ const TimesheetAdmin = ({
             // console.log({ timesheets });
 
             week.push(
-                <Box
+                <Flex
+                    border={['0', '1px solid #e5e5e5']}
+                    height={['auto', '4rem']}
+                    // color={['gray.500', 'inherit']}
+                    fontSize={['.5rem', '.8rem']}
+                    pt={['0', '0rem']}
                     className={`day ${
                         isSameMonth(currentDate, activeDate)
                             ? ''
@@ -459,11 +533,15 @@ const TimesheetAdmin = ({
                         setSelectedDate(cloneDate);
                     }}
                 >
-                    <Flex pos="relative">
+                    <Flex pos="relative" flexDir={['column', 'row']}>
                         <div>{format(currentDate, 'MMM, d')}</div>
-                        <HStack gap="0rem" ml=".5rem">
+                        <HStack
+                            gap={['.3rem', '1rem']}
+                            ml={['0', '.5rem']}
+                            spacing="0"
+                        >
                             <Circle
-                                size="1rem"
+                                size={['.7rem', '1rem']}
                                 bgColor={
                                     selected?.find((x) => x.date === userDate)
                                         ? 'green.500'
@@ -496,7 +574,7 @@ const TimesheetAdmin = ({
                                 <BiCheck />
                             </Circle>
                             <Circle
-                                size="1rem"
+                                size={['.7rem', '1rem']}
                                 bgColor={!singleReject ? 'gray.400' : 'red.500'}
                                 color="white"
                                 onClick={() => {
@@ -618,6 +696,8 @@ const TimesheetAdmin = ({
                     >
                         <Input
                             type="number"
+                            fontSize={['.6rem', '.9rem']}
+                            p={['0', '1rem']}
                             defaultValue={
                                 isWeekend(
                                     new Date(timesheets?.date as string),
@@ -660,7 +740,7 @@ const TimesheetAdmin = ({
                             <FaTimes color="red" onClick={onOpen} />
                         ) : null}
                     </InputGroup>
-                </Box>,
+                </Flex>,
             );
             currentDate = addDays(currentDate, 1);
             const dayHour = timesheets?.hours as number;
@@ -675,17 +755,20 @@ const TimesheetAdmin = ({
                     justify="center"
                     fontWeight="500"
                     fontSize=".9rem"
+                    display={['none', 'flex']}
+                    border={['0', '1px solid #e5e5e5']}
                 >
                     {weekNumber}
                 </Flex>
-                <>{week}</>
+                {week}
                 <Flex
                     className="day"
                     justify="center"
                     fontWeight="500"
-                    fontSize=".9rem"
+                    fontSize={['.6rem', '.9rem']}
+                    border={['0', '1px solid #e5e5e5']}
                 >
-                    {sumOfHours} HR
+                    {sumOfHours}
                 </Flex>
             </>
         );
@@ -714,41 +797,67 @@ const TimesheetAdmin = ({
             weekNumber++, (currentDate = addDays(currentDate, 7));
         }
 
-        return <div className="dayContainer">{allWeeks}</div>;
+        return (
+            <>
+                {allWeeks.map((x, i) => (
+                    <Box
+                        bgColor="white"
+                        mb={['1rem', '0']}
+                        p={['.5rem', '0']}
+                        borderRadius={['8px', '0']}
+                        boxShadow="sm"
+                    >
+                        <Box display={['block', 'none']}>
+                            {getWeekDaysNames(++i)}
+                        </Box>
+                        <Grid
+                            templateColumns={['repeat(8,1fr)', 'repeat(9,1fr)']}
+                            border={['0']}
+                        >
+                            {x}
+                        </Grid>
+                    </Box>
+                ))}
+            </>
+        );
     };
 
     return (
         <Box>
-            <Box bg="white">
+            <Box>
                 {getHeader()}
-                <Box m="1rem 2rem 0">
+                <Box p={['0rem 1rem 0', '1rem 2rem 0']} bgColor="white">
                     <Checkbox
-                        checked={selected?.length == timesheetALl.length}
+                        checked={selected?.length == timesheetALl?.length}
                         onChange={() => fillAllDate()}
                         label="Select All"
                     />
                 </Box>
                 <Box
                     w="full"
-                    bgColor="white"
-                    p="0rem 2rem 0rem"
-                    // pos="relative"
-                    // borderRadius="10px"
+                    bgColor={['transparent', 'white']}
+                    p={['0', '0rem 2rem 0rem']}
                 >
-                    {getWeekDaysNames()}
+                    <Box display={['none', 'block']}>{getWeekDaysNames()}</Box>
                     {getDates()}
                 </Box>
-                {/* <Box></Box> */}
             </Box>
             <Box
                 w="100%"
                 ml="auto"
                 bgColor="white"
                 mt="0rem"
-                // borderRadius="10px"
-                p="1rem 2rem"
+                mb={['3rem', '0']}
+                p={['1rem 1rem', '1rem 2rem']}
             >
-                <Grid templateColumns="repeat(6,1fr)" w="100%" mr="auto">
+                <Flex
+                    w="100%"
+                    mr="auto"
+                    flexWrap="wrap"
+                    display={['flex', 'grid']}
+                    gridTemplateColumns={'repeat(6,1fr)'}
+                    gap={['0rem 1rem', '0']}
+                >
                     <TimeSheetEstimation
                         label="Expected Total Hours"
                         data={`${expectedHours} HR`}
@@ -780,7 +889,7 @@ const TimesheetAdmin = ({
 
                     <ApproveSelectedInput />
                     <ApproveSelected />
-                </Grid>
+                </Flex>
             </Box>
         </Box>
     );

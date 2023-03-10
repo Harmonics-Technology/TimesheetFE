@@ -94,6 +94,7 @@ const SidebarToggle = ({ setChange, change }: sidebarProps) => {
                 boxShadow="sm"
                 color={change ? 'white' : 'gray.500'}
                 onClick={setAndStoreSidebarChange}
+                h={['1.8rem', '2.5rem']}
                 // pos="relative"
                 // right="0"
             />

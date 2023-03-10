@@ -34,6 +34,7 @@ import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { formatDate } from '@components/generics/functions/formatDate';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
+import { Round } from '@components/generics/functions/Round';
 
 function PayrollInvoice({
     isOpen,
@@ -265,7 +266,7 @@ function PayrollInvoice({
 
                                                         <TableData
                                                             name={CAD(
-                                                                Math.ceil(
+                                                                Round(
                                                                     (x?.totalAmount as number) /
                                                                         exchangeRate,
                                                                 ),
@@ -339,7 +340,7 @@ function PayrollInvoice({
                                             label="Subtotal"
                                             cur={'$'}
                                             value={CUR(
-                                                Math.ceil(
+                                                Round(
                                                     allInvoiceTotal /
                                                         exchangeRate,
                                                 ),
@@ -347,7 +348,7 @@ function PayrollInvoice({
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={CUR(Math.ceil(hst))}
+                                            value={CUR(Round(hst))}
                                             cur="$"
                                         />
                                         <Box
@@ -360,7 +361,7 @@ function PayrollInvoice({
                                                 cur={'$'}
                                                 label="Total"
                                                 value={CUR(
-                                                    Math.ceil(
+                                                    Round(
                                                         (allInvoiceTotal +
                                                             hstNaira) /
                                                             exchangeRate,

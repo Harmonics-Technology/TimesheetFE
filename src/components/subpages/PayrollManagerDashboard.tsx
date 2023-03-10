@@ -38,6 +38,7 @@ import {
 import PayrollInvoice from './PayrollInvoice';
 import { formatDate } from '@components/generics/functions/formatDate';
 import InvoiceTemplate from './InvoiceTemplate';
+import { Round } from '@components/generics/functions/Round';
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
@@ -104,8 +105,12 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                         name={`${x.expectedHours} hours`}
                                     />
                                     <TableData name={`${x.totalHours} hours`} />
-                                    <TableData name={`${CUR(x.expectedPayout)}`} />
-                                    <TableData name={CUR(x.actualPayout)} />
+                                    <TableData
+                                        name={`${CUR(x.expectedPayout)}`}
+                                    />
+                                    <TableData
+                                        name={CUR(Round(x.actualPayout))}
+                                    />
                                     {/* <TableState name={x.status} /> */}
                                 </Tr>
                             ))}
@@ -150,7 +155,9 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                             x.startDate,
                                         )}- ${formatDate(x.endDate)}`}
                                     />
-                                    <TableData name={CUR(x.totalAmount)} />
+                                    <TableData
+                                        name={CUR(Round(x.totalAmount))}
+                                    />
                                     <TableState name={x.status as string} />
                                     <TableInvoiceActions id={x.id} x={x} />
                                 </Tr>
@@ -234,7 +241,9 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                         }
                                     />
                                     <TableData name={x.invoiceReference} />
-                                    <TableData name={CUR(x.totalAmount)} />
+                                    <TableData
+                                        name={CUR(Round(x.totalAmount))}
+                                    />
                                     <TableData
                                         name={formatDate(x.dateCreated)}
                                     />

@@ -45,6 +45,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { Round } from '@components/generics/functions/Round';
 
 type Props = {
     isOpen?: any;
@@ -313,7 +314,7 @@ export const GenerateInvoiceModal = ({
                                                     exchangeRate ==
                                                 Infinity
                                                     ? 0
-                                                    : Math.ceil(
+                                                    : Round(
                                                           allInvoiceTotal /
                                                               exchangeRate,
                                                       )
@@ -325,7 +326,7 @@ export const GenerateInvoiceModal = ({
                                             value={
                                                 hst == Infinity
                                                     ? 0
-                                                    : Math.ceil(hst)
+                                                    : Round(hst)
                                             }
                                             cur={'$'}
                                         />
@@ -342,7 +343,7 @@ export const GenerateInvoiceModal = ({
                                         >
                                             <InvoiceTotalText
                                                 label="Total ($)"
-                                                value={CUR(Math.ceil(total))}
+                                                value={CUR(Round(total))}
                                                 cur={'$'}
                                             />
                                         </Box>

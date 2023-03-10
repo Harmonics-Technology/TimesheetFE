@@ -21,6 +21,7 @@ import {
 } from '@components/bits-utils/TableData';
 import { NotificationContext } from '@components/context/NotificationContext';
 import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
+import { Round } from '@components/generics/functions/Round';
 import { formatDate } from '@components/generics/functions/formatDate';
 import axios from 'axios';
 import moment from 'moment';
@@ -132,10 +133,12 @@ function PaymentPartnerDashboard({
                                     <TableData
                                         name={formatDate(x.dateCreated)}
                                     />
-                                    <TableData name={CAD(x.totalAmount)} />
+                                    <TableData
+                                        name={CAD(Round(x.totalAmount))}
+                                    />
                                     <TableData
                                         name={Naira(
-                                            Math.round(
+                                            Round(
                                                 (x.totalAmount as number) *
                                                     (x.rate as unknown as number),
                                             ),

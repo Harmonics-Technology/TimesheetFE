@@ -27,6 +27,7 @@ import RejectedMessage from '@components/bits-utils/RejectedMessage';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { Round } from '@components/generics/functions/Round';
 
 function Paymentinvoices({
     isOpen,
@@ -263,7 +264,7 @@ function Paymentinvoices({
                                             label="Subtotal"
                                             cur={'$'}
                                             value={CUR(
-                                                Math.ceil(
+                                                Round(
                                                     allInvoiceTotal /
                                                         exchangeRate,
                                                 ),
@@ -271,7 +272,7 @@ function Paymentinvoices({
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={CUR(Math.ceil(hst))}
+                                            value={CUR(Round(hst))}
                                             cur="$"
                                         />
                                         <Box
@@ -284,7 +285,7 @@ function Paymentinvoices({
                                                 cur={'$'}
                                                 label="Total"
                                                 value={CUR(
-                                                    Math.ceil(
+                                                    Round(
                                                         (allInvoiceTotal +
                                                             hstNaira) /
                                                             exchangeRate,

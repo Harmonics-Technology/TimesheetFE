@@ -17,11 +17,11 @@ function SingleTimeSheet({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) {
 
     return (
         <>
-            {size.width != null && size.width <= 1025 ? (
+            {/* {size.width != null && size.width <= 1025 ? (
                 <HidePage />
-            ) : (
-                <TimesheetTeam timeSheets={timeSheets} />
-            )}
+            ) : ( */}
+            <TimesheetTeam timeSheets={timeSheets} />
+            {/* )} */}
         </>
     );
 }
