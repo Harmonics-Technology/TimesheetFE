@@ -1,6 +1,6 @@
-import { Box, Button, Grid, Text, Tr, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, Grid, Text, Tr, useToast } from '@chakra-ui/react';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -24,6 +24,8 @@ import {
 } from '@components/bits-utils/TableData';
 import Checkbox from '@components/bits-utils/Checkbox';
 import Pagination from '@components/bits-utils/Pagination';
+import Link from 'next/link';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     firstName: yup.string().required(),
@@ -90,6 +92,9 @@ function SupervisorProfile({ userProfile, teamList }: SupervisorProfileProps) {
             });
         }
     };
+
+    const { user } = useContext(UserContext);
+    const role = user.role.replaceAll(' ', '');
     return (
         <Box
             bgColor="white"
@@ -98,15 +103,38 @@ function SupervisorProfile({ userProfile, teamList }: SupervisorProfileProps) {
             minH="80vh"
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
-            <Text
-                fontWeight="600"
-                fontSize="1.1rem"
+            <Flex
+                justify="space-between"
+                flexDir={['column', 'row']}
+                align="center"
+                gap="1rem"
                 mb="3rem"
-                textTransform="capitalize"
-                color="brand.200"
             >
-                Basic Info
-            </Text>
+                <Text
+                    fontWeight="600"
+                    fontSize="1.1rem"
+                    textTransform="capitalize"
+                    color="brand.200"
+                >
+                    Basic Info
+                </Text>
+                {userProfile?.role?.includes('Internal') && (
+                    <Link
+                        href={`/${role}/profile-management/team-members/${userProfile?.id}`}
+                        passHref
+                    >
+                        <Button
+                            bgColor="brand.600"
+                            color="white"
+                            height="2.5rem"
+                            fontSize="14px"
+                            // boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                        >
+                            View Full Profile
+                        </Button>
+                    </Link>
+                )}
+            </Flex>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid
                     templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}

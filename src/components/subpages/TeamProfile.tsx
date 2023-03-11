@@ -182,6 +182,10 @@ function TeamProfile({
             });
     };
     const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);
+    const percentageAmounts = percentageAmount?.sort(
+        (a, b) => (a.fee as number) - (b.fee as number),
+    );
+    // console.log({ percentageAmounts });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selected, setSelected] = useState(userProfile?.role as string);
     const changeUserRole = async (val) => {
@@ -365,7 +369,11 @@ function TeamProfile({
                             keyLabel="fullName"
                             label="Current Client"
                             disabled
-                            placeholder={userProfile?.clientName as string}
+                            placeholder={
+                                userProfile?.clientName ||
+                                (userProfile?.employeeInformation?.supervisor
+                                    ?.clientName as string)
+                            }
                             options={[]}
                         />
                         <SelectrixBox<TeamMemberModel>
@@ -601,7 +609,8 @@ function TeamProfile({
                                     options={paymentPartner}
                                     placeholder={
                                         userProfile?.employeeInformation
-                                            ?.paymentPartner?.fullName as string
+                                            ?.paymentPartner
+                                            ?.firstName as string
                                     }
                                 />
                                 <SelectrixBox<TeamMemberModel>
@@ -704,7 +713,7 @@ function TeamProfile({
                                     userProfile?.employeeInformation
                                         ?.onBoradingFee as unknown as string
                                 }
-                                options={percentageAmount}
+                                options={percentageAmounts}
                             />
                         ) : (
                             // : onboarding == true &&

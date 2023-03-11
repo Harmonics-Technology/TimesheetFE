@@ -38,7 +38,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 'payment partner',
             );
             const clientId =
-                data?.data?.employeeInformation?.supervisor?.client?.id;
+                data?.data?.employeeInformation?.supervisor?.client?.id ||
+                data?.data?.employeeInformation?.supervisor?.employeeInformation
+                    ?.client?.id;
             console.log({ clientId });
             const supervisor = await UserService.getClientSupervisors(
                 0,
