@@ -38,10 +38,14 @@ const Layout = ({ children }: LayoutProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const route = `/login`;
     const urlRoute = router.asPath.split('/')[1];
-    // console.log({ urlRoute });
+    console.log({ urlRoute });
     const loggedInUser = user?.role?.replaceAll(' ', '');
     useEffect(() => {
-        if (urlRoute !== loggedInUser && urlRoute !== 'user') {
+        if (
+            urlRoute !== loggedInUser &&
+            urlRoute !== 'forgot-password' &&
+            urlRoute !== 'user'
+        ) {
             // onOpen();
             Logout('/login');
         }
