@@ -604,7 +604,7 @@ function TeamProfile({
                                     name="paymentPartnerId"
                                     error={errors.paymentPartnerId}
                                     keys="id"
-                                    keyLabel="fullName"
+                                    keyLabel="firstName"
                                     label="Payment Partner"
                                     options={paymentPartner}
                                     placeholder={

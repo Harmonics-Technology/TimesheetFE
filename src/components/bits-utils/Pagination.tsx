@@ -12,14 +12,14 @@ function Pagination({ data }: pageOptions) {
     console.log({ data });
     const totalPages =
         (data?.size as number) / (data?.limit as unknown as number);
-        // console.log({ totalPages });
-        const currentPage = (((data?.limit as unknown as number) +
+    // console.log({ totalPages });
+    const currentPage = (((data?.limit as unknown as number) +
         (data?.offset as unknown as number)) /
         (data?.limit as unknown as number)) as number;
-        const total = data?.size;
-        // const pageSize = data?.value?.length;
-        const current = data?.offset + 1;
-    const pageSize = data.nextOffset;
+    const total = data?.size;
+    // const pageSize = data?.value?.length;
+    const current = data?.offset + 1;
+    const pageSize = data?.nextOffset;
 
     const router = useRouter();
     const dashboard = router.pathname.includes('/dashboard');

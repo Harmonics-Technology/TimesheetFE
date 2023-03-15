@@ -248,7 +248,7 @@ function ClientInvoicedInvoice({
                                     >
                                         <InvoiceTotalText
                                             label="Subtotal"
-                                            cur={''}
+                                            cur={'$'}
                                             value={CUR(
                                                 Round(clicked?.totalAmount),
                                             )}
@@ -256,7 +256,7 @@ function ClientInvoicedInvoice({
                                         <InvoiceTotalText
                                             label="Hst"
                                             value={CUR(hstPrice)}
-                                            cur=""
+                                            cur="$"
                                             hst={clicked?.hst}
                                         />
                                         <Box
@@ -266,7 +266,7 @@ function ClientInvoicedInvoice({
                                             pt="1em"
                                         >
                                             <InvoiceTotalText
-                                                cur={''}
+                                                cur={'$'}
                                                 label="Total"
                                                 value={CUR(
                                                     Round(
