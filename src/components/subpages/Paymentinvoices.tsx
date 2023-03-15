@@ -52,12 +52,12 @@ function Paymentinvoices({
     // const allExpenseTotal = clicked?.children
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
-    const { hstAmount } = useContext(OnboardingFeeContext);
+    // const { hstAmount } = useContext(OnboardingFeeContext);
     function calculatePercentage(num, per) {
         return (num / 100) * per;
     }
     const hst =
-        calculatePercentage(allInvoiceTotal, hstAmount?.fee) / exchangeRate;
+        calculatePercentage(allInvoiceTotal, clicked?.hst) / exchangeRate;
     const hstNaira = hst * exchangeRate;
     const status = clicked?.status;
     return (
@@ -274,6 +274,7 @@ function Paymentinvoices({
                                             label="Hst"
                                             value={CUR(Round(hst))}
                                             cur="$"
+                                            hst={clicked?.hst}
                                         />
                                         <Box
                                             border="2px dashed"

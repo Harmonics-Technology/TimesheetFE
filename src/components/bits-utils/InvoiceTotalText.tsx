@@ -5,10 +5,12 @@ function InvoiceTotalText({
     label,
     value,
     cur,
+    hst,
 }: {
     label: string;
     value: string | number;
     cur: any;
+    hst?: any;
 }) {
     return (
         <Flex fontSize=".9rem">
@@ -19,7 +21,7 @@ function InvoiceTotalText({
                 w="120px"
                 textAlign="left"
             >
-                {label}
+                {label} {hst && `(${hst}%)`}
             </Text>
             <Text color="black" fontWeight="600" w="120px" textAlign="right">
                 {cur}

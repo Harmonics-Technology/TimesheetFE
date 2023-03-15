@@ -25,6 +25,7 @@ export type InvoiceView = {
     invoiceType?: string | null;
     rejectionReason?: string | null;
     hst?: string | null;
+    clientTotalAmount?: number | null;
     createdByUserId?: string | null;
     createdByUser?: UserView;
     payrolls?: Array<PayrollView> | null;

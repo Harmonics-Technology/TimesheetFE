@@ -57,6 +57,9 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                 pr="1rem"
                 align="center"
                 pos="relative"
+                w="95%"
+                mx="auto"
+                pb=".5rem"
             >
                 <Box color="brand.200">
                     <Text

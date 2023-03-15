@@ -9,7 +9,7 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -34,18 +34,24 @@ import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
+import { UserContext } from '@components/context/UserContext';
+import ClientPaginate from '@components/bits-utils/ClientPaginate';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const schema = yup.object().shape({});
 interface ClientProfileProps {
     userProfile?: UserView;
     teamList?: UserViewPagedCollectionStandardResponse;
     supervisorList?: UserViewPagedCollectionStandardResponse;
+    id: any;
 }
 
 function ClientProfile({
     userProfile,
     teamList,
     supervisorList,
+    id,
 }: ClientProfileProps) {
     const [teamMembers, setTeamMembers] = useState(false);
     const [supervisors, setSupervisors] = useState(false);
@@ -67,6 +73,14 @@ function ClientProfile({
     });
     const router = useRouter();
     const toast = useToast();
+    const { user } = useContext(UserContext);
+    const role = user?.role?.replaceAll(' ', '');
+    const [teamLists, setTeamLists] = useState(teamList?.data);
+    const [teamLoading, setTeamLoading] = useState<boolean>(false);
+    const [supervisorLists, setSupervisorLists] = useState(
+        supervisorList?.data,
+    );
+    const [supervisorLoading, setSupervisorLoading] = useState<boolean>(false);
 
     const onSubmit = async (data: UpdateUserModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
@@ -331,7 +345,7 @@ function ClientProfile({
                     <Text fontWeight="600">Team Members</Text>
                     <Tables
                         tableHead={[
-                            'Name',
+                            'Full Name',
                             'Job Title',
                             'Phone No',
                             'Role',
@@ -340,25 +354,51 @@ function ClientProfile({
                         ]}
                     >
                         <>
-                            {teamList?.data?.value?.map((x: UserView) => (
-                                <Tr key={x.id}>
-                                    <TableData name={x.firstName} />
-                                    <TableData
-                                        name={x.employeeInformation?.jobTitle}
-                                    />
-                                    <TableData name={x.phoneNumber} />
-                                    <TableData name={x.role} />
-                                    <TableStatus name={x.isActive} />
-                                    <TableActions
-                                        id={x.id}
-                                        route="/SuperAdmin/profile-management/team-members"
-                                        email={x.email}
-                                    />
-                                </Tr>
-                            ))}
+                            {teamLoading ? (
+                                <Skeleton
+                                    count={8}
+                                    className="skeleton"
+                                    containerClassName="sk-wrapper"
+                                />
+                            ) : (
+                                <>
+                                    {teamList?.data?.value?.map(
+                                        (x: UserView) => (
+                                            <Tr key={x.id}>
+                                                <TableData name={x.fullName} />
+                                                <TableData
+                                                    name={
+                                                        x.employeeInformation
+                                                            ?.jobTitle
+                                                    }
+                                                />
+                                                <TableData
+                                                    name={x.phoneNumber}
+                                                />
+                                                <TableData name={x.role} />
+                                                <TableStatus
+                                                    name={x.isActive}
+                                                />
+                                                <TableActions
+                                                    id={x.id}
+                                                    route={`/${role}/profile-management/team-members`}
+                                                    email={x.email}
+                                                />
+                                            </Tr>
+                                        ),
+                                    )}
+                                </>
+                            )}
                         </>
                     </Tables>
-                    <Pagination data={teamList} />
+                    {/* <Pagination data={teamList} /> */}
+                    <ClientPaginate
+                        data={teamLists}
+                        setTxn={setTeamLists}
+                        id={id}
+                        api={UserService.getClientTeamMembers}
+                        setLoading={setTeamLoading}
+                    />
                 </Box>
                 <Box
                     borderY="1px solid"
@@ -370,8 +410,8 @@ function ClientProfile({
                     <Text fontWeight="600">Supervisors</Text>
                     <Tables
                         tableHead={[
-                            'Name',
-                            'Job Title',
+                            'First Name',
+                            'Last Name',
                             'Phone No',
                             'Role',
                             'Status',
@@ -379,25 +419,46 @@ function ClientProfile({
                         ]}
                     >
                         <>
-                            {supervisorList?.data?.value?.map((x: UserView) => (
-                                <Tr key={x.id}>
-                                    <TableData name={x.firstName} />
-                                    <TableData
-                                        name={x.employeeInformation?.jobTitle}
-                                    />
-                                    <TableData name={x.phoneNumber} />
-                                    <TableData name={x.role} />
-                                    <TableStatus name={x.isActive} />
-                                    <TableActions
-                                        id={x.id}
-                                        route="/SuperAdmin/profile-management/supervisors"
-                                        email={x.email}
-                                    />
-                                </Tr>
-                            ))}
+                            {supervisorLoading ? (
+                                <Skeleton
+                                    count={8}
+                                    className="skeleton"
+                                    containerClassName="sk-wrapper"
+                                />
+                            ) : (
+                                <>
+                                    {supervisorList?.data?.value?.map(
+                                        (x: UserView) => (
+                                            <Tr key={x.id}>
+                                                <TableData name={x.firstName} />
+                                                <TableData name={x.lastName} />
+                                                <TableData
+                                                    name={x.phoneNumber}
+                                                />
+                                                <TableData name={x.role} />
+                                                <TableStatus
+                                                    name={x.isActive}
+                                                />
+                                                <TableActions
+                                                    id={x.id}
+                                                    route={`/${role}/profile-management/supervisors`}
+                                                    email={x.email}
+                                                />
+                                            </Tr>
+                                        ),
+                                    )}
+                                </>
+                            )}
                         </>
                     </Tables>
-                    <Pagination data={supervisorList} />
+                    {/* <Pagination data={supervisorList} /> */}
+                    <ClientPaginate
+                        data={supervisorLists}
+                        setTxn={setSupervisorLists}
+                        id={id}
+                        api={UserService.getClientTeamMembers}
+                        setLoading={setSupervisorLoading}
+                    />
                 </Box>
             </Box>
         </Box>

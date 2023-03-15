@@ -11,14 +11,16 @@ interface pageOptions {
     userProfile: any;
     teamList: UserViewPagedCollectionStandardResponse;
     supervisorList: UserViewPagedCollectionStandardResponse;
+    id: any;
 }
 
-function ClientDetails({ userProfile, teamList, supervisorList }: pageOptions) {
+function ClientDetails({ userProfile, teamList, supervisorList, id }: pageOptions) {
     return (
         <ClientProfile
             userProfile={userProfile}
             teamList={teamList}
             supervisorList={supervisorList}
+            id={id}
         />
     );
 }
@@ -50,6 +52,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     userProfile: data.data,
                     teamList,
                     supervisorList,
+                    id,
                 },
             };
         } catch (error: any) {

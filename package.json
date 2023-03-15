@@ -57,6 +57,7 @@
         "react-dom": "^18.2.0",
         "react-hook-form": "^7.39.5",
         "react-icons": "^4.7.1",
+        "react-loading-skeleton": "^3.2.0",
         "react-month-year-picker": "^1.0.1",
         "react-multi-date-picker": "^3.3.4",
         "react-phone-input-2": "^2.15.1",

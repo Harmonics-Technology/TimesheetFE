@@ -127,7 +127,11 @@ function ClientInvoicedInvoice({
                                             Billed To
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
-                                            {/* {clicked?.clietName} <br /> */}
+                                            {
+                                                clicked?.createdByUser
+                                                    ?.organizationName
+                                            }
+                                            <br />
                                             201 New York Ibeju Leki, 201
                                             New-York Ibeju Leki
                                         </Text>
@@ -173,7 +177,7 @@ function ClientInvoicedInvoice({
                                                             <TableData
                                                                 name={CUR(
                                                                     Round(
-                                                                        x?.totalAmount as unknown as number,
+                                                                        x?.clientTotalAmount as unknown as number,
                                                                     ),
                                                                 )}
                                                             />
@@ -189,7 +193,7 @@ function ClientInvoicedInvoice({
                                                                                       ?.employeeInformation
                                                                                       ?.onBoradingFee
                                                                                 : calculatePercentage(
-                                                                                      x?.totalAmount,
+                                                                                      x?.clientTotalAmount,
                                                                                       x
                                                                                           ?.employeeInformation
                                                                                           ?.onBoradingFee,
@@ -201,7 +205,7 @@ function ClientInvoicedInvoice({
                                                             <TableData
                                                                 name={CUR(
                                                                     Round(
-                                                                        (x?.totalAmount as unknown as number) +
+                                                                        (x?.clientTotalAmount as unknown as number) +
                                                                             Number(
                                                                                 x
                                                                                     ?.employeeInformation
@@ -211,7 +215,7 @@ function ClientInvoicedInvoice({
                                                                                           ?.employeeInformation
                                                                                           ?.onBoradingFee
                                                                                     : calculatePercentage(
-                                                                                          x?.totalAmount,
+                                                                                          x?.clientTotalAmount,
                                                                                           x
                                                                                               ?.employeeInformation
                                                                                               ?.onBoradingFee,
@@ -251,8 +255,9 @@ function ClientInvoicedInvoice({
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={`${CUR(clicked?.hst)} %`}
+                                            value={CUR(hstPrice)}
                                             cur=""
+                                            hst={clicked?.hst}
                                         />
                                         <Box
                                             border="2px dashed"

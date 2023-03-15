@@ -161,7 +161,9 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                                             x.startDate,
                                         )}- ${formatDate(x.endDate)}`}
                                     />
-                                    <TableData name={CUR(x.totalAmount)} />
+                                    <TableData
+                                        name={CUR(Round(x.totalAmount))}
+                                    />
                                     <TableState name={x.status as string} />
                                     <TableInvoiceActions id={x.id} x={x} />
                                 </Tr>

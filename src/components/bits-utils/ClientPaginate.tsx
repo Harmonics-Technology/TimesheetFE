@@ -1,68 +1,92 @@
-import { Flex, Text, Circle, HStack, Button } from '@chakra-ui/react';
+import {
+    Button,
+    Circle,
+    Flex,
+    HStack,
+    Icon,
+    Square,
+    Text,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React from 'react';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
-interface pageOptions {
+interface ClientPaginateProps {
     data: any;
+    display?: string | undefined;
+    justify?: string | undefined;
+    setTxn?: any;
+    id?: any;
+    api?: any;
+    setLoading?: any;
 }
 
-function Pagination({ data }: pageOptions) {
-    data = data?.data;
-    console.log({ data });
-    const totalPages =
-        (data?.size as number) / (data?.limit as unknown as number);
-        // console.log({ totalPages });
-        const currentPage = (((data?.limit as unknown as number) +
+function ClientPaginate({
+    data,
+    display,
+    justify = 'flex-end',
+    setTxn,
+    id,
+    api,
+    setLoading,
+}: ClientPaginateProps) {
+    const totalPages = Math.ceil(
+        (data?.size as number) / (data?.limit as unknown as number),
+    );
+
+    const currentPage = (((data?.limit as unknown as number) +
         (data?.offset as unknown as number)) /
         (data?.limit as unknown as number)) as number;
-        const total = data?.size;
-        // const pageSize = data?.value?.length;
-        const current = data?.offset + 1;
+    const total = data?.size;
+    // const pageSize = data?.value?.length;
+    const current = data?.offset + 1;
     const pageSize = data.nextOffset;
-
     const router = useRouter();
-    const dashboard = router.pathname.includes('/dashboard');
     const next = data?.next?.href;
     const previous = data?.previous?.href;
     const last = data?.last?.href;
 
-    const paginate = (direction: 'next' | 'previous' | 'last') => {
+    const paginate = async (direction: 'next' | 'previous') => {
         let link = '';
         if (direction == 'previous' && previous != null) {
-            link = previous?.split('?')[1] ?? false;
-            router.push({
-                query: {
-                    ...router.query,
-                    limit: data.limit,
-                    offset: data.previousOffset,
-                },
-            });
+            const url = new URL(previous!);
+            const limit = url.searchParams.get('limit');
+            const offset = url.searchParams.get('offset');
+            const search = url.searchParams.get('search');
+            setLoading(true);
+            const getPrev = await api(
+                offset as unknown as number,
+                limit as unknown as number,
+                search,
+                id,
+            );
+            if (getPrev.status) {
+                setLoading(false);
+                setTxn(getPrev.data);
+            }
         }
         if (direction == 'next' && next != null) {
-            link = next?.split('?')[1] ?? false;
-            router.push({
-                query: {
-                    ...router.query,
-                    limit: data.limit,
-                    offset: data.nextOffset,
-                },
-            });
-        }
-        if (direction == 'last' && last != null) {
-            link = last?.split('?')[1] ?? false;
-            router.push({
-                query: {
-                    // url: link,
-                    limit: data.limit,
-                    offset: data.nextOffset,
-                },
-            });
+            link = next!.split('?')[1];
+            const url = new URL(next!);
+            const limit = url.searchParams.get('limit');
+            const offset = url.searchParams.get('offset');
+            const search = url.searchParams.get('search');
+            setLoading(true);
+            const getNext = await api(
+                offset as unknown as number,
+                limit as unknown as number,
+                search,
+                id,
+            );
+            if (getNext.status) {
+                setLoading(false);
+                setTxn(getNext.data);
+            }
         }
     };
     return (
         <Flex
-            justify={dashboard ? 'center' : 'space-between'}
+            justify={'space-between'}
             align="center"
             p="1.5rem 0 .5rem"
             gap="1rem"
@@ -72,7 +96,7 @@ function Pagination({ data }: pageOptions) {
                 fontSize=".9rem"
                 color="brand.300"
                 mb="0"
-                display={dashboard ? 'none' : 'block'}
+                // display={dashboard ? 'none' : 'block'}
             >
                 Showing {current} to {pageSize} of {total} entries
             </Text>
@@ -106,7 +130,7 @@ function Pagination({ data }: pageOptions) {
                         padding="0"
                         borderRadius="50%"
                         disabled={!previous}
-                        onClick={() => paginate('last')}
+                        // onClick={() => paginate('last')}
                     >
                         {Math.floor(totalPages) < 2
                             ? '2'
@@ -133,4 +157,4 @@ function Pagination({ data }: pageOptions) {
     );
 }
 
-export default Pagination;
+export default ClientPaginate;

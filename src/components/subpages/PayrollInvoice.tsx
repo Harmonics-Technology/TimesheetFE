@@ -59,10 +59,10 @@ function PayrollInvoice({
     // const allExpenseTotal = clicked?.children
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
-    const { hstAmount } = useContext(OnboardingFeeContext);
+    // const { hstAmount } = useContext(OnboardingFeeContext);
 
     const hst =
-        calculatePercentage(allInvoiceTotal, hstAmount?.fee) / exchangeRate;
+        calculatePercentage(allInvoiceTotal, clicked?.hst) / exchangeRate;
     const hstNaira = hst * exchangeRate;
     // console.log({ allInvoiceTotal, hst, hstNaira });
     // console.log({ clicked });
@@ -350,6 +350,7 @@ function PayrollInvoice({
                                             label="Hst"
                                             value={CUR(Round(hst))}
                                             cur="$"
+                                            hst={clicked?.hst}
                                         />
                                         <Box
                                             border="2px dashed"

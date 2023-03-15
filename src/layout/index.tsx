@@ -72,12 +72,14 @@ const Layout = ({ children }: LayoutProps) => {
                                 ml="auto"
                                 minH="95vh"
                             >
-                                <Box as="div" w="95%" mx="auto" mb="3rem">
+                                <Box as="div" w="100%" mx="auto" mb="3rem">
                                     <TopNav
                                         setOpenSidenav={setOpenSidenav}
                                         openSidenav={openSidenav}
                                     />
-                                    <Box mt="1rem">{children}</Box>
+                                    <Box mt="1rem" w="95%" mx="auto">
+                                        {children}
+                                    </Box>
                                     <Footer />
                                 </Box>
                             </Box>
