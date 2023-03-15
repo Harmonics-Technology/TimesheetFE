@@ -11,9 +11,9 @@ function Pagination({ data }: pageOptions) {
     data = data?.data;
     console.log({ data });
     const current = data?.offset + 1;
-    const totalPages = Math.floor(
-        (data?.size as number) / (data?.limit as unknown as number),
-    );
+    const totalPages =
+        (data?.size as number) / (data?.limit as unknown as number);
+    // console.log({ totalPages });
     const currentPage = (((data?.limit as unknown as number) +
         (data?.offset as unknown as number)) /
         (data?.limit as unknown as number)) as number;
@@ -108,7 +108,9 @@ function Pagination({ data }: pageOptions) {
                         disabled={!previous}
                         onClick={() => paginate('last')}
                     >
-                        {totalPages}
+                        {Math.floor(totalPages) < 2
+                            ? '2'
+                            : Math.floor(totalPages)}
                     </Button>
 
                     <Button

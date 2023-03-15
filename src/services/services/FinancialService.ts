@@ -1189,6 +1189,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param clientId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -1198,6 +1199,7 @@ endDate?: string,
     public static listClientInvoices(
 offset?: number,
 limit?: number,
+clientId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -1208,6 +1210,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'clientId': clientId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,

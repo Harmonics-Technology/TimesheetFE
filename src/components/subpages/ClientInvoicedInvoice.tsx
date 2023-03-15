@@ -28,8 +28,9 @@ import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { Round } from '@components/generics/functions/Round';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
 
-function Paymentinvoices({
+function ClientInvoicedInvoice({
     isOpen,
     onClose,
     clicked,
@@ -45,21 +46,9 @@ function Paymentinvoices({
             ref.current.save();
         }
     }
-    const exchangeRate = clicked?.rate as unknown as number;
-    const allInvoiceTotal = (
-        clicked?.children as unknown as InvoiceView[]
-    )?.reduce((a, b) => a + (b?.totalAmount as number), 0);
-    // const allExpenseTotal = clicked?.children
-    //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
-    //     ?.reduce((a: any, b: any) => a + b, 0);
-    const { hstAmount } = useContext(OnboardingFeeContext);
-    function calculatePercentage(num, per) {
-        return (num / 100) * per;
-    }
-    const hst =
-        calculatePercentage(allInvoiceTotal, hstAmount?.fee) / exchangeRate;
-    const hstNaira = hst * exchangeRate;
-    const status = clicked?.status;
+
+    const hstPrice = calculatePercentage(clicked?.totalAmount, clicked?.hst);
+
     return (
         <>
             <Modal
@@ -138,7 +127,7 @@ function Paymentinvoices({
                                             Billed To
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
-                                            {clicked?.payrollGroupName} <br />
+                                            {/* {clicked?.clietName} <br /> */}
                                             201 New York Ibeju Leki, 201
                                             New-York Ibeju Leki
                                         </Text>
@@ -158,122 +147,112 @@ function Paymentinvoices({
                                             'Name',
                                             'Start Date',
                                             'End Date',
-                                            'Amount (₦)',
-                                            'Amount ($)',
-                                            'Fee',
+                                            'Salary',
+                                            'Service charge',
+                                            'Total',
                                         ]}
                                     >
                                         <>
-                                            {clicked?.children?.map((x, i) => (
-                                                <>
-                                                    <Tr key={i}>
-                                                        <TableData
-                                                            name={x?.name}
-                                                        />
-                                                        <TableData
-                                                            name={formatDate(
-                                                                x?.startDate,
-                                                            )}
-                                                        />
-                                                        <TableData
-                                                            name={formatDate(
-                                                                x?.endDate,
-                                                            )}
-                                                        />
-                                                        <TableData
-                                                            name={`${Naira(
-                                                                (x?.totalAmount as number) -
-                                                                    (
-                                                                        x?.expenses as unknown as ExpenseView[]
-                                                                    )?.reduce(
-                                                                        (
-                                                                            a,
-                                                                            b,
-                                                                        ) =>
-                                                                            a +
-                                                                            (b?.amount as number),
-                                                                        0,
+                                            {clicked?.clientInvoiceChildren?.map(
+                                                (x, i) => (
+                                                    <>
+                                                        <Tr key={i}>
+                                                            <TableData
+                                                                name={x?.name}
+                                                            />
+                                                            <TableData
+                                                                name={formatDate(
+                                                                    x?.startDate,
+                                                                )}
+                                                            />
+                                                            <TableData
+                                                                name={formatDate(
+                                                                    x?.endDate,
+                                                                )}
+                                                            />
+                                                            <TableData
+                                                                name={CUR(
+                                                                    Round(
+                                                                        x?.totalAmount as unknown as number,
                                                                     ),
-                                                            )} ${
-                                                                x?.expenses
-                                                                    ?.length !==
-                                                                0
-                                                                    ? `+ ${Naira(
-                                                                          x.expenses?.reduce(
-                                                                              (
-                                                                                  a,
-                                                                                  b,
-                                                                              ) =>
-                                                                                  a +
-                                                                                  (b?.amount as number),
-                                                                              0,
-                                                                          ),
-                                                                      )}`
-                                                                    : ''
-                                                            }`}
-                                                            classes={
-                                                                x?.expenses
-                                                                    ?.length !==
-                                                                0
-                                                                    ? 'green'
-                                                                    : ''
-                                                            }
-                                                        />
-                                                        <TableData
-                                                            name={CAD(
-                                                                (x?.totalAmount as number) /
-                                                                    exchangeRate,
-                                                            )}
-                                                        />
-                                                        <TableData
-                                                            name={`${
-                                                                x
-                                                                    ?.employeeInformation
-                                                                    ?.onBoradingFee
-                                                            }${
-                                                                x
-                                                                    .employeeInformation
-                                                                    ?.fixedAmount ==
-                                                                false
-                                                                    ? '%'
-                                                                    : 'flat'
-                                                            }`}
-                                                        />
-                                                    </Tr>
-                                                </>
-                                            ))}
+                                                                )}
+                                                            />
+                                                            <TableData
+                                                                name={CUR(
+                                                                    Round(
+                                                                        Number(
+                                                                            x
+                                                                                ?.employeeInformation
+                                                                                ?.fixedAmount ==
+                                                                                true
+                                                                                ? x
+                                                                                      ?.employeeInformation
+                                                                                      ?.onBoradingFee
+                                                                                : calculatePercentage(
+                                                                                      x?.totalAmount,
+                                                                                      x
+                                                                                          ?.employeeInformation
+                                                                                          ?.onBoradingFee,
+                                                                                  ),
+                                                                        ),
+                                                                    ),
+                                                                )}
+                                                            />
+                                                            <TableData
+                                                                name={CUR(
+                                                                    Round(
+                                                                        (x?.totalAmount as unknown as number) +
+                                                                            Number(
+                                                                                x
+                                                                                    ?.employeeInformation
+                                                                                    ?.fixedAmount ==
+                                                                                    true
+                                                                                    ? x
+                                                                                          ?.employeeInformation
+                                                                                          ?.onBoradingFee
+                                                                                    : calculatePercentage(
+                                                                                          x?.totalAmount,
+                                                                                          x
+                                                                                              ?.employeeInformation
+                                                                                              ?.onBoradingFee,
+                                                                                      ),
+                                                                            ),
+                                                                    ),
+                                                                )}
+                                                            />
+                                                        </Tr>
+                                                    </>
+                                                ),
+                                            )}
                                         </>
                                     </Tables>
                                 </Box>
-                                <Box w={['full', '30%']}>
-                                    <InputBlank
+                                <Box w="30%">
+                                    {/* <InputBlank
                                         defaultValue={
                                             exchangeRate as unknown as string
                                         }
                                         placeholder=""
                                         label="Exchange Rate"
                                         fontSize=".8rem"
-                                    />
+                                    /> */}
                                 </Box>
-                                <Box w={['full', 'fit-content']} ml="auto">
+                                <Box w="fit-content" ml="auto">
                                     <Flex
                                         flexDirection="column"
                                         w="fit-content"
                                     >
                                         <InvoiceTotalText
                                             label="Subtotal"
-                                            cur={'$'}
+                                            cur={''}
                                             value={CUR(
-                                                Round(
-                                                    allInvoiceTotal /
-                                                        exchangeRate,
-                                                ),
+                                                Round(clicked?.totalAmount),
                                             )}
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={CUR(Round(hst))}
-                                            cur="$"
+                                            value={`${CUR(clicked?.hst)} %`}
+                                            cur=""
                                         />
                                         <Box
                                             border="2px dashed"
@@ -282,13 +261,12 @@ function Paymentinvoices({
                                             pt="1em"
                                         >
                                             <InvoiceTotalText
-                                                cur={'$'}
+                                                cur={''}
                                                 label="Total"
                                                 value={CUR(
                                                     Round(
-                                                        (allInvoiceTotal +
-                                                            hstNaira) /
-                                                            exchangeRate,
+                                                        (clicked?.totalAmount as unknown as number) +
+                                                            (hstPrice as unknown as number),
                                                     ),
                                                 )}
                                             />
@@ -307,7 +285,7 @@ function Paymentinvoices({
                                 </Text> */}
                             </PDFExport>
                         </Box>
-                        <HStack justify="center" mt="4rem" flexWrap="wrap">
+                        <HStack justify="center" mt="4rem">
                             <Button
                                 bgColor="brand.400"
                                 color="white"
@@ -318,37 +296,11 @@ function Paymentinvoices({
                             >
                                 Download Invoice
                             </Button>
-                            <Tooltip label="Click to view message" hasArrow>
-                                <Button
-                                    bgColor={
-                                        status == 'REJECTED'
-                                            ? 'red.600'
-                                            : status == 'PENDING'
-                                            ? 'brand.700'
-                                            : status == 'APPROVED'
-                                            ? 'brand.600'
-                                            : 'brand.400'
-                                    }
-                                    color="white"
-                                    fontSize=".8rem"
-                                    onClick={onOpen}
-                                    borderRadius="0"
-                                    textTransform="capitalize"
-                                    // h="3rem"
-                                >
-                                    {status}
-                                </Button>
-                            </Tooltip>
                         </HStack>
                     </ModalBody>
                 </ModalContent>
             </Modal>
-            <RejectedMessage
-                isOpen={isOpened}
-                onClose={onClosed}
-                clicked={clicked}
-            />
         </>
     );
 }
-export default Paymentinvoices;
+export default ClientInvoicedInvoice;

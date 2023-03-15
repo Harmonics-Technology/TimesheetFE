@@ -3,14 +3,17 @@ import { withPageAuth } from '@components/generics/withPageAuth';
 import AdminProfile from '@components/subpages/AdminProfile';
 import SupervisorProfile from '@components/subpages/SupervisorProfile';
 import { GetServerSideProps } from 'next';
-import { UserService, UserViewPagedCollectionStandardResponse } from 'src/services';
+import {
+    UserService,
+    UserViewPagedCollectionStandardResponse,
+} from 'src/services';
 interface pageOptions {
     userProfile: any;
     teamList: UserViewPagedCollectionStandardResponse;
 }
 
 function AdminDetails({ userProfile, teamList }: pageOptions) {
-    return <SupervisorProfile userProfile={userProfile}teamList={teamList}  />;
+    return <SupervisorProfile userProfile={userProfile} teamList={teamList} />;
 }
 
 export default AdminDetails;
@@ -27,6 +30,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.limit,
                 pagingOptions.search,
                 id,
+                pagingOptions.from,
+                pagingOptions.to,
             );
             // console.log({ data });
             return {

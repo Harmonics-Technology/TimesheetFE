@@ -29,6 +29,7 @@ import {
     UserViewPagedCollectionStandardResponse,
 } from 'src/services';
 import PayrollInvoice from './PayrollInvoice';
+import ClientInvoicedInvoice from './ClientInvoicedInvoice';
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
@@ -146,7 +147,7 @@ function ClientDashboard({
                 markAsRead={markAsRead}
                 loading={loading}
             />
-            <PayrollInvoice
+            <ClientInvoicedInvoice
                 isOpen={isOpen}
                 onClose={onClose}
                 clicked={clicked}

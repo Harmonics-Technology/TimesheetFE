@@ -4,6 +4,7 @@ import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import AdminInvoices from '@components/subpages/AdminInvoices';
+import ClientInvoices from '@components/subpages/ClientInvoices';
 import { GetServerSideProps } from 'next';
 import React, { useContext } from 'react';
 import {
@@ -33,7 +34,7 @@ function Invoices({ invoiceData }: invoiceType) {
                     tabName="Clients"
                 />
             </Flex>
-            <AdminInvoices invoiceData={invoiceData} />
+            <ClientInvoices invoiceData={invoiceData} />
         </Box>
     );
 }

@@ -29,6 +29,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
 import { formatDate } from '@components/generics/functions/formatDate';
+import ClientInvoicedInvoice from './ClientInvoicedInvoice';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -165,9 +166,7 @@ function ClientInvoices({ invoiceData }: adminProps) {
                                 <TableData name={x.invoiceReference} />
                                 <TableData
                                     name={
-                                        x.payrollGroupName ||
-                                        x.paymentPartnerName ||
-                                        x.name
+                                        x?.createdByUser?.organizationName || ''
                                     }
                                 />
                                 <TableData name={formatDate(x.dateCreated)} />
@@ -199,7 +198,7 @@ function ClientInvoices({ invoiceData }: adminProps) {
                 </Tables>
                 <Pagination data={invoiceData} />
             </Box>
-            <InvoiceTemplate
+            <ClientInvoicedInvoice
                 isOpen={isOpen}
                 onClose={onClose}
                 clicked={clicked}

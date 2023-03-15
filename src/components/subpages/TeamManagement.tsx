@@ -262,7 +262,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                 ? (data.monthlyPayoutRate = 0)
                 : (data.monthlyPayoutRate as number);
         }
-        data.clientId = null;
+        // data.clientId = null;
         console.log({ data });
 
         if (data.supervisorId === undefined || '') {

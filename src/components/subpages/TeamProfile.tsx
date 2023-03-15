@@ -94,7 +94,7 @@ function TeamProfile({
             phoneNumber: userProfile?.phoneNumber,
             email: userProfile?.email,
             dateOfBirth: userProfile?.dateOfBirth,
-            // clientId: userProfile?.employeeInformation?.clientId,
+            clientId: userProfile?.employeeInformation?.clientId,
             supervisorId: userProfile?.employeeInformation?.supervisorId,
             paymentPartnerId:
                 userProfile?.employeeInformation?.paymentPartnerId,

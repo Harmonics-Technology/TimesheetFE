@@ -8,7 +8,6 @@ export type TeamMemberModel = {
     email?: string | null;
     password?: string | null;
     address?: string | null;
-    clientId?: string | null;
     role: string;
     phoneNumber?: string | null;
     organizationName?: string | null;
@@ -21,6 +20,7 @@ export type TeamMemberModel = {
     payRollTypeId?: number;
     payrollGroupId?: number | null;
     supervisorId?: string | null;
+    clientId?: string | null;
     ratePerHour?: number;
     dateOfBirth?: string;
     jobTitle?: string | null;
