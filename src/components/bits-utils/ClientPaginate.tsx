@@ -40,7 +40,7 @@ function ClientPaginate({
     const total = data?.size;
     // const pageSize = data?.value?.length;
     const current = data?.offset + 1;
-    const pageSize = data.nextOffset;
+    const pageSize = data?.nextOffset;
     const router = useRouter();
     const next = data?.next?.href;
     const previous = data?.previous?.href;

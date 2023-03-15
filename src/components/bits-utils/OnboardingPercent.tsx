@@ -175,7 +175,7 @@ export const OnboardingPercent = ({ data }: { data: OnboardingFeeView[] }) => {
                     </Text>
                 </Link>
             </HStack>
-            <HStack w="full" gap="2rem">
+            <HStack w="full" gap="2rem" align="flex-start">
                 <Box w="30%">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Box w="70%">
