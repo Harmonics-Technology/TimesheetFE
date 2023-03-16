@@ -255,7 +255,7 @@ function ClientInvoicedInvoice({
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={CUR(hstPrice)}
+                                            value={CUR(Round(hstPrice))}
                                             cur="$"
                                             hst={clicked?.hst}
                                         />
