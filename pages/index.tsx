@@ -1,14 +1,18 @@
-import React from "react";
-import { Spacer, Flex } from "@chakra-ui/react";
+import { GetServerSideProps } from 'next';
+import React from 'react';
 
-import { Header, Main, Cards, Footer } from "@components";
+function index() {
+    return <div>index</div>;
+}
 
-const Home: React.FC = () => {
-    return (
-        <Flex direction="column" minH="100vh">
-            Something Fresh
-        </Flex>
-    );
+export default index;
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    return {
+        redirect: {
+            permanent: false,
+            destination: '/login',
+        },
+        props: {},
+    };
 };
-
-export default Home;
