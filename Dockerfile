@@ -7,8 +7,8 @@ ENV NEXT_PUBLIC_API_BASEURL ${API_BASEURL}
 
 COPY . .
 
-RUN npm ci
+RUN yarn install --frozen-lockfile
 
-RUN npm install --dev && npm run build
+RUN yarn run build
 
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]
