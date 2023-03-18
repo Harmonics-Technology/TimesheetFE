@@ -44,7 +44,7 @@ const Layout = ({ children }: LayoutProps) => {
         if (
             urlRoute !== loggedInUser &&
             urlRoute !== 'forgot-password' &&
-            urlRoute !== 'user'
+            urlRoute !== 'user' && !urlRoute.startsWith('password')
         ) {
             // onOpen();
             Logout('/login');
