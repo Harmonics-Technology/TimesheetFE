@@ -1,8 +1,9 @@
-/**
- * @type {import('next').NextConfig}
- */
-const nextConfig = {
-    /* config options here */
-};
+const withPlugins = require("next-compose-plugins");
 
-module.exports = nextConfig;
+module.exports = withPlugins([], {});
+
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+    enabled: process.env.ANALYZE === 'true'
+  })
+  
+  module.exports = withBundleAnalyzer({})
