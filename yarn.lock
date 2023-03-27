@@ -6489,6 +6489,11 @@ react-multi-date-picker@^3.3.4:
     react-date-object "^2.1.5"
     react-element-popper "^2.1.6"
 
+react-otp-input@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-otp-input/-/react-otp-input-3.0.0.tgz#870f3cdfb973dc4ef0b8749785c64ec303f2f835"
+  integrity sha512-TgTE3PbHhu4VxsAA9JUACzhtxwuZ8OSle9kiwK0Ne7fCv7wOXTtIRWQWPoNlfOZ/sxGsXjMexqwrQdB9yy0qEQ==
+
 react-phone-input-2@^2.15.1:
   version "2.15.1"
   resolved "https://registry.yarnpkg.com/react-phone-input-2/-/react-phone-input-2-2.15.1.tgz#31edf2adb03cbc990b5432e0567d8a5303f3de49"

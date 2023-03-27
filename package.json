@@ -60,6 +60,7 @@
         "react-loading-skeleton": "^3.2.0",
         "react-month-year-picker": "^1.0.1",
         "react-multi-date-picker": "^3.3.4",
+        "react-otp-input": "^3.0.0",
         "react-phone-input-2": "^2.15.1",
         "react-phone-number-input": "^3.2.13",
         "react-query": "^3.5.16",

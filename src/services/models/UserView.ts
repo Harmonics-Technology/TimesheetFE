@@ -31,4 +31,6 @@ export type UserView = {
     payrollGroupId?: number;
     invoiceGenerationFrequency?: string | null;
     term?: number | null;
+    twoFactorCode?: string;
+    twoFactorEnabled?: boolean;
 };

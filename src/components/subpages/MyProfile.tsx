@@ -16,6 +16,9 @@ import {
     Spinner,
     VStack,
     Tr,
+    FormControl,
+    FormLabel,
+    Switch,
 } from '@chakra-ui/react';
 import React, { useContext, useRef, useState } from 'react';
 import { FaTimes, FaUser } from 'react-icons/fa';
@@ -27,6 +30,7 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { UserContext } from '@components/context/UserContext';
 import {
     AdminPaymentScheduleViewListStandardResponse,
+    Enable2FAView,
     PaymentSchedule,
     PaymentScheduleListStandardResponse,
     UpdateUserModel,
@@ -51,6 +55,7 @@ import PaymentScheduleModal from '@components/bits-utils/PaymentScheduleModal';
 import AdminPaymentScheduleModal from '@components/bits-utils/AdminPaymentScheduleModal';
 import { subDays } from 'date-fns';
 import { formatDate } from '@components/generics/functions/formatDate';
+import TwoFaModal from '@components/bits-utils/TwoFaModal';
 
 const schema = yup.object().shape({
     dateOfBirth: yup.string().required(),
@@ -69,8 +74,9 @@ function MyProfile({
     const {
         register,
         handleSubmit,
+        handleSubmit: handleTwoFaSubmit,
         control,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isSubmitting: twoFaSubmit },
     } = useForm<UpdateUserModel>({
         resolver: yupResolver(schema),
         mode: 'all',
@@ -169,25 +175,7 @@ function MyProfile({
         }
     };
 
-    // const logedInUser = {
-    //     id: user?.id,
-    //     role: user?.role,
-    //     isActive: user?.isActive,
-    //     firstName: user?.firstName,
-    //     lastName: user?.lastName,
-    //     address: user?.address,
-    //     phoneNumber: user?.phoneNumber,
-    //     organizationName: user.organizationName,
-    //     profilePicture: user?.profilePicture,
-    //     dateOfBirth: user?.dateOfBirth,
-    // };
     const onSubmit = async (data: UpdateUserModel) => {
-        // console.log({ data });
-        // console.log({ logedInUser });
-        // if (data === logedInUser) {
-        //     console.log('Same');
-        //     return;
-        // }
         if (pictureUrl !== '') {
             data.profilePicture = pictureUrl.cdnUrl;
         }
@@ -216,6 +204,38 @@ function MyProfile({
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
+    const {
+        isOpen: open2Fa,
+        onOpen: onOpen2Fa,
+        onClose: close2Fa,
+    } = useDisclosure();
+    const [twoFaData, setTwoFaData] = useState<Enable2FAView>();
+
+    const twoFaSubmitFun = async () => {
+        try {
+            const result = await UserService.enable2Fa();
+            if (result.status) {
+                console.log({ result });
+                setTwoFaData(result.data);
+                onOpen2Fa();
+                return;
+            }
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            toast({
+                title: error?.message || error?.body?.message,
+                status: 'success',
                 isClosable: true,
                 position: 'top-right',
             });
@@ -372,7 +392,7 @@ function MyProfile({
                     </Box>
                 </Flex>
             </Box>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form>
                 <Grid
                     templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                     gap="1rem 1rem"
@@ -512,6 +532,109 @@ function MyProfile({
                         </Grid>
                     </Box>
                 </Grid>
+                <Box
+                    bgColor="white"
+                    borderRadius="15px"
+                    padding="1.5rem"
+                    boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
+                    w="full"
+                    mb="1.5rem"
+                >
+                    <VStack align="flex-start" w="60%" gap="1rem">
+                        <Box>
+                            <Text
+                                color="#484747"
+                                fontWeight="500"
+                                lineHeight="150%"
+                            >
+                                Two factor authentication
+                            </Text>
+                            <Text
+                                color="#484747"
+                                fontWeight="400"
+                                lineHeight="150%"
+                                fontSize="14px"
+                            >
+                                Two-Factor Authentication is an enhanced
+                                security measure. Once enabled, you will be
+                                required to give two types of Identification
+                                when you login.
+                            </Text>
+                        </Box>
+
+                        <FormControl
+                            display="flex"
+                            alignItems="center"
+                            gap="1rem"
+                        >
+                            <Switch
+                                id="email-alerts"
+                                onChange={() => twoFaSubmitFun()}
+                                defaultChecked={
+                                    user?.twoFactorEnabled == true
+                                        ? true
+                                        : false
+                                }
+                            />
+                            <FormLabel
+                                htmlFor="email-alerts"
+                                mb="0"
+                                fontSize="14px"
+                                fontWeight="500"
+                            >
+                                Enable
+                            </FormLabel>
+                        </FormControl>
+                        {/* <form>
+                            <Box w="50%">
+                                <PrimaryInput<UpdateUserModel>
+                                    label="Email (you will recieve an OTP code in your Email)"
+                                    name="organizationEmail"
+                                    error={errors.organizationEmail}
+                                    placeholder=""
+                                    defaultValue={user?.email as string}
+                                    register={register}
+                                    // disableLabel={true}
+                                />
+                                <Text
+                                    color="#484747"
+                                    fontWeight="400"
+                                    lineHeight="150%"
+                                    fontSize="14px"
+                                >
+                                    Or
+                                </Text>
+                                <PrimaryPhoneInput<UpdateUserModel>
+                                    label="Phone number (you will recieve an OTP code via sms)"
+                                    name="phoneNumber"
+                                    error={errors.phoneNumber}
+                                    placeholder={user?.phoneNumber as string}
+                                    control={control}
+                                />
+
+                                <Button
+                                    color="white"
+                                    bgColor="brand.400"
+                                    borderRadius="0"
+                                    height="35px"
+                                    px="2rem"
+                                    fontSize="13px"
+                                    fontWeight="700"
+                                    mt="1rem"
+                                    spinner={
+                                        <BeatLoader color="white" size={10} />
+                                    }
+                                    isLoading={twoFaSubmit}
+                                    onClick={() =>
+                                        handleTwoFaSubmit(twoFaSubmitFun)
+                                    }
+                                >
+                                    Confirm
+                                </Button>
+                            </Box>
+                        </form> */}
+                    </VStack>
+                </Box>
 
                 <Box
                     bgColor="white"
@@ -528,6 +651,7 @@ function MyProfile({
                         fontSize="15px"
                         type="submit"
                         isLoading={isSubmitting}
+                        onClick={() => handleSubmit(onSubmit)}
                         spinner={<BeatLoader color="white" size={10} />}
                         w="98%"
                         boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
@@ -544,6 +668,7 @@ function MyProfile({
                 onClose={onClose}
                 user={user}
             />
+            <TwoFaModal isOpen={open2Fa} onClose={close2Fa} data={twoFaData} />
             {paymentSchedule !== undefined && (
                 <>
                     <PaymentScheduleModal

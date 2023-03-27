@@ -11,6 +11,7 @@ import {
     DrawerFooter,
     useToast,
     Tooltip,
+    Icon,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -48,6 +49,8 @@ import Loading from '@components/bits-utils/Loading';
 import BeatLoader from 'react-spinners/BeatLoader';
 import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import Cookies from 'js-cookie';
+import { BsDownload } from 'react-icons/bs';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -317,6 +320,52 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
         }
     };
 
+    const token = Cookies.get('token');
+    const startDate = router.query.from;
+    const endDate = router.query.to;
+
+    const exportData = async () => {
+        if (startDate == undefined || endDate == undefined) {
+            toast({
+                title: 'Please select a date range to download',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
+        const filename = `Team Members for ${startDate} - ${endDate}`;
+        const xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.onreadystatechange = function () {
+            let a;
+            if (
+                xmlHttpRequest.readyState === 4 &&
+                xmlHttpRequest.status === 200
+            ) {
+                a = document.createElement('a');
+                a.href = window.URL.createObjectURL(xmlHttpRequest.response);
+                a.download = filename;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+            }
+        };
+        xmlHttpRequest.open(
+            'GET',
+            `${process.env.NEXT_PUBLIC_API_BASEURL}/api/export/users?Record=2&StartDate=${startDate}&EndDate=${endDate}`,
+        );
+        xmlHttpRequest.setRequestHeader('Content-Type', 'application/json');
+        xmlHttpRequest.setRequestHeader('Authorization', `Bearer ${token}`);
+        xmlHttpRequest.responseType = 'blob';
+        xmlHttpRequest.withCredentials = true;
+        xmlHttpRequest.send(
+            JSON.stringify({
+                key: '8575',
+                type: 'userdetails',
+            }),
+        );
+    };
+
     return (
         <>
             <Box
@@ -325,17 +374,29 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Button
-                    bgColor="brand.400"
-                    color="white"
-                    p=".5rem 1.5rem"
-                    height="fit-content"
-                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                    onClick={onOpen}
-                    mb="1rem"
-                >
-                    +Team Member
-                </Button>
+                <Flex justify="space-between" mb="1rem">
+                    <Button
+                        bgColor="brand.400"
+                        color="white"
+                        p=".5rem 1.5rem"
+                        height="fit-content"
+                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                        onClick={onOpen}
+                    >
+                        +Team Member
+                    </Button>
+                    <Button
+                        bgColor="brand.600"
+                        color="white"
+                        p=".5rem 1.5rem"
+                        height="fit-content"
+                        // boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                        onClick={() => exportData()}
+                        borderRadius="25px"
+                    >
+                        Download <Icon as={BsDownload} ml=".5rem" />
+                    </Button>
+                </Flex>
                 <FilterSearch searchOptions="Search by: Full Name, Job Title, Role, Payroll Type or Status" />
                 <Tables
                     tableHead={[

@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Enable2FAViewStandardResponse } from '../models/Enable2FAViewStandardResponse';
 import type { InitiateResetModel } from '../models/InitiateResetModel';
 import type { LoginModel } from '../models/LoginModel';
 import type { PasswordReset } from '../models/PasswordReset';
@@ -467,6 +468,57 @@ endDate?: string,
                 'paymentPartnerId': paymentPartnerId,
                 'StartDate': startDate,
                 'EndDate': endDate,
+            },
+        });
+    }
+
+    /**
+     * @returns Enable2FAViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static enable2Fa(): CancelablePromise<Enable2FAViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/enable2fa',
+        });
+    }
+
+    /**
+     * @param code 
+     * @param twoFactorCode 
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static completeTowFactorAuthentication(
+code: string,
+twoFactorCode: string,
+): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/enable2fa/complete/{code}/{twoFactorCode}',
+            path: {
+                'code': code,
+                'twoFactorCode': twoFactorCode,
+            },
+        });
+    }
+
+    /**
+     * @param code 
+     * @param twoFactorCode 
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static completeTowFactorAuthenticationLogin(
+code: string,
+twoFactorCode: string,
+): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/login/complete/{code}/{twoFactorCode}',
+            path: {
+                'code': code,
+                'twoFactorCode': twoFactorCode,
             },
         });
     }

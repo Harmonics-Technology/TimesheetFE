@@ -45,6 +45,7 @@ export type User = {
     term?: number | null;
     createdById?: string | null;
     createdBy?: User;
+    twoFactorCode?: string | null;
     supervisors?: Array<User> | null;
     supervisees?: Array<EmployeeInformation> | null;
     teamMembers?: Array<EmployeeInformation> | null;

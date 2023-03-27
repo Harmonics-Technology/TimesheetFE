@@ -15,6 +15,7 @@ import {
 } from 'react-icons/fa';
 import { RiLineChartFill } from 'react-icons/ri';
 import { MdOutlineSupervisorAccount } from 'react-icons/md';
+import { BsGraphUp } from 'react-icons/bs';
 interface sidenavProps {
     openSidenav: boolean;
     setOpenSidenav: any;
@@ -148,6 +149,16 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'onboarding fees',
                             'HST settings',
                         ]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="report"
+                        menuTitle="Reports"
+                        icon={<BsGraphUp opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
                     />

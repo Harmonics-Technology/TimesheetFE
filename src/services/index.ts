@@ -23,6 +23,8 @@ export type { DashboardView } from './models/DashboardView';
 export type { DashboardViewStandardResponse } from './models/DashboardViewStandardResponse';
 export type { EmployeeInformation } from './models/EmployeeInformation';
 export type { EmployeeInformationView } from './models/EmployeeInformationView';
+export type { Enable2FAView } from './models/Enable2FAView';
+export type { Enable2FAViewStandardResponse } from './models/Enable2FAViewStandardResponse';
 export type { ExpenseModel } from './models/ExpenseModel';
 export type { ExpenseTypeView } from './models/ExpenseTypeView';
 export type { ExpenseTypeViewIEnumerableStandardResponse } from './models/ExpenseTypeViewIEnumerableStandardResponse';
@@ -66,6 +68,7 @@ export type { PaySlipViewPagedCollection } from './models/PaySlipViewPagedCollec
 export type { PaySlipViewPagedCollectionStandardResponse } from './models/PaySlipViewPagedCollectionStandardResponse';
 export type { ProblemDetails } from './models/ProblemDetails';
 export type { RecentTimeSheetView } from './models/RecentTimeSheetView';
+export { RecordsToDownload } from './models/RecordsToDownload';
 export type { RegisterModel } from './models/RegisterModel';
 export type { RejectPaymentPartnerInvoiceModel } from './models/RejectPaymentPartnerInvoiceModel';
 export type { RejectTimeSheetModel } from './models/RejectTimeSheetModel';
@@ -93,6 +96,7 @@ export type { UserViewStandardResponse } from './models/UserViewStandardResponse
 
 export { ContractService } from './services/ContractService';
 export { DashboardService } from './services/DashboardService';
+export { ExportService } from './services/ExportService';
 export { FinancialService } from './services/FinancialService';
 export { NotificationService } from './services/NotificationService';
 export { OnboardingFeeService } from './services/OnboardingFeeService';
