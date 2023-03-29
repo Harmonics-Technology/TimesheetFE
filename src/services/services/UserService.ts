@@ -8,6 +8,7 @@ import type { PasswordReset } from '../models/PasswordReset';
 import type { RegisterModel } from '../models/RegisterModel';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
 import type { UpdateUserModel } from '../models/UpdateUserModel';
+import type { UserCountByPayrollTypeViewListStandardResponse } from '../models/UserCountByPayrollTypeViewListStandardResponse';
 import type { UserProfileViewStandardResponse } from '../models/UserProfileViewStandardResponse';
 import type { UserViewListStandardResponse } from '../models/UserViewListStandardResponse';
 import type { UserViewPagedCollectionStandardResponse } from '../models/UserViewPagedCollectionStandardResponse';
@@ -519,6 +520,23 @@ twoFactorCode: string,
             path: {
                 'code': code,
                 'twoFactorCode': twoFactorCode,
+            },
+        });
+    }
+
+    /**
+     * @param year 
+     * @returns UserCountByPayrollTypeViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static getUserCountByPayrolltypePerYear(
+year?: number,
+): CancelablePromise<UserCountByPayrollTypeViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/chart/teammembers-by-payrolls',
+            query: {
+                'year': year,
             },
         });
     }

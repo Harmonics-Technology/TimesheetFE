@@ -34,7 +34,11 @@ function Invoices({ invoiceData }: invoiceType) {
                     tabName="Clients"
                 />
             </Flex>
-            <OnshoreSubmittedInvoice invoiceData={invoiceData} />
+            <OnshoreSubmittedInvoice
+                invoiceData={invoiceData}
+                record={4}
+                fileName="Team Members Processed Invoice"
+            />
         </Box>
     );
 }

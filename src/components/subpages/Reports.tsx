@@ -1,17 +1,52 @@
-import { Grid, Tr } from '@chakra-ui/react';
+import {
+    Box,
+    Flex,
+    Grid,
+    Tr,
+    Text,
+    HStack,
+    Circle,
+    Icon,
+} from '@chakra-ui/react';
+import { BarChart } from '@components/bits-utils/BarChart';
+import { ChartLegend } from '@components/bits-utils/ChartLegend';
 import { ReportCards } from '@components/bits-utils/ReportCards';
 import {
     TableData,
     TableState,
     TableInvoiceActions,
+    TableStatus,
 } from '@components/bits-utils/TableData';
-import { CUR } from '@components/generics/functions/Naira';
+import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
 import { formatDate } from '@components/generics/functions/formatDate';
-import React from 'react';
-import { InvoiceView } from 'src/services';
+import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { FaRegCalendarAlt } from 'react-icons/fa';
+import DatePicker, { DateObject } from 'react-multi-date-picker';
+import {
+    InvoiceView,
+    PaySlipView,
+    PayslipUserView,
+    UserView,
+} from 'src/services';
 
-export const Reports = ({ metrics }) => {
+export const Reports = ({ metrics, team, paymentPartner, chart }) => {
+    console.log({ chart });
+    const router = useRouter();
+    const [fromDate, setFromDate] = useState<any>(new DateObject());
+
+    const switchDate = () => {
+        router.push({
+            query: {
+                chartYear: fromDate.format('YYYY'),
+            },
+        });
+    };
+    useNonInitialEffect(() => {
+        switchDate();
+    }, [fromDate]);
     return (
         <Grid
             templateColumns={[
@@ -43,12 +78,138 @@ export const Reports = ({ metrics }) => {
                 link="/"
             />
             <ReportCards
-                title="Payroll Report"
-                url="financials/payrolls"
-                data={metrics?.data?.recentPayrolls
+                title="Payslip Report"
+                url="financials/payslips"
+                data={metrics?.data?.recentPayslips
                     ?.slice(0, 4)
-                    .map((x: InvoiceView, i) => (
+                    .map((x: PaySlipView, i) => (
                         <Tr key={i}>
+                            <TableData
+                                name={x?.invoice?.createdByUser?.firstName}
+                            />
+                            <TableData
+                                name={formatDate(x?.invoice?.startDate)}
+                            />
+                            <TableData name={formatDate(x?.invoice?.endDate)} />
+                            <TableData name={`${x?.invoice?.totalHours} HRS`} />
+                            <TableData
+                                name={
+                                    x?.invoice?.employeeInformation?.currency ==
+                                    'CAD'
+                                        ? CAD(x?.invoice?.totalAmount as number)
+                                        : Naira(
+                                              x?.invoice?.totalAmount as number,
+                                          )
+                                }
+                            />
+                        </Tr>
+                    ))}
+                thead={['Name', 'Start Date', 'End Date', 'Hours', 'Total']}
+                link="/"
+            />
+
+            <Box
+                bgColor="white"
+                borderRadius="15px"
+                padding="1.5rem"
+                overflow="hidden"
+                boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
+            >
+                <Text fontSize="13px" fontWeight="700">
+                    Reports Between Offshore & Onshore Team memebers for a
+                    Calendar
+                </Text>
+                <Box>
+                    <Flex
+                        justify="space-between"
+                        py=".5rem"
+                        mb="1rem"
+                        borderBottom="1px solid #EEF0F6"
+                    >
+                        <HStack spacing="2rem">
+                            <ChartLegend text="Onshore Team" color="#45DAB6" />
+                            <ChartLegend text="Offshore Team" color="#28A3EF" />
+                        </HStack>
+                        <Box>
+                            <DatePicker
+                                value={fromDate}
+                                onChange={setFromDate}
+                                format="YYYY"
+                                onlyYearPicker
+                                render={(value, openCalendar) => {
+                                    return (
+                                        <HStack
+                                            w="fit-content"
+                                            px="1rem"
+                                            h="1.8rem"
+                                            justifyContent="center"
+                                            alignItems="center"
+                                            border="1px solid"
+                                            borderColor="gray.300"
+                                            color="gray.500"
+                                            boxShadow="sm"
+                                            borderRadius="4px"
+                                            cursor="pointer"
+                                            fontSize=".8rem"
+                                            spacing="1rem"
+                                            onClick={(value) =>
+                                                openCalendar(value)
+                                            }
+                                        >
+                                            <Text mb="0" whiteSpace="nowrap">
+                                                {value}
+                                            </Text>
+                                            <Icon as={FaRegCalendarAlt} />
+                                        </HStack>
+                                    );
+                                }}
+                            />
+                        </Box>
+                    </Flex>
+                    <Box h="290px" w="full">
+                        <BarChart chart={chart} />
+                    </Box>
+                </Box>
+            </Box>
+
+            <ReportCards
+                title="Team Member Report"
+                url="profile-management/team-members"
+                data={team?.data?.value?.slice(0, 4).map((x: UserView, i) => (
+                    <Tr key={i}>
+                        <TableData name={x.fullName} />
+                        <TableData name={x.employeeInformation?.jobTitle} />
+
+                        <TableData name={x.employeeInformation?.payrollType} />
+                        <TableStatus name={x.isActive} />
+                    </Tr>
+                ))}
+                thead={['Full Name', 'Job Title', 'Payroll Type', 'Status']}
+                link="/"
+            />
+            <ReportCards
+                title="Client Report"
+                url="profile-management/clients"
+                data={metrics?.data?.recentCLients
+                    ?.slice(0, 4)
+                    .map((x: UserView) => (
+                        <Tr key={x.id}>
+                            <TableData name={x.organizationName} />
+                            <TableData name={x.organizationEmail} />
+                            <TableData name={x.organizationPhone} />
+                            <TableStatus name={x.isActive} />
+                        </Tr>
+                    ))}
+                thead={['CLIENT NAME', 'EMAIL', 'Phone', 'STATUS']}
+                link="/"
+            />
+            <ReportCards
+                title="Invoice recieved from payment partner Report"
+                url="financials/invoice-payment"
+                data={paymentPartner?.data?.value
+                    ?.slice(0, 4)
+                    .map((x: InvoiceView) => (
+                        <Tr key={x.id}>
                             <TableData
                                 name={
                                     x.payrollGroupName ||
@@ -56,13 +217,24 @@ export const Reports = ({ metrics }) => {
                                     x.name
                                 }
                             />
-                            <TableData name={formatDate(x.startDate)} />
-                            <TableData name={formatDate(x.endDate)} />
-                            <TableData name={CUR(Round(x.totalAmount))} />
+                            <TableData name={x.invoiceReference} />
+                            <TableData
+                                name={CAD(Round(x.totalAmount as number))}
+                            />
+                            <TableData name={formatDate(x.dateCreated)} />
+                            <TableState name={x.status as string} />
                         </Tr>
                     ))}
-                thead={['Name', 'Start Date', 'End Date', 'Total']}
+                thead={[
+                    // 'Invoice No',
+                    'Client Name',
+                    'Invoice',
+                    'Amount',
+                    'Date',
+                    'Status',
+                ]}
                 link="/"
+                hides
             />
         </Grid>
     );

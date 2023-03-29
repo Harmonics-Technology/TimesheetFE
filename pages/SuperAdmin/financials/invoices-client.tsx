@@ -34,7 +34,11 @@ function Invoices({ invoiceData }: invoiceType) {
                     tabName="Clients"
                 />
             </Flex>
-            <ClientInvoices invoiceData={invoiceData} />
+            <ClientInvoices
+                invoiceData={invoiceData}
+                record={6}
+                fileName="Client Invoice"
+            />
         </Box>
     );
 }

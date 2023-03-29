@@ -5,6 +5,7 @@ import {
     Button,
     Flex,
     HStack,
+    Icon,
     Tr,
     useDisclosure,
     useToast,
@@ -30,12 +31,16 @@ import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
 import { formatDate } from '@components/generics/functions/formatDate';
 import ClientInvoicedInvoice from './ClientInvoicedInvoice';
+import { BsDownload } from 'react-icons/bs';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
+    fileName?: string;
+    record?: number;
 }
 
-function ClientInvoices({ invoiceData }: adminProps) {
+function ClientInvoices({ invoiceData, fileName, record }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
     console.log({ invoiceData });
@@ -111,6 +116,17 @@ function ClientInvoices({ invoiceData }: adminProps) {
         });
     };
 
+    const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
+    const thead = [
+        'Invoice No',
+        'Name',
+        'Created on',
+        'Start Date',
+        'End Date',
+        'Status',
+        'Action',
+    ];
+
     return (
         <>
             <Box
@@ -119,7 +135,7 @@ function ClientInvoices({ invoiceData }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between">
+                <Flex justify="space-between" mb="1rem">
                     <HStack gap="1rem">
                         {selectedId.length > 0 && (
                             <Button
@@ -147,19 +163,23 @@ function ClientInvoices({ invoiceData }: adminProps) {
                         onChange={() => toggleSelected('', true)}
                         label="Select All"
                     /> */}
+                    <HStack>
+                        {record !== undefined && (
+                            <Button
+                                bgColor="brand.600"
+                                color="white"
+                                p=".5rem 1.5rem"
+                                height="fit-content"
+                                onClick={onOpens}
+                                borderRadius="25px"
+                            >
+                                Download <Icon as={BsDownload} ml=".5rem" />
+                            </Button>
+                        )}
+                    </HStack>
                 </Flex>
                 <FilterSearch />
-                <Tables
-                    tableHead={[
-                        'Invoice No',
-                        'Name',
-                        'Created on',
-                        'Start Date',
-                        'End Date',
-                        'Status',
-                        'Action',
-                    ]}
-                >
+                <Tables tableHead={thead}>
                     <>
                         {invoiceData?.data?.value?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
@@ -202,6 +222,14 @@ function ClientInvoices({ invoiceData }: adminProps) {
                 isOpen={isOpen}
                 onClose={onClose}
                 clicked={clicked}
+            />
+            <ExportReportModal
+                isOpen={open}
+                onClose={close}
+                data={thead}
+                record={record}
+                fileName={fileName}
+                model="invoice"
             />
         </>
     );

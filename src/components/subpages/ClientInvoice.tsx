@@ -158,7 +158,7 @@ function ClientInvoice({ invoiceData }: adminProps) {
                     tableHead={[
                         'Invoice No',
                         'Name',
-                        'Created on',
+                        'Created On',
                         'Start Date',
                         'End Date',
                         'Status',

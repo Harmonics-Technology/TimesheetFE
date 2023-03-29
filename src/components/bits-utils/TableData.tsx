@@ -57,12 +57,14 @@ export function TableData({
     value,
     borderColor,
     classes,
+    full,
 }: {
     name: any;
     border?: boolean | undefined;
     value?: string;
     borderColor?: string;
     classes?: any;
+    full?: boolean;
 }) {
     return (
         <Td
@@ -84,7 +86,7 @@ export function TableData({
             }
         >
             <Tooltip label={name} hasArrow>
-                {name?.toString()?.substring(0, 20) || ''}
+                {full ? name : name?.toString()?.substring(0, 20) || ''}
             </Tooltip>
         </Td>
     );

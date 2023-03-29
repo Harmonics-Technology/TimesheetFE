@@ -151,9 +151,9 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                     tableHead={[
                         'Name on Invoice',
                         'Invoice No',
-                        'Created on',
-                        'Amount ($)',
-                        'Amount (₦)',
+                        'Created On',
+                        'Amount($)',
+                        'Amount(₦)',
                         'Status',
                         'Action',
                     ]}

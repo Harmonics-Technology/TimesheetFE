@@ -9,6 +9,7 @@ import {
     useDisclosure,
     useToast,
     Text,
+    Icon,
 } from '@chakra-ui/react';
 import {
     InvoiceAction,
@@ -33,12 +34,20 @@ import { UserContext } from '@components/context/UserContext';
 import Link from 'next/link';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { MiniTabs } from '@components/bits-utils/MiniTabs';
+import { BsDownload } from 'react-icons/bs';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
+    fileName?: string;
+    record?: number;
 }
 
-function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
+function OnshoreSubmittedInvoice({
+    invoiceData,
+    fileName,
+    record,
+}: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
     console.log({ invoiceData });
@@ -120,6 +129,17 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
     const approved = `/${role}/financials/invoices-team-treatedinvoice`;
     console.log({ hideCheckbox });
 
+    const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
+    const thead = [
+        'Invoice No',
+        'Name',
+        'Created On',
+        'Start Date',
+        'End Date',
+        'Status',
+        // 'Action',
+    ];
+
     return (
         <>
             <Box
@@ -137,8 +157,13 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
                     <MiniTabs url={pending} text={'Pending Approval'} />
                     <MiniTabs url={approved} text={'All Processed'} />
                 </HStack>
-                {selectedId.length > 0 && (
-                    <Flex justify="space-between" mb="1rem">
+                <Flex
+                    justify={
+                        selectedId.length > 0 ? 'space-between' : 'flex-end'
+                    }
+                    mb="1rem"
+                >
+                    {selectedId.length > 0 && (
                         <HStack gap="1rem">
                             <Button
                                 bgColor="brand.600"
@@ -154,6 +179,8 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
                                 Approve
                             </Button>
                         </HStack>
+                    )}
+                    <HStack>
                         {!hideCheckbox && (
                             <Checkbox
                                 checked={
@@ -166,21 +193,21 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
                                 label="Select All"
                             />
                         )}
-                    </Flex>
-                )}
+                        <Button
+                            bgColor="brand.600"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            height="fit-content"
+                            onClick={onOpens}
+                            borderRadius="25px"
+                        >
+                            Download <Icon as={BsDownload} ml=".5rem" />
+                        </Button>
+                    </HStack>
+                </Flex>
                 <FilterSearch />
 
-                <Tables
-                    tableHead={[
-                        'Invoice No',
-                        'Name',
-                        'Created on',
-                        'Start Date',
-                        'End Date',
-                        'Status',
-                        // 'Action',
-                    ]}
-                >
+                <Tables tableHead={thead}>
                     <>
                         {invoiceData?.data?.value?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
@@ -226,6 +253,14 @@ function OnshoreSubmittedInvoice({ invoiceData }: adminProps) {
                 isOpen={isOpen}
                 onClose={onClose}
                 clicked={clicked}
+            />
+            <ExportReportModal
+                isOpen={open}
+                onClose={close}
+                data={thead}
+                record={record}
+                fileName={fileName}
+                model="invoice"
             />
         </>
     );

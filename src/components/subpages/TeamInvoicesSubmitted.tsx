@@ -37,7 +37,7 @@ function TeamInvoicesSubmitted({ invoiceList }: invoiceProps) {
                     tableHead={[
                         'Invoice No',
                         'Name',
-                        'Created on',
+                        'Created On',
                         'Start Date',
                         'End Date',
                         'Status',

@@ -1,6 +1,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ExpenseRecordsToDownload } from '../models/ExpenseRecordsToDownload';
+import type { InvoiceRecord } from '../models/InvoiceRecord';
+import type { PayslipRecordToDownload } from '../models/PayslipRecordToDownload';
 import type { RecordsToDownload } from '../models/RecordsToDownload';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -14,6 +17,7 @@ export class ExportService {
      * @param supervisorId 
      * @param clientId 
      * @param paymentPartnerId 
+     * @param rowHeaders 
      * @param startDate 
      * @param endDate 
      * @returns any Success
@@ -24,6 +28,7 @@ record?: RecordsToDownload,
 supervisorId?: string,
 clientId?: string,
 paymentPartnerId?: string,
+rowHeaders?: Array<string>,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<any> {
@@ -35,6 +40,97 @@ endDate?: string,
                 'SupervisorId': supervisorId,
                 'ClientId': clientId,
                 'PaymentPartnerId': paymentPartnerId,
+                'rowHeaders': rowHeaders,
+                'StartDate': startDate,
+                'EndDate': endDate,
+            },
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param record 
+     * @param payrollGroupId 
+     * @param rowHeaders 
+     * @param startDate 
+     * @param endDate 
+     * @returns any Success
+     * @throws ApiError
+     */
+    public static exportInvoiceRecord(
+record?: InvoiceRecord,
+payrollGroupId?: number,
+rowHeaders?: Array<string>,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Export/invoice',
+            query: {
+                'Record': record,
+                'PayrollGroupId': payrollGroupId,
+                'rowHeaders': rowHeaders,
+                'StartDate': startDate,
+                'EndDate': endDate,
+            },
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param record 
+     * @param rowHeaders 
+     * @param startDate 
+     * @param endDate 
+     * @returns any Success
+     * @throws ApiError
+     */
+    public static exportExpenseRecord(
+record?: ExpenseRecordsToDownload,
+rowHeaders?: Array<string>,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Export/expense',
+            query: {
+                'Record': record,
+                'rowHeaders': rowHeaders,
+                'StartDate': startDate,
+                'EndDate': endDate,
+            },
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param record 
+     * @param rowHeaders 
+     * @param startDate 
+     * @param endDate 
+     * @returns any Success
+     * @throws ApiError
+     */
+    public static exportPayslipRecord(
+record?: PayslipRecordToDownload,
+rowHeaders?: Array<string>,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Export/payslip',
+            query: {
+                'Record': record,
+                'rowHeaders': rowHeaders,
                 'StartDate': startDate,
                 'EndDate': endDate,
             },

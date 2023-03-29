@@ -147,7 +147,7 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                         'Description',
                         'Expense Type',
                         'Expense Date',
-                        'Created on',
+                        'Created On',
                         'Amount',
                         'Status',
                     ]}

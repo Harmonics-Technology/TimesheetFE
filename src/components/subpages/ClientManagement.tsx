@@ -49,6 +49,7 @@ import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import moment from 'moment';
 import { BsDownload } from 'react-icons/bs';
 import Cookies from 'js-cookie';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -117,7 +118,7 @@ function ClientManagement({ adminList }: adminProps) {
             return;
         } catch (err: any) {
             toast({
-                title: err.body.message || err.message,
+                title: err?.body?.message || err?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -125,51 +126,16 @@ function ClientManagement({ adminList }: adminProps) {
         }
     };
 
-    const token = Cookies.get('token');
-    const startDate = router.query.from;
-    const endDate = router.query.to;
-
-    const exportData = async () => {
-        if (startDate == undefined || endDate == undefined) {
-            toast({
-                title: 'Please select a date range to download',
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
-        }
-        const filename = `Client Users for ${startDate} - ${endDate}`;
-        const xmlHttpRequest = new XMLHttpRequest();
-        xmlHttpRequest.onreadystatechange = function () {
-            let a;
-            if (
-                xmlHttpRequest.readyState === 4 &&
-                xmlHttpRequest.status === 200
-            ) {
-                a = document.createElement('a');
-                a.href = window.URL.createObjectURL(xmlHttpRequest.response);
-                a.download = filename;
-                a.style.display = 'none';
-                document.body.appendChild(a);
-                a.click();
-            }
-        };
-        xmlHttpRequest.open(
-            'GET',
-            `${process.env.NEXT_PUBLIC_API_BASEURL}/api/export/users?Record=4&StartDate=${startDate}&EndDate=${endDate}`,
-        );
-        xmlHttpRequest.setRequestHeader('Content-Type', 'application/json');
-        xmlHttpRequest.setRequestHeader('Authorization', `Bearer ${token}`);
-        xmlHttpRequest.responseType = 'blob';
-        xmlHttpRequest.withCredentials = true;
-        xmlHttpRequest.send(
-            JSON.stringify({
-                key: '8575',
-                type: 'userdetails',
-            }),
-        );
-    };
+    const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
+    const thead = [
+        'Name',
+        'Email',
+        'Role',
+        'Phone',
+        'Invoice Schedule',
+        'Status',
+        'Action',
+    ];
 
     return (
         <>
@@ -196,24 +162,14 @@ function ClientManagement({ adminList }: adminProps) {
                         p=".5rem 1.5rem"
                         height="fit-content"
                         // boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        onClick={() => exportData()}
+                        onClick={onOpens}
                         borderRadius="25px"
                     >
                         Download <Icon as={BsDownload} ml=".5rem" />
                     </Button>
                 </Flex>
                 <FilterSearch searchOptions="Search by: Name, Email, Role, or Status " />
-                <Tables
-                    tableHead={[
-                        'Name',
-                        'Email',
-                        'Role',
-                        'Phone',
-                        'Invoice Schedule',
-                        'Status',
-                        'Action',
-                    ]}
-                >
+                <Tables tableHead={thead}>
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
@@ -417,6 +373,14 @@ function ClientManagement({ adminList }: adminProps) {
                     </DrawerFooter>
                 </form>
             </DrawerWrapper>
+            <ExportReportModal
+                isOpen={open}
+                onClose={close}
+                data={thead}
+                record={4}
+                fileName={'Client'}
+                model="users"
+            />
         </>
     );
 }

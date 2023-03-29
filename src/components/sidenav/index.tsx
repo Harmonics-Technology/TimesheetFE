@@ -848,7 +848,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
-                        linkName="profile"
+                        linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
                         option={false}

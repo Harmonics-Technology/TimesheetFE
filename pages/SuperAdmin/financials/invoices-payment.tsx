@@ -33,7 +33,12 @@ function Invoices({ invoiceData }: invoiceType) {
                     tabName="Clients"
                 />
             </Flex>
-            <PayrollTreatPartnerInvoice invoiceData={invoiceData} />
+            <PayrollTreatPartnerInvoice
+                invoiceData={invoiceData}
+                record={5}
+                paygroupId={1}
+                fileName="Proinsight invoices from payment partner"
+            />
         </Box>
     );
 }

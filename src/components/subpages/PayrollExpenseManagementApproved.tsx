@@ -13,6 +13,7 @@ import {
     DrawerFooter,
     useToast,
     Td,
+    Icon,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -45,6 +46,8 @@ import Checkbox from '@components/bits-utils/Checkbox';
 import BeatLoader from 'react-spinners/BeatLoader';
 import moment from 'moment';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { BsDownload } from 'react-icons/bs';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -176,6 +179,18 @@ function PayrollExpenseManagementApproved({
             });
         }
     };
+    const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
+    const thead = [
+        'Name',
+        'Description',
+        'Expense Type',
+        'Expense Date',
+        'Currency',
+        'Amount',
+        'Status',
+        // 'Action',
+        // '...',
+    ];
     return (
         <>
             <Box
@@ -184,7 +199,7 @@ function PayrollExpenseManagementApproved({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between">
+                <Flex justify="space-between" mb="1rem">
                     <HStack gap="1rem">
                         {/* <Button
                             bgColor="brand.400"
@@ -221,21 +236,21 @@ function PayrollExpenseManagementApproved({
                         onChange={() => toggleSelected('', true)}
                         label="Select All"
                     /> */}
+                    <HStack>
+                        <Button
+                            bgColor="brand.600"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            height="fit-content"
+                            onClick={onOpens}
+                            borderRadius="25px"
+                        >
+                            Download <Icon as={BsDownload} ml=".5rem" />
+                        </Button>
+                    </HStack>
                 </Flex>
                 <FilterSearch />
-                <Tables
-                    tableHead={[
-                        'Name',
-                        'Description',
-                        'Expense Type',
-                        'Expense Date',
-                        'Currency',
-                        'Amount',
-                        'Status',
-                        // 'Action',
-                        // '...',
-                    ]}
-                >
+                <Tables tableHead={thead}>
                     <>
                         {expensesList?.map((x: ExpenseView) => (
                             <Tr key={x.id}>
@@ -364,6 +379,14 @@ function PayrollExpenseManagementApproved({
                     </DrawerFooter>
                 </form>
             </DrawerWrapper>
+            <ExportReportModal
+                isOpen={open}
+                onClose={close}
+                data={thead}
+                record={2}
+                fileName={'Approved Expenses'}
+                model="expense"
+            />
         </>
     );
 }
