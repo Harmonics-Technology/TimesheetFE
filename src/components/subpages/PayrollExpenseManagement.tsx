@@ -202,7 +202,13 @@ function PayrollExpenseManagement({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between" mb="1rem" align="center">
+                <Flex
+                    justify="space-between"
+                    mb="1rem"
+                    align="center"
+                    flexWrap="wrap"
+                    gap='.5rem'
+                >
                     <HStack gap="1rem">
                         <Button
                             bgColor="brand.400"
@@ -229,7 +235,7 @@ function PayrollExpenseManagement({
                             </Button>
                         )}
                     </HStack>
-                    <HStack>
+                    <HStack ml='auto'>
                         <Checkbox
                             checked={
                                 expensesList?.filter(

@@ -60,9 +60,11 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                     gap=".5rem"
                     bgColor="red.100"
                     w="full"
-                    h="3rem"
+                    h={['fit-content', '3rem']}
                     justify="center"
+                    py={['1rem', '0']}
                     align="center"
+                    flexDir={['column', 'row']}
                 >
                     <Icon as={GrShieldSecurity} />
                     <Text mb="0" fontSize=".8rem">

@@ -89,8 +89,8 @@ function TwofaLogin() {
             <Box
                 w={['full', '55%']}
                 mx="auto"
-                boxShadow="0 20px 27px 0 rgb(0 0 0 / 10%)"
-                h={['full', 'auto']}
+                boxShadow={['0', '0 20px 27px 0 rgb(0 0 0 / 10%)']}
+                h={['auto', 'auto']}
                 p="1rem 3rem 4rem"
             >
                 <Box display="flex" justifyContent="center" w="full" my="2rem">
@@ -98,7 +98,7 @@ function TwofaLogin() {
                 </Box>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <HStack gap="2rem">
+                    <HStack gap="2rem" flexDir={['column', 'row']}>
                         <Circle size="167px">
                             <Image
                                 src="/assets/pass.png"
@@ -107,12 +107,17 @@ function TwofaLogin() {
                                 objectFit="cover"
                             />
                         </Circle>
-                        <VStack w="full" spacing=".7rem" align="flex-start">
+                        <VStack
+                            w="full"
+                            spacing=".7rem"
+                            align={['center', 'flex-start']}
+                        >
                             <Box>
                                 <Text
                                     color="#263238"
                                     fontWeight="500"
                                     lineHeight="150%"
+                                    textAlign={['center', 'left']}
                                 >
                                     Two factor authentication
                                 </Text>
@@ -121,14 +126,15 @@ function TwofaLogin() {
                                     fontWeight="400"
                                     lineHeight="150%"
                                     fontSize="14px"
+                                    textAlign={['center', 'left']}
                                 >
                                     A validation code has been sent to your
                                     authenticator app, kindly open app to view
                                     code
                                 </Text>
                             </Box>
-                            <Flex align="flex-end" w="80%">
-                                <Box w="60%">
+                            <Flex align="flex-end" w={['95%', '80%']}>
+                                <Box w={['80%', '60%']}>
                                     <PrimaryInput<TwoFaModel>
                                         register={register}
                                         name="code"

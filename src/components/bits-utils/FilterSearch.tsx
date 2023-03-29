@@ -93,11 +93,12 @@ function FilterSearch({
                     align="flex-end"
                     mb={['.5rem', 'auto']}
                     spacing={['0', 'inherit']}
+                    gap=".5rem"
                 >
                     <Box
                         fontSize=".8rem"
                         w="fit-content"
-                        mb={['1rem', '0']}
+                        mb={['0rem', '0']}
                         display={hides ? 'box' : 'none'}
                     >
                         <Text noOfLines={1} mb="0">

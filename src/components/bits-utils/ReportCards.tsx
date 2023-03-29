@@ -79,11 +79,16 @@ export const ReportCards = ({
                 </Button>
             </Flex>
 
-            <Flex justify={hides ? 'space-between' : 'flex-end'} mb="1rem">
+            <Flex
+                justify={hides ? 'space-between' : 'flex-end'}
+                mb="1rem"
+                flexWrap="wrap"
+                gap='.5rem'
+            >
                 <HStack
                     fontSize=".8rem"
                     w="fit-content"
-                    mb={['1rem', '0']}
+                    mb={['0rem', '0']}
                     display={hides ? 'flex' : 'none'}
                 >
                     <Text noOfLines={1} mb="0">
@@ -100,6 +105,7 @@ export const ReportCards = ({
                         }
                         borderRadius="0"
                         fontSize=".8rem"
+                        height="2rem"
                     >
                         <option value={1}>Pro-insight</option>
                         <option value={2}>Olade</option>

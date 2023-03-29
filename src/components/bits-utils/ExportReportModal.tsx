@@ -11,11 +11,11 @@ import {
     Text,
     useToast,
     VStack,
+    Button,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import Checkbox from './Checkbox';
 import { GrClose } from 'react-icons/gr';
-import { Button } from '..';
 import { MdCancel } from 'react-icons/md';
 import { CgNotes } from 'react-icons/cg';
 import Cookies from 'js-cookie';
@@ -186,7 +186,7 @@ export const ExportReportModal = ({
                 </ModalHeader>
 
                 <ModalBody>
-                    <Box maxH="77vh" overflowY="auto" px={5}>
+                    <Box maxH="77vh" overflowY="auto" px={[2, 5]}>
                         <VStack
                             align="flex-start"
                             spacing="1.5rem"
@@ -338,7 +338,12 @@ export const ExportReportModal = ({
                                     />
                                 ))}
                         </VStack>
-                        <HStack gap="2rem">
+                        <HStack
+                            gap={['1rem', '2rem']}
+                            spacing="0"
+                            flexDir={['column', 'row']}
+                            mb="1rem"
+                        >
                             <Button
                                 bgColor="#EF516D"
                                 onClick={closeModal}

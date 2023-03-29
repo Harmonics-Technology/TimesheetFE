@@ -216,14 +216,17 @@ function MyProfile({
         onClose: close2Fa,
     } = useDisclosure();
     const [twoFaData, setTwoFaData] = useState<Enable2FAView>();
+    const [loading, setLoading] = useState(false);
 
     const twoFaSubmitFun = async () => {
+        setLoading(true);
         try {
             const result = await UserService.enable2Fa();
             if (result.status) {
                 console.log({ result });
                 setTwoFaData(result.data);
                 onOpen2Fa();
+                setLoading(false);
                 return;
             }
             toast({
@@ -232,6 +235,7 @@ function MyProfile({
                 isClosable: true,
                 position: 'top-right',
             });
+            setLoading(false);
         } catch (error: any) {
             toast({
                 title: error?.message || error?.body?.message,
@@ -239,6 +243,7 @@ function MyProfile({
                 isClosable: true,
                 position: 'top-right',
             });
+            setLoading(false);
         }
     };
 
@@ -540,7 +545,7 @@ function MyProfile({
                     w="full"
                     mb="1.5rem"
                 >
-                    <VStack align="flex-start" w="60%" gap="1rem">
+                    <VStack align="flex-start" w={['full', '60%']} gap="1rem">
                         <Box>
                             <Text
                                 color="#484747"
@@ -576,14 +581,18 @@ function MyProfile({
                                         : false
                                 }
                             />
-                            <FormLabel
-                                htmlFor="email-alerts"
-                                mb="0"
-                                fontSize="14px"
-                                fontWeight="500"
-                            >
-                                Enable
-                            </FormLabel>
+                            {loading ? (
+                                <Spinner />
+                            ) : (
+                                <FormLabel
+                                    htmlFor="email-alerts"
+                                    mb="0"
+                                    fontSize="14px"
+                                    fontWeight="500"
+                                >
+                                    Enable
+                                </FormLabel>
+                            )}
                         </FormControl>
                         {/* <form>
                             <Box w="50%">

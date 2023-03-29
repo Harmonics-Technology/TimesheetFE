@@ -77,7 +77,7 @@ function AdminPayslip({
                         borderRadius="0"
                         border="2px solid"
                         onClick={onOpened}
-                        w={['full', 'inherit']}
+                        w={['auto', 'inherit']}
                         mb="1rem"
                     >
                         View Payment Schedule
