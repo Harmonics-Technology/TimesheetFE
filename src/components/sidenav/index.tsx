@@ -147,7 +147,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[
                             'expense type',
                             'onboarding fees',
-                            'HST settings',
+                            'hst settings',
                         ]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}

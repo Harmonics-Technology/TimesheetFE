@@ -123,23 +123,23 @@ export function BarChart({
             },
         },
     };
-    // const labels = chart?.data?.map((x: UserCountByPayrollTypeView) =>
-    //     x.month?.substring(0, 3),
-    // );
-    const labels = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-    ];
+    const labels = chart?.data?.map((x: UserCountByPayrollTypeView) =>
+        x.month?.substring(0, 3),
+    );
+    // const labels = [
+    //     'Jan',
+    //     'Feb',
+    //     'Mar',
+    //     'Apr',
+    //     'May',
+    //     'Jun',
+    //     'Jul',
+    //     'Aug',
+    //     'Sep',
+    //     'Oct',
+    //     'Nov',
+    //     'Dec',
+    // ];
 
     const data = {
         labels,
