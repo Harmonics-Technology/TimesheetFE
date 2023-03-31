@@ -323,7 +323,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
 
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const thead = [
-        'Full Name',
+        'Name',
         'Job Title',
         'Client Name',
         'Payroll Type',
