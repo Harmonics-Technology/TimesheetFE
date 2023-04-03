@@ -107,7 +107,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                             margin={40}
                             fileName={`Payslip for the month of
                             ${formatDate(
-                                paySlip?.payslipView?.invoice?.paymentDate,
+                                paySlip?.payslipView?.invoice?.startDate,
                             )}.pdf`}
                         >
                             <Box>
@@ -119,7 +119,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                         Payslip for the month of{' '}
                                         {formatDate(
                                             paySlip?.payslipView?.invoice
-                                                ?.paymentDate,
+                                                ?.startDate,
                                         )}
                                     </Text>
                                 </Box>
@@ -190,7 +190,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                             title={'Pay Date'}
                                             value={formatDate(
                                                 paySlip?.payslipView?.invoice
-                                                    ?.paymentDate,
+                                                    ?.dateCreated,
                                             )}
                                         />
                                         <PayslipInfoTag
@@ -283,6 +283,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                 border
                                                 value="1px solid"
                                                 borderColor="gray.200"
+                                                full
                                             />
                                             <TableData
                                                 name={
@@ -303,6 +304,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                 border
                                                 value="1px solid"
                                                 borderColor="gray.200"
+                                                full
                                             />
                                             <TableData
                                                 name={

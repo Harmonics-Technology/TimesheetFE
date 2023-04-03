@@ -16,7 +16,12 @@ interface PayrollType {
 }
 function expenses({ payrolls, paymentSchedule }: PayrollType) {
     return (
-        <AdminPayslip payrolls={payrolls} paymentSchedule={paymentSchedule} />
+        <AdminPayslip
+            payrolls={payrolls}
+            paymentSchedule={paymentSchedule}
+            record={1}
+            fileName="Payslip"
+        />
     );
 }
 

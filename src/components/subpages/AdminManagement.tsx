@@ -13,6 +13,7 @@ import {
     DrawerFooter,
     useToast,
     FormLabel,
+    Icon,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -43,6 +44,7 @@ const Selectrix = dynamic<select>(() => import('react-selectrix'), {
     ssr: false,
 });
 import {
+    ExportService,
     RegisterModel,
     UserService,
     UserView,
@@ -55,6 +57,10 @@ import Loading from '@components/bits-utils/Loading';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { BsDownload } from 'react-icons/bs';
+import Cookies from 'js-cookie';
+import moment from 'moment';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -64,7 +70,6 @@ const schema = yup.object().shape({
 });
 
 function ProfileManagementAdmin({ adminList, team }: adminProps) {
-    // console.log({ adminList });
     const {
         register,
         handleSubmit,
@@ -76,6 +81,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
         mode: 'all',
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
     // console.log(watch("organizationName"));
@@ -193,6 +199,9 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
             });
         }
     };
+
+    const thead = ['Name', 'Email', 'Role', 'Status', 'Action'];
+
     return (
         <>
             <Box
@@ -201,23 +210,34 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Button
-                    bgColor="brand.400"
-                    color="white"
-                    p=".5rem 1.5rem"
-                    height="fit-content"
-                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                    onClick={onOpen}
-                    display={admin ? 'none' : 'flex'}
-                    mb="1rem"
-                    borderRadius="0"
-                >
-                    +Admin
-                </Button>
+                <Flex justify="space-between" mb="1rem">
+                    <Button
+                        bgColor="brand.400"
+                        color="white"
+                        p=".5rem 1.5rem"
+                        height="fit-content"
+                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                        onClick={onOpen}
+                        display={admin ? 'none' : 'flex'}
+                        borderRadius="0"
+                    >
+                        +Admin
+                    </Button>
+
+                    <Button
+                        bgColor="brand.600"
+                        color="white"
+                        p=".5rem 1.5rem"
+                        height="fit-content"
+                        onClick={onOpens}
+                        borderRadius="25px"
+                    >
+                        Download <Icon as={BsDownload} ml=".5rem" />
+                    </Button>
+                </Flex>
+
                 <FilterSearch searchOptions="Search by: Name, Email, Role, or Status " />
-                <Tables
-                    tableHead={['Name', 'Email', 'Role', 'Status', 'Action']}
-                >
+                <Tables tableHead={thead}>
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
@@ -428,6 +448,14 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                     </>
                 </form>
             </DrawerWrapper>
+            <ExportReportModal
+                isOpen={open}
+                onClose={close}
+                data={thead}
+                record={1}
+                fileName={'Admin'}
+                model="users"
+            />
         </>
     );
 }

@@ -11,6 +11,7 @@ import {
     DrawerFooter,
     useToast,
     Tooltip,
+    Icon,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -48,6 +49,9 @@ import Loading from '@components/bits-utils/Loading';
 import BeatLoader from 'react-spinners/BeatLoader';
 import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import Cookies from 'js-cookie';
+import { BsDownload } from 'react-icons/bs';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -317,6 +321,17 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
         }
     };
 
+    const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
+    const thead = [
+        'Name',
+        'Job Title',
+        'Client Name',
+        'Payroll Type',
+        'Role',
+        'Status',
+        '',
+    ];
+
     return (
         <>
             <Box
@@ -325,30 +340,31 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Button
-                    bgColor="brand.400"
-                    color="white"
-                    p=".5rem 1.5rem"
-                    height="fit-content"
-                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                    onClick={onOpen}
-                    mb="1rem"
-                >
-                    +Team Member
-                </Button>
+                <Flex justify="space-between" mb="1rem">
+                    <Button
+                        bgColor="brand.400"
+                        color="white"
+                        p=".5rem 1.5rem"
+                        height="fit-content"
+                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                        onClick={onOpen}
+                    >
+                        +Team Member
+                    </Button>
+                    <Button
+                        bgColor="brand.600"
+                        color="white"
+                        p=".5rem 1.5rem"
+                        height="fit-content"
+                        // boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                        onClick={onOpens}
+                        borderRadius="25px"
+                    >
+                        Download <Icon as={BsDownload} ml=".5rem" />
+                    </Button>
+                </Flex>
                 <FilterSearch searchOptions="Search by: Full Name, Job Title, Role, Payroll Type or Status" />
-                <Tables
-                    tableHead={[
-                        'Full Name',
-                        'Job Title',
-                        'Client Name',
-                        // 'Phone No',
-                        'Payroll Type',
-                        'Role',
-                        'Status',
-                        '',
-                    ]}
-                >
+                <Tables tableHead={thead}>
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
@@ -792,6 +808,14 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                     </DrawerFooter>
                 </form>
             </DrawerWrapper>
+            <ExportReportModal
+                isOpen={open}
+                onClose={close}
+                data={thead}
+                record={2}
+                fileName={'Team members'}
+                model="users"
+            />
         </>
     );
 }

@@ -92,7 +92,7 @@ function ForgotPassword() {
                             error={errors.email}
                             defaultValue=""
                             type="email"
-                            placeholder="Chigozie"
+                            placeholder="Email"
                             label="Email Address"
                             fontSize="1rem"
                         />

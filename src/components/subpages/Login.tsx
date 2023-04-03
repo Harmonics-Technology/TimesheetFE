@@ -53,19 +53,21 @@ function Login() {
                 data,
             )) as UserViewStandardResponse;
             if (result.status) {
-                // console.log({ result });
-
+                setUser(result.data);
+                Cookies.set('user', JSON.stringify(result.data));
                 OpenAPI.TOKEN = result?.data?.token as string;
+                result.data &&
+                    Cookies.set('token', result.data.token as string);
+                if (result.data?.twoFactorEnabled) {
+                    router.push('/login/twofalogin');
+                    return;
+                }
                 toast({
                     title: `Login Successful`,
                     status: 'success',
                     isClosable: true,
                     position: 'top-right',
                 });
-                setUser(result.data);
-                Cookies.set('user', JSON.stringify(result.data));
-                result.data &&
-                    Cookies.set('token', result.data.token as string);
                 router.query.from
                     ? (window.location.href = decodeURIComponent(
                           router.query.from as unknown as string,
@@ -74,11 +76,6 @@ function Login() {
                           ' ',
                           '',
                       )}/dashboard`);
-
-                // window.location.href = `${result?.data?.role?.replaceAll(
-                //     ' ',
-                //     '',
-                // )}/dashboard`;
                 return;
             }
             toast({
@@ -103,8 +100,8 @@ function Login() {
             <Box
                 w={['full', '35%']}
                 mx="auto"
-                boxShadow="0 20px 27px 0 rgb(0 0 0 / 10%)"
-                h={['full', 'auto']}
+                boxShadow={['0', '0 20px 27px 0 rgb(0 0 0 / 10%)']}
+                h={['auto', 'auto']}
                 p="1rem 3rem 4rem"
             >
                 <Box display="flex" justifyContent="center" w="full" my="2rem">
@@ -128,7 +125,7 @@ function Login() {
                             error={errors.email}
                             defaultValue=""
                             type="email"
-                            placeholder="Chigozie"
+                            placeholder="Email"
                             label="Email Address"
                             fontSize="1rem"
                         />

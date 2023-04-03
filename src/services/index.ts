@@ -23,7 +23,10 @@ export type { DashboardView } from './models/DashboardView';
 export type { DashboardViewStandardResponse } from './models/DashboardViewStandardResponse';
 export type { EmployeeInformation } from './models/EmployeeInformation';
 export type { EmployeeInformationView } from './models/EmployeeInformationView';
+export type { Enable2FAView } from './models/Enable2FAView';
+export type { Enable2FAViewStandardResponse } from './models/Enable2FAViewStandardResponse';
 export type { ExpenseModel } from './models/ExpenseModel';
+export { ExpenseRecordsToDownload } from './models/ExpenseRecordsToDownload';
 export type { ExpenseTypeView } from './models/ExpenseTypeView';
 export type { ExpenseTypeViewIEnumerableStandardResponse } from './models/ExpenseTypeViewIEnumerableStandardResponse';
 export type { ExpenseTypeViewStandardResponse } from './models/ExpenseTypeViewStandardResponse';
@@ -33,6 +36,7 @@ export type { ExpenseViewPagedCollectionStandardResponse } from './models/Expens
 export type { ExpenseViewStandardResponse } from './models/ExpenseViewStandardResponse';
 export { HttpStatusCode } from './models/HttpStatusCode';
 export type { InitiateResetModel } from './models/InitiateResetModel';
+export { InvoiceRecord } from './models/InvoiceRecord';
 export type { InvoiceView } from './models/InvoiceView';
 export type { InvoiceViewPagedCollection } from './models/InvoiceViewPagedCollection';
 export type { InvoiceViewPagedCollectionStandardResponse } from './models/InvoiceViewPagedCollectionStandardResponse';
@@ -58,6 +62,7 @@ export type { PayRollType } from './models/PayRollType';
 export type { PayrollView } from './models/PayrollView';
 export type { PayrollViewPagedCollection } from './models/PayrollViewPagedCollection';
 export type { PayrollViewPagedCollectionStandardResponse } from './models/PayrollViewPagedCollectionStandardResponse';
+export { PayslipRecordToDownload } from './models/PayslipRecordToDownload';
 export type { PayslipUserView } from './models/PayslipUserView';
 export type { PayslipUserViewPagedCollection } from './models/PayslipUserViewPagedCollection';
 export type { PayslipUserViewPagedCollectionStandardResponse } from './models/PayslipUserViewPagedCollectionStandardResponse';
@@ -66,6 +71,7 @@ export type { PaySlipViewPagedCollection } from './models/PaySlipViewPagedCollec
 export type { PaySlipViewPagedCollectionStandardResponse } from './models/PaySlipViewPagedCollectionStandardResponse';
 export type { ProblemDetails } from './models/ProblemDetails';
 export type { RecentTimeSheetView } from './models/RecentTimeSheetView';
+export { RecordsToDownload } from './models/RecordsToDownload';
 export type { RegisterModel } from './models/RegisterModel';
 export type { RejectPaymentPartnerInvoiceModel } from './models/RejectPaymentPartnerInvoiceModel';
 export type { RejectTimeSheetModel } from './models/RejectTimeSheetModel';
@@ -83,6 +89,8 @@ export type { TimeSheetMonthlyViewIEnumerableStandardResponse } from './models/T
 export type { TimeSheetView } from './models/TimeSheetView';
 export type { UpdateUserModel } from './models/UpdateUserModel';
 export type { User } from './models/User';
+export type { UserCountByPayrollTypeView } from './models/UserCountByPayrollTypeView';
+export type { UserCountByPayrollTypeViewListStandardResponse } from './models/UserCountByPayrollTypeViewListStandardResponse';
 export type { UserProfileView } from './models/UserProfileView';
 export type { UserProfileViewStandardResponse } from './models/UserProfileViewStandardResponse';
 export type { UserView } from './models/UserView';
@@ -93,6 +101,7 @@ export type { UserViewStandardResponse } from './models/UserViewStandardResponse
 
 export { ContractService } from './services/ContractService';
 export { DashboardService } from './services/DashboardService';
+export { ExportService } from './services/ExportService';
 export { FinancialService } from './services/FinancialService';
 export { NotificationService } from './services/NotificationService';
 export { OnboardingFeeService } from './services/OnboardingFeeService';

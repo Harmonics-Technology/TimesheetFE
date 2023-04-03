@@ -29,7 +29,11 @@ function expenses({ invoiceData }: InvoiceType) {
                     tabName="Processed Payrolls"
                 />
             </Flex>
-            <AdminInvoices invoiceData={invoiceData} />
+            <AdminInvoices
+                invoiceData={invoiceData}
+                record={1}
+                fileName="Pending Payrolls"
+            />
         </Box>
     );
 }

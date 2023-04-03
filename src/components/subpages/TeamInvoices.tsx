@@ -147,7 +147,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                             ? [
                                   'Invoice No',
                                   'Name',
-                                  'Created on',
+                                  'Created On',
                                   'Start Date',
                                   'End Date',
                                   'Status',
@@ -157,7 +157,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                             : [
                                   'Invoice No',
                                   'Name',
-                                  'Created on',
+                                  'Created On',
                                   'Start Date',
                                   'End Date',
                                   'Action',

@@ -13,6 +13,7 @@ import {
     DrawerFooter,
     useToast,
     Td,
+    Icon,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
@@ -47,6 +48,8 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import moment from 'moment';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { CUR } from '@components/generics/functions/Naira';
+import { BsDownload } from 'react-icons/bs';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -179,6 +182,18 @@ function PayrollExpenseManagement({
             });
         }
     };
+
+    const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
+    const thead = [
+        'Name',
+        'Description',
+        'Expense Type',
+        'Expense Date',
+        'Created On',
+        'Amount',
+        'Status',
+        'Action',
+    ];
     return (
         <>
             <Box
@@ -187,7 +202,13 @@ function PayrollExpenseManagement({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between">
+                <Flex
+                    justify="space-between"
+                    mb="1rem"
+                    align="center"
+                    flexWrap="wrap"
+                    gap='.5rem'
+                >
                     <HStack gap="1rem">
                         <Button
                             bgColor="brand.400"
@@ -196,7 +217,6 @@ function PayrollExpenseManagement({
                             height="fit-content"
                             boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             onClick={onOpen}
-                            mb="1rem"
                         >
                             +Expense
                         </Button>
@@ -215,31 +235,33 @@ function PayrollExpenseManagement({
                             </Button>
                         )}
                     </HStack>
-                    <Checkbox
-                        checked={
-                            expensesList?.filter((x) => x.status == 'REVIEWED')
-                                .length !== 0 &&
-                            expensesList?.filter((x) => x.status == 'REVIEWED')
-                                .length == selectedId?.length
-                        }
-                        onChange={() => toggleSelected('', true)}
-                        label="Select All"
-                    />
+                    <HStack ml='auto'>
+                        <Checkbox
+                            checked={
+                                expensesList?.filter(
+                                    (x) => x.status == 'REVIEWED',
+                                ).length !== 0 &&
+                                expensesList?.filter(
+                                    (x) => x.status == 'REVIEWED',
+                                ).length == selectedId?.length
+                            }
+                            onChange={() => toggleSelected('', true)}
+                            label="Select All"
+                        />
+                        <Button
+                            bgColor="brand.600"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            height="fit-content"
+                            onClick={onOpens}
+                            borderRadius="25px"
+                        >
+                            Download <Icon as={BsDownload} ml=".5rem" />
+                        </Button>
+                    </HStack>
                 </Flex>
                 <FilterSearch />
-                <Tables
-                    tableHead={[
-                        'Name',
-                        'Description',
-                        'Expense Type',
-                        'Expense Date',
-                        'Created on',
-                        'Amount',
-                        'Status',
-                        'Action',
-                        // '...',
-                    ]}
-                >
+                <Tables tableHead={thead}>
                     <>
                         {expensesList?.map((x: ExpenseView) => (
                             <Tr key={x.id}>
@@ -384,6 +406,14 @@ function PayrollExpenseManagement({
                     </DrawerFooter>
                 </form>
             </DrawerWrapper>
+            <ExportReportModal
+                isOpen={open}
+                onClose={close}
+                data={thead}
+                record={1}
+                fileName={'Pending Expenses'}
+                model="expense"
+            />
         </>
     );
 }

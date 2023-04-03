@@ -29,7 +29,11 @@ function payrolls({ invoiceData }: InvoiceType) {
                     tabName="Processed Payrolls"
                 />
             </Flex>
-            <AdminInvoices invoiceData={invoiceData} />
+            <AdminInvoices
+                invoiceData={invoiceData}
+                record={2}
+                fileName="Approved Payrolls"
+            />
         </Box>
     );
 }

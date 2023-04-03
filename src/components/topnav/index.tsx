@@ -12,6 +12,7 @@ import {
     Circle,
     Image,
     Button,
+    Icon,
 } from '@chakra-ui/react';
 import { FaUser } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
@@ -25,6 +26,8 @@ import { MdOutlineArrowBackIos } from 'react-icons/md';
 import { UserView } from 'src/services';
 import { NotificationContext } from '@components/context/NotificationContext';
 import { Logout } from '@components/bits-utils/LogUserOut';
+import { GrShieldSecurity } from 'react-icons/gr';
+import Link from 'next/link';
 interface topnavProps {
     setOpenSidenav: any;
     openSidenav: boolean;
@@ -42,7 +45,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
         (x) => x.isRead == false,
     ).length;
     return (
-        <Box pt="2rem" pos="sticky" top="0" zIndex="800" bgColor="#f6f7f8">
+        <Box pos="sticky" top="0" zIndex="800" bgColor="#f6f7f8">
             {/* <Button
                 onClick={() => router.back()}
                 variant="solid"
@@ -52,6 +55,43 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
             >
                 Back
             </Button> */}
+            {user?.twoFactorEnabled === false && (
+                <Flex
+                    gap=".5rem"
+                    bgColor="red.100"
+                    w="full"
+                    h={['fit-content', '3rem']}
+                    justify="center"
+                    py={['1rem', '0']}
+                    align="center"
+                    flexDir={['column', 'row']}
+                >
+                    <Icon as={GrShieldSecurity} />
+                    <Text mb="0" fontSize=".8rem">
+                        Set up two factor authentication for an extra level of
+                        security
+                    </Text>
+                    <Link
+                        passHref
+                        href={`/${role?.replace(' ', '')}/my-profile`}
+                    >
+                        <Text
+                            mb="0"
+                            fontSize=".8rem"
+                            cursor="pointer"
+                            border="1px solid"
+                            p=".1rem .5rem"
+                            borderRadius="25px"
+                            _hover={{
+                                bgColor: 'white',
+                            }}
+                        >
+                            Click Here!
+                        </Text>
+                    </Link>
+                </Flex>
+            )}
+
             <Flex
                 justify="space-between"
                 pr="1rem"
@@ -60,6 +100,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                 w="95%"
                 mx="auto"
                 pb=".5rem"
+                mt="1rem"
             >
                 <Box color="brand.200">
                     <Text

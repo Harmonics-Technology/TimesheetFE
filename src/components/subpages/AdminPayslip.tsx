@@ -1,5 +1,5 @@
 /* eslint-disable no-sparse-arrays */
-import { Box, Button, Tr, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Flex, Icon, Tr, useDisclosure } from '@chakra-ui/react';
 import { InvoiceAction, TableData } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import {
@@ -18,13 +18,22 @@ import { useState } from 'react';
 import Naira, { CAD } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
 import AdminPaymentScheduleModal from '@components/bits-utils/AdminPaymentScheduleModal';
+import { BsDownload } from 'react-icons/bs';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 
 interface expenseProps {
     payrolls: PayslipUserViewPagedCollectionStandardResponse;
     paymentSchedule: AdminPaymentScheduleViewListStandardResponse;
+    record?: number;
+    fileName?: string;
 }
 
-function AdminPayslip({ payrolls, paymentSchedule }: expenseProps) {
+function AdminPayslip({
+    payrolls,
+    paymentSchedule,
+    record,
+    fileName,
+}: expenseProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<PaySlipView>();
 
@@ -36,6 +45,18 @@ function AdminPayslip({ payrolls, paymentSchedule }: expenseProps) {
         onClose: onClosed,
     } = useDisclosure();
 
+    const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
+    const thead = [
+        'Name',
+        'Start Date',
+        'End Date',
+        'Payment Date',
+        'Total Hours',
+        'Total Amount',
+        'Action',
+        // '',
+    ];
+
     return (
         <>
             <Box
@@ -44,33 +65,38 @@ function AdminPayslip({ payrolls, paymentSchedule }: expenseProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Button
-                    bgColor="brand.600"
-                    color="white"
-                    display={paymentSchedule == undefined ? 'none' : 'block'}
-                    fontSize=".8rem"
-                    h="2.5rem"
-                    borderRadius="0"
-                    border="2px solid"
-                    onClick={onOpened}
-                    w={['full', 'inherit']}
-                    mb="1rem"
-                >
-                    View Payment Schedule
-                </Button>
+                <Flex justify="space-between">
+                    <Button
+                        bgColor="brand.600"
+                        color="white"
+                        display={
+                            paymentSchedule == undefined ? 'none' : 'block'
+                        }
+                        fontSize=".8rem"
+                        h="2.5rem"
+                        borderRadius="0"
+                        border="2px solid"
+                        onClick={onOpened}
+                        w={['auto', 'inherit']}
+                        mb="1rem"
+                    >
+                        View Payment Schedule
+                    </Button>
+                    {record !== undefined && (
+                        <Button
+                            bgColor="brand.600"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            height="fit-content"
+                            onClick={onOpens}
+                            borderRadius="25px"
+                        >
+                            Download <Icon as={BsDownload} ml=".5rem" />
+                        </Button>
+                    )}
+                </Flex>
                 <FilterSearch hides={true} />
-                <Tables
-                    tableHead={[
-                        'Name',
-                        'Start Date',
-                        'End Date',
-                        'Payment Date',
-                        'Total Hrs',
-                        'Total Amount',
-                        'Action',
-                        // '',
-                    ]}
-                >
+                <Tables tableHead={thead}>
                     <>
                         {payrollsList?.map((x: PayslipUserView, i) => (
                             <Tr key={i}>
@@ -89,7 +115,7 @@ function AdminPayslip({ payrolls, paymentSchedule }: expenseProps) {
                                 />
                                 <TableData
                                     name={formatDate(
-                                        x.payslipView?.invoice?.paymentDate,
+                                        x.payslipView?.invoice?.dateCreated,
                                     )}
                                 />
                                 <TableData
@@ -128,6 +154,14 @@ function AdminPayslip({ payrolls, paymentSchedule }: expenseProps) {
                 paymentSchedule={
                     paymentSchedule as AdminPaymentScheduleViewListStandardResponse
                 }
+            />
+            <ExportReportModal
+                isOpen={open}
+                onClose={close}
+                data={thead}
+                record={record}
+                fileName={fileName}
+                model="payslip"
             />
         </>
     );

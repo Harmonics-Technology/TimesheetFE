@@ -1,5 +1,6 @@
 import {
     FormControl,
+    FormErrorMessage,
     FormLabel,
     Input,
     InputGroup,
@@ -61,7 +62,11 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
     readonly = false,
 }: FormInputProps<TFormValues>) => {
     return (
-        <FormControl>
+        <FormControl
+            isInvalid={
+                error?.type === 'required' || error?.message !== undefined
+            }
+        >
             <FormLabel
                 htmlFor={label}
                 textTransform="capitalize"
@@ -95,10 +100,10 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                     </InputRightElement>
                 )}
             </InputGroup>
-            <Text fontSize=".7rem" color="red">
+            <FormErrorMessage fontSize=".7rem" color="red">
                 {(error?.type === 'required' && `${label} is required`) ||
                     error?.message}
-            </Text>
+            </FormErrorMessage>
         </FormControl>
     );
 };

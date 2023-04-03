@@ -106,7 +106,7 @@ function PaymentPartnerDashboard({
                             ))}
                         thead={[
                             'Name',
-                            'Created on',
+                            'Created On',
                             'Start Date',
                             'End Date',
                             'Status',
@@ -150,9 +150,9 @@ function PaymentPartnerDashboard({
                         thead={[
                             'Name on Invoice',
                             'Invoice No',
-                            'Created on',
-                            'Amount ($)',
-                            'Amount (₦)',
+                            'Created On',
+                            'Amount($)',
+                            'Amount(₦)',
                             'Status',
                         ]}
                         link={'/'}

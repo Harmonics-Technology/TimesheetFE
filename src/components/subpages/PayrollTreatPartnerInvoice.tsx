@@ -3,6 +3,7 @@ import {
     Button,
     Flex,
     HStack,
+    Icon,
     Tr,
     useDisclosure,
     useToast,
@@ -33,12 +34,22 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { MiniTabs } from '@components/bits-utils/MiniTabs';
 import { UserContext } from '@components/context/UserContext';
 import { Round } from '@components/generics/functions/Round';
+import { BsDownload } from 'react-icons/bs';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
+    fileName?: string;
+    record?: number;
+    paygroupId?: number;
 }
 
-function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
+function PayrollTreatPartnerInvoice({
+    invoiceData,
+    fileName,
+    record,
+    paygroupId,
+}: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
     console.log({ invoiceData });
@@ -117,6 +128,17 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
     const pending = `/${role}/financials/invoices-payment`;
     const approved = `/${role}/financials/invoices-payment-2`;
 
+    const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
+    const thead = [
+        'Invoice No',
+        'Name',
+        'Created On',
+        'Amount($)',
+        'Amount(₦)',
+        'Status',
+        'Action',
+    ];
+
     return (
         <>
             <Box
@@ -134,8 +156,13 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                     <MiniTabs url={pending} text={'Proinsight Technology'} />
                     <MiniTabs url={approved} text={'Olade Consulting'} />
                 </HStack>
-                {selectedId.length > 0 && (
-                    <Flex justify="space-between" mb="1rem">
+                <Flex
+                    justify={
+                        selectedId.length > 0 ? 'space-between' : 'flex-end'
+                    }
+                    mb="1rem"
+                >
+                    {selectedId.length > 0 && (
                         <HStack gap="1rem">
                             <Button
                                 bgColor="brand.600"
@@ -151,6 +178,8 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                                 Approve
                             </Button>
                         </HStack>
+                    )}
+                    <HStack>
                         <Checkbox
                             checked={
                                 invoice?.length !== 0 &&
@@ -162,20 +191,22 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                             onChange={() => toggleSelected('', true)}
                             label="Select All"
                         />
-                    </Flex>
-                )}
+                        {record !== undefined && (
+                            <Button
+                                bgColor="brand.600"
+                                color="white"
+                                p=".5rem 1.5rem"
+                                height="fit-content"
+                                onClick={onOpens}
+                                borderRadius="25px"
+                            >
+                                Download <Icon as={BsDownload} ml=".5rem" />
+                            </Button>
+                        )}
+                    </HStack>
+                </Flex>
                 <FilterSearch />
-                <Tables
-                    tableHead={[
-                        'Invoice No',
-                        'Name',
-                        'Created on',
-                        'Amount ($)',
-                        'Amount (₦)',
-                        'Status',
-                        'Action',
-                    ]}
-                >
+                <Tables tableHead={thead}>
                     <>
                         {invoiceData?.data?.value?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
@@ -229,6 +260,16 @@ function PayrollTreatPartnerInvoice({ invoiceData }: adminProps) {
                 isOpen={isOpen}
                 onClose={onClose}
                 clicked={clicked}
+            />
+            <ExportReportModal
+                isOpen={open}
+                onClose={close}
+                data={thead}
+                record={record}
+                fileName={fileName}
+                model="invoice"
+                payPartner={true}
+                paygroupId={paygroupId}
             />
         </>
     );
