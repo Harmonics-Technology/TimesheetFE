@@ -128,7 +128,8 @@ export const ExportReportModal = ({
         xmlHttpRequest.open(
             'GET',
             `${
-                process.env.NEXT_PUBLIC_API_BASEURL
+                (process.env.NEXT_PUBLIC_API_BASEURL as string) ||
+            'https://timesheetapiprod.azurewebsites.net'
             }/api/export/${model}?Record=${record}&${
                 payPartner && `PayrollGroupId=${paygroupId}`
             }&${header}&StartDate=${startDate}&EndDate=${endDate}`,
