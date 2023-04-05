@@ -55,7 +55,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
             >
                 Back
             </Button> */}
-            {user?.twoFactorEnabled === false && (
+            {user?.twoFactorEnabled == false && (
                 <Flex
                     gap=".5rem"
                     bgColor="red.100"
