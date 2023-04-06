@@ -28,7 +28,7 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
     const expensesList = listExpenses?.data?.value;
     const router = useRouter();
     const toast = useToast();
-    // console.log({ listExpenses });
+    // ({ listExpenses });
 
     const [loading, setLoading] = useState(false);
 
@@ -43,7 +43,7 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
             expensesList?.forEach((x) =>
                 response.push(x.id as string),
             ) as unknown as string[];
-            console.log({ response });
+            ({ response });
             setSelectedId([...response]);
             return;
         }

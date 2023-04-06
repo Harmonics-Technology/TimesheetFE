@@ -14,7 +14,7 @@ interface adminProps {
 }
 
 function admin({ adminList, clientId }: adminProps) {
-    // console.log({ team });
+    // ({ team });
     return <SupervisorManagement adminList={adminList} clientId={clientId} />;
 }
 
@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
+            (error);
             return {
                 props: {
                     data: [],

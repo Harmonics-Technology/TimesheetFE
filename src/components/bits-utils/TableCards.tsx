@@ -13,7 +13,7 @@ interface TableCardsProps {
     link: string;
 }
 function TableCards({ title, url, data, thead, link }: TableCardsProps) {
-    // console.log({ data });
+    // ({ data });
     return (
         <Box
             bgColor="white"
@@ -21,7 +21,7 @@ function TableCards({ title, url, data, thead, link }: TableCardsProps) {
             padding="1.5rem"
             overflow="hidden"
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
-    >
+        >
             <Text
                 fontWeight="600"
                 fontSize="1rem"

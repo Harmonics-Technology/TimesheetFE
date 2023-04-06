@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
             },
         };
     } catch (error: any) {
-        console.log(error);
+        (error);
         return {
             props: {
                 data: [],

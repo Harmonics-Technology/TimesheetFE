@@ -20,11 +20,11 @@ export default index;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
-        console.log({ id });
+        ({ id });
         try {
             const data = await DashboardService.getTeamMemberMetrics(id);
             const payslips = await FinancialService.listPaySlipsByTeamMember();
-            // console.log({ payslips });
+            // ({ payslips });
             return {
                 props: {
                     metrics: data,

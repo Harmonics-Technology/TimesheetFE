@@ -20,7 +20,7 @@ interface DashboardProps {
 }
 
 function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
-    console.log({ adminMetrics, expenses });
+    ({ adminMetrics, expenses });
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">

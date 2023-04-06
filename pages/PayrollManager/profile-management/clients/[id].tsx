@@ -35,7 +35,7 @@ export default ClientDetails;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
-        // console.log({ id });
+        // ({ id });
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
             const data = await UserService.getUserById(id);
@@ -51,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.search,
                 id,
             );
-            // console.log({ data });
+            // ({ data });
             return {
                 props: {
                     userProfile: data.data,
@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
+            (error);
             return {
                 props: {
                     data: [],

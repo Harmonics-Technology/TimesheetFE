@@ -9,10 +9,10 @@ interface pageOptions {
 
 function Pagination({ data }: pageOptions) {
     data = data?.data;
-    console.log({ data });
+    ({ data });
     const totalPages =
         (data?.size as number) / (data?.limit as unknown as number);
-    // console.log({ totalPages });
+    // ({ totalPages });
     const currentPage = (((data?.limit as unknown as number) +
         (data?.offset as unknown as number)) /
         (data?.limit as unknown as number)) as number;

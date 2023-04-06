@@ -1,7 +1,7 @@
-import { FormLabel, FormControl, Text } from "@chakra-ui/react";
-import { Control, Controller, FieldError, Path } from "react-hook-form";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
+import { FormLabel, FormControl, Text } from '@chakra-ui/react';
+import { Control, Controller, FieldError, Path } from 'react-hook-form';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
@@ -17,14 +17,14 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
 export const PrimaryPhoneInput = <TFormValues extends Record<string, any>>({
     name,
     error,
-    label = "",
+    label = '',
     control,
-    fontSize = ".8rem",
+    fontSize = '.8rem',
     placeholder,
-    defaultCountry = "ca",
+    defaultCountry = 'ca',
 }: FormInputProps<TFormValues>) => {
     // const value = control._formValues[name];
-    // console.log({ value });
+    // ({ value });
     return (
         <>
             <FormControl>
@@ -57,9 +57,9 @@ export const PrimaryPhoneInput = <TFormValues extends Record<string, any>>({
                                 onChange={(phone) => onChange(phone)}
                                 enableSearch
                                 disableSearchIcon
-                                containerClass={"phone-input"}
-                                inputClass={"PhoneInputInput"}
-                                searchClass={"searchInput"}
+                                containerClass={'phone-input'}
+                                inputClass={'PhoneInputInput'}
+                                searchClass={'searchInput'}
                             />
                         </>
                     )}
@@ -67,7 +67,7 @@ export const PrimaryPhoneInput = <TFormValues extends Record<string, any>>({
                     control={control}
                 />
                 <Text fontSize=".7rem" color="red">
-                    {(error?.type === "required" && `${label} is required`) ||
+                    {(error?.type === 'required' && `${label} is required`) ||
                         error?.message}
                     {/* {value
                         ? isValidPhoneNumber(value)

@@ -22,7 +22,7 @@ interface adminProps {
 }
 
 function TimeSheetApproval({ timeSheets }: adminProps) {
-    console.log({ timeSheets });
+    ({ timeSheets });
     const router = useRouter();
 
     return (

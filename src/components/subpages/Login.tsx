@@ -86,7 +86,7 @@ function Login() {
             });
             return;
         } catch (error: any) {
-            // console.log({ error });
+            // ({ error });
             toast({
                 title: error?.message || error?.body?.message,
                 status: 'error',

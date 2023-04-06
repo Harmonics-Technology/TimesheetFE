@@ -40,11 +40,11 @@ const ProfileConfirmModal = ({ isOpen, onClose, user }: Props) => {
         data.phoneNumber = user?.phoneNumber;
         data.role = user?.role;
         data.profilePicture = null;
-        console.log({ data });
+        ({ data });
         try {
             setLoading(true);
             const result = await UserService.updateUser(data);
-            console.log({ result });
+            ({ result });
             if (result.status) {
                 toast({
                     title: 'Profile Picture Update Success',
@@ -63,7 +63,7 @@ const ProfileConfirmModal = ({ isOpen, onClose, user }: Props) => {
                 position: 'top-right',
             });
         } catch (error) {
-            console.log(error);
+            error;
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',

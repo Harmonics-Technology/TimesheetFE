@@ -14,7 +14,7 @@ export const OnboardingFeeProvider = ({ children }: { children: any }) => {
                     setFixedAmount(data.data?.fee);
                 }
             } catch (error: any) {
-                console.log({ error });
+                ({ error });
             }
         };
         const getPercentageAmount = async () => {
@@ -25,7 +25,7 @@ export const OnboardingFeeProvider = ({ children }: { children: any }) => {
                     setPercentageAmount(data.data?.value);
                 }
             } catch (error: any) {
-                console.log({ error });
+                ({ error });
             }
         };
         const getHstAmount = async () => {
@@ -35,7 +35,7 @@ export const OnboardingFeeProvider = ({ children }: { children: any }) => {
                     setHstAmount(data.data);
                 }
             } catch (error: any) {
-                console.log({ error });
+                ({ error });
             }
         };
 

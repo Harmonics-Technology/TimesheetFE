@@ -63,7 +63,7 @@ const CompleteReset = ({ code }: { code: string }) => {
             });
             return;
         }
-        // console.log({ data });
+        // ({ data });
         try {
             const result = await UserService.completeReset(data);
             if (result.status) {
@@ -77,7 +77,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                 position: 'top-right',
             });
         } catch (error) {
-            console.log(error);
+            error;
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',

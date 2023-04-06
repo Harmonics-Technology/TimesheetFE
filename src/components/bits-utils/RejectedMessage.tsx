@@ -24,7 +24,7 @@ function RejectedMessage({
     clicked: InvoiceView | undefined;
 }) {
     const { user } = useContext(UserContext);
-    // console.log({ user });
+    // ({ user });
     const status = clicked?.status;
 
     return (

@@ -18,7 +18,7 @@ interface adminProps {
 }
 
 function TeamTimesheetHistory({ timeSheets }: adminProps) {
-    console.log({ timeSheets });
+    ({ timeSheets });
 
     return (
         <>

@@ -24,13 +24,13 @@ type Props = {
 };
 
 const ConfirmModal = ({ isOpen, onClose, id }: Props) => {
-    // console.log({ id });
+    // ({ id });
     const router = useRouter();
     const toast = useToast();
     const [loading, setLoading] = useState(false);
 
     const terminateContract = async (data: string) => {
-        console.log(data);
+        data;
         try {
             setLoading(true);
             const result = await ContractService.terminateContract(data);
@@ -54,7 +54,7 @@ const ConfirmModal = ({ isOpen, onClose, id }: Props) => {
                 position: 'top-right',
             });
         } catch (error) {
-            console.log({ error });
+            ({ error });
         }
     };
     return (

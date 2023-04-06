@@ -51,7 +51,7 @@ function AdminPayroll({ payrolls }: expenseProps) {
             payrollsList?.forEach((x) =>
                 response.push(x.payrollId as string),
             ) as unknown as string[];
-            console.log({ response });
+            ({ response });
             setSelectedId([...response]);
             return;
         }
@@ -70,7 +70,7 @@ function AdminPayroll({ payrolls }: expenseProps) {
                 setLoading(true);
                 const result = await FinancialService.approvePayroll(x);
                 if (result.status) {
-                    console.log({ result });
+                    ({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -89,7 +89,7 @@ function AdminPayroll({ payrolls }: expenseProps) {
                     position: 'top-right',
                 });
             } catch (error: any) {
-                console.log({ error });
+                ({ error });
                 setLoading(false);
                 toast({
                     title: error.body.message || error.message,

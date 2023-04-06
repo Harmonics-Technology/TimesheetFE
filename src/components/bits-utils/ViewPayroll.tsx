@@ -23,7 +23,7 @@ interface adminProps {
 }
 
 function ViewPayroll({ adminList }: adminProps) {
-    console.log({ adminList });
+    ({ adminList });
     const router = useRouter();
 
     return (

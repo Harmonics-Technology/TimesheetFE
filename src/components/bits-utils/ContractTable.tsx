@@ -63,7 +63,7 @@ function TeamManagement({ userProfile }: adminProps) {
     const [modify, setModify] = useState<boolean>(false);
     const [extend, setExtend] = useState<boolean>(false);
     const [clickedItem, setClickedItem] = useState<ContractView>({});
-    // console.log({ clickedItem });
+    // ({ clickedItem });
     const {
         register,
         handleSubmit,
@@ -89,12 +89,11 @@ function TeamManagement({ userProfile }: adminProps) {
     const showLoadingState = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoading(true);
+                ('File progress: ', info.progress), setShowLoading(true);
             });
             file.done((info) => {
                 setShowLoading(false),
-                    console.log('File uploaded: ', info),
+                    ('File uploaded: ', info),
                     setContractFile(info);
             });
         }
@@ -111,7 +110,7 @@ function TeamManagement({ userProfile }: adminProps) {
             });
             return;
         }
-        console.log({ data });
+        ({ data });
         try {
             const result = await ContractService.createContract(data);
             if (result.status) {
@@ -133,7 +132,7 @@ function TeamManagement({ userProfile }: adminProps) {
             });
             return;
         } catch (err: any) {
-            console.log({ err });
+            ({ err });
             toast({
                 title: err?.body?.message || err?.message,
                 status: 'error',

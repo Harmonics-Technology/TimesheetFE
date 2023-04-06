@@ -95,7 +95,7 @@ const schema = yup.object().shape({
 
 function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     const client = clients?.filter((x) => x.isActive);
-    console.log({ client });
+    ({ client });
 
     const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);
 
@@ -113,15 +113,15 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             onBordingFee: fixedAmount,
         },
     });
-    // console.log(watch('onBordingFee'));
+    // (watch('onBordingFee'));
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    // console.log(watch("payRollTypeId"));
+    // (watch("payRollTypeId"));
     const payroll = watch('payRollTypeId');
     const onboarding = watch('fixedAmount');
     const clientId = watch('clientId');
-    console.log({ payroll });
+    ({ payroll });
 
     const [contract, setContractFile] = useState<any>('');
     const [icd, setIcd] = useState<any>('');
@@ -143,25 +143,21 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     const showLoadingStateB = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingB(true);
+                ('File progress: ', info.progress), setShowLoadingB(true);
             });
             file.done((info) => {
-                setShowLoadingB(false),
-                    console.log('File uploaded: ', info),
-                    setIcd(info);
+                setShowLoadingB(false), ('File uploaded: ', info), setIcd(info);
             });
         }
     };
     const showLoadingStateC = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingC(true);
+                ('File progress: ', info.progress), setShowLoadingC(true);
             });
             file.done((info) => {
                 setShowLoadingC(false),
-                    console.log('File uploaded: ', info),
+                    ('File uploaded: ', info),
                     setVoidCheck(info);
             });
         }
@@ -169,25 +165,21 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     const showLoadingStateD = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingD(true);
+                ('File progress: ', info.progress), setShowLoadingD(true);
             });
             file.done((info) => {
-                setShowLoadingD(false),
-                    console.log('File uploaded: ', info),
-                    setInc(info);
+                setShowLoadingD(false), ('File uploaded: ', info), setInc(info);
             });
         }
     };
     const showLoadingState = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoading(true);
+                ('File progress: ', info.progress), setShowLoading(true);
             });
             file.done((info) => {
                 setShowLoading(false),
-                    console.log('File uploaded: ', info),
+                    ('File uploaded: ', info),
                     setContractFile(info);
             });
         }
@@ -202,11 +194,11 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             return;
         }
         setLoading(true);
-        console.log({ id });
+        ({ id });
         try {
             const data = await UserService.getSupervisors(id);
             setLoading(false);
-            console.log({ data });
+            ({ data });
             if (data.status) {
                 setSupervisors(data.data?.filter((x) => x.isActive));
                 return;
@@ -222,13 +214,13 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             });
         }
     };
-    console.log({ supervisors });
+    ({ supervisors });
 
     useEffect(() => {
         getSupervisor(clientId);
     }, [clientId]);
 
-    // console.log({ supervisors });
+    // ({ supervisors });
 
     const onSubmit = async (data: TeamMemberModel) => {
         if (data.fixedAmount == true) {
@@ -267,7 +259,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                 : (data.monthlyPayoutRate as number);
         }
         // data.clientId = null;
-        console.log({ data });
+        ({ data });
 
         if (data.supervisorId === undefined || '') {
             toast({
@@ -288,7 +280,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             return;
         }
 
-        console.log({ data });
+        ({ data });
 
         try {
             const result = await UserService.addTeamMember(data);
@@ -311,7 +303,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             });
             return;
         } catch (err: any) {
-            console.log({ err });
+            ({ err });
             toast({
                 title: err.body.message || err.message,
                 status: 'error',

@@ -37,10 +37,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             date = moment(new Date()).format('YYYY-MM-DD');
         }
 
-        console.log({ date });
+        ({ date });
         try {
             const data = await TimeSheetService.getTimeSheet(id, date);
-            console.log({ data });
+            ({ data });
             return {
                 props: {
                     timeSheets: data.data,
@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
+            (error);
             return {
                 props: {
                     data: [],

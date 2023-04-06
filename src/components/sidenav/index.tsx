@@ -24,7 +24,7 @@ interface sidenavProps {
 
 function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
     const { user } = useContext(UserContext);
-    // console.log({ user });
+    // ({ user });
     const role = user?.role?.replaceAll(' ', '');
     return (
         <Box
@@ -888,7 +888,7 @@ export default SideNav;
 
 // function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
 //     const { user } = useContext(UserContext);
-//     // console.log({ user });
+//     // ({ user });
 //     const role = user?.role?.replaceAll(' ', '');
 //     const closeToggle = () => {
 //         setOpenSidenav(false);
