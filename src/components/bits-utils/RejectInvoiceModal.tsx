@@ -45,25 +45,25 @@ function RejectInvoiceModal({
         mode: 'all',
     });
 
-    ({ clicked });
+    console.log({ clicked });
     const router = useRouter();
     const toast = useToast();
 
     const onSubmit = async (data: RejectPaymentPartnerInvoiceModel) => {
         data.invoiceId = clicked?.id;
-        ({ data });
+        console.log({ data });
         try {
             const result = await FinancialService.rejectPaymentPartnerInvoice(
                 data,
             );
             if (result.status) {
-                ({ result });
+                console.log({ result });
                 router.reload();
                 return;
             }
-            ({ result });
+            console.log({ result });
         } catch (error) {
-            ({ error });
+            console.log({ error });
             toast({
                 title: 'An error occured',
                 status: 'error',

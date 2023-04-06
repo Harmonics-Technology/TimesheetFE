@@ -48,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.to,
             );
             const data = await DashboardService.getClientMetrics();
-            ({ data });
+            console.log({ data });
             return {
                 props: {
                     metrics: data,

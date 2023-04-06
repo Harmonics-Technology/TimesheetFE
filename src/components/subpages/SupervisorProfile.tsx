@@ -39,7 +39,7 @@ interface SupervisorProfileProps {
     teamList?: UserViewPagedCollectionStandardResponse;
 }
 function SupervisorProfile({ userProfile, teamList }: SupervisorProfileProps) {
-    // ({ userProfile });
+    // console.log({ userProfile });
     const {
         register,
         handleSubmit,
@@ -54,18 +54,18 @@ function SupervisorProfile({ userProfile, teamList }: SupervisorProfileProps) {
             role: userProfile?.role,
         },
     });
-    // (watch("role"));
+    // console.log(watch("role"));
 
     const toast = useToast();
     const router = useRouter();
     const [teamMembers, setTeamMembers] = useState(false);
     const onSubmit = async (data: UpdateUserModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
-        ({ data });
+        console.log({ data });
 
         try {
             const result = await UserService.adminUpdateUser(data);
-            // ({ result });
+            // console.log({ result });
             if (result.status) {
                 toast({
                     title: 'Profile Update Success',
@@ -83,7 +83,7 @@ function SupervisorProfile({ userProfile, teamList }: SupervisorProfileProps) {
                 position: 'top-right',
             });
         } catch (error) {
-            error;
+            console.log(error);
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',

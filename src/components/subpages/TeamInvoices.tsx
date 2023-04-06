@@ -50,7 +50,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
             invoice?.forEach((x) =>
                 response.push(x.id as string),
             ) as unknown as string[];
-            ({ response });
+            console.log({ response });
             setSelectedId([...response]);
             return;
         }
@@ -62,7 +62,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
         }
         setSelectedId([...selectedId, id]);
     };
-    ({ selectedId });
+    console.log({ selectedId });
     const submitted = router.asPath.includes('/financials/invoices');
 
     const submitInvoiceItem = async () => {
@@ -71,7 +71,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                 setLoading(true);
                 const result = await FinancialService.submitInvoice(x);
                 if (result.status) {
-                    ({ result });
+                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -90,7 +90,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                     position: 'top-right',
                 });
             } catch (error: any) {
-                ({ error });
+                console.log({ error });
                 setLoading(false);
                 toast({
                     title: error.body.message || error.message,

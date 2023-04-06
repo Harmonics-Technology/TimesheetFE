@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(async (ctx) =
             },
         };
     } catch (error: any) {
-        (error);
+        console.log(error);
         return {
             props: {
                 data: [],

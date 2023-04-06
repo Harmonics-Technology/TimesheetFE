@@ -18,7 +18,7 @@ interface sidebarProps {
     change: boolean;
 }
 const SidebarToggle = ({ setChange, change }: sidebarProps) => {
-    // ({ change });
+    // console.log({ change });
     const [removeTag, setRemoveTag] = useState(false);
     const setAndClodeSidebarTag = () => {
         setRemoveTag(false);

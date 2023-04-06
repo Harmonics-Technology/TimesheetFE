@@ -66,7 +66,7 @@ const schema = yup.object().shape({
 });
 
 function ClientManagement({ adminList }: adminProps) {
-    // ({ adminList });
+    // console.log({ adminList });
     const {
         register,
         handleSubmit,
@@ -82,9 +82,9 @@ function ClientManagement({ adminList }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    // (watch("organizationPhone"));
+    // console.log(watch("organizationPhone"));
     const [same, setSame] = useState(false);
-    // ({ same });
+    // console.log({ same });
 
     const onSubmit = async (data: RegisterModel) => {
         {
@@ -95,7 +95,7 @@ function ClientManagement({ adminList }: adminProps) {
                   (data.lastName = data.organizationName))
                 : null;
         }
-        ({ data });
+        console.log({ data });
         try {
             const result = await UserService.create(data);
             if (result.status) {

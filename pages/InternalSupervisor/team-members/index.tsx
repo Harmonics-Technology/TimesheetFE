@@ -11,7 +11,7 @@ interface TeamProps {
 }
 
 function Team({ teamList, id, paymentPartner }: TeamProps) {
-    ({ teamList });
+    console.log({ teamList });
     return (
         <SupervisorTeamMember
             adminList={teamList}
@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.limit,
                 pagingOptions.search,
             );
-            ({ data });
+            console.log({ data });
             return {
                 props: {
                     teamList: data,
@@ -45,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            (error);
+            console.log(error);
             return {
                 props: {
                     data: [],

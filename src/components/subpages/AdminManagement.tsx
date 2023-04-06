@@ -84,8 +84,8 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    // (watch("organizationName"));
-    // ({ newUser });
+    // console.log(watch("organizationName"));
+    // console.log({ newUser });
 
     const onSubmit = async (data: RegisterModel) => {
         try {
@@ -149,7 +149,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
         try {
             const data = await UserService.getUserById(id);
             setLoading(false);
-            ({ data });
+            console.log({ data });
             if (data.status) {
                 setUserDetail((prevState) => ({
                     ...prevState,
@@ -168,7 +168,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
 
     const createFromTeam = async (e: any) => {
         e.preventDefault();
-        ({ userDetail });
+        console.log({ userDetail });
         setIsLoading(true);
         try {
             const result = await UserService.adminUpdateUser(userDetail);

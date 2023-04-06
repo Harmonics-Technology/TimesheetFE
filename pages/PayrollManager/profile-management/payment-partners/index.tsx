@@ -12,7 +12,7 @@ interface PaymentPartnerProps {
 }
 
 function PaymentPartner({ PaymentPartnerList }: PaymentPartnerProps) {
-    // ({ PaymentPartner });
+    // console.log({ PaymentPartner });
     return <PaymentPartnerManagement adminList={PaymentPartnerList} />;
 }
 
@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            (error);
+            console.log(error);
             return {
                 props: {
                     data: [],

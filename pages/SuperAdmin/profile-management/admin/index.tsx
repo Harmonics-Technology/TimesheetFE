@@ -15,7 +15,7 @@ interface adminProps {
 }
 
 function admin({ adminList, team }: adminProps) {
-    // ({ team });
+    // console.log({ team });
     return <ProfileManagementAdmin adminList={adminList} team={team} />;
 }
 
@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            (error);
+            console.log(error);
             return {
                 props: {
                     data: [],

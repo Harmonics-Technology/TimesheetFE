@@ -60,7 +60,7 @@ export const ExportReportModal = ({
                 .forEach((x) =>
                     response.push(x as string),
                 ) as unknown as string[];
-            ({ response });
+            console.log({ response });
             setSelectedId([...response]);
             return;
         }
@@ -73,7 +73,7 @@ export const ExportReportModal = ({
         setSelectedId([...selectedId, id]);
     };
 
-    ({ selectedId });
+    console.log({ selectedId });
 
     const [fromDate, setFromDate] = useState<any>();
     const [toDate, setToDate] = useState<any>();
@@ -129,7 +129,7 @@ export const ExportReportModal = ({
             'GET',
             `${
                 (process.env.NEXT_PUBLIC_API_BASEURL as string) ||
-                'https://timesheetapiprod.azurewebsites.net'
+            'https://timesheetapiprod.azurewebsites.net'
             }/api/export/${model}?Record=${record}&${
                 payPartner && `PayrollGroupId=${paygroupId}`
             }&${header}&StartDate=${startDate}&EndDate=${endDate}`,

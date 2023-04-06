@@ -50,7 +50,7 @@ const schema = yup.object().shape({
 });
 
 function SupervisorManagement({ adminList, client }: adminProps) {
-    // ({ adminList });
+    // console.log({ adminList });
     const clients = client?.filter((x) => x.isActive);
     const {
         register,
@@ -68,7 +68,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    // ({ adminList });
+    // console.log({ adminList });
 
     const onSubmit = async (data: RegisterModel) => {
         try {

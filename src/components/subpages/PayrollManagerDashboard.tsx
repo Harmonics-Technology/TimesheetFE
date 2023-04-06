@@ -62,7 +62,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
     const [clicked, setClicked] = useState<InvoiceView>();
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
-    ({ metrics });
+    console.log({ metrics });
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">

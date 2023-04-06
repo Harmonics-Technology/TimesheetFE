@@ -62,7 +62,7 @@ interface expenseProps {
 }
 
 function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
-    ({ expenseType, id, expenses });
+    console.log({ expenseType, id, expenses });
     const expensesList = expenses?.data?.value;
     const {
         register,

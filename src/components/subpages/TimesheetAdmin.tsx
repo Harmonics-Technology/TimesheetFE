@@ -72,9 +72,9 @@ const TimesheetAdmin = ({
     timeSheets: TimeSheetMonthlyView;
     id: string;
 }) => {
-    ({ id });
+    console.log({ id });
     const router = useRouter();
-    ({ timeSheets });
+    console.log({ timeSheets });
     const sheet = timeSheets?.timeSheet;
     const { date } = router.query;
     const newDate = new Date(date as unknown as string);
@@ -97,7 +97,7 @@ const TimesheetAdmin = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    // ({ totalHours });
+    // console.log({ totalHours });
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
@@ -107,9 +107,9 @@ const TimesheetAdmin = ({
 
     const [loading, setLoading] = useState(false);
     const [allChecked, setAllChecked] = useState<boolean>(false);
-    // ({ allChecked });
+    // console.log({ allChecked });
     const preventTomorrow = addDays(new Date(), 1).toISOString();
-    ({ preventTomorrow });
+    console.log({ preventTomorrow });
     const [selected, setSelected] = useState<TimeSheetView[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
 
@@ -118,7 +118,7 @@ const TimesheetAdmin = ({
             moment(x.date).format('DD/MM/YYYY') !=
             moment(preventTomorrow).format('DD/MM/YYYY'),
     );
-    // ({ selectedInput });
+    // console.log({ selectedInput });
     const fillSelectedDate = (item: TimeSheetView) => {
         const existingValue = selected.find((e) => e.date == item.date);
         if (existingValue) {
@@ -151,7 +151,7 @@ const TimesheetAdmin = ({
         }
         setSelectedInput([...selectedInput, item]);
     };
-    ({ selected });
+    console.log({ selected });
 
     const {
         register,
@@ -169,24 +169,24 @@ const TimesheetAdmin = ({
         chosenDate: '',
     });
     const showReject = (userId, chosenDate) => {
-        ({ chosenDate });
+        console.log({ chosenDate });
         setReject({ userId, chosenDate });
     };
 
     const onSubmit = async (data: RejectTimeSheetModel) => {
         data.date = reject.chosenDate;
         data.employeeInformationId = reject.userId;
-        ({ data });
+        console.log({ data });
         try {
             const result = await TimeSheetService.rejectTimeSheetForADay(data);
             if (result.status) {
-                ({ result });
+                console.log({ result });
                 router.reload();
                 return;
             }
-            ({ result });
+            console.log({ result });
         } catch (error) {
-            ({ error });
+            console.log({ error });
             toast({
                 title: 'An error occured',
                 status: 'error',
@@ -196,7 +196,7 @@ const TimesheetAdmin = ({
     };
 
     const approveTimeSheetForADay = async (userId, chosenDate) => {
-        // ({ item });
+        // console.log({ item });
         try {
             const data = await TimeSheetService.approveTimeSheetForADay(
                 userId,
@@ -213,12 +213,12 @@ const TimesheetAdmin = ({
             });
             return;
         } catch (error) {
-            error;
+            console.log(error);
         }
     };
 
     const addHours = async (item) => {
-        // ({ userId, chosenDate, hours });
+        // console.log({ userId, chosenDate, hours });
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
@@ -226,7 +226,7 @@ const TimesheetAdmin = ({
                 item.chosenDate,
                 item.hours,
             );
-            ({ data });
+            console.log({ data });
             if (data.status) {
                 return;
             }
@@ -237,7 +237,7 @@ const TimesheetAdmin = ({
             });
             return;
         } catch (error: any) {
-            error;
+            console.log(error);
             toast({
                 status: 'error',
                 title: error.body.message || error.message,
@@ -510,7 +510,7 @@ const TimesheetAdmin = ({
             const close = useCallback(() => onClose(), []);
             const popover = useRef(null);
             useClickOutside(popover, close);
-            // ({ timesheets });
+            // console.log({ timesheets });
 
             week.push(
                 <Flex
