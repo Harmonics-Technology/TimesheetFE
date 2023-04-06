@@ -43,14 +43,14 @@ interface adminProps {
 function ClientInvoices({ invoiceData, fileName, record }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    console.log({ invoiceData });
+    ({ invoiceData });
     const invoice = invoiceData?.data?.value;
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
     const offshore = router.pathname.includes('financials/payrolls-approved');
     const payment = router.pathname.includes('financials/invoices-payment');
-    // console.log({ clicked });
+    // ({ clicked });
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
@@ -67,7 +67,7 @@ function ClientInvoices({ invoiceData, fileName, record }: adminProps) {
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
-            console.log({ response });
+            ({ response });
             setSelectedId([...response]);
             return;
         }
@@ -85,7 +85,7 @@ function ClientInvoices({ invoiceData, fileName, record }: adminProps) {
                 setLoading(true);
                 const result = await FinancialService.treatSubmittedInvoice(x);
                 if (result.status) {
-                    console.log({ result });
+                    ({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -104,7 +104,7 @@ function ClientInvoices({ invoiceData, fileName, record }: adminProps) {
                     position: 'top-right',
                 });
             } catch (error: any) {
-                console.log({ error });
+                ({ error });
                 setLoading(false);
                 toast({
                     title: error.body.message || error.message,

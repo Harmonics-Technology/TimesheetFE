@@ -44,7 +44,7 @@ function FilterSearch({
         new DateObject().subtract(4, 'days'),
     );
     const [toDate, setToDate] = useState<any>(new DateObject().add(4, 'days'));
-    console.log({ fromDate: fromDate.format('YYYY-MM-DD') });
+    ({ fromDate: fromDate.format('YYYY-MM-DD') });
 
     function setFilter(filter: string) {
         router.push({

@@ -67,7 +67,7 @@ function PayrollExpenseManagementApproved({
     team,
     expenseType,
 }: expenseProps) {
-    console.log({ expenseType, team, expenses });
+    ({ expenseType, team, expenses });
     const expensesList = expenses?.data?.value;
     const [loading, setLoading] = useState(false);
 
@@ -87,7 +87,7 @@ function PayrollExpenseManagementApproved({
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
-            console.log({ response });
+            ({ response });
             setSelectedId([...response]);
             return;
         }

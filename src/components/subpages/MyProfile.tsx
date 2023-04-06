@@ -70,7 +70,7 @@ function MyProfile({
     user: any;
     paymentSchedule?: PaymentScheduleListStandardResponse;
 }) {
-    console.log({ user });
+    ({ user });
     const {
         register,
         handleSubmit,
@@ -125,10 +125,10 @@ function MyProfile({
         data.phoneNumber = user?.phoneNumber;
         data.role = user?.role;
         data.profilePicture = info?.cdnUrl;
-        console.log({ data });
+        ({ data });
         try {
             const result = await UserService.updateUser(data);
-            console.log({ result });
+            ({ result });
             if (result.status) {
                 toast({
                     title: 'Profile Picture Update Success',
@@ -149,7 +149,7 @@ function MyProfile({
             });
         } catch (error) {
             callback();
-            console.log(error);
+            error;
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',
@@ -162,11 +162,10 @@ function MyProfile({
     const showLoadingState = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoading(true);
+                ('File progress: ', info.progress), setShowLoading(true);
             });
             file.done((info) => {
-                console.log('File uploaded: ', info), setPictureUrl(info);
+                ('File uploaded: ', info), setPictureUrl(info);
                 if (info) {
                     updatePicture(user, info, reloadPage);
                     // setShowLoading(false);
@@ -181,7 +180,7 @@ function MyProfile({
         }
         try {
             const result = await UserService.updateUser(data);
-            console.log({ result });
+            ({ result });
             if (result.status) {
                 toast({
                     title: 'Profile Update Success',
@@ -200,7 +199,7 @@ function MyProfile({
                 position: 'top-right',
             });
         } catch (error) {
-            console.log(error);
+            error;
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',
@@ -223,7 +222,7 @@ function MyProfile({
         try {
             const result = await UserService.enable2Fa();
             if (result.status) {
-                console.log({ result });
+                ({ result });
                 setTwoFaData(result.data);
                 onOpen2Fa();
                 setLoading(false);

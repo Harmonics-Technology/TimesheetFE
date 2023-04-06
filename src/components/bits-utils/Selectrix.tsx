@@ -50,7 +50,7 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
     renderSelection,
     customOnchange,
 }: FormInputProps<TFormValues>) => {
-    // console.log({ customOnchange });
+    // ({ customOnchange });
     return (
         <FormControl isInvalid={error?.type === 'required'} minW="0">
             <FormLabel

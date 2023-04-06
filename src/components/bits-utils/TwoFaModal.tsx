@@ -53,13 +53,13 @@ function TwoFaModal({
         mode: 'all',
     });
 
-    console.log({ data });
+    ({ data });
     const router = useRouter();
     const toast = useToast();
     const [otp, setOtp] = useState<any>();
     const { user, setUser } = useContext(UserContext);
     const twoFactorCode = user?.twoFactorCode;
-    console.log({ twoFactorCode });
+    ({ twoFactorCode });
     const [codeText, setCodeText] = useState(false);
     const [step, setStep] = useState(0);
     const nextStep = () => {
@@ -95,7 +95,7 @@ function TwoFaModal({
                 position: 'top-right',
             });
         } catch (error) {
-            console.log({ error });
+            ({ error });
             toast({
                 title: 'An error occured',
                 status: 'error',

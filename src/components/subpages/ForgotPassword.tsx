@@ -36,7 +36,7 @@ function ForgotPassword() {
         try {
             const result = await UserService.initiateReset('', data);
             if (result.status) {
-                // console.log({ result });
+                // ({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -53,7 +53,7 @@ function ForgotPassword() {
                 position: 'top-right',
             });
         } catch (error) {
-            console.log({ error });
+            ({ error });
             toast({
                 title: `check your network connection and try again`,
                 status: 'error',

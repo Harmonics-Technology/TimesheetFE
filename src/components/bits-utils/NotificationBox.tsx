@@ -14,7 +14,7 @@ export const NotificationBox = ({
     loading: boolean;
 }) => {
     const unRead = data?.data?.value?.filter((x) => !x.isRead);
-    console.log({ data });
+    ({ data });
     return (
         <Box
             // pos="absolute"

@@ -18,7 +18,7 @@ interface adminProps {
 }
 
 function TeamContractList({ adminList }: adminProps) {
-    console.log({ adminList });
+    ({ adminList });
 
     return (
         <>

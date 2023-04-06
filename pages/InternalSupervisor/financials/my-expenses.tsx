@@ -21,7 +21,7 @@ interface ExpensesType {
     expenseType: ExpenseTypeView[];
 }
 function expenses({ expenses, id, expenseType }: ExpensesType) {
-    console.log({ id });
+    ({ id });
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
 
@@ -67,7 +67,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             // const data = await SettingsService.listExpenseTypes();
 
-            console.log({ data });
+            ({ data });
             return {
                 props: {
                     expenses: data,
@@ -76,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
+            (error);
             return {
                 props: {
                     data: [],

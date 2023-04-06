@@ -34,7 +34,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
     disabled,
     defaultValue,
 }: FormInputProps<TFormValues>) => {
-    // console.log({ defaultValue });
+    // ({ defaultValue });
     const size: Size = useWindowSize();
     const isMobile = size.width != null && size.width <= 750;
     return (

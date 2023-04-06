@@ -61,7 +61,7 @@ const schema = yup.object().shape({
 });
 
 function PaymentPartnerManagement({ adminList }: adminProps) {
-    // console.log({ adminList });
+    // ({ adminList });
     const {
         register,
         handleSubmit,
@@ -77,9 +77,9 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    // console.log(watch("organizationPhone"));
+    // (watch("organizationPhone"));
     const [same, setSame] = useState(false);
-    // console.log({ same });
+    // ({ same });
 
     const onSubmit = async (data: RegisterModel) => {
         {
@@ -89,7 +89,7 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                   (data.phoneNumber = data.organizationPhone))
                 : null;
         }
-        console.log({ data });
+        ({ data });
         try {
             const result = await UserService.create(data);
             if (result.status) {

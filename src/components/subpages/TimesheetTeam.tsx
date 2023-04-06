@@ -56,7 +56,7 @@ const TimesheetTeam = ({
     timeSheets: TimeSheetMonthlyView;
 }) => {
     const router = useRouter();
-    // console.log({ timeSheets });
+    // ({ timeSheets });
     const sheet = timeSheets?.timeSheet;
     const { date } = router.query;
     const newDate = new Date(date as unknown as string);
@@ -79,7 +79,7 @@ const TimesheetTeam = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    // console.log({ totalHours });
+    // ({ totalHours });
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
@@ -104,8 +104,8 @@ const TimesheetTeam = ({
         setSelectedInput([...selectedInput, item]);
     };
 
-    console.log({ selectedInput });
-    console.log({ timeSheets });
+    ({ selectedInput });
+    ({ timeSheets });
 
     // function ApproveAllTimeSheet() {
     //     const [loading, setLoading] = useState(false);
@@ -124,7 +124,7 @@ const TimesheetTeam = ({
     //         });
     //         router.reload();
     //     };
-    //     // console.log({ loading });
+    //     // ({ loading });
     //     return (
     //         <TimeSheetEstimationBtn
     //             id={1}
@@ -136,7 +136,7 @@ const TimesheetTeam = ({
     // }
 
     const addHours = async (item) => {
-        // console.log({ userId, chosenDate, hours });
+        // ({ userId, chosenDate, hours });
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
@@ -144,7 +144,7 @@ const TimesheetTeam = ({
                 item.chosenDate,
                 item.hours,
             );
-            console.log({ data });
+            ({ data });
             if (data.status) {
                 return;
             }
@@ -155,7 +155,7 @@ const TimesheetTeam = ({
             });
             return;
         } catch (error: any) {
-            console.log(error);
+            error;
             toast({
                 status: 'error',
                 title: error.body.message || error.message,
@@ -401,7 +401,7 @@ const TimesheetTeam = ({
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
 
-            // console.log({ notFilled });
+            // ({ notFilled });
 
             week.push(
                 <Flex
