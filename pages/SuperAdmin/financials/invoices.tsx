@@ -9,7 +9,7 @@ export default invoices;
 
 export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
     const role = JSON.parse(ctx.req.cookies.user).role.replaceAll(' ', '');
-    // (role);
+    // console.log(role);
     return {
         redirect: {
             permanent: false,

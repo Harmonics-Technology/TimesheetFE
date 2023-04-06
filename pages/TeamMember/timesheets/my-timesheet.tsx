@@ -30,11 +30,11 @@ export default SingleTimeSheet;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        // ({
+        // console.log({
         //     ctx: JSON.parse(ctx.req.cookies.user).employeeInformationId,
         // });
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
-        ({ id });
+        console.log({ id });
 
         let { date } = ctx.query;
         if (date === undefined) {
@@ -43,14 +43,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
 
         try {
             const data = await TimeSheetService.getTimeSheet(id, date);
-            ({ data });
+            console.log({ data });
             return {
                 props: {
                     timeSheets: data.data,
                 },
             };
         } catch (error: any) {
-            (error);
+            console.log(error);
             return {
                 props: {
                     data: [],

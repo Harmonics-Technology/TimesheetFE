@@ -140,7 +140,7 @@ export function TableState({ name }: { name: string | undefined | null }) {
     );
 }
 export function TableContract({ url }: { url: any }) {
-    // ({ url });
+    // console.log({ url });
     const [loading, setLoading] = useState(false);
     const downloadFile = (url: string) => {
         setLoading(true);
@@ -180,12 +180,12 @@ export function TableActions({
     const toast = useToast();
     const [loading, setLoading] = useState(false);
     const resendInvite = async (data: InitiateResetModel) => {
-        // (data.email);
+        // console.log(data.email);
         try {
             setLoading(true);
             const result = await UserService.resendInvite(data);
             if (result.status) {
-                // ({ result });
+                // console.log({ result });
                 toast({
                     title: 'Invite Sent',
                     status: 'success',
@@ -384,12 +384,12 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const toggleStatus = async (data: string) => {
-        // (data.email);
+        // console.log(data.email);
         try {
             setLoading(true);
             const result = await SettingsService.toggleStatus(data);
             if (result.status) {
-                ({ result });
+                console.log({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -409,7 +409,7 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
             });
         } catch (error: any) {
             setLoading(false);
-            ({ error });
+            console.log({ error });
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -458,7 +458,7 @@ export function ExpenseActions({
             if (manager) {
                 const result = await FinancialService.approveExpense(data);
                 if (result.status) {
-                    ({ result });
+                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -479,7 +479,7 @@ export function ExpenseActions({
             } else {
                 const result = await FinancialService.reviewExpense(data);
                 if (result.status) {
-                    ({ result });
+                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -499,7 +499,7 @@ export function ExpenseActions({
                 });
             }
         } catch (error: any) {
-            ({ error });
+            console.log({ error });
             setLoading(false);
             toast({
                 title: error.body.message || error.message,
@@ -514,7 +514,7 @@ export function ExpenseActions({
             setLoading(true);
             const result = await FinancialService.declineExpense(data);
             if (result.status) {
-                ({ result });
+                console.log({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -534,7 +534,7 @@ export function ExpenseActions({
             });
         } catch (err: any) {
             setLoading(false);
-            ({ err });
+            console.log({ err });
             toast({
                 title: err.body.message || err?.message,
                 status: 'error',
@@ -584,7 +584,7 @@ export function PayrollActions({ id, userId }: { id: any; userId: any }) {
     //         setLoading(true);
     //         const result = await FinancialService.approvePayroll(data);
     //         if (result.status) {
-    //             ({ result });
+    //             console.log({ result });
     //             toast({
     //                 title: result.message,
     //                 status: 'success',
@@ -603,7 +603,7 @@ export function PayrollActions({ id, userId }: { id: any; userId: any }) {
     //             position: 'top-right',
     //         });
     //     } catch (error: any) {
-    //         ({ error });
+    //         console.log({ error });
     //         setLoading(false);
     //         toast({
     //             title: error.body.message || error.message,
@@ -681,7 +681,7 @@ export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
             setLoading(true);
             const result = await FinancialService.treatSubmittedInvoice(id);
             if (result.status) {
-                ({ result });
+                console.log({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -700,7 +700,7 @@ export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
                 position: 'top-right',
             });
         } catch (error: any) {
-            ({ error });
+            console.log({ error });
             setLoading(false);
             toast({
                 title: error.body.message || error.message,

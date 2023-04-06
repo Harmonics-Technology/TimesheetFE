@@ -43,12 +43,12 @@ interface adminProps {
 function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    ({ invoiceData });
+    console.log({ invoiceData });
     const invoice = invoiceData?.data?.value;
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
-    // ({ clicked });
+    // console.log({ clicked });
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
@@ -65,7 +65,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
-            ({ response });
+            console.log({ response });
             setSelectedId([...response]);
             return;
         }
@@ -83,7 +83,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                 setLoading(true);
                 const result = await FinancialService.treatSubmittedInvoice(x);
                 if (result.status) {
-                    ({ result });
+                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -102,7 +102,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                     position: 'top-right',
                 });
             } catch (error: any) {
-                ({ error });
+                console.log({ error });
                 setLoading(false);
                 toast({
                     title: error?.body?.message || error?.message,
@@ -119,7 +119,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
         `/${role}/financials/offshore`,
     );
     const pays = router.asPath.startsWith(`/${role}/financials/payrolls`);
-    ({ hideCheckbox });
+    console.log({ hideCheckbox });
 
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const thead =
@@ -173,7 +173,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                         </Button>
                     </HStack>
 
-                    <HStack ml="auto">
+                    <HStack ml='auto'>
                         {!hideCheckbox && (
                             <Checkbox
                                 checked={

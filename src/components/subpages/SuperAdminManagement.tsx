@@ -23,7 +23,7 @@ interface SuperadminProfileProps {
     userProfile?: UserView;
 }
 function SuperadminProfile({ userProfile }: SuperadminProfileProps) {
-    // ({ userProfile });
+    // console.log({ userProfile });
     const {
         register,
         handleSubmit,
@@ -38,17 +38,17 @@ function SuperadminProfile({ userProfile }: SuperadminProfileProps) {
             role: userProfile?.role,
         },
     });
-    // (watch("role"));
+    // console.log(watch("role"));
 
     const toast = useToast();
     const router = useRouter();
     const onSubmit = async (data: UpdateUserModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
-        ({ data });
+        console.log({ data });
 
         try {
             const result = await UserService.adminUpdateUser(data);
-            // ({ result });
+            // console.log({ result });
             if (result.status) {
                 toast({
                     title: 'Profile Update Success',
@@ -66,7 +66,7 @@ function SuperadminProfile({ userProfile }: SuperadminProfileProps) {
                 position: 'top-right',
             });
         } catch (error) {
-            error;
+            console.log(error);
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',

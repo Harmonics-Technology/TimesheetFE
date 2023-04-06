@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 export const filterPagingSearchOptions = (ctx: any) => {
-    ({ ctx: ctx.query });
+    console.log({ ctx: ctx.query });
 
     const { limit, offset, search, from, to, paySlipFilter, chartYear } =
         ctx.query;
@@ -14,6 +14,6 @@ export const filterPagingSearchOptions = (ctx: any) => {
         paySlipFilter: paySlipFilter ? paySlipFilter : '',
         chartYear: chartYear ? chartYear : moment(new Date()).format('YYYY'),
     };
-    ({ options });
+    console.log({ options });
     return options;
 };

@@ -44,7 +44,7 @@ interface ExpenseCreate {
 }
 
 function ExpenseType({ expenses }: expenseProps) {
-    ({ expenses });
+    console.log({ expenses });
     const {
         register,
         handleSubmit,

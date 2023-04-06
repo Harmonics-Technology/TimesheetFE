@@ -73,10 +73,10 @@ function TeamProfile({
     supervisor,
     paymentPartner,
 }: TeamProfileProps) {
-    ({ userProfile });
+    console.log({ userProfile });
 
     const { user } = useContext(UserContext);
-    ({ user });
+    console.log({ user });
     const {
         register,
         handleSubmit,
@@ -116,7 +116,7 @@ function TeamProfile({
     });
     const router = useRouter();
     const toast = useToast();
-    // (watch('role'));
+    // console.log(watch('role'));
     const payroll = userProfile?.employeeInformation?.payrollType;
     const payrolls = watch('payRollTypeId');
     const onboarding = watch('fixedAmount');
@@ -134,21 +134,25 @@ function TeamProfile({
     const showLoadingStateB = (file) => {
         if (file) {
             file.progress((info) => {
-                ('File progress: ', info.progress), setShowLoadingB(true);
+                console.log('File progress: ', info.progress),
+                    setShowLoadingB(true);
             });
             file.done((info) => {
-                setShowLoadingB(false), ('File uploaded: ', info), setIcd(info);
+                setShowLoadingB(false),
+                    console.log('File uploaded: ', info),
+                    setIcd(info);
             });
         }
     };
     const showLoadingStateC = (file) => {
         if (file) {
             file.progress((info) => {
-                ('File progress: ', info.progress), setShowLoadingC(true);
+                console.log('File progress: ', info.progress),
+                    setShowLoadingC(true);
             });
             file.done((info) => {
                 setShowLoadingC(false),
-                    ('File uploaded: ', info),
+                    console.log('File uploaded: ', info),
                     setVoidCheck(info);
             });
         }
@@ -156,16 +160,19 @@ function TeamProfile({
     const showLoadingStateD = (file) => {
         if (file) {
             file.progress((info) => {
-                ('File progress: ', info.progress), setShowLoadingD(true);
+                console.log('File progress: ', info.progress),
+                    setShowLoadingD(true);
             });
             file.done((info) => {
-                setShowLoadingD(false), ('File uploaded: ', info), setInc(info);
+                setShowLoadingD(false),
+                    console.log('File uploaded: ', info),
+                    setInc(info);
             });
         }
     };
 
     const downloadFile = (url: any) => {
-        url;
+        console.log(url);
         axios
             .get(url, {
                 responseType: 'blob',
@@ -178,7 +185,7 @@ function TeamProfile({
     const percentageAmounts = percentageAmount?.sort(
         (a, b) => (a.fee as number) - (b.fee as number),
     );
-    // ({ percentageAmounts });
+    // console.log({ percentageAmounts });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selected, setSelected] = useState(userProfile?.role as string);
     const changeUserRole = async (val) => {
@@ -205,11 +212,11 @@ function TeamProfile({
             data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
         }
         // data.clientId = userProfile?.employeeInformation?.client?.id;
-        ({ data });
+        console.log({ data });
 
         try {
             const result = await UserService.updateTeamMember(data);
-            // ({ result });
+            // console.log({ result });
             if (result.status) {
                 toast({
                     title: 'Profile Update Success',
@@ -227,7 +234,7 @@ function TeamProfile({
                 position: 'top-right',
             });
         } catch (error) {
-            error;
+            console.log(error);
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',
@@ -238,7 +245,7 @@ function TeamProfile({
     };
 
     const show = router.asPath.startsWith('/clients/team-members');
-    // ({ isDirty });
+    // console.log({ isDirty });
 
     useLeavePageConfirmation(isDirty && !isSubmitting);
     return (

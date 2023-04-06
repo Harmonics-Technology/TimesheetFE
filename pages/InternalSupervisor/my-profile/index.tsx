@@ -21,14 +21,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         try {
             const data = await UserService.getUserById(id);
 
-            ({ data });
+            console.log({ data });
             return {
                 props: {
                     user: data.data,
                 },
             };
         } catch (error: any) {
-            (error);
+            console.log(error);
             return {
                 props: {
                     data: [],

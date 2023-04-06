@@ -50,12 +50,12 @@ function OnshoreSubmittedInvoice({
 }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    ({ invoiceData });
+    console.log({ invoiceData });
     const invoice = invoiceData?.data?.value;
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
-    // ({ clicked });
+    // console.log({ clicked });
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
@@ -72,7 +72,7 @@ function OnshoreSubmittedInvoice({
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
-            ({ response });
+            console.log({ response });
             setSelectedId([...response]);
             return;
         }
@@ -90,7 +90,7 @@ function OnshoreSubmittedInvoice({
                 setLoading(true);
                 const result = await FinancialService.treatSubmittedInvoice(x);
                 if (result.status) {
-                    ({ result });
+                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -109,7 +109,7 @@ function OnshoreSubmittedInvoice({
                     position: 'top-right',
                 });
             } catch (error: any) {
-                ({ error });
+                console.log({ error });
                 setLoading(false);
                 toast({
                     title: error?.body?.message || error?.message,
@@ -127,7 +127,7 @@ function OnshoreSubmittedInvoice({
     );
     const pending = `/${role}/financials/invoices-team`;
     const approved = `/${role}/financials/invoices-team-treatedinvoice`;
-    ({ hideCheckbox });
+    console.log({ hideCheckbox });
 
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const thead = [

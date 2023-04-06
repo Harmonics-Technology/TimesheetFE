@@ -59,7 +59,7 @@ function modifyContract({ modify, setmodify, clickedItem }: contractProps) {
     });
 
     const downloadFile = (url: any) => {
-        url;
+        console.log(url);
         axios
             .get(url, {
                 responseType: 'blob',
@@ -86,7 +86,7 @@ function modifyContract({ modify, setmodify, clickedItem }: contractProps) {
                 ? (data.endDate = clickedItem.endDate)
                 : data.endDate;
         }
-        ({ data });
+        console.log({ data });
         if (data.document === undefined || '') {
             toast({
                 title: 'Please select a contract document and try again',
@@ -96,7 +96,7 @@ function modifyContract({ modify, setmodify, clickedItem }: contractProps) {
             });
             return;
         }
-        ({ data });
+        console.log({ data });
         try {
             const result = await ContractService.updateContract(data);
             if (result.status) {
@@ -133,11 +133,12 @@ function modifyContract({ modify, setmodify, clickedItem }: contractProps) {
     const showLoadingState = (file) => {
         if (file) {
             file.progress((info) => {
-                ('File progress: ', info.progress), setShowLoading(true);
+                console.log('File progress: ', info.progress),
+                    setShowLoading(true);
             });
             file.done((info) => {
                 setShowLoading(false),
-                    ('File uploaded: ', info),
+                    console.log('File uploaded: ', info),
                     setContractFile(info);
             });
         }

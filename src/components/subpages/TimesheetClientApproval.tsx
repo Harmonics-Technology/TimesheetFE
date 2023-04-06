@@ -21,7 +21,7 @@ interface adminProps {
 }
 
 function TimesheetClient({ timeSheets }: adminProps) {
-    ({ timeSheets });
+    console.log({ timeSheets });
     const router = useRouter();
 
     return (

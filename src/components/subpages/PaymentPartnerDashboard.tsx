@@ -49,7 +49,7 @@ function PaymentPartnerDashboard({
     // const adminMetrics = metrics?.data as DashboardPaymentPartnerView;
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const router = useRouter();
-    // ({ metrics });
+    // console.log({ metrics });
     const toast = useToast();
     const [exchange, setExchange] = useState<any>();
 
@@ -58,7 +58,7 @@ function PaymentPartnerDashboard({
             const res = await axios.get(
                 'https://v6.exchangerate-api.com/v6/5689bf93bd619c9c94efc749/latest/CAD',
             );
-            ({ res });
+            console.log({ res });
             if (res.status) {
                 setExchange(res.data.conversion_rates.NGN);
                 localStorage.setItem('rate', res.data.conversion_rates.NGN);

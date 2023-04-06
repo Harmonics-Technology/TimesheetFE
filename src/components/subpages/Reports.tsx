@@ -33,7 +33,7 @@ import {
 } from 'src/services';
 
 export const Reports = ({ metrics, team, paymentPartner, chart }) => {
-    ({ chart });
+    console.log({ chart });
     const router = useRouter();
     const [fromDate, setFromDate] = useState<any>(new DateObject());
 

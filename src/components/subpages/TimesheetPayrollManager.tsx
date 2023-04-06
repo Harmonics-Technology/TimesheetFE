@@ -72,9 +72,9 @@ const TimesheetPayrollManager = ({
     timeSheets: TimeSheetMonthlyView;
     id: string;
 }) => {
-    ({ id });
+    console.log({ id });
     const router = useRouter();
-    ({ timeSheets });
+    console.log({ timeSheets });
     const sheet = timeSheets?.timeSheet;
     const { date } = router.query;
     const newDate = new Date(date as unknown as string);
@@ -97,7 +97,7 @@ const TimesheetPayrollManager = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    // ({ totalHours });
+    // console.log({ totalHours });
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
@@ -107,7 +107,7 @@ const TimesheetPayrollManager = ({
 
     const [loading, setLoading] = useState(false);
     const [allChecked, setAllChecked] = useState<boolean>(false);
-    // ({ allChecked });
+    // console.log({ allChecked });
     const [selected, setSelected] = useState<approveDate[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
 
@@ -124,8 +124,8 @@ const TimesheetPayrollManager = ({
         }
         setSelectedInput([...selectedInput, item]);
     };
-    // ({ selectedInput });
-    // ({ selected });
+    // console.log({ selectedInput });
+    // console.log({ selected });
 
     const {
         register,
@@ -147,25 +147,25 @@ const TimesheetPayrollManager = ({
         chosenDate: '',
     });
     const showReject = (userId, chosenDate) => {
-        ({ chosenDate });
+        console.log({ chosenDate });
         setReject({ userId, chosenDate });
     };
     const preventTomorrow = addDays(new Date(), 1).toISOString();
-    ({ reject });
+    console.log({ reject });
     const onSubmit = async (data: RejectTimeSheetModel) => {
         data.date = reject.chosenDate;
         data.employeeInformationId = reject.userId;
-        ({ data });
+        console.log({ data });
         try {
             const result = await TimeSheetService.rejectTimeSheetForADay(data);
             if (result.status) {
-                ({ result });
+                console.log({ result });
                 router.reload();
                 return;
             }
-            ({ result });
+            console.log({ result });
         } catch (error) {
-            ({ error });
+            console.log({ error });
             toast({
                 title: 'An error occured',
                 status: 'error',
@@ -175,11 +175,11 @@ const TimesheetPayrollManager = ({
     };
 
     // const generatePayroll = async (id) => {
-    //     ({ id });
+    //     console.log({ id });
     //     try {
     //         const data = await TimeSheetService.generatePayroll(id);
     //         if (data.status) {
-    //             ({ data });
+    //             console.log({ data });
     //             return;
     //         }
     //         toast({
@@ -196,7 +196,7 @@ const TimesheetPayrollManager = ({
     //             isClosable: true,
     //             position: 'top-right',
     //         });
-    //         (error);
+    //         console.log(error);
     //     }
     // };
     // const approveTimeSheetForADay = async (userId, chosenDate) => {
@@ -216,7 +216,7 @@ const TimesheetPayrollManager = ({
     //         });
     //         return;
     //     } catch (error) {
-    //         (error);
+    //         console.log(error);
     //     }
     // };
 
@@ -224,7 +224,7 @@ const TimesheetPayrollManager = ({
     //     const updateSelected = async (callback) => {
     //         // setAllChecked(!allChecked);
     //         monthlyTimesheets?.forEach(async (timeSheet: TimeSheetView) => {
-    //             ({ timeSheet });
+    //             console.log({ timeSheet });
     //             if (
     //                 timeSheet.employeeInformation &&
     //                 timeSheet.status == 'PENDING'
@@ -251,7 +251,7 @@ const TimesheetPayrollManager = ({
     // }
 
     const addHours = async (item) => {
-        // ({ userId, chosenDate, hours });
+        // console.log({ userId, chosenDate, hours });
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
@@ -259,7 +259,7 @@ const TimesheetPayrollManager = ({
                 item.chosenDate,
                 item.hours,
             );
-            ({ data });
+            console.log({ data });
             if (data.status) {
                 return;
             }
@@ -270,7 +270,7 @@ const TimesheetPayrollManager = ({
             });
             return;
         } catch (error: any) {
-            error;
+            console.log(error);
             toast({
                 status: 'error',
                 title: error.body.message || error.message,
@@ -516,7 +516,7 @@ const TimesheetPayrollManager = ({
             useClickOutside(popover, close);
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
-            // ({ timesheets });
+            // console.log({ timesheets });
 
             week.push(
                 <Flex

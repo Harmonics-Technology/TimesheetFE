@@ -37,12 +37,12 @@ interface adminProps {
 function PaymentPartnerInvoice({ invoiceData }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    ({ invoiceData });
+    console.log({ invoiceData });
     const invoice = invoiceData?.data?.value;
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
-    // ({ clicked });
+    // console.log({ clicked });
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
@@ -59,7 +59,7 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
-            ({ response });
+            console.log({ response });
             setSelectedId([...response]);
             return;
         }
@@ -77,7 +77,7 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                 setLoading(true);
                 const result = await FinancialService.treatSubmittedInvoice(x);
                 if (result.status) {
-                    ({ result });
+                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -96,7 +96,7 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                     position: 'top-right',
                 });
             } catch (error: any) {
-                ({ error });
+                console.log({ error });
                 setLoading(false);
                 toast({
                     title: error.body.message || error.message,

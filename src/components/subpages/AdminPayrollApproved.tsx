@@ -35,7 +35,7 @@ interface expenseProps {
 }
 
 function AdminPayrollApproved({ payrolls }: expenseProps) {
-    ({ payrolls });
+    console.log({ payrolls });
     const payrollsList = payrolls?.data?.value;
     const router = useRouter();
     const toast = useToast();
@@ -52,7 +52,7 @@ function AdminPayrollApproved({ payrolls }: expenseProps) {
             payrollsList?.forEach((x) =>
                 response.push(x.payrollId as string),
             ) as unknown as string[];
-            ({ response });
+            console.log({ response });
             setSelectedId([...response]);
             return;
         }

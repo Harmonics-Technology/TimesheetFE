@@ -35,7 +35,7 @@ function MenuItem({
     const router = useRouter();
     const [openMenu, setOpenMenu] = useState(false);
     const url = `/${role}/${linkName}`;
-    // ({ url });
+    // console.log({ url });
     return (
         <>
             {change ? (
@@ -394,7 +394,7 @@ export default MenuItem;
 //     const router = useRouter();
 //     const [openMenu, setOpenMenu] = useState(false);
 //     const url = `/${role}/${linkName}`;
-//     // ({ url });
+//     // console.log({ url });
 //     return (
 //         <>
 //             {option ? (

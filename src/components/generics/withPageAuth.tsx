@@ -4,7 +4,7 @@ export function withPageAuth(gssp: any) {
     return async (context: any) => {
         const { req } = context;
         const token = req.cookies.token;
-        // (req.url);
+        // console.log(req.url);
 
         if (!token) {
             // Redirect to login page

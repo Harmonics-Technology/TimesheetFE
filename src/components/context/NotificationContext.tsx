@@ -20,7 +20,7 @@ export const NotificationProvider = ({ children }: { children: any }) => {
         try {
             setLoading(true);
             const data = await NotificationService.markAsRead(id);
-            // ({ data });
+            // console.log({ data });
             if (data.status) {
                 setLoading(false);
                 router.reload();
@@ -40,7 +40,7 @@ export const NotificationProvider = ({ children }: { children: any }) => {
         const offset = router.query.offset || 0;
         const limit = router.query.limit || 6;
 
-        // ({ limit, offset });
+        // console.log({ limit, offset });
         const getNotifications = async () => {
             try {
                 const data = await NotificationService.listMyNotifications(
@@ -48,7 +48,7 @@ export const NotificationProvider = ({ children }: { children: any }) => {
                     limit as unknown as number,
                 );
                 if (data.status) {
-                    // ({ data });
+                    // console.log({ data });
                     setMessages(data);
                     // toast({
                     //     position: 'top-right',
@@ -57,7 +57,7 @@ export const NotificationProvider = ({ children }: { children: any }) => {
                     // });
                 }
             } catch (error: any) {
-                ({ error });
+                console.log({ error });
                 toast({
                     position: 'top-right',
                     status: 'error',

@@ -37,7 +37,7 @@ function AdminPayslip({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<PaySlipView>();
 
-    // ({ payrolls });
+    // console.log({ payrolls });
     const payrollsList = payrolls?.data?.value;
     const {
         isOpen: isOpened,

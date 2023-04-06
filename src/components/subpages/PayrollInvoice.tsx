@@ -64,8 +64,8 @@ function PayrollInvoice({
     const hst =
         calculatePercentage(allInvoiceTotal, clicked?.hst) / exchangeRate;
     const hstNaira = hst * exchangeRate;
-    // ({ allInvoiceTotal, hst, hstNaira });
-    // ({ clicked });
+    // console.log({ allInvoiceTotal, hst, hstNaira });
+    // console.log({ clicked });
     const [loading, setLoading] = useState<boolean>(false);
     const toast = useToast();
     const router = useRouter();
@@ -77,7 +77,7 @@ function PayrollInvoice({
                 clicked?.id,
             );
             if (result.status) {
-                ({ result });
+                console.log({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -97,7 +97,7 @@ function PayrollInvoice({
                 position: 'top-right',
             });
         } catch (error: any) {
-            ({ error });
+            console.log({ error });
             setLoading(false);
             toast({
                 title: error.body.message || error.message,

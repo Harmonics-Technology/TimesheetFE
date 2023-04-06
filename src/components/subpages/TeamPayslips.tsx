@@ -25,7 +25,7 @@ interface expenseProps {
 }
 
 function TeamPayslips({ payrolls, paymentSchedule }: expenseProps) {
-    ({ payrolls });
+    console.log({ payrolls });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<PaySlipView>();
     const payrollsList = payrolls?.data?.value;
