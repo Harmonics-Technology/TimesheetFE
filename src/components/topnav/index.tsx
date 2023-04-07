@@ -39,6 +39,9 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     const { user } = useContext(UserContext);
     const role = user?.role;
 
+    console.log({ user });
+    
+
     const curPage = router.pathname.split('/').at(-1);
     const idPage = router.pathname.split('/').at(-2);
     const { messages } = useContext(NotificationContext);
@@ -59,7 +62,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
             >
                 Back
             </Button> */}
-            {user?.twoFactorEnabled === false && (
+            {user?.twoFactorEnabled == false && (
                 <Flex
                     gap=".5rem"
                     bgColor="red.100"
