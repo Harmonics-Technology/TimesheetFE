@@ -42,4 +42,8 @@ export type TeamMemberModel = {
     paymentFrequency?: string | null;
     isActive?: boolean;
     onBordingFee?: number;
+    timeSheetGenerationStartDate?: string | null;
+    isEligibleForLeave?: boolean | null;
+    numberOfDaysEligible?: number | null;
+    numberOfHoursEligible?: number | null;
 };

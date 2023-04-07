@@ -2,7 +2,7 @@ import { Box, HStack, VStack, Text, Divider, Image } from '@chakra-ui/react';
 import { UserContext } from '@components/context/UserContext';
 import MenuItem from '@components/menu-item';
 import Link from 'next/link';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import {
     FaCalendar,
     FaCogs,
@@ -26,6 +26,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
     const { user } = useContext(UserContext);
     // console.log({ user });
     const role = user?.role?.replaceAll(' ', '');
+
     return (
         <Box
             bgColor={change ? 'brand.400' : 'white'}
@@ -40,7 +41,6 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             zIndex="985"
             overflowY="auto"
             boxShadow="sm"
-            // ref={ref}
         >
             <Link href="/" passHref>
                 <HStack>

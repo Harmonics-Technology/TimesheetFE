@@ -4,14 +4,17 @@ import {
     RadioGroup,
     Stack,
     HStack,
-    Radio,
-} from "@chakra-ui/react";
-import { Controller, Path, FieldError, Control } from "react-hook-form";
+    useRadioGroup,
+    FormErrorMessage,
+} from '@chakra-ui/react';
+import { Controller, Path, FieldError, Control } from 'react-hook-form';
+import RadioBtn from './RadioBtn';
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
     required?: boolean;
     disableLabel?: boolean;
+    defaultValue?: any;
     validate?: any;
     label?: string;
     error: FieldError | undefined;
@@ -22,52 +25,55 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
 
 export const PrimaryRadio = <TFormValues extends Record<string, any>>({
     name,
-    label = "",
+    label = '',
     error,
     control,
+    defaultValue = undefined,
     radios,
     value,
 }: FormInputProps<TFormValues>) => {
+    const { getRootProps, getRadioProps } = useRadioGroup({
+        name: 'framework',
+        defaultValue: defaultValue,
+        onChange: console.log,
+    });
+
+    const group = getRootProps();
     return (
         <>
-            <FormControl>
+            <FormControl
+                isInvalid={
+                    error?.type === 'required' || error?.message !== undefined
+                }
+            >
+                <Text fontSize="1rem" fontWeight="500">
+                    {label}
+                </Text>
                 <Controller
                     render={({ field }) => (
-                        <HStack justify="space-between" spacing={6}>
-                            <RadioGroup
-                                aria-label={label}
-                                {...field}
-                                defaultValue={value}
-                                w="full"
-                            >
-                                <Stack
-                                    direction={["row", "row"]}
-                                    w="full"
-                                    align="center"
-                                    spacing={["1.25rem", "1rem"]}
-                                >
-                                    {radios.map(({ label, val }) => (
-                                        <Radio
-                                            value={val}
-                                            key={val}
-                                            className="radio"
-                                            fontSize=".8rem"
-                                        >
-                                            {label}
-                                        </Radio>
-                                    ))}
-                                </Stack>
-                            </RadioGroup>
+                        // <HStack justify="space-between" spacing={6}>
+                        <HStack
+                            aria-label={label}
+                            {...field}
+                            defaultValue={value}
+                            w="full"
+                            {...group}
+                        >
+                            {radios.map((value) => {
+                                const radio = getRadioProps({ value });
+                                return <RadioBtn {...radio}>{value}</RadioBtn>;
+                            })}
                         </HStack>
+                        // </HStack>
                     )}
                     name={name}
                     control={control}
                 />
+                <FormErrorMessage fontSize=".7rem" color="red">
+                    {(error?.type === 'required' && `${label} is required`) ||
+                        error?.message}
+                </FormErrorMessage>
             </FormControl>
-            <Text fontSize=".7rem" color="red">
-                {(error?.type === "required" && `This Field is required`) ||
-                    error?.message}
-            </Text>
         </>
     );
 };

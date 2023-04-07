@@ -8,6 +8,7 @@ interface pageOptions {
     // clients: UserView[];
     supervisor: UserView[];
     paymentPartner: UserView[];
+    id: string;
 }
 
 function TeamDetails({
@@ -15,6 +16,7 @@ function TeamDetails({
     // clients,
     supervisor,
     paymentPartner,
+    id,
 }: pageOptions) {
     return (
         <TeamProfile
@@ -22,6 +24,7 @@ function TeamDetails({
             // clients={clients}
             supervisor={supervisor}
             paymentPartner={paymentPartner}
+            id={id}
         />
     );
 }
@@ -54,6 +57,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     userProfile: data.data,
                     paymentPartner: paymentPartner?.data?.value,
                     supervisor: supervisor?.data?.value,
+                    id,
                 },
             };
         } catch (error: any) {

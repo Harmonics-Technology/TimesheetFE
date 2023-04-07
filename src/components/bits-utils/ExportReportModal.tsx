@@ -152,6 +152,8 @@ export const ExportReportModal = ({
         onClose();
     };
 
+    
+
     return (
         <Modal
             isOpen={isOpen}

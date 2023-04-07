@@ -164,7 +164,9 @@ function TwoFaModal({
                                 <Text>
                                     To enable 2FA, you need to install an
                                     authenticator app like Microsoft
-                                    authenticator, or Google Authenticator.
+                                    authenticator, or Google Authenticator on
+                                    your smart phone (App Store or Google play
+                                    store).
                                 </Text>
                             </Box>
                         ) : step == 1 ? (

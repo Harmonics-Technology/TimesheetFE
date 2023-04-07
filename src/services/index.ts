@@ -84,6 +84,8 @@ export type { TimeSheetApprovedViewPagedCollectionStandardResponse } from './mod
 export type { TimeSheetHistoryView } from './models/TimeSheetHistoryView';
 export type { TimeSheetHistoryViewPagedCollection } from './models/TimeSheetHistoryViewPagedCollection';
 export type { TimeSheetHistoryViewPagedCollectionStandardResponse } from './models/TimeSheetHistoryViewPagedCollectionStandardResponse';
+export type { TimesheetHoursAdditionModel } from './models/TimesheetHoursAdditionModel';
+export type { TimesheetHoursApprovalModel } from './models/TimesheetHoursApprovalModel';
 export type { TimeSheetMonthlyView } from './models/TimeSheetMonthlyView';
 export type { TimeSheetMonthlyViewIEnumerableStandardResponse } from './models/TimeSheetMonthlyViewIEnumerableStandardResponse';
 export type { TimeSheetView } from './models/TimeSheetView';

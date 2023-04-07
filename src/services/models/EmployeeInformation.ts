@@ -37,5 +37,9 @@ export type EmployeeInformation = {
     onBoradingFee?: number;
     payrollGroupId?: number | null;
     payrollGroup?: PayrollGroup;
+    timeSheetGenerationStartDate?: string;
+    isEligibleForLeave?: boolean | null;
+    numberOfDaysEligible?: number | null;
+    numberOfHoursEligible?: number | null;
     contracts?: Array<Contract> | null;
 };

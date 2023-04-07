@@ -46,6 +46,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { useLeavePageConfirmation } from '@components/generics/useLeavePageConfirmation';
 import Link from 'next/link';
 import { UserContext } from '@components/context/UserContext';
+import { ActivateUserAlert } from './ActivateUserAlert';
 
 const schema = yup.object().shape({});
 interface ActivateUserPageProps {
@@ -248,27 +249,13 @@ function ActivateUserPage({
     return (
         <>
             {userProfile?.isActive && (
-                <Alert status="info" variant="left-accent" mb="1rem">
-                    <Flex
-                        justify="space-between"
-                        w="full"
-                        align="center"
-                        flexDir={['column', 'row']}
-                    >
-                        <Box>
-                            <HStack>
-                                <AlertIcon />
-                                <AlertTitle>Account Activated!</AlertTitle>
-                            </HStack>
-                            <AlertDescription textAlign="center" as="p">
-                                This user has already been activated by an admin
-                            </AlertDescription>
-                        </Box>
-                        <Link passHref href={`/${role}/dashboard`}>
-                            <Button ml="auto">Go to Dashboard</Button>
-                        </Link>
-                    </Flex>
-                </Alert>
+                <ActivateUserAlert
+                    title="Account Activated!"
+                    desc=" This user has already been activated by an admin"
+                    url={`/${role}/dashboard`}
+                    link={true}
+                    btn="Go to Dashboard"
+                />
             )}
             <Box
                 bgColor="white"

@@ -3,8 +3,8 @@ import {
     FormErrorMessage,
     FormLabel,
     Select,
-} from "@chakra-ui/react";
-import { FieldError, Path, UseFormRegister } from "react-hook-form";
+} from '@chakra-ui/react';
+import { FieldError, Path, UseFormRegister } from 'react-hook-form';
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
@@ -26,14 +26,18 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
     required = false,
     validate = {},
     error,
-    label = "",
-    fontSize = ".8rem",
+    label = '',
+    fontSize = '.8rem',
     options,
     defaultValue,
     id,
 }: FormInputProps<TFormValues>) => {
     return (
-        <FormControl isInvalid={error?.type === "required"}>
+        <FormControl
+            isInvalid={
+                error?.type === 'required' || error?.message !== undefined
+            }
+        >
             <FormLabel
                 htmlFor={label}
                 textTransform="capitalize"
@@ -58,7 +62,7 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
                 {options}
             </Select>
             <FormErrorMessage fontSize=".7rem">
-                {(error?.type === "required" && `${label} is required`) ||
+                {(error?.type === 'required' && `${label} is required`) ||
                     error?.message}
             </FormErrorMessage>
         </FormControl>
