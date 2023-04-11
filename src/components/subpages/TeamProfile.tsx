@@ -80,7 +80,7 @@ function TeamProfile({
 
     const { user } = useContext(UserContext);
     console.log({ user });
-    const eligible = true;
+    const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
     const {
         register,
         handleSubmit,
@@ -116,6 +116,12 @@ function TeamProfile({
             monthlyPayoutRate:
                 userProfile?.employeeInformation?.monthlyPayoutRate,
             payrollGroupId: userProfile?.employeeInformation?.payrollGroupId,
+            isEligibleForLeave:
+                userProfile?.employeeInformation?.isEligibleForLeave,
+            numberOfDaysEligible:
+                userProfile?.employeeInformation?.numberOfDaysEligible,
+            numberOfHoursEligible:
+                userProfile?.employeeInformation?.numberOfHoursEligible,
         },
     });
     const router = useRouter();
@@ -124,6 +130,8 @@ function TeamProfile({
     const payroll = userProfile?.employeeInformation?.payrollType;
     const payrolls = watch('payRollTypeId');
     const onboarding = watch('fixedAmount');
+    const isEligibleForLeave = watch('isEligibleForLeave');
+    // console.log({ isEligibleForLeave });
 
     const [icd, setIcd] = useState<any>('');
     const [voidCheck, setVoidCheck] = useState<any>('');
@@ -843,25 +851,33 @@ function TeamProfile({
                                 defaultValue={eligible == true ? 'Yes' : 'No'}
                             />
 
-                            {(eligible as unknown as string) == 'Yes' ||
+                            {(isEligibleForLeave as unknown as string) ==
+                                'No' ||
                                 (eligible == true && (
                                     <PrimaryInput<TeamMemberModel>
                                         label="Number of days"
                                         name="numberOfDaysEligible"
                                         error={errors.numberOfDaysEligible}
                                         placeholder=""
-                                        defaultValue=""
+                                        defaultValue={
+                                            userProfile?.employeeInformation
+                                                ?.numberOfDaysEligible
+                                        }
                                         register={register}
                                     />
                                 ))}
-                            {(eligible as unknown as string) == 'Yes' ||
+                            {(isEligibleForLeave as unknown as string) ==
+                                'No' ||
                                 (eligible == true && (
                                     <PrimaryInput<TeamMemberModel>
                                         label="Number of hours"
                                         name="numberOfHoursEligible"
                                         error={errors.numberOfHoursEligible}
                                         placeholder=""
-                                        defaultValue=""
+                                        defaultValue={
+                                            userProfile?.employeeInformation
+                                                ?.numberOfHoursEligible
+                                        }
                                         register={register}
                                     />
                                 ))}

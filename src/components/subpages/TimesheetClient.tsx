@@ -222,7 +222,7 @@ const TimesheetSupervisor = ({
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
-                item.userId,
+                // item.userId,
                 item.chosenDate,
                 item.hours,
             );

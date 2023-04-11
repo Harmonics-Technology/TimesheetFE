@@ -1,13 +1,14 @@
-import { withPageAuth } from "@components/generics/withPageAuth";
-import TeamProfile from "@components/subpages/TeamProfile";
-import { GetServerSideProps } from "next";
-import { UserService, UserView } from "src/services";
+import { withPageAuth } from '@components/generics/withPageAuth';
+import TeamProfile from '@components/subpages/TeamProfile';
+import { GetServerSideProps } from 'next';
+import { UserService, UserView } from 'src/services';
 
 interface pageOptions {
     userProfile: any;
     clients: UserView[];
     supervisor: UserView[];
     paymentPartner: UserView[];
+    id: string;
 }
 
 function TeamDetails({
@@ -15,6 +16,7 @@ function TeamDetails({
     clients,
     supervisor,
     paymentPartner,
+    id,
 }: pageOptions) {
     return (
         <TeamProfile
@@ -22,6 +24,7 @@ function TeamDetails({
             // clients={clients}
             supervisor={supervisor}
             paymentPartner={paymentPartner}
+            id={id}
         />
     );
 }
@@ -34,10 +37,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         // console.log({ id });
         try {
             const data = await UserService.getUserById(id);
-            const clients = await UserService.listUsers("client");
-            const supervisor = await UserService.listUsers("supervisor");
+            const clients = await UserService.listUsers('client');
+            const supervisor = await UserService.listUsers('supervisor');
             const paymentPartner = await UserService.listUsers(
-                "payment partner",
+                'payment partner',
             );
             console.log({ data });
             return {
@@ -46,6 +49,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     clients: clients?.data?.value,
                     supervisor: supervisor?.data?.value,
                     paymentPartner: paymentPartner?.data?.value,
+                    id,
                 },
             };
         } catch (error: any) {

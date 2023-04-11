@@ -12,7 +12,13 @@ interface Size {
     height: number | undefined;
 }
 
-function SingleTimeSheet({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) {
+function SingleTimeSheet({
+    timeSheets,
+    id,
+}: {
+    timeSheets: TimeSheetMonthlyView;
+    id: string;
+}) {
     const size: Size = useWindowSize();
 
     return (
@@ -20,7 +26,7 @@ function SingleTimeSheet({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) {
             {/* {size.width != null && size.width <= 1025 ? (
                 <HidePage />
             ) : ( */}
-            <TimesheetTeam timeSheets={timeSheets} />
+            <TimesheetTeam timeSheets={timeSheets} id={id} />
             {/* )} */}
         </>
     );
@@ -34,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         //     ctx: JSON.parse(ctx.req.cookies.user).employeeInformationId,
         // });
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
-        console.log({ id });
+        // console.log({ id });
 
         let { date } = ctx.query;
         if (date === undefined) {
@@ -47,6 +53,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             return {
                 props: {
                     timeSheets: data.data,
+                    id,
                 },
             };
         } catch (error: any) {

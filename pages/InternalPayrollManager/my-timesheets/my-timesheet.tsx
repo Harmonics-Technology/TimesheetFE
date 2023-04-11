@@ -12,16 +12,18 @@ interface Size {
     height: number | undefined;
 }
 
-function SingleTimeSheet({ timeSheets }: { timeSheets: TimeSheetMonthlyView }) {
+function SingleTimeSheet({
+    timeSheets,
+    id,
+}: {
+    timeSheets: TimeSheetMonthlyView;
+    id: string;
+}) {
     const size: Size = useWindowSize();
 
     return (
         <>
-            {size.width != null && size.width <= 1025 ? (
-                <HidePage />
-            ) : (
-                <TimesheetTeam timeSheets={timeSheets} />
-            )}
+            <TimesheetTeam timeSheets={timeSheets} id={id} />
         </>
     );
 }
@@ -47,6 +49,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             return {
                 props: {
                     timeSheets: data.data,
+                    id,
                 },
             };
         } catch (error: any) {

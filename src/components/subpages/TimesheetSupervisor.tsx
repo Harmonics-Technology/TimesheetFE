@@ -38,6 +38,7 @@ import {
     TimeSheetMonthlyView,
     TimeSheetService,
     TimeSheetView,
+    TimesheetHoursApprovalModel,
 } from 'src/services';
 import moment from 'moment';
 import { FaCheck, FaCheckCircle, FaTimes } from 'react-icons/fa';
@@ -110,16 +111,16 @@ const TimesheetSupervisor = ({
     // console.log({ allChecked });
     const preventTomorrow = addDays(new Date(), 1).toISOString();
     console.log({ preventTomorrow });
-    const [selected, setSelected] = useState<TimeSheetView[]>([]);
+    const [selected, setSelected] = useState<TimesheetHoursApprovalModel[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
 
     const timesheetALl = monthlyTimesheets?.filter(
         (x) =>
             moment(x.date).format('DD/MM/YYYY') !=
-            moment(preventTomorrow).format('DD/MM/YYYY'),
+                moment(preventTomorrow).format('DD/MM/YYYY') && !x.isApproved,
     );
     // console.log({ selectedInput });
-    const fillSelectedDate = (item: TimeSheetView) => {
+    const fillSelectedDate = (item: TimesheetHoursApprovalModel) => {
         const existingValue = selected.find((e) => e.date == item.date);
         if (existingValue) {
             const newArray = selected.filter((x) => x.date !== item.date);
@@ -222,7 +223,6 @@ const TimesheetSupervisor = ({
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
-                item.userId,
                 item.chosenDate,
                 item.hours,
             );
@@ -254,28 +254,61 @@ const TimesheetSupervisor = ({
 
     function ApproveSelected() {
         const [loading, setLoading] = useState(false);
-        const start = async () => {
-            await asyncForEach(selected, async (select: TimeSheetView) => {
+        const updateSelected = async () => {
+            try {
                 setLoading(true);
-                await approveTimeSheetForADay(
-                    select.employeeInformationId,
-                    select.date,
+                const data = await TimeSheetService.approveTimeSheetForADay(
+                    id,
+                    selected,
                 );
-            });
-            setLoading(false);
-            toast({
-                status: 'success',
-                title: 'Successful',
-                position: 'top-right',
-            });
-            router.reload();
+                console.log({ data });
+                if (data.status) {
+                    setLoading(false);
+                    toast({
+                        status: 'success',
+                        title: 'Successful',
+                        position: 'top-right',
+                    });
+                    router.reload();
+                    return;
+                }
+                toast({
+                    status: 'error',
+                    title: data.message,
+                    position: 'top-right',
+                });
+                return;
+            } catch (error: any) {
+                console.log(error);
+                toast({
+                    status: 'error',
+                    title: error.body.message || error.message,
+                    position: 'top-right',
+                });
+            }
         };
+        // const start = async () => {
+        //     await asyncForEach(selected, async (select: TimeSheetView) => {
+        //         setLoading(true);
+        //         await approveTimeSheetForADay(
+        //             select.employeeInformationId,
+        //             select.date,
+        //         );
+        //     });
+        //     setLoading(false);
+        //     toast({
+        //         status: 'success',
+        //         title: 'Successful',
+        //         position: 'top-right',
+        //     });
+        //     router.reload();
+        // };
         return (
             <TimeSheetEstimationBtn
                 id={1}
                 loading={loading}
                 title="Approve TimeSheet"
-                click={() => start()}
+                click={() => updateSelected()}
                 disabled={selected?.length < 1}
                 // bg="brand.200"
             />
@@ -550,8 +583,9 @@ const TimesheetSupervisor = ({
                                 color="white"
                                 onClick={() => {
                                     fillSelectedDate({
-                                        employeeInformationId: userId,
                                         date: userDate,
+                                        hours: timesheets?.hours,
+                                        approve: timesheets?.isApproved,
                                     });
                                 }}
                                 disabled={

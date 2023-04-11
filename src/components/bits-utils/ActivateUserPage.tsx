@@ -64,6 +64,7 @@ function ActivateUserPage({
     paymentPartner,
     id,
 }: ActivateUserPageProps) {
+    const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
     const {
         register,
         handleSubmit,
@@ -96,6 +97,13 @@ function ActivateUserPage({
             onBordingFee: userProfile?.employeeInformation?.onBoradingFee,
             monthlyPayoutRate:
                 userProfile?.employeeInformation?.monthlyPayoutRate,
+            payrollGroupId: userProfile?.employeeInformation?.payrollGroupId,
+            isEligibleForLeave:
+                userProfile?.employeeInformation?.isEligibleForLeave,
+            numberOfDaysEligible:
+                userProfile?.employeeInformation?.numberOfDaysEligible,
+            numberOfHoursEligible:
+                userProfile?.employeeInformation?.numberOfHoursEligible,
         },
     });
     const router = useRouter();
@@ -104,6 +112,7 @@ function ActivateUserPage({
     const payroll = userProfile?.employeeInformation?.payrollType;
     const payrolls = watch('payRollTypeId');
     const onboarding = watch('fixedAmount');
+    const isEligibleForLeave = watch('isEligibleForLeave');
 
     const [icd, setIcd] = useState<any>('');
     const [voidCheck, setVoidCheck] = useState<any>('');
@@ -752,6 +761,70 @@ function ActivateUserPage({
                                 // )
                                 ''
                             )}
+                        </Grid>
+                    </Box>
+                    <Box w="full">
+                        <Flex
+                            justify="space-between"
+                            align="center"
+                            my="1rem"
+                            py="1rem"
+                            borderY="1px solid"
+                            borderColor="gray.300"
+                        >
+                            <Text
+                                textTransform="uppercase"
+                                mb="0"
+                                fontSize="1.3rem"
+                                fontWeight="500"
+                            >
+                                Leave Management
+                            </Text>
+                        </Flex>
+
+                        <Grid
+                            templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
+                            gap="1rem 2rem"
+                        >
+                            <PrimaryRadio
+                                label="Are you eligible for Leave"
+                                radios={['No', 'Yes']}
+                                name="isEligibleForLeave"
+                                control={control}
+                                error={errors.isEligibleForLeave}
+                                defaultValue={eligible == true ? 'Yes' : 'No'}
+                            />
+
+                            {(isEligibleForLeave as unknown as string) ==
+                                'No' ||
+                                (eligible == true && (
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Number of days"
+                                        name="numberOfDaysEligible"
+                                        error={errors.numberOfDaysEligible}
+                                        placeholder=""
+                                        defaultValue={
+                                            userProfile?.employeeInformation
+                                                ?.numberOfDaysEligible
+                                        }
+                                        register={register}
+                                    />
+                                ))}
+                            {(isEligibleForLeave as unknown as string) ==
+                                'No' ||
+                                (eligible == true && (
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Number of hours"
+                                        name="numberOfHoursEligible"
+                                        error={errors.numberOfHoursEligible}
+                                        placeholder=""
+                                        defaultValue={
+                                            userProfile?.employeeInformation
+                                                ?.numberOfHoursEligible
+                                        }
+                                        register={register}
+                                    />
+                                ))}
                         </Grid>
                     </Box>
                     <ContractTable userProfile={userProfile} />
