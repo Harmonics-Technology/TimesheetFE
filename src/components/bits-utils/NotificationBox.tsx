@@ -25,6 +25,7 @@ export const NotificationBox = ({
             right="0"
             bottom="-200%"
             p="1rem .8rem"
+            h="fit-content"
             // fontFamily="'Montserrat', sans-serif"
         >
             <Text fontSize=".8rem" fontWeight="bold" color="black">

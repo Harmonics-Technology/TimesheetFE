@@ -763,7 +763,10 @@ const TimesheetAdmin = ({
                                 moment(timesheets?.date).format(
                                     'DD/MM/YYYY',
                                 ) ===
-                                    moment(preventTomorrow).format('DD/MM/YYYY')
+                                    moment(preventTomorrow).format(
+                                        'DD/MM/YYYY',
+                                    ) || // (notFilled && timesheets?.hours == 0)
+                                timesheets?.status == 'PENDING'
                                     ? '---'
                                     : timesheets?.hours
                             }

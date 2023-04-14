@@ -22,9 +22,9 @@ export default index;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
+        const id = JSON.parse(ctx.req.cookies.user).id;
         const clientId = JSON.parse(ctx.req.cookies.user).clientId;
-        console.log({ user: JSON.parse(ctx.req.cookies.user) });
+        console.log({ id });
         try {
             const teamMembers = await UserService.getClientTeamMembers(
                 pagingOptions.offset,
@@ -43,8 +43,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const leavelist = await LeaveService.listLeaves(
                 pagingOptions.offset,
                 pagingOptions.limit,
-                undefined,
                 id,
+                undefined,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,

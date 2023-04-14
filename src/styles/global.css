@@ -176,3 +176,19 @@ select option {
     text-overflow: ellipsis;
     overflow: hidden;
 }
+.modalContentWrapper {
+    padding: 22px !important;
+}
+.pickButton {
+    border: 0 !important;
+    display: block !important;
+    padding: 0 !important;
+    width: 150px;
+}
+.searchInput {
+    font-size: 15px;
+}
+.modalWrapper {
+    width: 90% !important;
+    height: 80% !important;
+}

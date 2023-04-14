@@ -8,12 +8,13 @@ import { Control, Controller, FieldError, Path } from 'react-hook-form';
 import Select from 'react-select';
 interface select {
     options: [];
-    customKeys: { key: string | number | boolean; label: string };
+    customKeys: { key: string | number | boolean; label: string; icon: string };
     onChange: (value: any) => void;
     placeholder?: string;
     disabled?: boolean;
     searchable?: boolean;
     onRenderSelection?: any;
+    onRenderOption?: any;
 }
 import dynamic from 'next/dynamic';
 import { UserView } from 'src/services';
@@ -35,6 +36,9 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     disabled?: boolean;
     renderSelection?: any;
     customOnchange?: any;
+    searchable?: boolean;
+    renderOption?: any;
+    icon?: any;
 }
 export const SelectrixBox = <TFormValues extends Record<string, any>>({
     name,
@@ -49,6 +53,9 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
     disabled,
     renderSelection,
     customOnchange,
+    searchable = false,
+    renderOption,
+    icon,
 }: FormInputProps<TFormValues>) => {
     // console.log({ customOnchange });
     return (
@@ -70,13 +77,14 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                         customKeys={{
                             key: keys,
                             label: keyLabel,
+                            icon: icon,
                         }}
                         onChange={
                             customOnchange
                                 ? customOnchange
                                 : (value) => onChange(value.key)
                         }
-                        searchable={false}
+                        searchable={searchable}
                         onRenderSelection={
                             renderSelection
                                 ? () => (
@@ -86,6 +94,7 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                                   )
                                 : false
                         }
+                        onRenderOption={renderOption}
                     />
                 )}
                 name={name}

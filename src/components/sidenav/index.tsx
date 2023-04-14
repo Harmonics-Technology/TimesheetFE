@@ -148,6 +148,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'expense type',
                             'onboarding fees',
                             'hst settings',
+                            'leave type',
                         ]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
@@ -216,6 +217,16 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                    />
+                    <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -270,6 +281,16 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['expenses']}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
                     />
                     <MenuItem
                         change={change}
@@ -346,6 +367,16 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         change={change}
                         linkName="my-contracts"
                         menuTitle="My Contracts"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
                         icon={<FaFile opacity=".8" />}
                         option={false}
                         setOpenSidenav={setOpenSidenav}

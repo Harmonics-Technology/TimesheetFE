@@ -10,23 +10,27 @@ import {
     Th,
     Td,
     Tooltip,
+    Icon,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react';
 import { AiOutlineDownload } from 'react-icons/ai';
-import { FaEllipsisH, FaEye } from 'react-icons/fa';
+import { FaAppStore, FaEllipsisH, FaEye } from 'react-icons/fa';
 import {
     ExpenseView,
     FinancialService,
     InitiateResetModel,
     InvoiceView,
+    LeaveService,
     SettingsService,
     UserService,
 } from 'src/services';
 import fileDownload from 'js-file-download';
 import { UserContext } from '@components/context/UserContext';
+import { BiTrash } from 'react-icons/bi';
+import { MdVerified, MdCancel } from 'react-icons/md';
 
 export function TableHead({
     name,
@@ -236,6 +240,131 @@ export function TableActions({
                                 View Profile
                             </Link>
                         </NextLink>
+                    </MenuItem>
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+export function LeaveActions({ id, route }: { id: any; route: any }) {
+    const toast = useToast();
+    const [loading, setLoading] = useState(false);
+    const { user } = useContext(UserContext);
+    const router = useRouter();
+    const role = user?.role.replaceAll(' ', '');
+    const treatLeave = async (id, type) => {
+        try {
+            setLoading(true);
+            const result = await LeaveService.treatLeave(id, type);
+            if (result.status) {
+                // console.log({ result });
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                setLoading(false);
+                router.reload();
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (err: any) {
+            setLoading(false);
+            toast({
+                title: err?.body?.message || err.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
+    const deleteLeave = async (id) => {
+        try {
+            setLoading(true);
+            const result = await LeaveService.deleteLeave(id);
+            if (result.status) {
+                // console.log({ result });
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                setLoading(false);
+                router.reload();
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (err: any) {
+            setLoading(false);
+            toast({
+                title: err?.body?.message || err.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    {(route != `/${role}/leave-management` ||
+                        role == 'Supervisor') && (
+                        <>
+                            <MenuItem
+                                onClick={() => treatLeave(id, 1)}
+                                w="full"
+                            >
+                                <Icon
+                                    as={MdVerified}
+                                    mr=".5rem"
+                                    color="brand.400"
+                                />
+                                Approve
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => treatLeave(id, 2)}
+                                w="full"
+                            >
+                                <Icon
+                                    as={MdCancel}
+                                    mr=".5rem"
+                                    color="#FF5B79"
+                                />{' '}
+                                Decline
+                            </MenuItem>
+                        </>
+                    )}
+                    <MenuItem onClick={() => deleteLeave(id)} w="full">
+                        <Icon as={BiTrash} mr=".5rem" color="#D62242" />
+                        Delete
                     </MenuItem>
                 </MenuList>
             </Menu>

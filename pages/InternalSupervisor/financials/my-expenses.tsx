@@ -33,7 +33,7 @@ function expenses({ expenses, id, expenseType }: ExpensesType) {
                     tabName="Team Members Expenses"
                 />
                 <PageTabs
-                    url={`/${role}/financials/my-expense`}
+                    url={`/${role}/financials/my-expenses`}
                     tabName="My Expenses"
                 />
             </Flex>

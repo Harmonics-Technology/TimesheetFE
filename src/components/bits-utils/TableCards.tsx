@@ -21,7 +21,7 @@ function TableCards({ title, url, data, thead, link }: TableCardsProps) {
             padding="1.5rem"
             overflow="hidden"
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
-    >
+        >
             <Text
                 fontWeight="600"
                 fontSize="1rem"
@@ -33,9 +33,7 @@ function TableCards({ title, url, data, thead, link }: TableCardsProps) {
                 {title}
             </Text>
             <Tables tableHead={thead}>
-                <Link href={link} key={1}>
-                    <>{data}</>
-                </Link>
+                <>{data}</>
             </Tables>
             <Stack direction="column" align="flex-end" mt="1rem">
                 {link !== '' && (

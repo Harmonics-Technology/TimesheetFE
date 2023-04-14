@@ -820,7 +820,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                         <Box mb="1.5rem">
                             <PrimaryRadio
                                 label="Are you eligible for Leave"
-                                radios={['No', 'Yes']}
+                                radios={[{ text: 'No' }, { text: 'Yes' }]}
                                 name="isEligibleForLeave"
                                 control={control}
                                 error={errors.isEligibleForLeave}

@@ -12,13 +12,14 @@ import Link from 'next/link';
 import React from 'react';
 
 interface alertProps {
-    title: string;
+    title?: string;
     desc: string;
-    link: boolean;
+    link?: boolean;
     btn?: any;
     url?: any;
     loading?: any;
     onClick?: any;
+    color?: any;
 }
 
 export const ActivateUserAlert = ({
@@ -29,9 +30,10 @@ export const ActivateUserAlert = ({
     url,
     loading,
     onClick,
+    color = 'info',
 }: alertProps) => {
     return (
-        <Alert status="info" variant="left-accent" mb="1rem">
+        <Alert status={color} variant={['top-accent', 'left-accent']} mb="1rem">
             <Flex
                 justify="space-between"
                 w="full"
@@ -39,19 +41,22 @@ export const ActivateUserAlert = ({
                 flexDir={['column', 'row']}
             >
                 <Box>
-                    <HStack>
-                        <AlertIcon />
-                        <AlertTitle>{title}</AlertTitle>
-                    </HStack>
+                    {title && (
+                        <HStack>
+                            <AlertIcon />
+                            <AlertTitle>{title}</AlertTitle>
+                        </HStack>
+                    )}
                     <AlertDescription textAlign="center" as="p">
                         {desc}
                     </AlertDescription>
                 </Box>
-                {link ? (
+                {link && (
                     <Link passHref href={url}>
                         <Button ml="auto">{btn}</Button>
                     </Link>
-                ) : (
+                )}
+                {btn && (
                     <Button
                         ml="auto"
                         isLoading={loading}

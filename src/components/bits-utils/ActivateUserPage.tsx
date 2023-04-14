@@ -264,6 +264,7 @@ function ActivateUserPage({
                     url={`/${role}/dashboard`}
                     link={true}
                     btn="Go to Dashboard"
+                    color={'success'}
                 />
             )}
             <Box
@@ -788,7 +789,7 @@ function ActivateUserPage({
                         >
                             <PrimaryRadio
                                 label="Are you eligible for Leave"
-                                radios={['No', 'Yes']}
+                                radios={[{ text: 'No' }, { text: 'Yes' }]}
                                 name="isEligibleForLeave"
                                 control={control}
                                 error={errors.isEligibleForLeave}

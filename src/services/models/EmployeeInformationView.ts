@@ -37,6 +37,7 @@ export type EmployeeInformationView = {
     isEligibleForLeave?: boolean | null;
     numberOfDaysEligible?: number | null;
     numberOfHoursEligible?: number | null;
+    numberOfLeaveDaysTaken?: number;
     contracts?: Array<ContractView> | null;
     dateCreated?: string;
 };

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     format,
     startOfWeek,
@@ -26,6 +26,7 @@ import {
     InputGroup,
     useToast,
     useDisclosure,
+    Button,
 } from '@chakra-ui/react';
 import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
@@ -42,6 +43,7 @@ import { useRouter } from 'next/router';
 import Naira, { CAD } from '@components/generics/functions/Naira';
 import useClickOutside from '@components/generics/useClickOutside';
 import { Round } from '@components/generics/functions/Round';
+import Cookies from 'js-cookie';
 
 const TimesheetTeam = ({
     timeSheets,
@@ -83,6 +85,20 @@ const TimesheetTeam = ({
         Round((expectedPay * approvedHours) / expectedHours) || 0;
 
     const [selected, setSelected] = useState<TimesheetHoursAdditionModel[]>([]);
+
+    const [view, setView] = useState('monthly');
+    useEffect(() => {
+        const timesheetView = Cookies.get('timesheetView');
+        setView(timesheetView as string);
+    }, []);
+
+    const [increaseWeek, setIncreaseWeek] = useState(0);
+    const [weekDate, setWeekDate] = useState({
+        startWeek: moment(activeDate).startOf('month').format('MMM DD'),
+        endWeek: moment(activeDate).endOf('month').format('MMM DD'),
+    });
+
+    console.log({ weekDate });
     const [selectedInput, setSelectedInput] = useState<
         TimesheetHoursAdditionModel[]
     >([]);
@@ -98,7 +114,7 @@ const TimesheetTeam = ({
     };
 
     console.log({ selectedInput });
-    console.log({ timeSheets });
+    console.log({ timeSheets, increaseWeek });
 
     // function ApproveAllTimeSheet() {
     //     const [loading, setLoading] = useState(false);
@@ -157,6 +173,10 @@ const TimesheetTeam = ({
         }
     };
 
+    const setViewToStorage = (value) => {
+        setView(value);
+        Cookies.set('timesheetView', value);
+    };
     const asyncForEach = async (array, callback) => {
         for (let index = 0; index < array.length; index++) {
             await callback(array[index], index, array);
@@ -243,6 +263,55 @@ const TimesheetTeam = ({
     };
     const preventTomorrow = addDays(new Date(), 1).toISOString();
 
+    const navigateWeek = (dir: string, weeks: any) => {
+        console.log({ dir });
+        if (dir == 'prev' && increaseWeek !== 0) {
+            setIncreaseWeek((increaseWeek) => increaseWeek - 1);
+            setWeekDate({
+                startWeek: weeks
+                    .at(increaseWeek - 1)
+                    .props.children.at(1)
+                    .at(0)
+                    .props.children.at(0)
+                    .props.children.at(0).props.children,
+                endWeek: weeks
+                    .at(increaseWeek - 1)
+                    .props.children.at(1)
+                    .at(-1)
+                    .props.children.at(0)
+                    .props.children.at(0).props.children,
+            });
+            return;
+        }
+        if (dir == 'prev' && increaseWeek === 0) {
+            prevMonth();
+            return;
+        }
+
+        if (dir == 'next' && increaseWeek !== weeks.length) {
+            setIncreaseWeek((increaseWeek) => increaseWeek + 1);
+            setWeekDate({
+                startWeek: weeks
+                    .at(increaseWeek)
+                    .props.children.at(1)
+                    .at(0)
+                    .props.children.at(0)
+                    .props.children.at(0).props.children,
+                endWeek: weeks
+                    .at(increaseWeek)
+                    .props.children.at(1)
+                    .at(-1)
+                    .props.children.at(0)
+                    .props.children.at(0).props.children,
+            });
+            return;
+        }
+        if (dir == 'next' && increaseWeek === weeks.length) {
+            nextMonth();
+            return;
+        }
+    };
+
     const getHeader = () => {
         return (
             <Flex
@@ -270,39 +339,73 @@ const TimesheetTeam = ({
                     icon={<MdArrowDropDown />}
                     bgColor="brand.400"
                     h="1.8rem"
-                    _focus={{
+                    _focusVisible={{
                         border: 0,
+                        boxShadow: 'none',
                     }}
+                    className="select"
+                    onChange={(e) => setViewToStorage(e.target.value)}
+                    placeholder={
+                        view == 'monthly'
+                            ? 'Monthly Activities'
+                            : 'Weekly Activities'
+                    }
                 >
-                    <option value="">Monthly Activities</option>
-                    <option value="">Weekly Activities</option>
+                    <option value="monthly">Monthly Activities</option>
+                    <option value="weekly">Weekly Activities</option>
                 </Select>
-                <Flex
-                    align="center"
-                    color={['black', 'white']}
-                    fontSize={['.8rem', '1rem']}
-                >
-                    <AiOutlineLeft
-                        className="navIcon"
-                        onClick={() => prevMonth()}
-                    />
-                    <Box
-                        borderRadius="15px"
-                        bgColor="#f5f5ff"
-                        p=".3rem .8rem"
-                        border={['1px solid gray', 'none']}
-                        color="#000"
+                {view == 'weekly' ? (
+                    <Flex
+                        align="center"
+                        color={['black', 'white']}
+                        fontSize={['.8rem', '1rem']}
                     >
-                        {`${format(activeDate, 'MMM 01')} - ${format(
-                            lastDayOfMonth(activeDate),
-                            'MMM dd',
-                        )}`}
-                    </Box>
-                    <AiOutlineRight
-                        className="navIcon"
-                        onClick={() => nextMonth()}
-                    />
-                </Flex>
+                        <AiOutlineLeft
+                            className="navIcon"
+                            onClick={() => navigateWeek('prev', allWeeks)}
+                        />
+                        <Box
+                            borderRadius="15px"
+                            bgColor="#f5f5ff"
+                            p=".3rem .8rem"
+                            border={['1px solid gray', 'none']}
+                            color="#000"
+                        >
+                            {`${weekDate.startWeek} - ${weekDate.endWeek}`}
+                        </Box>
+                        <AiOutlineRight
+                            className="navIcon"
+                            onClick={() => navigateWeek('next', allWeeks)}
+                        />
+                    </Flex>
+                ) : (
+                    <Flex
+                        align="center"
+                        color={['black', 'white']}
+                        fontSize={['.8rem', '1rem']}
+                    >
+                        <AiOutlineLeft
+                            className="navIcon"
+                            onClick={() => prevMonth()}
+                        />
+                        <Box
+                            borderRadius="15px"
+                            bgColor="#f5f5ff"
+                            p=".3rem .8rem"
+                            border={['1px solid gray', 'none']}
+                            color="#000"
+                        >
+                            {`${format(activeDate, 'MMM 01')} - ${format(
+                                lastDayOfMonth(activeDate),
+                                'MMM dd',
+                            )}`}
+                        </Box>
+                        <AiOutlineRight
+                            className="navIcon"
+                            onClick={() => nextMonth()}
+                        />
+                    </Flex>
+                )}
                 <Flex
                     px="2rem"
                     border="1px solid"
@@ -510,14 +613,18 @@ const TimesheetTeam = ({
                                         'DD/MM/YYYY',
                                     ) ||
                                 (notFilled && timesheets?.hours == 0)
-                                    ? '---'
+                                    ? // timesheets?.status == 'PENDING'
+                                      '---'
                                     : timesheets?.hours
                             }
                             placeholder="---"
                             textAlign="center"
                             h="full"
                             border="0"
-                            readOnly={timesheets?.status == 'APPROVED'}
+                            readOnly={
+                                timesheets?.status == 'APPROVED' ||
+                                timesheets?.onLeave
+                            }
                             disabled={
                                 timesheets == undefined ||
                                 isWeekend(
@@ -534,6 +641,15 @@ const TimesheetTeam = ({
                                     hours: e.target.value as unknown as number,
                                 })
                             }
+                            color={
+                                timesheets?.onLeave &&
+                                timesheets?.onLeaveAndEligibleForLeave
+                                    ? 'blue'
+                                    : timesheets?.onLeave &&
+                                      !timesheets?.onLeaveAndEligibleForLeave
+                                    ? 'yellow'
+                                    : 'green'
+                            }
                         />
 
                         {timesheets?.status == 'APPROVED' ? (
@@ -544,6 +660,7 @@ const TimesheetTeam = ({
                     </InputGroup>
                 </Flex>,
             );
+            // week.push(format(currentDate, 'MMM, d'));
             currentDate = addDays(currentDate, 1);
             const dayHour = timesheets?.hours as number;
             total.push(timesheets?.hours == undefined ? 0 : dayHour);
@@ -575,6 +692,7 @@ const TimesheetTeam = ({
         );
     };
 
+    const allWeeks: any[] = [];
     const getDates = () => {
         const startOfTheSelectedMonth = startOfMonth(activeDate);
         const endOfTheSelectedMonth = endOfMonth(activeDate);
@@ -582,8 +700,6 @@ const TimesheetTeam = ({
         const endDate = endOfWeek(endOfTheSelectedMonth);
 
         let currentDate = startDate;
-
-        const allWeeks: any[] = [];
 
         let weekNumber = 1;
         while (currentDate <= endDate) {
@@ -597,28 +713,75 @@ const TimesheetTeam = ({
             );
             weekNumber++, (currentDate = addDays(currentDate, 7));
         }
+        console.log({ allWeeks });
 
         return (
             <>
-                {allWeeks.map((x, i) => (
-                    <Box
-                        bgColor="white"
-                        mb={['1rem', '0']}
-                        p={['.5rem', '0']}
-                        borderRadius={['8px', '0']}
-                        boxShadow="sm"
-                    >
-                        <Box display={['block', 'none']}>
-                            {getWeekDaysNames(++i)}
-                        </Box>
-                        <Grid
-                            templateColumns={['repeat(8,1fr)', 'repeat(9,1fr)']}
-                            border={['0']}
-                        >
-                            {x}
-                        </Grid>
-                    </Box>
-                ))}
+                {view == 'weekly' ? (
+                    <>
+                        {allWeeks.splice(increaseWeek, 1).map((x, i) => (
+                            <Box
+                                bgColor="white"
+                                mb={['1rem', '0']}
+                                p={['.5rem', '0']}
+                                borderRadius={['8px', '0']}
+                                boxShadow="sm"
+                            >
+                                <Box display={['block', 'none']}>
+                                    {getWeekDaysNames(++i)}
+                                </Box>
+                                <Grid
+                                    templateColumns={[
+                                        'repeat(8,1fr)',
+                                        'repeat(9,1fr)',
+                                    ]}
+                                    border={['0']}
+                                >
+                                    {x}
+                                </Grid>
+                                {/* <Flex mx="auto" w="fit-content">
+                                    <Button
+                                        onClick={() => navigateWeek('prev', 0)}
+                                    >
+                                        {'<'}
+                                    </Button>
+                                    <Button
+                                        onClick={() =>
+                                            navigateWeek('next', allWeeks)
+                                        }
+                                    >
+                                        {'>'}
+                                    </Button>
+                                </Flex> */}
+                            </Box>
+                        ))}
+                    </>
+                ) : (
+                    <>
+                        {allWeeks.map((x, i) => (
+                            <Box
+                                bgColor="white"
+                                mb={['1rem', '0']}
+                                p={['.5rem', '0']}
+                                borderRadius={['8px', '0']}
+                                boxShadow="sm"
+                            >
+                                <Box display={['block', 'none']}>
+                                    {getWeekDaysNames(++i)}
+                                </Box>
+                                <Grid
+                                    templateColumns={[
+                                        'repeat(8,1fr)',
+                                        'repeat(9,1fr)',
+                                    ]}
+                                    border={['0']}
+                                >
+                                    {x}
+                                </Grid>
+                            </Box>
+                        ))}
+                    </>
+                )}
             </>
         );
     };
@@ -664,7 +827,7 @@ const TimesheetTeam = ({
                     /> */}
                     <TimeSheetEstimation
                         label="Total Hours Approved"
-                        data={`${timeSheets?.totalApprovedHours} HR`}
+                        data={`${timeSheets?.totalApprovedHours || 0} HR`}
                         tip="Number of hours approved by your supervisor"
                     />
                     <TimeSheetEstimation

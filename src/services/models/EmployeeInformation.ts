@@ -41,5 +41,6 @@ export type EmployeeInformation = {
     isEligibleForLeave?: boolean | null;
     numberOfDaysEligible?: number | null;
     numberOfHoursEligible?: number | null;
+    numberOfEligibleLeaveDaysTaken?: number;
     contracts?: Array<Contract> | null;
 };

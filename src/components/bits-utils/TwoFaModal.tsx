@@ -59,7 +59,7 @@ function TwoFaModal({
     const [otp, setOtp] = useState<any>();
     const { user, setUser } = useContext(UserContext);
     const twoFactorCode = user?.twoFactorCode;
-    console.log({ twoFactorCode });
+    // console.log({ twoFactorCode });
     const [codeText, setCodeText] = useState(false);
     const [step, setStep] = useState(0);
     const nextStep = () => {
