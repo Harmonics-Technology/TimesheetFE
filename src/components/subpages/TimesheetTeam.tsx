@@ -345,12 +345,12 @@ const TimesheetTeam = ({
                     }}
                     className="select"
                     onChange={(e) => setViewToStorage(e.target.value)}
-                    placeholder={
-                        view == 'monthly'
-                            ? 'Monthly Activities'
-                            : 'Weekly Activities'
-                    }
                 >
+                    <option selected hidden>
+                        {view == 'weekly'
+                            ? 'Weekly Activities'
+                            : 'Monthly Activities'}
+                    </option>
                     <option value="monthly">Monthly Activities</option>
                     <option value="weekly">Weekly Activities</option>
                 </Select>
