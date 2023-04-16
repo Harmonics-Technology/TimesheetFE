@@ -7,6 +7,7 @@ import DragDropContext from '../generics/withDnDContext';
 import Schedulers from './Schedulers';
 import { AddShiftModal } from '@components/bits-utils/AddShiftModal';
 import { useReactToPrint } from 'react-to-print';
+import { PublishShiftModal } from '@components/bits-utils/PublishShiftModal';
 
 const ShiftManagement = () => {
     const DemoData = {
@@ -84,6 +85,7 @@ const ShiftManagement = () => {
     };
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: open, onOpen: opens, onClose: close } = useDisclosure();
     const [data, setData] = useState();
     const openModal = (data) => {
         onOpen();
@@ -123,15 +125,20 @@ const ShiftManagement = () => {
                             bg="header.200"
                             onClick={handlePrint}
                         />
-                        <ShiftBtn text="Publish Shift" />
+                        <ShiftBtn text="Publish Shift" onClick={opens} />
                     </HStack>
                 </Flex>
                 <Box ref={componentRef}>
-                    <Schedulers DemoData={DemoData} openModal={openModal} />
+                    <Schedulers
+                        DemoData={DemoData}
+                        openModal={openModal}
+                        setData={setData}
+                    />
                 </Box>
             </Box>
 
             <AddShiftModal isOpen={isOpen} onClose={onClose} data={data} />
+            <PublishShiftModal isOpen={open} onClose={close} data={data} />
         </>
     );
 };

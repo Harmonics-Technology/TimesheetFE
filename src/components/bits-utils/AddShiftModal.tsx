@@ -586,6 +586,7 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                     text="Add Shift"
                                     bg="brand.400"
                                     onClick={handleSubmit(onSubmit)}
+                                    loading={isSubmitting}
                                 />
                             </HStack>
                         </form>

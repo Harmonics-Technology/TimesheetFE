@@ -15,6 +15,7 @@ const Scheduler = dynamic<any>(() => import('react-big-scheduler-stch'), {
 type Props = {
     DemoData: any;
     openModal: any;
+    setData: any;
 };
 type State = {
     viewModel: any;
@@ -116,6 +117,7 @@ class ShiftManagementInterface extends Component<Props, State> {
             viewModel: schedulerData,
         });
         this.shiftDate(schedulerData);
+        this.props.setData(schedulerData);
     };
 
     nextClick = (schedulerData) => {
@@ -125,6 +127,7 @@ class ShiftManagementInterface extends Component<Props, State> {
             viewModel: schedulerData,
         });
         this.shiftDate(schedulerData);
+        this.props.setData(schedulerData);
     };
 
     onViewChange = (schedulerData, view) => {
@@ -174,6 +177,7 @@ class ShiftManagementInterface extends Component<Props, State> {
             resourceId: slotId,
             slotName: slotName,
             bgColor: '#' + randomColor,
+            schedulerData: schedulerData,
         };
         this.props.openModal(newEvent);
     };

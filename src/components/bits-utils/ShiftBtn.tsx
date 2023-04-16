@@ -1,11 +1,13 @@
 import { Button } from '@chakra-ui/react';
 import React from 'react';
+import BeatLoader from 'react-spinners/BeatLoader';
 
 interface shiftBtnProps {
     color?: any;
     bg?: any;
     text: any;
     onClick?: any;
+    loading?: any;
 }
 
 export const ShiftBtn = ({
@@ -13,6 +15,7 @@ export const ShiftBtn = ({
     bg = 'brand.400',
     text,
     onClick,
+    loading,
 }: shiftBtnProps) => {
     return (
         <Button
@@ -21,6 +24,8 @@ export const ShiftBtn = ({
             borderRadius="5px"
             fontSize=".9rem"
             onClick={onClick}
+            isLoading={loading}
+            spinner={<BeatLoader color="white" size={10} />}
         >
             {text}
         </Button>
