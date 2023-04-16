@@ -264,7 +264,7 @@ const TimesheetTeam = ({
     const preventTomorrow = addDays(new Date(), 1).toISOString();
 
     const navigateWeek = (dir: string, weeks: any) => {
-        console.log({ dir });
+        // console.log({ dir });
         if (dir == 'prev' && increaseWeek !== 0) {
             setIncreaseWeek((increaseWeek) => increaseWeek - 1);
             setWeekDate({
@@ -713,7 +713,7 @@ const TimesheetTeam = ({
             );
             weekNumber++, (currentDate = addDays(currentDate, 7));
         }
-        console.log({ allWeeks });
+        // console.log({ allWeeks });
 
         return (
             <>

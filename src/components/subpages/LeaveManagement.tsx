@@ -46,7 +46,13 @@ import { ShowLeaveDetailsModal } from '@components/bits-utils/ShowLeaveDetailsMo
 import { UserContext } from '@components/context/UserContext';
 import { ActivateUserAlert } from '@components/bits-utils/ActivateUserAlert';
 
-const schema = yup.object().shape({});
+const schema = yup.object().shape({
+    endDate: yup.string().required(),
+    startDate: yup.string().required(),
+    leaveTypeId: yup.string().required(),
+    reasonForLeave: yup.string().required(),
+    workAssigneeId: yup.string().required(),
+});
 
 interface leaveProps {
     leavelist: any;
@@ -81,6 +87,7 @@ export const LeaveManagement = ({
         register,
         handleSubmit,
         control,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<LeaveModel>({
         resolver: yupResolver(schema),
@@ -106,9 +113,13 @@ export const LeaveManagement = ({
         setDate(x);
         onOpens();
     };
+    console.log(watch('leaveTypeId'));
 
     const onSubmit = async (data: LeaveModel) => {
         oneDay == true && (data.endDate = data.startDate);
+        data.leaveTypeId = leavetypes.value?.filter(
+            (x) => x.name == data.leaveTypeId,
+        )[0].id;
 
         try {
             const result = await LeaveService.createLeave(data);
@@ -254,18 +265,34 @@ export const LeaveManagement = ({
                         control={control}
                         name="leaveTypeId"
                         error={errors.leaveTypeId}
-                        keys="id"
-                        keyLabel="name"
-                        icon="leaveTypeIcon"
+                        keys="name"
+                        keyLabel="leaveTypeIcon"
                         label="Leave Type"
                         options={leavetypes?.value}
                         renderOption={(option, index) => {
-                            // console.log({ option });
+                            console.log({ option });
                             return (
                                 <Flex key={index} gap=".4rem">
-                                    <IconPickerItem value={option.key} />
-                                    {option.label}
+                                    <IconPickerItem
+                                        value={option.label}
+                                        color="#2EAFA3"
+                                    />
+                                    {option.key}
                                 </Flex>
+                            );
+                        }}
+                        renderSelection={(selected, settings, deselect) => {
+                            // console.log({ selected });
+                            return (
+                                <Box className="react-selectrix rs-toggle">
+                                    <Flex gap=".4rem">
+                                        <IconPickerItem
+                                            value={selected?.label}
+                                            color="#2EAFA3"
+                                        />
+                                        {selected?.key || 'Select a type'}
+                                    </Flex>
+                                </Box>
                             );
                         }}
                     />

@@ -16,6 +16,7 @@ import {
 import { RiLineChartFill } from 'react-icons/ri';
 import { MdOutlineSupervisorAccount } from 'react-icons/md';
 import { BsGraphUp } from 'react-icons/bs';
+import { AiFillSchedule } from 'react-icons/ai';
 interface sidenavProps {
     openSidenav: boolean;
     setOpenSidenav: any;
@@ -163,6 +164,16 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         role={role}
                     />
+                    {/* <MenuItem
+                        change={change}
+                        linkName="shift-management"
+                        menuTitle="Shift Management"
+                        icon={<AiFillSchedule opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                    /> */}
                 </VStack>
             ) : role == 'TeamMember' ? (
                 <VStack
@@ -630,6 +641,16 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                    />
+                    <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -804,6 +825,16 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={['all contracts', 'my contracts']}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
                     />
                     <MenuItem
                         change={change}

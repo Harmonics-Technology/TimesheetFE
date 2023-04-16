@@ -1,0 +1,94 @@
+.timeline-event {
+    top: 3px !important;
+    height: 100%;
+}
+.event-container {
+    height: 95% !important;
+}
+.event-item {
+    height: 90% !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+}
+.round-all {
+    border-radius: 0 !important;
+}
+.scheduler td {
+    height: 70px !important;
+    border-bottom: 0 !important;
+}
+.scheduler-bg-table thead tr {
+    border-bottom: none !important;
+}
+.scheduler-view {
+    border: 0 !important;
+}
+.resource-view {
+    border: 0 !important;
+}
+/* td div {
+    border: 0 !important;
+} */
+table.scheduler-content-table {
+    border-width: 1px !important;
+    border-bottom: 0;
+}
+.overflow-text {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background: rgba(46, 175, 163, 0.09);
+    border: 0 !important;
+}
+table.resource-table tbody tr td {
+    padding: 0 0 0.5rem;
+}
+.resource-table tbody {
+    border: 1px solid rgb(233, 233, 233) !important;
+}
+.ant-radio-button-wrapper.css-dev-only-do-not-override-htwhyh {
+    border: 0 !important;
+    height: 3rem !important;
+    background-color: #f0f0f0 !important;
+    color: #696969 !important;
+    border-radius: 0;
+    font-family: 'Rubik';
+    display: flex;
+    align-items: center;
+}
+.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.css-dev-only-do-not-override-htwhyh {
+    background-color: #2eafa3 !important;
+    color: white !important;
+}
+.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.css-dev-only-do-not-override-htwhyh::before {
+    display: none !important;
+}
+.anticon {
+    background-color: #f0f0f0 !important;
+    height: 34px !important;
+    width: 34px !important;
+    color: black !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ant-space-item div {
+    display: flex !important;
+}
+.header2-text-label {
+    position: absolute;
+    left: 50%;
+    font-family: 'Rubik';
+    font-size: 15px;
+}
+.ant-col.css-dev-only-do-not-override-htwhyh {
+    position: unset !important;
+}
+.header3-text {
+    font-size: 14px !important;
+    text-transform: uppercase;
+    border-bottom: 4px solid #065845 !important;
+    border-right: 0 !important;
+}

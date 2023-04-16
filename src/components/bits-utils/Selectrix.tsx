@@ -8,7 +8,7 @@ import { Control, Controller, FieldError, Path } from 'react-hook-form';
 import Select from 'react-select';
 interface select {
     options: [];
-    customKeys: { key: string | number | boolean; label: string; icon: string };
+    customKeys: { key: string | number | boolean; label: string };
     onChange: (value: any) => void;
     placeholder?: string;
     disabled?: boolean;
@@ -38,7 +38,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     customOnchange?: any;
     searchable?: boolean;
     renderOption?: any;
-    icon?: any;
+    withIcon?: any;
 }
 export const SelectrixBox = <TFormValues extends Record<string, any>>({
     name,
@@ -55,18 +55,20 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
     customOnchange,
     searchable = false,
     renderOption,
-    icon,
+    withIcon = false,
 }: FormInputProps<TFormValues>) => {
     // console.log({ customOnchange });
     return (
         <FormControl isInvalid={error?.type === 'required'} minW="0">
-            <FormLabel
-                htmlFor={label}
-                textTransform="capitalize"
-                fontSize={fontSize}
-            >
-                {label}
-            </FormLabel>
+            {label && (
+                <FormLabel
+                    htmlFor={label}
+                    textTransform="capitalize"
+                    fontSize={fontSize}
+                >
+                    {label}
+                </FormLabel>
+            )}
 
             <Controller
                 render={({ field: { onChange } }) => (
@@ -77,7 +79,6 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                         customKeys={{
                             key: keys,
                             label: keyLabel,
-                            icon: icon,
                         }}
                         onChange={
                             customOnchange
@@ -86,13 +87,7 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                         }
                         searchable={searchable}
                         onRenderSelection={
-                            renderSelection
-                                ? () => (
-                                      <Box className="react-selectrix rs-toggle">
-                                          {renderSelection}
-                                      </Box>
-                                  )
-                                : false
+                            renderSelection ? renderSelection : false
                         }
                         onRenderOption={renderOption}
                     />

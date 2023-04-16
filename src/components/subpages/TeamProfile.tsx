@@ -475,7 +475,11 @@ function TeamProfile({
                                 customOnchange={(value) =>
                                     changeUserRole(value.key)
                                 }
-                                renderSelection={getValues('role')}
+                                renderSelection={() => (
+                                    <Box className="react-selectrix rs-toggle">
+                                        {getValues('role')}
+                                    </Box>
+                                )}
                                 options={[
                                     { id: 'Team Member', label: 'Team Member' },
                                     {

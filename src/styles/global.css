@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap');
 @import url('./calendar.css');
 @import url('./scrollbar.css');
+@import url('./scheduler.css');
 
 .phone-input {
     /* border: 1px solid #e5e5e5; */
@@ -171,10 +172,16 @@ select option {
     align-items: center;
     display: flex;
 }
+.react-selectrix.rs-toggle {
+    height: 2.6rem;
+    display: flex;
+    align-items: center;
+}
 .react-selectrix .rs-toggle.rs-focused {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    box-shadow: none !important;
 }
 .modalContentWrapper {
     padding: 22px !important;
@@ -191,4 +198,14 @@ select option {
 .modalWrapper {
     width: 90% !important;
     height: 80% !important;
+}
+.custom-container {
+    width: 100%;
+}
+.colorPicker {
+    border: 1px solid #cacaca;
+    height: 2.5rem;
+    margin-top: 0.5rem;
+    width: 100%;
+    padding: 0 1rem;
 }
