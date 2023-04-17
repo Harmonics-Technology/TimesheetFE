@@ -93,6 +93,7 @@ const schema = yup.object().shape({
     clientRate: yup.string().required(),
     timeSheetGenerationStartDate: yup.string().required(),
     isEligibleForLeave: yup.string().required(),
+    employeeType: yup.string().required(),
     numberOfDaysEligible: yup.string().when('isEligibleForLeave', {
         is: 'Yes',
         then: yup.string().required(),
@@ -653,6 +654,21 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 </>
                             ) : null}
 
+                            <SelectrixBox<TeamMemberModel>
+                                control={control}
+                                name="employeeType"
+                                error={errors.employeeType}
+                                keys="id"
+                                keyLabel="label"
+                                label="Employee Type"
+                                options={[
+                                    { id: 'regular', label: 'Regular' },
+                                    {
+                                        id: 'shift',
+                                        label: 'Shift',
+                                    },
+                                ]}
+                            />
                             <PrimaryInput<TeamMemberModel>
                                 label="Client Rate"
                                 name="clientRate"

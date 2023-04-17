@@ -76,10 +76,10 @@ function TeamProfile({
     paymentPartner,
     id,
 }: TeamProfileProps) {
-    console.log({ userProfile });
+    // console.log({ userProfile });
 
     const { user } = useContext(UserContext);
-    console.log({ user });
+    // console.log({ user });
     const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
     const {
         register,
@@ -122,6 +122,7 @@ function TeamProfile({
                 userProfile?.employeeInformation?.numberOfDaysEligible,
             numberOfHoursEligible:
                 userProfile?.employeeInformation?.numberOfHoursEligible,
+            employeeType: userProfile?.employeeInformation?.employeeType,
         },
     });
     const router = useRouter();
@@ -496,6 +497,26 @@ function TeamProfile({
                                     },
                                 ]}
                             />
+                            <SelectrixBox<TeamMemberModel>
+                                control={control}
+                                name="employeeType"
+                                error={errors.employeeType}
+                                keys="id"
+                                keyLabel="label"
+                                label="Employee Type"
+                                // disabled={true}
+                                placeholder={
+                                    userProfile?.employeeInformation
+                                        ?.employeeType as string
+                                }
+                                options={[
+                                    { id: 'regular', label: 'Regular' },
+                                    {
+                                        id: 'shift',
+                                        label: 'Shift',
+                                    },
+                                ]}
+                            />
 
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -848,7 +869,7 @@ function TeamProfile({
                         >
                             <PrimaryRadio
                                 label="Are you eligible for Leave"
-                                radios={[{ text: 'No' }, { text: 'Yes' }]}
+                                radios={['No', 'Yes']}
                                 name="isEligibleForLeave"
                                 control={control}
                                 error={errors.isEligibleForLeave}
@@ -856,35 +877,33 @@ function TeamProfile({
                             />
 
                             {(isEligibleForLeave as unknown as string) ==
-                                'No' ||
-                                (eligible == true && (
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="Number of days"
-                                        name="numberOfDaysEligible"
-                                        error={errors.numberOfDaysEligible}
-                                        placeholder=""
-                                        defaultValue={
-                                            userProfile?.employeeInformation
-                                                ?.numberOfDaysEligible
-                                        }
-                                        register={register}
-                                    />
-                                ))}
+                                'Yes' || eligible == true ? (
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Number of days"
+                                    name="numberOfDaysEligible"
+                                    error={errors.numberOfDaysEligible}
+                                    placeholder=""
+                                    defaultValue={
+                                        userProfile?.employeeInformation
+                                            ?.numberOfDaysEligible
+                                    }
+                                    register={register}
+                                />
+                            ) : null}
                             {(isEligibleForLeave as unknown as string) ==
-                                'No' ||
-                                (eligible == true && (
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="Number of hours"
-                                        name="numberOfHoursEligible"
-                                        error={errors.numberOfHoursEligible}
-                                        placeholder=""
-                                        defaultValue={
-                                            userProfile?.employeeInformation
-                                                ?.numberOfHoursEligible
-                                        }
-                                        register={register}
-                                    />
-                                ))}
+                                'Yes' || eligible == true ? (
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Number of hours"
+                                    name="numberOfHoursEligible"
+                                    error={errors.numberOfHoursEligible}
+                                    placeholder=""
+                                    defaultValue={
+                                        userProfile?.employeeInformation
+                                            ?.numberOfHoursEligible
+                                    }
+                                    register={register}
+                                />
+                            ) : null}
                         </Grid>
                     </Box>
                     <ContractTable userProfile={userProfile} />

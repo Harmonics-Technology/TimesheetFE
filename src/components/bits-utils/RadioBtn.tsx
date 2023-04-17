@@ -1,7 +1,7 @@
 import { Box, Circle, HStack, useRadio, Text, Icon } from '@chakra-ui/react';
 
 export default function RadioBtn(props) {
-    console.log({ props });
+    // console.log({ props });
     const { getInputProps, getCheckboxProps } = useRadio(props);
 
     const input = getInputProps();
@@ -24,14 +24,8 @@ export default function RadioBtn(props) {
                     }}
                 />
                 <Text fontSize=".8rem" color="#263238" fontWeight="500">
-                    {props?.children?.text}
+                    {props?.children}
                 </Text>
-                {props?.icon && (
-                    <Icon
-                        as={props?.children?.icon}
-                        color={props?.children?.color}
-                    />
-                )}
             </HStack>
         </Box>
     );

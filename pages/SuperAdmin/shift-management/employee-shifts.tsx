@@ -2,13 +2,13 @@ import { Box } from '@chakra-ui/react';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import ShiftManagement from '@components/subpages/ShiftManagement';
+import { EmployeeShift } from '@components/subpages/EmployeeShift';
 import { endOfWeek, format, startOfWeek } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import { ShiftService, UserService } from 'src/services';
 
-const schedule = ({ allShift, shiftUser }) => {
+const schedule = ({ allShift }) => {
     return (
         <Box
             bgColor="white"
@@ -32,7 +32,7 @@ const schedule = ({ allShift, shiftUser }) => {
                     },
                 ]}
             />
-            <ShiftManagement allShift={allShift} shiftUser={shiftUser} />
+            <EmployeeShift allShift={allShift} />
         </Box>
     );
 };
@@ -51,18 +51,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from || start,
                 pagingOptions.to || end,
             );
-            const shiftUser = await UserService.listShiftUsers(
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.from || start,
-                pagingOptions.to || end,
-            );
 
-            console.log({ allShift, shiftUser });
+            console.log({ allShift });
             return {
                 props: {
                     allShift,
-                    shiftUser,
                 },
             };
         } catch (error: any) {

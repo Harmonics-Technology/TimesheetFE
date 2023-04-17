@@ -38,6 +38,7 @@ export type EmployeeInformationView = {
     numberOfDaysEligible?: number | null;
     numberOfHoursEligible?: number | null;
     numberOfLeaveDaysTaken?: number;
+    employeeType?: string | null;
     contracts?: Array<ContractView> | null;
     dateCreated?: string;
 };

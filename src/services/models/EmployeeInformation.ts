@@ -42,5 +42,6 @@ export type EmployeeInformation = {
     numberOfDaysEligible?: number | null;
     numberOfHoursEligible?: number | null;
     numberOfEligibleLeaveDaysTaken?: number;
+    employeeType?: string | null;
     contracts?: Array<Contract> | null;
 };

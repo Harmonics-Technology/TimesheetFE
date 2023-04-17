@@ -16,17 +16,20 @@ type Props = {
     DemoData: any;
     openModal: any;
     setData: any;
+    date: any;
+    url: string;
+    schedule: any;
+    deleteShiftItem: any;
 };
 type State = {
     viewModel: any;
-    DemoData: any;
 };
 class ShiftManagementInterface extends Component<Props, State> {
     constructor(props) {
         super(props);
 
         const schedulerData = new SchedulerData(
-            dayjs().format(DATE_FORMAT),
+            dayjs(props.date).format(DATE_FORMAT),
             ViewType.Week,
             false,
             false,
@@ -69,22 +72,27 @@ class ShiftManagementInterface extends Component<Props, State> {
         schedulerData.setEvents(props.DemoData.events);
         this.state = {
             viewModel: schedulerData,
-            DemoData: props.DemoData,
         };
     }
 
     shiftDate(data) {
         // console.log(data.startDate.$d);
-        Router.push({
-            query: {
-                from: moment(data.startDate.$d).format('YYYY-MM-DD'),
-                to: moment(data.endDate.$d).format('YYYY-MM-DD'),
-            },
-        });
+        // Router.push({
+        //     query: {
+        //         from: moment(data.startDate.$d).format('YYYY-MM-DD'),
+        //         to: moment(data.endDate.$d).format('YYYY-MM-DD'),
+        //     },
+        // });
+        window.location.href = `/${this.props.url}?from=${moment(
+            data.startDate.$d,
+        ).format('YYYY-MM-DD')}&to=${moment(data.endDate.$d).format(
+            'YYYY-MM-DD',
+        )}`;
     }
 
     render() {
         const { viewModel } = this.state;
+        this.props.schedule(viewModel);
         return (
             <TableContainer>
                 <Scheduler
@@ -96,8 +104,8 @@ class ShiftManagementInterface extends Component<Props, State> {
                     eventItemClick={this.eventClicked}
                     // viewEventClick={this.ops1}
                     // viewEventText="Ops 1"
-                    // viewEvent2Text="Ops 2"
-                    // viewEvent2Click={this.ops2}
+                    viewEvent2Text="Delete shift"
+                    viewEvent2Click={this.ops2}
                     // updateEventStart={this.updateEventStart}
                     // updateEventEnd={this.updateEventEnd}
                     // moveEvent={this.moveEvent}
@@ -112,7 +120,7 @@ class ShiftManagementInterface extends Component<Props, State> {
 
     prevClick = (schedulerData) => {
         schedulerData.prev();
-        schedulerData.setEvents(this.state.DemoData.events);
+        schedulerData.setEvents(this.props.DemoData.events);
         this.setState({
             viewModel: schedulerData,
         });
@@ -122,7 +130,7 @@ class ShiftManagementInterface extends Component<Props, State> {
 
     nextClick = (schedulerData) => {
         schedulerData.next();
-        schedulerData.setEvents(this.state.DemoData.events);
+        schedulerData.setEvents(this.props.DemoData.events);
         this.setState({
             viewModel: schedulerData,
         });
@@ -136,7 +144,7 @@ class ShiftManagementInterface extends Component<Props, State> {
             view.showAgenda,
             view.isEventPerspective,
         );
-        schedulerData.setEvents(this.state.DemoData.events);
+        schedulerData.setEvents(this.props.DemoData.events);
         this.setState({
             viewModel: schedulerData,
         });
@@ -144,7 +152,7 @@ class ShiftManagementInterface extends Component<Props, State> {
 
     onSelectDate = (schedulerData, date) => {
         schedulerData.setDate(date);
-        schedulerData.setEvents(this.state.DemoData.events);
+        schedulerData.setEvents(this.props.DemoData.events);
         this.setState({
             viewModel: schedulerData,
         });
@@ -163,8 +171,9 @@ class ShiftManagementInterface extends Component<Props, State> {
     };
 
     ops2 = (schedulerData, event) => {
-        alert(
-            `You just executed ops2 to event: {id: ${event.id}, title: ${event.title}}`,
+        console.log({ event });
+        this.props.deleteShiftItem(
+            event.rrule ? event.recurringEventId : event.id,
         );
     };
 
@@ -239,7 +248,7 @@ class ShiftManagementInterface extends Component<Props, State> {
     ) => {
         const borderWidth = isStart ? '4' : '0';
         const borderColor = colord(bgColor).darken(0.25).toHex();
-        // console.log({ isStart, event, bgColor, borderColor });
+        // console.log({ event, schedulerData });
 
         const divStyle = {
             borderLeft: borderWidth + 'px solid ' + borderColor,
@@ -250,9 +259,17 @@ class ShiftManagementInterface extends Component<Props, State> {
         return (
             <Flex key={event.id} className={mustAddCssClass} style={divStyle}>
                 <VStack align="flex-start" spacing={0} fontSize=".8rem">
-                    <span>{`${moment(event.start).format('LT')} - ${moment(
-                        event.end,
-                    ).format('LT')}`}</span>
+                    {event.rrule ? (
+                        <span>{`${moment(event.recurringEventStart).format(
+                            'LT',
+                        )} - ${moment(event.recurringEventEnd).format(
+                            'LT',
+                        )}`}</span>
+                    ) : (
+                        <span>{`${moment(event.start).format('LT')} - ${moment(
+                            event.end,
+                        ).format('LT')}`}</span>
+                    )}
                     <span>{event.title}</span>
                 </VStack>
             </Flex>

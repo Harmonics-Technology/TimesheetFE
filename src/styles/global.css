@@ -182,6 +182,7 @@ select option {
     text-overflow: ellipsis;
     overflow: hidden;
     box-shadow: none !important;
+    text-transform: capitalize;
 }
 .modalContentWrapper {
     padding: 22px !important;

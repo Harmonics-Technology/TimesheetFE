@@ -46,4 +46,5 @@ export type TeamMemberModel = {
     isEligibleForLeave?: boolean | null;
     numberOfDaysEligible?: number | null;
     numberOfHoursEligible?: number | null;
+    employeeType?: string | null;
 };

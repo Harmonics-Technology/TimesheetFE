@@ -7,11 +7,13 @@ const useClickOutside = (ref, handler) => {
         let startedWhenMounted = false;
 
         const listener = (event) => {
+            // console.log({ startedWhenMounted, startedInside });
             // Do nothing if `mousedown` or `touchstart` started inside ref element
             if (startedInside || !startedWhenMounted) return;
             // Do nothing if clicking ref's element or descendent elements
             if (!ref.current || ref.current.contains(event.target)) return;
 
+            // alert('Clicked');
             handler(event);
         };
 

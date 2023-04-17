@@ -15,10 +15,7 @@ import {
 import React, { useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { ShiftBtn } from './ShiftBtn';
-import { LeaveService, TeamMemberModel } from 'src/services';
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { ShiftService } from 'src/services';
 import { useRouter } from 'next/router';
 import { endOfWeek, format, startOfWeek } from 'date-fns';
 import { SingleText } from './SingleText';
@@ -29,8 +26,6 @@ interface ExportProps {
     data: any;
 }
 
-const schema = yup.object().shape({});
-
 export const PublishShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
     const router = useRouter();
     const toast = useToast();
@@ -39,22 +34,17 @@ export const PublishShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
     const end = router?.query?.to || endOfWeek(new Date());
 
     console.log({ start, end, data });
+    const [loading, setLoading] = useState(false);
 
-    const {
-        register,
-        handleSubmit,
-        control,
-        formState: { errors, isSubmitting },
-    } = useForm<TeamMemberModel>({
-        resolver: yupResolver(schema),
-        mode: 'all',
-        defaultValues: {},
-    });
-
-    const onSubmit = async (data: any) => {
+    const onSubmit = async () => {
         try {
-            const result = await LeaveService.createLeave(data);
+            setLoading(true);
+            const result = await ShiftService.publishShifts(
+                format(new Date(start as any), 'yyyy-MM-dd'),
+                format(new Date(end as any), 'yyyy-MM-dd'),
+            );
             if (result.status) {
+                setLoading(false);
                 toast({
                     title: result.message,
                     status: 'success',
@@ -65,6 +55,7 @@ export const PublishShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                 onClose();
                 return;
             }
+            setLoading(false);
             toast({
                 title: result.message,
                 status: 'error',
@@ -178,8 +169,8 @@ export const PublishShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                             <ShiftBtn
                                 text="Publish and send notification"
                                 bg="brand.400"
-                                onClick={handleSubmit(onSubmit)}
-                                loading={isSubmitting}
+                                onClick={onSubmit}
+                                loading={loading}
                             />
                         </Flex>
                     </Box>

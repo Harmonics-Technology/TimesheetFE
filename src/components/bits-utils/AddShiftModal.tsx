@@ -14,11 +14,17 @@ import {
     VStack,
     useToast,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { ShiftBtn } from './ShiftBtn';
 import { SelectrixBox } from './Selectrix';
-import { LeaveService, TeamMemberModel } from 'src/services';
+import {
+    ShiftService,
+    ShiftModel,
+    UserView,
+    UserViewListStandardResponse,
+    ShiftUsersListViewPagedCollectionStandardResponse,
+} from 'src/services';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -30,6 +36,8 @@ import { HexColorPicker, HexColorInput } from 'powerful-color-picker';
 import dynamic from 'next/dynamic';
 import { PrimaryTextarea } from './PrimaryTextArea';
 import { useRouter } from 'next/router';
+import moment from 'moment';
+import useClickOutside from '@components/generics/useClickOutside';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -37,30 +45,46 @@ const Selectrix = dynamic<any>(() => import('react-selectrix'), {
 interface ExportProps {
     isOpen: any;
     onClose: any;
-    data: any;
+    datas: any;
+    user: ShiftUsersListViewPagedCollectionStandardResponse;
 }
 
 const schema = yup.object().shape({});
 
-export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
+export const AddShiftModal = ({
+    isOpen,
+    onClose,
+    datas,
+    user,
+}: ExportProps) => {
     const router = useRouter();
     const toast = useToast();
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
 
-    const [fromDate, setFromDate] = useState<any>(
-        data?.start || new DateObject(),
-    );
-    const [toDate, setToDate] = useState<any>(
-        data?.end || new DateObject().add(5, 'hours'),
-    );
-    const [color, setColor] = useState(data?.bgColor || '#' + randomColor);
+    const [fromDate, setFromDate] = useState<any>(new DateObject());
+    const [toDate, setToDate] = useState<any>(new DateObject());
+    const [color, setColor] = useState<any>();
     const [showColor, setShowColor] = useState(false);
+    const [userId, setUserId] = useState();
     const [repeat, setRepeat] = useState(false);
     const [repeatEndDate, setRepeatEndDate] = useState<any>(
         new DateObject().add(10, 'days'),
     );
     const [selectedId, setSelectedId] = useState<any>([]);
-    console.log({ data, randomColor });
+    const [data, setData] = useState<any>();
+
+    useEffect(() => {
+        setData(datas);
+    }, [datas]);
+
+    useEffect(() => {
+        setFromDate(new DateObject(data?.start));
+        setToDate(new DateObject(data?.end).subtract(59, 'minutes'));
+        setColor(data?.bgColor || '#' + randomColor);
+        setUserId(data?.resourceId);
+    }, [data]);
+
+    // console.log({ fromDate, toDate });
 
     const toggleSelected = (value: any) => {
         const existingValue = selectedId?.find((e) => e.id === value.id);
@@ -76,12 +100,23 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
         register,
         handleSubmit,
         control,
+        reset,
         formState: { errors, isSubmitting },
-    } = useForm<TeamMemberModel>({
+    } = useForm<ShiftModel>({
         resolver: yupResolver(schema),
         mode: 'all',
-        defaultValues: {},
     });
+
+    const closeModal = () => {
+        setData({});
+        setRepeat(false);
+        setSelectedId([]);
+        reset({
+            userId: '',
+            note: '',
+        });
+        onClose();
+    };
 
     const repeating = [
         { id: 0, name: 'SU' },
@@ -93,22 +128,34 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
         { id: 6, name: 'SA' },
     ];
 
-    console.log({
-        fromDate: fromDate?.format('YYYY-MM-DD HH:MM:ss'),
-    });
-
-    const rrule = `FREQ=WEEKLY;DTSTART=${fromDate.format(
-        'YYYYMMDDTHHMMssZ',
-    )};UNTIL=${repeatEndDate.format('YYYYMMDDTHHMMssZ')};BYDAY=${selectedId.map(
-        (x) => x.name,
-    )}`;
+    const rrule = `FREQ=WEEKLY;DTSTART=${new DateObject(fromDate)
+        .subtract(1, 'days')
+        .format('YYYYMMDDTHHmmssZ')};UNTIL=${repeatEndDate.format(
+        'YYYYMMDDTHHmmssZ',
+    )};BYDAY=${selectedId.map((x) => x.name)}`;
 
     const title =
         fromDate.format('A') == 'AM' ? 'Morning shift' : 'Night Shift';
 
-    const onSubmit = async (data: any) => {
+    const hoursDiff = moment(new Date(toDate)).diff(
+        moment(new Date(fromDate)),
+        'hours',
+    );
+
+    // console.log({ hoursDiff });
+
+    const onSubmit = async (data: ShiftModel) => {
+        data.hours = hoursDiff;
+        data.title = title;
+        data.start = fromDate?.format('YYYY-MM-DD HH:mm:ss');
+        data.end = toDate?.format('YYYY-MM-DD HH:mm:ss');
+        data.color = color;
+        data.repeatStopDate = repeatEndDate?.format('YYYY-MM-DD HH:mm:ss');
+        repeat && (data.repeatQuery = rrule);
+        data.userId ? data.userId : (data.userId = userId);
+        console.log({ data });
         try {
-            const result = await LeaveService.createLeave(data);
+            const result = await ShiftService.addShift(data);
             if (result.status) {
                 toast({
                     title: result.message,
@@ -185,13 +232,13 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                     <Text fontSize=".9rem" w="20%">
                                         Assign shift To:
                                     </Text>
-                                    <SelectrixBox<TeamMemberModel>
+                                    <SelectrixBox<ShiftModel>
                                         control={control}
-                                        name="clientId"
-                                        error={errors.clientId}
-                                        keys="id"
+                                        name="userId"
+                                        error={errors.userId}
+                                        keys="userId"
                                         keyLabel="fullName"
-                                        options={[]}
+                                        options={user.data?.value}
                                         placeholder={
                                             data?.slotName || 'Select a user'
                                         }
@@ -210,6 +257,9 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                             value={fromDate}
                                             onChange={setFromDate}
                                             format="dddd, MMM DD, YYYY"
+                                            plugins={[
+                                                <TimePicker hideSeconds />,
+                                            ]}
                                             render={(value, openCalendar) => {
                                                 return (
                                                     <HStack
@@ -248,7 +298,7 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                             containerStyle={{
                                                 width: '40%',
                                             }}
-                                            disableDayPicker
+                                            // disableDayPicker
                                             format="hh:mm A"
                                             value={fromDate}
                                             onChange={setFromDate}
@@ -304,6 +354,9 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                             value={toDate}
                                             onChange={setToDate}
                                             format="dddd, MMM DD, YYYY"
+                                            plugins={[
+                                                <TimePicker hideSeconds />,
+                                            ]}
                                             render={(value, openCalendar) => {
                                                 return (
                                                     <HStack
@@ -342,7 +395,7 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                             containerStyle={{
                                                 width: '40%',
                                             }}
-                                            disableDayPicker
+                                            // disableDayPicker
                                             format="hh:mm A"
                                             value={toDate}
                                             onChange={setToDate}
@@ -415,25 +468,26 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                         </HStack>
                                         <Icon as={AiOutlineBgColors} />
                                     </HStack>
-                                    <Box
-                                        pos="absolute"
-                                        right="50%"
-                                        zIndex="900"
-                                        display={showColor ? 'block' : 'none'}
-                                        bgColor="white"
-                                        p="1rem"
-                                        borderRadius="5px"
-                                    >
-                                        <HexColorPicker
-                                            color={color}
-                                            onChange={setColor}
-                                        />
-                                        <HexColorInput
-                                            color={color}
-                                            onChange={setColor}
-                                            className="colorPicker"
-                                        />
-                                    </Box>
+                                    {showColor && (
+                                        <Box
+                                            pos="absolute"
+                                            right="50%"
+                                            zIndex="900"
+                                            bgColor="white"
+                                            p="1rem"
+                                            borderRadius="5px"
+                                        >
+                                            <HexColorPicker
+                                                color={color}
+                                                onChange={setColor}
+                                            />
+                                            <HexColorInput
+                                                color={color}
+                                                onChange={setColor}
+                                                className="colorPicker"
+                                            />
+                                        </Box>
+                                    )}
                                 </HStack>
                                 <HStack gap="2rem" w="full">
                                     <Text fontSize=".9rem" w="20%">
@@ -455,6 +509,7 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                                 onChange={(value) =>
                                                     setRepeat(value.key)
                                                 }
+                                                searchable={false}
                                                 style={{
                                                     width: '70%',
                                                 }}
@@ -566,9 +621,9 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                         <Text fontSize=".9rem" w="20%">
                                             Note:
                                         </Text>
-                                        <PrimaryTextarea<TeamMemberModel>
-                                            name="address"
-                                            error={errors.address}
+                                        <PrimaryTextarea<ShiftModel>
+                                            name="note"
+                                            error={errors.note}
                                             placeholder=""
                                             defaultValue=""
                                             register={register}
@@ -580,7 +635,7 @@ export const AddShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                 <ShiftBtn
                                     text="Cancel"
                                     bg="#FF5B79"
-                                    onClick={onClose}
+                                    onClick={closeModal}
                                 />
                                 <ShiftBtn
                                     text="Add Shift"
