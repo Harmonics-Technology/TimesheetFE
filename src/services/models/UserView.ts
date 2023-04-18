@@ -35,4 +35,5 @@ export type UserView = {
     twoFactorEnabled?: boolean;
     numberOfDaysEligible?: number | null;
     numberOfLeaveDaysTaken?: number | null;
+    numberOfHoursEligible?: number | null;
 };

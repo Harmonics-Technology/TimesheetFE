@@ -164,7 +164,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         role={role}
                     />
-                    {/* <MenuItem
+                    <MenuItem
                         change={change}
                         linkName="shift-management"
                         menuTitle="Shift Management"
@@ -173,7 +173,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
-                    /> */}
+                    />
                 </VStack>
             ) : role == 'TeamMember' ? (
                 <VStack

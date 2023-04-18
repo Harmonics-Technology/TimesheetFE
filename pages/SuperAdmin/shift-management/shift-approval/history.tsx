@@ -2,13 +2,14 @@ import { Box } from '@chakra-ui/react';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import { EmployeeShift } from '@components/subpages/EmployeeShift';
+import { ShiftSwapList } from '@components/subpages/ShiftSwapList';
+import { SwapShiftList } from '@components/subpages/SwapShiftsList';
 import { endOfWeek, format, startOfWeek } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import { ShiftService, UserService } from 'src/services';
 
-const schedule = ({ allShift }) => {
+const ShiftApproval = ({ allShift }) => {
     return (
         <Box
             bgColor="white"
@@ -32,27 +33,27 @@ const schedule = ({ allShift }) => {
                     },
                 ]}
             />
-            <EmployeeShift allShift={allShift} />
+            <SwapShiftList allShift={allShift} />
         </Box>
     );
 };
 
-export default schedule;
+export default ShiftApproval;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         const start = format(startOfWeek(new Date()), 'yyyy-MM-dd');
         const end = format(endOfWeek(new Date()), 'yyyy-MM-dd');
+        const { id } = ctx.query;
 
         console.log({ start, end });
         try {
-            const allShift = await ShiftService.listUsersShift(
-                pagingOptions.from || start,
-                pagingOptions.to || end,
+            const allShift = await ShiftService.getAllSwapShifts(
+                pagingOptions.offset,
+                pagingOptions.limit,
             );
 
-            console.log({ allShift });
             return {
                 props: {
                     allShift,

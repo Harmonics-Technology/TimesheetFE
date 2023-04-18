@@ -92,6 +92,8 @@ export type { ShiftUsersListViewPagedCollection } from './models/ShiftUsersListV
 export type { ShiftUsersListViewPagedCollectionStandardResponse } from './models/ShiftUsersListViewPagedCollectionStandardResponse';
 export type { ShiftView } from './models/ShiftView';
 export type { ShiftViewListStandardResponse } from './models/ShiftViewListStandardResponse';
+export type { ShiftViewPagedCollection } from './models/ShiftViewPagedCollection';
+export type { ShiftViewPagedCollectionStandardResponse } from './models/ShiftViewPagedCollectionStandardResponse';
 export type { ShiftViewStandardResponse } from './models/ShiftViewStandardResponse';
 export type { Status } from './models/Status';
 export type { StrippedUserView } from './models/StrippedUserView';
@@ -113,7 +115,6 @@ export type { UserCountByPayrollTypeView } from './models/UserCountByPayrollType
 export type { UserCountByPayrollTypeViewListStandardResponse } from './models/UserCountByPayrollTypeViewListStandardResponse';
 export type { UserProfileView } from './models/UserProfileView';
 export type { UserProfileViewStandardResponse } from './models/UserProfileViewStandardResponse';
-export type { UsersShiftModel } from './models/UsersShiftModel';
 export type { UsersShiftView } from './models/UsersShiftView';
 export type { UsersShiftViewPagedCollection } from './models/UsersShiftViewPagedCollection';
 export type { UsersShiftViewPagedCollectionStandardResponse } from './models/UsersShiftViewPagedCollectionStandardResponse';

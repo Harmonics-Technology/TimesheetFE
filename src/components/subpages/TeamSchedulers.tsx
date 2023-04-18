@@ -104,14 +104,14 @@ class ShiftManagementInterface extends Component<Props, State> {
                     eventItemClick={this.eventClicked}
                     // viewEventClick={this.ops1}
                     // viewEventText="Ops 1"
-                    viewEvent2Text="Delete shift"
-                    viewEvent2Click={this.ops2}
+                    // viewEvent2Text="Delete shift"
+                    // viewEvent2Click={this.ops2}
                     // updateEventStart={this.updateEventStart}
                     // updateEventEnd={this.updateEventEnd}
                     // moveEvent={this.moveEvent}
                     eventItemTemplateResolver={this.eventItemTemplateResolver}
                     slotItemTemplateResolver={this.slotItemTemplateResolver}
-                    newEvent={this.newEvent}
+                    // newEvent={this.newEvent}
                     // toggleExpandFunc={this.toggleExpandFunc}
                 />
             </TableContainer>

@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import {
     format,
     startOfWeek,
@@ -44,6 +50,7 @@ import Naira, { CAD } from '@components/generics/functions/Naira';
 import useClickOutside from '@components/generics/useClickOutside';
 import { Round } from '@components/generics/functions/Round';
 import Cookies from 'js-cookie';
+import { UserContext } from '@components/context/UserContext';
 
 const TimesheetTeam = ({
     timeSheets,
@@ -102,6 +109,8 @@ const TimesheetTeam = ({
     const [selectedInput, setSelectedInput] = useState<
         TimesheetHoursAdditionModel[]
     >([]);
+    const { user } = useContext(UserContext);
+    const hoursEligible = user?.numberOfHoursEligible;
 
     const fillTimeInDate = (item: TimesheetHoursAdditionModel) => {
         const existingValue = selectedInput.find((e) => e.date == item.date);
@@ -621,10 +630,7 @@ const TimesheetTeam = ({
                             textAlign="center"
                             h="full"
                             border="0"
-                            readOnly={
-                                timesheets?.status == 'APPROVED' ||
-                                timesheets?.onLeave
-                            }
+                            readOnly={timesheets?.status == 'APPROVED'}
                             disabled={
                                 timesheets == undefined ||
                                 isWeekend(
@@ -645,9 +651,11 @@ const TimesheetTeam = ({
                                 timesheets?.onLeave &&
                                 timesheets?.onLeaveAndEligibleForLeave
                                     ? 'blue'
-                                    : timesheets?.onLeave &&
-                                      !timesheets?.onLeaveAndEligibleForLeave
-                                    ? 'yellow'
+                                    : (timesheets?.onLeave &&
+                                          !timesheets?.onLeaveAndEligibleForLeave) ||
+                                      (timesheets?.hours as number) >
+                                          hoursEligible
+                                    ? 'red'
                                     : 'green'
                             }
                         />

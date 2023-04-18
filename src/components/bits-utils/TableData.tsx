@@ -11,6 +11,7 @@ import {
     Td,
     Tooltip,
     Icon,
+    Text,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import NextLink from 'next/link';
@@ -25,6 +26,7 @@ import {
     InvoiceView,
     LeaveService,
     SettingsService,
+    ShiftService,
     UserService,
 } from 'src/services';
 import fileDownload from 'js-file-download';
@@ -95,6 +97,51 @@ export function TableData({
         </Td>
     );
 }
+export function TableDataShiftDate({
+    name,
+    border,
+    value,
+    borderColor,
+    classes,
+    full,
+    date,
+}: {
+    name: any;
+    border?: boolean | undefined;
+    value?: string;
+    borderColor?: string;
+    classes?: any;
+    full?: boolean;
+    date?: any;
+}) {
+    return (
+        <Td
+            borderColor={borderColor}
+            borderRight={border ? value : 0}
+            borderRightColor={borderColor}
+            paddingInlineStart="1rem"
+            className={classes}
+            // maxW="120px"
+            // textOverflow=""
+            // overflow="hidden"
+            // noOfLines={1}
+            color={
+                name == 'OFFSHORE'
+                    ? 'brand.700'
+                    : name == 'ONSHORE'
+                    ? 'brand.400'
+                    : 'black'
+            }
+        >
+            <Tooltip label={name} hasArrow>
+                {full ? name : name?.toString()?.substring(0, 20) || ''}
+            </Tooltip>
+            <Text fontSize="11px" color="#b8b9b9" mb="0" fontWeight="500">
+                {date}
+            </Text>
+        </Td>
+    );
+}
 export function TableStatus({ name }: { name: boolean | undefined }) {
     return (
         <td>
@@ -120,7 +167,9 @@ export function TableState({ name }: { name: string | undefined | null }) {
             <Box
                 fontSize="10px"
                 bgColor={
-                    name == 'ACTIVE' || name == 'APPROVED'
+                    name == 'ACTIVE' ||
+                    name == 'APPROVED' ||
+                    name == 'Completed'
                         ? 'brand.400'
                         : name == 'PENDING'
                         ? 'brand.700'
@@ -128,6 +177,8 @@ export function TableState({ name }: { name: string | undefined | null }) {
                         ? 'brand.600'
                         : name == 'INVOICED'
                         ? '#28a3ef'
+                        : name == 'In progress'
+                        ? 'gray.400'
                         : 'red'
                 }
                 borderRadius="4px"
@@ -371,6 +422,89 @@ export function LeaveActions({ id, route }: { id: any; route: any }) {
         </td>
     );
 }
+export function ShiftSwapActions({ id }: { id: any }) {
+    const toast = useToast();
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    const { user } = useContext(UserContext);
+    const role = user?.role.replaceAll(' ', '');
+    const treatLeave = async (id, type) => {
+        try {
+            setLoading(true);
+            const result = await ShiftService.approveSwap(id, type);
+            if (result.status) {
+                // console.log({ result });
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                setLoading(false);
+                router.reload();
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (err: any) {
+            setLoading(false);
+            toast({
+                title: err?.body?.message || err.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    <MenuItem
+                        onClick={
+                            role == 'TeamMember'
+                                ? () => treatLeave(id, 1)
+                                : () => treatLeave(id, 1)
+                        }
+                        w="full"
+                    >
+                        <Icon as={MdVerified} mr=".5rem" color="brand.400" />
+                        Approve
+                    </MenuItem>
+                    <MenuItem
+                        onClick={
+                            role == 'TeamMember'
+                                ? () => treatLeave(id, 1)
+                                : () => treatLeave(id, 1)
+                        }
+                        w="full"
+                    >
+                        <Icon as={MdCancel} mr=".5rem" color="#FF5B79" />{' '}
+                        Decline
+                    </MenuItem>
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+
 export function TableContractOptions({
     id,
     extend,
