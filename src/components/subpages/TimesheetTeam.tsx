@@ -122,7 +122,7 @@ const TimesheetTeam = ({
         setSelectedInput([...selectedInput, item]);
     };
 
-    console.log({ selectedInput });
+    console.log({ hoursEligible });
     console.log({ timeSheets, increaseWeek });
 
     // function ApproveAllTimeSheet() {
@@ -649,12 +649,14 @@ const TimesheetTeam = ({
                             }
                             color={
                                 timesheets?.onLeave &&
-                                timesheets?.onLeaveAndEligibleForLeave
+                                timesheets?.onLeaveAndEligibleForLeave &&
+                                (timesheets?.hours as number) <= hoursEligible
                                     ? 'blue'
                                     : (timesheets?.onLeave &&
                                           !timesheets?.onLeaveAndEligibleForLeave) ||
-                                      (timesheets?.hours as number) >
-                                          hoursEligible
+                                      (timesheets?.onLeave == true &&
+                                          (timesheets?.hours as number) >
+                                              hoursEligible)
                                     ? 'red'
                                     : 'green'
                             }
