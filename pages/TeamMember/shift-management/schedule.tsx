@@ -3,12 +3,13 @@ import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import ShiftManagement from '@components/subpages/ShiftManagement';
+import TeamManagementAll from '@components/subpages/TeamManagementAll';
 import { endOfWeek, format, startOfWeek } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import { ShiftService, UserService } from 'src/services';
 
-const schedule = ({ allShift, shiftUser }) => {
+const schedule = ({ allShift, shiftUser, id, myShift }) => {
     return (
         <Box
             bgColor="white"
@@ -36,7 +37,12 @@ const schedule = ({ allShift, shiftUser }) => {
                     },
                 ]}
             />
-            <ShiftManagement allShift={allShift} shiftUser={shiftUser} />
+            <TeamManagementAll
+                allShift={allShift}
+                shiftUser={shiftUser}
+                id={id}
+                myShift={myShift}
+            />
         </Box>
     );
 };
@@ -48,12 +54,21 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const start = format(startOfWeek(new Date()), 'yyyy-MM-dd');
         const end = format(endOfWeek(new Date()), 'yyyy-MM-dd');
+        const id = JSON.parse(ctx.req.cookies.user).id;
 
         console.log({ start, end });
         try {
             const allShift = await ShiftService.listUsersShift(
                 pagingOptions.from || start,
                 pagingOptions.to || end,
+                undefined,
+                true,
+            );
+            const myShift = await ShiftService.listUsersShift(
+                pagingOptions.from || start,
+                pagingOptions.to || end,
+                id,
+                true,
             );
             const shiftUser = await UserService.listShiftUsers(
                 pagingOptions.offset,
@@ -62,11 +77,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.to || end,
             );
 
-            console.log({ allShift, shiftUser });
+            // console.log({ allShift, shiftUser, myShift });
             return {
                 props: {
                     allShift,
                     shiftUser,
+                    myShift,
+                    id,
                 },
             };
         } catch (error: any) {

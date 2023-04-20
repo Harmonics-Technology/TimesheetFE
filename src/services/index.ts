@@ -92,11 +92,12 @@ export type { ShiftUsersListViewPagedCollection } from './models/ShiftUsersListV
 export type { ShiftUsersListViewPagedCollectionStandardResponse } from './models/ShiftUsersListViewPagedCollectionStandardResponse';
 export type { ShiftView } from './models/ShiftView';
 export type { ShiftViewListStandardResponse } from './models/ShiftViewListStandardResponse';
-export type { ShiftViewPagedCollection } from './models/ShiftViewPagedCollection';
-export type { ShiftViewPagedCollectionStandardResponse } from './models/ShiftViewPagedCollectionStandardResponse';
 export type { ShiftViewStandardResponse } from './models/ShiftViewStandardResponse';
 export type { Status } from './models/Status';
 export type { StrippedUserView } from './models/StrippedUserView';
+export type { SwapView } from './models/SwapView';
+export type { SwapViewPagedCollection } from './models/SwapViewPagedCollection';
+export type { SwapViewPagedCollectionStandardResponse } from './models/SwapViewPagedCollectionStandardResponse';
 export type { TeamMemberModel } from './models/TeamMemberModel';
 export type { TimeSheetApprovedView } from './models/TimeSheetApprovedView';
 export type { TimeSheetApprovedViewPagedCollection } from './models/TimeSheetApprovedViewPagedCollection';

@@ -3,9 +3,9 @@
 /* eslint-disable */
 
 import type { Link } from './Link';
-import type { ShiftView } from './ShiftView';
+import type { SwapView } from './SwapView';
 
-export type ShiftViewPagedCollection = {
+export type SwapViewPagedCollection = {
     offset?: number | null;
     limit?: number | null;
     nextOffset?: number | null;
@@ -16,5 +16,5 @@ export type ShiftViewPagedCollection = {
     next?: Link;
     last?: Link;
     self?: Link;
-    value?: Array<ShiftView> | null;
+    value?: Array<SwapView> | null;
 };

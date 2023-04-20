@@ -28,7 +28,7 @@ interface swapProps {
     allShift: ShiftViewPagedCollectionStandardResponse;
 }
 
-export const ShiftSwapList = ({ allShift }: swapProps) => {
+export const SwapShiftListTeam = ({ allShift }: swapProps) => {
     console.log({ allShift });
     const [search, setSearch] = useState('');
     const debounced = useDebouncedCallback(
@@ -99,7 +99,7 @@ export const ShiftSwapList = ({ allShift }: swapProps) => {
                     />
                 </Box>
 
-                <Button
+                {/* <Button
                     variant="outline"
                     color="brand.400"
                     borderColor="brand.400"
@@ -108,15 +108,13 @@ export const ShiftSwapList = ({ allShift }: swapProps) => {
                     onClick={() => router.push(`${router.asPath}/history`)}
                 >
                     View Shift Approval History
-                </Button>
+                </Button> */}
             </Flex>
 
             <Box>
-                {allShift?.data?.value?.filter((x) => !x.isSwapped).length !=
-                0 ? (
-                    allShift.data?.value
-                        ?.filter((x) => !x.isSwapped)
-                        .map((x) => (
+                {allShift?.data?.value?.length != 0 ? (
+                    allShift?.data?.value?.map((x) => (
+                        <>
                             <Flex
                                 justify="space-between"
                                 align="center"
@@ -124,13 +122,22 @@ export const ShiftSwapList = ({ allShift }: swapProps) => {
                                 py="1rem"
                             >
                                 <ShiftSwapTemplate
-                                    userName={x.shiftToSwap?.user?.fullName}
+                                    userName={
+                                        x.swapperId == user?.id
+                                            ? 'My'
+                                            : x.swapee?.fullName
+                                    }
                                     userShift={`${
-                                        x.shiftToSwap?.title
-                                    } ${moment(x.shiftToSwap?.start).format(
-                                        'ddd DD/MM/YYYY',
-                                    )}`}
+                                        x.swapperId == user?.id
+                                            ? x.swapper?.title
+                                            : x.swapee.title
+                                    } ${moment(
+                                        x.swapperId == user?.id
+                                            ? x.swapper?.start
+                                            : x.swapee.start,
+                                    ).format('ddd DD/MM/YYYY')}`}
                                 />
+
                                 <Text
                                     mb="0"
                                     color="brand.400"
@@ -139,37 +146,69 @@ export const ShiftSwapList = ({ allShift }: swapProps) => {
                                 >
                                     Swap Shift with
                                 </Text>
+                                {/* <ShiftSwapTemplate
+                                    userName={
+                                        x.swapperId == user?.id
+                                            ? 'My'
+                                            : x.shiftToSwap?.user?.fullName
+                                    }
+                                    userShift={`${
+                                        x.swapperId == user?.id
+                                            ? x.title
+                                            : x.shiftToSwap?.title
+                                    } ${moment(
+                                        x.swapperId == user?.id
+                                            ? x.start
+                                            : x.shiftToSwap?.start,
+                                    ).format('ddd DD/MM/YYYY')}`}
+                                    status={x?.swapStatus}
+                                /> */}
                                 <ShiftSwapTemplate
-                                    userName={x.user?.fullName}
-                                    userShift={`${x.title} ${moment(
-                                        x.start,
+                                    userName={
+                                        x.swapperId == user?.id
+                                            ? x.swapee?.fullName
+                                            : 'My'
+                                    }
+                                    userShift={`${
+                                        x.swapperId == user?.id
+                                            ? x.shiftToSwap?.title
+                                            : x.title
+                                    } ${moment(
+                                        x.swapperId == user?.id
+                                            ? x.shiftToSwap?.start
+                                            : x.start,
                                     ).format('ddd DD/MM/YYYY')}`}
                                     status={x?.swapStatus}
                                 />
-                                <ShiftCustomBtn
-                                    name={x.isSwapped ? 'APPROVED' : 'PENDING'}
-                                />
 
-                                <HStack spacing=".5rem">
-                                    <ShiftCustomBtn
-                                        name={'Decline'}
-                                        icon={MdCancel}
-                                        onClick={() =>
-                                            treatSwap(x.shiftToSwapId, 2)
-                                        }
-                                        loading={loading}
-                                    />
-                                    <ShiftCustomBtn
-                                        name={'Approve'}
-                                    icon={MdVerified}
-                                        onClick={() =>
-                                            treatSwap(x.shiftToSwapId, 2)
-                                        }
-                                        loading={loading}
-                                    />
-                                </HStack>
+                                <ShiftCustomBtn name={x.status} />
+
+                                <Box w="18%">
+                                    {x.swapperId != user?.id &&
+                                        x.status != 'APPROVED' && (
+                                            <HStack spacing=".5rem">
+                                                <ShiftCustomBtn
+                                                    name={'Decline'}
+                                                    icon={MdCancel}
+                                                    onClick={() =>
+                                                        treatSwap(x.id, 2)
+                                                    }
+                                                    loading={loading}
+                                                />
+                                                <ShiftCustomBtn
+                                                    name={'Approve'}
+                                                    icon={MdVerified}
+                                                    onClick={() =>
+                                                        treatSwap(x.id, 1)
+                                                    }
+                                                    loading={loading}
+                                                />
+                                            </HStack>
+                                        )}
+                                </Box>
                             </Flex>
-                        ))
+                        </>
+                    ))
                 ) : (
                     <>
                         <Flex h="20vh" justify="center" align="center">

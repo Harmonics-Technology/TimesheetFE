@@ -19,14 +19,22 @@ import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
 import ScheduleData from '@components/bits-utils/ScheduleData';
 import TeamSchedulers from './TeamSchedulers';
+import { SwapRequestModal } from '@components/bits-utils/SwapRequestModal';
 
 interface shiftProps {
     allShift: ShiftViewListStandardResponse;
     shiftUser: ShiftUsersListViewPagedCollectionStandardResponse;
+    id: any;
+    myShift?: any;
 }
 
-const TeamManagementAll = ({ allShift, shiftUser }: shiftProps) => {
-    console.log({ allShift, shiftUser });
+const TeamManagementAll = ({
+    allShift,
+    shiftUser,
+    id,
+    myShift,
+}: shiftProps) => {
+    console.log({ allShift, shiftUser, myShift });
 
     const EventList = allShift?.data?.map((obj) => {
         return {
@@ -139,13 +147,12 @@ const TeamManagementAll = ({ allShift, shiftUser }: shiftProps) => {
                 />
             </Box>
 
-            <AddShiftModal
-                isOpen={isOpen}
-                onClose={onClose}
-                datas={data}
-                user={shiftUser}
+            <SwapRequestModal
+                isOpen={open}
+                onClose={close}
+                employee={shiftUser}
+                data={myShift}
             />
-            <PublishShiftModal isOpen={open} onClose={close} data={data} />
         </>
     );
 };

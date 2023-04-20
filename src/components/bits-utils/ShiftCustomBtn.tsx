@@ -5,12 +5,18 @@ interface shiftBtnProps {
     name: any;
     icon?: any;
     onClick?: any;
+    loading?: any;
 }
 
-export const ShiftCustomBtn = ({ name, icon, onClick }: shiftBtnProps) => {
+export const ShiftCustomBtn = ({
+    name,
+    icon,
+    onClick,
+    loading,
+}: shiftBtnProps) => {
     return (
         <Button
-            fontSize="12px"
+            fontSize="14px"
             bgColor={
                 name == 'ACTIVE' || name == 'APPROVED' || name == 'Approve'
                     ? 'brand.400'
@@ -27,14 +33,16 @@ export const ShiftCustomBtn = ({ name, icon, onClick }: shiftBtnProps) => {
             borderRadius="5px"
             color="white"
             fontWeight="bold"
-            padding=".2rem 1rem"
+            h="2rem"
+            // padding=".2rem 1rem"
             width="fit-content"
+            isLoading={loading && name}
             cursor="pointer"
             textTransform="capitalize"
             boxShadow="0px 3.5px 5.5px rgba(0, 0, 0, 0.02)"
             onClick={onClick}
         >
-            {icon && <Icon as={icon} pr=".5rem" />} {name || 'Inactive'}
+            {icon && <Icon as={icon} mr=".5rem" />} {name || 'Inactive'}
         </Button>
     );
 };

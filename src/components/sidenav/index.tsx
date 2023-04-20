@@ -238,6 +238,16 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="shift-management"
+                        menuTitle="Shift Management"
+                        icon={<AiFillSchedule opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                    />
+                    <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}

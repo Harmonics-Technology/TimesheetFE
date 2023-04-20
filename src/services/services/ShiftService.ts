@@ -4,8 +4,8 @@
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { ShiftModel } from '../models/ShiftModel';
 import type { ShiftViewListStandardResponse } from '../models/ShiftViewListStandardResponse';
-import type { ShiftViewPagedCollectionStandardResponse } from '../models/ShiftViewPagedCollectionStandardResponse';
 import type { ShiftViewStandardResponse } from '../models/ShiftViewStandardResponse';
+import type { SwapViewPagedCollectionStandardResponse } from '../models/SwapViewPagedCollectionStandardResponse';
 import type { UsersShiftViewPagedCollectionStandardResponse } from '../models/UsersShiftViewPagedCollectionStandardResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -227,14 +227,14 @@ action?: number,
      * @param offset 
      * @param limit 
      * @param userId 
-     * @returns ShiftViewPagedCollectionStandardResponse Success
+     * @returns SwapViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getUserSwapShifts(
 offset?: number,
 limit?: number,
 userId?: string,
-): CancelablePromise<ShiftViewPagedCollectionStandardResponse> {
+): CancelablePromise<SwapViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Shift/user/swaps',
@@ -253,13 +253,13 @@ userId?: string,
     /**
      * @param offset 
      * @param limit 
-     * @returns ShiftViewPagedCollectionStandardResponse Success
+     * @returns SwapViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getAllSwapShifts(
 offset?: number,
 limit?: number,
-): CancelablePromise<ShiftViewPagedCollectionStandardResponse> {
+): CancelablePromise<SwapViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Shift/swaps',

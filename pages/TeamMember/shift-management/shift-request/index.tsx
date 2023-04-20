@@ -2,8 +2,7 @@ import { Box } from '@chakra-ui/react';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import { ShiftSwapList } from '@components/subpages/ShiftSwapList';
-import { SwapShiftList } from '@components/subpages/SwapShiftsList';
+import { SwapShiftListTeam } from '@components/subpages/SwapShiftListTeam';
 import { endOfWeek, format, startOfWeek } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import React from 'react';
@@ -20,20 +19,24 @@ const ShiftApproval = ({ allShift }) => {
             <LeaveTab
                 tabValue={[
                     {
-                        text: 'Schedule',
-                        url: '/shift-management/schedule',
+                        text: 'My Shift',
+                        url: '/shift-management/my-schedule',
                     },
                     {
-                        text: 'Employee Shifts',
+                        text: 'Shift history',
                         url: '/shift-management/employee-shifts',
                     },
                     {
-                        text: 'Shift Approval',
-                        url: '/shift-management/shift-approval',
+                        text: 'Team Schedule',
+                        url: '/shift-management/schedule',
+                    },
+                    {
+                        text: 'Shift Request',
+                        url: '/shift-management/shift-request',
                     },
                 ]}
             />
-            <SwapShiftList allShift={allShift} />
+            <SwapShiftListTeam allShift={allShift} />
         </Box>
     );
 };
@@ -45,13 +48,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const start = format(startOfWeek(new Date()), 'yyyy-MM-dd');
         const end = format(endOfWeek(new Date()), 'yyyy-MM-dd');
-        const { id } = ctx.query;
+        const id = JSON.parse(ctx.req.cookies.user).id;
 
         console.log({ start, end });
         try {
-            const allShift = await ShiftService.getAllSwapShifts(
+            const allShift = await ShiftService.getUserSwapShifts(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                id,
             );
 
             return {

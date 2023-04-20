@@ -40,7 +40,6 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     const role = user?.role;
 
     console.log({ user });
-    
 
     const curPage = router.pathname.split('/').at(-1);
     const idPage = router.pathname.split('/').at(-2);
@@ -106,7 +105,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                 mx="auto"
                 pb=".5rem"
                 pt={['2.5rem', '1.5rem']}
-                ref={popover}
+                // ref={popover}
             >
                 <Box
                     cursor="pointer"

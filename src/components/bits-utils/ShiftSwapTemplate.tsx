@@ -10,7 +10,7 @@ interface swapProps {
 const ShiftSwapTemplate = ({ userName, userShift, status }: swapProps) => {
     return (
         <Box>
-            <HStack align="flex-end" mb="1rem">
+            <HStack align="flex-end" mb="0rem">
                 <Text
                     fontSize="14px"
                     letterSpacing="0.01em"

@@ -251,7 +251,7 @@ class ShiftManagementInterface extends Component<Props, State> {
         // console.log({ event, schedulerData });
 
         const divStyle = {
-            borderLeft: borderWidth + 'px solid ' + borderColor,
+            // borderLeft: borderWidth + 'px solid ' + borderColor,
             backgroundColor: bgColor,
             height: mustBeHeight,
         };
@@ -287,7 +287,7 @@ class ShiftManagementInterface extends Component<Props, State> {
         const hour = schedulerData.resources.filter(
             (x) => x.id == slot.slotId,
         )[0];
-        // console.log({ hour });
+        console.log({ hour });
 
         return (
             <Flex key={slot.id} className={clsName}>
@@ -301,8 +301,11 @@ class ShiftManagementInterface extends Component<Props, State> {
                     <Text fontWeight="600" mb="0">
                         {slot.slotName}
                     </Text>
+
                     <Text mb="0" color="#4FAA94">
-                        {`Shift: ${hour.hours}hours`}
+                        {hour.hours != undefined
+                            ? `Shift: ${hour.hours}hours`
+                            : ''}
                     </Text>
                 </VStack>
             </Flex>

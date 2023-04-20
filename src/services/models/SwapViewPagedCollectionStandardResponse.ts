@@ -3,9 +3,9 @@
 /* eslint-disable */
 
 import type { HttpStatusCode } from './HttpStatusCode';
-import type { ShiftViewPagedCollection } from './ShiftViewPagedCollection';
+import type { SwapViewPagedCollection } from './SwapViewPagedCollection';
 
-export type ShiftViewPagedCollectionStandardResponse = {
+export type SwapViewPagedCollectionStandardResponse = {
     href?: string | null;
     relations?: Array<string> | null;
     method?: string | null;
@@ -13,7 +13,7 @@ export type ShiftViewPagedCollectionStandardResponse = {
     routeValues?: any;
     status?: boolean;
     message?: string | null;
-    data?: ShiftViewPagedCollection;
+    data?: SwapViewPagedCollection;
     statusCode?: HttpStatusCode;
     errors?: any;
 };

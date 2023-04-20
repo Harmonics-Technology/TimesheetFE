@@ -16,9 +16,5 @@ export type ShiftView = {
     repeatQuery?: string | null;
     note?: string | null;
     isPublished?: boolean;
-    shiftToSwapId?: string | null;
-    shiftToSwap?: ShiftView;
-    isSwapped?: boolean;
-    swapStatusId?: number | null;
-    swapStatus?: string | null;
+    swapId?: string | null;
 };
