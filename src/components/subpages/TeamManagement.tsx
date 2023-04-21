@@ -851,7 +851,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 gap="1rem 2rem"
                             >
                                 <PrimaryInput<TeamMemberModel>
-                                    label="Number of days"
+                                    label="Eligible number of days"
                                     name="numberOfDaysEligible"
                                     error={errors.numberOfDaysEligible}
                                     placeholder=""
@@ -859,7 +859,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                     register={register}
                                 />
                                 <PrimaryInput<TeamMemberModel>
-                                    label="Number of hours"
+                                    label="Eligible number hours"
                                     name="numberOfHoursEligible"
                                     error={errors.numberOfHoursEligible}
                                     placeholder=""

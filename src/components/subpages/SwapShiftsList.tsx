@@ -30,13 +30,12 @@ import React, { useContext, useState } from 'react';
 import { BsDownload } from 'react-icons/bs';
 import { MdOutlineArrowBackIos } from 'react-icons/md';
 import {
-    ShiftViewPagedCollectionStandardResponse,
-    UserView,
     UsersShiftViewPagedCollectionStandardResponse,
+    UserView,
 } from 'src/services';
 
 interface employeeShiftProps {
-    allShift: ShiftViewPagedCollectionStandardResponse;
+    allShift: UsersShiftViewPagedCollectionStandardResponse;
 }
 
 export const SwapShiftList = ({ allShift }: employeeShiftProps) => {
@@ -58,7 +57,7 @@ export const SwapShiftList = ({ allShift }: employeeShiftProps) => {
         <Box
             bgColor="white"
             borderRadius="15px"
-            padding="1.5rem"
+            padding="1rem 0rem 0"
             // boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
             <Flex justify="space-between" mb="1.5rem" align="center">
@@ -104,7 +103,7 @@ export const SwapShiftList = ({ allShift }: employeeShiftProps) => {
             <ShiftFilter />
             <Tables tableHead={thead}>
                 <>
-                    {allShift?.data?.value?.map((x) => {
+                    {allShift?.data?.value?.map((x: any) => {
                         // setData(x);
                         return (
                             <Tr key={x.id}>
@@ -120,18 +119,20 @@ export const SwapShiftList = ({ allShift }: employeeShiftProps) => {
                                         x.shiftToSwap?.start,
                                     ).format('LT')}`}
                                 />
-                                <TableData name={x.title} />
+                                <TableData name={x.shift?.title} />
                                 <TableDataShiftDate
-                                    name={formatDate(x?.start)}
-                                    date={`${moment(x?.start).format(
+                                    name={formatDate(x?.shift?.start)}
+                                    date={`${moment(x?.shift?.start).format(
                                         'LT',
-                                    )} - ${moment(x?.start).format('LT')}`}
+                                    )} - ${moment(x?.shift?.start).format(
+                                        'LT',
+                                    )}`}
                                 />
-                                <TableData name={x.user?.fullName} />
+                                <TableData name={x?.shift?.user?.fullName} />
                                 <TableState
-                                    name={x.isSwapped ? 'APPROVED' : 'PENDING'}
+                                    name={x.isApproved ? 'APPROVED' : 'PENDING'}
                                 />
-                                <ShiftSwapActions id={x.shiftToSwapId} />
+                                <ShiftSwapActions id={x.id} />
                             </Tr>
                         );
                     })}

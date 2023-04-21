@@ -879,7 +879,7 @@ function TeamProfile({
                             {(isEligibleForLeave as unknown as string) ==
                                 'Yes' || eligible == true ? (
                                 <PrimaryInput<TeamMemberModel>
-                                    label="Number of days"
+                                    label="Eligibleb number of days"
                                     name="numberOfDaysEligible"
                                     error={errors.numberOfDaysEligible}
                                     placeholder=""
@@ -893,7 +893,7 @@ function TeamProfile({
                             {(isEligibleForLeave as unknown as string) ==
                                 'Yes' || eligible == true ? (
                                 <PrimaryInput<TeamMemberModel>
-                                    label="Number of hours"
+                                    label="Eligible number of hours"
                                     name="numberOfHoursEligible"
                                     error={errors.numberOfHoursEligible}
                                     placeholder=""

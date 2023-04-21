@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Flex,
+    Grid,
     HStack,
     Icon,
     Input,
@@ -20,12 +21,12 @@ import { BsFillInfoCircleFill } from 'react-icons/bs';
 import { MdCancel, MdVerified } from 'react-icons/md';
 import {
     ShiftService,
-    ShiftViewPagedCollectionStandardResponse,
+    UsersShiftViewPagedCollectionStandardResponse,
 } from 'src/services';
 import { useDebouncedCallback } from 'use-debounce';
 
 interface swapProps {
-    allShift: ShiftViewPagedCollectionStandardResponse;
+    allShift: UsersShiftViewPagedCollectionStandardResponse;
 }
 
 export const ShiftSwapList = ({ allShift }: swapProps) => {
@@ -112,14 +113,14 @@ export const ShiftSwapList = ({ allShift }: swapProps) => {
             </Flex>
 
             <Box>
-                {allShift?.data?.value?.filter((x) => !x.isSwapped).length !=
-                0 ? (
+                {allShift?.data?.value?.filter((x: any) => !x.isApproved)
+                    .length != 0 ? (
                     allShift.data?.value
-                        ?.filter((x) => !x.isSwapped)
-                        .map((x) => (
-                            <Flex
-                                justify="space-between"
-                                align="center"
+                        ?.filter((x: any) => !x.isApproved)
+                        .map((x: any) => (
+                            <Grid
+                                templateColumns={'repeat(5, 1fr)'}
+                                alignItems="center"
                                 borderBottom="1px solid #EBEFF2"
                                 py="1rem"
                             >
@@ -136,39 +137,44 @@ export const ShiftSwapList = ({ allShift }: swapProps) => {
                                     color="brand.400"
                                     fontWeight="700"
                                     fontSize="14px"
+                                    textAlign="center"
                                 >
                                     Swap Shift with
                                 </Text>
                                 <ShiftSwapTemplate
-                                    userName={x.user?.fullName}
-                                    userShift={`${x.title} ${moment(
+                                    userName={x.shift?.user?.fullName}
+                                    userShift={`${x.shift?.title} ${moment(
                                         x.start,
                                     ).format('ddd DD/MM/YYYY')}`}
-                                    status={x?.swapStatus}
+                                    status={x?.status.toLowerCase()}
                                 />
-                                <ShiftCustomBtn
-                                    name={x.isSwapped ? 'APPROVED' : 'PENDING'}
-                                />
+                                <Box mx="auto">
+                                    <ShiftCustomBtn
+                                        name={
+                                            x.isApproved
+                                                ? 'approved'
+                                                : 'pending'
+                                        }
+                                    />
+                                </Box>
 
-                                <HStack spacing=".5rem">
-                                    <ShiftCustomBtn
-                                        name={'Decline'}
-                                        icon={MdCancel}
-                                        onClick={() =>
-                                            treatSwap(x.shiftToSwapId, 2)
-                                        }
-                                        loading={loading}
-                                    />
-                                    <ShiftCustomBtn
-                                        name={'Approve'}
-                                    icon={MdVerified}
-                                        onClick={() =>
-                                            treatSwap(x.shiftToSwapId, 2)
-                                        }
-                                        loading={loading}
-                                    />
-                                </HStack>
-                            </Flex>
+                                {!x.isApproved && (
+                                    <HStack spacing=".5rem">
+                                        <ShiftCustomBtn
+                                            name={'decline'}
+                                            icon={MdCancel}
+                                            onClick={() => treatSwap(x.id, 3)}
+                                            loading={loading}
+                                        />
+                                        <ShiftCustomBtn
+                                            name={'approve'}
+                                            icon={MdVerified}
+                                            onClick={() => treatSwap(x.id, 2)}
+                                            loading={loading}
+                                        />
+                                    </HStack>
+                                )}
+                            </Grid>
                         ))
                 ) : (
                     <>

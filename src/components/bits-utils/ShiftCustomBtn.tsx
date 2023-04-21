@@ -18,11 +18,11 @@ export const ShiftCustomBtn = ({
         <Button
             fontSize="14px"
             bgColor={
-                name == 'ACTIVE' || name == 'APPROVED' || name == 'Approve'
+                name == 'ACTIVE' || name == 'approved' || name == 'approve'
                     ? 'brand.400'
-                    : name == 'PENDING'
+                    : name == 'pending'
                     ? 'brand.700'
-                    : name == 'Decline' || name == 'SUBMITTED'
+                    : name == 'decline' || name == 'SUBMITTED'
                     ? '#FF5B79'
                     : name == 'INVOICED'
                     ? '#28a3ef'

@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Flex,
+    Grid,
     HStack,
     Icon,
     Input,
@@ -20,12 +21,12 @@ import { BsFillInfoCircleFill } from 'react-icons/bs';
 import { MdCancel, MdVerified } from 'react-icons/md';
 import {
     ShiftService,
-    ShiftViewPagedCollectionStandardResponse,
+    UsersShiftViewPagedCollectionStandardResponse,
 } from 'src/services';
 import { useDebouncedCallback } from 'use-debounce';
 
 interface swapProps {
-    allShift: ShiftViewPagedCollectionStandardResponse;
+    allShift: UsersShiftViewPagedCollectionStandardResponse;
 }
 
 export const SwapShiftListTeam = ({ allShift }: swapProps) => {
@@ -113,100 +114,120 @@ export const SwapShiftListTeam = ({ allShift }: swapProps) => {
 
             <Box>
                 {allShift?.data?.value?.length != 0 ? (
-                    allShift?.data?.value?.map((x) => (
+                    allShift?.data?.value?.map((x: any) => (
                         <>
-                            <Flex
-                                justify="space-between"
-                                align="center"
-                                borderBottom="1px solid #EBEFF2"
-                                py="1rem"
-                            >
-                                <ShiftSwapTemplate
-                                    userName={
-                                        x.swapperId == user?.id
-                                            ? 'My'
-                                            : x.swapee?.fullName
-                                    }
-                                    userShift={`${
-                                        x.swapperId == user?.id
-                                            ? x.swapper?.title
-                                            : x.swapee.title
-                                    } ${moment(
-                                        x.swapperId == user?.id
-                                            ? x.swapper?.start
-                                            : x.swapee.start,
-                                    ).format('ddd DD/MM/YYYY')}`}
-                                />
-
-                                <Text
-                                    mb="0"
-                                    color="brand.400"
-                                    fontWeight="700"
-                                    fontSize="14px"
+                            {x.shiftToSwap.userId == user?.id ? (
+                                <Grid
+                                    templateColumns={'repeat(5,1fr)'}
+                                    alignItems="center"
+                                    borderBottom="1px solid #EBEFF2"
+                                    py="1rem"
                                 >
-                                    Swap Shift with
-                                </Text>
-                                {/* <ShiftSwapTemplate
-                                    userName={
-                                        x.swapperId == user?.id
-                                            ? 'My'
-                                            : x.shiftToSwap?.user?.fullName
-                                    }
-                                    userShift={`${
-                                        x.swapperId == user?.id
-                                            ? x.title
-                                            : x.shiftToSwap?.title
-                                    } ${moment(
-                                        x.swapperId == user?.id
-                                            ? x.start
-                                            : x.shiftToSwap?.start,
-                                    ).format('ddd DD/MM/YYYY')}`}
-                                    status={x?.swapStatus}
-                                /> */}
-                                <ShiftSwapTemplate
-                                    userName={
-                                        x.swapperId == user?.id
-                                            ? x.swapee?.fullName
-                                            : 'My'
-                                    }
-                                    userShift={`${
-                                        x.swapperId == user?.id
-                                            ? x.shiftToSwap?.title
-                                            : x.title
-                                    } ${moment(
-                                        x.swapperId == user?.id
-                                            ? x.shiftToSwap?.start
-                                            : x.start,
-                                    ).format('ddd DD/MM/YYYY')}`}
-                                    status={x?.swapStatus}
-                                />
+                                    <ShiftSwapTemplate
+                                        userName={'My'}
+                                        userShift={`${
+                                            x.shiftToSwap?.title
+                                        } ${moment(x.shiftToSwap?.start).format(
+                                            'ddd DD/MM/YYYY',
+                                        )}`}
+                                    />
 
-                                <ShiftCustomBtn name={x.status} />
+                                    <Text
+                                        mb="0"
+                                        color="brand.400"
+                                        fontWeight="700"
+                                        fontSize="14px"
+                                        textAlign="center"
+                                    >
+                                        Swap Shift with
+                                    </Text>
 
-                                <Box w="18%">
-                                    {x.swapperId != user?.id &&
-                                        x.status != 'APPROVED' && (
-                                            <HStack spacing=".5rem">
-                                                <ShiftCustomBtn
-                                                    name={'Decline'}
-                                                    icon={MdCancel}
-                                                    onClick={() =>
-                                                        treatSwap(x.id, 2)
-                                                    }
-                                                    loading={loading}
-                                                />
-                                                <ShiftCustomBtn
-                                                    name={'Approve'}
-                                                    icon={MdVerified}
-                                                    onClick={() =>
-                                                        treatSwap(x.id, 1)
-                                                    }
-                                                    loading={loading}
-                                                />
-                                            </HStack>
-                                        )}
-                                </Box>
-                            </Flex>
+                                    <ShiftSwapTemplate
+                                        userName={x.shift?.user?.fullName}
+                                        userShift={`${x.shift?.title} ${moment(
+                                            x.shift.start,
+                                        ).format('ddd DD/MM/YYYY')}`}
+                                        status={x?.status.toLowerCase()}
+                                    />
+
+                                    <Box mx="auto">
+                                        <ShiftCustomBtn
+                                            name={
+                                                x.isApproved
+                                                    ? 'approved'
+                                                    : 'pending'
+                                            }
+                                        />
+                                    </Box>
+
+                                    <Box></Box>
+                                </Grid>
+                            ) : (
+                                <Grid
+                                    templateColumns={'repeat(5,1fr)'}
+                                    alignItems="center"
+                                    borderBottom="1px solid #EBEFF2"
+                                    py="1rem"
+                                >
+                                    <ShiftSwapTemplate
+                                        userName={x.shiftToSwap?.user?.fullName}
+                                        userShift={`${
+                                            x.shiftToSwap?.title
+                                        } ${moment(x.shiftToSwap.start).format(
+                                            'ddd DD/MM/YYYY',
+                                        )}`}
+                                    />
+
+                                    <Text
+                                        mb="0"
+                                        color="brand.400"
+                                        fontWeight="700"
+                                        fontSize="14px"
+                                        textAlign="center"
+                                    >
+                                        Swap Shift with
+                                    </Text>
+
+                                    <ShiftSwapTemplate
+                                        userName={'My'}
+                                        userShift={`${x.shift?.title} ${moment(
+                                            x.shift?.start,
+                                        ).format('ddd DD/MM/YYYY')}`}
+                                        status={x.status.toLowerCase()}
+                                    />
+
+                                    <Box mx="auto">
+                                        <ShiftCustomBtn
+                                            name={
+                                                x.isApproved
+                                                    ? 'approved'
+                                                    : 'pending'
+                                            }
+                                        />
+                                    </Box>
+
+                                    {x.status.toLowerCase() != 'approved' && (
+                                        <HStack spacing=".5rem">
+                                            <ShiftCustomBtn
+                                                name={'decline'}
+                                                icon={MdCancel}
+                                                onClick={() =>
+                                                    treatSwap(x.id, 3)
+                                                }
+                                                loading={loading}
+                                            />
+                                            <ShiftCustomBtn
+                                                name={'approve'}
+                                                icon={MdVerified}
+                                                onClick={() =>
+                                                    treatSwap(x.id, 1)
+                                                }
+                                                loading={loading}
+                                            />
+                                        </HStack>
+                                    )}
+                                </Grid>
+                            )}
                         </>
                     ))
                 ) : (

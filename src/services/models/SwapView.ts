@@ -15,7 +15,6 @@ export type SwapView = {
     shift?: ShiftView;
     shiftToSwapId?: string;
     shiftToSwap?: ShiftView;
-    statusId?: number;
     status?: string | null;
     isApproved?: boolean;
 };

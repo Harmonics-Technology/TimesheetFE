@@ -25,7 +25,8 @@ const ShiftSwapTemplate = ({ userName, userShift, status }: swapProps) => {
                         letterSpacing="0.01em"
                         fontWeight="700"
                         mb="0"
-                        color={status == 'Accepted' ? 'brand.400' : '#c4c4c4'}
+                        textTransform="capitalize"
+                        color={status == 'approved' ? 'brand.400' : '#c4c4c4'}
                     >
                         {status}
                     </Text>

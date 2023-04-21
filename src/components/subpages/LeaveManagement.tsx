@@ -45,6 +45,7 @@ import { BsEye } from 'react-icons/bs';
 import { ShowLeaveDetailsModal } from '@components/bits-utils/ShowLeaveDetailsModal';
 import { UserContext } from '@components/context/UserContext';
 import { ActivateUserAlert } from '@components/bits-utils/ActivateUserAlert';
+import { DateObject } from 'react-multi-date-picker';
 
 const schema = yup.object().shape({
     endDate: yup.string().required(),
@@ -307,7 +308,7 @@ export const LeaveManagement = ({
                             name="startDate"
                             label={oneDay ? 'Leave Date' : 'Start Date'}
                             error={errors.startDate}
-                            // min={new Date()}
+                            min={new DateObject().add(3, 'days')}
                         />
                         {!oneDay && (
                             <PrimaryDate<LeaveModel>
@@ -315,7 +316,7 @@ export const LeaveManagement = ({
                                 name="endDate"
                                 label="End Date"
                                 error={errors.endDate}
-                                // min={new Date()}
+                                min={new DateObject().add(4, 'days')}
                             />
                         )}
                     </Grid>
