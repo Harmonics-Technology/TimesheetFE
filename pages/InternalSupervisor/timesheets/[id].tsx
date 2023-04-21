@@ -2,6 +2,7 @@ import HidePage from '@components/bits-utils/HidePage';
 import useWindowSize from '@components/generics/useWindowSize';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import TimesheetAdmin from '@components/subpages/TimesheetAdmin';
+import TimesheetSupervisor from '@components/subpages/TimesheetSupervisor';
 import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import React from 'react';
@@ -21,7 +22,7 @@ function SingleTimeSheet({
     const size: Size = useWindowSize();
     return (
         <>
-            <TimesheetAdmin timeSheets={timeSheets} id={id} />
+            <TimesheetSupervisor timeSheets={timeSheets} id={id} />
         </>
     );
 }

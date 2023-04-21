@@ -271,7 +271,7 @@ export const LeaveManagement = ({
                         label="Leave Type"
                         options={leavetypes?.value}
                         renderOption={(option, index) => {
-                            console.log({ option });
+                            // console.log({ option });
                             return (
                                 <Flex key={index} gap=".4rem">
                                     <IconPickerItem
