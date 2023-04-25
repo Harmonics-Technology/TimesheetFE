@@ -101,6 +101,7 @@ export const LeaveManagement = ({
     const role = user?.role.replaceAll(' ', '');
     const thead = [
         'Leave Type',
+        'User',
         'Start Date',
         'End Date',
         'No of Days',
@@ -168,7 +169,7 @@ export const LeaveManagement = ({
                                       url: '/leave-management',
                                   },
                               ]
-                            : role == 'Supervisor'
+                            : role == 'Supervisor' || role == 'SuperAdmin'
                             ? [
                                   {
                                       text: 'Leave Application',
@@ -188,7 +189,7 @@ export const LeaveManagement = ({
                     }
                 />
                 <Flex justify="space-between" my="1rem">
-                    {role != 'Supervisor' && (
+                    {role != 'Supervisor' && role != 'SuperAdmin' && (
                         <Button
                             bgColor="brand.400"
                             color="white"
@@ -226,14 +227,23 @@ export const LeaveManagement = ({
                                         {x?.leaveType?.name}
                                     </Flex>
                                 </td>
-
+                                <TableData
+                                    name={x.employeeInformation?.user?.fullName}
+                                />
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />
                                 <TableData
-                                    name={`${moment(x?.endDate).diff(
-                                        moment(x.startDate),
-                                        'days',
-                                    )} days`}
+                                    name={
+                                        moment(x?.endDate).diff(
+                                            moment(x.startDate),
+                                            'days',
+                                        ) == 0
+                                            ? '1 day'
+                                            : `${moment(x?.endDate).diff(
+                                                  moment(x.startDate),
+                                                  'days',
+                                              )} days`
+                                    }
                                 />
 
                                 <TableState name={x.status} />

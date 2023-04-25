@@ -56,6 +56,8 @@ import AdminPaymentScheduleModal from '@components/bits-utils/AdminPaymentSchedu
 import { subDays } from 'date-fns';
 import { formatDate } from '@components/generics/functions/formatDate';
 import TwoFaModal from '@components/bits-utils/TwoFaModal';
+import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
+import { Logout } from '@components/bits-utils/LogUserOut';
 
 const schema = yup.object().shape({
     dateOfBirth: yup.string().required(),
@@ -217,18 +219,33 @@ function MyProfile({
     } = useDisclosure();
     const [twoFaData, setTwoFaData] = useState<Enable2FAView>();
     const [loading, setLoading] = useState(false);
+    const [twofaState, settwofaState] = useState(
+        user?.twoFactorEnabled || false,
+    );
+    // console.log({ twoFaData, twofaState });
 
     const twoFaSubmitFun = async () => {
         setLoading(true);
         try {
-            const result = await UserService.enable2Fa();
+            const result = await UserService.enable2Fa(twofaState);
             if (result.status) {
-                console.log({ result });
-                setTwoFaData(result.data);
-                onOpen2Fa();
                 setLoading(false);
+                // console.log({ result });
+                if (result.data?.enable2FA) {
+                    setTwoFaData(result.data);
+                    onOpen2Fa();
+                    return;
+                }
+                toast({
+                    title: 'Successful, Please login again!',
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                Logout('/login');
                 return;
             }
+
             toast({
                 title: result.message,
                 status: 'error',
@@ -246,6 +263,10 @@ function MyProfile({
             setLoading(false);
         }
     };
+
+    useNonInitialEffect(() => {
+        twoFaSubmitFun();
+    }, [twofaState]);
 
     return (
         <Box>
@@ -574,7 +595,7 @@ function MyProfile({
                         >
                             <Switch
                                 id="email-alerts"
-                                onChange={() => twoFaSubmitFun()}
+                                onChange={() => settwofaState(!twofaState)}
                                 defaultChecked={
                                     user?.twoFactorEnabled == true
                                         ? true

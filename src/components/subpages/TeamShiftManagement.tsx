@@ -120,7 +120,7 @@ const TeamShiftManagement = ({ allShift, id, shiftUser }: shiftProps) => {
         resources: [
             {
                 id: id,
-                name: 'My Shift for the month of March',
+                name: 'My Shift For The Week',
             },
         ],
         // ResourceList,

@@ -501,13 +501,19 @@ endDate?: string,
     }
 
     /**
+     * @param is2FaEnabled 
      * @returns Enable2FAViewStandardResponse Success
      * @throws ApiError
      */
-    public static enable2Fa(): CancelablePromise<Enable2FAViewStandardResponse> {
+    public static enable2Fa(
+is2FaEnabled?: boolean,
+): CancelablePromise<Enable2FAViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/enable2fa',
+            query: {
+                'is2FAEnabled': is2FaEnabled,
+            },
         });
     }
 

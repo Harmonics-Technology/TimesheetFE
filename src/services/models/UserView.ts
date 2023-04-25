@@ -36,4 +36,5 @@ export type UserView = {
     numberOfDaysEligible?: number | null;
     numberOfLeaveDaysTaken?: number | null;
     numberOfHoursEligible?: number | null;
+    employeeType?: string | null;
 };

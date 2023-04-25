@@ -36,7 +36,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             w={['60%', '17%']}
             pos="fixed"
             left={[openSidenav ? '0%' : '-70%', 'unset']}
-            pl="2rem"
+            pl="1.5rem"
             transition="left .3s ease-out"
             pt="2rem"
             zIndex="985"
@@ -166,6 +166,16 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                    />
+                    <MenuItem
+                        change={change}
                         linkName="shift-management"
                         menuTitle="Shift Management"
                         icon={<AiFillSchedule opacity=".8" />}
@@ -236,16 +246,18 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         role={role}
                     />
-                    <MenuItem
-                        change={change}
-                        linkName="shift-management"
-                        menuTitle="Shift Management"
-                        icon={<AiFillSchedule opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        setOpenSidenav={setOpenSidenav}
-                        role={role}
-                    />
+                    {user?.employeeType?.toLowerCase() == 'shift' && (
+                        <MenuItem
+                            change={change}
+                            linkName="shift-management"
+                            menuTitle="Shift Management"
+                            icon={<AiFillSchedule opacity=".8" />}
+                            option={false}
+                            dropDown={[]}
+                            setOpenSidenav={setOpenSidenav}
+                            role={role}
+                        />
+                    )}
                     <MenuItem
                         change={change}
                         linkName="my-profile"

@@ -1,6 +1,7 @@
 import {
     Box,
     Flex,
+    Grid,
     Icon,
     Modal,
     ModalBody,
@@ -82,29 +83,46 @@ export const ShowLeaveDetailsModal = ({
                             >
                                 {status}
                             </Box>
-                            <SingleDetailsInfo
-                                label="Leave Type"
-                                content={data?.leaveType?.name}
-                                icon={data?.leaveType?.leaveTypeIcon}
-                            />
+                            <Grid
+                                templateColumns={'repeat(2,1fr)'}
+                                gap="1rem"
+                                w="full"
+                            >
+                                <SingleDetailsInfo
+                                    label="Leave Type"
+                                    content={data?.leaveType?.name}
+                                    icon={data?.leaveType?.leaveTypeIcon}
+                                />
+                                <SingleDetailsInfo
+                                    label="Leave Duration"
+                                    content={moment(data?.endDate).diff(
+                                        moment(data?.startDate),
+                                        'days',
+                                    )}
+                                />
+                                <SingleDetailsInfo
+                                    label="User"
+                                    content={
+                                        data?.employeeInformation?.user
+                                            ?.fullName
+                                    }
+                                />
+                                <SingleDetailsInfo
+                                    label="Work Assignee"
+                                    content={data?.workAssignee?.fullName}
+                                />
+                                <SingleDetailsInfo
+                                    label="Leave Start Date"
+                                    content={formatDate(data?.startDate)}
+                                />
+                                <SingleDetailsInfo
+                                    label="Leave End Date"
+                                    content={formatDate(data?.endDate)}
+                                />
+                            </Grid>
                             <SingleDetailsInfo
                                 label="Leave Reason"
                                 content={data?.reasonForLeave}
-                            />
-                            <SingleDetailsInfo
-                                label="Leave Start Date"
-                                content={formatDate(data?.startDate)}
-                            />
-                            <SingleDetailsInfo
-                                label="Leave End Date"
-                                content={formatDate(data?.endDate)}
-                            />
-                            <SingleDetailsInfo
-                                label="Leave Duration"
-                                content={moment(data?.endDate).diff(
-                                    moment(data?.startDate),
-                                    'days',
-                                )}
                             />
                         </VStack>
                     </Box>

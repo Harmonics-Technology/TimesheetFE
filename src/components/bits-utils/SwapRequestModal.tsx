@@ -410,7 +410,7 @@ export const SwapRequestModal = ({
                                     onClick={onClose}
                                 />
                                 <ShiftBtn
-                                    text="Add Shift"
+                                    text="Submit"
                                     bg="brand.400"
                                     onClick={handleSubmit(onSubmit)}
                                     loading={isSubmitting}

@@ -6,4 +6,5 @@ export type Enable2FAView = {
     qrCodeUrl?: string | null;
     alternativeKey?: string | null;
     secretKey?: string;
+    enable2FA?: boolean;
 };
