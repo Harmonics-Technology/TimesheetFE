@@ -567,6 +567,8 @@ const TimesheetAdmin = ({
             const close = useCallback(() => onClose(), []);
             const popover = useRef(null);
             useClickOutside(popover, close);
+            const notFilled =
+                moment(timesheets?.date) > moment(timesheets?.dateModified);
             // console.log({ timesheets });
 
             week.push(
@@ -765,9 +767,10 @@ const TimesheetAdmin = ({
                                 ) ===
                                     moment(preventTomorrow).format(
                                         'DD/MM/YYYY',
-                                    ) || // (notFilled && timesheets?.hours == 0)
-                                timesheets?.status == 'PENDING'
-                                    ? '---'
+                                    ) ||
+                                (notFilled && timesheets?.hours == 0)
+                                    ? // timesheets?.status == 'PENDING'
+                                      '---'
                                     : timesheets?.hours
                             }
                             placeholder="---"
