@@ -1,7 +1,9 @@
 import {
     Box,
+    Circle,
     Flex,
     Grid,
+    HStack,
     Icon,
     Modal,
     ModalBody,
@@ -68,21 +70,50 @@ export const ShowLeaveDetailsModal = ({
                 <ModalBody>
                     <Box maxH="77vh" overflowY="auto" px={[2, 5]}>
                         <VStack>
-                            <Box
-                                ml="auto"
-                                p=".5rem 1.5rem"
-                                borderRadius="25px"
-                                color="white"
-                                bgColor={
-                                    status == 'ACTIVE' || status == 'APPROVED'
-                                        ? 'brand.400'
-                                        : status == 'PENDING'
-                                        ? 'brand.700'
-                                        : 'red'
-                                }
+                            <HStack
+                                justify="flex-end"
+                                w="full"
+                                mb="1rem !important"
                             >
-                                {status}
-                            </Box>
+                                <Box
+                                    p=".5rem 1.5rem"
+                                    borderRadius="25px"
+                                    color="white"
+                                    fontSize=".9rem"
+                                    bgColor={
+                                        status == 'ACTIVE' ||
+                                        status == 'APPROVED'
+                                            ? 'brand.400'
+                                            : status == 'PENDING'
+                                            ? 'brand.700'
+                                            : 'red'
+                                    }
+                                >
+                                    {status}
+                                </Box>
+                                <VStack spacing="0">
+                                    <Circle
+                                        size="2rem"
+                                        bgColor="brand.400"
+                                        color="white"
+                                        fontSize=".9rem"
+                                    >
+                                        {
+                                            data?.employeeInformation
+                                                ?.numberOfDaysEligible
+                                        }
+                                    </Circle>
+                                    <Text
+                                        fontSize=".6rem"
+                                        textAlign="center"
+                                        mb="0"
+                                        fontWeight="bold"
+                                    >
+                                        Days eligible
+                                    </Text>
+                                </VStack>
+                            </HStack>
+
                             <Grid
                                 templateColumns={'repeat(2,1fr)'}
                                 gap="1rem"
