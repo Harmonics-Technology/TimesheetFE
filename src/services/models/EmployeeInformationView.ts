@@ -33,6 +33,12 @@ export type EmployeeInformationView = {
     monthlyPayoutRate?: number | null;
     paymentFrequency?: string | null;
     onBoradingFee?: number;
+    timeSheetGenerationStartDate?: string;
+    isEligibleForLeave?: boolean | null;
+    numberOfDaysEligible?: number | null;
+    numberOfHoursEligible?: number | null;
+    numberOfLeaveDaysTaken?: number;
+    employeeType?: string | null;
     contracts?: Array<ContractView> | null;
     dateCreated?: string;
 };

@@ -14,6 +14,7 @@ interface select {
     disabled?: boolean;
     searchable?: boolean;
     onRenderSelection?: any;
+    onRenderOption?: any;
 }
 import dynamic from 'next/dynamic';
 import { UserView } from 'src/services';
@@ -35,6 +36,9 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     disabled?: boolean;
     renderSelection?: any;
     customOnchange?: any;
+    searchable?: boolean;
+    renderOption?: any;
+    withIcon?: any;
 }
 export const SelectrixBox = <TFormValues extends Record<string, any>>({
     name,
@@ -49,17 +53,22 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
     disabled,
     renderSelection,
     customOnchange,
+    searchable = false,
+    renderOption,
+    withIcon = false,
 }: FormInputProps<TFormValues>) => {
     // console.log({ customOnchange });
     return (
         <FormControl isInvalid={error?.type === 'required'} minW="0">
-            <FormLabel
-                htmlFor={label}
-                textTransform="capitalize"
-                fontSize={fontSize}
-            >
-                {label}
-            </FormLabel>
+            {label && (
+                <FormLabel
+                    htmlFor={label}
+                    textTransform="capitalize"
+                    fontSize={fontSize}
+                >
+                    {label}
+                </FormLabel>
+            )}
 
             <Controller
                 render={({ field: { onChange } }) => (
@@ -76,16 +85,11 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                                 ? customOnchange
                                 : (value) => onChange(value.key)
                         }
-                        searchable={false}
+                        searchable={searchable}
                         onRenderSelection={
-                            renderSelection
-                                ? () => (
-                                      <Box className="react-selectrix rs-toggle">
-                                          {renderSelection}
-                                      </Box>
-                                  )
-                                : false
+                            renderSelection ? renderSelection : false
                         }
+                        onRenderOption={renderOption}
                     />
                 )}
                 name={name}

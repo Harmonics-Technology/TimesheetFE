@@ -14,4 +14,5 @@ export type NotificationView = {
     userId?: string;
     user?: User;
     isRead?: boolean;
+    dateCreated?: string;
 };

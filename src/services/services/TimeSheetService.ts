@@ -5,6 +5,8 @@ import type { BooleanStandardResponse } from '../models/BooleanStandardResponse'
 import type { RejectTimeSheetModel } from '../models/RejectTimeSheetModel';
 import type { TimeSheetApprovedViewPagedCollectionStandardResponse } from '../models/TimeSheetApprovedViewPagedCollectionStandardResponse';
 import type { TimeSheetHistoryViewPagedCollectionStandardResponse } from '../models/TimeSheetHistoryViewPagedCollectionStandardResponse';
+import type { TimesheetHoursAdditionModel } from '../models/TimesheetHoursAdditionModel';
+import type { TimesheetHoursApprovalModel } from '../models/TimesheetHoursApprovalModel';
 import type { TimeSheetMonthlyViewIEnumerableStandardResponse } from '../models/TimeSheetMonthlyViewIEnumerableStandardResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -104,44 +106,43 @@ date?: string,
 
     /**
      * @param employeeInformationId 
-     * @param date 
+     * @param requestBody 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static approveTimeSheetForADay(
 employeeInformationId?: string,
-date?: string,
+requestBody?: Array<TimesheetHoursApprovalModel>,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/TimeSheet/approve/daily',
             query: {
                 'employeeInformationId': employeeInformationId,
-                'date': date,
             },
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
         });
     }
 
     /**
      * @param employeeInformationId 
-     * @param date 
-     * @param hours 
+     * @param requestBody 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static addWorkHoursForADay(
 employeeInformationId?: string,
-date?: string,
-hours?: number,
+requestBody?: Array<TimesheetHoursAdditionModel>,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/TimeSheet/add-hour',
             query: {
                 'employeeInformationId': employeeInformationId,
-                'date': date,
-                'hours': hours,
             },
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
         });
     }
 

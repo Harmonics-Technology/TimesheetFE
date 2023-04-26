@@ -52,6 +52,7 @@ import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import Cookies from 'js-cookie';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -90,7 +91,21 @@ const schema = yup.object().shape({
     paymentFrequency: yup.string().required(),
     address: yup.string().required(),
     clientRate: yup.string().required(),
-    // onBordingFee: yup.string().required(),
+    timeSheetGenerationStartDate: yup.string().required(),
+    isEligibleForLeave: yup.string().required(),
+    employeeType: yup.string().required(),
+    numberOfDaysEligible: yup.string().when('isEligibleForLeave', {
+        is: 'Yes',
+        then: yup.string().required(),
+    }),
+    numberOfHoursEligible: yup.string().when('isEligibleForLeave', {
+        is: 'Yes',
+        then: yup.string().required(),
+    }),
+    onBordingFee: yup.string().when('fixedAmount', {
+        is: false,
+        then: yup.string().required(),
+    }),
 });
 
 function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
@@ -121,7 +136,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     const payroll = watch('payRollTypeId');
     const onboarding = watch('fixedAmount');
     const clientId = watch('clientId');
-    console.log({ payroll });
+    const isEligibleForLeave = watch('isEligibleForLeave');
 
     const [contract, setContractFile] = useState<any>('');
     const [icd, setIcd] = useState<any>('');
@@ -265,6 +280,11 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             (data.monthlyPayoutRate as unknown as string) == ''
                 ? (data.monthlyPayoutRate = 0)
                 : (data.monthlyPayoutRate as number);
+        }
+        {
+            (data?.isEligibleForLeave as unknown as string) == 'Yes'
+                ? (data.isEligibleForLeave = true)
+                : (data.isEligibleForLeave = false);
         }
         // data.clientId = null;
         console.log({ data });
@@ -634,6 +654,21 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 </>
                             ) : null}
 
+                            <SelectrixBox<TeamMemberModel>
+                                control={control}
+                                name="employeeType"
+                                error={errors.employeeType}
+                                keys="id"
+                                keyLabel="label"
+                                label="Employee Type"
+                                options={[
+                                    { id: 'regular', label: 'Regular' },
+                                    {
+                                        id: 'shift',
+                                        label: 'Shift',
+                                    },
+                                ]}
+                            />
                             <PrimaryInput<TeamMemberModel>
                                 label="Client Rate"
                                 name="clientRate"
@@ -736,24 +771,25 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 Contract Details
                             </Text>
                         </Flex>
+                        <PrimaryInput<TeamMemberModel>
+                            label="Contract Title"
+                            name="title"
+                            error={errors.title}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
                         <Grid
                             templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
+                            my="1.5rem"
                         >
-                            <PrimaryInput<TeamMemberModel>
-                                label="Contract Title"
-                                name="title"
-                                error={errors.title}
-                                placeholder=""
-                                defaultValue=""
-                                register={register}
-                            />
                             <PrimaryDate<TeamMemberModel>
                                 control={control}
                                 name="startDate"
                                 label="Start Date"
                                 error={errors.startDate}
-                                min={new Date()}
+                                // min={new Date()}
                             />
                             <PrimaryDate<TeamMemberModel>
                                 control={control}
@@ -761,6 +797,13 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 label="End Date"
                                 error={errors.endDate}
                                 min={new DateObject().add(3, 'days')}
+                            />
+                            <PrimaryDate<TeamMemberModel>
+                                control={control}
+                                name="timeSheetGenerationStartDate"
+                                label="Timesheet Start Date"
+                                error={errors.timeSheetGenerationStartDate}
+                                // min={new DateObject().add(3, 'days')}
                             />
                         </Grid>
                         <UploadCareWidget
@@ -770,6 +813,61 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                             loading={showLoading}
                             uploadFunction={showLoadingState}
                         />
+                    </Box>
+
+                    <Box w="full">
+                        <Flex
+                            justify="space-between"
+                            align="center"
+                            my="1rem"
+                            py="1rem"
+                            borderY="1px solid"
+                            borderColor="gray.300"
+                        >
+                            <Text
+                                textTransform="uppercase"
+                                mb="0"
+                                fontSize="1.3rem"
+                                fontWeight="500"
+                            >
+                                Leave Management
+                            </Text>
+                        </Flex>
+                        <Box mb="1.5rem">
+                            <PrimaryRadio
+                                label="Are you eligible for Leave"
+                                radios={['No', 'Yes']}
+                                name="isEligibleForLeave"
+                                control={control}
+                                error={errors.isEligibleForLeave}
+                            />
+                        </Box>
+                        {(isEligibleForLeave as unknown as string) == 'Yes' && (
+                            <Grid
+                                templateColumns={[
+                                    'repeat(1,1fr)',
+                                    'repeat(3,1fr)',
+                                ]}
+                                gap="1rem 2rem"
+                            >
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Eligible number of days"
+                                    name="numberOfDaysEligible"
+                                    error={errors.numberOfDaysEligible}
+                                    placeholder=""
+                                    defaultValue=""
+                                    register={register}
+                                />
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Eligible number hours"
+                                    name="numberOfHoursEligible"
+                                    error={errors.numberOfHoursEligible}
+                                    placeholder=""
+                                    defaultValue=""
+                                    register={register}
+                                />
+                            </Grid>
+                        )}
                     </Box>
 
                     <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">

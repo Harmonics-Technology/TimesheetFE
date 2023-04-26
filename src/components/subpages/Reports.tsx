@@ -23,8 +23,10 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { AiOutlineDownload } from 'react-icons/ai';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
+import CsvDownloader from 'react-csv-downloader';
 import {
     InvoiceView,
     PaySlipView,
@@ -47,6 +49,22 @@ export const Reports = ({ metrics, team, paymentPartner, chart }) => {
     useNonInitialEffect(() => {
         switchDate();
     }, [fromDate]);
+
+    const columns = [
+        {
+            id: 'month',
+            displayName: 'Month',
+        },
+        {
+            id: 'onShore',
+            displayName: 'Onshore',
+        },
+        {
+            id: 'offShore',
+            displayName: 'Offshore',
+        },
+    ];
+    const datas = chart.data;
     return (
         <Grid
             templateColumns={[
@@ -116,7 +134,7 @@ export const Reports = ({ metrics, team, paymentPartner, chart }) => {
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Text fontSize="13px" fontWeight="700">
-                    Reports Between Offshore & Onshore Team memebers for a
+                    Reports Between Offshore & Onshore Team members for a
                     Calendar
                 </Text>
                 <Box>
@@ -130,7 +148,15 @@ export const Reports = ({ metrics, team, paymentPartner, chart }) => {
                             <ChartLegend text="Onshore Team" color="#45DAB6" />
                             <ChartLegend text="Offshore Team" color="#28A3EF" />
                         </HStack>
-                        <Box>
+                        <HStack align="center">
+                            <CsvDownloader
+                                filename="Reports Between Offshore & Onshore Team members for a
+                                Calendar"
+                                columns={columns}
+                                datas={datas}
+                            >
+                                <Icon as={AiOutlineDownload} />
+                            </CsvDownloader>
                             <DatePicker
                                 value={fromDate}
                                 onChange={setFromDate}
@@ -164,7 +190,7 @@ export const Reports = ({ metrics, team, paymentPartner, chart }) => {
                                     );
                                 }}
                             />
-                        </Box>
+                        </HStack>
                     </Flex>
                     <Box h="290px" w="full">
                         <BarChart chart={chart} />
@@ -204,8 +230,8 @@ export const Reports = ({ metrics, team, paymentPartner, chart }) => {
                 link="/"
             />
             <ReportCards
-                title="Invoice recieved from payment partner Report"
-                url="financials/invoice-payment"
+                title="Invoice received from payment partner Report"
+                url="financials/invoices-payment"
                 data={paymentPartner?.data?.value
                     ?.slice(0, 4)
                     .map((x: InvoiceView) => (

@@ -152,36 +152,34 @@ function InvoiceTemplate({
                                             // 'Total',
                                         ]}
                                     >
-                                        <>
-                                            <Tr key={clicked?.id}>
-                                                <TableData
-                                                    name={
-                                                        clicked?.payrollGroupName ||
-                                                        clicked?.paymentPartnerName ||
-                                                        clicked?.name
-                                                    }
-                                                />
-                                                <TableData
-                                                    name={`${formatDate(
-                                                        clicked?.startDate,
-                                                    )} - ${formatDate(
-                                                        clicked?.endDate,
-                                                    )}`}
-                                                />
-                                                <TableData
-                                                    name={clicked?.invoiceType}
-                                                />
-                                                <TableData
-                                                    name={`${
-                                                        clicked
-                                                            ?.employeeInformation
-                                                            ?.currency
-                                                    } ${CUR(
-                                                        (clicked?.totalAmount as number) -
-                                                            (allExpenseTotal as number),
-                                                    )}`}
-                                                />
-                                                {/* <TableData
+                                        <Tr key={clicked?.id}>
+                                            <TableData
+                                                name={
+                                                    clicked?.payrollGroupName ||
+                                                    clicked?.paymentPartnerName ||
+                                                    clicked?.name
+                                                }
+                                            />
+                                            <TableData
+                                                name={`${formatDate(
+                                                    clicked?.startDate,
+                                                )} - ${formatDate(
+                                                    clicked?.endDate,
+                                                )}`}
+                                            />
+                                            <TableData
+                                                name={clicked?.invoiceType}
+                                            />
+                                            <TableData
+                                                name={`${
+                                                    clicked?.employeeInformation
+                                                        ?.currency
+                                                } ${CUR(
+                                                    (clicked?.totalAmount as number) -
+                                                        (allExpenseTotal as number),
+                                                )}`}
+                                            />
+                                            {/* <TableData
                                                     name={CAD(
                                                         clicked
                                                             ?.employeeInformation
@@ -202,8 +200,7 @@ function InvoiceTemplate({
                                                 <TableData
                                                     name={clicked?.totalPay}
                                                 /> */}
-                                            </Tr>
-                                        </>
+                                        </Tr>
                                     </Tables>
 
                                     <>
@@ -226,43 +223,41 @@ function InvoiceTemplate({
                                                         `Amount`,
                                                     ]}
                                                 >
-                                                    <>
-                                                        {clicked?.expenses?.map(
-                                                            (x) => (
-                                                                <Tr key={x?.id}>
-                                                                    <TableData
-                                                                        name={
-                                                                            x
-                                                                                .teamMember
-                                                                                ?.fullName
-                                                                        }
-                                                                    />
-                                                                    <TableData
-                                                                        name={formatDate(
-                                                                            x.expenseDate,
-                                                                        )}
-                                                                    />
-                                                                    <TableData
-                                                                        name={formatDate(
-                                                                            x.dateCreated,
-                                                                        )}
-                                                                    />
-                                                                    <TableData
-                                                                        name={
-                                                                            x.description
-                                                                        }
-                                                                    />
-                                                                    <TableData
-                                                                        name={`${
-                                                                            x?.currency
-                                                                        } ${CUR(
-                                                                            x?.amount,
-                                                                        )}`}
-                                                                    />
-                                                                </Tr>
-                                                            ),
-                                                        )}
-                                                    </>
+                                                    {clicked?.expenses?.map(
+                                                        (x) => (
+                                                            <Tr key={x?.id}>
+                                                                <TableData
+                                                                    name={
+                                                                        x
+                                                                            .teamMember
+                                                                            ?.fullName
+                                                                    }
+                                                                />
+                                                                <TableData
+                                                                    name={formatDate(
+                                                                        x.expenseDate,
+                                                                    )}
+                                                                />
+                                                                <TableData
+                                                                    name={formatDate(
+                                                                        x.dateCreated,
+                                                                    )}
+                                                                />
+                                                                <TableData
+                                                                    name={
+                                                                        x.description
+                                                                    }
+                                                                />
+                                                                <TableData
+                                                                    name={`${
+                                                                        x?.currency
+                                                                    } ${CUR(
+                                                                        x?.amount,
+                                                                    )}`}
+                                                                />
+                                                            </Tr>
+                                                        ),
+                                                    )}
                                                 </Tables>
                                             </>
                                         )}

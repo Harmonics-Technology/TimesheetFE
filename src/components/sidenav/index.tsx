@@ -2,7 +2,7 @@ import { Box, HStack, VStack, Text, Divider, Image } from '@chakra-ui/react';
 import { UserContext } from '@components/context/UserContext';
 import MenuItem from '@components/menu-item';
 import Link from 'next/link';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import {
     FaCalendar,
     FaCogs,
@@ -16,6 +16,7 @@ import {
 import { RiLineChartFill } from 'react-icons/ri';
 import { MdOutlineSupervisorAccount } from 'react-icons/md';
 import { BsGraphUp } from 'react-icons/bs';
+import { AiFillSchedule } from 'react-icons/ai';
 interface sidenavProps {
     openSidenav: boolean;
     setOpenSidenav: any;
@@ -26,6 +27,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
     const { user } = useContext(UserContext);
     // console.log({ user });
     const role = user?.role?.replaceAll(' ', '');
+
     return (
         <Box
             bgColor={change ? 'brand.400' : 'white'}
@@ -34,13 +36,12 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             w={['60%', '17%']}
             pos="fixed"
             left={[openSidenav ? '0%' : '-70%', 'unset']}
-            pl="2rem"
+            pl="1.5rem"
             transition="left .3s ease-out"
             pt="2rem"
             zIndex="985"
             overflowY="auto"
             boxShadow="sm"
-            // ref={ref}
         >
             <Link href="/" passHref>
                 <HStack>
@@ -148,6 +149,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'expense type',
                             'onboarding fees',
                             'hst settings',
+                            'leave type',
                         ]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
@@ -157,6 +159,26 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         linkName="report"
                         menuTitle="Reports"
                         icon={<BsGraphUp opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="shift-management"
+                        menuTitle="Shift Management"
+                        icon={<AiFillSchedule opacity=".8" />}
                         option={false}
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
@@ -216,6 +238,28 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                    />
+                    {user?.employeeType?.toLowerCase() == 'shift' && (
+                        <MenuItem
+                            change={change}
+                            linkName="shift-management"
+                            menuTitle="Shift Management"
+                            icon={<AiFillSchedule opacity=".8" />}
+                            option={false}
+                            dropDown={[]}
+                            setOpenSidenav={setOpenSidenav}
+                            role={role}
+                        />
+                    )}
+                    <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -270,6 +314,16 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['expenses']}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
                     />
                     <MenuItem
                         change={change}
@@ -352,6 +406,28 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         role={role}
                     />
+                    <MenuItem
+                        change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                    />
+                    {user?.employeeType?.toLowerCase() == 'shift' && (
+                        <MenuItem
+                            change={change}
+                            linkName="shift-management"
+                            menuTitle="Shift Management"
+                            icon={<AiFillSchedule opacity=".8" />}
+                            option={false}
+                            dropDown={[]}
+                            setOpenSidenav={setOpenSidenav}
+                            role={role}
+                        />
+                    )}
                     <MenuItem
                         change={change}
                         linkName="my-profile"
@@ -599,6 +675,28 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                    />
+                    {user?.employeeType?.toLowerCase() == 'shift' && (
+                        <MenuItem
+                            change={change}
+                            linkName="shift-management"
+                            menuTitle="Shift Management"
+                            icon={<AiFillSchedule opacity=".8" />}
+                            option={false}
+                            dropDown={[]}
+                            setOpenSidenav={setOpenSidenav}
+                            role={role}
+                        />
+                    )}
+                    <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -774,6 +872,28 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                     />
+                    <MenuItem
+                        change={change}
+                        linkName="leave-management"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                    />
+                    {user?.employeeType?.toLowerCase() == 'shift' && (
+                        <MenuItem
+                            change={change}
+                            linkName="shift-management"
+                            menuTitle="Shift Management"
+                            icon={<AiFillSchedule opacity=".8" />}
+                            option={false}
+                            dropDown={[]}
+                            setOpenSidenav={setOpenSidenav}
+                            role={role}
+                        />
+                    )}
                     <MenuItem
                         change={change}
                         linkName="my-profile"

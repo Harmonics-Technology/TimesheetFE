@@ -127,7 +127,7 @@ function SuperadminProfile({ userProfile }: SuperadminProfileProps) {
                         keyLabel="title"
                         label="Role"
                         placeholder={userProfile?.role as string}
-                        options={roles.slice(0, 4)}
+                        options={roles.slice(0, 3)}
                     />
 
                     <SelectrixBox<UpdateUserModel>

@@ -33,4 +33,8 @@ export type UserView = {
     term?: number | null;
     twoFactorCode?: string;
     twoFactorEnabled?: boolean;
+    numberOfDaysEligible?: number | null;
+    numberOfLeaveDaysTaken?: number | null;
+    numberOfHoursEligible?: number | null;
+    employeeType?: string | null;
 };

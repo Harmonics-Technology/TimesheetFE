@@ -20,7 +20,7 @@ import { MdCancel } from 'react-icons/md';
 import { CgNotes } from 'react-icons/cg';
 import Cookies from 'js-cookie';
 import { FaRegCalendarAlt } from 'react-icons/fa';
-import DatePicker, { DateObject } from 'react-multi-date-picker';
+import DatePicker from 'react-multi-date-picker';
 import BeatLoader from 'react-spinners/BeatLoader';
 
 interface ExportProps {
@@ -86,7 +86,7 @@ export const ExportReportModal = ({
 
     const header = selectedId.map((e) => `rowHeaders=${e}`).join('&');
 
-    const payrollGroupId = payPartner && `PayrollGroupId=${paygroupId}`;
+    // const payrollGroupId = payPartner && `PayrollGroupId=${paygroupId}`;
 
     const exportData = async () => {
         if (startDate == undefined || endDate == undefined) {
@@ -129,7 +129,7 @@ export const ExportReportModal = ({
             'GET',
             `${
                 (process.env.NEXT_PUBLIC_API_BASEURL as string) ||
-            'https://timesheetapiprod.azurewebsites.net'
+                'https://timesheetapiprod.azurewebsites.net'
             }/api/export/${model}?Record=${record}&${
                 payPartner && `PayrollGroupId=${paygroupId}`
             }&${header}&StartDate=${startDate}&EndDate=${endDate}`,

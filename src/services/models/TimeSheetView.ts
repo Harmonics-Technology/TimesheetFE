@@ -17,5 +17,7 @@ export type TimeSheetView = {
     totalHours?: number | null;
     expectedPayout?: number | null;
     actualPayout?: number | null;
+    onLeaveAndEligibleForLeave?: boolean;
+    onLeave?: boolean;
     dateModified?: string;
 };

@@ -59,7 +59,7 @@ function TwoFaModal({
     const [otp, setOtp] = useState<any>();
     const { user, setUser } = useContext(UserContext);
     const twoFactorCode = user?.twoFactorCode;
-    console.log({ twoFactorCode });
+    // console.log({ twoFactorCode });
     const [codeText, setCodeText] = useState(false);
     const [step, setStep] = useState(0);
     const nextStep = () => {
@@ -164,7 +164,9 @@ function TwoFaModal({
                                 <Text>
                                     To enable 2FA, you need to install an
                                     authenticator app like Microsoft
-                                    authenticator, or Google Authenticator.
+                                    authenticator, or Google Authenticator on
+                                    your smart phone (App Store or Google play
+                                    store).
                                 </Text>
                             </Box>
                         ) : step == 1 ? (

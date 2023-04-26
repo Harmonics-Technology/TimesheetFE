@@ -83,7 +83,7 @@ export const ReportCards = ({
                 justify={hides ? 'space-between' : 'flex-end'}
                 mb="1rem"
                 flexWrap="wrap"
-                gap='.5rem'
+                gap=".5rem"
             >
                 <HStack
                     fontSize=".8rem"
@@ -249,9 +249,7 @@ export const ReportCards = ({
             </Flex>
 
             <Tables tableHead={thead}>
-                <Link href={link} key={1}>
-                    <>{data}</>
-                </Link>
+                <>{data}</>
             </Tables>
         </Box>
     );

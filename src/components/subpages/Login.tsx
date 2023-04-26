@@ -167,7 +167,7 @@ function Login() {
                             </Checkbox>
                             <NextLink href="/forgot-password" passHref>
                                 <Link fontSize="1rem" fontWeight="semibold">
-                                    I forgot my password
+                                    Forgot Password?
                                 </Link>
                             </NextLink>
                         </Flex>

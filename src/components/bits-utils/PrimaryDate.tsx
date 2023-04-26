@@ -1,4 +1,10 @@
-import { FormControl, FormLabel, GridItem, Text } from '@chakra-ui/react';
+import {
+    FormControl,
+    FormErrorMessage,
+    FormLabel,
+    GridItem,
+    Text,
+} from '@chakra-ui/react';
 import useWindowSize from '@components/generics/useWindowSize';
 import { Controller, Path, FieldError, Control } from 'react-hook-form';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
@@ -38,50 +44,50 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
     const size: Size = useWindowSize();
     const isMobile = size.width != null && size.width <= 750;
     return (
-        <GridItem>
-            <FormControl>
-                <FormLabel
-                    htmlFor={label}
-                    textTransform="capitalize"
-                    width="fit-content"
-                    fontSize={fontSize}
-                >
-                    {label}
-                </FormLabel>
-                <Controller
-                    control={control}
-                    name={name}
-                    rules={{ required: true }} //optional
-                    render={({ field: { onChange, value } }) => (
-                        <>
-                            <DatePicker
-                                value={
-                                    defaultValue || value || new DateObject()
-                                }
-                                onChange={(date: any) => {
-                                    onChange(
-                                        JSON.stringify(
-                                            date?.toDate?.(),
-                                        )?.replaceAll('"', ''),
-                                    );
-                                }}
-                                format={'DD/MM/YYYY'}
-                                inputClass={'date'}
-                                containerClassName="dateWrapper"
-                                hideOnScroll={isMobile ? false : true}
-                                placeholder={placeholder}
-                                minDate={min}
-                                maxDate={max}
-                                disabled={disabled}
-                            />
-                        </>
-                    )}
-                />
-            </FormControl>
-            <Text fontSize=".7rem" color="red">
+        <FormControl
+            isInvalid={
+                error?.type === 'required' || error?.message !== undefined
+            }
+        >
+            <FormLabel
+                htmlFor={label}
+                textTransform="capitalize"
+                width="fit-content"
+                fontSize={fontSize}
+            >
+                {label}
+            </FormLabel>
+            <Controller
+                control={control}
+                name={name}
+                rules={{ required: true }} //optional
+                render={({ field: { onChange, value } }) => (
+                    <>
+                        <DatePicker
+                            value={defaultValue || value || new DateObject()}
+                            onChange={(date: any) => {
+                                onChange(
+                                    JSON.stringify(
+                                        date?.toDate?.(),
+                                    )?.replaceAll('"', ''),
+                                );
+                            }}
+                            format={'DD/MM/YYYY'}
+                            inputClass={'date'}
+                            containerClassName="dateWrapper"
+                            hideOnScroll={isMobile ? false : true}
+                            placeholder={placeholder}
+                            minDate={min}
+                            maxDate={max}
+                            disabled={disabled}
+                        />
+                    </>
+                )}
+            />
+            <FormErrorMessage fontSize=".7rem" color="red">
                 {(error?.type === 'required' && `${label} is required`) ||
                     error?.message}
-            </Text>
-        </GridItem>
+            </FormErrorMessage>
+        </FormControl>
     );
 };

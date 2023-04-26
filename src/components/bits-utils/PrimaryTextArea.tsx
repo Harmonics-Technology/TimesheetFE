@@ -73,6 +73,10 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
                     resize="none"
                     fontSize={fontsize}
                     focusBorderColor="none"
+                    _focusVisible={{
+                        borderColor: 'gray.300',
+                        boxShadow: 'none',
+                    }}
                     w={w}
                     // bgColor="rgba(25,25,25,.03)"
                     // borderColor="transparent"

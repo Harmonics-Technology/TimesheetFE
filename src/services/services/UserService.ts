@@ -6,6 +6,7 @@ import type { InitiateResetModel } from '../models/InitiateResetModel';
 import type { LoginModel } from '../models/LoginModel';
 import type { PasswordReset } from '../models/PasswordReset';
 import type { RegisterModel } from '../models/RegisterModel';
+import type { ShiftUsersListViewPagedCollectionStandardResponse } from '../models/ShiftUsersListViewPagedCollectionStandardResponse';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
 import type { UpdateUserModel } from '../models/UpdateUserModel';
 import type { UserCountByPayrollTypeViewListStandardResponse } from '../models/UserCountByPayrollTypeViewListStandardResponse';
@@ -348,6 +349,32 @@ clientId: string,
     /**
      * @param offset 
      * @param limit 
+     * @param startDate 
+     * @param endDate 
+     * @returns ShiftUsersListViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listShiftUsers(
+offset?: number,
+limit?: number,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<ShiftUsersListViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/shift-users',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'startDate': startDate,
+                'endDate': endDate,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
      * @param search 
      * @param supervisorId 
      * @param startDate 
@@ -474,13 +501,19 @@ endDate?: string,
     }
 
     /**
+     * @param is2FaEnabled 
      * @returns Enable2FAViewStandardResponse Success
      * @throws ApiError
      */
-    public static enable2Fa(): CancelablePromise<Enable2FAViewStandardResponse> {
+    public static enable2Fa(
+is2FaEnabled?: boolean,
+): CancelablePromise<Enable2FAViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/enable2fa',
+            query: {
+                'is2FAEnabled': is2FaEnabled,
+            },
         });
     }
 

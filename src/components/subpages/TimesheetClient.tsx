@@ -222,7 +222,7 @@ const TimesheetSupervisor = ({
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
-                item.userId,
+                // item.userId,
                 item.chosenDate,
                 item.hours,
             );
@@ -510,6 +510,8 @@ const TimesheetSupervisor = ({
             const close = useCallback(() => onClose(), []);
             const popover = useRef(null);
             useClickOutside(popover, close);
+            const notFilled =
+                moment(timesheets?.date) > moment(timesheets?.dateModified);
             // console.log({ timesheets });
 
             week.push(
@@ -706,8 +708,12 @@ const TimesheetSupervisor = ({
                                 moment(timesheets?.date).format(
                                     'DD/MM/YYYY',
                                 ) ===
-                                    moment(preventTomorrow).format('DD/MM/YYYY')
-                                    ? '---'
+                                    moment(preventTomorrow).format(
+                                        'DD/MM/YYYY',
+                                    ) ||
+                                (notFilled && timesheets?.hours == 0)
+                                    ? // timesheets?.status == 'PENDING'
+                                      '---'
                                     : timesheets?.hours
                             }
                             placeholder="---"
