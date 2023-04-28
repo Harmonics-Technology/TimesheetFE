@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { useForm } from 'react-hook-form';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
@@ -24,6 +24,7 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { UserContext } from '@components/context/UserContext';
 import { OpenAPI, UserService, UserViewStandardResponse } from 'src/services';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
 
 const schema = yup.object().shape({
     email: yup.string().required('Email is required'),
@@ -36,16 +37,24 @@ function Login() {
     const path = Cookies.get('path') as string;
     const toast = useToast();
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
+    const [rememberMe, setRememberMe] = useState(false);
+    const [rememberedData, setRememberedData] = useState<any>();
+    console.log({ rememberedData });
     const changeInputType = () => {
         setPasswordVisible(!passwordVisible);
     };
     const {
         handleSubmit,
         register,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<LoginModel>({
         resolver: yupResolver(schema),
         mode: 'all',
+        defaultValues: {
+            email: rememberedData?.email,
+            password: rememberedData?.pass,
+        },
     });
     const onSubmit = async (data: LoginModel) => {
         try {
@@ -53,7 +62,18 @@ function Login() {
                 data,
             )) as UserViewStandardResponse;
             if (result.status) {
+                if (rememberMe) {
+                    Cookies.set(
+                        'details',
+                        JSON.stringify({
+                            email: data.email,
+                            pass: data.password,
+                            rememberMe: rememberMe,
+                        }),
+                    );
+                }
                 setUser(result.data);
+
                 Cookies.set('user', JSON.stringify(result.data));
                 OpenAPI.TOKEN = result?.data?.token as string;
                 result.data &&
@@ -95,6 +115,15 @@ function Login() {
             });
         }
     };
+    console.log(watch('email'));
+
+    useEffect(() => {
+        const isUser = Cookies.get('details');
+        if (isUser !== undefined) {
+            const userDetails = JSON.parse(isUser as unknown as string);
+            setRememberedData(userDetails);
+        }
+    }, []);
     return (
         <Flex w="full" h="100vh" justify="center" alignItems="center">
             <Box
@@ -123,7 +152,7 @@ function Login() {
                             register={register}
                             name="email"
                             error={errors.email}
-                            defaultValue=""
+                            defaultValue={''}
                             type="email"
                             placeholder="Email"
                             label="Email Address"
@@ -133,7 +162,7 @@ function Login() {
                             register={register}
                             name="password"
                             error={errors.password}
-                            defaultValue=""
+                            defaultValue={''}
                             placeholder="*********"
                             type={passwordVisible ? 'text' : 'password'}
                             icon={true}
@@ -162,6 +191,8 @@ function Login() {
                                 borderRadius="5px"
                                 size="md"
                                 textTransform="capitalize"
+                                onChange={() => setRememberMe(!rememberMe)}
+                                // isChecked={rememberedData?.rememberMe}
                             >
                                 remember me.
                             </Checkbox>

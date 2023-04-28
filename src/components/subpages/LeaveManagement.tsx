@@ -239,10 +239,12 @@ export const LeaveManagement = ({
                                             'days',
                                         ) == 0
                                             ? '1 day'
-                                            : `${moment(x?.endDate).diff(
-                                                  moment(x.startDate),
-                                                  'days',
-                                              )} days`
+                                            : `${
+                                                  moment(x?.endDate).diff(
+                                                      moment(x.startDate),
+                                                      'days',
+                                                  ) + 1
+                                              } days`
                                     }
                                 />
 
