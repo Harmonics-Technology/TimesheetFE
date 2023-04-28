@@ -39,7 +39,7 @@ function Login() {
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [rememberedData, setRememberedData] = useState<any>();
-    console.log({ rememberedData });
+    // console.log({ rememberedData });
     const changeInputType = () => {
         setPasswordVisible(!passwordVisible);
     };
@@ -115,7 +115,7 @@ function Login() {
             });
         }
     };
-    console.log(watch('email'));
+    // console.log(watch('email'));
 
     useEffect(() => {
         const isUser = Cookies.get('details');
