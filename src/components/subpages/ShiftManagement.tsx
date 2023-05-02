@@ -191,13 +191,13 @@ const ShiftManagement = ({ allShift, shiftUser }: shiftProps) => {
         <>
             <Flex justify="flex-end" borderBottom="1px solid #EBEFF2">
                 <HStack py=".5rem">
-                    <ShiftBtn text="Add New Shift" onClick={onOpen} />
+                    <ShiftBtn text="Add New Shift" onClick={() => onOpen()} />
                     <ShiftBtn
                         text="Print"
                         bg="header.200"
-                        onClick={handlePrint}
+                        onClick={() => handlePrint()}
                     />
-                    <ShiftBtn text="Publish Shift" onClick={opens} />
+                    <ShiftBtn text="Publish Shift" onClick={() => opens()} />
                 </HStack>
             </Flex>
             <Box ref={componentRef}>
