@@ -230,6 +230,9 @@ export const LeaveManagement = ({
                                 <TableData
                                     name={x.employeeInformation?.user?.fullName}
                                 />
+                                {/* <TableData
+                                    name={x.workAssignee?.fullName}
+                                /> */}
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />
                                 <TableData

@@ -65,6 +65,7 @@ function ActivateUserPage({
     id,
 }: ActivateUserPageProps) {
     const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
+    console.log({ userProfile, supervisor, paymentPartner });
     const {
         register,
         handleSubmit,
@@ -263,7 +264,7 @@ function ActivateUserPage({
                     desc=" This user has already been activated by an admin"
                     url={`/${role}/dashboard`}
                     link={true}
-                    btn="Go to Dashboard"
+                    btnLink="Go to Dashboard"
                     color={'success'}
                 />
             )}
@@ -789,7 +790,7 @@ function ActivateUserPage({
                         >
                             <PrimaryRadio
                                 label="Are you eligible for Leave"
-                                radios={[{ text: 'No' }, { text: 'Yes' }]}
+                                radios={['No', 'Yes']}
                                 name="isEligibleForLeave"
                                 control={control}
                                 error={errors.isEligibleForLeave}
