@@ -99,17 +99,41 @@ export const LeaveManagement = ({
     });
     const route = router.asPath;
     const role = user?.role.replaceAll(' ', '');
-    const thead = [
-        'Leave Type',
-        'User',
-        'Start Date',
-        'End Date',
-        'No of Days',
-        'Status',
-        'Action',
-        '',
-    ];
-
+    const thead =
+        role == 'TeamMember'
+            ? [
+                  'Leave Type',
+                  'Work Assignee',
+                  // 'Supervisor',
+                  'Start Date',
+                  'End Date',
+                  'Total Days',
+                  'Status',
+                  'Action',
+              ]
+            : role == 'Supervisor'
+            ? [
+                  'Employee',
+                  'Leave Type',
+                  'Work Assignee',
+                  // 'Supervisor',
+                  'Start Date',
+                  'End Date',
+                  'Total Days',
+                  'Status',
+                  'Action',
+              ]
+            : [
+                  'Employee',
+                  'Leave Type',
+                  'Work Assignee',
+                  'Supervisor',
+                  'Start Date',
+                  'End Date',
+                  'Total Days',
+                  'Status',
+                  'Action',
+              ];
     const [data, setDate] = useState<any>();
     const openModal = (x) => {
         setDate(x);
@@ -166,24 +190,32 @@ export const LeaveManagement = ({
                             ? [
                                   {
                                       text: 'Leave Status',
-                                      url: '/leave-management',
+                                      url: '/leave/management',
                                   },
                               ]
                             : role == 'Supervisor' || role == 'SuperAdmin'
                             ? [
                                   {
                                       text: 'Leave Application',
-                                      url: '/leave-management',
+                                      url: '/leave/management',
+                                  },
+                                  {
+                                      text: 'Leave History',
+                                      url: '/leave/history',
                                   },
                               ]
                             : [
                                   {
                                       text: 'Leave Application',
-                                      url: '/leave-application',
+                                      url: '/leave/application',
                                   },
                                   {
                                       text: 'Leave Status',
-                                      url: '/leave-management',
+                                      url: '/leave/management',
+                                  },
+                                  {
+                                      text: 'Leave History',
+                                      url: '/leave/history',
                                   },
                               ]
                     }
@@ -218,6 +250,15 @@ export const LeaveManagement = ({
                     <>
                         {leavelist?.data?.value?.map((x: LeaveView) => (
                             <Tr key={x.id}>
+                                {role !== 'TeamMember' && (
+                                    <TableData
+                                        name={
+                                            x.employeeInformation?.user
+                                                ?.fullName
+                                        }
+                                    />
+                                )}
+
                                 <td>
                                     <Flex align="center" gap=".5rem">
                                         <IconPickerItem
@@ -227,24 +268,28 @@ export const LeaveManagement = ({
                                         {x?.leaveType?.name}
                                     </Flex>
                                 </td>
-                                <TableData
-                                    name={x.employeeInformation?.user?.fullName}
-                                />
-                                {/* <TableData
-                                    name={x.workAssignee?.fullName}
-                                /> */}
-                                <TableData name={formatDate(x.startDate)} />
-                                <TableData name={formatDate(x.endDate)} />
+                                <TableData name={x.workAssignee?.fullName} />
+                                {role == 'SuperAdmin' && (
+                                    <TableData
+                                        name={
+                                            x.employeeInformation?.supervisor
+                                                ?.fullName
+                                        }
+                                    />
+                                )}
+
+                                <TableData name={formatDate(x?.startDate)} />
+                                <TableData name={formatDate(x?.endDate)} />
                                 <TableData
                                     name={
                                         moment(x?.endDate).diff(
-                                            moment(x.startDate),
+                                            moment(x?.startDate),
                                             'days',
                                         ) == 0
                                             ? '1 day'
                                             : `${
                                                   moment(x?.endDate).diff(
-                                                      moment(x.startDate),
+                                                      moment(x?.startDate),
                                                       'days',
                                                   ) + 1
                                               } days`
@@ -252,15 +297,12 @@ export const LeaveManagement = ({
                                 />
 
                                 <TableState name={x.status} />
-                                <td>
-                                    <Icons
-                                        as={BsEye}
-                                        onClick={() => openModal(x)}
-                                        cursor="pointer"
-                                    />
-                                </td>
 
-                                <LeaveActions id={x.id} route={route} />
+                                <LeaveActions
+                                    id={x.id}
+                                    route={route}
+                                    click={() => openModal(x)}
+                                />
                             </Tr>
                         ))}
                     </>

@@ -106,12 +106,14 @@ date?: string,
 
     /**
      * @param employeeInformationId 
+     * @param date 
      * @param requestBody 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static approveTimeSheetForADay(
 employeeInformationId?: string,
+date?: string,
 requestBody?: Array<TimesheetHoursApprovalModel>,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
@@ -119,6 +121,7 @@ requestBody?: Array<TimesheetHoursApprovalModel>,
             url: '/api/TimeSheet/approve/daily',
             query: {
                 'employeeInformationId': employeeInformationId,
+                'date': date,
             },
             body: requestBody,
             mediaType: 'application/json-patch+json',
@@ -127,12 +130,14 @@ requestBody?: Array<TimesheetHoursApprovalModel>,
 
     /**
      * @param employeeInformationId 
+     * @param date 
      * @param requestBody 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static addWorkHoursForADay(
 employeeInformationId?: string,
+date?: string,
 requestBody?: Array<TimesheetHoursAdditionModel>,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
@@ -140,6 +145,7 @@ requestBody?: Array<TimesheetHoursAdditionModel>,
             url: '/api/TimeSheet/add-hour',
             query: {
                 'employeeInformationId': employeeInformationId,
+                'date': date,
             },
             body: requestBody,
             mediaType: 'application/json-patch+json',
@@ -377,6 +383,26 @@ endDate?: string,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
+            },
+        });
+    }
+
+    /**
+     * @param date 
+     * @param employeeInformationId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static createTimeSheetForADay(
+date?: string,
+employeeInformationId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/TimeSheet/create-timesheet-for-a-day',
+            query: {
+                'date': date,
+                'employeeInformationId': employeeInformationId,
             },
         });
     }

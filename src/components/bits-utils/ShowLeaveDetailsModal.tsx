@@ -20,6 +20,7 @@ import { LeaveView } from 'src/services';
 import moment from 'moment';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { TableState } from './TableData';
+import { IconPickerItem } from 'react-icons-picker';
 
 interface ExportProps {
     isOpen: any;
@@ -44,8 +45,8 @@ export const ShowLeaveDetailsModal = ({
 
             <ModalContent
                 py={5}
-                borderRadius="0px"
-                w={['88%', '50%']}
+                borderRadius="10px"
+                w={['88%', '30%']}
                 // overflow="hidden"
                 maxH="100vh"
                 pos="fixed"
@@ -54,12 +55,17 @@ export const ShowLeaveDetailsModal = ({
                 maxW="100%"
             >
                 <ModalHeader textAlign="center">
-                    <Flex justify="space-between">
+                    <Flex
+                        justify="space-between"
+                        mx="1rem"
+                        borderBottom="2px solid"
+                        borderColor="gray.300"
+                    >
                         <Text
                             color="black"
                             fontSize="1.1rem"
                             textAlign="left"
-                            fontWeight="semibold"
+                            fontWeight="bold"
                         >
                             Leave Details
                         </Text>
@@ -68,53 +74,103 @@ export const ShowLeaveDetailsModal = ({
                 </ModalHeader>
 
                 <ModalBody>
-                    <Box maxH="77vh" overflowY="auto" px={[2, 5]}>
+                    <Box maxH="77vh" overflowY="auto" px={[2, 2]}>
                         <VStack>
-                            <HStack
-                                justify="flex-end"
-                                w="full"
-                                mb="1rem !important"
-                            >
-                                <Box
-                                    p=".5rem 1.5rem"
-                                    borderRadius="25px"
-                                    color="white"
-                                    fontSize=".9rem"
-                                    bgColor={
-                                        status == 'ACTIVE' ||
-                                        status == 'APPROVED'
-                                            ? 'brand.400'
-                                            : status == 'PENDING'
-                                            ? 'brand.700'
-                                            : 'red'
-                                    }
-                                >
-                                    {status}
-                                </Box>
-                                <VStack spacing="0">
-                                    <Circle
-                                        size="2rem"
-                                        bgColor="brand.400"
-                                        color="white"
-                                        fontSize=".9rem"
+                            <HStack justify="space-between" w="full" px=".7rem">
+                                <Box>
+                                    <Text
+                                        fontSize="1.1rem"
+                                        fontWeight="bold"
+                                        mb=".5rem"
                                     >
                                         {
-                                            data?.employeeInformation
-                                                ?.numberOfDaysEligible
+                                            data?.employeeInformation?.user
+                                                ?.fullName
                                         }
-                                    </Circle>
-                                    <Text
-                                        fontSize=".6rem"
-                                        textAlign="center"
-                                        mb="0"
-                                        fontWeight="bold"
-                                    >
-                                        Days eligible
                                     </Text>
-                                </VStack>
+                                    <Flex align="center" gap=".5rem">
+                                        <IconPickerItem
+                                            value={
+                                                data?.leaveType?.leaveTypeIcon
+                                            }
+                                            color="#2EAFA3"
+                                        />
+                                        <Text mb="0" fontSize=".8rem">
+                                            {data?.leaveType?.name}
+                                        </Text>
+                                    </Flex>
+                                </Box>
+                                <Box textAlign="right">
+                                    <Text fontSize=".8rem">
+                                        Leave Application Date
+                                    </Text>
+                                    <Text fontSize=".6rem">
+                                        {formatDate(data?.dateCreated)}
+                                    </Text>
+                                </Box>
                             </HStack>
+                            <VStack
+                                spacing="0"
+                                border="1px solid"
+                                borderColor="gray.100"
+                                gap="1rem"
+                                w="full"
+                                p=".8rem 1rem"
+                            >
+                                <SingleDetailsInfo
+                                    label="Status"
+                                    content={''}
+                                    icon={data?.status}
+                                />
+                                <SingleDetailsInfo
+                                    label="Start Date"
+                                    content={formatDate(data?.startDate)}
+                                />
+                                <SingleDetailsInfo
+                                    label="End Date"
+                                    content={formatDate(data?.endDate)}
+                                />
+                                <SingleDetailsInfo
+                                    label="Duration"
+                                    content={moment(data?.endDate).diff(
+                                        moment(data?.startDate),
+                                        'days',
+                                    )}
+                                />
+                                <SingleDetailsInfo
+                                    label="Supervisor"
+                                    content={
+                                        data?.employeeInformation?.supervisor
+                                            ?.fullName
+                                    }
+                                />
+                                <SingleDetailsInfo
+                                    label="Total No of eligible leave"
+                                    content={
+                                        data?.employeeInformation
+                                            ?.numberOfDaysEligible || 0
+                                    }
+                                />
+                                <SingleDetailsInfo
+                                    label="Number of eligible leave used"
+                                    content={
+                                        data?.employeeInformation
+                                            ?.numberOfLeaveDaysTaken || 0
+                                    }
+                                />
+                                <SingleDetailsInfo
+                                    label="Current eligible leave balance"
+                                    content={
+                                        (data?.employeeInformation
+                                            ?.numberOfDaysEligible as number) -
+                                            (data?.employeeInformation
+                                                ?.numberOfLeaveDaysTaken as number) ||
+                                        0
+                                    }
+                                />
+                            </VStack>
 
-                            <Grid
+                            {/* <Grid
                                 templateColumns={'repeat(2,1fr)'}
                                 gap="1rem"
                                 w="full"
@@ -142,19 +198,11 @@ export const ShowLeaveDetailsModal = ({
                                     label="Work Assignee"
                                     content={data?.workAssignee?.fullName}
                                 />
-                                <SingleDetailsInfo
-                                    label="Leave Start Date"
-                                    content={formatDate(data?.startDate)}
-                                />
-                                <SingleDetailsInfo
-                                    label="Leave End Date"
-                                    content={formatDate(data?.endDate)}
-                                />
-                            </Grid>
-                            <SingleDetailsInfo
+                            </Grid> */}
+                            {/* <SingleDetailsInfo
                                 label="Leave Reason"
                                 content={data?.reasonForLeave}
-                            />
+                            /> */}
                         </VStack>
                     </Box>
                 </ModalBody>

@@ -172,7 +172,8 @@ select option {
     align-items: center;
     display: flex;
 }
-.react-selectrix.rs-toggle {
+.react-selectrix.rs-toggle,
+.react-selectrix .rs-header {
     height: 2.6rem;
     display: flex;
     align-items: center;
