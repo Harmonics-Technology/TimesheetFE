@@ -238,7 +238,7 @@ export const AddShiftModal = ({
                                         error={errors.userId}
                                         keys="userId"
                                         keyLabel="fullName"
-                                        options={user.data?.value}
+                                        options={user?.data?.value}
                                         placeholder={
                                             data?.slotName || 'Select a user'
                                         }

@@ -25,6 +25,9 @@
 .scheduler-view {
     border: 0 !important;
 }
+.scheduler-view div {
+    overflow: hidden !important;
+}
 .resource-view {
     border: 0 !important;
 }

@@ -198,6 +198,7 @@ const TimesheetTeam = ({
                 setLoading(true);
                 const data = await TimeSheetService.addWorkHoursForADay(
                     id,
+                    selectedInput.at(0)?.date,
                     selectedInput,
                 );
                 console.log({ data });

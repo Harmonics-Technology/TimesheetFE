@@ -259,6 +259,7 @@ const TimesheetSupervisor = ({
                 setLoading(true);
                 const data = await TimeSheetService.approveTimeSheetForADay(
                     id,
+                    selected.at(0)?.date,
                     selected,
                 );
                 console.log({ data });

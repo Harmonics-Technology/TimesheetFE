@@ -250,6 +250,7 @@ const TimesheetAdmin = ({
                 setLoading(true);
                 const data = await TimeSheetService.approveTimeSheetForADay(
                     id,
+                    selected.at(0)?.date,
                     selected,
                 );
                 console.log({ data });
@@ -313,6 +314,7 @@ const TimesheetAdmin = ({
                 setLoading(true);
                 const data = await TimeSheetService.addWorkHoursForADay(
                     id,
+                    selectedInput.at(0)?.date,
                     selectedInput,
                 );
                 console.log({ data });
