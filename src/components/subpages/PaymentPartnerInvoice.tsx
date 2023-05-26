@@ -29,6 +29,7 @@ import { useRouter } from 'next/router';
 import Paymentinvoices from './Paymentinvoices';
 import Naira, { CAD } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { Round } from '@components/generics/functions/Round';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -170,11 +171,19 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                                 />
                                 <TableData name={x.invoiceReference} />
                                 <TableData name={formatDate(x.dateCreated)} />
-                                <TableData name={CAD(x.totalAmount)} />
+                                <TableData
+                                    name={CAD(
+                                        Round(
+                                            (x.totalAmount as number) /
+                                                (x.rate as unknown as number),
+                                        ),
+                                    )}
+                                />
                                 <TableData
                                     name={Naira(
-                                        (x.totalAmount as number) *
-                                            (x.rate as unknown as number),
+                                        x.totalAmount as number,
+                                        // *
+                                        //     (x.rate as unknown as number),
                                     )}
                                 />
                                 <TableState name={x.status as string} />

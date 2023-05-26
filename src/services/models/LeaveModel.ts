@@ -9,4 +9,5 @@ export type LeaveModel = {
     endDate?: string;
     reasonForLeave?: string | null;
     workAssigneeId?: string | null;
+    noOfLeaveDaysApplied?: number;
 };

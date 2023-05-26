@@ -46,9 +46,10 @@ import { ShowLeaveDetailsModal } from '@components/bits-utils/ShowLeaveDetailsMo
 import { UserContext } from '@components/context/UserContext';
 import { ActivateUserAlert } from '@components/bits-utils/ActivateUserAlert';
 import { DateObject } from 'react-multi-date-picker';
+import getBusinessDateCount from '@components/bits-utils/GetBusinessDays';
 
 const schema = yup.object().shape({
-    endDate: yup.string().required(),
+    // endDate: yup.string().required(),
     startDate: yup.string().required(),
     leaveTypeId: yup.string().required(),
     reasonForLeave: yup.string().required(),
@@ -139,13 +140,16 @@ export const LeaveManagement = ({
         setDate(x);
         onOpens();
     };
-    console.log(watch('leaveTypeId'));
 
     const onSubmit = async (data: LeaveModel) => {
         oneDay == true && (data.endDate = data.startDate);
         data.leaveTypeId = leavetypes.value?.filter(
             (x) => x.name == data.leaveTypeId,
         )[0].id;
+        data.noOfLeaveDaysApplied = getBusinessDateCount(
+            new Date(data?.startDate as unknown as Date),
+            new Date(data?.endDate as unknown as Date),
+        );
 
         try {
             const result = await LeaveService.createLeave(data);
@@ -280,7 +284,7 @@ export const LeaveManagement = ({
 
                                 <TableData name={formatDate(x?.startDate)} />
                                 <TableData name={formatDate(x?.endDate)} />
-                                <TableData
+                                {/* <TableData
                                     name={
                                         moment(x?.endDate).diff(
                                             moment(x?.startDate),
@@ -294,6 +298,14 @@ export const LeaveManagement = ({
                                                   ) + 1
                                               } days`
                                     }
+                                /> */}
+                                <TableData
+                                    name={getBusinessDateCount(
+                                        new Date(
+                                            x?.startDate as unknown as Date,
+                                        ),
+                                        new Date(x?.endDate as unknown as Date),
+                                    )}
                                 />
 
                                 <TableState name={x.status} />
@@ -366,6 +378,7 @@ export const LeaveManagement = ({
                             label={oneDay ? 'Leave Date' : 'Start Date'}
                             error={errors.startDate}
                             min={new DateObject().add(3, 'days')}
+                            disableWeekend
                         />
                         {!oneDay && (
                             <PrimaryDate<LeaveModel>
@@ -374,6 +387,7 @@ export const LeaveManagement = ({
                                 label="End Date"
                                 error={errors.endDate}
                                 min={new DateObject().add(4, 'days')}
+                                disableWeekend
                             />
                         )}
                     </Grid>
@@ -400,7 +414,9 @@ export const LeaveManagement = ({
                             keys="id"
                             keyLabel="fullName"
                             label="Work Assignee"
-                            options={teamMembers?.data?.value}
+                            options={teamMembers?.data?.value.filter(
+                                (x) => x.id !== id,
+                            )}
                             searchable
                         />
                         {/* {role != 'TeamMember' && (

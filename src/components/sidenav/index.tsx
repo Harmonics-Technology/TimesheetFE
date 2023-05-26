@@ -67,6 +67,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     align="left"
                     gap={change ? '.5rem' : '1.5rem'}
                     pr="1rem"
+                    pb="5rem"
                 >
                     <MenuItem
                         change={change}

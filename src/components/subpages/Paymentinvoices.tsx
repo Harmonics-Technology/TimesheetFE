@@ -221,8 +221,10 @@ function Paymentinvoices({
                                                         />
                                                         <TableData
                                                             name={CAD(
-                                                                (x?.totalAmount as number) /
-                                                                    exchangeRate,
+                                                                Round(
+                                                                    (x?.totalAmount as number) /
+                                                                        exchangeRate,
+                                                                ),
                                                             )}
                                                         />
                                                         <TableData
