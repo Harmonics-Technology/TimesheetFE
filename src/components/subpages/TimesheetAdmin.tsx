@@ -34,7 +34,7 @@ import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
 } from '@components/bits-utils/TimeSheetEstimation';
 import {
-    RejectTimeSheetModel,
+    RejectTimesheetModel,
     TimeSheetMonthlyView,
     TimeSheetService,
     TimeSheetView,
@@ -150,37 +150,47 @@ const TimesheetAdmin = ({
         handleSubmit,
         control,
         formState: { errors, isSubmitting },
-    } = useForm<RejectTimeSheetModel>({
+    } = useForm<RejectTimesheetModel>({
         resolver: yupResolver(schema),
         mode: 'all',
         defaultValues: {},
     });
 
-    const [reject, setReject] = useState<any>({
-        userId: '',
-        date: '',
-    });
-    const showReject = (userId, date) => {
-        console.log({ date });
-        setReject({ userId, date });
+    const [reject, setReject] = useState<any>([]);
+    const showReject = (userId, chosenDate) => {
+        const existing = reject.find((x) => x.userId == userId);
+        if (existing) {
+            setReject(reject.filter((x) => x.user !== userId));
+            return;
+        }
+        setReject([...reject, { userId, chosenDate }]);
+        // setReject({ userId, chosenDate });
     };
 
-    const onSubmit = async (data: RejectTimeSheetModel) => {
-        data.date = reject.date;
-        data.employeeInformationId = reject.userId;
+    const onSubmit = async (data: RejectTimesheetModel) => {
+        data.timeSheets = reject.map((x) => {
+            return {
+                employeeInformationId: x.userId,
+                date: x.chosenDate,
+            };
+        });
         console.log({ data });
         try {
-            const result = await TimeSheetService.rejectTimeSheetForADay(data);
+            const result = await TimeSheetService.rejectTimeSheetForADay(
+                id,
+                reject.at(0)?.chosenDate,
+                data,
+            );
             if (result.status) {
                 console.log({ result });
                 router.reload();
                 return;
             }
             console.log({ result });
-        } catch (error) {
-            console.log({ error });
+        } catch (error: any) {
+            // console.log({ error });
             toast({
-                title: 'An error occured',
+                title: error?.body?.message || error?.message,
                 status: 'error',
                 position: 'top-right',
             });
@@ -250,6 +260,7 @@ const TimesheetAdmin = ({
                 setLoading(true);
                 const data = await TimeSheetService.approveTimeSheetForADay(
                     id,
+                    selected.at(0)?.date,
                     selected,
                 );
                 console.log({ data });
@@ -313,6 +324,7 @@ const TimesheetAdmin = ({
                 setLoading(true);
                 const data = await TimeSheetService.addWorkHoursForADay(
                     id,
+                    selectedInput.at(0)?.date,
                     selectedInput,
                 );
                 console.log({ data });
@@ -681,10 +693,10 @@ const TimesheetAdmin = ({
                                         <FaTimes />
                                     </Flex>
                                     <form onSubmit={handleSubmit(onSubmit)}>
-                                        <PrimaryTextarea<RejectTimeSheetModel>
+                                        <PrimaryTextarea<RejectTimesheetModel>
                                             label="Reason"
                                             name="reason"
-                                            error={errors.reason}
+                                            error={errors?.reason}
                                             placeholder=""
                                             defaultValue=""
                                             h="3.5rem"

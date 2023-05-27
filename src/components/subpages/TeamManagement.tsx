@@ -859,7 +859,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                     register={register}
                                 />
                                 <PrimaryInput<TeamMemberModel>
-                                    label="Eligible number hours"
+                                    label="Eligible number of hours"
                                     name="numberOfHoursEligible"
                                     error={errors.numberOfHoursEligible}
                                     placeholder=""

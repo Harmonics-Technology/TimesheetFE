@@ -5,10 +5,9 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 interface pageOptions {
     data: any;
-    shift?: boolean;
 }
 
-function Pagination({ data, shift }: pageOptions) {
+function Shift({ data }: pageOptions) {
     data = data?.data;
     console.log({ data });
     const totalPages =
@@ -28,34 +27,27 @@ function Pagination({ data, shift }: pageOptions) {
     const previous = data?.previous?.href;
     const last = data?.last?.href;
 
-    const paginate = async (direction: 'next' | 'previous' | 'last') => {
+    const paginate = (direction: 'next' | 'previous' | 'last') => {
         let link = '';
         if (direction == 'previous' && previous != null) {
             link = previous?.split('?')[1] ?? false;
-            shift
-                ? (window.location.href = `?limit=${data.limit}&offset=${
-                      data.previousOffset || 0
-                  }`)
-                : router.push({
-                      query: {
-                          ...router.query,
-                          limit: data.limit,
-                          offset: data.previousOffset,
-                      },
-                  });
+            router.push({
+                query: {
+                    ...router.query,
+                    limit: data.limit,
+                    offset: data.previousOffset,
+                },
+            });
         }
         if (direction == 'next' && next != null) {
             link = next?.split('?')[1] ?? false;
-            shift
-                ? (window.location.href = `?limit=${data.limit}&offset=${data.nextOffset}`)
-                : router.push({
-                      query: {
-                          ...router.query,
-                          limit: data.limit,
-                          offset: data.nextOffset,
-                      },
-                  });
-            // shift && router.reload();
+            router.push({
+                query: {
+                    ...router.query,
+                    limit: data.limit,
+                    offset: data.nextOffset,
+                },
+            });
         }
         if (direction == 'last' && last != null) {
             link = last?.split('?')[1] ?? false;
@@ -76,14 +68,6 @@ function Pagination({ data, shift }: pageOptions) {
             gap="1rem"
             flexDirection={['column', 'row']}
         >
-            <Text
-                fontSize=".9rem"
-                color="brand.300"
-                mb="0"
-                display={dashboard ? 'none' : 'block'}
-            >
-                Showing {current} to {pageSize} of {total} entries
-            </Text>
             {totalPages > 1 && (
                 <HStack cursor="pointer">
                     <Button
@@ -141,4 +125,4 @@ function Pagination({ data, shift }: pageOptions) {
     );
 }
 
-export default Pagination;
+export default Shift;

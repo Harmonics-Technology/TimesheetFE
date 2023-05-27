@@ -2,8 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type RejectTimeSheetModel = {
+export type RejectTimeSheetData = {
     employeeInformationId?: string;
     date?: string;
-    reason?: string | null;
 };

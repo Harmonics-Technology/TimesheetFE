@@ -67,6 +67,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     align="left"
                     gap={change ? '.5rem' : '1.5rem'}
                     pr="1rem"
+                    pb="5rem"
                 >
                     <MenuItem
                         change={change}
@@ -166,7 +167,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
-                        linkName="leave-management"
+                        linkName="leave"
                         menuTitle="Leave Management"
                         icon={<FaFile opacity=".8" />}
                         option={false}
@@ -238,7 +239,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
-                        linkName="leave-management"
+                        linkName="leave"
                         menuTitle="Leave Management"
                         icon={<FaFile opacity=".8" />}
                         option={false}
@@ -317,7 +318,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
-                        linkName="leave-management"
+                        linkName="leave"
                         menuTitle="Leave Management"
                         icon={<FaFile opacity=".8" />}
                         option={false}
@@ -408,7 +409,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
-                        linkName="leave-management"
+                        linkName="leave"
                         menuTitle="Leave Management"
                         icon={<FaFile opacity=".8" />}
                         option={false}
@@ -675,7 +676,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
-                        linkName="leave-management"
+                        linkName="leave"
                         menuTitle="Leave Management"
                         icon={<FaFile opacity=".8" />}
                         option={false}
@@ -874,7 +875,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
-                        linkName="leave-management"
+                        linkName="leave"
                         menuTitle="Leave Management"
                         icon={<FaFile opacity=".8" />}
                         option={false}

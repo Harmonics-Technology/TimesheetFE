@@ -879,7 +879,7 @@ function TeamProfile({
                             {(isEligibleForLeave as unknown as string) ==
                                 'Yes' || eligible == true ? (
                                 <PrimaryInput<TeamMemberModel>
-                                    label="Eligibleb number of days"
+                                    label="Eligible number of days"
                                     name="numberOfDaysEligible"
                                     error={errors.numberOfDaysEligible}
                                     placeholder=""

@@ -100,7 +100,8 @@ export const GenerateInvoiceModal = ({
             calculatePercentage(allInvoiceTotal, hstAmount?.fee) / exchangeRate,
         ) || 0;
     const hstNaira = Number(hst * exchangeRate);
-    const total = Number((allInvoiceTotal + hstNaira) / exchangeRate) || 0;
+    // const total = Number((allInvoiceTotal + hstNaira) / exchangeRate) || 0;
+    const total = Number(allInvoiceTotal / exchangeRate) || 0;
     // console.log({
     //     exchangeRate,
     //     total,
@@ -110,7 +111,8 @@ export const GenerateInvoiceModal = ({
     // });
 
     const onSubmit = async (data: PaymentPartnerInvoiceModel) => {
-        (data.invoiceIds = invoicesId), (data.totalAmount = total);
+        data.invoiceIds = invoicesId;
+        data.totalAmount = Number(allInvoiceTotal);
         console.log({ data });
         try {
             const result = await FinancialService.createPaymentPartnerInvoice(
@@ -323,11 +325,10 @@ export const GenerateInvoiceModal = ({
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
-                                            value={
-                                                hst == Infinity
-                                                    ? 0
-                                                    : Round(hst)
-                                            }
+                                            // value={
+                                            //     hst == Infinity ? 0 : Round(hst)
+                                            // }
+                                            value={0}
                                             cur={'$'}
                                         />
                                         {/* <InvoiceTotalText

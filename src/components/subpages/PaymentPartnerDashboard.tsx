@@ -85,7 +85,7 @@ function PaymentPartnerDashboard({
                     <TableCards
                         title={'Recent Payroll'}
                         url={'viewpayroll'}
-                        data={metrics.data?.recentPayroll
+                        data={metrics?.data?.recentPayroll
                             ?.slice(0, 5)
                             .map((x: any, i) => (
                                 <Tr key={i}>
@@ -193,7 +193,7 @@ function PaymentPartnerDashboard({
                     >
                         <Text mb="0">1 CAD</Text>
                         <Icon as={RiExchangeLine} />{' '}
-                        <Text mb="0">{result.data.rate - 12} NGN</Text>
+                        <Text mb="0">{result?.data.rate - 12} NGN</Text>
                     </HStack>
                     <Button
                         fontSize=".8rem"

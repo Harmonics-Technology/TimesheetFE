@@ -19,7 +19,7 @@ interface TablesProps {
 }
 
 function Tables({ tableHead, children }: TablesProps) {
-    // console.log({ children });
+    console.log({ children });
     return (
         <TableContainer h="auto">
             <Table variant="striped" fontSize="11px">
@@ -43,7 +43,9 @@ function Tables({ tableHead, children }: TablesProps) {
 
                 {
                     //@ts-ignore
-                    children?.props?.children?.length > 0 ? (
+                    children?.props?.children?.length > 0 ||
+                    //@ts-ignore
+                    children[0]?.props?.children?.length > 0 ? (
                         <Tbody>{children}</Tbody>
                     ) : (
                         <TableNoContentWrapper

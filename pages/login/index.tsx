@@ -1,4 +1,8 @@
-import Login from "@components/subpages/Login";
+import dynamic from 'next/dynamic';
+
+const Login = dynamic(() => import('@components/subpages/Login'), {
+    ssr: false,
+});
 
 function index() {
     return <Login />;

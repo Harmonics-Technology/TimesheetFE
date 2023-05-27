@@ -20,7 +20,7 @@ interface MenuProps {
     dropDown: string[];
     role?: string;
     change?: boolean;
-    setOpenSidenav;
+    setOpenSidenav: any;
 }
 function MenuItem({
     menuTitle,

@@ -18,6 +18,9 @@ import {
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
 import ScheduleData from '@components/bits-utils/ScheduleData';
+import ShiftPagination from '@components/bits-utils/ShiftPagination';
+import Pagination from '@components/bits-utils/Pagination';
+import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
 
 interface shiftProps {
     allShift: ShiftViewListStandardResponse;
@@ -187,17 +190,21 @@ const ShiftManagement = ({ allShift, shiftUser }: shiftProps) => {
     const role = user?.role?.replaceAll(' ', '');
     const url = `${role}/shift-management/schedule`;
 
+    useNonInitialEffect(() => {
+        router.reload();
+    }, [router.isReady]);
+
     return (
         <>
             <Flex justify="flex-end" borderBottom="1px solid #EBEFF2">
                 <HStack py=".5rem">
-                    <ShiftBtn text="Add New Shift" onClick={onOpen} />
+                    <ShiftBtn text="Add New Shift" onClick={() => onOpen()} />
                     <ShiftBtn
                         text="Print"
                         bg="header.200"
-                        onClick={handlePrint}
+                        onClick={() => handlePrint()}
                     />
-                    <ShiftBtn text="Publish Shift" onClick={opens} />
+                    <ShiftBtn text="Publish Shift" onClick={() => opens()} />
                 </HStack>
             </Flex>
             <Box ref={componentRef}>
@@ -211,6 +218,7 @@ const ShiftManagement = ({ allShift, shiftUser }: shiftProps) => {
                     deleteShiftItem={deleteShiftItem}
                 />
             </Box>
+            <Pagination data={shiftUser} shift />
 
             <AddShiftModal
                 isOpen={isOpen}

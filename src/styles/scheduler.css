@@ -25,6 +25,9 @@
 .scheduler-view {
     border: 0 !important;
 }
+.scheduler-view div {
+    overflow: hidden !important;
+}
 .resource-view {
     border: 0 !important;
 }
@@ -48,7 +51,8 @@ table.resource-table tbody tr td {
 .resource-table tbody {
     border: 1px solid rgb(233, 233, 233) !important;
 }
-.ant-radio-button-wrapper.css-dev-only-do-not-override-htwhyh {
+.ant-radio-button-wrapper.css-dev-only-do-not-override-htwhyh,
+.ant-radio-button-wrapper.css-htwhyh {
     border: 0 !important;
     height: 3rem !important;
     background-color: #f0f0f0 !important;
@@ -58,12 +62,17 @@ table.resource-table tbody tr td {
     display: flex;
     align-items: center;
 }
-.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.css-dev-only-do-not-override-htwhyh {
+.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.css-dev-only-do-not-override-htwhyh,
+.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.css-htwhyh {
     background-color: #2eafa3 !important;
     color: white !important;
 }
-.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.css-dev-only-do-not-override-htwhyh::before {
+.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.css-dev-only-do-not-override-htwhyh::before,
+.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.css-htwhyh::before {
     display: none !important;
+}
+:where(.css-htwhyh).ant-radio-button-wrapper > .ant-radio-button {
+    position: relative !important;
 }
 .anticon {
     background-color: #f0f0f0 !important;
@@ -83,7 +92,8 @@ table.resource-table tbody tr td {
     font-family: 'Rubik';
     font-size: 15px;
 }
-.ant-col.css-dev-only-do-not-override-htwhyh {
+.ant-col.css-dev-only-do-not-override-htwhyh,
+.ant-col.css-htwhyh {
     position: unset !important;
 }
 .header3-text {

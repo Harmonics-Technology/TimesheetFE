@@ -21,6 +21,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     max?: any;
     disabled?: boolean;
     defaultValue?: string;
+    disableWeekend?: boolean;
 }
 
 interface Size {
@@ -39,6 +40,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
     max,
     disabled,
     defaultValue,
+    disableWeekend,
 }: FormInputProps<TFormValues>) => {
     // console.log({ defaultValue });
     const size: Size = useWindowSize();
@@ -80,6 +82,17 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                             minDate={min}
                             maxDate={max}
                             disabled={disabled}
+                            mapDays={({ date }) => {
+                                const isWeekend = [0, 6].includes(
+                                    date.weekDay.index,
+                                );
+
+                                if (disableWeekend && isWeekend)
+                                    return {
+                                        disabled: true,
+                                        style: { color: '#ccc' },
+                                    };
+                            }}
                         />
                     </>
                 )}

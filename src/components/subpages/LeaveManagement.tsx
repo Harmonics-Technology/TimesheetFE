@@ -46,9 +46,10 @@ import { ShowLeaveDetailsModal } from '@components/bits-utils/ShowLeaveDetailsMo
 import { UserContext } from '@components/context/UserContext';
 import { ActivateUserAlert } from '@components/bits-utils/ActivateUserAlert';
 import { DateObject } from 'react-multi-date-picker';
+import getBusinessDateCount from '@components/bits-utils/GetBusinessDays';
 
 const schema = yup.object().shape({
-    endDate: yup.string().required(),
+    // endDate: yup.string().required(),
     startDate: yup.string().required(),
     leaveTypeId: yup.string().required(),
     reasonForLeave: yup.string().required(),
@@ -99,29 +100,56 @@ export const LeaveManagement = ({
     });
     const route = router.asPath;
     const role = user?.role.replaceAll(' ', '');
-    const thead = [
-        'Leave Type',
-        'User',
-        'Start Date',
-        'End Date',
-        'No of Days',
-        'Status',
-        'Action',
-        '',
-    ];
-
+    const thead =
+        role == 'TeamMember'
+            ? [
+                  'Leave Type',
+                  'Work Assignee',
+                  // 'Supervisor',
+                  'Start Date',
+                  'End Date',
+                  'Total Days',
+                  'Status',
+                  'Action',
+              ]
+            : role == 'Supervisor'
+            ? [
+                  'Employee',
+                  'Leave Type',
+                  'Work Assignee',
+                  // 'Supervisor',
+                  'Start Date',
+                  'End Date',
+                  'Total Days',
+                  'Status',
+                  'Action',
+              ]
+            : [
+                  'Employee',
+                  'Leave Type',
+                  'Work Assignee',
+                  'Supervisor',
+                  'Start Date',
+                  'End Date',
+                  'Total Days',
+                  'Status',
+                  'Action',
+              ];
     const [data, setDate] = useState<any>();
     const openModal = (x) => {
         setDate(x);
         onOpens();
     };
-    console.log(watch('leaveTypeId'));
 
     const onSubmit = async (data: LeaveModel) => {
         oneDay == true && (data.endDate = data.startDate);
         data.leaveTypeId = leavetypes.value?.filter(
             (x) => x.name == data.leaveTypeId,
         )[0].id;
+        data.noOfLeaveDaysApplied = getBusinessDateCount(
+            new Date(data?.startDate as unknown as Date),
+            new Date(data?.endDate as unknown as Date),
+        );
 
         try {
             const result = await LeaveService.createLeave(data);
@@ -166,24 +194,32 @@ export const LeaveManagement = ({
                             ? [
                                   {
                                       text: 'Leave Status',
-                                      url: '/leave-management',
+                                      url: '/leave/management',
                                   },
                               ]
                             : role == 'Supervisor' || role == 'SuperAdmin'
                             ? [
                                   {
                                       text: 'Leave Application',
-                                      url: '/leave-management',
+                                      url: '/leave/management',
+                                  },
+                                  {
+                                      text: 'Leave History',
+                                      url: '/leave/history',
                                   },
                               ]
                             : [
                                   {
                                       text: 'Leave Application',
-                                      url: '/leave-application',
+                                      url: '/leave/application',
                                   },
                                   {
                                       text: 'Leave Status',
-                                      url: '/leave-management',
+                                      url: '/leave/management',
+                                  },
+                                  {
+                                      text: 'Leave History',
+                                      url: '/leave/history',
                                   },
                               ]
                     }
@@ -218,6 +254,15 @@ export const LeaveManagement = ({
                     <>
                         {leavelist?.data?.value?.map((x: LeaveView) => (
                             <Tr key={x.id}>
+                                {role !== 'TeamMember' && (
+                                    <TableData
+                                        name={
+                                            x.employeeInformation?.user
+                                                ?.fullName
+                                        }
+                                    />
+                                )}
+
                                 <td>
                                     <Flex align="center" gap=".5rem">
                                         <IconPickerItem
@@ -227,35 +272,49 @@ export const LeaveManagement = ({
                                         {x?.leaveType?.name}
                                     </Flex>
                                 </td>
-                                <TableData
-                                    name={x.employeeInformation?.user?.fullName}
-                                />
-                                <TableData name={formatDate(x.startDate)} />
-                                <TableData name={formatDate(x.endDate)} />
-                                <TableData
+                                <TableData name={x.workAssignee?.fullName} />
+                                {role == 'SuperAdmin' && (
+                                    <TableData
+                                        name={
+                                            x.employeeInformation?.supervisor
+                                                ?.fullName
+                                        }
+                                    />
+                                )}
+
+                                <TableData name={formatDate(x?.startDate)} />
+                                <TableData name={formatDate(x?.endDate)} />
+                                {/* <TableData
                                     name={
                                         moment(x?.endDate).diff(
-                                            moment(x.startDate),
+                                            moment(x?.startDate),
                                             'days',
                                         ) == 0
                                             ? '1 day'
-                                            : `${moment(x?.endDate).diff(
-                                                  moment(x.startDate),
-                                                  'days',
-                                              )} days`
+                                            : `${
+                                                  moment(x?.endDate).diff(
+                                                      moment(x?.startDate),
+                                                      'days',
+                                                  ) + 1
+                                              } days`
                                     }
+                                /> */}
+                                <TableData
+                                    name={getBusinessDateCount(
+                                        new Date(
+                                            x?.startDate as unknown as Date,
+                                        ),
+                                        new Date(x?.endDate as unknown as Date),
+                                    )}
                                 />
 
                                 <TableState name={x.status} />
-                                <td>
-                                    <Icons
-                                        as={BsEye}
-                                        onClick={() => openModal(x)}
-                                        cursor="pointer"
-                                    />
-                                </td>
 
-                                <LeaveActions id={x.id} route={route} />
+                                <LeaveActions
+                                    id={x.id}
+                                    route={route}
+                                    click={() => openModal(x)}
+                                />
                             </Tr>
                         ))}
                     </>
@@ -319,6 +378,7 @@ export const LeaveManagement = ({
                             label={oneDay ? 'Leave Date' : 'Start Date'}
                             error={errors.startDate}
                             min={new DateObject().add(3, 'days')}
+                            disableWeekend
                         />
                         {!oneDay && (
                             <PrimaryDate<LeaveModel>
@@ -327,6 +387,7 @@ export const LeaveManagement = ({
                                 label="End Date"
                                 error={errors.endDate}
                                 min={new DateObject().add(4, 'days')}
+                                disableWeekend
                             />
                         )}
                     </Grid>
@@ -353,7 +414,9 @@ export const LeaveManagement = ({
                             keys="id"
                             keyLabel="fullName"
                             label="Work Assignee"
-                            options={teamMembers?.data?.value}
+                            options={teamMembers?.data?.value.filter(
+                                (x) => x.id !== id,
+                            )}
                             searchable
                         />
                         {/* {role != 'TeamMember' && (

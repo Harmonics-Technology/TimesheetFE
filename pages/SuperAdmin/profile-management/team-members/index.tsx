@@ -31,10 +31,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const clients = await UserService.listUsers('client');
-            const paymentPartner = await UserService.listUsers(
-                'payment partner',
-            );
             const data = await UserService.listUsers(
                 'Team Member',
                 pagingOptions.offset,
@@ -42,6 +38,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,
+            );
+            const clients = await UserService.listUsers('client');
+            const paymentPartner = await UserService.listUsers(
+                'payment partner',
             );
             return {
                 props: {

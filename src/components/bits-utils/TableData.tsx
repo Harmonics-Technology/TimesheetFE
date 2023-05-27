@@ -33,6 +33,7 @@ import fileDownload from 'js-file-download';
 import { UserContext } from '@components/context/UserContext';
 import { BiTrash } from 'react-icons/bi';
 import { MdVerified, MdCancel } from 'react-icons/md';
+import { BsEye } from 'react-icons/bs';
 
 export function TableHead({
     name,
@@ -297,7 +298,15 @@ export function TableActions({
         </td>
     );
 }
-export function LeaveActions({ id, route }: { id: any; route: any }) {
+export function LeaveActions({
+    id,
+    route,
+    click,
+}: {
+    id: any;
+    route: any;
+    click?: any;
+}) {
     const toast = useToast();
     const [loading, setLoading] = useState(false);
     const { user } = useContext(UserContext);
@@ -387,8 +396,13 @@ export function LeaveActions({ id, route }: { id: any; route: any }) {
                 </MenuButton>
                 <MenuList w="full">
                     {(route != `/${role}/leave-management` ||
-                        role == 'Supervisor') && (
+                        role == 'Supervisor' ||
+                        role == 'SuperAdmin') && (
                         <>
+                            <MenuItem onClick={click} w="full">
+                                <Icon as={BsEye} mr=".5rem" color="brand.400" />
+                                View
+                            </MenuItem>
                             <MenuItem
                                 onClick={() => treatLeave(id, 1)}
                                 w="full"

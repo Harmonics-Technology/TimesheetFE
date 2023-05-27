@@ -26,7 +26,7 @@ function Checkbox({
                         {label}
                     </FormLabel>
                 )}
-                <Input
+                <input
                     type="checkbox"
                     className="formcheck"
                     checked={checked}

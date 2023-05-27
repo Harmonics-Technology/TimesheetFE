@@ -146,6 +146,30 @@ endDate?: string,
     }
 
     /**
+     * @param offset 
+     * @param limit 
+     * @returns LeaveViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listAllPendingLeaves(
+offset?: number,
+limit?: number,
+): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Leave/treated-leaves',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
      * @param requestBody 
      * @returns LeaveViewStandardResponse Success
      * @throws ApiError

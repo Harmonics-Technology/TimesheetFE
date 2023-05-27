@@ -20,6 +20,7 @@ interface alertProps {
     loading?: any;
     onClick?: any;
     color?: any;
+    btnLink?: any
 }
 
 export const ActivateUserAlert = ({
@@ -30,6 +31,7 @@ export const ActivateUserAlert = ({
     url,
     loading,
     onClick,
+    btnLink,
     color = 'info',
 }: alertProps) => {
     return (
@@ -53,7 +55,7 @@ export const ActivateUserAlert = ({
                 </Box>
                 {link && (
                     <Link passHref href={url}>
-                        <Button ml="auto">{btn}</Button>
+                        <Button ml="auto">{btnLink}</Button>
                     </Link>
                 )}
                 {btn && (

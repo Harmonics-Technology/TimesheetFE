@@ -53,12 +53,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             const shiftUser = await UserService.listShiftUsers(
                 pagingOptions.offset,
-                pagingOptions.limit,
+                pagingOptions.shiftLimit,
                 pagingOptions.from || start,
                 pagingOptions.to || end,
             );
 
-            console.log({ allShift, shiftUser });
+            // console.log({ allShift });
             return {
                 props: {
                     allShift,
