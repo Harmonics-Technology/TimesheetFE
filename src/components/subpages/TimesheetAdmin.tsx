@@ -696,7 +696,7 @@ const TimesheetAdmin = ({
                                         <PrimaryTextarea<RejectTimesheetModel>
                                             label="Reason"
                                             name="reason"
-                                            error={errors.reason}
+                                            error={errors?.reason}
                                             placeholder=""
                                             defaultValue=""
                                             h="3.5rem"
