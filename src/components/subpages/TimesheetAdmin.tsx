@@ -693,7 +693,7 @@ const TimesheetAdmin = ({
                                         <FaTimes />
                                     </Flex>
                                     <form onSubmit={handleSubmit(onSubmit)}>
-                                        <PrimaryTextarea<RejectTimesheetModel>
+                                        {/* <PrimaryTextarea<RejectTimesheetModel>
                                             label="Reason"
                                             name="reason"
                                             error={errors?.reason}
@@ -701,7 +701,7 @@ const TimesheetAdmin = ({
                                             defaultValue=""
                                             h="3.5rem"
                                             register={register}
-                                        />
+                                        /> */}
                                         <Button
                                             isLoading={isSubmitting}
                                             spinner={
