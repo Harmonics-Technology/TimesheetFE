@@ -5,14 +5,14 @@ import {
     Text,
     Textarea,
 } from '@chakra-ui/react';
-import { FieldError, UseFormRegister, Path } from 'react-hook-form';
+import { FieldError, UseFormRegister, Path, FieldErrorsImpl, Merge } from 'react-hook-form';
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
     placeholder?: string;
     label?: string;
     register: UseFormRegister<TFormValues>;
-    error: FieldError | undefined;
+    error: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
     type?: string;
     required?: boolean;
     disableLabel?: boolean;
