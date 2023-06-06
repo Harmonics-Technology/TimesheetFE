@@ -128,13 +128,13 @@ const AdminPaymentScheduleModal = ({
                 </ModalHeader>
 
                 <ModalBody>
-                    <Box maxH="70vh" overflowY="auto" px={5}>
-                        <Tabs isFitted variant="enclosed">
-                            <TabList mb="1em">
-                                <Tab>Monthly</Tab>
-                                <Tab>Bi-Weekly</Tab>
-                                <Tab>Weekly</Tab>
-                            </TabList>
+                    <Tabs isFitted variant="enclosed">
+                        <TabList mb="1em">
+                            <Tab>Monthly</Tab>
+                            <Tab>Bi-Weekly</Tab>
+                            <Tab>Weekly</Tab>
+                        </TabList>
+                        <Box maxH="70vh" overflowY="auto" px={5}>
                             <TabPanels>
                                 <TabPanel>
                                     <ScheduleTable
@@ -161,8 +161,8 @@ const AdminPaymentScheduleModal = ({
                                     />
                                 </TabPanel>
                             </TabPanels>
-                        </Tabs>
-                    </Box>
+                        </Box>
+                    </Tabs>
                 </ModalBody>
             </ModalContent>
         </Modal>

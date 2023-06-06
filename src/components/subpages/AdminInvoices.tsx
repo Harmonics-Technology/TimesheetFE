@@ -34,6 +34,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { BsDownload } from 'react-icons/bs';
 import Naira from '@components/generics/functions/Naira';
+import { Round } from '@components/generics/functions/Round';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -223,7 +224,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                                         x.name
                                     }
                                 />
-                                <TableData name={Naira(x.totalAmount)} />
+                                <TableData name={Naira(Round(x.totalAmount))} />
                                 <TableData name={formatDate(x.dateCreated)} />
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />
