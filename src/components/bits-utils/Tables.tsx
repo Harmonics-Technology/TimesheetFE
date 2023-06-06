@@ -19,7 +19,7 @@ interface TablesProps {
 }
 
 function Tables({ tableHead, children }: TablesProps) {
-    console.log({ children });
+    // console.log({ children });
     return (
         <TableContainer h="auto">
             <Table variant="striped" fontSize="11px">

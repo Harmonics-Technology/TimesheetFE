@@ -679,9 +679,9 @@ function MyProfile({
                         color="white"
                         height="4rem"
                         fontSize="15px"
-                        type="submit"
+                        // type="submit"
                         isLoading={isSubmitting}
-                        onClick={() => handleSubmit(onSubmit)}
+                        onClick={handleSubmit(onSubmit)}
                         spinner={<BeatLoader color="white" size={10} />}
                         w="98%"
                         boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"

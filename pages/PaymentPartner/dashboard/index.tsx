@@ -46,14 +46,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     pagingOptions.limit,
                 );
 
-            // const result = await axios.post(url, payload, { headers: headers });
+            const result = await axios.post(url, payload, { headers: headers });
             // console.log({ result });
 
             return {
                 props: {
                     metrics,
                     pendingPayrolls,
-                    // result: result.data,
+                    result: result.data,
                 },
             };
         } catch (error: any) {

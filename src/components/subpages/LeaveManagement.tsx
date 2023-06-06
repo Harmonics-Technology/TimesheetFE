@@ -273,7 +273,8 @@ export const LeaveManagement = ({
                                     </Flex>
                                 </td>
                                 <TableData name={x.workAssignee?.fullName} />
-                                {role == 'SuperAdmin' && (
+                                {(role == 'SuperAdmin' ||
+                                    role == 'InternalSupervisor') && (
                                     <TableData
                                         name={
                                             x.employeeInformation?.supervisor
