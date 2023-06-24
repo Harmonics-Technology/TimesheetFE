@@ -96,6 +96,7 @@ id: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -105,6 +106,7 @@ id: string,
     public static listContracts(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -115,6 +117,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,

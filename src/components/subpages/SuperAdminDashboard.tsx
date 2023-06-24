@@ -47,7 +47,7 @@ interface DashboardProps {
 }
 
 function SuperAdminDashboard({ metrics }: DashboardProps) {
-    const { user } = useContext(UserContext);
+    const { user, subType, addons } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -63,17 +63,23 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
     const [clicked, setClicked] = useState<InvoiceView>();
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
-    console.log({ metrics });
+    console.log({ subType, addons });
+    const isClient = addons?.includes('client management');
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">
                 <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
                     gap="1.2rem"
+
                     w="full"
                 >
                     <DashboardCard
-                        url={`/${role}/profile-management/clients`}
+                        url={
+                            isClient
+                                ? `/${role}/profile-management/clients`
+                                : ''
+                        }
                         title="client"
                         value={adminMetrics?.totalClients}
                     />
@@ -180,33 +186,39 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                         link={'/'}
                     />
                 </Grid>
-                <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
-                    <TableCards
-                        title={'Recent Clients'}
-                        url={'profile-management/clients'}
-                        data={adminMetrics?.recentCLients
-                            ?.slice(0, 4)
-                            .map((x: UserView) => (
-                                <Tr key={x.id}>
-                                    <TableData name={x.organizationName} />
-                                    <TableData name={x.organizationEmail} />
-                                    <TableData name={x.organizationPhone} />
-                                    <TableData
-                                        name={x.invoiceGenerationFrequency}
-                                    />
-                                    <TableStatus name={x.isActive} />
-                                </Tr>
-                            ))}
-                        thead={[
-                            'CLIENT NAME',
-                            'EMAIL',
-                            'Phone',
-                            'Invoice Schedule',
-                            'STATUS',
-                        ]}
-                        link={'/'}
-                    />
-                </Grid>
+                {isClient && (
+                    <Grid
+                        templateColumns={['1fr', '1fr']}
+                        gap="1.2rem"
+                        w="full"
+                    >
+                        <TableCards
+                            title={'Recent Clients'}
+                            url={'profile-management/clients'}
+                            data={adminMetrics?.recentCLients
+                                ?.slice(0, 4)
+                                .map((x: UserView) => (
+                                    <Tr key={x.id}>
+                                        <TableData name={x.organizationName} />
+                                        <TableData name={x.organizationEmail} />
+                                        <TableData name={x.organizationPhone} />
+                                        <TableData
+                                            name={x.invoiceGenerationFrequency}
+                                        />
+                                        <TableStatus name={x.isActive} />
+                                    </Tr>
+                                ))}
+                            thead={[
+                                'CLIENT NAME',
+                                'EMAIL',
+                                'Phone',
+                                'Invoice Schedule',
+                                'STATUS',
+                            ]}
+                            link={'/'}
+                        />
+                    </Grid>
+                )}
                 {/* <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Payslip'}

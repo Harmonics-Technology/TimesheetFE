@@ -4,7 +4,9 @@ import {
     Flex,
     HStack,
     Icon,
+    Select,
     Tr,
+    Text,
     useDisclosure,
     useToast,
 } from '@chakra-ui/react';
@@ -42,6 +44,7 @@ interface adminProps {
     fileName?: string;
     record?: number;
     paygroupId?: number;
+    clients?: any;
 }
 
 function PayrollTreatPartnerInvoice({
@@ -49,6 +52,7 @@ function PayrollTreatPartnerInvoice({
     fileName,
     record,
     paygroupId,
+    clients,
 }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
@@ -147,7 +151,7 @@ function PayrollTreatPartnerInvoice({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <HStack
+                {/* <HStack
                     mb="1rem"
                     bgColor="gray.50"
                     w="fit-content"
@@ -155,7 +159,32 @@ function PayrollTreatPartnerInvoice({
                 >
                     <MiniTabs url={pending} text={'Proinsight Technology'} />
                     <MiniTabs url={approved} text={'Olade Consulting'} />
-                </HStack>
+                </HStack> */}
+                {clients?.length > 0 && (
+                    <Box fontSize=".8rem" w="fit-content" mb={['0rem', '0']}>
+                        <Text noOfLines={1} mb="0">
+                            Filter By
+                        </Text>
+                        <Select
+                            w="fit-content"
+                            onChange={(e) =>
+                                router.push({
+                                    query: {
+                                        paySlipFilter: e.target.value,
+                                    },
+                                })
+                            }
+                            borderRadius="0"
+                            fontSize=".8rem"
+                        >
+                            {clients.value?.map((x) => (
+                                <option value={x.id} key={x.id}>
+                                    {x.fullName}
+                                </option>
+                            ))}
+                        </Select>
+                    </Box>
+                )}
                 <Flex
                     justify={
                         selectedId.length > 0 ? 'space-between' : 'flex-end'

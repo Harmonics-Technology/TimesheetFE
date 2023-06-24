@@ -36,6 +36,8 @@ export type User = {
     organizationAddress?: string | null;
     clientId?: string | null;
     client?: User;
+    superAdminId?: string | null;
+    superAdmin?: User;
     dateCreated?: string;
     dateModified?: string;
     isActive?: boolean;
@@ -46,7 +48,11 @@ export type User = {
     createdById?: string | null;
     createdBy?: User;
     twoFactorCode?: string | null;
+    clientSubscriptionId?: string | null;
+    clientSubscriptionStatus?: boolean | null;
+    commandCenterClientId?: string | null;
     supervisors?: Array<User> | null;
+    usersCreatedByYou?: Array<User> | null;
     supervisees?: Array<EmployeeInformation> | null;
     teamMembers?: Array<EmployeeInformation> | null;
     payees?: Array<EmployeeInformation> | null;

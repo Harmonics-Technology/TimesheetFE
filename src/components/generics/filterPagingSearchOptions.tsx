@@ -3,10 +3,11 @@ import moment from 'moment';
 export const filterPagingSearchOptions = (ctx: any) => {
     console.log({ ctx: ctx.query });
 
-    const { limit, offset, search, from, to, paySlipFilter, chartYear } =
+    const { limit, offset, search, from, to, paySlipFilter, chartYear,clientId } =
         ctx.query;
     const options = {
         limit: limit ? limit : 10,
+        clientId: clientId,
         shiftLimit: limit ? limit : 5,
         offset: offset ? offset : 0,
         search: search ? search : '',

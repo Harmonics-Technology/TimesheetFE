@@ -61,7 +61,7 @@ endDate?: string,
      */
     public static exportInvoiceRecord(
 record?: InvoiceRecord,
-payrollGroupId?: number,
+payrollGroupId?: string,
 rowHeaders?: Array<string>,
 startDate?: string,
 endDate?: string,
@@ -116,6 +116,7 @@ endDate?: string,
      * @param rowHeaders 
      * @param startDate 
      * @param endDate 
+     * @param superAdminId 
      * @returns any Success
      * @throws ApiError
      */
@@ -124,6 +125,7 @@ record?: PayslipRecordToDownload,
 rowHeaders?: Array<string>,
 startDate?: string,
 endDate?: string,
+superAdminId?: string,
 ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -133,6 +135,7 @@ endDate?: string,
                 'rowHeaders': rowHeaders,
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'superAdminId': superAdminId,
             },
             errors: {
                 401: `Unauthorized`,

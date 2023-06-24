@@ -49,26 +49,26 @@ function TimeSheetApproval({ timeSheets }: adminProps) {
                         {timeSheets?.data?.value?.map(
                             (x: TimeSheetApprovedView, i) => (
                                 <Tr key={i}>
-                                    <TableData name={x.name} />
+                                    <TableData name={x?.name} />
                                     {/* <TableData name={x.email} /> */}
                                     <TableData
-                                        name={x.employeeInformation?.jobTitle}
+                                        name={x?.employeeInformation?.jobTitle}
                                     />
-                                    <TableData name={formatDate(x.startDate)} />
-                                    <TableData name={formatDate(x.endDate)} />
+                                    <TableData name={formatDate(x?.startDate)} />
+                                    <TableData name={formatDate(x?.endDate)} />
                                     <TableData
                                         name={`${
-                                            x.totalHours as unknown as string
+                                            x?.totalHours as unknown as string
                                         } Hours`}
                                     />
                                     <TableData
                                         name={`${
-                                            x.approvedNumberOfHours as unknown as string
+                                            x?.approvedNumberOfHours as unknown as string
                                         }Hours`}
                                     />
 
                                     <TableContractAction
-                                        id={x.employeeInformationId}
+                                        id={x?.employeeInformationId}
                                         timeSheets={true}
                                     />
                                 </Tr>

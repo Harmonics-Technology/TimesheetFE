@@ -1,19 +1,23 @@
 import { Circle, Flex, Text } from '@chakra-ui/react';
+import { UserContext } from '@components/context/UserContext';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 
 function PageTabs({
     url,
     tabName,
     size,
+    upgrade,
 }: {
     url: string;
     tabName: string;
     size?: any;
+    upgrade?: boolean;
 }) {
     const router = useRouter();
     const isActive = router.pathname.startsWith(url);
     // console.log({ url });
+    const { opens } = useContext(UserContext);
     return (
         <Flex
             justify="center"
@@ -22,7 +26,7 @@ function PageTabs({
             w="full"
             h="3.5rem"
             bgColor={isActive ? 'white' : 'gray.100'}
-            onClick={() => router.push(url)}
+            onClick={() => (upgrade ? opens() : router.push(url))}
             color={isActive ? 'brand.400' : 'gray.500'}
             // borderRadius="8px"
             cursor="pointer"

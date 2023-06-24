@@ -43,6 +43,7 @@ requestBody?: ExpenseModel,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param employeeInformationId 
      * @param search 
      * @param startDate 
@@ -53,6 +54,7 @@ requestBody?: ExpenseModel,
     public static listExpenses(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 employeeInformationId?: string,
 search?: string,
 startDate?: string,
@@ -64,6 +66,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'employeeInformationId': employeeInformationId,
                 'search': search,
                 'StartDate': startDate,
@@ -145,6 +148,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -154,6 +158,7 @@ endDate?: string,
     public static listReviewedExpenses(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -164,6 +169,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -462,6 +468,7 @@ requestBody?: Array<string>,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -471,6 +478,7 @@ requestBody?: Array<string>,
     public static listAllApprovedExpenses(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -481,6 +489,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -495,6 +504,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -504,6 +514,7 @@ endDate?: string,
     public static listInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -514,6 +525,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -528,6 +540,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -537,6 +550,7 @@ endDate?: string,
     public static listSubmittedOnshoreInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -547,6 +561,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -561,6 +576,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -570,6 +586,7 @@ endDate?: string,
     public static listSubmittedOffshoreInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -580,6 +597,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -594,6 +612,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -604,6 +623,7 @@ endDate?: string,
     public static listSubmittedInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -615,6 +635,7 @@ payrollTypeFilter?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -641,7 +662,7 @@ payrollTypeFilter?: number,
 offset?: number,
 limit?: number,
 search?: string,
-payrollGroupId?: number,
+payrollGroupId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -699,6 +720,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -709,6 +731,7 @@ endDate?: string,
     public static listInvoicedInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -720,6 +743,7 @@ payrollTypeFilter?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -913,7 +937,7 @@ limit?: number,
 offset?: number,
 limit?: number,
 search?: string,
-payrollGroupId?: number,
+payrollGroupId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -1117,6 +1141,7 @@ requestBody?: PaymentPartnerInvoiceModel,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param payrollGroupId 
      * @param startDate 
@@ -1127,8 +1152,9 @@ requestBody?: PaymentPartnerInvoiceModel,
     public static listPaymentPartnerInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
-payrollGroupId?: number,
+payrollGroupId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -1138,6 +1164,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'payrollGroupId': payrollGroupId,
                 'StartDate': startDate,
@@ -1161,7 +1188,7 @@ endDate?: string,
      * @throws ApiError
      */
     public static listPayrollGroupInvoices(
-payrollGroupId?: number,
+payrollGroupId?: string,
 offset?: number,
 limit?: number,
 search?: string,
@@ -1225,6 +1252,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -1234,6 +1262,7 @@ endDate?: string,
     public static listInvoicesHistories(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -1244,6 +1273,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -1269,7 +1299,7 @@ endDate?: string,
 offset?: number,
 limit?: number,
 search?: string,
-payrollGroupId?: number,
+payrollGroupId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -1294,6 +1324,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -1303,6 +1334,7 @@ endDate?: string,
     public static listAllClientInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -1313,6 +1345,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,

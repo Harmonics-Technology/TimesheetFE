@@ -12,13 +12,19 @@ import { request as __request } from '../core/request';
 export class DashboardService {
 
     /**
+     * @param superAminId 
      * @returns DashboardViewStandardResponse Success
      * @throws ApiError
      */
-    public static getAdminMetrics(): CancelablePromise<DashboardViewStandardResponse> {
+    public static getAdminMetrics(
+superAminId?: string,
+): CancelablePromise<DashboardViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Dashboard/admin-metrics',
+            query: {
+                'superAminId': superAminId,
+            },
         });
     }
 

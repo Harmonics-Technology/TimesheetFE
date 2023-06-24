@@ -22,7 +22,7 @@ import {
     TableStatus,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -61,6 +61,7 @@ import { BsDownload } from 'react-icons/bs';
 import Cookies from 'js-cookie';
 import moment from 'moment';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -70,6 +71,7 @@ const schema = yup.object().shape({
 });
 
 function ProfileManagementAdmin({ adminList, team }: adminProps) {
+    const { user } = useContext(UserContext);
     const {
         register,
         handleSubmit,
@@ -88,6 +90,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
     // console.log({ newUser });
 
     const onSubmit = async (data: RegisterModel) => {
+        data.superAdminId = user?.superAdminId;
         try {
             const result = await UserService.create(data);
             if (result.status) {
@@ -299,7 +302,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                                 keys="title"
                                 keyLabel="title"
                                 label="Role"
-                                options={roles.slice(0, 3)}
+                                options={roles.slice(1, 3)}
                             />
                         </Grid>
                     ) : null}

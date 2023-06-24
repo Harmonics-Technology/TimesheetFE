@@ -64,7 +64,7 @@ export const Reports = ({ metrics, team, paymentPartner, chart }) => {
             displayName: 'Offshore',
         },
     ];
-    const datas = chart.data;
+    const datas = chart?.data;
     return (
         <Grid
             templateColumns={[

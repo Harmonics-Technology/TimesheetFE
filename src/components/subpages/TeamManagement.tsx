@@ -10,8 +10,9 @@ import {
     Grid,
     DrawerFooter,
     useToast,
-    Tooltip,
     Icon,
+    HStack,
+    useRadioGroup,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -49,10 +50,12 @@ import Loading from '@components/bits-utils/Loading';
 import BeatLoader from 'react-spinners/BeatLoader';
 import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
-import Cookies from 'js-cookie';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
+import { UserContext } from '@components/context/UserContext';
+import RadioBtn from '@components/bits-utils/RadioBtn';
+import { TriggerBox } from '@components/bits-utils/TriggerBox';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -60,7 +63,7 @@ const schema = yup.object().shape({
     email: yup.string().email().required(),
     phoneNumber: yup.string().required(),
     jobTitle: yup.string().required(),
-    clientId: yup.string().required(),
+    // clientId: yup.string().required(),
     supervisorId: yup.string().required(),
     isActive: yup.boolean().required(),
     hoursPerDay: yup.number().required(),
@@ -110,7 +113,7 @@ const schema = yup.object().shape({
 
 function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     const client = clients?.filter((x) => x.isActive);
-    console.log({ client });
+    // console.log({ client });
 
     const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);
 
@@ -119,6 +122,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
         handleSubmit,
         control,
         watch,
+        setValue,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(schema),
@@ -126,16 +130,19 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
         defaultValues: {
             role: 'Team Member',
             onBordingFee: fixedAmount,
+            employeeType: 'regular',
         },
     });
     // console.log(watch('onBordingFee'));
     const { isOpen, onOpen, onClose } = useDisclosure();
+    // const { isOpen: opened, onOpen: opens, onClose: closed } = useDisclosure();
+    const { addons, subType, user, opens } = useContext(UserContext);
     const router = useRouter();
     const toast = useToast();
     // console.log(watch("payRollTypeId"));
     const payroll = watch('payRollTypeId');
     const onboarding = watch('fixedAmount');
-    const clientId = watch('clientId');
+    const clientId = watch('clientId') || user?.superAdminId;
     const isEligibleForLeave = watch('isEligibleForLeave');
 
     const [contract, setContractFile] = useState<any>('');
@@ -244,8 +251,10 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
     }, [clientId]);
 
     // console.log({ supervisors });
+    const [clientType, setClientType] = useState(false);
 
     const onSubmit = async (data: TeamMemberModel) => {
+        data.superAdminId = user?.superAdminId;
         if (data.fixedAmount == true) {
             data.onBordingFee = fixedAmount;
         }
@@ -286,7 +295,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                 ? (data.isEligibleForLeave = true)
                 : (data.isEligibleForLeave = false);
         }
-        // data.clientId = null;
+        data.clientId = !clientType ? user?.superAdminId : data.clientId;
         console.log({ data });
 
         if (data.supervisorId === undefined || '') {
@@ -351,6 +360,39 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
         'Status',
         '',
     ];
+
+    // subType = 'onshore';
+
+    const radios = ['For me', 'For my client'];
+    const { getRootProps, getRadioProps } = useRadioGroup({
+        name: 'selection',
+        defaultValue: 'for my client',
+        onChange: (value) => updateClientField(value),
+    });
+
+    const updateClientField = (value: any) => {
+        if (value == 'For me') {
+            setClientType(false);
+        } else {
+            setClientType(true);
+        }
+    };
+
+    const group = getRootProps();
+
+    useEffect(() => {
+        if (subType == 'onshore') {
+            setValue('payRollTypeId', 1);
+            return;
+        }
+        if (subType == 'offshore') {
+            setValue('payRollTypeId', 2);
+            return;
+        }
+        // addons?.includes('client management')
+        //     ? setClientType(true)
+        //     : setClientType(false);
+    }, []);
 
     return (
         <>
@@ -503,6 +545,20 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 Work Data
                             </Text>
                         </Flex>
+                        <Box mb="1.5rem">
+                            <Text fontWeight="500" mb=".5rem" fontSize=".9rem">
+                                Is this team member for you or for a client you
+                                manage?
+                            </Text>
+                            <HStack w="full" {...group}>
+                                {radios.map((value) => {
+                                    const radio = getRadioProps({ value });
+                                    return (
+                                        <RadioBtn {...radio}>{value}</RadioBtn>
+                                    );
+                                })}
+                            </HStack>
+                        </Box>
                         <Grid
                             templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
@@ -516,15 +572,18 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 defaultValue=""
                                 register={register}
                             />
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="clientId"
-                                error={errors.clientId}
-                                keys="id"
-                                keyLabel="organizationName"
-                                label="Current Client"
-                                options={client}
-                            />
+
+                            {clientType && (
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="clientId"
+                                    error={errors.clientId}
+                                    keys="id"
+                                    keyLabel="organizationName"
+                                    label="Current Client"
+                                    options={client}
+                                />
+                            )}
                             {supervisors !== undefined && (
                                 <SelectrixBox<TeamMemberModel>
                                     control={control}
@@ -536,24 +595,29 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                     options={supervisors}
                                 />
                             )}
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="payRollTypeId"
-                                error={errors.payRollTypeId}
-                                keys="id"
-                                keyLabel="label"
-                                label="Payroll Type"
-                                options={[
-                                    {
-                                        id: 1,
-                                        label: 'Onshore Contract',
-                                    },
-                                    {
-                                        id: 2,
-                                        label: 'Offshore contract',
-                                    },
-                                ]}
-                            />
+                            <Box pos="relative">
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="payRollTypeId"
+                                    error={errors.payRollTypeId}
+                                    keys="id"
+                                    keyLabel="label"
+                                    label="Payroll Type"
+                                    options={[
+                                        {
+                                            id: 1,
+                                            label: 'Onshore Contract',
+                                        },
+                                        {
+                                            id: 2,
+                                            label: 'Offshore contract',
+                                        },
+                                    ]}
+                                />
+                                {subType != 'full package' && (
+                                    <TriggerBox opens={opens} />
+                                )}
+                            </Box>
                             {payroll == 1 ? (
                                 <>
                                     <PrimaryInput<TeamMemberModel>
@@ -633,7 +697,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                         label="Payment Partner"
                                         options={paymentPartner}
                                     />
-                                    <SelectrixBox<TeamMemberModel>
+                                    {/* <SelectrixBox<TeamMemberModel>
                                         control={control}
                                         name="payrollGroupId"
                                         error={errors.payrollGroupId}
@@ -650,25 +714,32 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                                 label: 'Olade consulting',
                                             },
                                         ]}
-                                    />
+                                    /> */}
                                 </>
                             ) : null}
-
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="employeeType"
-                                error={errors.employeeType}
-                                keys="id"
-                                keyLabel="label"
-                                label="Employee Type"
-                                options={[
-                                    { id: 'regular', label: 'Regular' },
-                                    {
-                                        id: 'shift',
-                                        label: 'Shift',
-                                    },
-                                ]}
-                            />
+                            <Box pos="relative">
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="employeeType"
+                                    error={errors.employeeType}
+                                    keys="id"
+                                    keyLabel="label"
+                                    label="Employee Type"
+                                    placeholder={
+                                        watch('employeeType') as string
+                                    }
+                                    options={[
+                                        { id: 'regular', label: 'Regular' },
+                                        {
+                                            id: 'shift',
+                                            label: 'Shift',
+                                        },
+                                    ]}
+                                />
+                                {!addons?.includes('shift management') && (
+                                    <TriggerBox opens={opens} />
+                                )}
+                            </Box>
                             <PrimaryInput<TeamMemberModel>
                                 label="Client Rate"
                                 name="clientRate"
@@ -700,6 +771,18 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                     { id: 'Weekly', label: 'Weekly' },
                                     { id: 'Bi-weekly', label: 'Bi-Weekly' },
                                     { id: 'Monthly', label: 'Monthly' },
+                                ]}
+                            />
+                            <SelectrixBox<TeamMemberModel>
+                                control={control}
+                                name="invoiceGenerationType"
+                                error={errors.invoiceGenerationType}
+                                keys="id"
+                                keyLabel="label"
+                                label="Invoice Type"
+                                options={[
+                                    { id: 'invoice', label: 'Invoice' },
+                                    { id: 'payroll', label: 'Payroll' },
                                 ]}
                             />
                             <SelectrixBox<TeamMemberModel>
@@ -833,7 +916,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 Leave Management
                             </Text>
                         </Flex>
-                        <Box mb="1.5rem">
+                        <Box pos="relative" mb="1rem">
                             <PrimaryRadio
                                 label="Are you eligible for Leave"
                                 radios={['No', 'Yes']}
@@ -841,6 +924,9 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                 control={control}
                                 error={errors.isEligibleForLeave}
                             />
+                            {!addons?.includes('leave management') && (
+                                <TriggerBox opens={opens} />
+                            )}
                         </Box>
                         {(isEligibleForLeave as unknown as string) == 'Yes' && (
                             <Grid

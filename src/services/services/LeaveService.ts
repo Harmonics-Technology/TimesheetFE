@@ -109,6 +109,7 @@ limit?: number,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param supervisorId 
      * @param employeeInformationId 
      * @param search 
@@ -120,6 +121,7 @@ limit?: number,
     public static listLeaves(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 supervisorId?: string,
 employeeInformationId?: string,
 search?: string,
@@ -132,6 +134,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'supervisorId': supervisorId,
                 'employeeInformationId': employeeInformationId,
                 'search': search,
@@ -148,12 +151,14 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @returns LeaveViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static listAllPendingLeaves(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 ): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -161,6 +166,7 @@ limit?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,

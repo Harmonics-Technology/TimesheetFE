@@ -22,7 +22,7 @@ import {
     TableStatus,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -48,6 +48,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import Cookies from 'js-cookie';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -62,6 +63,7 @@ const schema = yup.object().shape({
 
 function PaymentPartnerManagement({ adminList }: adminProps) {
     // console.log({ adminList });
+    const { user } = useContext(UserContext);
     const {
         register,
         handleSubmit,
@@ -89,6 +91,7 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                   (data.phoneNumber = data.organizationPhone))
                 : null;
         }
+        data.superAdminId = user?.superAdminId;
         console.log({ data });
         try {
             const result = await UserService.create(data);

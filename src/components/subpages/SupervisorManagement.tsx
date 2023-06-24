@@ -8,6 +8,7 @@ import {
     useToast,
     Flex,
     Icon,
+    VStack,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -33,7 +34,7 @@ import {
     UserViewPagedCollectionStandardResponse,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
 import Loading from '@components/bits-utils/Loading';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import FilterSearch from '@components/bits-utils/FilterSearch';
@@ -41,6 +42,8 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import Cookies from 'js-cookie';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { useContext, useEffect, useState } from 'react';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -70,7 +73,18 @@ function SupervisorManagement({ adminList, client }: adminProps) {
     const toast = useToast();
     // console.log({ adminList });
 
+    const [clientType, setClientType] = useState(false);
+    const { addons, subType, user } = useContext(UserContext);
+
+    useEffect(() => {
+        addons?.includes('client management')
+            ? setClientType(true)
+            : setClientType(false);
+    }, []);
+
     const onSubmit = async (data: RegisterModel) => {
+        data.superAdminId = user?.superAdminId;
+        data.clientId = !clientType ? user?.superAdminId : data.clientId;
         try {
             const result = await UserService.create(data);
             if (result.status) {
@@ -164,19 +178,18 @@ function SupervisorManagement({ adminList, client }: adminProps) {
                 title={'Add new supervisor'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <Grid
-                        templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
-                        gap="1rem 2rem"
-                    >
-                        <SelectrixBox<RegisterModel>
-                            control={control}
-                            name="clientId"
-                            error={errors.clientId}
-                            keys="id"
-                            keyLabel="organizationName"
-                            label="Client"
-                            options={clients}
-                        />
+                    <VStack spacing="1.5rem">
+                        {clientType && (
+                            <SelectrixBox<RegisterModel>
+                                control={control}
+                                name="clientId"
+                                error={errors.clientId}
+                                keys="id"
+                                keyLabel="organizationName"
+                                label="Client"
+                                options={clients}
+                            />
+                        )}
                         <PrimaryInput<RegisterModel>
                             label="Email"
                             name="email"
@@ -185,49 +198,55 @@ function SupervisorManagement({ adminList, client }: adminProps) {
                             defaultValue=""
                             register={register}
                         />
-                        <PrimaryInput<RegisterModel>
-                            label="First Name"
-                            name="firstName"
-                            error={errors.firstName}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
-                        <PrimaryInput<RegisterModel>
-                            label="Last Name"
-                            name="lastName"
-                            error={errors.lastName}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
+                        <Grid
+                            templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
+                            gap="1.5rem 2rem"
+                            w="full"
+                        >
+                            <PrimaryInput<RegisterModel>
+                                label="First Name"
+                                name="firstName"
+                                error={errors.firstName}
+                                placeholder=""
+                                defaultValue=""
+                                register={register}
+                            />
+                            <PrimaryInput<RegisterModel>
+                                label="Last Name"
+                                name="lastName"
+                                error={errors.lastName}
+                                placeholder=""
+                                defaultValue=""
+                                register={register}
+                            />
 
-                        <Button
-                            bgColor="gray.500"
-                            color="white"
-                            height="3rem"
-                            fontSize="14px"
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            onClick={() => onClose()}
-                        >
-                            Close
-                        </Button>
-                        <Button
-                            bgColor="brand.400"
-                            color="white"
-                            height="3rem"
-                            fontSize="14px"
-                            type="submit"
-                            isLoading={isSubmitting}
-                            spinner={<BeatLoader color="white" size={10} />}
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        >
-                            <Box pr=".5rem">
-                                <RiMailSendFill />
-                            </Box>
-                            <Box>Send Invite</Box>
-                        </Button>
-                    </Grid>
+                            <Button
+                                bgColor="gray.500"
+                                color="white"
+                                height="3rem"
+                                fontSize="14px"
+                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                onClick={() => onClose()}
+                            >
+                                Close
+                            </Button>
+                            <Button
+                                bgColor="brand.400"
+                                color="white"
+                                height="3rem"
+                                fontSize="14px"
+                                type="submit"
+                                isLoading={isSubmitting}
+                                spinner={<BeatLoader color="white" size={10} />}
+                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                            >
+                                <Box pr=".5rem">
+                                    <RiMailSendFill />
+                                </Box>
+                                <Box>Send Invite</Box>
+                            </Button>
+                        </Grid>
+                    </VStack>
                 </form>
             </DrawerWrapper>
             <ExportReportModal

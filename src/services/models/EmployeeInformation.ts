@@ -3,7 +3,6 @@
 /* eslint-disable */
 
 import type { Contract } from './Contract';
-import type { PayrollGroup } from './PayrollGroup';
 import type { PayRollType } from './PayRollType';
 import type { User } from './User';
 
@@ -35,13 +34,12 @@ export type EmployeeInformation = {
     monthlyPayoutRate?: number | null;
     paymentFrequency?: string | null;
     onBoradingFee?: number;
-    payrollGroupId?: number | null;
-    payrollGroup?: PayrollGroup;
     timeSheetGenerationStartDate?: string;
     isEligibleForLeave?: boolean | null;
     numberOfDaysEligible?: number | null;
     numberOfHoursEligible?: number | null;
     numberOfEligibleLeaveDaysTaken?: number;
     employeeType?: string | null;
+    invoiceGenerationType?: string | null;
     contracts?: Array<Contract> | null;
 };

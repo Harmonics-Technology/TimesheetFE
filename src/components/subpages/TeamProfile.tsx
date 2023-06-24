@@ -76,9 +76,9 @@ function TeamProfile({
     paymentPartner,
     id,
 }: TeamProfileProps) {
-    // console.log({ userProfile });
+    console.log({ userProfile });
 
-    const { user } = useContext(UserContext);
+    const { user, addons, opens } = useContext(UserContext);
     // console.log({ user });
     const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
     const {
@@ -123,6 +123,8 @@ function TeamProfile({
             numberOfHoursEligible:
                 userProfile?.employeeInformation?.numberOfHoursEligible,
             employeeType: userProfile?.employeeInformation?.employeeType,
+            invoiceGenerationType:
+                userProfile?.employeeInformation?.invoiceGenerationType,
         },
     });
     const router = useRouter();
@@ -497,26 +499,39 @@ function TeamProfile({
                                     },
                                 ]}
                             />
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="employeeType"
-                                error={errors.employeeType}
-                                keys="id"
-                                keyLabel="label"
-                                label="Employee Type"
-                                // disabled={true}
-                                placeholder={
-                                    userProfile?.employeeInformation
-                                        ?.employeeType as string
+                            <Box
+                                pointerEvents={
+                                    addons?.includes('shift management')
+                                        ? 'all'
+                                        : 'none'
                                 }
-                                options={[
-                                    { id: 'regular', label: 'Regular' },
-                                    {
-                                        id: 'shift',
-                                        label: 'Shift',
-                                    },
-                                ]}
-                            />
+                                onClick={() =>
+                                    addons?.includes('shift management')
+                                        ? void 0
+                                        : opens()
+                                }
+                            >
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="employeeType"
+                                    error={errors.employeeType}
+                                    keys="id"
+                                    keyLabel="label"
+                                    label="Employee Type"
+                                    placeholder={
+                                        (userProfile?.employeeInformation
+                                            ?.employeeType as string) ||
+                                        (watch('employeeType') as string)
+                                    }
+                                    options={[
+                                        { id: 'regular', label: 'Regular' },
+                                        {
+                                            id: 'shift',
+                                            label: 'Shift',
+                                        },
+                                    ]}
+                                />
+                            </Box>
 
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -784,6 +799,23 @@ function TeamProfile({
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
+                                name="invoiceGenerationType"
+                                error={errors.invoiceGenerationType}
+                                keys="id"
+                                keyLabel="label"
+                                label="Invoice Type"
+                                options={[
+                                    { id: 'invoice', label: 'Invoice' },
+                                    { id: 'payroll', label: 'Payroll' },
+                                ]}
+                                placeholder={
+                                    userProfile?.employeeInformation
+                                        ?.invoiceGenerationType ||
+                                    'Please select'
+                                }
+                            />
+                            <SelectrixBox<TeamMemberModel>
+                                control={control}
                                 name="fixedAmount"
                                 error={errors.fixedAmount}
                                 keys="id"
@@ -867,14 +899,30 @@ function TeamProfile({
                             templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
                         >
-                            <PrimaryRadio
-                                label="Are you eligible for Leave"
-                                radios={['No', 'Yes']}
-                                name="isEligibleForLeave"
-                                control={control}
-                                error={errors.isEligibleForLeave}
-                                defaultValue={eligible == true ? 'Yes' : 'No'}
-                            />
+                            <Box
+                                mb="1.5rem"
+                                pointerEvents={
+                                    addons?.includes('leave management')
+                                        ? 'all'
+                                        : 'none'
+                                }
+                                onClick={() =>
+                                    addons?.includes('leave management')
+                                        ? void 0
+                                        : opens()
+                                }
+                            >
+                                <PrimaryRadio
+                                    label="Are you eligible for Leave"
+                                    radios={['No', 'Yes']}
+                                    name="isEligibleForLeave"
+                                    control={control}
+                                    error={errors.isEligibleForLeave}
+                                    defaultValue={
+                                        eligible == true ? 'Yes' : 'No'
+                                    }
+                                />
+                            </Box>
 
                             {(isEligibleForLeave as unknown as string) ==
                                 'Yes' || eligible == true ? (

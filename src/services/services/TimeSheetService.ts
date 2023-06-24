@@ -18,6 +18,7 @@ export class TimeSheetService {
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -27,6 +28,7 @@ export class TimeSheetService {
     public static listTimeSheetHistories(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -37,6 +39,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -155,6 +158,7 @@ requestBody?: Array<TimesheetHoursAdditionModel>,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -162,6 +166,7 @@ requestBody?: Array<TimesheetHoursAdditionModel>,
     public static listApprovedTimeSheet(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 ): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -170,6 +175,7 @@ search?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
             },
         });

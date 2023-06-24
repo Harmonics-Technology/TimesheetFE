@@ -37,6 +37,7 @@ requestBody?: ShiftModel,
     /**
      * @param startDate 
      * @param endDate 
+     * @param superAdminId 
      * @param userId 
      * @param isPublished 
      * @returns ShiftViewListStandardResponse Success
@@ -45,6 +46,7 @@ requestBody?: ShiftModel,
     public static listUsersShift(
 startDate?: string,
 endDate?: string,
+superAdminId?: string,
 userId?: string,
 isPublished?: boolean,
 ): CancelablePromise<ShiftViewListStandardResponse> {
@@ -54,6 +56,7 @@ isPublished?: boolean,
             query: {
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'SuperAdminId': superAdminId,
                 'UserId': userId,
                 'isPublished': isPublished,
             },
@@ -69,6 +72,7 @@ isPublished?: boolean,
      * @param limit 
      * @param startDate 
      * @param endDate 
+     * @param superAdminId 
      * @param userId 
      * @returns UsersShiftViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -78,6 +82,7 @@ offset?: number,
 limit?: number,
 startDate?: string,
 endDate?: string,
+superAdminId?: string,
 userId?: string,
 ): CancelablePromise<UsersShiftViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -88,6 +93,7 @@ userId?: string,
                 'Limit': limit,
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'SuperAdminId': superAdminId,
                 'UserId': userId,
             },
             errors: {
@@ -102,6 +108,7 @@ userId?: string,
      * @param limit 
      * @param startDate 
      * @param endDate 
+     * @param superAdminId 
      * @param userId 
      * @returns UsersShiftViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -111,6 +118,7 @@ offset?: number,
 limit?: number,
 startDate?: string,
 endDate?: string,
+superAdminId?: string,
 userId?: string,
 ): CancelablePromise<UsersShiftViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -121,6 +129,7 @@ userId?: string,
                 'Limit': limit,
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'SuperAdminId': superAdminId,
                 'UserId': userId,
             },
             errors: {

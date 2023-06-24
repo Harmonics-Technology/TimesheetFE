@@ -46,6 +46,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const start = format(startOfWeek(new Date()), 'yyyy-MM-dd');
         const end = format(endOfWeek(new Date()), 'yyyy-MM-dd');
         const { id } = ctx.query;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
 
         console.log({ start, end });
         try {
@@ -54,6 +55,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.limit,
                 pagingOptions.from || start,
                 pagingOptions.to || end,
+                superAdminId,
                 id,
             );
             const getUserInfo = (await UserService.getUserById(id)).data;

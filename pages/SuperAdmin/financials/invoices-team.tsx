@@ -16,7 +16,7 @@ interface invoiceType {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
 function Invoices({ invoiceData }: invoiceType) {
-    const { user } = useContext(UserContext);
+    const { user, subType, addons } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
@@ -28,10 +28,12 @@ function Invoices({ invoiceData }: invoiceType) {
                 <PageTabs
                     url={`/${role}/financials/invoices-payment`}
                     tabName="Payment Partners"
+                    upgrade={subType == 'onshore'}
                 />
                 <PageTabs
                     url={`/${role}/financials/invoices-client`}
                     tabName="Clients"
+                    upgrade={!addons.includes('client management')}
                 />
             </Flex>
             <OnshoreSubmittedInvoice
@@ -48,10 +50,12 @@ export default Invoices;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await FinancialService.listSubmittedOnshoreInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,

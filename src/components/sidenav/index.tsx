@@ -24,9 +24,56 @@ interface sidenavProps {
 }
 
 function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
-    const { user } = useContext(UserContext);
+    const { user, subType, addons } = useContext(UserContext);
     // console.log({ user });
     const role = user?.role?.replaceAll(' ', '');
+
+    const profile =
+        subType == 'onshore'
+            ? [
+                  'admin',
+                  { show: true, name: 'clients' },
+                  'supervisors',
+                  'team members',
+              ]
+            : subType == 'onshore' && addons?.includes('client management')
+            ? [
+                  'admin',
+                  { show: false, name: 'clients' },
+                  'supervisors',
+                  'team members',
+              ]
+            : subType == 'offshore'
+            ? [
+                  'admin',
+                  { show: true, name: 'clients' },
+                  'supervisors',
+                  'team members',
+                  'payment partners',
+              ]
+            : subType == 'offshore' && addons?.includes('client management')
+            ? [
+                  'admin',
+                  { show: false, name: 'clients' },
+                  'supervisors',
+                  'team members',
+                  'payment partners',
+              ]
+            : addons?.includes('client management')
+            ? [
+                  'admin',
+                  { show: false, name: 'clients' },
+                  'supervisors',
+                  'team members',
+                  'payment partners',
+              ]
+            : [
+                  'admin',
+                  { show: true, name: 'clients' },
+                  'supervisors',
+                  'team members',
+                  'payment partners',
+              ];
 
     return (
         <Box
@@ -87,13 +134,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         option={true}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                        dropDown={[
-                            'admin',
-                            'clients',
-                            'supervisors',
-                            'team members',
-                            'payment partners',
-                        ]}
+                        dropDown={profile}
                     />
                     <MenuItem
                         change={change}
@@ -174,6 +215,9 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
+                        display={
+                            addons?.includes('leave management') ? true : false
+                        }
                     />
                     <MenuItem
                         change={change}
@@ -184,6 +228,9 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
+                        display={
+                            addons?.includes('shift management') ? true : false
+                        }
                     />
                 </VStack>
             ) : role == 'TeamMember' ? (
@@ -246,6 +293,9 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
+                        display={
+                            addons?.includes('leave management') ? true : false
+                        }
                     />
                     {user?.employeeType?.toLowerCase() == 'shift' && (
                         <MenuItem
@@ -325,6 +375,9 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
+                        display={
+                            addons?.includes('leave management') ? true : false
+                        }
                     />
                     <MenuItem
                         change={change}
@@ -416,6 +469,9 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
+                        display={
+                            addons?.includes('leave management') ? true : false
+                        }
                     />
                     {user?.employeeType?.toLowerCase() == 'shift' && (
                         <MenuItem
@@ -683,6 +739,9 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
+                        display={
+                            addons?.includes('leave management') ? true : false
+                        }
                     />
                     {user?.employeeType?.toLowerCase() == 'shift' && (
                         <MenuItem
@@ -731,12 +790,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         option={true}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                        dropDown={[
-                            'clients',
-                            'supervisors',
-                            'team members',
-                            'payment partners',
-                        ]}
+                        dropDown={profile}
                     />
                     <MenuItem
                         change={change}
@@ -807,12 +861,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         option={true}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                        dropDown={[
-                            'clients',
-                            'supervisors',
-                            'team members',
-                            'payment partners',
-                        ]}
+                        dropDown={profile}
                     />
                     <MenuItem
                         change={change}
@@ -882,6 +931,9 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
+                        display={
+                            addons?.includes('leave management') ? true : false
+                        }
                     />
                     {user?.employeeType?.toLowerCase() == 'shift' && (
                         <MenuItem

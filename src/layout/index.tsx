@@ -9,7 +9,6 @@ import Cookies from 'js-cookie';
 import SessionModal from '@components/bits-utils/SessionModal';
 import { NotificationProvider } from '@components/context/NotificationContext';
 import { OnboardingFeeProvider } from '@components/context/OnboardingFeeContext';
-import { UserProvider } from '@components/context/UserContext';
 import { Logout } from '@components/bits-utils/LogUserOut';
 
 type LayoutProps = {

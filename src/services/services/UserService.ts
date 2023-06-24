@@ -8,6 +8,7 @@ import type { PasswordReset } from '../models/PasswordReset';
 import type { RegisterModel } from '../models/RegisterModel';
 import type { ShiftUsersListViewPagedCollectionStandardResponse } from '../models/ShiftUsersListViewPagedCollectionStandardResponse';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
+import type { UpdateClientSubscriptionModel } from '../models/UpdateClientSubscriptionModel';
 import type { UpdateUserModel } from '../models/UpdateUserModel';
 import type { UserCountByPayrollTypeViewListStandardResponse } from '../models/UserCountByPayrollTypeViewListStandardResponse';
 import type { UserProfileViewStandardResponse } from '../models/UserProfileViewStandardResponse';
@@ -124,6 +125,22 @@ requestBody?: UpdateUserModel,
     }
 
     /**
+     * @param requestBody 
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateClientSubscription(
+requestBody?: UpdateClientSubscriptionModel,
+): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/update/client-subscription',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
      * @param password 
      * @returns UserViewStandardResponse Success
      * @throws ApiError
@@ -173,6 +190,7 @@ userId: string,
 
     /**
      * @param role 
+     * @param superAdminId 
      * @param offset 
      * @param limit 
      * @param search 
@@ -183,6 +201,7 @@ userId: string,
      */
     public static listUsers(
 role: string,
+superAdminId?: string,
 offset?: number,
 limit?: number,
 search?: string,
@@ -196,6 +215,7 @@ endDate?: string,
                 'role': role,
             },
             query: {
+                'superAdminId': superAdminId,
                 'Offset': offset,
                 'Limit': limit,
                 'Search': search,
@@ -349,6 +369,7 @@ clientId: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param startDate 
      * @param endDate 
      * @returns ShiftUsersListViewPagedCollectionStandardResponse Success
@@ -357,6 +378,7 @@ clientId: string,
     public static listShiftUsers(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<ShiftUsersListViewPagedCollectionStandardResponse> {
@@ -366,6 +388,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'startDate': startDate,
                 'endDate': endDate,
             },

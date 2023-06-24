@@ -44,16 +44,19 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const start = format(startOfWeek(new Date()), 'yyyy-MM-dd');
         const end = format(endOfWeek(new Date()), 'yyyy-MM-dd');
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
 
         console.log({ start, end });
         try {
             const allShift = await ShiftService.listUsersShift(
                 pagingOptions.from || start,
                 pagingOptions.to || end,
+                superAdminId,
             );
             const shiftUser = await UserService.listShiftUsers(
                 pagingOptions.offset,
                 pagingOptions.shiftLimit,
+                superAdminId,
                 pagingOptions.from || start,
                 pagingOptions.to || end,
             );

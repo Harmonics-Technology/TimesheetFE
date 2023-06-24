@@ -21,10 +21,12 @@ export default index;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const data = await DashboardService.getAdminMetrics();
+            const data = await DashboardService.getAdminMetrics(superAdminId);
             const team = await UserService.listUsers(
                 'Team Member',
+                superAdminId,
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
@@ -52,6 +54,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     data: [],

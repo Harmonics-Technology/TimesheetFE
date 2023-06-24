@@ -12,20 +12,24 @@ function index({ metrics }: DashboardProps) {
 
 export default index;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
-    try {
-        const data = await DashboardService.getAdminMetrics();
-        return {
-            props: {
-                metrics: data,
-            },
-        };
-    } catch (error: any) {
-        console.log({ error });
-        return {
-            props: {
-                data: [],
-            },
-        };
-    }
-});
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx: any) => {
+        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
+        // console.log({ superAdminId });
+        try {
+            const data = await DashboardService.getAdminMetrics(superAdminId);
+            return {
+                props: {
+                    metrics: data,
+                },
+            };
+        } catch (error: any) {
+            console.log({ error });
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);

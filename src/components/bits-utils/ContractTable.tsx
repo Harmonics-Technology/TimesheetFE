@@ -167,7 +167,7 @@ function TeamManagement({ userProfile }: adminProps) {
                     >
                         Contract Data
                     </Text>
-                    <Button
+                    {/* <Button
                         bgColor="brand.400"
                         color="white"
                         p=".5rem 1.5rem"
@@ -176,7 +176,7 @@ function TeamManagement({ userProfile }: adminProps) {
                         onClick={onOpen}
                     >
                         +Contract
-                    </Button>
+                    </Button> */}
                 </Flex>
                 {/* <FilterSearch /> */}
                 <Tables
