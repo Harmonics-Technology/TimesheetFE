@@ -43,7 +43,7 @@ export default expenses;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const payrollGroupId = 2;
+        const payrollGroupId = pagingOptions.clientId;
         try {
             const data = await FinancialService.listPayrollGroupInvoices(
                 payrollGroupId,

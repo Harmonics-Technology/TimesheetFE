@@ -78,6 +78,7 @@
         "react-select": "^5.7.0",
         "react-selectrix": "^1.0.17",
         "react-spinners": "^0.13.7",
+        "react-time-picker": "^6.2.0",
         "react-to-print": "^2.14.12",
         "styled-components": "^5.2.1",
         "styled-system": "^5.1.5",

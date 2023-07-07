@@ -48,7 +48,7 @@ const Layout = ({ children }: LayoutProps) => {
             !urlRoute.startsWith('password')
         ) {
             // onOpen();
-            Logout('/login');
+            // Logout('/login');
         }
     }, [urlRoute, loggedInUser]);
 

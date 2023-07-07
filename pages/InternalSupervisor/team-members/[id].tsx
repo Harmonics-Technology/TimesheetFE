@@ -5,7 +5,7 @@ import { UserService, UserView } from 'src/services';
 
 interface pageOptions {
     userProfile: any;
-    clients: UserView[];
+    // clients: UserView[];
     supervisor: UserView[];
     paymentPartner: UserView[];
     id: string;
@@ -13,7 +13,7 @@ interface pageOptions {
 
 function TeamDetails({
     userProfile,
-    clients,
+    // clients,
     supervisor,
     paymentPartner,
     id,
@@ -34,21 +34,29 @@ export default TeamDetails;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
-        // console.log({ id });
         try {
             const data = await UserService.getUserById(id);
-            const clients = await UserService.listUsers('client');
-            const supervisor = await UserService.listUsers('supervisor');
+            // const clients = await UserService.listUsers('client');
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
             );
-            console.log({ data });
+            const clientId =
+                data?.data?.employeeInformation?.client?.id ||
+                data?.data?.employeeInformation?.supervisor?.employeeInformation
+                    ?.client?.id;
+            // console.log({ clientId });
+            const supervisor = await UserService.getClientSupervisors(
+                0,
+                18,
+                '',
+                clientId,
+            );
+            // console.log({ supervisor: supervisor.data?.value });
             return {
                 props: {
                     userProfile: data.data,
-                    clients: clients?.data?.value,
-                    supervisor: supervisor?.data?.value,
                     paymentPartner: paymentPartner?.data?.value,
+                    supervisor: supervisor?.data?.value,
                     id,
                 },
             };

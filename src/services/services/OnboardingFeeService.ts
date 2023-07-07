@@ -57,12 +57,14 @@ feeId: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @returns OnboardingFeeViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static listPercentageOnboardingFees(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 ): CancelablePromise<OnboardingFeeViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -70,6 +72,7 @@ limit?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,
@@ -79,13 +82,19 @@ limit?: number,
     }
 
     /**
+     * @param superAdminId 
      * @returns OnboardingFeeViewStandardResponse Success
      * @throws ApiError
      */
-    public static getFixedAmount(): CancelablePromise<OnboardingFeeViewStandardResponse> {
+    public static getFixedAmount(
+superAdminId?: string,
+): CancelablePromise<OnboardingFeeViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/OnboardingFee/fixed-fee',
+            query: {
+                'superAdminId': superAdminId,
+            },
             errors: {
                 400: `Bad Request`,
                 500: `Server Error`,
@@ -94,13 +103,19 @@ limit?: number,
     }
 
     /**
+     * @param superAdminId 
      * @returns OnboardingFeeViewStandardResponse Success
      * @throws ApiError
      */
-    public static getHst(): CancelablePromise<OnboardingFeeViewStandardResponse> {
+    public static getHst(
+superAdminId?: string,
+): CancelablePromise<OnboardingFeeViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/OnboardingFee/hst',
+            query: {
+                'superAdminId': superAdminId,
+            },
             errors: {
                 400: `Bad Request`,
                 500: `Server Error`,

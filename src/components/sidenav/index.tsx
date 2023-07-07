@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useContext } from 'react';
 import {
     FaCalendar,
-    FaCogs,
     FaCreditCard,
     FaFile,
     FaHome,
@@ -14,7 +13,7 @@ import {
     FaUsers,
 } from 'react-icons/fa';
 import { RiLineChartFill } from 'react-icons/ri';
-import { MdOutlineSupervisorAccount } from 'react-icons/md';
+import { MdOutlineSupervisorAccount, MdSettings } from 'react-icons/md';
 import { BsGraphUp } from 'react-icons/bs';
 import { AiFillSchedule } from 'react-icons/ai';
 interface sidenavProps {
@@ -171,7 +170,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         role={role}
                     />
-                    <MenuItem
+                    {/* <MenuItem
                         change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
@@ -180,8 +179,8 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
-                    />
-                    <MenuItem
+                    /> */}
+                    {/* <MenuItem
                         change={change}
                         linkName="settings"
                         menuTitle="Settings"
@@ -195,7 +194,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         ]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
-                    />
+                    /> */}
                     <MenuItem
                         change={change}
                         linkName="report"
@@ -231,6 +230,26 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         display={
                             addons?.includes('shift management') ? true : false
                         }
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="account-management"
+                        menuTitle="Account settings"
+                        icon={<MdSettings opacity=".8" />}
+                        option={true}
+                        dropDown={[
+                            'manage subscription',
+                            'expense type',
+                            'onboarding fee',
+                            'hst settings',
+                            'leave management settings',
+                            'shift management settings',
+                            'access control settings',
+                            'payment schedule settings',
+                            'personal info',
+                        ]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
                     />
                 </VStack>
             ) : role == 'TeamMember' ? (

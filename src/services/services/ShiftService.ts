@@ -3,6 +3,8 @@
 /* eslint-disable */
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { ShiftModel } from '../models/ShiftModel';
+import type { ShiftTypeModel } from '../models/ShiftTypeModel';
+import type { ShiftTypeViewStandardResponse } from '../models/ShiftTypeViewStandardResponse';
 import type { ShiftViewListStandardResponse } from '../models/ShiftViewListStandardResponse';
 import type { ShiftViewStandardResponse } from '../models/ShiftViewStandardResponse';
 import type { SwapViewPagedCollectionStandardResponse } from '../models/SwapViewPagedCollectionStandardResponse';
@@ -13,6 +15,88 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class ShiftService {
+
+    /**
+     * @param requestBody 
+     * @returns ShiftTypeViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static createShiftType(
+requestBody?: ShiftTypeModel,
+): CancelablePromise<ShiftTypeViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Shift/add-shift-type',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @returns ShiftTypeViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static listShiftTypes(
+superAdminId?: string,
+): CancelablePromise<Array<ShiftTypeViewStandardResponse>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Shift/shift-types',
+            query: {
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateShiftType(
+requestBody?: ShiftTypeModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Shift/shift-type/update',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param id 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static deleteShiftType(
+id?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Shift/shift-type/delete',
+            query: {
+                'id': id,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
 
     /**
      * @param requestBody 

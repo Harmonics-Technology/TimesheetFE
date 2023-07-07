@@ -59,9 +59,13 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
                             w="full"
                             {...group}
                         >
-                            {radios.map((value) => {
+                            {radios.map((value, index) => {
                                 const radio = getRadioProps({ value });
-                                return <RadioBtn {...radio}>{value}</RadioBtn>;
+                                return (
+                                    <RadioBtn {...radio} key={index}>
+                                        {value}
+                                    </RadioBtn>
+                                );
                             })}
                         </HStack>
                         // </HStack>

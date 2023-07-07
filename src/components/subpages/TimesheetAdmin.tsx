@@ -12,11 +12,17 @@ import {
     addMonths,
     lastDayOfMonth,
     isWeekend,
+    eachDayOfInterval,
 } from 'date-fns';
 
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
-import { MdArrowDropDown, MdOutlineBookmarkAdd } from 'react-icons/md';
+import { MdArrowDropDown } from 'react-icons/md';
 import { BiX, BiCheck } from 'react-icons/bi';
+import dynamic from 'next/dynamic';
+const Selectrix = dynamic<any>(() => import('react-selectrix'), {
+    ssr: false,
+});
+
 import {
     Box,
     Flex,
@@ -54,6 +60,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import useClickOutside from '@components/generics/useClickOutside';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { Round } from '@components/generics/functions/Round';
+import { TimeSheetHighlight } from '@components/bits-utils/TimeSheetHighlight';
 
 const schema = yup.object().shape({
     reason: yup.string().required(),
@@ -66,8 +73,32 @@ const TimesheetAdmin = ({
     timeSheets: TimeSheetMonthlyView;
     id: string;
 }) => {
-    console.log({ id });
+    // console.log({ id });
+
     const router = useRouter();
+
+    const [from, setFrom] = useState<any>();
+    const [to, setTo] = useState<any>();
+
+    const HighlightDate = (value: any) => {
+        setFrom(value.split('-')[0]);
+        setTo(value.split('-')[1]);
+    };
+
+    const dates = eachDayOfInterval({
+        start: new Date(from),
+        end: new Date(to),
+    });
+    console.log({ dates });
+
+    // const newOptions = data.map((obj) => ({
+    //     id: `${obj.begin} - ${obj.end}`,
+    //     label: `${format(obj.start, 'MMM d')} - ${format(
+    //         obj.end,
+    //         'MMM d, YYYY',
+    //     )}`,
+    // }));
+
     console.log({ timeSheets });
     const sheet = timeSheets?.timeSheet;
     const { date } = router.query;
@@ -582,10 +613,16 @@ const TimesheetAdmin = ({
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
             // console.log({ timesheets });
+            // console.log({ week });
 
             week.push(
                 <Flex
-                    border={['0', '1px solid #e5e5e5']}
+                    border={[
+                        '0',
+                        dates?.includes(new Date(userDate as string))
+                            ? '0.25rem solid rgba(46, 175, 163, 0.40)'
+                            : '1px solid #e5e5e5',
+                    ]}
                     height={['auto', '4rem']}
                     // color={['gray.500', 'inherit']}
                     fontSize={['.5rem', '.8rem']}
@@ -600,9 +637,9 @@ const TimesheetAdmin = ({
                             : ''
                     }
     ${isSameDay(currentDate, new Date()) ? 'today' : ''}`}
-                    onClick={() => {
-                        setSelectedDate(cloneDate);
-                    }}
+                    // onClick={() => {
+                    //     setSelectedDate(cloneDate);
+                    // }}
                 >
                     <Flex pos="relative" flexDir={['column', 'row']}>
                         <div>{format(currentDate, 'MMM, d')}</div>
@@ -870,6 +907,7 @@ const TimesheetAdmin = ({
             );
             weekNumber++, (currentDate = addDays(currentDate, 7));
         }
+        console.log({ allWeeks });
 
         return (
             <>
@@ -897,7 +935,8 @@ const TimesheetAdmin = ({
     };
 
     return (
-        <Box>
+        <Box pos="relative">
+            <TimeSheetHighlight />
             <Box>
                 {getHeader()}
                 <Box p={['0rem 1rem 0', '1rem 2rem 0']} bgColor="white">
@@ -915,6 +954,26 @@ const TimesheetAdmin = ({
                     <Box display={['none', 'block']}>{getWeekDaysNames()}</Box>
                     {getDates()}
                 </Box>
+            </Box>
+            <Box w="40%">
+                <Selectrix
+                    label="Pay Period"
+                    customKeys={{
+                        keys: 'id',
+                        label: 'label',
+                    }}
+                    options={[
+                        {
+                            id: 'May 29  -  Jun 9, 2023',
+                            label: 'May 29  -  Jun 9, 2023',
+                        },
+                        {
+                            id: 'May 29  -  Jun 9, 2023',
+                            label: 'May 29  -  Jun 9, 2023',
+                        },
+                    ]}
+                    onChange={(e) => HighlightDate(e.target.value)}
+                />
             </Box>
             <Box
                 w="100%"

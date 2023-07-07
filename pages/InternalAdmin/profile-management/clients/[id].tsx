@@ -14,12 +14,7 @@ interface pageOptions {
     id: any;
 }
 
-function ClientDetails({
-    userProfile,
-    teamList,
-    supervisorList,
-    id,
-}: pageOptions) {
+function ClientDetails({ userProfile, teamList, supervisorList, id }: pageOptions) {
     return (
         <ClientProfile
             userProfile={userProfile}

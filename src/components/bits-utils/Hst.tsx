@@ -27,6 +27,7 @@ export const Hst = ({ data }: { data: OnboardingFeeView }) => {
     });
     const toast = useToast();
     const onSubmit = async (data: OnboardingFeeModel) => {
+        data.superAdminId = user?.superAdminId;
         try {
             const result = await OnboardingFeeService.addFee(data);
             if (result.status) {

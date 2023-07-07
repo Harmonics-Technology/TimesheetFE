@@ -31,9 +31,11 @@ interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     clients: UserView[];
     paymentPartner: UserView[];
+    leaveSettings: LeaveConfigurationView;
 }
 
 import {
+    LeaveConfigurationView,
     TeamMemberModel,
     UserService,
     UserView,
@@ -111,7 +113,12 @@ const schema = yup.object().shape({
     }),
 });
 
-function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
+function TeamManagement({
+    adminList,
+    clients,
+    paymentPartner,
+    leaveSettings,
+}: adminProps) {
     const client = clients?.filter((x) => x.isActive);
     // console.log({ client });
 
@@ -131,6 +138,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
             role: 'Team Member',
             onBordingFee: fixedAmount,
             employeeType: 'regular',
+            numberOfDaysEligible: leaveSettings?.eligibleLeaveDays,
         },
     });
     // console.log(watch('onBordingFee'));
@@ -917,7 +925,7 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                             </Text>
                         </Flex>
                         <Box pos="relative" mb="1rem">
-                            <PrimaryRadio
+                            <PrimaryRadio<TeamMemberModel>
                                 label="Are you eligible for Leave"
                                 radios={['No', 'Yes']}
                                 name="isEligibleForLeave"
@@ -943,6 +951,9 @@ function TeamManagement({ adminList, clients, paymentPartner }: adminProps) {
                                     placeholder=""
                                     defaultValue=""
                                     register={register}
+                                    readonly={
+                                        leaveSettings?.isStandardEligibleDays
+                                    }
                                 />
                                 <PrimaryInput<TeamMemberModel>
                                     label="Eligible number of hours"

@@ -4,6 +4,8 @@ import TeamManagement from '@components/subpages/TeamManagement';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
+    LeaveConfigurationView,
+    LeaveService,
     UserService,
     UserView,
     UserViewPagedCollectionStandardResponse,
@@ -12,15 +14,17 @@ interface TeamProps {
     teamList: UserViewPagedCollectionStandardResponse;
     clients: UserView[];
     paymentPartner: UserView[];
+    leaveSettings: LeaveConfigurationView;
 }
 
-function Team({ teamList, clients, paymentPartner }: TeamProps) {
+function Team({ teamList, clients, paymentPartner, leaveSettings }: TeamProps) {
     // console.log({ team });
     return (
         <TeamManagement
             adminList={teamList}
             clients={clients}
             paymentPartner={paymentPartner}
+            leaveSettings={leaveSettings}
         />
     );
 }
@@ -46,11 +50,15 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 'payment partner',
                 superAdminId,
             );
+            const leaveSettings = await LeaveService.getLeaveConfiguration(
+                superAdminId,
+            );
             return {
                 props: {
                     teamList: data,
                     clients: clients?.data?.value,
                     paymentPartner: paymentPartner?.data?.value,
+                    leaveSettings: leaveSettings.data,
                 },
             };
         } catch (error: any) {

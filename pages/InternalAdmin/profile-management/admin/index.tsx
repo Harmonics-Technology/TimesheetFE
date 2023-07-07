@@ -4,6 +4,7 @@ import ProfileManagementAdmin from '@components/subpages/AdminManagement';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
+    ExportService,
     UserService,
     UserView,
     UserViewPagedCollectionStandardResponse,
@@ -23,10 +24,15 @@ export default admin;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const team = await UserService.listUsers('Team Member');
+            const team = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
+            );
             const data = await UserService.listUsers(
                 'admins',
+                superAdminId,
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,

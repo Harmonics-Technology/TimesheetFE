@@ -1,5 +1,6 @@
 import { withPageAuth } from "@components/generics/withPageAuth";
 import AdminProfile from "@components/subpages/AdminProfile";
+import SuperadminProfile from "@components/subpages/SuperAdminManagement";
 import { GetServerSideProps } from "next";
 import { UserService } from "src/services";
 interface pageOptions {
@@ -7,7 +8,7 @@ interface pageOptions {
 }
 
 function AdminDetails({ userProfile }: pageOptions) {
-    return <AdminProfile userProfile={userProfile} />;
+    return <SuperadminProfile userProfile={userProfile} />;
 }
 
 export default AdminDetails;

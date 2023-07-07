@@ -165,7 +165,7 @@ function PaymentPartnerDashboard({
                     markAsRead={markAsRead}
                     loading={loading}
                 />
-                <Flex
+                {/* <Flex
                     minH="5rem"
                     w="full"
                     bgColor="brand.400"
@@ -206,7 +206,7 @@ function PaymentPartnerDashboard({
                     >
                         Check Rate
                     </Button>
-                </Flex>
+                </Flex> */}
             </VStack>
         </Grid>
     );

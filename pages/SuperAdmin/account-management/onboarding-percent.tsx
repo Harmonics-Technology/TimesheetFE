@@ -9,9 +9,10 @@ function onboardingfee({ data }: { data: OnboardingFeeView[] }) {
 
 export default onboardingfee;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
+export const getServerSideProps: GetServerSideProps = withPageAuth(async (ctx) => {
+    const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
     try {
-        const data = await OnboardingFeeService.listPercentageOnboardingFees();
+        const data = await OnboardingFeeService.listPercentageOnboardingFees(superAdminId);
         return {
             props: {
                 data: data.data?.value,

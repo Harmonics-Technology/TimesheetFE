@@ -34,6 +34,7 @@ import { UserContext } from '@components/context/UserContext';
 import { BiTrash } from 'react-icons/bi';
 import { MdVerified, MdCancel } from 'react-icons/md';
 import { BsEye } from 'react-icons/bs';
+import { RiInboxArchiveFill } from 'react-icons/ri';
 
 export function TableHead({
     name,
@@ -1019,6 +1020,57 @@ export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
                             </Link>
                         </NextLink>
                     </MenuItem> */}
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+export function TableSubscriptionActions({
+    x,
+    openRenew,
+    // openPayment,
+    setData,
+}: {
+    x: any;
+    openRenew: any;
+    // openPayment: any;
+    setData: any;
+}) {
+    const openRenewSub = () => {
+        setData(x);
+        openRenew();
+    };
+    const upgradeSub = () => {
+        setData(x);
+        // openPayment();
+    };
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        <FaEllipsisH />
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    <MenuItem onClick={openRenewSub} w="full">
+                        <Icon as={MdVerified} mr=".5rem" color="#777777" />
+                        Renew Subscription
+                    </MenuItem>
+                    <MenuItem onClick={upgradeSub} w="full">
+                        <Icon
+                            as={RiInboxArchiveFill}
+                            mr=".5rem"
+                            color="#777777"
+                        />
+                        Upgrade Subscription
+                    </MenuItem>
                 </MenuList>
             </Menu>
         </td>

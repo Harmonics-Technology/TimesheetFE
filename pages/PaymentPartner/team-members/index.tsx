@@ -5,6 +5,7 @@ import TeamManagement from '@components/subpages/TeamManagement';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
+    LeaveService,
     UserService,
     UserView,
     UserViewPagedCollectionStandardResponse,
@@ -43,6 +44,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
+
             return {
                 props: {
                     teamList: data,

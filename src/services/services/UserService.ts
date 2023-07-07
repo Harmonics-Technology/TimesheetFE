@@ -1,9 +1,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
+import type { ControlSettingModel } from '../models/ControlSettingModel';
+import type { ControlSettingViewStandardResponse } from '../models/ControlSettingViewStandardResponse';
 import type { Enable2FAViewStandardResponse } from '../models/Enable2FAViewStandardResponse';
 import type { InitiateResetModel } from '../models/InitiateResetModel';
 import type { LoginModel } from '../models/LoginModel';
+import type { ObjectStandardResponse } from '../models/ObjectStandardResponse';
 import type { PasswordReset } from '../models/PasswordReset';
 import type { RegisterModel } from '../models/RegisterModel';
 import type { ShiftUsersListViewPagedCollectionStandardResponse } from '../models/ShiftUsersListViewPagedCollectionStandardResponse';
@@ -103,6 +107,39 @@ requestBody?: PasswordReset,
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/reset/complete',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @returns ControlSettingViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getControlSettingById(
+superAdminId?: string,
+): CancelablePromise<ControlSettingViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/control-settings',
+            query: {
+                'superAdminId': superAdminId,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateControlSettings(
+requestBody?: ControlSettingModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/update-control-settings',
             body: requestBody,
             mediaType: 'application/json-patch+json',
         });
@@ -593,6 +630,43 @@ year?: number,
             url: '/api/User/chart/teammembers-by-payrolls',
             query: {
                 'year': year,
+            },
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @param search 
+     * @returns ObjectStandardResponse Success
+     * @throws ApiError
+     */
+    public static getClientSubscriptionHistory(
+superAdminId?: string,
+search?: string,
+): CancelablePromise<ObjectStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/subscription/history',
+            query: {
+                'superAdminId': superAdminId,
+                'search': search,
+            },
+        });
+    }
+
+    /**
+     * @param subscriptionId 
+     * @returns ObjectStandardResponse Success
+     * @throws ApiError
+     */
+    public static cancelSubscription(
+subscriptionId?: string,
+): CancelablePromise<ObjectStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/subscription/cancel',
+            query: {
+                'subscriptionId': subscriptionId,
             },
         });
     }

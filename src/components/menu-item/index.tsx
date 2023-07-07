@@ -53,7 +53,7 @@ function MenuItem({
                                 }
                                 overflow="hidden"
                                 transition="all .35s ease-in-out"
-                                maxH={openMenu ? '20rem' : '3rem'}
+                                maxH={openMenu ? 'auto' : '3rem'}
                             >
                                 <Flex
                                     justify="space-between"
@@ -135,10 +135,11 @@ function MenuItem({
                                             fontSize={
                                                 router.pathname.startsWith(
                                                     `${url}/${
-                                                        x?.name?.replace(
+                                                        x?.name?.replaceAll(
                                                             ' ',
                                                             '-',
-                                                        ) || x.replace(' ', '-')
+                                                        ) ||
+                                                        x.replaceAll(' ', '-')
                                                     }`,
                                                 )
                                                     ? '1rem'
@@ -148,10 +149,11 @@ function MenuItem({
                                             fontWeight={
                                                 router.pathname.startsWith(
                                                     `${url}/${
-                                                        x?.name?.replace(
+                                                        x?.name?.replaceAll(
                                                             ' ',
                                                             '-',
-                                                        ) || x.replace(' ', '-')
+                                                        ) ||
+                                                        x.replaceAll(' ', '-')
                                                     }`,
                                                 )
                                                     ? 'bold'
@@ -166,11 +168,11 @@ function MenuItem({
                                                         : () => {
                                                               router.push(
                                                                   `${url}/${
-                                                                      x?.name?.replace(
+                                                                      x?.name?.replaceAll(
                                                                           ' ',
                                                                           '-',
                                                                       ) ||
-                                                                      x.replace(
+                                                                      x.replaceAll(
                                                                           ' ',
                                                                           '-',
                                                                       )
@@ -272,7 +274,7 @@ function MenuItem({
                                 }
                                 overflow="hidden"
                                 transition="all .35s ease-in-out"
-                                maxH={openMenu ? '20rem' : '2rem'}
+                                maxH={openMenu ? 'auto' : '2rem'}
                             >
                                 <Flex
                                     justify="space-between"
@@ -343,10 +345,11 @@ function MenuItem({
                                             fontSize={
                                                 router.pathname.startsWith(
                                                     `${url}/${
-                                                        x?.name?.replace(
+                                                        x?.name?.replaceAll(
                                                             ' ',
                                                             '-',
-                                                        ) || x.replace(' ', '-')
+                                                        ) ||
+                                                        x.replaceAll(' ', '-')
                                                     }`,
                                                 )
                                                     ? '1rem'
@@ -356,10 +359,11 @@ function MenuItem({
                                             fontWeight={
                                                 router.pathname.startsWith(
                                                     `${url}/${
-                                                        x?.name?.replace(
+                                                        x?.name?.replaceAll(
                                                             ' ',
                                                             '-',
-                                                        ) || x.replace(' ', '-')
+                                                        ) ||
+                                                        x.replaceAll(' ', '-')
                                                     }`,
                                                 )
                                                     ? 'bold'
@@ -374,11 +378,11 @@ function MenuItem({
                                                         : () => {
                                                               router.push(
                                                                   `${url}/${
-                                                                      x?.name?.replace(
+                                                                      x?.name?.replaceAll(
                                                                           ' ',
                                                                           '-',
                                                                       ) ||
-                                                                      x.replace(
+                                                                      x.replaceAll(
                                                                           ' ',
                                                                           '-',
                                                                       )

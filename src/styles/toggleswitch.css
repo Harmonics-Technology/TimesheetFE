@@ -1,0 +1,42 @@
+.container {
+    text-align: center;
+}
+.toggle-switch {
+    position: relative;
+    width: 40px;
+    display: inline-block;
+    text-align: left;
+    top: 8px;
+}
+.checkboxs {
+    display: none !important;
+}
+.label {
+    display: block;
+    cursor: pointer;
+    border: 0px solid #bbb;
+    position: relative;
+}
+.inner {
+    display: block;
+    width: 100%;
+    height: 1.1rem;
+    background-color: #f0f0f0;
+    border-radius: 25px;
+}
+.switch {
+    display: block;
+    width: 1.2rem;
+    height: 1.2rem;
+    background: #2eafa3;
+    position: absolute;
+    top: 0;
+    transform: translateY(-5%);
+    right: 25px;
+    border-radius: 50%;
+    transition: all 0.3s ease-in 0s;
+    border: 1px solid white;
+}
+.checkboxs:checked + .label .switch {
+    right: -5px;
+}

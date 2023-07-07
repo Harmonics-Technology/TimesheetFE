@@ -23,10 +23,12 @@ export default admin;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const client = await UserService.listUsers('client');
+            const client = await UserService.listUsers('client', superAdminId);
             const data = await UserService.listUsers(
                 'supervisor',
+                superAdminId,
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,

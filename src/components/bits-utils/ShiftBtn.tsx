@@ -25,6 +25,7 @@ export const ShiftBtn = ({
             fontSize=".9rem"
             onClick={onClick}
             isLoading={loading}
+            px="2rem"
             spinner={<BeatLoader color="white" size={10} />}
         >
             {text}

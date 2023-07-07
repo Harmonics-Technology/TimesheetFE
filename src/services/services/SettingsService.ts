@@ -12,17 +12,22 @@ export class SettingsService {
 
     /**
      * @param name 
+     * @param superAdminId 
      * @returns ExpenseTypeViewStandardResponse Success
      * @throws ApiError
      */
     public static createExpenseType(
 name: string,
+superAdminId?: string,
 ): CancelablePromise<ExpenseTypeViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/Settings/expense-type/create/{name}',
             path: {
                 'name': name,
+            },
+            query: {
+                'superAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,
@@ -32,13 +37,19 @@ name: string,
     }
 
     /**
+     * @param superAdminId 
      * @returns ExpenseTypeViewIEnumerableStandardResponse Success
      * @throws ApiError
      */
-    public static listExpenseTypes(): CancelablePromise<ExpenseTypeViewIEnumerableStandardResponse> {
+    public static listExpenseTypes(
+superAdminId?: string,
+): CancelablePromise<ExpenseTypeViewIEnumerableStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Settings/expense-types',
+            query: {
+                'superAdminId': superAdminId,
+            },
             errors: {
                 400: `Bad Request`,
                 500: `Server Error`,

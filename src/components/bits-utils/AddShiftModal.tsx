@@ -14,22 +14,20 @@ import {
     VStack,
     useToast,
 } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { ShiftBtn } from './ShiftBtn';
 import { SelectrixBox } from './Selectrix';
 import {
     ShiftService,
     ShiftModel,
-    UserView,
-    UserViewListStandardResponse,
     ShiftUsersListViewPagedCollectionStandardResponse,
 } from 'src/services';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
-import { FaLess, FaRegCalendarAlt } from 'react-icons/fa';
+import { FaRegCalendarAlt } from 'react-icons/fa';
 import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 import { AiOutlineBgColors, AiOutlineFieldTime } from 'react-icons/ai';
 import { HexColorPicker, HexColorInput } from 'powerful-color-picker';
@@ -37,7 +35,6 @@ import dynamic from 'next/dynamic';
 import { PrimaryTextarea } from './PrimaryTextArea';
 import { useRouter } from 'next/router';
 import moment from 'moment';
-import useClickOutside from '@components/generics/useClickOutside';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -145,11 +142,11 @@ export const AddShiftModal = ({
     // console.log({ hoursDiff });
 
     const onSubmit = async (data: ShiftModel) => {
-        data.hours = hoursDiff;
-        data.title = title;
-        data.start = fromDate?.format('YYYY-MM-DD HH:mm:ss');
-        data.end = toDate?.format('YYYY-MM-DD HH:mm:ss');
-        data.color = color;
+        // data.hours = hoursDiff;
+        // data.title = title;
+        // data.start = fromDate?.format('YYYY-MM-DD HH:mm:ss');
+        // data.end = toDate?.format('YYYY-MM-DD HH:mm:ss');
+        // data.color = color;
         data.repeatStopDate = repeatEndDate?.format('YYYY-MM-DD HH:mm:ss');
         repeat && (data.repeatQuery = rrule);
         data.userId ? data.userId : (data.userId = userId);

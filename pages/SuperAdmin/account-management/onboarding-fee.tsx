@@ -1,17 +1,18 @@
-import { Hst } from '@components/bits-utils/Hst';
+import { OnboardingFee } from '@components/bits-utils/OnboardingFee';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
 import { OnboardingFeeView, OnboardingFeeService } from 'src/services';
 
-function hst({ data }: { data: OnboardingFeeView }) {
-    return <Hst data={data} />;
+function onboardingfee({ data }: { data: OnboardingFeeView }) {
+    return <OnboardingFee data={data} />;
 }
 
-export default hst;
+export default onboardingfee;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async () => {
+export const getServerSideProps: GetServerSideProps = withPageAuth(async (ctx) => {
+    const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
     try {
-        const data = await OnboardingFeeService.getHst();
+        const data = await OnboardingFeeService.getFixedAmount(superAdminId);
         return {
             props: {
                 data: data.data,

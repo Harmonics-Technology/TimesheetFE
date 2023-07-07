@@ -192,7 +192,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     bgColor="brand.400"
                                     // mt={["2rem", "0"]}
                                 >
-                                    Login
+                                    Complete Reset
                                 </Button>
                             </VStack>
                         )}

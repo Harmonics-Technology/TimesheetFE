@@ -14,6 +14,7 @@ export class ExportService {
 
     /**
      * @param record 
+     * @param superAdminId 
      * @param supervisorId 
      * @param clientId 
      * @param paymentPartnerId 
@@ -25,6 +26,7 @@ export class ExportService {
      */
     public static exportUserRecord(
 record?: RecordsToDownload,
+superAdminId?: string,
 supervisorId?: string,
 clientId?: string,
 paymentPartnerId?: string,
@@ -37,6 +39,7 @@ endDate?: string,
             url: '/api/Export/users',
             query: {
                 'Record': record,
+                'SuperAdminId': superAdminId,
                 'SupervisorId': supervisorId,
                 'ClientId': clientId,
                 'PaymentPartnerId': paymentPartnerId,
@@ -51,6 +54,7 @@ endDate?: string,
     }
 
     /**
+     * @param superAdminId 
      * @param record 
      * @param payrollGroupId 
      * @param rowHeaders 
@@ -60,6 +64,7 @@ endDate?: string,
      * @throws ApiError
      */
     public static exportInvoiceRecord(
+superAdminId?: string,
 record?: InvoiceRecord,
 payrollGroupId?: string,
 rowHeaders?: Array<string>,
@@ -70,6 +75,7 @@ endDate?: string,
             method: 'GET',
             url: '/api/Export/invoice',
             query: {
+                'SuperAdminId': superAdminId,
                 'Record': record,
                 'PayrollGroupId': payrollGroupId,
                 'rowHeaders': rowHeaders,

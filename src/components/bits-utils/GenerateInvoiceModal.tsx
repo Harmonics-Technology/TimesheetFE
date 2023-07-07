@@ -76,7 +76,7 @@ export const GenerateInvoiceModal = ({
         resolver: yupResolver(schema),
         mode: 'all',
         defaultValues: {
-            payrollGroupId: id,
+            clientId: id,
         },
     });
 

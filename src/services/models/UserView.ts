@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 import type { ClientSubscriptionResponseViewModel } from './ClientSubscriptionResponseViewModel';
+import type { ControlSettingView } from './ControlSettingView';
 import type { EmployeeInformationView } from './EmployeeInformationView';
 
 export type UserView = {
@@ -39,5 +40,6 @@ export type UserView = {
     numberOfLeaveDaysTaken?: number | null;
     numberOfHoursEligible?: number | null;
     employeeType?: string | null;
+    controlSettingView?: ControlSettingView;
     subscriptiobDetails?: ClientSubscriptionResponseViewModel;
 };

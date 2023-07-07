@@ -1,5 +1,6 @@
-import { HStack, Link, Text } from '@chakra-ui/react';
+import { HStack, Text } from '@chakra-ui/react';
 import { UserContext } from '@components/context/UserContext';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
@@ -14,21 +15,19 @@ export const LeaveTab = ({ tabValue }: leaveProps) => {
     return (
         <HStack w="full" borderBottom="1px solid #EBEFF2" gap="1rem">
             {tabValue.map((x) => (
-                <Link
-                    href={`/${role}${x.url}`}
-                    color={
-                        router.asPath.startsWith(`/${role}${x.url}`)
-                            ? 'black'
-                            : ' #A6ACBE'
-                    }
-                    _hover={{
-                        textDecor: 'none',
-                        color: 'brand.400',
-                    }}
-                >
+                <Link href={`/${role}${x.url}`} passHref>
                     <Text
                         fontWeight="700"
                         fontSize=".9rem"
+                        color={
+                            router.asPath.startsWith(`/${role}${x.url}`)
+                                ? 'black'
+                                : ' #A6ACBE'
+                        }
+                        _hover={{
+                            textDecor: 'none',
+                            color: 'brand.400',
+                        }}
                         borderBottom={
                             router.asPath.startsWith(`/${role}${x.url}`)
                                 ? '4px solid #2EAFA3'

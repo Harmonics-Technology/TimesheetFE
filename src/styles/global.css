@@ -4,6 +4,7 @@
 @import url('./calendar.css');
 @import url('./scrollbar.css');
 @import url('./scheduler.css');
+@import url('./toggleswitch.css');
 
 .phone-input {
     /* border: 1px solid #e5e5e5; */
@@ -210,4 +211,23 @@ select option {
     margin-top: 0.5rem;
     width: 100%;
     padding: 0 1rem;
+}
+.timePicker {
+    width: 100%;
+    height: 3rem;
+    border: thin solid #cbd5e0;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+.timePicker .react-time-picker__wrapper {
+    border: 0 !important;
+}
+.timePicker .react-time-picker__inputGroup__divider::before {
+    content: ':';
+}
+.timePicker .react-time-picker__inputGroup__input {
+    border: 0;
+    outline: 0;
 }

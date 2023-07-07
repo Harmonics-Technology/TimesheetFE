@@ -51,6 +51,8 @@ export type User = {
     clientSubscriptionId?: string | null;
     clientSubscriptionStatus?: boolean | null;
     commandCenterClientId?: string | null;
+    leaveConfigurationId?: string | null;
+    controlSettingId?: string | null;
     supervisors?: Array<User> | null;
     usersCreatedByYou?: Array<User> | null;
     supervisees?: Array<EmployeeInformation> | null;

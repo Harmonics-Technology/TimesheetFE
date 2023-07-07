@@ -12,4 +12,5 @@ export type PaymentSchedule = {
     approvalDate?: string;
     paymentDate?: string;
     cycleType?: string | null;
+    superAdminId?: string | null;
 };
