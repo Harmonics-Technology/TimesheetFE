@@ -66,7 +66,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                 render={({ field: { onChange, value } }) => (
                     <>
                         <DatePicker
-                            value={defaultValue || value || new DateObject()}
+                            value={defaultValue || value}
                             onChange={(date: any) => {
                                 onChange(
                                     JSON.stringify(
@@ -78,7 +78,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                             inputClass={'date'}
                             containerClassName="dateWrapper"
                             hideOnScroll={isMobile ? false : true}
-                            placeholder={placeholder}
+                            placeholder={placeholder || 'Please select'}
                             minDate={min}
                             maxDate={max}
                             disabled={disabled}

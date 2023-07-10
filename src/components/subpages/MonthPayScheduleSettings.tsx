@@ -90,16 +90,12 @@ export const MonthPayScheduleSettings = () => {
             <form>
                 <VStack w="40%" spacing="1.5rem" align="flex-start">
                     <Selectrix
-                        customKeys={{
-                            keys: 'id',
-                            label: 'label',
-                        }}
                         label="Payment Type"
                         options={[
-                            { id: 1, label: 'Full Month' },
-                            { id: 2, label: '4 Weeks Period' },
+                            { key: 1, label: 'Full Month' },
+                            { key: 2, label: '4 Weeks Period' },
                         ]}
-                        onChange={(e) => setPayType(e.target.value)}
+                        onChange={(val) => setPayType(val.key)}
                     />
                     {(payType as any) == 1 && (
                         <PrimaryInput<PayScheduleGenerationModel>

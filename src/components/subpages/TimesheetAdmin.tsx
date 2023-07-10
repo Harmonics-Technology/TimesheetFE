@@ -966,9 +966,9 @@ const TimesheetAdmin = ({
             >
                 <Box w="40%" mb="2rem">
                     <Selectrix
-                        label="Pay Period"
+                        // label="Pay Period"
                         customKeys={{
-                            keys: 'id',
+                            key: 'id',
                             label: 'label',
                         }}
                         options={[
@@ -981,7 +981,7 @@ const TimesheetAdmin = ({
                                 label: 'May 29  -  Jun 9, 2023',
                             },
                         ]}
-                        onChange={(e) => HighlightDate(e.target.value)}
+                        onChange={(e) => HighlightDate(e.key)}
                     />
                 </Box>
                 <Flex
