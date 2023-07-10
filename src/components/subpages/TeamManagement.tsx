@@ -58,6 +58,7 @@ import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 import { UserContext } from '@components/context/UserContext';
 import RadioBtn from '@components/bits-utils/RadioBtn';
 import { TriggerBox } from '@components/bits-utils/TriggerBox';
+import Cookies from 'js-cookie';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -129,17 +130,15 @@ function TeamManagement({
         handleSubmit,
         control,
         watch,
+        reset,
         setValue,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(schema),
         mode: 'all',
-        defaultValues: {
-            role: 'Team Member',
-            onBordingFee: fixedAmount,
-            employeeType: 'regular',
-            numberOfDaysEligible: leaveSettings?.eligibleLeaveDays,
-        },
+        // defaultValues: {
+
+        // },
     });
     // console.log(watch('onBordingFee'));
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -150,7 +149,7 @@ function TeamManagement({
     // console.log(watch("payRollTypeId"));
     const payroll = watch('payRollTypeId');
     const onboarding = watch('fixedAmount');
-    const clientId = watch('clientId') || user?.superAdminId;
+    const clientId = watch('clientId');
     const isEligibleForLeave = watch('isEligibleForLeave');
 
     const [contract, setContractFile] = useState<any>('');
@@ -238,7 +237,7 @@ function TeamManagement({
             setLoading(false);
             console.log({ data });
             if (data.status) {
-                setSupervisors(data.data?.filter((x) => x.isActive));
+                setSupervisors(data.data?.filter((x) => !x.isActive));
                 return;
             }
             setLoading(false);
@@ -252,7 +251,7 @@ function TeamManagement({
             });
         }
     };
-    console.log({ supervisors });
+    console.log({ supervisors, clientId });
 
     useEffect(() => {
         getSupervisor(clientId);
@@ -371,6 +370,8 @@ function TeamManagement({
 
     // subType = 'onshore';
 
+    console.log({ user });
+
     const radios = ['For me', 'For my client'];
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'selection',
@@ -397,9 +398,18 @@ function TeamManagement({
             setValue('payRollTypeId', 2);
             return;
         }
-        // addons?.includes('client management')
-        //     ? setClientType(true)
-        //     : setClientType(false);
+        const isUser = Cookies.get('user');
+        if (isUser !== undefined) {
+            const userDetails = JSON.parse(isUser as unknown as string);
+            reset({
+                clientId: userDetails.superAdminId,
+                role: 'Team Member',
+                onBordingFee: fixedAmount,
+                employeeType: 'regular',
+                numberOfDaysEligible: leaveSettings?.eligibleLeaveDays,
+                isEligibleForLeave: false,
+            });
+        }
     }, []);
 
     return (
@@ -462,250 +472,265 @@ function TeamManagement({
                 </Tables>
                 <Pagination data={adminList} />
             </Box>
-            <DrawerWrapper
-                onClose={onClose}
-                isOpen={isOpen}
-                title={'Add a new Team Member'}
-            >
-                <Loading loading={loading} />
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Grid
-                        templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
-                        gap="1rem 2rem"
-                    >
-                        <PrimaryInput<TeamMemberModel>
-                            label="First Name"
-                            name="firstName"
-                            error={errors.firstName}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
-                        <PrimaryInput<TeamMemberModel>
-                            label="Last Name"
-                            name="lastName"
-                            error={errors.lastName}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
-                        <PrimaryInput<TeamMemberModel>
-                            label="Email"
-                            name="email"
-                            error={errors.email}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
-                        <PrimaryPhoneInput<TeamMemberModel>
-                            label="Phone Number"
-                            name="phoneNumber"
-                            error={errors.phoneNumber}
-                            placeholder="Phone No."
-                            control={control}
-                        />
-                        <PrimaryDate<TeamMemberModel>
-                            control={control}
-                            name="dateOfBirth"
-                            label="Date of Birth"
-                            error={errors.dateOfBirth}
-                            max={new DateObject().subtract(1, 'days')}
-                        />
-
-                        <SelectrixBox<TeamMemberModel>
-                            control={control}
-                            name="isActive"
-                            error={errors.isActive}
-                            keys="id"
-                            keyLabel="label"
-                            label="Profile Status"
-                            options={[
-                                { id: 'true', label: 'Active' },
-                                { id: 'false', label: 'Not Active' },
-                            ]}
-                        />
-                    </Grid>
-                    <Box mt="1rem">
-                        <PrimaryInput<TeamMemberModel>
-                            label="Address"
-                            name="address"
-                            error={errors.address}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
-                    </Box>
-                    <Box w="full">
-                        <Flex
-                            justify="space-between"
-                            align="center"
-                            my="1rem"
-                            py="1rem"
-                            borderY="1px solid"
-                            borderColor="gray.300"
-                        >
-                            <Text
-                                textTransform="uppercase"
-                                mb="0"
-                                fontSize="1.3rem"
-                                fontWeight="500"
-                            >
-                                Work Data
-                            </Text>
-                        </Flex>
-                        <Box mb="1.5rem">
-                            <Text fontWeight="500" mb=".5rem" fontSize=".9rem">
-                                Is this team member for you or for a client you
-                                manage?
-                            </Text>
-                            <HStack w="full" {...group}>
-                                {radios.map((value) => {
-                                    const radio = getRadioProps({ value });
-                                    return (
-                                        <RadioBtn {...radio}>{value}</RadioBtn>
-                                    );
-                                })}
-                            </HStack>
-                        </Box>
+            {isOpen && (
+                <DrawerWrapper
+                    onClose={onClose}
+                    isOpen={isOpen}
+                    title={'Add a new Team Member'}
+                >
+                    <Loading loading={loading} />
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <Grid
                             templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
-                            minW="0"
                         >
                             <PrimaryInput<TeamMemberModel>
-                                label="Job Title"
-                                name="jobTitle"
-                                error={errors.jobTitle}
+                                label="First Name"
+                                name="firstName"
+                                error={errors.firstName}
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
                             />
+                            <PrimaryInput<TeamMemberModel>
+                                label="Last Name"
+                                name="lastName"
+                                error={errors.lastName}
+                                placeholder=""
+                                defaultValue=""
+                                register={register}
+                            />
+                            <PrimaryInput<TeamMemberModel>
+                                label="Email"
+                                name="email"
+                                error={errors.email}
+                                placeholder=""
+                                defaultValue=""
+                                register={register}
+                            />
+                            <PrimaryPhoneInput<TeamMemberModel>
+                                label="Phone Number"
+                                name="phoneNumber"
+                                error={errors.phoneNumber}
+                                placeholder="Phone No."
+                                control={control}
+                            />
+                            <PrimaryDate<TeamMemberModel>
+                                control={control}
+                                name="dateOfBirth"
+                                label="Date of Birth"
+                                error={errors.dateOfBirth}
+                                max={new DateObject().subtract(1, 'days')}
+                            />
 
-                            {clientType && (
-                                <SelectrixBox<TeamMemberModel>
-                                    control={control}
-                                    name="clientId"
-                                    error={errors.clientId}
-                                    keys="id"
-                                    keyLabel="organizationName"
-                                    label="Current Client"
-                                    options={client}
-                                />
+                            <SelectrixBox<TeamMemberModel>
+                                control={control}
+                                name="isActive"
+                                error={errors.isActive}
+                                keys="id"
+                                keyLabel="label"
+                                label="Profile Status"
+                                options={[
+                                    { id: 'true', label: 'Active' },
+                                    { id: 'false', label: 'Not Active' },
+                                ]}
+                            />
+                        </Grid>
+                        <Box mt="1rem">
+                            <PrimaryInput<TeamMemberModel>
+                                label="Address"
+                                name="address"
+                                error={errors.address}
+                                placeholder=""
+                                defaultValue=""
+                                register={register}
+                            />
+                        </Box>
+                        <Box w="full">
+                            <Flex
+                                justify="space-between"
+                                align="center"
+                                my="1rem"
+                                py="1rem"
+                                borderY="1px solid"
+                                borderColor="gray.300"
+                            >
+                                <Text
+                                    textTransform="uppercase"
+                                    mb="0"
+                                    fontSize="1.3rem"
+                                    fontWeight="500"
+                                >
+                                    Work Data
+                                </Text>
+                            </Flex>
+                            {addons?.includes('client management') && (
+                                <Box mb="1.5rem">
+                                    <Text
+                                        fontWeight="500"
+                                        mb=".5rem"
+                                        fontSize=".9rem"
+                                    >
+                                        Is this team member for you or for a
+                                        client you manage?
+                                    </Text>
+                                    <HStack w="full" {...group}>
+                                        {radios.map((value) => {
+                                            const radio = getRadioProps({
+                                                value,
+                                            });
+                                            return (
+                                                <RadioBtn {...radio}>
+                                                    {value}
+                                                </RadioBtn>
+                                            );
+                                        })}
+                                    </HStack>
+                                </Box>
                             )}
-                            {supervisors !== undefined && (
-                                <SelectrixBox<TeamMemberModel>
-                                    control={control}
-                                    name="supervisorId"
-                                    error={errors.supervisorId}
-                                    keys="id"
-                                    keyLabel="fullName"
-                                    label="Supervisor"
-                                    options={supervisors}
+                            <Grid
+                                templateColumns={[
+                                    'repeat(1,1fr)',
+                                    'repeat(3,1fr)',
+                                ]}
+                                gap="1rem 2rem"
+                                minW="0"
+                            >
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Job Title"
+                                    name="jobTitle"
+                                    error={errors.jobTitle}
+                                    placeholder=""
+                                    defaultValue=""
+                                    register={register}
                                 />
-                            )}
-                            <Box pos="relative">
-                                <SelectrixBox<TeamMemberModel>
-                                    control={control}
-                                    name="payRollTypeId"
-                                    error={errors.payRollTypeId}
-                                    keys="id"
-                                    keyLabel="label"
-                                    label="Payroll Type"
-                                    options={[
-                                        {
-                                            id: 1,
-                                            label: 'Onshore Contract',
-                                        },
-                                        {
-                                            id: 2,
-                                            label: 'Offshore contract',
-                                        },
-                                    ]}
-                                />
-                                {subType != 'full package' && (
-                                    <TriggerBox opens={opens} />
-                                )}
-                            </Box>
-                            {payroll == 1 ? (
-                                <>
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="Rate/Hr"
-                                        name="ratePerHour"
-                                        error={errors.ratePerHour}
-                                        placeholder=""
-                                        type="number"
-                                        defaultValue=""
-                                        register={register}
-                                    />
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="Hr/Day"
-                                        name="hoursPerDay"
-                                        error={errors.hoursPerDay}
-                                        placeholder=""
-                                        defaultValue=""
-                                        type="number"
-                                        register={register}
-                                    />
-                                    <UploadCareWidget
-                                        refs={widgetApiB}
-                                        label="Incoporation Document"
-                                        filename={icd?.name}
-                                        loading={showLoadingB}
-                                        uploadFunction={showLoadingStateB}
-                                    />
-                                    <UploadCareWidget
-                                        refs={widgetApiC}
-                                        label="Void Check"
-                                        filename={voidCheck?.name}
-                                        loading={showLoadingC}
-                                        uploadFunction={showLoadingStateC}
-                                    />
-                                    <UploadCareWidget
-                                        refs={widgetApiD}
-                                        label="Issuance Certificate"
-                                        filename={inc?.name}
-                                        loading={showLoadingD}
-                                        uploadFunction={showLoadingStateD}
-                                    />
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="HST No."
-                                        name="hstNumber"
-                                        error={errors.hstNumber}
-                                        placeholder=""
-                                        defaultValue=""
-                                        type="number"
-                                        register={register}
-                                    />
-                                </>
-                            ) : payroll == 2 ? (
-                                <>
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="Monthly Payout"
-                                        name="monthlyPayoutRate"
-                                        error={errors.monthlyPayoutRate}
-                                        placeholder=""
-                                        defaultValue=""
-                                        type="number"
-                                        register={register}
-                                    />
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="Hr/Day"
-                                        name="hoursPerDay"
-                                        error={errors.hoursPerDay}
-                                        placeholder=""
-                                        defaultValue=""
-                                        register={register}
-                                    />
+
+                                {clientType && (
                                     <SelectrixBox<TeamMemberModel>
                                         control={control}
-                                        name="paymentPartnerId"
-                                        error={errors.paymentPartnerId}
+                                        name="clientId"
+                                        error={errors.clientId}
                                         keys="id"
-                                        keyLabel="firstName"
-                                        label="Payment Partner"
-                                        options={paymentPartner}
+                                        keyLabel="organizationName"
+                                        label="Current Client"
+                                        options={client}
                                     />
-                                    {/* <SelectrixBox<TeamMemberModel>
+                                )}
+                                {supervisors !== undefined && (
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="supervisorId"
+                                        error={errors.supervisorId}
+                                        keys="id"
+                                        keyLabel="fullName"
+                                        label="Supervisor"
+                                        options={supervisors}
+                                    />
+                                )}
+                                <Box pos="relative">
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="payRollTypeId"
+                                        error={errors.payRollTypeId}
+                                        keys="id"
+                                        keyLabel="label"
+                                        label="Payroll Type"
+                                        options={[
+                                            {
+                                                id: 1,
+                                                label: 'Onshore Contract',
+                                            },
+                                            {
+                                                id: 2,
+                                                label: 'Offshore contract',
+                                            },
+                                        ]}
+                                    />
+                                    {subType != 'full package' && (
+                                        <TriggerBox opens={opens} />
+                                    )}
+                                </Box>
+                                {payroll == 1 ? (
+                                    <>
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="Rate/Hr"
+                                            name="ratePerHour"
+                                            error={errors.ratePerHour}
+                                            placeholder=""
+                                            type="number"
+                                            defaultValue=""
+                                            register={register}
+                                        />
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="Hr/Day"
+                                            name="hoursPerDay"
+                                            error={errors.hoursPerDay}
+                                            placeholder=""
+                                            defaultValue=""
+                                            type="number"
+                                            register={register}
+                                        />
+                                        <UploadCareWidget
+                                            refs={widgetApiB}
+                                            label="Incoporation Document"
+                                            filename={icd?.name}
+                                            loading={showLoadingB}
+                                            uploadFunction={showLoadingStateB}
+                                        />
+                                        <UploadCareWidget
+                                            refs={widgetApiC}
+                                            label="Void Check"
+                                            filename={voidCheck?.name}
+                                            loading={showLoadingC}
+                                            uploadFunction={showLoadingStateC}
+                                        />
+                                        <UploadCareWidget
+                                            refs={widgetApiD}
+                                            label="Issuance Certificate"
+                                            filename={inc?.name}
+                                            loading={showLoadingD}
+                                            uploadFunction={showLoadingStateD}
+                                        />
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="HST No."
+                                            name="hstNumber"
+                                            error={errors.hstNumber}
+                                            placeholder=""
+                                            defaultValue=""
+                                            type="number"
+                                            register={register}
+                                        />
+                                    </>
+                                ) : payroll == 2 ? (
+                                    <>
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="Monthly Payout"
+                                            name="monthlyPayoutRate"
+                                            error={errors.monthlyPayoutRate}
+                                            placeholder=""
+                                            defaultValue=""
+                                            type="number"
+                                            register={register}
+                                        />
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="Hr/Day"
+                                            name="hoursPerDay"
+                                            error={errors.hoursPerDay}
+                                            placeholder=""
+                                            defaultValue=""
+                                            register={register}
+                                        />
+
+                                        <SelectrixBox<TeamMemberModel>
+                                            control={control}
+                                            name="paymentPartnerId"
+                                            error={errors.paymentPartnerId}
+                                            keys="id"
+                                            keyLabel="firstName"
+                                            label="Payment Partner"
+                                            options={paymentPartner}
+                                        />
+                                        {/* <SelectrixBox<TeamMemberModel>
                                         control={control}
                                         name="payrollGroupId"
                                         error={errors.payrollGroupId}
@@ -723,294 +748,303 @@ function TeamManagement({
                                             },
                                         ]}
                                     /> */}
-                                </>
-                            ) : null}
-                            <Box pos="relative">
+                                    </>
+                                ) : null}
+                                <Box pos="relative">
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="employeeType"
+                                        error={errors.employeeType}
+                                        keys="id"
+                                        keyLabel="label"
+                                        label="Employee Type"
+                                        placeholder={
+                                            watch('employeeType') as string
+                                        }
+                                        options={[
+                                            { id: 'regular', label: 'Regular' },
+                                            {
+                                                id: 'shift',
+                                                label: 'Shift',
+                                            },
+                                        ]}
+                                    />
+                                    {!addons?.includes('shift management') && (
+                                        <TriggerBox opens={opens} />
+                                    )}
+                                </Box>
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Client Rate"
+                                    name="clientRate"
+                                    error={errors.clientRate}
+                                    placeholder=""
+                                    defaultValue=""
+                                    register={register}
+                                />
                                 <SelectrixBox<TeamMemberModel>
                                     control={control}
-                                    name="employeeType"
-                                    error={errors.employeeType}
+                                    name="currency"
+                                    error={errors.currency}
                                     keys="id"
                                     keyLabel="label"
-                                    label="Employee Type"
-                                    placeholder={
-                                        watch('employeeType') as string
-                                    }
+                                    label="Currency"
                                     options={[
-                                        { id: 'regular', label: 'Regular' },
-                                        {
-                                            id: 'shift',
-                                            label: 'Shift',
-                                        },
+                                        { id: 'CAD', label: 'CAD' },
+                                        { id: 'NGN', label: 'NGN' },
                                     ]}
                                 />
-                                {!addons?.includes('shift management') && (
-                                    <TriggerBox opens={opens} />
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="paymentFrequency"
+                                    error={errors.paymentFrequency}
+                                    keys="id"
+                                    keyLabel="label"
+                                    label="Payment Frequency"
+                                    options={[
+                                        { id: 'Weekly', label: 'Weekly' },
+                                        { id: 'Bi-weekly', label: 'Bi-Weekly' },
+                                        { id: 'Monthly', label: 'Monthly' },
+                                    ]}
+                                />
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="invoiceGenerationType"
+                                    error={errors.invoiceGenerationType}
+                                    keys="id"
+                                    keyLabel="label"
+                                    label="Invoice Type"
+                                    options={[
+                                        { id: 'invoice', label: 'Invoice' },
+                                        { id: 'payroll', label: 'Payroll' },
+                                    ]}
+                                />
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="fixedAmount"
+                                    error={errors.fixedAmount}
+                                    keys="id"
+                                    keyLabel="label"
+                                    label="Onboarding fee type"
+                                    options={[
+                                        { id: true, label: 'Fixed amount' },
+                                        { id: false, label: 'Percentage' },
+                                    ]}
+                                />
+                                {onboarding == false ? (
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="onBordingFee"
+                                        error={errors.onBordingFee}
+                                        keys="fee"
+                                        keyLabel="fee"
+                                        label="Onboarding fee"
+                                        options={percentageAmount}
+                                    />
+                                ) : (
+                                    // : onboarding == true &&
+                                    //   fixedAmount !== undefined ? (
+                                    //     <Box pos="relative">
+                                    //         <PrimaryInput<TeamMemberModel>
+                                    //             label="Onboarding fee"
+                                    //             name="onBordingFee"
+                                    //             error={errors.onBordingFee}
+                                    //             placeholder=""
+                                    //             value={fixedAmount}
+                                    //             register={register}
+                                    //             readonly
+                                    //         />
+                                    //         <Text
+                                    //             pos="absolute"
+                                    //             mb="0"
+                                    //             left="8%"
+                                    //             top="50%"
+                                    //             transform="translateY(-15%)"
+                                    //             bgColor="white"
+                                    //         >
+                                    //             {fixedAmount}
+                                    //         </Text>
+                                    //     </Box>
+                                    // )
+                                    ''
                                 )}
-                            </Box>
+                            </Grid>
+                        </Box>
+                        <Box w="full">
+                            <Flex
+                                justify="space-between"
+                                align="center"
+                                my="1rem"
+                                py="1rem"
+                                borderY="1px solid"
+                                borderColor="gray.300"
+                            >
+                                <Text
+                                    textTransform="uppercase"
+                                    mb="0"
+                                    fontSize="1.3rem"
+                                    fontWeight="500"
+                                >
+                                    Contract Details
+                                </Text>
+                            </Flex>
                             <PrimaryInput<TeamMemberModel>
-                                label="Client Rate"
-                                name="clientRate"
-                                error={errors.clientRate}
+                                label="Contract Title"
+                                name="title"
+                                error={errors.title}
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
                             />
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="currency"
-                                error={errors.currency}
-                                keys="id"
-                                keyLabel="label"
-                                label="Currency"
-                                options={[
-                                    { id: 'CAD', label: 'CAD' },
-                                    { id: 'NGN', label: 'NGN' },
-                                ]}
-                            />
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="paymentFrequency"
-                                error={errors.paymentFrequency}
-                                keys="id"
-                                keyLabel="label"
-                                label="Payment Frequency"
-                                options={[
-                                    { id: 'Weekly', label: 'Weekly' },
-                                    { id: 'Bi-weekly', label: 'Bi-Weekly' },
-                                    { id: 'Monthly', label: 'Monthly' },
-                                ]}
-                            />
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="invoiceGenerationType"
-                                error={errors.invoiceGenerationType}
-                                keys="id"
-                                keyLabel="label"
-                                label="Invoice Type"
-                                options={[
-                                    { id: 'invoice', label: 'Invoice' },
-                                    { id: 'payroll', label: 'Payroll' },
-                                ]}
-                            />
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="fixedAmount"
-                                error={errors.fixedAmount}
-                                keys="id"
-                                keyLabel="label"
-                                label="Onboarding fee type"
-                                options={[
-                                    { id: true, label: 'Fixed amount' },
-                                    { id: false, label: 'Percentage' },
-                                ]}
-                            />
-                            {onboarding == false ? (
-                                <SelectrixBox<TeamMemberModel>
-                                    control={control}
-                                    name="onBordingFee"
-                                    error={errors.onBordingFee}
-                                    keys="fee"
-                                    keyLabel="fee"
-                                    label="Onboarding fee"
-                                    options={percentageAmount}
-                                />
-                            ) : (
-                                // : onboarding == true &&
-                                //   fixedAmount !== undefined ? (
-                                //     <Box pos="relative">
-                                //         <PrimaryInput<TeamMemberModel>
-                                //             label="Onboarding fee"
-                                //             name="onBordingFee"
-                                //             error={errors.onBordingFee}
-                                //             placeholder=""
-                                //             value={fixedAmount}
-                                //             register={register}
-                                //             readonly
-                                //         />
-                                //         <Text
-                                //             pos="absolute"
-                                //             mb="0"
-                                //             left="8%"
-                                //             top="50%"
-                                //             transform="translateY(-15%)"
-                                //             bgColor="white"
-                                //         >
-                                //             {fixedAmount}
-                                //         </Text>
-                                //     </Box>
-                                // )
-                                ''
-                            )}
-                        </Grid>
-                    </Box>
-                    <Box w="full">
-                        <Flex
-                            justify="space-between"
-                            align="center"
-                            my="1rem"
-                            py="1rem"
-                            borderY="1px solid"
-                            borderColor="gray.300"
-                        >
-                            <Text
-                                textTransform="uppercase"
-                                mb="0"
-                                fontSize="1.3rem"
-                                fontWeight="500"
-                            >
-                                Contract Details
-                            </Text>
-                        </Flex>
-                        <PrimaryInput<TeamMemberModel>
-                            label="Contract Title"
-                            name="title"
-                            error={errors.title}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
-                        <Grid
-                            templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
-                            gap="1rem 2rem"
-                            my="1.5rem"
-                        >
-                            <PrimaryDate<TeamMemberModel>
-                                control={control}
-                                name="startDate"
-                                label="Start Date"
-                                error={errors.startDate}
-                                // min={new Date()}
-                            />
-                            <PrimaryDate<TeamMemberModel>
-                                control={control}
-                                name="endDate"
-                                label="End Date"
-                                error={errors.endDate}
-                                min={new DateObject().add(3, 'days')}
-                            />
-                            <PrimaryDate<TeamMemberModel>
-                                control={control}
-                                name="timeSheetGenerationStartDate"
-                                label="Timesheet Start Date"
-                                error={errors.timeSheetGenerationStartDate}
-                                // min={new DateObject().add(3, 'days')}
-                            />
-                        </Grid>
-                        <UploadCareWidget
-                            refs={widgetApi}
-                            label="Attach Document"
-                            filename={contract?.name}
-                            loading={showLoading}
-                            uploadFunction={showLoadingState}
-                        />
-                    </Box>
-
-                    <Box w="full">
-                        <Flex
-                            justify="space-between"
-                            align="center"
-                            my="1rem"
-                            py="1rem"
-                            borderY="1px solid"
-                            borderColor="gray.300"
-                        >
-                            <Text
-                                textTransform="uppercase"
-                                mb="0"
-                                fontSize="1.3rem"
-                                fontWeight="500"
-                            >
-                                Leave Management
-                            </Text>
-                        </Flex>
-                        <Box pos="relative" mb="1rem">
-                            <PrimaryRadio<TeamMemberModel>
-                                label="Are you eligible for Leave"
-                                radios={['No', 'Yes']}
-                                name="isEligibleForLeave"
-                                control={control}
-                                error={errors.isEligibleForLeave}
-                            />
-                            {!addons?.includes('leave management') && (
-                                <TriggerBox opens={opens} />
-                            )}
-                        </Box>
-                        {(isEligibleForLeave as unknown as string) == 'Yes' && (
                             <Grid
                                 templateColumns={[
                                     'repeat(1,1fr)',
                                     'repeat(3,1fr)',
                                 ]}
                                 gap="1rem 2rem"
+                                my="1.5rem"
                             >
-                                <PrimaryInput<TeamMemberModel>
-                                    label="Eligible number of days"
-                                    name="numberOfDaysEligible"
-                                    error={errors.numberOfDaysEligible}
-                                    placeholder=""
-                                    defaultValue=""
-                                    register={register}
-                                    readonly={
-                                        leaveSettings?.isStandardEligibleDays
-                                    }
+                                <PrimaryDate<TeamMemberModel>
+                                    control={control}
+                                    name="startDate"
+                                    label="Start Date"
+                                    error={errors.startDate}
+                                    // min={new Date()}
                                 />
-                                <PrimaryInput<TeamMemberModel>
-                                    label="Eligible number of hours"
-                                    name="numberOfHoursEligible"
-                                    error={errors.numberOfHoursEligible}
-                                    placeholder=""
-                                    defaultValue=""
-                                    register={register}
+                                <PrimaryDate<TeamMemberModel>
+                                    control={control}
+                                    name="endDate"
+                                    label="End Date"
+                                    error={errors.endDate}
+                                    min={new DateObject().add(3, 'days')}
+                                />
+                                <PrimaryDate<TeamMemberModel>
+                                    control={control}
+                                    name="timeSheetGenerationStartDate"
+                                    label="Timesheet Start Date"
+                                    error={errors.timeSheetGenerationStartDate}
+                                    // min={new DateObject().add(3, 'days')}
                                 />
                             </Grid>
-                        )}
-                    </Box>
+                            <UploadCareWidget
+                                refs={widgetApi}
+                                label="Attach Document"
+                                filename={contract?.name}
+                                loading={showLoading}
+                                uploadFunction={showLoadingState}
+                            />
+                        </Box>
 
-                    <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">
-                        <Grid
-                            templateColumns="repeat(2,1fr)"
-                            gap="1rem 2rem"
-                            my="2rem"
-                            w="full"
-                        >
-                            <Button
-                                bgColor="gray.500"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                onClick={() => onClose()}
+                        <Box w="full">
+                            <Flex
+                                justify="space-between"
+                                align="center"
+                                my="1rem"
+                                py="1rem"
+                                borderY="1px solid"
+                                borderColor="gray.300"
                             >
-                                Close
-                            </Button>
-                            <Button
-                                bgColor="brand.400"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                type="submit"
-                                isLoading={isSubmitting}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                <Text
+                                    textTransform="uppercase"
+                                    mb="0"
+                                    fontSize="1.3rem"
+                                    fontWeight="500"
+                                >
+                                    Leave Management
+                                </Text>
+                            </Flex>
+                            <Box pos="relative" mb="1rem">
+                                <PrimaryRadio<TeamMemberModel>
+                                    label="Are you eligible for Leave"
+                                    radios={['No', 'Yes']}
+                                    name="isEligibleForLeave"
+                                    control={control}
+                                    error={errors.isEligibleForLeave}
+                                />
+                                {!addons?.includes('leave management') && (
+                                    <TriggerBox opens={opens} />
+                                )}
+                            </Box>
+                            {(isEligibleForLeave as unknown as string) ==
+                                'Yes' && (
+                                <Grid
+                                    templateColumns={[
+                                        'repeat(1,1fr)',
+                                        'repeat(3,1fr)',
+                                    ]}
+                                    gap="1rem 2rem"
+                                >
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Eligible number of days"
+                                        name="numberOfDaysEligible"
+                                        error={errors.numberOfDaysEligible}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                        readonly={
+                                            leaveSettings?.isStandardEligibleDays
+                                        }
+                                    />
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Eligible number of hours"
+                                        name="numberOfHoursEligible"
+                                        error={errors.numberOfHoursEligible}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                    />
+                                </Grid>
+                            )}
+                        </Box>
+
+                        <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">
+                            <Grid
+                                templateColumns="repeat(2,1fr)"
+                                gap="1rem 2rem"
+                                my="2rem"
+                                w="full"
                             >
-                                <Box pr=".5rem">
-                                    <RiMailSendFill />
-                                </Box>
-                                <Box>Send Invite</Box>
-                            </Button>
-                        </Grid>
-                    </DrawerFooter>
-                </form>
-            </DrawerWrapper>
-            <ExportReportModal
-                isOpen={open}
-                onClose={close}
-                data={thead}
-                record={2}
-                fileName={'Team members'}
-                model="users"
-            />
+                                <Button
+                                    bgColor="gray.500"
+                                    color="white"
+                                    height="3rem"
+                                    fontSize="14px"
+                                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                    onClick={() => onClose()}
+                                >
+                                    Close
+                                </Button>
+                                <Button
+                                    bgColor="brand.400"
+                                    color="white"
+                                    height="3rem"
+                                    fontSize="14px"
+                                    type="submit"
+                                    isLoading={isSubmitting}
+                                    spinner={
+                                        <BeatLoader color="white" size={10} />
+                                    }
+                                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                >
+                                    <Box pr=".5rem">
+                                        <RiMailSendFill />
+                                    </Box>
+                                    <Box>Send Invite</Box>
+                                </Button>
+                            </Grid>
+                        </DrawerFooter>
+                    </form>
+                </DrawerWrapper>
+            )}
+            {open && (
+                <ExportReportModal
+                    isOpen={open}
+                    onClose={close}
+                    data={thead}
+                    record={2}
+                    fileName={'Team members'}
+                    model="users"
+                />
+            )}
         </>
     );
 }

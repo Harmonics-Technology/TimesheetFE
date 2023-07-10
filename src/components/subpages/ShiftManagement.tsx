@@ -10,6 +10,7 @@ import { useReactToPrint } from 'react-to-print';
 import { PublishShiftModal } from '@components/bits-utils/PublishShiftModal';
 import {
     ShiftService,
+    ShiftTypeViewStandardResponse,
     ShiftUsersListViewPagedCollectionStandardResponse,
     ShiftViewListStandardResponse,
     ShiftViewStandardResponse,
@@ -25,9 +26,10 @@ import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
 interface shiftProps {
     allShift: ShiftViewListStandardResponse;
     shiftUser: ShiftUsersListViewPagedCollectionStandardResponse;
+    shiftTypes: ShiftTypeViewStandardResponse;
 }
 
-const ShiftManagement = ({ allShift, shiftUser }: shiftProps) => {
+const ShiftManagement = ({ allShift, shiftUser, shiftTypes }: shiftProps) => {
     console.log({ allShift, shiftUser });
     const DemoData = {
         events: [
@@ -220,13 +222,18 @@ const ShiftManagement = ({ allShift, shiftUser }: shiftProps) => {
             </Box>
             <Pagination data={shiftUser} shift />
 
-            <AddShiftModal
-                isOpen={isOpen}
-                onClose={onClose}
-                datas={data}
-                user={shiftUser}
-            />
-            <PublishShiftModal isOpen={open} onClose={close} data={data} />
+            {isOpen && (
+                <AddShiftModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    datas={data}
+                    user={shiftUser}
+                    shiftTypes={shiftTypes}
+                />
+            )}
+            {open && (
+                <PublishShiftModal isOpen={open} onClose={close} data={data} />
+            )}
         </>
     );
 };

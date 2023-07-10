@@ -18,7 +18,7 @@ export const ScheduleTable = ({
     paymentSchedule,
     exportPDF,
 }: {
-    paymentSchedule: AdminPaymentScheduleView;
+    paymentSchedule: AdminPaymentScheduleView | undefined;
     exportPDF: () => void;
 }) => {
     return (

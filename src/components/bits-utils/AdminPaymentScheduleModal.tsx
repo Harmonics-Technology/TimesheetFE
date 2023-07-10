@@ -33,16 +33,16 @@ const AdminPaymentScheduleModal = ({
     onClose,
     paymentSchedule,
 }: Props) => {
-    const monthlySchedule = (
-        paymentSchedule?.data as AdminPaymentScheduleView
+    const monthlySchedule = paymentSchedule?.data?.filter(
+        (x) => x.scheduleType == 'Monthly',
     )[0];
-    const biWeeklySchedule = (
-        paymentSchedule?.data as AdminPaymentScheduleView
-    )[1];
-    const weeklySchedule = (
-        paymentSchedule?.data as AdminPaymentScheduleView
-    )[2];
-    const exportPDF = (type: AdminPaymentScheduleView) => {
+    const biWeeklySchedule = paymentSchedule?.data?.filter(
+        (x) => x.scheduleType == 'Bi-Weekly',
+    )[0];
+    const weeklySchedule = paymentSchedule?.data?.filter(
+        (x) => x.scheduleType == 'Weekly',
+    )[0];
+    const exportPDF = (type: AdminPaymentScheduleView | undefined) => {
         const unit = 'pt';
         const size = 'A4'; // Use A1, A2, A3 or A4
         const orientation = 'portrait'; // portrait or landscape
@@ -52,7 +52,7 @@ const AdminPaymentScheduleModal = ({
 
         doc.setFontSize(15);
 
-        const title = `${type.scheduleType} Schedule`;
+        const title = `${type?.scheduleType} Schedule`;
         const headers = [
             [
                 'S/N',
@@ -92,7 +92,7 @@ const AdminPaymentScheduleModal = ({
         doc.text(title, marginLeft, 40);
         //@ts-ignore
         doc.autoTable(content);
-        doc.save(`${type.scheduleType} schedule.pdf`);
+        doc.save(`${type?.scheduleType} schedule.pdf`);
     };
     return (
         <Modal

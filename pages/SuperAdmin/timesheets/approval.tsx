@@ -29,7 +29,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 superAdminId,
                 pagingOptions.search,
             );
-            console.log(data.data?.value);
+            console.log({ data: data.data?.value });
             return {
                 props: {
                     timeSheets: data,

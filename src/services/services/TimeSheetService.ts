@@ -8,6 +8,7 @@ import type { TimeSheetHistoryViewPagedCollectionStandardResponse } from '../mod
 import type { TimesheetHoursAdditionModel } from '../models/TimesheetHoursAdditionModel';
 import type { TimesheetHoursApprovalModel } from '../models/TimesheetHoursApprovalModel';
 import type { TimeSheetMonthlyViewIEnumerableStandardResponse } from '../models/TimeSheetMonthlyViewIEnumerableStandardResponse';
+import type { TimeSheetMonthlyViewStandardResponse } from '../models/TimeSheetMonthlyViewStandardResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -50,19 +51,42 @@ endDate?: string,
     /**
      * @param employeeInformationId 
      * @param date 
-     * @returns TimeSheetMonthlyViewIEnumerableStandardResponse Success
+     * @returns TimeSheetMonthlyViewStandardResponse Success
      * @throws ApiError
      */
     public static getTimeSheet(
 employeeInformationId?: string,
 date?: string,
-): CancelablePromise<TimeSheetMonthlyViewIEnumerableStandardResponse> {
+): CancelablePromise<TimeSheetMonthlyViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/TimeSheet/monthly',
             query: {
                 'employeeInformationId': employeeInformationId,
                 'date': date,
+            },
+        });
+    }
+
+    /**
+     * @param employeeInformationId 
+     * @param startDate 
+     * @param endDate 
+     * @returns TimeSheetMonthlyViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getTimesheetByPaySchedule(
+employeeInformationId?: string,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<TimeSheetMonthlyViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/TimeSheet/schedule',
+            query: {
+                'employeeInformationId': employeeInformationId,
+                'startDate': startDate,
+                'endDate': endDate,
             },
         });
     }

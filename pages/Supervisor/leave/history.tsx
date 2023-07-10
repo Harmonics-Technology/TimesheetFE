@@ -24,6 +24,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const id = JSON.parse(ctx.req.cookies.user).id;
         const clientId = JSON.parse(ctx.req.cookies.user).clientId;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         // console.log({ id });
         try {
             // const teamMembers = await UserService.getClientTeamMembers(
@@ -43,6 +44,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const leavelist = await LeaveService.listLeaves(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 id,
                 undefined,
                 pagingOptions.search,

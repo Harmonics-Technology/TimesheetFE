@@ -288,7 +288,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Button
+                {/* <Button
                     bgColor="brand.400"
                     color="white"
                     p=".5rem 1.5rem"
@@ -298,7 +298,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                     mb="1rem"
                 >
                     +Team Member
-                </Button>
+                </Button> */}
                 <FilterSearch />
                 <Tables
                     tableHead={[

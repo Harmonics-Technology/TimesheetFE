@@ -48,6 +48,7 @@ import { keys } from 'mobx';
 import error from 'next/error';
 import { UserContext } from '@components/context/UserContext';
 import { ActivateUserAlert } from '@components/bits-utils/ActivateUserAlert';
+import { TriggerBox } from '@components/bits-utils/TriggerBox';
 
 interface select {
     options: any;
@@ -78,7 +79,7 @@ function TeamProfile({
 }: TeamProfileProps) {
     console.log({ userProfile });
 
-    const { user, addons, opens } = useContext(UserContext);
+    const { user, addons, opens, subType } = useContext(UserContext);
     // console.log({ user });
     const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
     const {
@@ -499,18 +500,7 @@ function TeamProfile({
                                     },
                                 ]}
                             />
-                            <Box
-                                pointerEvents={
-                                    addons?.includes('shift management')
-                                        ? 'all'
-                                        : 'none'
-                                }
-                                onClick={() =>
-                                    addons?.includes('shift management')
-                                        ? void 0
-                                        : opens()
-                                }
-                            >
+                            <Box pos="relative">
                                 <SelectrixBox<TeamMemberModel>
                                     control={control}
                                     name="employeeType"
@@ -531,32 +521,39 @@ function TeamProfile({
                                         },
                                     ]}
                                 />
+                                {!addons?.includes('shift management') && (
+                                    <TriggerBox opens={opens} />
+                                )}
                             </Box>
-
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="payRollTypeId"
-                                error={errors.payRollTypeId}
-                                keys="id"
-                                keyLabel="label"
-                                label="Payroll Type"
-                                disabled={true}
-                                placeholder={
-                                    (userProfile?.employeeInformation
-                                        ?.payrollType as string) ||
-                                    'Please Select'
-                                }
-                                options={[
-                                    {
-                                        id: '1',
-                                        label: 'Onshore Contract',
-                                    },
-                                    {
-                                        id: '2',
-                                        label: 'Offshore contract',
-                                    },
-                                ]}
-                            />
+                            <Box pos="relative">
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="payRollTypeId"
+                                    error={errors.payRollTypeId}
+                                    keys="id"
+                                    keyLabel="label"
+                                    label="Payroll Type"
+                                    disabled={true}
+                                    placeholder={
+                                        (userProfile?.employeeInformation
+                                            ?.payrollType as string) ||
+                                        'Please Select'
+                                    }
+                                    options={[
+                                        {
+                                            id: '1',
+                                            label: 'Onshore Contract',
+                                        },
+                                        {
+                                            id: '2',
+                                            label: 'Offshore contract',
+                                        },
+                                    ]}
+                                />
+                                {/* {subType != 'full package' && (
+                                    <TriggerBox opens={opens} />
+                                )} */}
+                            </Box>
                             {(payroll == 'ONSHORE' && payrolls == undefined) ||
                             payroll == 'ONSHORE' ||
                             payrolls == 1 ? (
@@ -727,7 +724,7 @@ function TeamProfile({
                                                 ?.firstName as string
                                         }
                                     />
-                                    <SelectrixBox<TeamMemberModel>
+                                    {/* <SelectrixBox<TeamMemberModel>
                                         control={control}
                                         name="payrollGroupId"
                                         error={errors.payrollGroupId}
@@ -749,7 +746,7 @@ function TeamProfile({
                                                 label: 'Olade consulting',
                                             },
                                         ]}
-                                    />
+                                    /> */}
                                 </>
                             )}
                             <PrimaryInput<TeamMemberModel>
@@ -899,19 +896,7 @@ function TeamProfile({
                             templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
                         >
-                            <Box
-                                mb="1.5rem"
-                                pointerEvents={
-                                    addons?.includes('leave management')
-                                        ? 'all'
-                                        : 'none'
-                                }
-                                onClick={() =>
-                                    addons?.includes('leave management')
-                                        ? void 0
-                                        : opens()
-                                }
-                            >
+                            <Box mb="1.5rem" pos="relative">
                                 <PrimaryRadio
                                     label="Are you eligible for Leave"
                                     radios={['No', 'Yes']}
@@ -922,6 +907,9 @@ function TeamProfile({
                                         eligible == true ? 'Yes' : 'No'
                                     }
                                 />
+                                {addons != 'leave management' && (
+                                    <TriggerBox opens={opens} />
+                                )}
                             </Box>
 
                             {(isEligibleForLeave as unknown as string) ==

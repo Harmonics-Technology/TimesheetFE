@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
 
             return {
                 props: {
-                    data: data.data,
+                    controls: data.data,
                 },
             };
         } catch (error: any) {

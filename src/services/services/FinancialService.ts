@@ -8,9 +8,11 @@ import type { ExpenseViewPagedCollectionStandardResponse } from '../models/Expen
 import type { ExpenseViewStandardResponse } from '../models/ExpenseViewStandardResponse';
 import type { InvoiceViewPagedCollectionStandardResponse } from '../models/InvoiceViewPagedCollectionStandardResponse';
 import type { InvoiceViewStandardResponse } from '../models/InvoiceViewStandardResponse';
+import type { ObjectStandardResponse } from '../models/ObjectStandardResponse';
 import type { PaymentPartnerInvoiceModel } from '../models/PaymentPartnerInvoiceModel';
 import type { PaymentScheduleListStandardResponse } from '../models/PaymentScheduleListStandardResponse';
 import type { PayrollViewPagedCollectionStandardResponse } from '../models/PayrollViewPagedCollectionStandardResponse';
+import type { PayScheduleGenerationModel } from '../models/PayScheduleGenerationModel';
 import type { PaySlipViewPagedCollectionStandardResponse } from '../models/PaySlipViewPagedCollectionStandardResponse';
 import type { RejectPaymentPartnerInvoiceModel } from '../models/RejectPaymentPartnerInvoiceModel';
 
@@ -1041,6 +1043,50 @@ year: number,
     }
 
     /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomMonthlyPaymentScheduleWeekPeriod(
+requestBody?: PayScheduleGenerationModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/monthly/week-period',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param paymentDay 
+     * @param superAdminId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomFullMonthPaymentSchedule(
+paymentDay?: number,
+superAdminId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/monthly/full-month',
+            query: {
+                'paymentDay': paymentDay,
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
      * @param year 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
@@ -1054,6 +1100,26 @@ year: number,
             path: {
                 'year': year,
             },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomBiWeeklyPaymentSchedule(
+requestBody?: PayScheduleGenerationModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/biweekly/custom',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
             errors: {
                 400: `Bad Request`,
                 500: `Server Error`,
@@ -1104,13 +1170,76 @@ employeeInformationId?: string,
     }
 
     /**
+     * @param superAdminId 
      * @returns AdminPaymentScheduleViewListStandardResponse Success
      * @throws ApiError
      */
-    public static getPaymentSchedules(): CancelablePromise<AdminPaymentScheduleViewListStandardResponse> {
+    public static getPaymentSchedules(
+superAdminId?: string,
+): CancelablePromise<AdminPaymentScheduleViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Financial/admin/schedules',
+            query: {
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @returns ObjectStandardResponse Success
+     * @throws ApiError
+     */
+    public static getMonthlyPaySchedule(
+superAdminId?: string,
+): CancelablePromise<ObjectStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/monthly',
+            query: {
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @returns ObjectStandardResponse Success
+     * @throws ApiError
+     */
+    public static getBiWeeklyPaySchedule(
+superAdminId?: string,
+): CancelablePromise<ObjectStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/biweekly',
+            query: {
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @returns ObjectStandardResponse Success
+     * @throws ApiError
+     */
+    public static getWeeklyPaySchedule(): CancelablePromise<ObjectStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/weekly',
             errors: {
                 400: `Bad Request`,
                 500: `Server Error`,

@@ -27,9 +27,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         const id = JSON.parse(ctx.req.cookies.user).id;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
+                superAdminId,
             );
             const data = await UserService.getSupervisees(
                 pagingOptions.offset,

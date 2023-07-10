@@ -17,6 +17,7 @@ export default index;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await DashboardService.getSupervisorMetrics();
             const expense = await FinancialService.listSuperviseesExpenses(

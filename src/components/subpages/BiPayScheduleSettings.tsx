@@ -2,14 +2,18 @@ import { Box, HStack, Text, VStack, useToast } from '@chakra-ui/react';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
+import { UserContext } from '@components/context/UserContext';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { TeamMemberModel, UserService } from 'src/services';
+import { FinancialService, PayScheduleGenerationModel } from 'src/services';
 import * as yup from 'yup';
 
-const schema = yup.object().shape({});
+const schema = yup.object().shape({
+    startDate: yup.string().required(),
+    paymentDateDays: yup.string().required(),
+});
 
 export const BiPayScheduleSettings = () => {
     const {
@@ -17,16 +21,21 @@ export const BiPayScheduleSettings = () => {
         handleSubmit,
         control,
         formState: { errors, isSubmitting },
-    } = useForm<TeamMemberModel>({
+    } = useForm<PayScheduleGenerationModel>({
         resolver: yupResolver(schema),
         mode: 'all',
     });
     const toast = useToast();
     const router = useRouter();
+    const { user } = useContext(UserContext);
 
-    const onSubmit = async (data: TeamMemberModel) => {
+    const onSubmit = async (data: PayScheduleGenerationModel) => {
+        data.superAdminId = user?.superAdminId;
         try {
-            const result = await UserService.addTeamMember(data);
+            const result =
+                await FinancialService.generateCustomBiWeeklyPaymentSchedule(
+                    data,
+                );
             if (result.status) {
                 toast({
                     title: result.message,
@@ -70,17 +79,17 @@ export const BiPayScheduleSettings = () => {
             </VStack>
             <form>
                 <HStack w="40%" spacing="1rem">
-                    <PrimaryDate<TeamMemberModel>
+                    <PrimaryDate<PayScheduleGenerationModel>
                         control={control}
                         name="startDate"
                         label="Beginning Period or  Start Date"
                         error={errors.startDate}
                         // min={new Date()}
                     />
-                    <PrimaryInput<TeamMemberModel>
+                    <PrimaryInput<PayScheduleGenerationModel>
                         label="Payment period"
-                        name="clientRate"
-                        error={errors.clientRate}
+                        name="paymentDateDays"
+                        error={errors.paymentDateDays}
                         placeholder="Enter the number of days"
                         defaultValue=""
                         register={register}

@@ -34,13 +34,18 @@ export default TeamDetails;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         // console.log({ id });
         try {
             const data = await UserService.getUserById(id);
-            const clients = await UserService.listUsers('client');
-            const supervisor = await UserService.listUsers('supervisor');
+            const clients = await UserService.listUsers('client', superAdminId);
+            const supervisor = await UserService.listUsers(
+                'supervisor',
+                superAdminId,
+            );
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
+                superAdminId,
             );
             console.log({ data });
             return {

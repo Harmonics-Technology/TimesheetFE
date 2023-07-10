@@ -84,6 +84,7 @@ export type { PayRollType } from './models/PayRollType';
 export type { PayrollView } from './models/PayrollView';
 export type { PayrollViewPagedCollection } from './models/PayrollViewPagedCollection';
 export type { PayrollViewPagedCollectionStandardResponse } from './models/PayrollViewPagedCollectionStandardResponse';
+export type { PayScheduleGenerationModel } from './models/PayScheduleGenerationModel';
 export { PayslipRecordToDownload } from './models/PayslipRecordToDownload';
 export type { PayslipUserView } from './models/PayslipUserView';
 export type { PayslipUserViewPagedCollection } from './models/PayslipUserViewPagedCollection';
@@ -124,6 +125,7 @@ export type { TimesheetHoursAdditionModel } from './models/TimesheetHoursAdditio
 export type { TimesheetHoursApprovalModel } from './models/TimesheetHoursApprovalModel';
 export type { TimeSheetMonthlyView } from './models/TimeSheetMonthlyView';
 export type { TimeSheetMonthlyViewIEnumerableStandardResponse } from './models/TimeSheetMonthlyViewIEnumerableStandardResponse';
+export type { TimeSheetMonthlyViewStandardResponse } from './models/TimeSheetMonthlyViewStandardResponse';
 export type { TimeSheetView } from './models/TimeSheetView';
 export type { UpdateClientSubscriptionModel } from './models/UpdateClientSubscriptionModel';
 export type { UpdateUserModel } from './models/UpdateUserModel';

@@ -77,8 +77,8 @@ const TimesheetAdmin = ({
 
     const router = useRouter();
 
-    const [from, setFrom] = useState<any>();
-    const [to, setTo] = useState<any>();
+    const [from, setFrom] = useState<any>(new Date('07/01/2023'));
+    const [to, setTo] = useState<any>(new Date('07/10/2023'));
 
     const HighlightDate = (value: any) => {
         setFrom(value.split('-')[0]);
@@ -612,7 +612,7 @@ const TimesheetAdmin = ({
             useClickOutside(popover, close);
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
-            // console.log({ timesheets });
+            // console.log({ userDate });
             // console.log({ week });
 
             week.push(
@@ -620,7 +620,7 @@ const TimesheetAdmin = ({
                     border={[
                         '0',
                         dates?.includes(new Date(userDate as string))
-                            ? '0.25rem solid rgba(46, 175, 163, 0.40)'
+                            ? '0.1rem solid rgba(46, 175, 163, 0.40)'
                             : '1px solid #e5e5e5',
                     ]}
                     height={['auto', '4rem']}
@@ -955,34 +955,35 @@ const TimesheetAdmin = ({
                     {getDates()}
                 </Box>
             </Box>
-            <Box w="40%">
-                <Selectrix
-                    label="Pay Period"
-                    customKeys={{
-                        keys: 'id',
-                        label: 'label',
-                    }}
-                    options={[
-                        {
-                            id: 'May 29  -  Jun 9, 2023',
-                            label: 'May 29  -  Jun 9, 2023',
-                        },
-                        {
-                            id: 'May 29  -  Jun 9, 2023',
-                            label: 'May 29  -  Jun 9, 2023',
-                        },
-                    ]}
-                    onChange={(e) => HighlightDate(e.target.value)}
-                />
-            </Box>
+
             <Box
                 w="100%"
                 ml="auto"
                 bgColor="white"
                 mt="0rem"
                 mb={['3rem', '0']}
-                p={['1rem 1rem', '1rem 2rem']}
+                p={['1rem 1rem', '2rem 2rem']}
             >
+                <Box w="40%" mb="2rem">
+                    <Selectrix
+                        label="Pay Period"
+                        customKeys={{
+                            keys: 'id',
+                            label: 'label',
+                        }}
+                        options={[
+                            {
+                                id: 'May 29  -  Jun 9, 2023',
+                                label: 'May 29  -  Jun 9, 2023',
+                            },
+                            {
+                                id: 'May 29  -  Jun 9, 2023',
+                                label: 'May 29  -  Jun 9, 2023',
+                            },
+                        ]}
+                        onChange={(e) => HighlightDate(e.target.value)}
+                    />
+                </Box>
                 <Flex
                     w="100%"
                     mr="auto"

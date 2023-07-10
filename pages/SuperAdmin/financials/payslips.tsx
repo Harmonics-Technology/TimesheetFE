@@ -41,8 +41,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.to,
                 pagingOptions.paySlipFilter,
             );
-            const paymentSchedule =
-                await FinancialService.getPaymentSchedules();
+            const paymentSchedule = await FinancialService.getPaymentSchedules(
+                superAdminId,
+            );
 
             return {
                 props: {

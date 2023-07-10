@@ -32,6 +32,7 @@ export default SingleTimeSheet;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
 
         let { date } = ctx.query;
         if (date === undefined) {

@@ -4,7 +4,7 @@ import { BsInfoCircleFill } from 'react-icons/bs';
 
 export const TimeSheetHighlight = () => {
     return (
-        <Box pos="absolute" top="-10%" left="50%" transform="translateX(-50%)">
+        <Box pos="absolute" top="-8%" left="50%" transform="translateX(-50%)" zIndex='900'>
             <HStack
                 color="#2E5268"
                 border="1px solid #2EAFA3"

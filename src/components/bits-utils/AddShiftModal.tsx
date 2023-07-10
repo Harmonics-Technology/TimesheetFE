@@ -22,19 +22,18 @@ import {
     ShiftService,
     ShiftModel,
     ShiftUsersListViewPagedCollectionStandardResponse,
+    ShiftTypeViewStandardResponse,
 } from 'src/services';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
 import { FaRegCalendarAlt } from 'react-icons/fa';
-import TimePicker from 'react-multi-date-picker/plugins/time_picker';
-import { AiOutlineBgColors, AiOutlineFieldTime } from 'react-icons/ai';
-import { HexColorPicker, HexColorInput } from 'powerful-color-picker';
 import dynamic from 'next/dynamic';
 import { PrimaryTextarea } from './PrimaryTextArea';
 import { useRouter } from 'next/router';
 import moment from 'moment';
+import { PrimaryDate } from './PrimaryDate';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -44,6 +43,7 @@ interface ExportProps {
     onClose: any;
     datas: any;
     user: ShiftUsersListViewPagedCollectionStandardResponse;
+    shiftTypes: ShiftTypeViewStandardResponse;
 }
 
 const schema = yup.object().shape({});
@@ -53,20 +53,17 @@ export const AddShiftModal = ({
     onClose,
     datas,
     user,
+    shiftTypes,
 }: ExportProps) => {
     const router = useRouter();
     const toast = useToast();
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
 
-    const [fromDate, setFromDate] = useState<any>(new DateObject());
-    const [toDate, setToDate] = useState<any>(new DateObject());
-    const [color, setColor] = useState<any>();
-    const [showColor, setShowColor] = useState(false);
+    // const [fromDate, setFromDate] = useState<any>(new DateObject());
     const [userId, setUserId] = useState();
     const [repeat, setRepeat] = useState(false);
-    const [repeatEndDate, setRepeatEndDate] = useState<any>(
-        new DateObject().add(10, 'days'),
-    );
+    // const [repeatEndDate, setRepeatEndDate] = useState<any>(
+    //     new DateObject().add(10, 'days'),
+    // );
     const [selectedId, setSelectedId] = useState<any>([]);
     const [data, setData] = useState<any>();
 
@@ -75,9 +72,7 @@ export const AddShiftModal = ({
     }, [datas]);
 
     useEffect(() => {
-        setFromDate(new DateObject(data?.start));
-        setToDate(new DateObject(data?.end).subtract(59, 'minutes'));
-        setColor(data?.bgColor || '#' + randomColor);
+        // setFromDate(new DateObject(data?.start));
         setUserId(data?.resourceId);
     }, [data]);
 
@@ -98,10 +93,14 @@ export const AddShiftModal = ({
         handleSubmit,
         control,
         reset,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<ShiftModel>({
         resolver: yupResolver(schema),
         mode: 'all',
+        defaultValues: {
+            start: new DateObject(data?.start) as unknown as string,
+        },
     });
 
     const closeModal = () => {
@@ -125,32 +124,20 @@ export const AddShiftModal = ({
         { id: 6, name: 'SA' },
     ];
 
-    const rrule = `FREQ=WEEKLY;DTSTART=${new DateObject(fromDate)
+    const fromDate = watch('start');
+    const rrule = `FREQ=WEEKLY;DTSTART=${new DateObject(fromDate as string)
         .subtract(1, 'days')
-        .format('YYYYMMDDTHHmmssZ')};UNTIL=${repeatEndDate.format(
-        'YYYYMMDDTHHmmssZ',
-    )};BYDAY=${selectedId.map((x) => x.name)}`;
-
-    const title =
-        fromDate.format('A') == 'AM' ? 'Morning shift' : 'Night Shift';
-
-    const hoursDiff = moment(new Date(toDate)).diff(
-        moment(new Date(fromDate)),
-        'hours',
-    );
+        .format('YYYYMMDDTHHmmssZ')};UNTIL=${new DateObject(
+        watch('repeatStopDate') as string,
+    ).format('YYYYMMDDTHHmmssZ')};BYDAY=${selectedId.map((x) => x.name)}`;
 
     // console.log({ hoursDiff });
 
     const onSubmit = async (data: ShiftModel) => {
-        // data.hours = hoursDiff;
-        // data.title = title;
-        // data.start = fromDate?.format('YYYY-MM-DD HH:mm:ss');
-        // data.end = toDate?.format('YYYY-MM-DD HH:mm:ss');
-        // data.color = color;
-        data.repeatStopDate = repeatEndDate?.format('YYYY-MM-DD HH:mm:ss');
+        // data.repeatStopDate = repeatEndDate?.format('YYYY-MM-DD HH:mm:ss');
         repeat && (data.repeatQuery = rrule);
         data.userId ? data.userId : (data.userId = userId);
-        console.log({ data });
+        // console.log({ data });
         try {
             const result = await ShiftService.addShift(data);
             if (result.status) {
@@ -243,249 +230,34 @@ export const AddShiftModal = ({
                                 </HStack>
                                 <HStack gap="2rem" w="full">
                                     <Text fontSize=".9rem" w="20%">
-                                        From:
+                                        Date:
                                     </Text>
-                                    <Flex w="full" gap="1rem">
-                                        <DatePicker
-                                            // containerClassName="custom-container"
-                                            containerStyle={{
-                                                width: '60%',
-                                            }}
-                                            value={fromDate}
-                                            onChange={setFromDate}
-                                            format="dddd, MMM DD, YYYY"
-                                            plugins={[
-                                                <TimePicker hideSeconds />,
-                                            ]}
-                                            render={(value, openCalendar) => {
-                                                return (
-                                                    <HStack
-                                                        w="100%"
-                                                        px="1rem"
-                                                        h="2.5rem"
-                                                        justifyContent="space-between"
-                                                        alignItems="center"
-                                                        border="1px solid"
-                                                        borderColor="gray.300"
-                                                        color="gray.500"
-                                                        boxShadow="sm"
-                                                        borderRadius="0"
-                                                        cursor="pointer"
-                                                        fontSize=".9rem"
-                                                        onClick={(value) =>
-                                                            openCalendar(value)
-                                                        }
-                                                    >
-                                                        <Text
-                                                            mb="0"
-                                                            whiteSpace="nowrap"
-                                                        >
-                                                            {value}
-                                                        </Text>
-                                                        <Icon
-                                                            as={
-                                                                FaRegCalendarAlt
-                                                            }
-                                                        />
-                                                    </HStack>
-                                                );
-                                            }}
-                                        />
-                                        <DatePicker
-                                            containerStyle={{
-                                                width: '40%',
-                                            }}
-                                            // disableDayPicker
-                                            format="hh:mm A"
-                                            value={fromDate}
-                                            onChange={setFromDate}
-                                            plugins={[
-                                                <TimePicker hideSeconds />,
-                                            ]}
-                                            render={(value, openCalendar) => {
-                                                return (
-                                                    <HStack
-                                                        w="100%"
-                                                        px="1rem"
-                                                        h="2.5rem"
-                                                        alignItems="center"
-                                                        justify="space-between"
-                                                        border="1px solid"
-                                                        borderColor="gray.300"
-                                                        color="gray.500"
-                                                        boxShadow="sm"
-                                                        borderRadius="0"
-                                                        cursor="pointer"
-                                                        fontSize=".9rem"
-                                                        onClick={(value) =>
-                                                            openCalendar(value)
-                                                        }
-                                                    >
-                                                        <Text
-                                                            mb="0"
-                                                            whiteSpace="nowrap"
-                                                        >
-                                                            {value}
-                                                        </Text>
-                                                        <Icon
-                                                            as={
-                                                                AiOutlineFieldTime
-                                                            }
-                                                        />
-                                                    </HStack>
-                                                );
-                                            }}
-                                        />
-                                    </Flex>
+                                    <PrimaryDate<ShiftModel>
+                                        control={control}
+                                        name="start"
+                                        label=""
+                                        error={errors.start}
+                                        // max={new Date()}
+                                    />
                                 </HStack>
                                 <HStack gap="2rem" w="full">
                                     <Text fontSize=".9rem" w="20%">
-                                        To:
+                                        Shift Type:
                                     </Text>
-                                    <Flex w="full" gap="1rem">
-                                        <DatePicker
-                                            // containerClassName="custom-container"
-                                            containerStyle={{
-                                                width: '60%',
-                                            }}
-                                            value={toDate}
-                                            onChange={setToDate}
-                                            format="dddd, MMM DD, YYYY"
-                                            plugins={[
-                                                <TimePicker hideSeconds />,
-                                            ]}
-                                            render={(value, openCalendar) => {
-                                                return (
-                                                    <HStack
-                                                        w="100%"
-                                                        px="1rem"
-                                                        h="2.5rem"
-                                                        justifyContent="space-between"
-                                                        alignItems="center"
-                                                        border="1px solid"
-                                                        borderColor="gray.300"
-                                                        color="gray.500"
-                                                        boxShadow="sm"
-                                                        borderRadius="0"
-                                                        cursor="pointer"
-                                                        fontSize=".9rem"
-                                                        onClick={(value) =>
-                                                            openCalendar(value)
-                                                        }
-                                                    >
-                                                        <Text
-                                                            mb="0"
-                                                            whiteSpace="nowrap"
-                                                        >
-                                                            {value}
-                                                        </Text>
-                                                        <Icon
-                                                            as={
-                                                                FaRegCalendarAlt
-                                                            }
-                                                        />
-                                                    </HStack>
-                                                );
-                                            }}
-                                        />
-                                        <DatePicker
-                                            containerStyle={{
-                                                width: '40%',
-                                            }}
-                                            // disableDayPicker
-                                            format="hh:mm A"
-                                            value={toDate}
-                                            onChange={setToDate}
-                                            plugins={[
-                                                <TimePicker hideSeconds />,
-                                            ]}
-                                            render={(value, openCalendar) => {
-                                                return (
-                                                    <HStack
-                                                        w="100%"
-                                                        px="1rem"
-                                                        h="2.5rem"
-                                                        alignItems="center"
-                                                        justify="space-between"
-                                                        border="1px solid"
-                                                        borderColor="gray.300"
-                                                        color="gray.500"
-                                                        boxShadow="sm"
-                                                        borderRadius="0"
-                                                        cursor="pointer"
-                                                        fontSize=".9rem"
-                                                        onClick={(value) =>
-                                                            openCalendar(value)
-                                                        }
-                                                    >
-                                                        <Text
-                                                            mb="0"
-                                                            whiteSpace="nowrap"
-                                                        >
-                                                            {value}
-                                                        </Text>
-                                                        <Icon
-                                                            as={
-                                                                AiOutlineFieldTime
-                                                            }
-                                                        />
-                                                    </HStack>
-                                                );
-                                            }}
-                                        />
-                                    </Flex>
+                                    <SelectrixBox<ShiftModel>
+                                        control={control}
+                                        name="shiftTypeId"
+                                        error={errors.shiftTypeId}
+                                        keys="id"
+                                        keyLabel="name"
+                                        options={shiftTypes?.data}
+                                        placeholder={
+                                            data?.slotName ||
+                                            'Select a shift type'
+                                        }
+                                    />
                                 </HStack>
-                                <HStack gap="2rem" w="full">
-                                    <Text fontSize=".9rem" w="20%">
-                                        Select Color:
-                                    </Text>
-                                    <HStack
-                                        w="100%"
-                                        px="1rem"
-                                        h="2.5rem"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                        border="1px solid"
-                                        borderColor="gray.300"
-                                        color="gray.500"
-                                        boxShadow="sm"
-                                        borderRadius="0"
-                                        cursor="pointer"
-                                        fontSize=".9rem"
-                                        onClick={() => setShowColor(!showColor)}
-                                    >
-                                        <HStack>
-                                            <Square
-                                                size="2rem"
-                                                bgColor={color}
-                                            />
-                                            <Text mb="0" whiteSpace="nowrap">
-                                                {color}
-                                            </Text>
-                                        </HStack>
-                                        <Icon as={AiOutlineBgColors} />
-                                    </HStack>
-                                    {showColor && (
-                                        <Box
-                                            pos="absolute"
-                                            right="50%"
-                                            zIndex="900"
-                                            bgColor="white"
-                                            p="1rem"
-                                            borderRadius="5px"
-                                        >
-                                            <HexColorPicker
-                                                color={color}
-                                                onChange={setColor}
-                                            />
-                                            <HexColorInput
-                                                color={color}
-                                                onChange={setColor}
-                                                className="colorPicker"
-                                            />
-                                        </Box>
-                                    )}
-                                </HStack>
+
                                 <HStack gap="2rem" w="full">
                                     <Text fontSize=".9rem" w="20%">
                                         Repeats
@@ -566,7 +338,14 @@ export const AddShiftModal = ({
                                         <Text fontSize=".9rem" w="20%">
                                             Repeat Ends
                                         </Text>
-                                        <DatePicker
+                                        <PrimaryDate<ShiftModel>
+                                            control={control}
+                                            name="repeatStopDate"
+                                            label=""
+                                            error={errors.repeatStopDate}
+                                            // max={new Date()}
+                                        />
+                                        {/* <DatePicker
                                             containerStyle={{
                                                 width: '100%',
                                             }}
@@ -606,7 +385,7 @@ export const AddShiftModal = ({
                                                     </HStack>
                                                 );
                                             }}
-                                        />
+                                        /> */}
                                     </HStack>
                                 )}
                                 <Box
