@@ -392,11 +392,9 @@ function TeamManagement({
     useEffect(() => {
         if (subType == 'onshore') {
             setValue('payRollTypeId', 1);
-            return;
         }
         if (subType == 'offshore') {
             setValue('payRollTypeId', 2);
-            return;
         }
         const isUser = Cookies.get('user');
         if (isUser !== undefined) {
@@ -616,17 +614,17 @@ function TeamManagement({
                                         options={client}
                                     />
                                 )}
-                                {supervisors !== undefined && (
-                                    <SelectrixBox<TeamMemberModel>
-                                        control={control}
-                                        name="supervisorId"
-                                        error={errors.supervisorId}
-                                        keys="id"
-                                        keyLabel="fullName"
-                                        label="Supervisor"
-                                        options={supervisors}
-                                    />
-                                )}
+                                {/* {supervisors !== undefined && ( */}
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="supervisorId"
+                                    error={errors.supervisorId}
+                                    keys="id"
+                                    keyLabel="fullName"
+                                    label="Supervisor"
+                                    options={supervisors}
+                                />
+                                {/*  )} */}
                                 <Box pos="relative">
                                     <SelectrixBox<TeamMemberModel>
                                         control={control}
