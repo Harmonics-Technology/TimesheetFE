@@ -23,7 +23,7 @@ export default function RadioBtn(props) {
                         boxShadow: 'outline',
                     }}
                 />
-                <Text fontSize=".8rem" color="#263238" fontWeight="500">
+                <Text fontSize=".8rem" color="#263238" fontWeight="500" mb="0">
                     {props?.children}
                 </Text>
             </HStack>

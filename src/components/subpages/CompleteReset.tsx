@@ -111,6 +111,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                         w={['100%', '100%']}
                         lineHeight="1"
                         textAlign="center"
+                        mb="1rem"
                     >
                         Reset Password!
                     </Text>
@@ -123,6 +124,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     w="70%"
                                     fontWeight="500"
                                     textAlign="center"
+                                    mb="1rem"
                                 >
                                     Password reset completed, you can now{' '}
                                     <Link href="/login" passHref>
@@ -149,7 +151,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                                 </Link>
                             </Flex>
                         ) : (
-                            <VStack w="full" spacing=".7rem">
+                            <VStack w="full" spacing="1rem">
                                 <PrimaryInput<PasswordReset>
                                     register={register}
                                     name="newPassword"

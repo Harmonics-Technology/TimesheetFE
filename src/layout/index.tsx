@@ -2,7 +2,7 @@ import { Box, Flex, useDisclosure } from '@chakra-ui/react';
 import SideNav from '@components/sidenav';
 import TopNav from '@components/topnav';
 import { useRouter } from 'next/router';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import Footer from './Footer';
 import SidebarToggle from '@components/sidenav/SidebarToggle';
 import Cookies from 'js-cookie';
@@ -10,6 +10,8 @@ import SessionModal from '@components/bits-utils/SessionModal';
 import { NotificationProvider } from '@components/context/NotificationContext';
 import { OnboardingFeeProvider } from '@components/context/OnboardingFeeContext';
 import { Logout } from '@components/bits-utils/LogUserOut';
+import { UserContext } from '@components/context/UserContext';
+import { InactiveUser } from '@components/bits-utils/InactiveUser';
 
 type LayoutProps = {
     children: ReactNode;
@@ -39,6 +41,9 @@ const Layout = ({ children }: LayoutProps) => {
     const urlRoute = router.asPath.split('/')[1];
     // console.log({ urlRoute });
     const loggedInUser = user?.role?.replaceAll(' ', '');
+    const { activeSub } = useContext(UserContext);
+    const upgrade = router.asPath.startsWith('/SuperAdmin/account-management');
+    // console.log({ activeSub });
     useEffect(() => {
         if (
             urlRoute !== loggedInUser &&
@@ -79,7 +84,11 @@ const Layout = ({ children }: LayoutProps) => {
                                         openSidenav={openSidenav}
                                     />
                                     <Box mt="1rem" w="95%" mx="auto">
-                                        {children}
+                                        {!activeSub && !upgrade ? (
+                                            <InactiveUser />
+                                        ) : (
+                                            children
+                                        )}
                                     </Box>
                                     <Footer />
                                 </Box>

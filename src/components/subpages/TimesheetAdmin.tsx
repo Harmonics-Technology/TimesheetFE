@@ -81,6 +81,7 @@ const TimesheetAdmin = ({
     const [to, setTo] = useState<any>(new Date('07/10/2023'));
 
     const HighlightDate = (value: any) => {
+        console.log({ value });
         setFrom(value.split('-')[0]);
         setTo(value.split('-')[1]);
     };
@@ -89,7 +90,8 @@ const TimesheetAdmin = ({
         start: new Date(from),
         end: new Date(to),
     });
-    console.log({ dates });
+    const newDates = dates?.map((x) => moment(x).format('DD/MM/YY'));
+    // console.log({ newDates });
 
     // const newOptions = data.map((obj) => ({
     //     id: `${obj.begin} - ${obj.end}`,
@@ -612,15 +614,17 @@ const TimesheetAdmin = ({
             useClickOutside(popover, close);
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
-            // console.log({ userDate });
+            // console.log({ userDate: new Date(userDate) });
             // console.log({ week });
 
             week.push(
                 <Flex
                     border={[
                         '0',
-                        dates?.includes(new Date(userDate as string))
-                            ? '0.1rem solid rgba(46, 175, 163, 0.40)'
+                        newDates?.includes(
+                            moment(userDate as string).format('DD/MM/YY'),
+                        )
+                            ? '0.1rem solid rgba(46, 175, 163, .7)'
                             : '1px solid #e5e5e5',
                     ]}
                     height={['auto', '4rem']}
@@ -965,6 +969,9 @@ const TimesheetAdmin = ({
                 p={['1rem 1rem', '2rem 2rem']}
             >
                 <Box w="40%" mb="2rem">
+                    <Text fontSize=".8rem" fontWeight={500} mb='.3rem'>
+                        Pay Period
+                    </Text>
                     <Selectrix
                         // label="Pay Period"
                         customKeys={{
@@ -973,8 +980,8 @@ const TimesheetAdmin = ({
                         }}
                         options={[
                             {
-                                id: 'May 29  -  Jun 9, 2023',
-                                label: 'May 29  -  Jun 9, 2023',
+                                id: 'May 29, 2023  -  Jul 9, 2023',
+                                label: 'May 29, 2023  -  Jul 9, 2023',
                             },
                             {
                                 id: 'May 29  -  Jun 9, 2023',

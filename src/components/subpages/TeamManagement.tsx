@@ -143,11 +143,13 @@ function TeamManagement({
     // console.log(watch('onBordingFee'));
     const { isOpen, onOpen, onClose } = useDisclosure();
     // const { isOpen: opened, onOpen: opens, onClose: closed } = useDisclosure();
-    const { addons, subType, user, opens } = useContext(UserContext);
+    const { subType, user, opens } = useContext(UserContext);
     const router = useRouter();
     const toast = useToast();
-    // console.log(watch("payRollTypeId"));
     const payroll = watch('payRollTypeId');
+    const currency = watch('currency');
+    // console.log(watch('payRollTypeId'));
+    // console.log({ payroll });
     const onboarding = watch('fixedAmount');
     const clientId = watch('clientId');
     const isEligibleForLeave = watch('isEligibleForLeave');
@@ -237,7 +239,7 @@ function TeamManagement({
             setLoading(false);
             console.log({ data });
             if (data.status) {
-                setSupervisors(data.data?.filter((x) => !x.isActive));
+                setSupervisors(data.data?.filter((x) => x.isActive));
                 return;
             }
             setLoading(false);
@@ -390,12 +392,6 @@ function TeamManagement({
     const group = getRootProps();
 
     useEffect(() => {
-        if (subType == 'onshore') {
-            setValue('payRollTypeId', 1);
-        }
-        if (subType == 'offshore') {
-            setValue('payRollTypeId', 2);
-        }
         const isUser = Cookies.get('user');
         if (isUser !== undefined) {
             const userDetails = JSON.parse(isUser as unknown as string);
@@ -406,6 +402,8 @@ function TeamManagement({
                 employeeType: 'regular',
                 numberOfDaysEligible: leaveSettings?.eligibleLeaveDays,
                 isEligibleForLeave: false,
+                payRollTypeId: subType == 'premium' ? 2 : 1,
+                currency: subType != 'premium' ? 'CAD' : 'NGN',
             });
         }
     }, []);
@@ -562,7 +560,7 @@ function TeamManagement({
                                     Work Data
                                 </Text>
                             </Flex>
-                            {addons?.includes('client management') && (
+                            {subType == 'premium' && (
                                 <Box mb="1.5rem">
                                     <Text
                                         fontWeight="500"
@@ -633,6 +631,11 @@ function TeamManagement({
                                         keys="id"
                                         keyLabel="label"
                                         label="Payroll Type"
+                                        placeholder={
+                                            payroll == 1
+                                                ? 'Onshore Contract'
+                                                : 'Offshore Contract'
+                                        }
                                         options={[
                                             {
                                                 id: 1,
@@ -640,11 +643,11 @@ function TeamManagement({
                                             },
                                             {
                                                 id: 2,
-                                                label: 'Offshore contract',
+                                                label: 'Offshore Contract',
                                             },
                                         ]}
                                     />
-                                    {subType != 'full package' && (
+                                    {subType != 'premium' && (
                                         <TriggerBox opens={opens} />
                                     )}
                                 </Box>
@@ -767,7 +770,7 @@ function TeamManagement({
                                             },
                                         ]}
                                     />
-                                    {!addons?.includes('shift management') && (
+                                    {subType == 'basic' && (
                                         <TriggerBox opens={opens} />
                                     )}
                                 </Box>
@@ -779,18 +782,24 @@ function TeamManagement({
                                     defaultValue=""
                                     register={register}
                                 />
-                                <SelectrixBox<TeamMemberModel>
-                                    control={control}
-                                    name="currency"
-                                    error={errors.currency}
-                                    keys="id"
-                                    keyLabel="label"
-                                    label="Currency"
-                                    options={[
-                                        { id: 'CAD', label: 'CAD' },
-                                        { id: 'NGN', label: 'NGN' },
-                                    ]}
-                                />
+                                <Box pos="relative">
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="currency"
+                                        error={errors.currency}
+                                        keys="id"
+                                        keyLabel="label"
+                                        label="Currency"
+                                        placeholder={currency as string}
+                                        options={[
+                                            { id: 'CAD', label: 'CAD' },
+                                            { id: 'NGN', label: 'NGN' },
+                                        ]}
+                                    />
+                                    {subType != 'premium' && (
+                                        <TriggerBox opens={opens} />
+                                    )}
+                                </Box>
                                 <SelectrixBox<TeamMemberModel>
                                     control={control}
                                     name="paymentFrequency"
@@ -958,9 +967,9 @@ function TeamManagement({
                                     control={control}
                                     error={errors.isEligibleForLeave}
                                 />
-                                {!addons?.includes('leave management') && (
+                                {/* {!addons?.includes('leave management') && (
                                     <TriggerBox opens={opens} />
-                                )}
+                                )} */}
                             </Box>
                             {(isEligibleForLeave as unknown as string) ==
                                 'Yes' && (

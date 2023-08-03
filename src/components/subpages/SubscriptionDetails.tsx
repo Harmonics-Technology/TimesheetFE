@@ -19,129 +19,88 @@ import {
     TableSubscriptionActions,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
+import { UpgradeSubModal } from '@components/bits-utils/UpgradeSubModal';
 import { UserContext } from '@components/context/UserContext';
+import { TextWithBottom } from '@components/generics/TextWithBottom';
 import { CAD } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react';
-import { BaseSubscription, UserService, UserView } from 'src/services';
+import { UserService, UserView } from 'src/services';
 
 export const SubscriptionDetails = ({ data }) => {
-    const { user, subType, addons } = useContext(UserContext);
+    const { user, subType } = useContext(UserContext);
     const userInfo: UserView = user;
     const role = user?.role.replaceAll(' ', '');
     const { onOpen, isOpen, onClose } = useDisclosure();
-    const toast = useToast();
     const router = useRouter();
-    const [subData, setSubData] = useState();
-    const [loading, setLoading] = useState(false);
-    const currentSub: BaseSubscription =
-        user?.subscriptiobDetails?.data?.baseSubscription;
 
-    const cancelSub = async () => {
-        try {
-            setLoading(true);
-            const result = await UserService.cancelSubscription(
-                currentSub.id as string,
-            );
-            if (result.status) {
-                // console.log({ result });
-                toast({
-                    title: result.message,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                setLoading(false);
-                router.reload();
-                return;
-            }
-            setLoading(false);
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        } catch (err: any) {
-            setLoading(false);
-            toast({
-                title: err?.body?.message || err.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    // const currentSub: any = user?.subscriptiobDetails?.data?.subscription;
+
     return (
         <Box>
             <LeaveTab
                 tabValue={[
                     {
                         text: 'Subscription',
-                        url: `/${role}/account-management/manage-subscription`,
+                        url: `/account-management/manage-subscription`,
                     },
                     {
                         text: 'Billing Information',
-                        url: `/${role}/account-management/billing-information`,
+                        url: `/account-management/billing-information`,
                     },
                 ]}
             />
-            <Flex justify="space-between" mt="1rem">
+            <Flex justify="space-between" mt="1rem" w="90%">
                 <Box>
-                    <Text fontSize=".875rem" color="#696969">
+                    <Text fontSize=".875rem" color="#696969" mb="1em">
                         Current Subscription Plan
                     </Text>
-                    <Text fontSize=".875rem" color="#2d3748" fontWeight="500">
-                        {subType} +{addons?.map((x) => x).join('+')}
+                    <Text
+                        fontSize=".875rem"
+                        color="#2d3748"
+                        fontWeight="500"
+                        textTransform="capitalize"
+                    >
+                        {subType} Package
                     </Text>
-                    <HStack>
+                    <HStack mt="1rem">
                         <ManageBtn
                             bg="#e45771"
                             btn="Cancel"
-                            onClick={cancelSub}
-                            isLoading={loading}
+                            onClick={() =>
+                                router.push(
+                                    `/${role}/account-management/cancel-subscription`,
+                                )
+                            }
                         />
-                        <ManageBtn bg="#707683" btn="Pause" disabled />
-                        <ManageBtn bg="#1b487d" btn="Upgrade" disabled />
+                        {/* <ManageBtn bg="#707683" btn="Pause" disabled /> */}
+                        <ManageBtn
+                            bg="#1b487d"
+                            btn="Upgrade"
+                            onClick={onOpen}
+                        />
                         <ManageBtn bg="brand.400" btn="Renew" />
                     </HStack>
                 </Box>
                 <VStack spacing="2rem" align="flex-start">
-                    <Box>
-                        <Text fontSize=".875rem" color="#696969">
-                            Subscription Date
-                        </Text>
-                        <Text
-                            fontSize=".875rem"
-                            color="#2d3748"
-                            fontWeight="500"
-                        >
-                            {formatDate(
-                                userInfo?.subscriptiobDetails?.data?.startDate,
-                            )}
-                        </Text>
-                    </Box>
-                    <Box>
-                        <Text fontSize=".875rem" color="#696969">
-                            Subscription Renewal Date
-                        </Text>
-                        <Text
-                            fontSize=".875rem"
-                            color="#2d3748"
-                            fontWeight="500"
-                        >
-                            {formatDate(
-                                userInfo?.subscriptiobDetails?.data?.endDate,
-                            )}{' '}
-                            (
-                            {moment(
-                                userInfo?.subscriptiobDetails?.data?.endDate,
-                            ).diff(moment(), 'day')}{' '}
-                            days)
-                        </Text>
-                    </Box>
+                    <TextWithBottom
+                        title="Subscription Date"
+                        text={formatDate(
+                            userInfo?.subscriptiobDetails?.data?.startDate,
+                        )}
+                    />
+                    <TextWithBottom
+                        title="Subscription Renewal Date"
+                        text={`${formatDate(
+                            userInfo?.subscriptiobDetails?.data?.endDate,
+                        )}
+                        (${moment(
+                            userInfo?.subscriptiobDetails?.data?.endDate,
+                        ).diff(moment(), 'day')}
+                        days)`}
+                    />
                 </VStack>
             </Flex>
 
@@ -161,7 +120,7 @@ export const SubscriptionDetails = ({ data }) => {
                         'Duration',
                         'Amount',
                         'Status',
-                        'Actions',
+                        // 'Actions',
                     ]}
                     bg="brand.400"
                     color="white"
@@ -169,13 +128,7 @@ export const SubscriptionDetails = ({ data }) => {
                     <>
                         {data?.value?.map((x: any) => (
                             <Tr key={x.id}>
-                                <TableData
-                                    name={`${
-                                        x.baseSubscription?.name
-                                    } + ${x.addOns
-                                        ?.map((x) => x.addOnSubscription?.name)
-                                        .join(',')}`}
-                                />
+                                <TableData name={x.subscription?.name} />
                                 <TableData
                                     name={moment(x.startDate).format(
                                         'DD/MM/YYYY',
@@ -191,11 +144,11 @@ export const SubscriptionDetails = ({ data }) => {
                                 <TableStatus
                                     name={x.status == 'ACTIVE' ? true : false}
                                 />
-                                <TableSubscriptionActions
+                                {/* <TableSubscriptionActions
                                     openRenew={onOpen}
                                     setData={setSubData}
                                     x={x}
-                                />
+                                /> */}
                             </Tr>
                         ))}
                         {/* <RenewSubscription
@@ -203,6 +156,12 @@ export const SubscriptionDetails = ({ data }) => {
                             onClose={onClose}
                             data={subData}
                         /> */}
+                        {isOpen && (
+                            <UpgradeSubModal
+                                isOpen={isOpen}
+                                onClose={onClose}
+                            />
+                        )}
                     </>
                 </Tables>
             </Box>

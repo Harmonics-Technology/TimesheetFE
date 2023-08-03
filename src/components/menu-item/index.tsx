@@ -40,7 +40,7 @@ function MenuItem({
     const [openMenu, setOpenMenu] = useState(false);
     const url = `/${role}/${linkName}`;
     const { isOpen, onOpen, onClose } = useDisclosure();
-    // console.log({ url });
+    // console.log({ display });
     return (
         <>
             <Box>
@@ -61,7 +61,7 @@ function MenuItem({
                                     cursor="pointer"
                                     bgColor={
                                         router.pathname.startsWith(url)
-                                            ? 'brand.500'
+                                            ? 'brand.100'
                                             : 'brand.400'
                                     }
                                     p=".5rem .5rem"
@@ -71,9 +71,13 @@ function MenuItem({
                                     <HStack>
                                         <Square
                                             bgColor={
-                                                router.pathname.startsWith(url)
+                                                !display
+                                                    ? 'gray.300'
+                                                    : router.pathname.startsWith(
+                                                          url,
+                                                      )
                                                     ? 'brand.400'
-                                                    : 'brand.500'
+                                                    : 'brand.100'
                                             }
                                             color={
                                                 router.pathname.startsWith(url)
@@ -88,7 +92,11 @@ function MenuItem({
                                         </Square>
                                         <Text
                                             color={
-                                                router.pathname.startsWith(url)
+                                                !display
+                                                    ? 'gray.300'
+                                                    : router.pathname.startsWith(
+                                                          url,
+                                                      )
                                                     ? 'brand.200'
                                                     : 'white'
                                             }
@@ -100,6 +108,7 @@ function MenuItem({
                                             fontSize=".9rem"
                                             pl=".5rem"
                                             noOfLines={1}
+                                            mb='0'
                                         >
                                             {menuTitle}
                                         </Text>
@@ -211,7 +220,7 @@ function MenuItem({
                                 <HStack
                                     bgColor={
                                         router.pathname.startsWith(url)
-                                            ? 'brand.500'
+                                            ? 'brand.100'
                                             : 'brand.400'
                                     }
                                     p=".5rem .5rem"
@@ -226,7 +235,7 @@ function MenuItem({
                                                       url,
                                                   )
                                                 ? 'brand.400'
-                                                : 'brand.500'
+                                                : 'brand.100'
                                         }
                                         color={
                                             router.pathname.startsWith(url)
@@ -257,6 +266,7 @@ function MenuItem({
                                         fontSize=".9rem"
                                         pl=".5rem"
                                         noOfLines={1}
+                                        mb='0'
                                     >
                                         {menuTitle}
                                     </Text>
@@ -286,7 +296,7 @@ function MenuItem({
                                             bgColor={
                                                 router.pathname.startsWith(url)
                                                     ? 'brand.400'
-                                                    : 'brand.500'
+                                                    : 'brand.100'
                                             }
                                             color={
                                                 router.pathname.startsWith(url)
@@ -313,6 +323,7 @@ function MenuItem({
                                             fontSize=".9rem"
                                             pl=".5rem"
                                             noOfLines={1}
+                                            mb='0'
                                         >
                                             {menuTitle}
                                         </Text>
@@ -430,7 +441,7 @@ function MenuItem({
                                                           url,
                                                       )
                                                     ? 'brand.400'
-                                                    : 'brand.500'
+                                                    : 'brand.100'
                                             }
                                             color={
                                                 router.pathname.startsWith(url)
@@ -461,6 +472,7 @@ function MenuItem({
                                             fontSize=".9rem"
                                             pl=".5rem"
                                             noOfLines={1}
+                                            mb='0'
                                         >
                                             {menuTitle}
                                         </Text>

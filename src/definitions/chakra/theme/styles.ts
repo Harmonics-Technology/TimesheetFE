@@ -11,7 +11,7 @@ export default {
                 fontFamily: "'Rubik', sans-serif",
             },
             p: {
-                marginBottom: '1em',
+                marginBottom: '0em',
             },
             body: {
                 fontFamily: "'Rubik', sans-serif",

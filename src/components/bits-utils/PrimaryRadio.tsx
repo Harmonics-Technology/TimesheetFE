@@ -21,6 +21,8 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     control: Control<TFormValues>;
     radios?: any;
     value?: string;
+    flexDir?: any;
+    gap?: any;
 }
 
 export const PrimaryRadio = <TFormValues extends Record<string, any>>({
@@ -31,6 +33,8 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
     defaultValue = undefined,
     radios,
     value,
+    flexDir = 'row',
+    gap = '1rem',
 }: FormInputProps<TFormValues>) => {
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'framework',
@@ -46,7 +50,7 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
                     error?.type === 'required' || error?.message !== undefined
                 }
             >
-                <Text fontSize="1rem" fontWeight="500">
+                <Text fontSize="1rem" fontWeight="500" mb=".7rem">
                     {label}
                 </Text>
                 <Controller
@@ -58,6 +62,10 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
                             defaultValue={value}
                             w="full"
                             {...group}
+                            spacing="0"
+                            gap={gap}
+                            flexDir={flexDir}
+                            align="flex-start"
                         >
                             {radios.map((value, index) => {
                                 const radio = getRadioProps({ value });

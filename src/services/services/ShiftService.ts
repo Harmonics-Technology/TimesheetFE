@@ -271,12 +271,14 @@ id?: string,
     /**
      * @param shiftId 
      * @param shiftToSwapId 
+     * @param superAdminId 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static swapShift(
 shiftId?: string,
 shiftToSwapId?: string,
+superAdminId?: string,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -284,6 +286,7 @@ shiftToSwapId?: string,
             query: {
                 'ShiftId': shiftId,
                 'ShiftToSwapId': shiftToSwapId,
+                'SuperAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,
@@ -295,12 +298,14 @@ shiftToSwapId?: string,
     /**
      * @param id 
      * @param action 
+     * @param superAdminId 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static approveSwap(
 id?: string,
 action?: number,
+superAdminId?: string,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -308,6 +313,7 @@ action?: number,
             query: {
                 'id': id,
                 'action': action,
+                'superAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,
@@ -346,12 +352,14 @@ userId?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @returns SwapViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getAllSwapShifts(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 ): CancelablePromise<SwapViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -359,6 +367,7 @@ limit?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,

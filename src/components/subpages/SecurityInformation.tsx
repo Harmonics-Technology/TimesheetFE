@@ -137,7 +137,7 @@ export const SecurityInformation = ({
                 ]}
             />
             <Box mt="2rem" pb="3rem" borderBottom="1px solid #C2CFE0">
-                <Text fontSize=".875rem" color="#1B1D21">
+                <Text fontSize=".875rem" color="#1B1D21" mb="1rem">
                     Password Update Or Change
                 </Text>
                 <form>

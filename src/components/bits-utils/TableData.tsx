@@ -607,18 +607,23 @@ export function TableContractAction({
                 <MenuList>
                     <MenuItem>
                         {timeSheets === true ? (
-                            <NextLink
-                                href={
-                                    date !== undefined
-                                        ? `/${role}/timesheets/${id}?date=${date}`
-                                        : `/${role}/timesheets/${id}`
-                                }
-                                passHref
-                            >
-                                <Link width="100%" textDecor="none !important">
-                                    View Timesheet
-                                </Link>
-                            </NextLink>
+                            <>
+                                <NextLink
+                                    href={
+                                        date !== undefined
+                                            ? `/${role}/timesheets/${id}?date=${date}`
+                                            : `/${role}/timesheets/${id}`
+                                    }
+                                    passHref
+                                >
+                                    <Link
+                                        width="100%"
+                                        textDecor="none !important"
+                                    >
+                                        View Timesheet
+                                    </Link>
+                                </NextLink>
+                            </>
                         ) : supervisor === true ? (
                             <NextLink
                                 href={`/Supervisor/timesheets/${id}`}
@@ -650,6 +655,27 @@ export function TableContractAction({
                                     View Profile
                                 </Link>
                             </NextLink>
+                        )}
+                    </MenuItem>
+                    <MenuItem>
+                        {timeSheets === true && (
+                            <>
+                                <NextLink
+                                    href={
+                                        date !== undefined
+                                            ? `/${role}/timesheets/${id}?date=${date}`
+                                            : `/${role}/timesheets/all/${id}`
+                                    }
+                                    passHref
+                                >
+                                    <Link
+                                        width="100%"
+                                        textDecor="none !important"
+                                    >
+                                        View Details
+                                    </Link>
+                                </NextLink>
+                            </>
                         )}
                     </MenuItem>
                 </MenuList>

@@ -40,7 +40,7 @@ interface select {
 }
 
 import dynamic from 'next/dynamic';
-const Selectrix = dynamic<select>(() => import('react-selectrix'), {
+const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
 import {
@@ -71,7 +71,7 @@ const schema = yup.object().shape({
 });
 
 function ProfileManagementAdmin({ adminList, team }: adminProps) {
-    const { user } = useContext(UserContext);
+    const { user, subType } = useContext(UserContext);
     const {
         register,
         handleSubmit,
@@ -302,7 +302,11 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                                 keys="title"
                                 keyLabel="title"
                                 label="Role"
-                                options={roles.slice(1, 3)}
+                                options={
+                                    subType == 'basic'
+                                        ? [{ title: 'Admin' }]
+                                        : roles.slice(1, 3)
+                                }
                             />
                         </Grid>
                     ) : null}
@@ -394,11 +398,20 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                                             Role
                                         </FormLabel>
                                         <Selectrix
-                                            options={roles.slice(3, 5)}
                                             customKeys={{
                                                 key: 'id',
                                                 label: 'title',
                                             }}
+                                            options={
+                                                subType == 'basic'
+                                                    ? [
+                                                          {
+                                                              id: 'admin',
+                                                              title: 'Internal Admin',
+                                                          },
+                                                      ]
+                                                    : roles.slice(3, 6)
+                                            }
                                             onChange={(value: any) =>
                                                 setUserDetail((exist) => ({
                                                     ...exist,

@@ -2,22 +2,19 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type AddOnSubscription = {
+export type Subscription = {
     id?: string | null;
-    subscriptionTypeId?: number;
-    subscriptionType?: any;
     name?: string | null;
     description?: string | null;
     recommendedFor?: string | null;
     features?: string | null;
     monthlyAmount?: number;
-    monthlyDiscount?: number | null;
+    monthlyDiscount?: number;
     yearlyAmount?: number;
-    yearlyDiscount?: number | null;
+    yearlyDiscount?: number;
     totalMonthlyAmount?: number;
     totalYearlyAmount?: number;
-    addonAmount?: number | null;
     hasFreeTrial?: boolean;
     freeTrialDuration?: any;
-    discountType?: string | null;
+    discountType?: any;
 };

@@ -90,6 +90,7 @@ endDate?: string,
 
     /**
      * @param record 
+     * @param superAdminId 
      * @param rowHeaders 
      * @param startDate 
      * @param endDate 
@@ -98,6 +99,7 @@ endDate?: string,
      */
     public static exportExpenseRecord(
 record?: ExpenseRecordsToDownload,
+superAdminId?: string,
 rowHeaders?: Array<string>,
 startDate?: string,
 endDate?: string,
@@ -107,6 +109,7 @@ endDate?: string,
             url: '/api/Export/expense',
             query: {
                 'Record': record,
+                'SuperAdminId': superAdminId,
                 'rowHeaders': rowHeaders,
                 'StartDate': startDate,
                 'EndDate': endDate,

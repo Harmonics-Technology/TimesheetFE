@@ -79,7 +79,14 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                     </Text>
                     <Link
                         passHref
-                        href={`/${role?.replace(' ', '')}/my-profile`}
+                        href={
+                            role == 'Super Admin'
+                                ? `/${role?.replaceAll(
+                                      ' ',
+                                      '',
+                                  )}/account-management/personal-info`
+                                : `/${role?.replaceAll(' ', '')}/my-profile`
+                        }
                     >
                         <Text
                             mb="0"

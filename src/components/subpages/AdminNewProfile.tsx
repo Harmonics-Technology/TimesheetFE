@@ -140,9 +140,9 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
         }
     };
 
-    useNonInitialEffect(() => {
-        twoFaSubmitFun();
-    }, [twofaState]);
+    // useNonInitialEffect(() => {
+    //     twoFaSubmitFun();
+    // }, [twofaState]);
     return (
         <Box>
             <LeaveTab
@@ -159,7 +159,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
             />
             <form>
                 <Box mt="2rem">
-                    <Text fontSize=".875rem" color="#1B1D21">
+                    <Text fontSize=".875rem" color="#1B1D21" mb="1rem">
                         Personal Information
                     </Text>
                     <VStack align="flex-start" spacing="1.5rem" w="80%">
@@ -208,7 +208,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                     </VStack>
                 </Box>
                 <Box mt="2rem">
-                    <Text fontSize=".875rem" color="#1B1D21">
+                    <Text fontSize=".875rem" color="#1B1D21" mb="1rem">
                         Contact Person
                     </Text>
                     <VStack align="flex-start" spacing="1.5rem" w="80%">
@@ -268,6 +268,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                             color="#484747"
                             fontWeight="500"
                             lineHeight="150%"
+                            mb="1rem"
                         >
                             Two factor authentication
                         </Text>
@@ -302,7 +303,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                         ) : (
                             <FormLabel
                                 htmlFor="two_fa_setup"
-                                mb="0"
+                                mt=".4rem"
                                 fontSize="14px"
                                 fontWeight="500"
                             >

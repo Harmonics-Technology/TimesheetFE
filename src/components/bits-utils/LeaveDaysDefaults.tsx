@@ -95,7 +95,7 @@ export const LeaveDaysDefaults = ({ leaveConfiguration }: leavesProps) => {
                     w="10%"
                 />
                 <PrimaryRadio<LeaveConfigurationModel>
-                    label="is this the standard eligible leave for all your staff members in your company"
+                    label="Is this the standard eligible leave for all your staff members in your company"
                     radios={['Yes', 'No']}
                     name="isStandardEligibleDays"
                     control={control}

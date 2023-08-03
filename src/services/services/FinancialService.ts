@@ -1248,6 +1248,27 @@ superAdminId?: string,
     }
 
     /**
+     * @param employeeInformationId 
+     * @returns ObjectStandardResponse Success
+     * @throws ApiError
+     */
+    public static getPayScheduleInAMonth(
+employeeInformationId?: string,
+): CancelablePromise<ObjectStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/month-schedules',
+            query: {
+                'employeeInformationId': employeeInformationId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
      * @param requestBody 
      * @returns InvoiceViewStandardResponse Success
      * @throws ApiError

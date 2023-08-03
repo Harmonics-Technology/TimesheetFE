@@ -47,7 +47,7 @@ interface DashboardProps {
 }
 
 function SuperAdminDashboard({ metrics }: DashboardProps) {
-    const { user, subType, addons } = useContext(UserContext);
+    const { user, subType } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -63,15 +63,14 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
     const [clicked, setClicked] = useState<InvoiceView>();
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
-    console.log({ subType, addons });
-    const isClient = addons?.includes('client management');
+    console.log({ subType });
+    const isClient = subType == 'premium';
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">
                 <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
                     gap="1.2rem"
-
                     w="full"
                 >
                     <DashboardCard

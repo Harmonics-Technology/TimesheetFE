@@ -5,15 +5,17 @@ const TitleText = ({
     title,
     text,
     color,
+    fontSize,
 }: {
     title: string;
     text: string | undefined | any;
     color?: any;
+    fontSize?: any;
 }) => {
     return (
-        <VStack spacing=".5rem" align="flex-start">
+        <VStack spacing=".9rem" align="flex-start">
             <Text
-                fontSize=".875rem"
+                fontSize={fontSize || '.875rem'}
                 color="#1b1d21"
                 fontWeight="500"
                 mb="0"

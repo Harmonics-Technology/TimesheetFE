@@ -2,6 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
+import type { CancelSubscriptionModel } from '../models/CancelSubscriptionModel';
+import type { CardsStandardResponse } from '../models/CardsStandardResponse';
+import type { ClientSubscriptionResponseViewModelStandardResponse } from '../models/ClientSubscriptionResponseViewModelStandardResponse';
 import type { ControlSettingModel } from '../models/ControlSettingModel';
 import type { ControlSettingViewStandardResponse } from '../models/ControlSettingViewStandardResponse';
 import type { Enable2FAViewStandardResponse } from '../models/Enable2FAViewStandardResponse';
@@ -11,7 +14,10 @@ import type { ObjectStandardResponse } from '../models/ObjectStandardResponse';
 import type { PasswordReset } from '../models/PasswordReset';
 import type { RegisterModel } from '../models/RegisterModel';
 import type { ShiftUsersListViewPagedCollectionStandardResponse } from '../models/ShiftUsersListViewPagedCollectionStandardResponse';
+import type { StringStandardResponse } from '../models/StringStandardResponse';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
+import type { UpdateCardDetailsModel } from '../models/UpdateCardDetailsModel';
+import type { UpdateClientStripeSubscriptionModel } from '../models/UpdateClientStripeSubscriptionModel';
 import type { UpdateClientSubscriptionModel } from '../models/UpdateClientSubscriptionModel';
 import type { UpdateUserModel } from '../models/UpdateUserModel';
 import type { UserCountByPayrollTypeViewListStandardResponse } from '../models/UserCountByPayrollTypeViewListStandardResponse';
@@ -655,18 +661,148 @@ search?: string,
     }
 
     /**
-     * @param subscriptionId 
-     * @returns ObjectStandardResponse Success
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static cancelSubscription(
-subscriptionId?: string,
-): CancelablePromise<ObjectStandardResponse> {
+requestBody?: CancelSubscriptionModel,
+): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/subscription/cancel',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param subscriptionId 
+     * @param pauseDuration 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static pauseSubscription(
+subscriptionId?: string,
+pauseDuration?: number,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/subscription/pause',
             query: {
                 'subscriptionId': subscriptionId,
+                'pauseDuration': pauseDuration,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns ClientSubscriptionResponseViewModelStandardResponse Success
+     * @throws ApiError
+     */
+    public static upgradeSubscription(
+requestBody?: UpdateClientStripeSubscriptionModel,
+): CancelablePromise<ClientSubscriptionResponseViewModelStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/subscription/upgrade',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param userId 
+     * @returns CardsStandardResponse Success
+     * @throws ApiError
+     */
+    public static getUserCards(
+userId?: string,
+): CancelablePromise<CardsStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/billing/cards',
+            query: {
+                'userId': userId,
+            },
+        });
+    }
+
+    /**
+     * @param userId 
+     * @returns StringStandardResponse Success
+     * @throws ApiError
+     */
+    public static addNewCard(
+userId?: string,
+): CancelablePromise<StringStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/billing/add-card',
+            query: {
+                'userId': userId,
+            },
+        });
+    }
+
+    /**
+     * @param userId 
+     * @param paymentMethod 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static setAsDefaulCard(
+userId?: string,
+paymentMethod?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/billing/set-as-default',
+            query: {
+                'userId': userId,
+                'paymentMethod': paymentMethod,
+            },
+        });
+    }
+
+    /**
+     * @param userId 
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateUserCardDetails(
+userId?: string,
+requestBody?: UpdateCardDetailsModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/billing/update-card',
+            query: {
+                'userId': userId,
+            },
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param userId 
+     * @param paymentMethod 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static deletePaymentCard(
+userId?: string,
+paymentMethod?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/billing/delete-card',
+            query: {
+                'userId': userId,
+                'paymentMethod': paymentMethod,
             },
         });
     }
