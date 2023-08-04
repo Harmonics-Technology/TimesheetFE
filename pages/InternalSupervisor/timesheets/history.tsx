@@ -1,6 +1,6 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import TimesheetHistory from '@components/subpages/SupervisorTimeSheetHistory';
+import TimesheetHistory from '@components/subpages/TimesheetHistory';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
@@ -21,10 +21,12 @@ export default history;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const data = await TimeSheetService.getSuperviseesTimeSheet(
+            const data = await TimeSheetService.listTimeSheetHistories(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,

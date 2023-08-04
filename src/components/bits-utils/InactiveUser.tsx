@@ -52,7 +52,7 @@ export const InactiveUser = () => {
                         )
                     }
                 >
-                    Reactivate Subscription
+                    Manage Subscription
                 </Button>
             </VStack>
         </Box>

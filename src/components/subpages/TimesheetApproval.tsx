@@ -46,9 +46,9 @@ function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                {!isWeekly || !isBiWeekly || !isMonthly ? (
+                {/* {!isWeekly || !isBiWeekly || !isMonthly ? (
                     <PayScheduleNotify scheduleDone={schedules} />
-                ) : (
+                ) : ( */}
                     <Box>
                         <FilterSearch hide={true} />
                         <Tables
@@ -102,7 +102,7 @@ function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
                         </Tables>
                         <Pagination data={timeSheets} />
                     </Box>
-                )}
+                {/* )} */}
             </Box>
         </>
     );

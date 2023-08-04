@@ -45,8 +45,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const { end } = ctx.query;
         let { date } = ctx.query;
         if (date === undefined) {
-            date = moment(new Date()).format('YYYY-MM-DD');
+            date = new Date();
         }
+
+        date = moment(date).format('YYYY-MM-DD');
 
         console.log({ id, date });
         try {
@@ -55,7 +57,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 id,
                 date,
             );
-            console.log({ payPeriod: payPeriod.data });
+            // console.log({ payPeriod: payPeriod.data });
             return {
                 props: {
                     timeSheets: data.data,
@@ -68,6 +70,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             return {
                 props: {
                     data: [],
+                    payPeriod: [],
                 },
             };
         }

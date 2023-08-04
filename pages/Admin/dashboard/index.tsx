@@ -1,38 +1,30 @@
-import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import SadminDashboard from '@components/subpages/SadminDashboard';
+import SuperAdminDashboard from '@components/subpages/SuperAdminDashboard';
 import { GetServerSideProps } from 'next';
-import { DashboardService, UserService } from 'src/services';
+import { DashboardService } from 'src/services';
 interface DashboardProps {
     metrics: any;
-    team: any;
 }
 
-function index({ metrics, team }: DashboardProps) {
-    return <SadminDashboard metrics={metrics} team={team} />;
+function index({ metrics }: DashboardProps) {
+    return <SuperAdminDashboard metrics={metrics} />;
 }
 
 export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
-    async (ctx) => {
-        const pagingOptions = filterPagingSearchOptions(ctx);
+    async (ctx: any) => {
+        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
+        // console.log({ superAdminId });
         try {
-            const data = await DashboardService.getAdminMetrics();
-            const team = await UserService.listUsers(
-                'Team Member',
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-            );
-            // console.log({ data });
+            const data = await DashboardService.getAdminMetrics(superAdminId);
             return {
                 props: {
                     metrics: data,
-                    team,
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     data: [],

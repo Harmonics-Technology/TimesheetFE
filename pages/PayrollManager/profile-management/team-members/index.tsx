@@ -36,17 +36,19 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const clients = await UserService.listUsers('client');
-            const paymentPartner = await UserService.listUsers(
-                'payment partner',
-            );
             const data = await UserService.listUsers(
                 'Team Member',
+                superAdminId,
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,
+            );
+            const clients = await UserService.listUsers('client', superAdminId);
+            const paymentPartner = await UserService.listUsers(
+                'payment partner',
+                superAdminId,
             );
             const leaveSettings = await LeaveService.getLeaveConfiguration(
                 superAdminId,

@@ -1,12 +1,15 @@
 import HidePage from '@components/bits-utils/HidePage';
 import useWindowSize from '@components/generics/useWindowSize';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import TimesheetAdmin from '@components/subpages/TimesheetAdmin';
 import TimesheetPayrollManager from '@components/subpages/TimesheetPayrollManager';
 import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { TimeSheetMonthlyView, TimeSheetService } from 'src/services';
+import {
+    FinancialService,
+    TimeSheetMonthlyView,
+    TimeSheetService,
+} from 'src/services';
 interface Size {
     width: number | undefined;
     height: number | undefined;
@@ -15,15 +18,21 @@ interface Size {
 function SingleTimeSheet({
     timeSheets,
     id,
+    payPeriod,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
+    payPeriod: any;
 }) {
     // console.log({ id });
     // const size: Size = useWindowSize();
     return (
         <>
-            <TimesheetPayrollManager timeSheets={timeSheets} id={id} />
+            <TimesheetPayrollManager
+                timeSheets={timeSheets}
+                id={id}
+                payPeriod={payPeriod}
+            />
         </>
     );
 }
@@ -33,19 +42,26 @@ export default SingleTimeSheet;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
-
+        const { end } = ctx.query;
         let { date } = ctx.query;
         if (date === undefined) {
-            date = moment(new Date()).format('YYYY-MM-DD');
+            date = new Date();
         }
 
-        console.log({ id });
+        date = moment(date).format('YYYY-MM-DD');
+
+        console.log({ id, date });
         try {
-            const data = await TimeSheetService.getTimeSheet(id, date);
-            console.log({ data });
+            const data = await TimeSheetService.getTimeSheet(id, date, end);
+            const payPeriod = await FinancialService.getPayScheduleInAMonth(
+                id,
+                date,
+            );
+            // console.log({ payPeriod: payPeriod.data });
             return {
                 props: {
                     timeSheets: data.data,
+                    payPeriod: payPeriod.data,
                     id,
                 },
             };
@@ -54,6 +70,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             return {
                 props: {
                     data: [],
+                    payPeriod: [],
                 },
             };
         }

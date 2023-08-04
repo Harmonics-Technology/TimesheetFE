@@ -91,6 +91,12 @@ const UpgradePromptModal = ({ isOpen, onClose }: Props) => {
                                 width="full"
                                 bgColor="brand.400"
                                 color="white"
+                                onClick={() => {
+                                    router.push(
+                                        `/SuperAdmin/account-management/manage-subscription`,
+                                    );
+                                    onClose();
+                                }}
                                 _hover={{
                                     bgColor: 'white',
                                     color: 'brand.400',

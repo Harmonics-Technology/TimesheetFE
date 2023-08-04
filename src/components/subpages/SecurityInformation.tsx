@@ -37,7 +37,7 @@ export const SecurityInformation = ({
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [passwordVisibleA, setPasswordVisibleA] = useState<boolean>(false);
     const [passwordVisibleB, setPasswordVisibleB] = useState<boolean>(false);
-    const [isTwoFa, setisTwoFa] = useState(controls?.twoFactorEnabled || false);
+    const [isTwoFa, setisTwoFa] = useState(controls?.twoFactorEnabled);
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(false);
 

@@ -21,10 +21,12 @@ export default history;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await TimeSheetService.listTimeSheetHistories(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,

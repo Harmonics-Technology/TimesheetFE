@@ -21,15 +21,19 @@ function expenses({ invoiceData }: InvoiceType) {
         <Box>
             <Flex>
                 <PageTabs
-                    url={`/${role}/PayrollManager/financials/payrolls`}
-                    tabName="Onshore"
+                    url={`/${role}/financials/payrolls`}
+                    tabName="Pending Payrolls"
                 />
                 <PageTabs
-                    url={`/${role}/PayrollManager/financials/payrolls-approved`}
-                    tabName="Offshore"
+                    url={`/${role}/financials/offshore`}
+                    tabName="Processed Payrolls"
                 />
             </Flex>
-            <AdminInvoices invoiceData={invoiceData} />
+            <AdminInvoices
+                invoiceData={invoiceData}
+                record={1}
+                fileName="Pending Payrolls"
+            />
         </Box>
     );
 }
@@ -39,10 +43,12 @@ export default expenses;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const data = await FinancialService.listSubmittedOnshoreInvoices(
+            const data = await FinancialService.listSubmittedOffshoreInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,

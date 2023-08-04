@@ -29,7 +29,11 @@ function payrolls({ invoiceData }: InvoiceType) {
                     tabName="Processed Payrolls"
                 />
             </Flex>
-            <AdminInvoices invoiceData={invoiceData} />
+            <AdminInvoices
+                invoiceData={invoiceData}
+                record={2}
+                fileName="Approved Payrolls"
+            />
         </Box>
     );
 }
@@ -39,14 +43,16 @@ export default payrolls;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await FinancialService.listSubmittedInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,
-                pagingOptions.clientId,
+                2,
             );
 
             return {

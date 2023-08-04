@@ -15,10 +15,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const id = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await UserService.getControlSettingById(id);
-
             return {
                 props: {
-                    data: data.data,
+                    controls: data.data,
                 },
             };
         } catch (error: any) {

@@ -140,9 +140,9 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
         }
     };
 
-    // useNonInitialEffect(() => {
-    //     twoFaSubmitFun();
-    // }, [twofaState]);
+    useNonInitialEffect(() => {
+        twoFaSubmitFun();
+    }, [twofaState]);
     return (
         <Box>
             <LeaveTab

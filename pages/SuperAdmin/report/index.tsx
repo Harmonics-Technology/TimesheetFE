@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     pagingOptions.offset,
                     pagingOptions.limit,
                     pagingOptions.search,
-                    pagingOptions.paySlipFilter || 1,
+                    pagingOptions.paySlipFilter || superAdminId,
                     pagingOptions.from,
                     pagingOptions.to,
                 );

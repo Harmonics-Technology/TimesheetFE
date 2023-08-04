@@ -132,21 +132,12 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         option={true}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                        dropDown={
-                            subType == 'basic'
-                                ? [
-                                      { show: true, name: 'expenses' },
-                                      { show: true, name: 'payrolls' },
-                                      { show: true, name: 'payslips' },
-                                      { show: true, name: 'invoices' },
-                                  ]
-                                : [
-                                      'expenses',
-                                      'payrolls',
-                                      'payslips',
-                                      'invoices',
-                                  ]
-                        }
+                        dropDown={[
+                            { show: subType == 'basic', name: 'expenses' },
+                            { show: subType == 'basic', name: 'payrolls' },
+                            { show: subType == 'basic', name: 'payslips' },
+                            { show: subType == 'basic', name: 'invoices' },
+                        ]}
                         display={activeSub}
                     />
                     <MenuItem
@@ -217,9 +208,8 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         role={role}
                         display={
-                            subType == 'standard' ||
-                            subType == 'premium' ||
-                            activeSub
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
                                 ? true
                                 : false
                         }
@@ -236,7 +226,10 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'onboarding fee',
                             'hst settings',
                             'leave management settings',
-                            { show: true, name: 'shift management settings' },
+                            {
+                                show: subType == 'basic',
+                                name: 'shift management settings',
+                            },
                             'access control settings',
                             'payment schedule settings',
                             'personal info',
@@ -282,7 +275,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={
-                            user?.payrollType === 'OFFSHORE'
+                            user?.invoiceType == 'payroll'
                                 ? ['my expenses', 'my payslips']
                                 : ['my expenses', 'my payslips', 'my invoices']
                         }

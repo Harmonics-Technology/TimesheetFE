@@ -82,25 +82,30 @@ const TimesheetAdmin = ({
     const { date } = router.query;
     const { end } = router.query;
 
+    // console.log({ date, end: lastDayOfMonth('2023-07-01') });
+
     const HighlightDate = (value: any) => {
         router.push({
             query: {
                 ...router.query,
-                date: value?.split(' - ')[0] || '01/01/2001',
-                end: value?.split(' - ')[1] || '01/01/2001',
+                date: value?.split(' - ')[0] || new Date(),
+                end: value?.split(' - ')[1] || new Date(),
             },
         });
     };
-
-    console.log(new Date(moment('2023-August').format('MM/DD/YYYY')));
     const dates = eachDayOfInterval({
-        start: new Date((date as string) || '01/01/2001'),
+        start: new Date(
+            moment(date as string).format('MM/DD/YYYY') ||
+                (moment() as unknown as string),
+        ),
         end: new Date(
-            (end as string) || (moment(date as string) as unknown as string),
+            moment((end as string) || (date as string)).format(
+                'MM/DD/YYYY',
+            ) as unknown as string,
         ),
     });
     const newDates = dates?.map((x) => moment(x).format('DD/MM/YY'));
-    console.log({ newDates });
+    console.log({ newDates, date, end });
 
     const newOptions = payPeriod?.map((obj) => ({
         id: `${obj.weekDate} - ${obj.lastWorkDayOfCycle}`,
@@ -424,7 +429,8 @@ const TimesheetAdmin = ({
         await router.push({
             query: {
                 ...router.query,
-                date: moment(addMonths(activeDate, 1)).format('YYYY-MM-DD'),
+                date: moment(addMonths(activeDate, 1)).format('YYYY-MM-01'),
+                end: undefined,
             },
         });
         router.reload();
@@ -433,11 +439,16 @@ const TimesheetAdmin = ({
         await router.push({
             query: {
                 ...router.query,
-                date: moment(subMonths(activeDate, 1)).format('YYYY-MM-DD'),
+                date: moment(subMonths(activeDate, 1)).format('YYYY-MM-01'),
+                end: undefined,
             },
         });
         router.reload();
     };
+    // format(
+    //     lastDayOfMonth(subMonths(activeDate, 1)),
+    //     'yyyy-MM-dd',
+    // ),
 
     const getHeader = () => {
         return (
@@ -622,7 +633,7 @@ const TimesheetAdmin = ({
             useClickOutside(popover, close);
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
-            // console.log({ userDate: new Date(userDate) });
+            // console.log(moment(userDate as string).format('DD/MM/YY'));
             // console.log({ week });
 
             week.push(
@@ -631,7 +642,9 @@ const TimesheetAdmin = ({
                         '0',
                         newDates?.length > 1 &&
                         newDates.includes(
-                            moment(userDate as string).format('DD/MM/YY'),
+                            moment((userDate as string) || '01/01/2021').format(
+                                'DD/MM/YY',
+                            ),
                         )
                             ? '0.1rem solid rgba(46, 175, 163, .7)'
                             : '1px solid #e5e5e5',
@@ -984,7 +997,9 @@ const TimesheetAdmin = ({
                     <Selectrix
                         placeholder={`${moment(date).format(
                             'MMM DD,',
-                        )} - ${moment(end).format('MMM DD, YYYY')}`}
+                        )} - ${moment(
+                            end || lastDayOfMonth(new Date(date as string)),
+                        ).format('MMM DD, YYYY')}`}
                         customKeys={{
                             key: 'id',
                             label: 'label',

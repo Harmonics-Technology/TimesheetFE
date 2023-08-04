@@ -19,6 +19,7 @@ import {
     FormControl,
     FormLabel,
     Switch,
+    Icon,
 } from '@chakra-ui/react';
 import React, { useContext, useRef, useState } from 'react';
 import { FaTimes, FaUser } from 'react-icons/fa';
@@ -30,6 +31,7 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { UserContext } from '@components/context/UserContext';
 import {
     AdminPaymentScheduleViewListStandardResponse,
+    ControlSettingView,
     Enable2FAView,
     PaymentSchedule,
     PaymentScheduleListStandardResponse,
@@ -49,6 +51,7 @@ import ConfirmModal from '@components/bits-utils/ConfirmModal';
 import ProfileConfirmModal from '@components/bits-utils/ProfileConfirmModal';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { BsCameraFill } from 'react-icons/bs';
+import { FcCancel } from 'react-icons/fc';
 import TableCards from '@components/bits-utils/TableCards';
 import { TableData } from '@components/bits-utils/TableData';
 import PaymentScheduleModal from '@components/bits-utils/PaymentScheduleModal';
@@ -68,11 +71,14 @@ const schema = yup.object().shape({
 function MyProfile({
     user,
     paymentSchedule,
+    controls,
 }: {
     user: any;
     paymentSchedule?: PaymentScheduleListStandardResponse;
+    controls?: ControlSettingView;
 }) {
-    console.log({ user });
+    // console.log({ controls });
+    const isTfa = controls?.twoFactorEnabled;
     const {
         register,
         handleSubmit,
@@ -264,9 +270,9 @@ function MyProfile({
         }
     };
 
-    useNonInitialEffect(() => {
-        twoFaSubmitFun();
-    }, [twofaState]);
+    // useNonInitialEffect(() => {
+    //     twoFaSubmitFun();
+    // }, [twofaState]);
 
     return (
         <Box>
@@ -565,6 +571,7 @@ function MyProfile({
                     boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
                     w="full"
                     mb="1.5rem"
+                    pos="relative"
                 >
                     <VStack align="flex-start" w={['full', '60%']} gap="1rem">
                         <Box>
@@ -572,6 +579,7 @@ function MyProfile({
                                 color="#484747"
                                 fontWeight="500"
                                 lineHeight="150%"
+                                mb="1rem"
                             >
                                 Two factor authentication
                             </Text>
@@ -664,6 +672,24 @@ function MyProfile({
                             </Box>
                         </form> */}
                     </VStack>
+                    {!isTfa && (
+                        <HStack
+                            pos="absolute"
+                            bgColor="rgba(250,250,250,.8)"
+                            w="full"
+                            h="full"
+                            top="0"
+                            justify="center"
+                            align="center"
+                            onClick={() => void 0}
+                        >
+                            <Icon as={FcCancel} />
+                            <Text>
+                                This feature has been disabled by your
+                                organization admin
+                            </Text>
+                        </HStack>
+                    )}
                 </Box>
 
                 <Box
