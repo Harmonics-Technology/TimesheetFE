@@ -31,7 +31,7 @@ jobs:
       - uses: actions/checkout@v2
 
     
-      # Runs a single command using the runners shell
+      # Runs a single command using the runners shells
       - name: Run a one-line script
         run: echo Hello, world!
     
