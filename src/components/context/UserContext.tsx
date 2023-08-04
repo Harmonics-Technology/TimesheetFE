@@ -16,7 +16,7 @@ export const UserProvider = ({ children }: { children: any }) => {
             const subType = JSON.parse(users)
                 ?.subscriptiobDetails?.data?.subscription?.name?.split(' ')[0]
                 ?.toLowerCase();
-            setSubType('basic');
+            setSubType(subType);
             setActiveSub(
                 JSON.parse(users)?.subscriptiobDetails?.data?.status == 'ACTIVE'
                     ? true
