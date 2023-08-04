@@ -13,7 +13,7 @@ function all({
 }: {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
 }) {
-    return <TeamTimesheetHistory timeSheets={timeSheets} />;
+    return <TeamTimesheetHistory timeSheets={timeSheets} timesheet={true} />;
 }
 
 export default all;
@@ -26,6 +26,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const data = await TimeSheetService.getTeamMemberRecentTimeSheet(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                id,
                 pagingOptions.from,
                 pagingOptions.to,
             );

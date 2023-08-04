@@ -33,7 +33,7 @@ export const WeeklyPaySchedule = () => {
         data.superAdminId = user?.superAdminId;
         try {
             const result =
-                await FinancialService.generateCustomBiWeeklyPaymentSchedule(
+                await FinancialService.generateCustomWeeklyPaymentSchedule(
                     data,
                 );
             if (result.status) {

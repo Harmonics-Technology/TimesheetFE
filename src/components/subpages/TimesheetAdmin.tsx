@@ -69,41 +69,49 @@ const schema = yup.object().shape({
 const TimesheetAdmin = ({
     timeSheets,
     id,
+    payPeriod,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
+    payPeriod: any;
 }) => {
     // console.log({ id });
 
     const router = useRouter();
 
-    const [from, setFrom] = useState<any>(new Date('07/01/2023'));
-    const [to, setTo] = useState<any>(new Date('07/10/2023'));
+    const { date } = router.query;
+    const { end } = router.query;
 
     const HighlightDate = (value: any) => {
-        console.log({ value });
-        setFrom(value.split('-')[0]);
-        setTo(value.split('-')[1]);
+        router.push({
+            query: {
+                ...router.query,
+                date: value?.split(' - ')[0] || '01/01/2001',
+                end: value?.split(' - ')[1] || '01/01/2001',
+            },
+        });
     };
 
+    console.log(new Date(moment('2023-August').format('MM/DD/YYYY')));
     const dates = eachDayOfInterval({
-        start: new Date(from),
-        end: new Date(to),
+        start: new Date((date as string) || '01/01/2001'),
+        end: new Date(
+            (end as string) || (moment(date as string) as unknown as string),
+        ),
     });
     const newDates = dates?.map((x) => moment(x).format('DD/MM/YY'));
-    // console.log({ newDates });
+    console.log({ newDates });
 
-    // const newOptions = data.map((obj) => ({
-    //     id: `${obj.begin} - ${obj.end}`,
-    //     label: `${format(obj.start, 'MMM d')} - ${format(
-    //         obj.end,
-    //         'MMM d, YYYY',
-    //     )}`,
-    // }));
+    const newOptions = payPeriod?.map((obj) => ({
+        id: `${obj.weekDate} - ${obj.lastWorkDayOfCycle}`,
+        label: `${moment(obj.weekDate).format('MMM DD')} - ${moment(
+            obj.lastWorkDayOfCycle,
+        ).format('MMM DD, YYYY')}`,
+    }));
 
-    console.log({ timeSheets });
+    // console.log({ newOptions });
     const sheet = timeSheets?.timeSheet;
-    const { date } = router.query;
+
     const newDate = new Date(date as unknown as string);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [activeDate, setActiveDate] = useState(
@@ -621,7 +629,8 @@ const TimesheetAdmin = ({
                 <Flex
                     border={[
                         '0',
-                        newDates?.includes(
+                        newDates?.length > 1 &&
+                        newDates.includes(
                             moment(userDate as string).format('DD/MM/YY'),
                         )
                             ? '0.1rem solid rgba(46, 175, 163, .7)'
@@ -969,25 +978,18 @@ const TimesheetAdmin = ({
                 p={['1rem 1rem', '2rem 2rem']}
             >
                 <Box w="40%" mb="2rem">
-                    <Text fontSize=".8rem" fontWeight={500} mb='.3rem'>
+                    <Text fontSize=".8rem" fontWeight={500} mb=".3rem">
                         Pay Period
                     </Text>
                     <Selectrix
-                        // label="Pay Period"
+                        placeholder={`${moment(date).format(
+                            'MMM DD,',
+                        )} - ${moment(end).format('MMM DD, YYYY')}`}
                         customKeys={{
                             key: 'id',
                             label: 'label',
                         }}
-                        options={[
-                            {
-                                id: 'May 29, 2023  -  Jul 9, 2023',
-                                label: 'May 29, 2023  -  Jul 9, 2023',
-                            },
-                            {
-                                id: 'May 29  -  Jun 9, 2023',
-                                label: 'May 29  -  Jun 9, 2023',
-                            },
-                        ]}
+                        options={newOptions}
                         onChange={(e) => HighlightDate(e.key)}
                     />
                 </Box>

@@ -15,9 +15,10 @@ import { formatDate } from '@components/generics/functions/formatDate';
 
 interface adminProps {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
+    timesheet?: boolean;
 }
 
-function TeamTimesheetHistory({ timeSheets }: adminProps) {
+function TeamTimesheetHistory({ timeSheets, timesheet = false }: adminProps) {
     console.log({ timeSheets });
 
     return (
@@ -31,6 +32,7 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
                 <FilterSearch />
                 <Tables
                     tableHead={[
+                        'Name',
                         'Year',
                         'Month',
                         'Begining Period',
@@ -42,6 +44,7 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
                     <>
                         {timeSheets?.data?.value?.map((x: any, i) => (
                             <Tr key={i}>
+                                <TableData name={x.name} />
                                 <TableData name={x.year} />
                                 <TableData name={x.month} />
                                 <TableData name={formatDate(x.startDate)} />
@@ -55,7 +58,7 @@ function TeamTimesheetHistory({ timeSheets }: adminProps) {
                                     id={x.employeeInformationId}
                                     date={`${x.year}-${x.month}`}
                                     team={true}
-                                    timeSheets={false}
+                                    timeSheets={timesheet}
                                 />
                             </Tr>
                         ))}

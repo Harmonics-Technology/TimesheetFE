@@ -4,16 +4,20 @@ import TimeSheetApproval from '@components/subpages/TimesheetApproval';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
+    AdminPaymentScheduleView,
+    FinancialService,
     TimeSheetHistoryViewPagedCollectionStandardResponse,
     TimeSheetService,
 } from 'src/services';
 
 function approval({
     timeSheets,
+    paymentSchedule,
 }: {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
+    paymentSchedule: AdminPaymentScheduleView[];
 }) {
-    return <TimeSheetApproval timeSheets={timeSheets} />;
+    return <TimeSheetApproval timeSheets={timeSheets} paymentSchedule={paymentSchedule} />;
 }
 
 export default approval;
@@ -29,10 +33,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 superAdminId,
                 pagingOptions.search,
             );
-            console.log({ data: data.data?.value });
+            const paymentSchedule = await FinancialService.getPaymentSchedules(
+                superAdminId,
+            );
+            // console.log({ data: paymentSchedule.data });
             return {
                 props: {
                     timeSheets: data,
+                    paymentSchedule: paymentSchedule.data,
                 },
             };
         } catch (error: any) {

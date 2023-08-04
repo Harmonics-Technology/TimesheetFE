@@ -657,27 +657,22 @@ export function TableContractAction({
                             </NextLink>
                         )}
                     </MenuItem>
-                    <MenuItem>
-                        {timeSheets === true && (
-                            <>
-                                <NextLink
-                                    href={
-                                        date !== undefined
-                                            ? `/${role}/timesheets/${id}?date=${date}`
-                                            : `/${role}/timesheets/all/${id}`
-                                    }
-                                    passHref
-                                >
-                                    <Link
-                                        width="100%"
-                                        textDecor="none !important"
-                                    >
-                                        View Details
-                                    </Link>
-                                </NextLink>
-                            </>
-                        )}
-                    </MenuItem>
+                    {timeSheets === true && !team && (
+                        <MenuItem>
+                            <NextLink
+                                href={
+                                    date !== undefined
+                                        ? `/${role}/timesheets/${id}?date=${date}`
+                                        : `/${role}/timesheets/all/${id}`
+                                }
+                                passHref
+                            >
+                                <Link width="100%" textDecor="none !important">
+                                    View Details
+                                </Link>
+                            </NextLink>
+                        </MenuItem>
+                    )}
                 </MenuList>
             </Menu>
         </td>

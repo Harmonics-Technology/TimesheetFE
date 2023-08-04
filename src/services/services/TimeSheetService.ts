@@ -51,12 +51,14 @@ endDate?: string,
     /**
      * @param employeeInformationId 
      * @param date 
+     * @param endDate 
      * @returns TimeSheetMonthlyViewStandardResponse Success
      * @throws ApiError
      */
     public static getTimeSheet(
 employeeInformationId?: string,
 date?: string,
+endDate?: string,
 ): CancelablePromise<TimeSheetMonthlyViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -64,6 +66,7 @@ date?: string,
             query: {
                 'employeeInformationId': employeeInformationId,
                 'date': date,
+                'endDate': endDate,
             },
         });
     }
@@ -292,6 +295,7 @@ limit?: number,
     /**
      * @param offset 
      * @param limit 
+     * @param employeeInformationId 
      * @param startDate 
      * @param endDate 
      * @returns TimeSheetHistoryViewPagedCollectionStandardResponse Success
@@ -300,6 +304,7 @@ limit?: number,
     public static getTeamMemberRecentTimeSheet(
 offset?: number,
 limit?: number,
+employeeInformationId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<TimeSheetHistoryViewPagedCollectionStandardResponse> {
@@ -309,6 +314,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'employeeInformationId': employeeInformationId,
                 'StartDate': startDate,
                 'EndDate': endDate,
             },

@@ -1128,6 +1128,26 @@ requestBody?: PayScheduleGenerationModel,
     }
 
     /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomWeeklyPaymentSchedule(
+requestBody?: PayScheduleGenerationModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/weekly/custom',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
      * @param year 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
@@ -1233,13 +1253,19 @@ superAdminId?: string,
     }
 
     /**
+     * @param superAdminId 
      * @returns ObjectStandardResponse Success
      * @throws ApiError
      */
-    public static getWeeklyPaySchedule(): CancelablePromise<ObjectStandardResponse> {
+    public static getWeeklyPaySchedule(
+superAdminId?: string,
+): CancelablePromise<ObjectStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Financial/weekly',
+            query: {
+                'superAdminId': superAdminId,
+            },
             errors: {
                 400: `Bad Request`,
                 500: `Server Error`,
@@ -1249,17 +1275,20 @@ superAdminId?: string,
 
     /**
      * @param employeeInformationId 
+     * @param date 
      * @returns ObjectStandardResponse Success
      * @throws ApiError
      */
     public static getPayScheduleInAMonth(
 employeeInformationId?: string,
+date?: string,
 ): CancelablePromise<ObjectStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Financial/month-schedules',
             query: {
                 'employeeInformationId': employeeInformationId,
+                'date': date,
             },
             errors: {
                 400: `Bad Request`,
