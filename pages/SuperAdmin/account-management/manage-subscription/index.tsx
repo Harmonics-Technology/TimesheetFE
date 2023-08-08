@@ -16,14 +16,15 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            // const data = await UserService.getClientSubscriptionHistory(
-            //     superAdminId,
-            //     pagingOptions.search,
-            // );
+            const data = await UserService.getClientSubscriptionHistory(
+                superAdminId,
+                pagingOptions.search,
+            );
+            // console.log({ data });
             return {
                 props: {
-                    // data: data.data,
-                    data: [],
+                    data: data.data?.data,
+                    // data: [],
                 },
             };
         } catch (error: any) {

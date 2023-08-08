@@ -65,13 +65,13 @@ const CancelSub = () => {
         }
         setReason([...reason, base]);
     };
-    const stringifiedReason = reason.map((x) => x.title.join(','));
+    const stringifiedReason = reason.map((x) => x?.title)?.join(',');
     console.log({ stringifiedReason });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const role = user?.role.replaceAll(' ', '');
     const toast = useToast();
     const [loading, setLoading] = useState(false);
-    const cancelSub = async (data: CancelSubscriptionModel) => {
+    const cancelSubscription = async (data: CancelSubscriptionModel) => {
         data.userId = user?.id;
         data.reason = stringifiedReason;
         try {
@@ -341,6 +341,8 @@ const CancelSub = () => {
                                 w="7.6rem"
                                 fontWeight={600}
                                 borderRadius=".3rem"
+                                isLoading={loading}
+                                onClick={cancelSubscription}
                             >
                                 Confirm
                             </Button>

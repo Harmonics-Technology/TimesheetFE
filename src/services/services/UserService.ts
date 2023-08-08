@@ -10,11 +10,11 @@ import type { ControlSettingViewStandardResponse } from '../models/ControlSettin
 import type { Enable2FAViewStandardResponse } from '../models/Enable2FAViewStandardResponse';
 import type { InitiateResetModel } from '../models/InitiateResetModel';
 import type { LoginModel } from '../models/LoginModel';
-import type { ObjectStandardResponse } from '../models/ObjectStandardResponse';
 import type { PasswordReset } from '../models/PasswordReset';
 import type { RegisterModel } from '../models/RegisterModel';
 import type { ShiftUsersListViewPagedCollectionStandardResponse } from '../models/ShiftUsersListViewPagedCollectionStandardResponse';
 import type { StringStandardResponse } from '../models/StringStandardResponse';
+import type { SubscriptionHistoryViewModelStandardResponse } from '../models/SubscriptionHistoryViewModelStandardResponse';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
 import type { UpdateCardDetailsModel } from '../models/UpdateCardDetailsModel';
 import type { UpdateClientStripeSubscriptionModel } from '../models/UpdateClientStripeSubscriptionModel';
@@ -642,19 +642,25 @@ year?: number,
 
     /**
      * @param superAdminId 
+     * @param offset 
+     * @param limit 
      * @param search 
-     * @returns ObjectStandardResponse Success
+     * @returns SubscriptionHistoryViewModelStandardResponse Success
      * @throws ApiError
      */
     public static getClientSubscriptionHistory(
 superAdminId?: string,
+offset?: number,
+limit?: number,
 search?: string,
-): CancelablePromise<ObjectStandardResponse> {
+): CancelablePromise<SubscriptionHistoryViewModelStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/subscription/history',
             query: {
                 'superAdminId': superAdminId,
+                'Offset': offset,
+                'Limit': limit,
                 'search': search,
             },
         });
