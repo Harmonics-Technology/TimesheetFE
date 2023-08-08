@@ -151,19 +151,16 @@ export const SubscriptionDetails = ({ data }) => {
                                 /> */}
                             </Tr>
                         ))}
-                        {/* <RenewSubscription
+                    </>
+                </Tables>
+                {/* <RenewSubscription
                             isOpen={isOpen}
                             onClose={onClose}
                             data={subData}
                         /> */}
-                        {isOpen && (
-                            <UpgradeSubModal
-                                isOpen={isOpen}
-                                onClose={onClose}
-                            />
-                        )}
-                    </>
-                </Tables>
+                {isOpen && (
+                    <UpgradeSubModal isOpen={isOpen} onClose={onClose} />
+                )}
             </Box>
         </Box>
     );

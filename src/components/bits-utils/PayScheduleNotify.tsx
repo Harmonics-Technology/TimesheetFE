@@ -23,7 +23,7 @@ export const PayScheduleNotify = ({ scheduleDone }) => {
                 management settings to view all records.
             </Text>
             <Text textAlign="center" fontWeight={500}>
-                You currently have {scheduleDone.map((x) => x) || 'no'} payment
+                You currently have {scheduleDone.map((x) => x).join(', ') || 'no'} payment
                 schedule configured{' '}
             </Text>
             <Button
