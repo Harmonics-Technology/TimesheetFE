@@ -342,7 +342,7 @@ const CancelSub = () => {
                                 fontWeight={600}
                                 borderRadius=".3rem"
                                 isLoading={loading}
-                                onClick={cancelSubscription}
+                                // onClick={cancelSubscription}
                             >
                                 Confirm
                             </Button>
