@@ -3,7 +3,7 @@ import { UserContext } from '@components/context/UserContext';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
-export const PayScheduleNotify = ({ scheduleDone }) => {
+export const PayScheduleNotify = ({ scheduleDone }: { scheduleDone: any }) => {
     console.log({ scheduleDone });
     const router = useRouter();
     const { user } = useContext(UserContext);
@@ -19,29 +19,33 @@ export const PayScheduleNotify = ({ scheduleDone }) => {
                 Permission Denied!
             </Text>
             <Text textAlign="center">
-                You need to configure all payment schedules in your account
-                management settings to view all records.
+                {role !== 'SuperAdmin'
+                    ? 'Please contact your superadmin to gain access'
+                    : ' You need to configure all payment schedules in your account management settings to view all records.'}
             </Text>
             <Text textAlign="center" fontWeight={500}>
-                You currently have {scheduleDone.map((x) => x).join(', ') || 'no'} payment
-                schedule configured{' '}
+                You currently have{' '}
+                {scheduleDone.map((x) => x).join(', ') || 'no'} payment schedule
+                configured{' '}
             </Text>
-            <Button
-                bgColor="brand.400"
-                color="white"
-                fontWeight="500"
-                borderRadius="4px"
-                fontSize=".875rem"
-                px="2rem"
-                mt="1.4rem !important"
-                onClick={() =>
-                    router.push(
-                        `/${role}/account-management/payment-schedule-settings`,
-                    )
-                }
-            >
-                Configure now
-            </Button>
+            {role == 'SuperAdmin' && (
+                <Button
+                    bgColor="brand.400"
+                    color="white"
+                    fontWeight="500"
+                    borderRadius="4px"
+                    fontSize=".875rem"
+                    px="2rem"
+                    mt="1.4rem !important"
+                    onClick={() =>
+                        router.push(
+                            `/${role}/account-management/payment-schedule-settings`,
+                        )
+                    }
+                >
+                    Configure now
+                </Button>
+            )}
         </VStack>
     );
 };

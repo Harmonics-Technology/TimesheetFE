@@ -28,7 +28,7 @@
     display: block;
     width: 1.2rem;
     height: 1.2rem;
-    background: #2eafa3;
+    background: #989898;
     position: absolute;
     top: 0;
     transform: translateY(-5%);
@@ -39,4 +39,5 @@
 }
 .checkboxs:checked + .label .switch {
     right: -5px;
+    background: #2eafa3;
 }

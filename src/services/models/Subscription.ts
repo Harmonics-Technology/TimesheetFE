@@ -9,9 +9,9 @@ export type Subscription = {
     recommendedFor?: string | null;
     features?: string | null;
     monthlyAmount?: number;
-    monthlyDiscount?: number;
+    monthlyDiscount?: number | null;
     yearlyAmount?: number;
-    yearlyDiscount?: number;
+    yearlyDiscount?: number | null;
     totalMonthlyAmount?: number;
     totalYearlyAmount?: number;
     hasFreeTrial?: boolean;

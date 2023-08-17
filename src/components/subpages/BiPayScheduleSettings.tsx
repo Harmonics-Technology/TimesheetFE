@@ -1,4 +1,5 @@
-import { Box, HStack, Text, VStack, useToast } from '@chakra-ui/react';
+import { Box, Flex, HStack, Text, VStack, useToast } from '@chakra-ui/react';
+import { LabelSign } from '@components/bits-utils/LabelSign';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
@@ -15,7 +16,7 @@ const schema = yup.object().shape({
     paymentDateDays: yup.string().required(),
 });
 
-export const BiPayScheduleSettings = () => {
+export const BiPayScheduleSettings = ({ data }) => {
     const {
         register,
         handleSubmit,
@@ -64,19 +65,22 @@ export const BiPayScheduleSettings = () => {
     };
     return (
         <Box py="1.5rem" mb="1rem" borderBottom="1px solid #C2CFE0">
-            <VStack align="flex-start" mb="1.5rem">
-                <Text
-                    color="#002861"
-                    fontSize="0.93rem"
-                    fontWeight="500"
-                    mb="0"
-                >
-                    Bi-weekly Payment Schedule
-                </Text>
-                <Text color="#002861" fontSize="0.93rem" mb="0">
-                    Payment is processed for a Bi-weekly period
-                </Text>
-            </VStack>
+            <Flex justify='space-between'>
+                <VStack align="flex-start" mb="1.5rem">
+                    <Text
+                        color="#002861"
+                        fontSize="0.93rem"
+                        fontWeight="500"
+                        mb="0"
+                    >
+                        Bi-weekly Payment Schedule
+                    </Text>
+                    <Text color="#002861" fontSize="0.93rem" mb="0">
+                        Payment is processed for a Bi-weekly period
+                    </Text>
+                </VStack>
+                <LabelSign data={data ? 'Configured!' : 'Not Configured!'} />
+            </Flex>
             <form>
                 <HStack w="40%" spacing="1rem">
                     <PrimaryDate<PayScheduleGenerationModel>

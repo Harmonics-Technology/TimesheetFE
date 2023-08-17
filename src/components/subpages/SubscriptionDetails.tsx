@@ -9,6 +9,7 @@ import {
     useDisclosure,
     useToast,
 } from '@chakra-ui/react';
+import { LabelSign } from '@components/bits-utils/LabelSign';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { ManageBtn } from '@components/bits-utils/ManageBtn';
 import { RenewSubscription } from '@components/bits-utils/RenewSubscription';
@@ -33,6 +34,7 @@ export const SubscriptionDetails = ({ data }) => {
     const { user, subType } = useContext(UserContext);
     const userInfo: UserView = user;
     const role = user?.role.replaceAll(' ', '');
+    const curSub = user?.subscriptiobDetails?.data;
     const { onOpen, isOpen, onClose } = useDisclosure();
     const router = useRouter();
 
@@ -57,14 +59,18 @@ export const SubscriptionDetails = ({ data }) => {
                     <Text fontSize=".875rem" color="#696969" mb="1em">
                         Current Subscription Plan
                     </Text>
-                    <Text
-                        fontSize=".875rem"
-                        color="#2d3748"
-                        fontWeight="500"
-                        textTransform="capitalize"
-                    >
-                        {subType} Package
-                    </Text>
+                    <HStack>
+                        <Text
+                            fontSize=".875rem"
+                            color="#2d3748"
+                            fontWeight="500"
+                            textTransform="capitalize"
+                        >
+                            {subType} Package{' '}
+                            {curSub?.subscription?.hasFreeTrial &&
+                                '(free trial)'}
+                        </Text>
+                    </HStack>
                     <HStack mt="1rem">
                         <ManageBtn
                             bg="#e45771"

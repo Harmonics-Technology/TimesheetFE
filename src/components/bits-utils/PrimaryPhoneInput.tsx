@@ -49,8 +49,8 @@ export const PrimaryPhoneInput = <TFormValues extends Record<string, any>>({
                                 className={"phone-input"}
                             /> */}
                             <PhoneInput
-                                country={defaultCountry}
-                                disableCountryCode
+                               // country={defaultCountry}
+                                // disableCountryCode
                                 // enableAreaCodes
                                 placeholder={placeholder}
                                 value={value}

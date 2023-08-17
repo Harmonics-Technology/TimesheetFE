@@ -6,7 +6,11 @@ import TimesheetTeam from '@components/subpages/TimesheetTeam';
 import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { FinancialService, TimeSheetMonthlyView, TimeSheetService } from 'src/services';
+import {
+    FinancialService,
+    TimeSheetMonthlyView,
+    TimeSheetService,
+} from 'src/services';
 interface Size {
     width: number | undefined;
     height: number | undefined;
@@ -42,7 +46,7 @@ export default SingleTimeSheet;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const { id } = ctx.query;
+        const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
         const { end } = ctx.query;
         let { date } = ctx.query;
         if (date === undefined) {
@@ -58,7 +62,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 id,
                 date,
             );
-            // console.log({ payPeriod: payPeriod.data });
+            // console.log({ data });
             return {
                 props: {
                     timeSheets: data.data,

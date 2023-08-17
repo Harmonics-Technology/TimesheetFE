@@ -1,4 +1,4 @@
-import { Box, HStack, Text, VStack, useToast } from '@chakra-ui/react';
+import { Box, Flex, HStack, Text, VStack, useToast } from '@chakra-ui/react';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
@@ -13,10 +13,11 @@ const Selectrix = dynamic<any>(() => import('react-selectrix'), {
 });
 import { FinancialService, PayScheduleGenerationModel } from 'src/services';
 import * as yup from 'yup';
+import { LabelSign } from '@components/bits-utils/LabelSign';
 
 const schema = yup.object().shape({});
 
-export const MonthPayScheduleSettings = () => {
+export const MonthPayScheduleSettings = ({ data }) => {
     const {
         register,
         handleSubmit,
@@ -73,20 +74,23 @@ export const MonthPayScheduleSettings = () => {
     };
     return (
         <Box py="1.5rem" mb="1rem" borderBottom="1px solid #C2CFE0">
-            <VStack align="flex-start" mb="1.5rem">
-                <Text
-                    color="#002861"
-                    fontSize="0.93rem"
-                    fontWeight="500"
-                    mb="0"
-                >
-                    Monthly Payment Schedule
-                </Text>
-                <Text color="#002861" fontSize="0.93rem" mb="0">
-                    Payment is processed for either a full month or a 4 weeks
-                    period
-                </Text>
-            </VStack>
+            <Flex justify="space-between">
+                <VStack align="flex-start" mb="1.5rem">
+                    <Text
+                        color="#002861"
+                        fontSize="0.93rem"
+                        fontWeight="500"
+                        mb="0"
+                    >
+                        Monthly Payment Schedule
+                    </Text>
+                    <Text color="#002861" fontSize="0.93rem" mb="0">
+                        Payment is processed for either a full month or a 4
+                        weeks period
+                    </Text>
+                </VStack>
+                <LabelSign data={data ? 'Configured!' : 'Not Configured!'} />
+            </Flex>
             <form>
                 <VStack w="40%" spacing="1.5rem" align="flex-start">
                     <Selectrix

@@ -133,6 +133,7 @@ function MyProfile({
         data.phoneNumber = user?.phoneNumber;
         data.role = user?.role;
         data.profilePicture = info?.cdnUrl;
+
         console.log({ data });
         try {
             const result = await UserService.updateUser(data);
@@ -144,7 +145,8 @@ function MyProfile({
                     isClosable: true,
                     position: 'top-right',
                 });
-                Cookies.set('user', JSON.stringify(result.data));
+
+                // Cookies.set('user', JSON.stringify(result.data));
                 callback();
                 return;
             }
@@ -197,7 +199,7 @@ function MyProfile({
                     isClosable: true,
                     position: 'top-right',
                 });
-                Cookies.set('user', JSON.stringify(result.data));
+                // Cookies.set('user', JSON.stringify(result.data));
                 router.reload();
                 return;
             }

@@ -18,6 +18,7 @@ export const BillingInfo = ({ data }: { data: Card[] }) => {
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(false);
     const toast = useToast();
+    console.log({ data });
     const getClientSecret = async () => {
         setLoading(true);
         try {
@@ -64,7 +65,15 @@ export const BillingInfo = ({ data }: { data: Card[] }) => {
                 </HStack>
 
                 <Box w="60%">
-                    <SavedCard data={data?.filter((x) => x.isDefaultCard)[0]} />
+                    {data.length > 0 ? (
+                        <SavedCard
+                            data={data?.filter((x) => x.isDefaultCard)[0]}
+                        />
+                    ) : (
+                        <Text textAlign="right" my="3rem">
+                            No Default Payment method has been added!
+                        </Text>
+                    )}
                 </Box>
             </Box>
             <Box my="1rem" borderRadius=".75rem" bgColor="white" p="1rem">
