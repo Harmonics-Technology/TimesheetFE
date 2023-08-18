@@ -22,7 +22,7 @@ export const Hst = ({ data }: { data: OnboardingFeeView }) => {
     } = useForm<OnboardingFeeModel>({
         mode: 'all',
         defaultValues: {
-            onboardingTypeId: 3,
+            onboardingType: 'hst',
         },
     });
     const toast = useToast();

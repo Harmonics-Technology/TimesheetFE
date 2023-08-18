@@ -75,7 +75,7 @@ const TimesheetAdmin = ({
     id: string;
     payPeriod: any;
 }) => {
-    // console.log({ id });
+    console.log({ timeSheets });
 
     const router = useRouter();
 
@@ -854,7 +854,7 @@ const TimesheetAdmin = ({
                             border="0"
                             // readOnly
                             disabled={
-                                timesheets == undefined ||
+                                // timesheets == undefined ||
                                 isWeekend(
                                     new Date(timesheets?.date as string),
                                 ) ||

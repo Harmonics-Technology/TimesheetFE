@@ -22,7 +22,7 @@ export const OnboardingFee = ({ data }: { data: OnboardingFeeView }) => {
     } = useForm<OnboardingFeeModel>({
         mode: 'all',
         defaultValues: {
-            onboardingTypeId: 2,
+            onboardingType: 'FIXEDAMOUNT',
         },
     });
     const toast = useToast();

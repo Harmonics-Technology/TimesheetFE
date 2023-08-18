@@ -37,7 +37,7 @@ export const OnboardingPercent = ({ data }: { data: OnboardingFeeView[] }) => {
     } = useForm<OnboardingFeeModel>({
         mode: 'all',
         defaultValues: {
-            onboardingTypeId: 1,
+            onboardingType: 'PERCENTAGE',
         },
     });
     const toast = useToast();
@@ -49,6 +49,7 @@ export const OnboardingPercent = ({ data }: { data: OnboardingFeeView[] }) => {
     }
 
     const onSubmit = async (data: OnboardingFeeModel) => {
+        data.superAdminId = user?.superAdminId;
         if (dataExists(data.fee as number)) {
             toast({
                 title: 'The value you are trying to add already exists',
@@ -224,33 +225,37 @@ export const OnboardingPercent = ({ data }: { data: OnboardingFeeView[] }) => {
                                     <Th>Action</Th>
                                 </Tr>
                             </Thead>
-                            {data?.length <= 0 ? (
-                                <Text
-                                    textAlign="center"
-                                    my="1rem"
-                                    fontStyle="italic"
-                                    fontSize=".8rem"
-                                >
-                                    No data available
-                                </Text>
-                            ) : (
-                                <Tbody>
-                                    {data
-                                        ?.sort(
-                                            (a, b) =>
-                                                (a.fee as number) -
-                                                (b.fee as number),
-                                        )
-                                        .map((x: OnboardingFeeView) => (
-                                            <Tr key={x.id}>
-                                                <Td>{x.fee}%</Td>
-                                                <DeleteFeeBtn
-                                                    feeId={x.id as string}
-                                                />
-                                            </Tr>
-                                        ))}
-                                </Tbody>
-                            )}
+                            <Tbody>
+                                {data?.length <= 0 ? (
+                                    <Tr>
+                                        <Td
+                                            textAlign="center"
+                                            my="1rem"
+                                            fontStyle="italic"
+                                            fontSize=".8rem"
+                                        >
+                                            No data available
+                                        </Td>
+                                    </Tr>
+                                ) : (
+                                    <>
+                                        {data
+                                            ?.sort(
+                                                (a, b) =>
+                                                    (a.fee as number) -
+                                                    (b.fee as number),
+                                            )
+                                            .map((x: OnboardingFeeView) => (
+                                                <Tr key={x.id}>
+                                                    <Td>{x.fee}%</Td>
+                                                    <DeleteFeeBtn
+                                                        feeId={x.id as string}
+                                                    />
+                                                </Tr>
+                                            ))}
+                                    </>
+                                )}
+                            </Tbody>
                         </Table>
                     </TableContainer>
                 </Box>

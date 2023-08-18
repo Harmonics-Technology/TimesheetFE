@@ -42,6 +42,7 @@ const CompleteReset = ({ code }: { code: string }) => {
         mode: 'all',
     });
     const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
     const [confirmPass, setConfirmPass] = useState('');
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [passwordVisibleB, setPasswordVisibleB] = useState<boolean>(false);
@@ -65,17 +66,20 @@ const CompleteReset = ({ code }: { code: string }) => {
         }
         // console.log({ data });
         try {
-            const result = await UserService.completeReset(data);
-            if (result.status) {
+            const result = (await UserService.completeReset(
+                data,
+            )) as unknown as any;
+            if (result.result.status) {
                 setShowSuccess(true);
                 return;
             }
             toast({
-                title: result.message,
+                title: result.result.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
             });
+            setShowError(true);
         } catch (error) {
             console.log(error);
             toast({
@@ -116,6 +120,20 @@ const CompleteReset = ({ code }: { code: string }) => {
                         Reset Password!
                     </Text>
 
+                    {showError && (
+                        <Flex
+                            bgColor="red.100"
+                            borderRadius="6px"
+                            p=".5rem 1rem"
+                            mb='1rem'
+                        >
+                            <Text fontSize=".9rem" color="red">
+                                Error: Password reset link can be used only once
+                                and it seems like this code has been used
+                                before. If not so, please contact admin.
+                            </Text>
+                        </Flex>
+                    )}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         {showSuccess ? (
                             <Flex flexDirection="column" align="center">
