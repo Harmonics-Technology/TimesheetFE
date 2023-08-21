@@ -25,9 +25,12 @@ export const BillingInfo = ({ data }: { data: Card[] }) => {
             const res = await UserService.addNewCard(user?.id);
             if (res.status) {
                 setLoading(false);
+                console.log({ res });
                 window.location.href = `${
                     process.env.NEXT_PUBLIC_TTS as string
-                }/addcard?client_secret=${res.message}`;
+                }/addcard/${res.data?.subscriptionId}?client_secret=${
+                    res?.data?.clientSecret
+                }`;
                 return;
             }
             setLoading(false);

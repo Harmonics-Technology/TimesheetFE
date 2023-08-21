@@ -5,5 +5,5 @@
 export type OnboardingFeeView = {
     id?: string;
     fee?: number;
-    onbordingFeeType?: number;
+    onbordingFeeType?: string | null;
 };

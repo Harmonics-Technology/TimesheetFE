@@ -68,20 +68,20 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
         >
             <Link href="/" passHref>
                 <HStack>
-                    <Box h="2rem">
+                    <Box h="3rem">
                         {change ? (
-                            <Image src="/assets/logob.png" h="full" />
+                            <Image src="/assets/newlogob.png" h="full" />
                         ) : (
-                            <Image src="/assets/logo.png" h="full" />
+                            <Image src="/assets/newlogo.png" h="full" />
                         )}
                     </Box>
-                    <Text
+                    {/* <Text
                         fontWeight="600"
                         fontSize=".875rem"
                         color={change ? 'white' : 'brand.200'}
                     >
                         Admin Timesheet
-                    </Text>
+                    </Text> */}
                 </HStack>
             </Link>
             <Divider my="2rem" />
@@ -1078,7 +1078,7 @@ export default SideNav;
 //             <Link href="/" passHref>
 //                 <HStack>
 //                     <Box h="2rem">
-//                         <Image src="/assets/logo.png" h="full" />
+//                         <Image src="/assets/newlogo.png" h="full" />
 //                     </Box>
 //                     <Text fontWeight="600" fontSize=".875rem" color="brand.300">
 //                         Admin Timesheet

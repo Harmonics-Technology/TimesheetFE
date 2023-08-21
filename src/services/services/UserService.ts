@@ -5,6 +5,7 @@ import type { BooleanStandardResponse } from '../models/BooleanStandardResponse'
 import type { CancelSubscriptionModel } from '../models/CancelSubscriptionModel';
 import type { CardsStandardResponse } from '../models/CardsStandardResponse';
 import type { ClientSubscriptionResponseViewModelStandardResponse } from '../models/ClientSubscriptionResponseViewModelStandardResponse';
+import type { CommandCenterAddCardResponseStandardResponse } from '../models/CommandCenterAddCardResponseStandardResponse';
 import type { ControlSettingModel } from '../models/ControlSettingModel';
 import type { ControlSettingViewStandardResponse } from '../models/ControlSettingViewStandardResponse';
 import type { Enable2FAViewStandardResponse } from '../models/Enable2FAViewStandardResponse';
@@ -13,7 +14,6 @@ import type { LoginModel } from '../models/LoginModel';
 import type { PasswordReset } from '../models/PasswordReset';
 import type { RegisterModel } from '../models/RegisterModel';
 import type { ShiftUsersListViewPagedCollectionStandardResponse } from '../models/ShiftUsersListViewPagedCollectionStandardResponse';
-import type { StringStandardResponse } from '../models/StringStandardResponse';
 import type { SubscriptionHistoryViewModelStandardResponse } from '../models/SubscriptionHistoryViewModelStandardResponse';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
 import type { UpdateCardDetailsModel } from '../models/UpdateCardDetailsModel';
@@ -737,12 +737,12 @@ userId?: string,
 
     /**
      * @param userId 
-     * @returns StringStandardResponse Success
+     * @returns CommandCenterAddCardResponseStandardResponse Success
      * @throws ApiError
      */
     public static addNewCard(
 userId?: string,
-): CancelablePromise<StringStandardResponse> {
+): CancelablePromise<CommandCenterAddCardResponseStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/billing/add-card',

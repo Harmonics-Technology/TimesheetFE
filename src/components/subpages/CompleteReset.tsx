@@ -107,7 +107,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                         w="full"
                         my="2rem"
                     >
-                        <Image src="/assets/logo.png" h="3rem" />
+                        <Image src="/assets/newlogo.png" h="3rem" />
                     </Box>
                     <Text
                         fontSize="35px"
@@ -125,7 +125,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                             bgColor="red.100"
                             borderRadius="6px"
                             p=".5rem 1rem"
-                            mb='1rem'
+                            mb="1rem"
                         >
                             <Text fontSize=".9rem" color="red">
                                 Error: Password reset link can be used only once

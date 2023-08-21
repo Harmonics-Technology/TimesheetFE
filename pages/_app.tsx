@@ -39,7 +39,11 @@ function MyApp({
                     content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
                 />
                 <title>Timesheet</title>
-                <link rel="icon" href="/assets/logo.png" type="image/x-icon" />
+                <link
+                    rel="icon"
+                    href="/assets/newfav.jpg"
+                    type="image/x-icon"
+                />
             </Head>
             <StyledThemeProvider>
                 <QueryClientProvider client={queryClient}>

@@ -72,7 +72,7 @@ function ForgotPassword() {
                 p="1rem 3rem 4rem"
             >
                 <Box display="flex" justifyContent="center" w="full" my="2rem">
-                    <Image src="/assets/logo.png" h="3rem" />
+                    <Image src="/assets/newlogo.png" h="3rem" />
                 </Box>
                 <Text
                     fontSize="35px"
