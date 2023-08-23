@@ -53,7 +53,7 @@ function Login() {
         resolver: yupResolver(schema),
         mode: 'all',
     });
-    const expiresIn = new Date(new Date().getTime() + 15 * 60 * 1000);
+    const expiresIn = new Date(new Date().getTime() + 30 * 60 * 1000);
     // console.log({expiresIn})
     const onSubmit = async (data: LoginModel) => {
         try {
@@ -77,7 +77,7 @@ function Login() {
                 OpenAPI.TOKEN = result?.data?.token as string;
                 result.data &&
                     Cookies.set('token', result.data.token as string, {
-                        // expires: expiresIn,
+                        expires: expiresIn,
                     });
                 if (result.data?.twoFactorEnabled) {
                     router.push('/login/twofalogin');
