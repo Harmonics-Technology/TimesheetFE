@@ -77,7 +77,7 @@ function Login() {
                 OpenAPI.TOKEN = result?.data?.token as string;
                 result.data &&
                     Cookies.set('token', result.data.token as string, {
-                        expires: expiresIn,
+                        // expires: expiresIn,
                     });
                 if (result.data?.twoFactorEnabled) {
                     router.push('/login/twofalogin');

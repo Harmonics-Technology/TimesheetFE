@@ -30,7 +30,7 @@ export const BillingInfo = ({ data }: { data: Card[] }) => {
                     process.env.NEXT_PUBLIC_TTS as string
                 }/addcard/${res.data?.subscriptionId}?client_secret=${
                     res?.data?.clientSecret
-                }`;
+                }&clientId=${res.data?.clientId}`;
                 return;
             }
             setLoading(false);
