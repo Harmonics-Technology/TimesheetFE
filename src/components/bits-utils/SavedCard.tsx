@@ -16,7 +16,7 @@ import { UserContext } from '@components/context/UserContext';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { useRouter } from 'next/router';
 import { EditSavedCard } from './EditSavedCard';
-import { RiSecurePaymentFill } from 'react-icons/ri';
+import { GrSecure } from 'react-icons/gr';
 
 export const SavedCard = ({
     isDefault,
@@ -153,7 +153,7 @@ export const SavedCard = ({
                         <Icon
                             fontWeight="700"
                             fontSize="1rem"
-                            as={RiSecurePaymentFill}
+                            as={GrSecure}
                             ml="3rem !important"
                             cursor="pointer"
                         />
