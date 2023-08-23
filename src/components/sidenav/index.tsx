@@ -1,4 +1,4 @@
-import { Box, HStack, VStack, Text, Divider, Image } from '@chakra-ui/react';
+import { Box, HStack, VStack, Divider, Image } from '@chakra-ui/react';
 import { UserContext } from '@components/context/UserContext';
 import MenuItem from '@components/menu-item';
 import Link from 'next/link';
@@ -16,6 +16,7 @@ import { RiLineChartFill } from 'react-icons/ri';
 import { MdOutlineSupervisorAccount, MdSettings } from 'react-icons/md';
 import { BsGraphUp } from 'react-icons/bs';
 import { AiFillSchedule } from 'react-icons/ai';
+import {TbCalendarTime} from 'react-icons/tb'
 interface sidenavProps {
     openSidenav: boolean;
     setOpenSidenav: any;
@@ -68,7 +69,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
         >
             <Link href="/" passHref>
                 <HStack>
-                    <Box h="3rem">
+                    <Box h="2rem">
                         {change ? (
                             <Image src="/assets/newlogob.png" h="full" />
                         ) : (
@@ -203,6 +204,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         linkName="shift-management"
                         menuTitle="Shift Management"
                         icon={<AiFillSchedule opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="project-management"
+                        menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
                         option={false}
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}

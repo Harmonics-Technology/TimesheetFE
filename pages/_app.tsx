@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from '@definitions/chakra/theme';

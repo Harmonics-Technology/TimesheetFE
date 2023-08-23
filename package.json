@@ -66,7 +66,7 @@
         "react-csv-downloader": "^2.9.1",
         "react-dom": "^18.2.0",
         "react-hook-form": "^7.39.5",
-        "react-icons": "^4.7.1",
+        "react-icons": "^4.10.1",
         "react-icons-picker": "^1.0.9",
         "react-loading-skeleton": "^3.2.0",
         "react-month-year-picker": "^1.0.1",

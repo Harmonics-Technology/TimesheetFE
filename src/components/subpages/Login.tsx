@@ -25,7 +25,6 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { UserContext } from '@components/context/UserContext';
 import { OpenAPI, UserService, UserViewStandardResponse } from 'src/services';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
 
 const schema = yup.object().shape({
     email: yup.string().required('Email is required'),
@@ -35,7 +34,6 @@ const schema = yup.object().shape({
 function Login() {
     const router = useRouter();
     const { setUser } = useContext(UserContext);
-    const path = Cookies.get('path') as string;
     const toast = useToast();
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [rememberedData, setRememberedData] = useState<any>();
