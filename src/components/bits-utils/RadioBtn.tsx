@@ -17,7 +17,7 @@ export default function RadioBtn(props) {
                         cursor="pointer"
                         size=".6rem"
                         _checked={{
-                            bg: props.bg,
+                            bg: props.bg || 'brand.400',
                         }}
                         _focus={{
                             boxShadow: 'outline',
