@@ -2,7 +2,7 @@ import { ProjectTask } from '@components/bits-utils/ProjectManagement/Projects/S
 import React from 'react';
 
 const index = () => {
-    return <ProjectTask />;
+    return <ProjectTask id={2} />;
 };
 
 export default index;
