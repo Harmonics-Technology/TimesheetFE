@@ -1,41 +1,34 @@
 import {
     Box,
     Button,
-    HStack,
-    Image,
-    Select,
-    Text,
-    useDisclosure,
-    Icon,
     Flex,
+    HStack,
+    Select,
+    useDisclosure,
+    Image,
+    Text,
 } from '@chakra-ui/react';
 import React, { useContext } from 'react';
-import { TopBar } from './TopBar';
-import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
-import { TableCard } from '../../Generics/TableCard';
-import {
-    TableRow,
-    TableData,
-    NewTableState,
-} from '@components/bits-utils/TableData';
+import { ProjectTabs } from '../Dashboard/ProjectTabs';
 import moment from 'moment';
-import colorSwatch from '@components/generics/colorSwatch';
-import { BiSolidPencil } from 'react-icons/bi';
-import { FaEye } from 'react-icons/fa';
-import { useRouter } from 'next/router';
+import { ProgressBar } from '../Generics/ProgressBar';
+import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
+import { TableRow, TableData } from '@components/bits-utils/TableData';
 import { UserContext } from '@components/context/UserContext';
-import { AddNewTaskDrawer } from '../../Modals/AddNewTaskDrawer';
+import { useRouter } from 'next/router';
+import { TableCard } from '../Generics/TableCard';
+import { AddNewTaskDrawer } from '../Modals/AddNewTaskDrawer';
+import { AddOperationalTaskDrawer } from '../Modals/AddOperationalTaskDrawer';
 
-export const ProjectTask = ({ id }: { id: any }) => {
-    id = 2;
+export const OperationalTask = () => {
     const tableHead = [
         'Task Name',
         'Task assigned to',
-        'Hours spent',
+        'Category',
+        'Department',
+        'Priority',
         'Start Date',
-        'Sub Task',
-        'Status',
-        'Actions',
+        'Progress Status',
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -44,9 +37,13 @@ export const ProjectTask = ({ id }: { id: any }) => {
     const role = user?.role?.replaceAll(' ', '');
     return (
         <Box>
-            <TopBar />
+            <Box mb="1.5rem">
+                <ProjectTabs
+                    name={['dashboard', 'projects', 'operational-task']}
+                />
+            </Box>
             <HStack py="1rem" justify="space-between">
-                <HStack w="17%">
+                <HStack w='17%'>
                     <HStack w="full">
                         <Image
                             src="/assets/filter.png"
@@ -80,7 +77,7 @@ export const ProjectTask = ({ id }: { id: any }) => {
             <TableCard tableHead={tableHead}>
                 <TableRow>
                     <TableData
-                        name="Requirement Gathering"
+                        name="Book a requierment gathering meeting"
                         fontWeight="500"
                         full
                         breakWord
@@ -106,32 +103,35 @@ export const ProjectTask = ({ id }: { id: any }) => {
                                 ))}
                         </HStack>
                     </td>
-                    <TableData name={`${50} Hrs`} fontWeight="500" />
+                    <TableData
+                        name={`${'Planning and Scheduling'}`}
+                        fontWeight="500"
+                        full
+                        breakWord
+                    />
+                    <TableData name={'Admin Depart'} fontWeight="500" />
+                    <TableData
+                        name={'High'}
+                        fontWeight="500"
+                        customColor="red"
+                    />
                     <TableData
                         name={moment().format('DD/MM/YYYY')}
                         fontWeight="500"
                     />
-                    <TableData name={4} fontWeight="500" />
-                    <NewTableState
-                        name="Completed"
-                        color={colorSwatch('completed')}
-                    />
                     <td>
-                        <HStack
-                            color="#c2cfe0"
-                            onClick={() =>
-                                router.push(
-                                    `/${role}/project-management/projects/${id}/project-task/${5}`,
-                                )
-                            }
-                        >
-                            <Icon as={FaEye} />
-                            <Icon as={BiSolidPencil} />
-                        </HStack>
+                        <ProgressBar
+                            barWidth={50}
+                            showProgress={true}
+                            rightText={'100%'}
+                            barColor="brand.400"
+                        />
                     </td>
                 </TableRow>
             </TableCard>
-            {isOpen && <AddNewTaskDrawer isOpen={isOpen} onClose={onClose} />}
+            {isOpen && (
+                <AddOperationalTaskDrawer isOpen={isOpen} onClose={onClose} />
+            )}
         </Box>
     );
 };

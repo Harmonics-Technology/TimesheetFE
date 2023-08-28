@@ -172,19 +172,16 @@ export const AddNewTaskDrawer = ({ onClose, isOpen }) => {
                         <PrimaryDate<TeamMemberModel>
                             control={control}
                             name="dateOfBirth"
-                            label="End Date"
+                            label="Start Date"
                             error={errors.dateOfBirth}
                             max={new DateObject().subtract(1, 'days')}
                         />
-
-                        <PrimaryInput<TeamMemberModel>
-                            label="Duration"
-                            name="firstName"
-                            error={errors.firstName}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                            // readonly={readonly}
+                        <PrimaryDate<TeamMemberModel>
+                            control={control}
+                            name="dateOfBirth"
+                            label="End Date"
+                            error={errors.dateOfBirth}
+                            max={new DateObject().subtract(1, 'days')}
                         />
                     </Grid>
 
@@ -207,7 +204,7 @@ export const AddNewTaskDrawer = ({ onClose, isOpen }) => {
 
                     <PrimaryTextarea<TeamMemberModel>
                         label="Notes"
-                        color='#707683'
+                        color="#707683"
                         name="firstName"
                         error={errors.firstName}
                         placeholder=""

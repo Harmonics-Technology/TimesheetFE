@@ -27,7 +27,7 @@ import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 
 const schema = yup.object().shape({});
 
-export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
+export const AddOperationalTaskDrawer = ({ onClose, isOpen }) => {
     const {
         register,
         handleSubmit,
@@ -39,10 +39,6 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
         mode: 'all',
     });
 
-    const isHours =
-        (watch('isActive') as unknown as string) == 'Track by hours'
-            ? true
-            : false;
     const onSubmit = async (data: TeamMemberModel) => {
         console.log({ data });
     };
@@ -106,12 +102,12 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
         <DrawerWrapper
             onClose={onClose}
             isOpen={isOpen}
-            title={'Add New Sub-Task'}
+            title={'Add Operation Task'}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack align="flex-start" spacing="1.5rem">
                     <PrimaryInput<TeamMemberModel>
-                        label="Sub-Task Name"
+                        label="Task Name"
                         name="firstName"
                         error={errors.firstName}
                         placeholder=""
@@ -124,7 +120,7 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
                             width="fit-content"
                             fontSize=".8rem"
                         >
-                            Assign this Sub-task to
+                            Category
                         </FormLabel>
 
                         <CustomSelectBox
@@ -135,44 +131,42 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
                             checkbox={false}
                             id="users"
                         />
-                        {/* <Box
-                            mt="1rem"
-                            borderY="1px solid #e5e5e5"
-                            w="full"
-                            py="1rem"
+                    </Box>
+                    <Box w="full">
+                        <FormLabel
+                            textTransform="capitalize"
+                            width="fit-content"
+                            fontSize=".8rem"
                         >
-                            {selectedUser?.length > 0 && (
-                                <HStack mb=".5rem">
-                                    {selectedUser?.map((x: any, i: any) => (
-                                        <HStack
-                                            borderRadius="25px"
-                                            border="1px solid #e5e5e5"
-                                            fontSize=".6rem"
-                                            color="#707683"
-                                            key={i}
-                                            p=".1rem .4rem"
-                                        >
-                                            <Text
-                                                fontSize=".6rem"
-                                                color="#707683"
-                                                mb="0"
-                                            >
-                                                {x?.fullName}
-                                            </Text>
-                                            <Icon
-                                                as={MdCancel}
-                                                onClick={() =>
-                                                    removeUser(x?.id)
-                                                }
-                                            />
-                                        </HStack>
-                                    ))}
-                                </HStack>
-                            )}
-                            <Text fontSize=".6rem" color="#707683" mb="0">
-                                These team members were added to this project
-                            </Text>
-                        </Box> */}
+                            Assign this task to
+                        </FormLabel>
+
+                        <CustomSelectBox
+                            data={userOptions}
+                            updateFunction={addUser}
+                            items={selectedUser}
+                            customKeys={{ key: 'id', label: 'fullName' }}
+                            checkbox={false}
+                            id="tasks"
+                        />
+                    </Box>
+                    <Box w="full">
+                        <FormLabel
+                            textTransform="capitalize"
+                            width="fit-content"
+                            fontSize=".8rem"
+                        >
+                            Assign this task to
+                        </FormLabel>
+
+                        <CustomSelectBox
+                            data={userOptions}
+                            updateFunction={addUser}
+                            items={selectedUser}
+                            customKeys={{ key: 'id', label: 'fullName' }}
+                            checkbox={false}
+                            id="dept"
+                        />
                     </Box>
                     <Grid
                         templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
@@ -189,7 +183,7 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
                         <PrimaryDate<TeamMemberModel>
                             control={control}
                             name="dateOfBirth"
-                            label="End Date"
+                            label="Start Date"
                             error={errors.dateOfBirth}
                             max={new DateObject().subtract(1, 'days')}
                         />
@@ -204,25 +198,6 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
                             // readonly={readonly}
                         />
                     </Grid>
-                    <PrimaryRadio
-                        control={control}
-                        error={errors.isActive}
-                        radios={['Track by days', 'Track by hours']}
-                        name="isActive"
-                        flexDir="column"
-                        defaultValue={'Track by days'}
-                    />
-                    {isHours && (
-                        <PrimaryInput<TeamMemberModel>
-                            label="Duration"
-                            name="firstName"
-                            error={errors.firstName}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                            // readonly={readonly}
-                        />
-                    )}
 
                     <Box w="full">
                         <FormLabel
@@ -230,7 +205,7 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
                             width="fit-content"
                             fontSize=".8rem"
                         >
-                            Sub-Task priority
+                            Task priority
                         </FormLabel>
                         <CustomSelectBox
                             data={userOptions}
@@ -241,7 +216,7 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
                         />
                     </Box>
 
-                    <PrimaryTextarea<TeamMemberModel>
+                    {/* <PrimaryTextarea<TeamMemberModel>
                         label="Notes"
                         color="#707683"
                         name="firstName"
@@ -249,7 +224,7 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
                         placeholder=""
                         defaultValue=""
                         register={register}
-                    />
+                    /> */}
 
                     <DrawerFooter my="2rem" p="0" w="full">
                         <Flex justify="space-between" w="full">

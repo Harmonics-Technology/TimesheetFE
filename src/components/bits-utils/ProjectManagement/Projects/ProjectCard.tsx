@@ -77,7 +77,7 @@ export const ProjectCard = ({ data }: { data: any }) => {
                         showProgress={true}
                         barColor={'brand.400'}
                         leftText="Progress"
-                        rightText={`$ {duration} left`}
+                        rightText={`${'6 Months'} left`}
                     />
                 </Box>
             </VStack>

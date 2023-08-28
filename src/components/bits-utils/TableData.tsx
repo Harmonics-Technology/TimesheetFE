@@ -70,6 +70,7 @@ export function TableData({
     full,
     fontWeight = '400',
     customColor,
+    breakWord,
 }: {
     name: any;
     border?: boolean | undefined;
@@ -79,6 +80,7 @@ export function TableData({
     full?: boolean;
     fontWeight?: string;
     customColor?: any;
+    breakWord?: any;
 }) {
     return (
         <Td
@@ -88,7 +90,7 @@ export function TableData({
             paddingInlineStart="1rem"
             className={classes}
             fontWeight={fontWeight}
-            // maxW="120px"
+            maxW={breakWord ? '150px' : 'unset'}
             // textOverflow=""
             // overflow="hidden"
             // noOfLines={1}
@@ -103,7 +105,9 @@ export function TableData({
             }
         >
             <Tooltip label={name} hasArrow>
-                {full ? name : name?.toString()?.substring(0, 20) || ''}
+                <Text whiteSpace={breakWord ? 'normal' : 'unset'}>
+                    {full ? name : name?.toString()?.substring(0, 20) || ''}
+                </Text>
             </Tooltip>
         </Td>
     );
