@@ -12,6 +12,7 @@ import {
     Tooltip,
     Icon,
     Text,
+    Tr,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import NextLink from 'next/link';
@@ -35,6 +36,7 @@ import { BiTrash } from 'react-icons/bi';
 import { MdVerified, MdCancel } from 'react-icons/md';
 import { BsEye } from 'react-icons/bs';
 import { RiInboxArchiveFill } from 'react-icons/ri';
+import shadeColor from '@components/generics/functions/shadeColor';
 
 export function TableHead({
     name,
@@ -66,6 +68,8 @@ export function TableData({
     borderColor,
     classes,
     full,
+    fontWeight = '400',
+    customColor,
 }: {
     name: any;
     border?: boolean | undefined;
@@ -73,6 +77,8 @@ export function TableData({
     borderColor?: string;
     classes?: any;
     full?: boolean;
+    fontWeight?: string;
+    customColor?: any;
 }) {
     return (
         <Td
@@ -81,6 +87,7 @@ export function TableData({
             borderRightColor={borderColor}
             paddingInlineStart="1rem"
             className={classes}
+            fontWeight={fontWeight}
             // maxW="120px"
             // textOverflow=""
             // overflow="hidden"
@@ -90,6 +97,8 @@ export function TableData({
                     ? 'brand.700'
                     : name == 'ONSHORE'
                     ? 'brand.400'
+                    : customColor
+                    ? customColor
                     : 'black'
             }
         >
@@ -97,6 +106,13 @@ export function TableData({
                 {full ? name : name?.toString()?.substring(0, 20) || ''}
             </Tooltip>
         </Td>
+    );
+}
+export function TableRow({ children, bg }: { children: any; bg?: string }) {
+    return (
+        <Tr border="1px solid #EFEFEF" bgColor={bg || 'white'}>
+            {children}
+        </Tr>
     );
 }
 export function TableDataShiftDate({
@@ -190,6 +206,32 @@ export function TableState({ name }: { name: string | undefined | null }) {
                 width="fit-content"
                 cursor="pointer"
                 textTransform="uppercase"
+            >
+                {name || 'Inactive'}
+            </Box>
+        </td>
+    );
+}
+export function NewTableState({
+    name,
+    color,
+}: {
+    name: string | undefined | null;
+    color: any;
+}) {
+    console.log({ color });
+    return (
+        <td>
+            <Box
+                fontSize=".75rem"
+                bgColor={shadeColor(color, 0.3)}
+                borderRadius="4px"
+                color={color}
+                fontWeight="500"
+                padding=".4rem .4rem"
+                width="fit-content"
+                cursor="pointer"
+                textTransform="capitalize"
             >
                 {name || 'Inactive'}
             </Box>

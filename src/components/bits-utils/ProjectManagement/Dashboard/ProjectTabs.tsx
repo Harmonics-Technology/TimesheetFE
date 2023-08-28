@@ -12,7 +12,7 @@ export const ProjectTabs = ({ name }: { name: any[] }) => {
         <Flex bgColor="white" w="full" borderRadius=".3rem" p=".5rem 1rem">
             {name.map((x: any) => {
                 const isActive = router.pathname.startsWith(
-                    `/${role}/project-management/${x}`,
+                    `/${role}/project-management/${x.replaceAll(' ', '-')}`,
                 );
                 return (
                     <Flex
@@ -24,8 +24,9 @@ export const ProjectTabs = ({ name }: { name: any[] }) => {
                         fontWeight="500"
                         textTransform="capitalize"
                         align="center"
+                        cursor="pointer"
                         onClick={() =>
-                            router.push(`/${role}/project-management/${name}`)
+                            router.push(`/${role}/project-management/${x}`)
                         }
                     >
                         {x.replaceAll('-', ' ')}
