@@ -6,14 +6,16 @@ const TitleText = ({
     text,
     color,
     fontSize,
+    gap = '.9rem',
 }: {
     title: string;
     text: string | undefined | any;
     color?: any;
     fontSize?: any;
+    gap?: any;
 }) => {
     return (
-        <VStack spacing=".9rem" align="flex-start">
+        <VStack spacing={gap} align="flex-start">
             <Text
                 fontSize={fontSize || '.875rem'}
                 color="#1b1d21"

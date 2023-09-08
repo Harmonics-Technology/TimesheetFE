@@ -5,7 +5,7 @@ export default function colorSwatch(status) {
     } else if (status?.toLowerCase() == 'ongoing') {
         color = '#C19600';
     } else if (status?.toLowerCase() == 'not started') {
-        color = 'red';
+        color = '#ff0000';
     } else {
         color = 'gray';
     }

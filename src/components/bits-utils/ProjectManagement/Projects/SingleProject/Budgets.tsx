@@ -11,7 +11,7 @@ import { CAD } from '@components/generics/functions/Naira';
 import moment from 'moment';
 import { TableCard } from '../../Generics/TableCard';
 
-export const Budgets = () => {
+export const Budgets = ({id}) => {
     const tableHead = [
         'Team Members',
         'Assigned Task',
@@ -24,7 +24,7 @@ export const Budgets = () => {
     ];
     return (
         <Box>
-            <TopBar />
+            <TopBar id={id} />
             <Grid
                 mb="1.25rem"
                 templateColumns={['repeat(1,1fr)', 'repeat(4,1fr)']}

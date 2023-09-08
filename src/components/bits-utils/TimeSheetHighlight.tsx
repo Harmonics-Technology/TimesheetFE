@@ -1,10 +1,11 @@
-import { Box, HStack, Icon, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Icon, Text } from '@chakra-ui/react';
 import React from 'react';
 import { BsInfoCircleFill } from 'react-icons/bs';
 
 export const TimeSheetHighlight = () => {
     return (
-        <Box pos="fixed" top="10%" left="50%" transform="translateX(-30%)" zIndex='800'>
+        // <Box pos="fixed" top="10%" left="50%" transform="translateX(-30%)" zIndex='800'>
+        <Flex justify="center" w="full" mb="2rem">
             <HStack
                 color="#2E5268"
                 border="1px solid #2EAFA3"
@@ -17,6 +18,6 @@ export const TimeSheetHighlight = () => {
                     The highlighted weeks is the pay period for this month
                 </Text>
             </HStack>
-        </Box>
+        </Flex>
     );
 };

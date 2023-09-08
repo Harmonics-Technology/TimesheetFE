@@ -54,6 +54,7 @@ import Cookies from 'js-cookie';
 import { UserContext } from '@components/context/UserContext';
 import { TimeSheetHighlight } from '@components/bits-utils/TimeSheetHighlight';
 import dynamic from 'next/dynamic';
+import { TabMenuTimesheet } from '@components/bits-utils/ProjectManagement/Generics/TabMenuTimesheet';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -853,6 +854,7 @@ const TimesheetTeam = ({
     };
     return (
         <Box pos="relative">
+            <TabMenuTimesheet name={['my-timesheet', 'task-view']} />
             <TimeSheetHighlight />
             <Box>
                 {getHeader()}

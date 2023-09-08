@@ -91,6 +91,7 @@ export function TableData({
             className={classes}
             fontWeight={fontWeight}
             maxW={breakWord ? '150px' : 'unset'}
+            textTransform="capitalize"
             // textOverflow=""
             // overflow="hidden"
             // noOfLines={1}

@@ -16,6 +16,7 @@ import moment from 'moment';
 import colorSwatch from '@components/generics/colorSwatch';
 import { ProgressBar } from '../Generics/ProgressBar';
 import { ChartLargeCard } from './ChartLargeCard';
+import { ProjectModel } from 'src/services';
 
 export const Dashboard = () => {
     const status = 'completed';

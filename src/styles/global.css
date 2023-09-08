@@ -33,6 +33,14 @@
     box-sizing: border-box;
     width: 100%;
 }
+.dateError {
+    border: 1px solid red;
+    height: 2.6rem;
+    /* border-radius: 5px; */
+    padding: 0 1rem;
+    box-sizing: border-box;
+    width: 100%;
+}
 .dateWrapper {
     width: 100%;
 }

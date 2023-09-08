@@ -5,32 +5,31 @@ import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import { TabCounts } from '../Generics/TabCounts';
 import { ProjectCard } from './ProjectCard';
 import { CreateProjectDrawer } from '../Modals/CreateProjectDrawer';
+import { useRouter } from 'next/router';
+import { ProjectProgressCountView } from 'src/services';
 
-export const ProjectPage = () => {
+export const ProjectPage = ({
+    projects,
+    users,
+    superAdminId,
+    counts,
+}: {
+    projects: any;
+    users: any;
+    superAdminId: string;
+    counts: ProjectProgressCountView;
+}) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const data = {
-        title: 'Time Tracking System',
-        desc: 'These project will need a new brand identity where they will get recognies.',
-        budget: 600000,
-        id: 2,  
-        users: [
-            {
-                id: 0,
-                url: 'https://bit.ly/sage-adebayo',
-                name: 'Sage Adebayo',
+    const router = useRouter();
+    function filterProjects(val: number) {
+        router.push({
+            query: {
+                ...router.query,
+                status: val,
             },
-            {
-                id: 1,
-                url: 'https://bit.ly/sage-adebayo',
-                name: 'Tade Ojo',
-            },
-            {
-                id: 2,
-                url: 'https://bit.ly/sage-adebayo',
-                name: 'Ben Joe',
-            },
-        ],
-    };
+        });
+    }
+    console.log({ projects });
     return (
         <Box>
             <Box mb="2.5rem">
@@ -51,9 +50,21 @@ export const ProjectPage = () => {
                 </Button>
             </Flex>
             <Grid templateColumns={['repeat(3,1fr)']} my="2rem" w="full">
-                <TabCounts text="Not Started" count={3} />
-                <TabCounts text="In Progress" count={3} />
-                <TabCounts text="Completed" count={3} />
+                <TabCounts
+                    text="Not Started"
+                    count={counts.notStarted}
+                    onClick={() => filterProjects(1)}
+                />
+                <TabCounts
+                    text="In Progress"
+                    count={counts.inProgress}
+                    onClick={() => filterProjects(2)}
+                />
+                <TabCounts
+                    text="Completed"
+                    count={counts.completed}
+                    onClick={() => filterProjects(3)}
+                />
             </Grid>
             <Grid
                 templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
@@ -61,14 +72,17 @@ export const ProjectPage = () => {
                 w="full"
                 gap="1.5rem"
             >
-                {Array(9)
-                    .fill(9)
-                    .map((x, i) => (
-                        <ProjectCard data={data} key={i} />
-                    ))}
+                {projects?.value?.map((x, i) => (
+                    <ProjectCard data={x} key={i} />
+                ))}
             </Grid>
             {isOpen && (
-                <CreateProjectDrawer isOpen={isOpen} onClose={onClose} />
+                <CreateProjectDrawer
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    users={users}
+                    superAdminId={superAdminId}
+                />
             )}
         </Box>
     );

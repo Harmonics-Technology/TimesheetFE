@@ -9,99 +9,137 @@ import {
     Icon,
     Text,
     VStack,
+    useToast,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { TeamMemberModel } from 'src/services';
+import {
+    ProjectTaskView,
+    ProjectSubTaskModel,
+    ProjectManagementService,
+} from 'src/services';
 import { DateObject } from 'react-multi-date-picker';
 import { MdCancel } from 'react-icons/md';
 import { CustomSelectBox } from '../Generics/CustomSelectBox';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
+import moment from 'moment';
+import { useRouter } from 'next/router';
 
-const schema = yup.object().shape({});
+const schema = yup.object().shape({
+    name: yup.string().required(),
+    startDate: yup.string().required(),
+    endDate: yup.string().required(),
+    duration: yup.number().required(),
+    // trackedByHours: yup.boolean().required(),
+    projectTaskAssigneeId: yup.string().required(),
+    note: yup.string().required(),
+    taskPriority: yup.number().required(),
+    // durationInHours: yup
+    //     .number()
+    //     .when('trackedByHours', { is: true, then: yup.string().required() }),
+});
 
-export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
+export const AddSubTaskDrawer = ({
+    onClose,
+    isOpen,
+    data,
+}: {
+    onClose: any;
+    isOpen: boolean;
+    data: ProjectTaskView;
+}) => {
     const {
         register,
         handleSubmit,
         control,
         watch,
+        setValue,
         formState: { errors, isSubmitting },
-    } = useForm<TeamMemberModel>({
+    } = useForm<ProjectSubTaskModel>({
         resolver: yupResolver(schema),
         mode: 'all',
+        defaultValues: {
+            projectTaskId: data?.id,
+            // trackedByHours: false,
+        },
     });
 
+    const toast = useToast();
+    const router = useRouter();
+
     const isHours =
-        (watch('isActive') as unknown as string) == 'Track by hours'
+        (watch('trackedByHours') as unknown as string) == 'Track by hours'
             ? true
             : false;
-    const onSubmit = async (data: TeamMemberModel) => {
-        console.log({ data });
-    };
     const [selectedUser, setSelecedUser] = useState<any>([]);
     const addUser = (user) => {
-        const filtered = selectedUser?.find((x) => x.id === user.id);
-        if (filtered) return;
-        setSelecedUser([...selectedUser, user]);
+        setSelecedUser(user);
     };
     const removeUser = (id) => {
         const filtered = selectedUser?.filter((x) => x.id !== id);
         setSelecedUser(filtered);
     };
-    const userOptions = [
-        {
-            id: 'javascript',
-            fullName: 'Javascript',
-        },
-        {
-            id: 'go',
-            fullName: 'Go',
-        },
-        {
-            id: 'ruby',
-            fullName: 'Ruby On Rails',
-        },
-        {
-            id: 'php',
-            fullName: 'PHP',
-        },
-        {
-            id: 'csharp',
-            fullName: 'C#',
-        },
-        {
-            id: 'java',
-            fullName: 'JAVA',
-        },
-        {
-            id: 'python',
-            fullName: 'Python',
-        },
-        {
-            id: 'scala',
-            fullName: 'Scala',
-        },
-        {
-            id: 'typescript',
-            fullName: 'Typescript',
-        },
+    const priority = [
+        { id: 1, name: 'High' },
+        { id: 2, name: 'Medium' },
+        { id: 3, name: 'Low' },
     ];
+    const [selectedPriority, setSelectedPriority] = useState<any>();
+    const selectPriority = (user) => {
+        setSelectedPriority(user);
+    };
+    const onSubmit = async (data: ProjectSubTaskModel) => {
+        // console.log({ data });
+        data.trackedByHours = isHours;
+        try {
+            const result = await ProjectManagementService.createSubTask(data);
+            if (result.status) {
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.reload();
+                onClose();
+                return;
+            }
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        } catch (err: any) {
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
 
-    console.log(
-        userOptions.filter(
-            (x) => !selectedUser?.some((user) => user.id === x.id),
-        ),
-    );
+    useEffect(() => {
+        setValue('projectTaskAsigneeId', selectedUser?.id);
+    }, [selectedUser]);
+    const dateDiff = moment(watch('endDate')).diff(watch('startDate'), 'day');
+    useEffect(() => {
+        setValue('duration', dateDiff + 1 || 0);
+    }, [watch('startDate'), watch('endDate')]);
+    useEffect(() => {
+        setValue('taskPriority', selectedPriority?.id);
+    }, [selectedPriority]);
 
-    console.log({ selectedUser });
+    console.log({ data });
     return (
         <DrawerWrapper
             onClose={onClose}
@@ -110,10 +148,10 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack align="flex-start" spacing="1.5rem">
-                    <PrimaryInput<TeamMemberModel>
+                    <PrimaryInput<ProjectSubTaskModel>
                         label="Sub-Task Name"
-                        name="firstName"
-                        error={errors.firstName}
+                        name="name"
+                        error={errors.name}
                         placeholder=""
                         defaultValue=""
                         register={register}
@@ -128,12 +166,15 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
                         </FormLabel>
 
                         <CustomSelectBox
-                            data={userOptions}
+                            data={data?.assignees}
                             updateFunction={addUser}
                             items={selectedUser}
-                            customKeys={{ key: 'id', label: 'fullName' }}
+                            customKeys={{ key: 'id', label: 'user.fullName' }}
                             checkbox={false}
                             id="users"
+                            error={errors?.projectTaskAsigneeId}
+                            removeFn={removeUser}
+                            single
                         />
                         {/* <Box
                             mt="1rem"
@@ -179,44 +220,46 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
                         gap="1rem 1rem"
                         w="full"
                     >
-                        <PrimaryDate<TeamMemberModel>
+                        <PrimaryDate<ProjectSubTaskModel>
                             control={control}
-                            name="dateOfBirth"
+                            name="startDate"
                             label="Start Date"
-                            error={errors.dateOfBirth}
-                            max={new DateObject().subtract(1, 'days')}
+                            error={errors.startDate}
+                            min={data?.startDate}
+                            max={data?.endDate}
                         />
-                        <PrimaryDate<TeamMemberModel>
+                        <PrimaryDate<ProjectSubTaskModel>
                             control={control}
-                            name="dateOfBirth"
+                            name="endDate"
                             label="End Date"
-                            error={errors.dateOfBirth}
-                            max={new DateObject().subtract(1, 'days')}
+                            error={errors.endDate}
+                            min={data?.startDate}
+                            max={data?.endDate}
                         />
 
-                        <PrimaryInput<TeamMemberModel>
+                        <PrimaryInput<ProjectSubTaskModel>
                             label="Duration"
-                            name="firstName"
-                            error={errors.firstName}
+                            name="duration"
+                            error={errors.duration}
                             placeholder=""
                             defaultValue=""
                             register={register}
-                            // readonly={readonly}
+                            readonly={true}
                         />
                     </Grid>
                     <PrimaryRadio
                         control={control}
-                        error={errors.isActive}
+                        error={errors.trackedByHours}
                         radios={['Track by days', 'Track by hours']}
-                        name="isActive"
+                        name="trackedByHours"
                         flexDir="column"
                         defaultValue={'Track by days'}
                     />
                     {isHours && (
-                        <PrimaryInput<TeamMemberModel>
+                        <PrimaryInput<ProjectSubTaskModel>
                             label="Duration"
-                            name="firstName"
-                            error={errors.firstName}
+                            name="durationInHours"
+                            error={errors.durationInHours}
                             placeholder=""
                             defaultValue=""
                             register={register}
@@ -233,19 +276,21 @@ export const AddSubTaskDrawer = ({ onClose, isOpen }) => {
                             Sub-Task priority
                         </FormLabel>
                         <CustomSelectBox
-                            data={userOptions}
-                            updateFunction={addUser}
-                            items={selectedUser}
-                            customKeys={{ key: 'id', label: 'fullName' }}
+                            data={priority}
+                            updateFunction={selectPriority}
+                            items={selectedPriority}
+                            customKeys={{ key: 'id', label: 'name' }}
                             id="priority"
+                            error={errors?.taskPriority}
+                            single
                         />
                     </Box>
 
-                    <PrimaryTextarea<TeamMemberModel>
+                    <PrimaryTextarea<ProjectSubTaskModel>
                         label="Notes"
                         color="#707683"
-                        name="firstName"
-                        error={errors.firstName}
+                        name="note"
+                        error={errors.note}
                         placeholder=""
                         defaultValue=""
                         register={register}

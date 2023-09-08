@@ -9,101 +9,154 @@ import {
     Icon,
     Text,
     VStack,
+    useToast,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { TeamMemberModel } from 'src/services';
 import { DateObject } from 'react-multi-date-picker';
 import { MdCancel } from 'react-icons/md';
 import { CustomSelectBox } from '../Generics/CustomSelectBox';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
+import {
+    ProjectManagementService,
+    ProjectTaskModel,
+    ProjectView,
+} from 'src/services';
+import { useRouter } from 'next/router';
+import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
+import moment from 'moment';
 
-const schema = yup.object().shape({});
+const schema = yup.object().shape({
+    name: yup.string().required(),
+    startDate: yup.string().required(),
+    endDate: yup.string().required(),
+    duration: yup.number().required(),
+    // trackedByHours: yup.boolean().required(),
+    assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
+    note: yup.string().required(),
+    taskPriority: yup.number().required(),
+    // durationInHours: yup
+    //     .number()
+    //     .when('trackedByHours', { is: true, then: yup.string().required() }),
+});
 
-export const AddNewTaskDrawer = ({ onClose, isOpen }) => {
+export const AddNewTaskDrawer = ({
+    onClose,
+    isOpen,
+    data,
+}: {
+    onClose: any;
+    isOpen: boolean;
+    data: ProjectView;
+}) => {
     const {
         register,
         handleSubmit,
         control,
         watch,
+        setValue,
         formState: { errors, isSubmitting },
-    } = useForm<TeamMemberModel>({
+    } = useForm<ProjectTaskModel>({
         resolver: yupResolver(schema),
         mode: 'all',
+        defaultValues: {
+            superAdminId: data?.superAdminId,
+            projectId: data?.id,
+            // trackedByHours: false,
+        },
     });
-    const onSubmit = async (data: TeamMemberModel) => {
-        console.log({ data });
-    };
+
+    const toast = useToast();
+    const router = useRouter();
+    const assignees = data?.assignees?.filter((x) => x.projectTaskId == null);
+    // console.log({ assignees, data });
+
     const [selectedUser, setSelecedUser] = useState<any>([]);
     const addUser = (user) => {
-        const filtered = selectedUser?.find((x) => x.id === user.id);
+        const filtered = selectedUser?.find((x) => x.userId === user.userId);
         if (filtered) return;
         setSelecedUser([...selectedUser, user]);
     };
+    // console.log({ selectedPriority });
     const removeUser = (id) => {
-        const filtered = selectedUser?.filter((x) => x.id !== id);
+        const filtered = selectedUser?.filter((x) => x.userId !== id);
         setSelecedUser(filtered);
     };
-    const userOptions = [
-        {
-            id: 'javascript',
-            fullName: 'Javascript',
-        },
-        {
-            id: 'go',
-            fullName: 'Go',
-        },
-        {
-            id: 'ruby',
-            fullName: 'Ruby On Rails',
-        },
-        {
-            id: 'php',
-            fullName: 'PHP',
-        },
-        {
-            id: 'csharp',
-            fullName: 'C#',
-        },
-        {
-            id: 'java',
-            fullName: 'JAVA',
-        },
-        {
-            id: 'python',
-            fullName: 'Python',
-        },
-        {
-            id: 'scala',
-            fullName: 'Scala',
-        },
-        {
-            id: 'typescript',
-            fullName: 'Typescript',
-        },
+    const priority = [
+        { id: 1, name: 'High' },
+        { id: 2, name: 'Medium' },
+        { id: 3, name: 'Low' },
     ];
+    const [selectedPriority, setSelectedPriority] = useState<any>();
+    const selectPriority = (user) => {
+        setSelectedPriority(user);
+    };
+    const isHours =
+        (watch('trackedByHours') as unknown as string) == 'Track by hours'
+            ? true
+            : false;
 
-    console.log(
-        userOptions.filter(
-            (x) => !selectedUser?.some((user) => user.id === x.id),
-        ),
-    );
+    const onSubmit = async (data: ProjectTaskModel) => {
+        // console.log({ data });
+        data.trackedByHours = isHours;
+        try {
+            const result = await ProjectManagementService.createTask(data);
+            if (result.status) {
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.reload();
+                onClose();
+                return;
+            }
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        } catch (err: any) {
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
 
-    console.log({ selectedUser });
+    useEffect(() => {
+        setValue(
+            'assignedUsers',
+            selectedUser.map((x) => x.userId),
+        );
+    }, [selectedUser]);
+    const dateDiff = moment(watch('endDate')).diff(watch('startDate'), 'day');
+    useEffect(() => {
+        setValue('duration', dateDiff + 1 || 0);
+    }, [watch('startDate'), watch('endDate')]);
+    useEffect(() => {
+        setValue('taskPriority', selectedPriority?.id);
+    }, [selectedPriority]);
+
     return (
         <DrawerWrapper onClose={onClose} isOpen={isOpen} title={'Add New Task'}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack align="flex-start" spacing="1.5rem">
-                    <PrimaryInput<TeamMemberModel>
+                    <PrimaryInput<ProjectTaskModel>
                         label="Task Name"
-                        name="firstName"
-                        error={errors.firstName}
+                        name="name"
+                        error={errors.name}
                         placeholder=""
                         defaultValue=""
                         register={register}
@@ -118,12 +171,17 @@ export const AddNewTaskDrawer = ({ onClose, isOpen }) => {
                         </FormLabel>
 
                         <CustomSelectBox
-                            data={userOptions}
+                            data={assignees}
                             updateFunction={addUser}
                             items={selectedUser}
-                            customKeys={{ key: 'id', label: 'fullName' }}
+                            customKeys={{
+                                key: 'userId',
+                                label: 'user.fullName',
+                            }}
                             checkbox={true}
                             id="users"
+                            error={errors?.assignedUsers}
+                            removeFn={removeUser}
                         />
                         <Box
                             mt="1rem"
@@ -147,7 +205,7 @@ export const AddNewTaskDrawer = ({ onClose, isOpen }) => {
                                                 color="#707683"
                                                 mb="0"
                                             >
-                                                {x?.fullName}
+                                                {x['user.fullName']}
                                             </Text>
                                             {/* <Icon
                                                 as={MdCancel}
@@ -165,25 +223,55 @@ export const AddNewTaskDrawer = ({ onClose, isOpen }) => {
                         </Box>
                     </Box>
                     <Grid
-                        templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
+                        templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                         gap="1rem 1rem"
                         w="full"
                     >
-                        <PrimaryDate<TeamMemberModel>
+                        <PrimaryDate<ProjectTaskModel>
                             control={control}
-                            name="dateOfBirth"
+                            name="startDate"
                             label="Start Date"
-                            error={errors.dateOfBirth}
-                            max={new DateObject().subtract(1, 'days')}
+                            error={errors.startDate}
+                            min={data?.startDate}
+                            max={data?.endDate}
                         />
-                        <PrimaryDate<TeamMemberModel>
+                        <PrimaryDate<ProjectTaskModel>
                             control={control}
-                            name="dateOfBirth"
+                            name="endDate"
                             label="End Date"
-                            error={errors.dateOfBirth}
-                            max={new DateObject().subtract(1, 'days')}
+                            error={errors.endDate}
+                            min={data?.startDate}
+                            max={data?.endDate}
+                        />
+                        <PrimaryInput<ProjectTaskModel>
+                            label="Duration"
+                            name="duration"
+                            error={errors.duration}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                            readonly={true}
                         />
                     </Grid>
+                    <PrimaryRadio
+                        control={control}
+                        error={errors.trackedByHours}
+                        radios={['Track by days', 'Track by hours']}
+                        name="trackedByHours"
+                        flexDir="column"
+                        defaultValue={'Track by days'}
+                    />
+                    {isHours && (
+                        <PrimaryInput<ProjectTaskModel>
+                            label="Duration"
+                            name="durationInHours"
+                            error={errors.durationInHours}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                            // readonly={readonly}
+                        />
+                    )}
 
                     <Box w="full">
                         <FormLabel
@@ -194,19 +282,21 @@ export const AddNewTaskDrawer = ({ onClose, isOpen }) => {
                             Task priority
                         </FormLabel>
                         <CustomSelectBox
-                            data={userOptions}
-                            updateFunction={addUser}
-                            items={selectedUser}
-                            customKeys={{ key: 'id', label: 'fullName' }}
+                            data={priority}
+                            updateFunction={selectPriority}
+                            items={selectedPriority}
+                            customKeys={{ key: 'id', label: 'name' }}
                             id="priority"
+                            error={errors?.taskPriority}
+                            single
                         />
                     </Box>
 
-                    <PrimaryTextarea<TeamMemberModel>
+                    <PrimaryTextarea<ProjectTaskModel>
                         label="Notes"
                         color="#707683"
-                        name="firstName"
-                        error={errors.firstName}
+                        name="note"
+                        error={errors.note}
                         placeholder=""
                         defaultValue=""
                         register={register}

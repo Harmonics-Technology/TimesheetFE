@@ -75,7 +75,11 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                                 );
                             }}
                             format={'DD/MM/YYYY'}
-                            inputClass={'date'}
+                            inputClass={
+                                error?.type === 'required'
+                                    ? 'dateError'
+                                    : 'date'
+                            }
                             containerClassName="dateWrapper"
                             hideOnScroll={isMobile ? false : true}
                             placeholder={placeholder || 'Please select'}

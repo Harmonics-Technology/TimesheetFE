@@ -13,7 +13,7 @@ export const ProgressBar = ({
     bg?: string;
     h?: string;
     barColor?: string;
-    barWidth: number;
+    barWidth: number | undefined| null;
     showProgress?: boolean;
     leftText?: any;
     rightText?: any;

@@ -8,7 +8,15 @@ import { CAD } from '@components/generics/functions/Naira';
 import shadeColor from '@components/generics/functions/shadeColor';
 import moment from 'moment';
 
-export const TopBar = ({ noTitle = false }: { noTitle?: boolean }) => {
+export const TopBar = ({
+    noTitle = false,
+    id,
+    data,
+}: {
+    noTitle?: boolean;
+    id?: any;
+    data?: any;
+}) => {
     return (
         <Box borderBottom={noTitle ? 'none' : '1px solid #e5e5e5'} pb="0rem">
             <Box mb="1.5rem">
@@ -32,22 +40,26 @@ export const TopBar = ({ noTitle = false }: { noTitle?: boolean }) => {
                     'team-members',
                     'budget',
                 ]}
-                id={2}
+                id={id}
             />
             {!noTitle && (
                 <HStack justify="space-between" my="2rem" align="flex-start">
                     <Box>
                         <Text color="#2d3748" fontWeight={600}>
-                            Time Tracking System Project
+                            {data?.name}
                         </Text>
                         <HStack mt=".5rem">
                             <ColoredTag
                                 bg="#afb6e5"
-                                text={moment().format('DD MMM, YYYY')}
+                                text={moment(data?.startDate).format(
+                                    'DD MMM, YYYY',
+                                )}
                             />
                             <ColoredTag
                                 bg="#FFA681"
-                                text={moment().format('DD MMM, YYYY')}
+                                text={moment(data?.endDate).format(
+                                    'DD MMM, YYYY',
+                                )}
                             />
                         </HStack>
                     </Box>
@@ -62,7 +74,7 @@ export const TopBar = ({ noTitle = false }: { noTitle?: boolean }) => {
                         <HStack mt=".5rem">
                             <ColoredTag
                                 bg={shadeColor('#2eafa3', 0.5)}
-                                text={CAD(60000)}
+                                text={CAD(data?.budget)}
                                 h={1.5}
                             />
                         </HStack>

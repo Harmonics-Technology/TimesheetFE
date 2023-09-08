@@ -5,12 +5,18 @@ import React, { useContext } from 'react';
 import { ProgressBar } from '../Generics/ProgressBar';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
+import { ProjectTaskAsigneeView, ProjectView } from 'src/services';
 
-export const ProjectCard = ({ data }: { data: any }) => {
-    const duration = '6 Months';
+export const ProjectCard = ({ data }: { data: ProjectView }) => {
+    const dateDiff = moment(data?.endDate).diff(data?.startDate, 'day');
+    const dateUsed = moment().diff(moment(data?.startDate), 'day');
+    const dateLeft = dateDiff - dateUsed + 1;
+    // const datePercent = Math.round((dateUsed / dateDiff) * 100);
+    // console.log({ dateDiff, dateUsed });
     const router = useRouter();
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
+    // console.log({ data });
     return (
         <Box
             borderRadius=".6rem"
@@ -29,7 +35,7 @@ export const ProjectCard = ({ data }: { data: any }) => {
                         mb="0"
                         fontFamily="Roboto"
                     >
-                        {data?.title}
+                        {data?.name}
                     </Text>
                     <Text
                         fontWeight={400}
@@ -37,7 +43,7 @@ export const ProjectCard = ({ data }: { data: any }) => {
                         mb="0"
                         fontSize=".8rem"
                     >
-                        {data?.desc}
+                        {data?.note}
                     </Text>
                 </Box>
                 <Box
@@ -48,7 +54,7 @@ export const ProjectCard = ({ data }: { data: any }) => {
                     fontSize="0.75rem"
                     my="0.5rem"
                 >
-                    Due Date: {moment().format('Do MMM YYYY')}
+                    Due Date: {moment(data?.endDate).format('Do MMM YYYY')}
                 </Box>
                 <HStack justify="space-between" align="flex-start" w="full">
                     <Text
@@ -60,24 +66,27 @@ export const ProjectCard = ({ data }: { data: any }) => {
                         Budget: {CAD(data?.budget)}
                     </Text>
                     <HStack gap="0">
-                        {data?.users?.map((x: any, i: any) => (
-                            <Avatar
-                                size={'sm'}
-                                name={x?.fullName}
-                                src={x?.url}
-                                border="1px solid white"
-                                transform={`translateX(${-i * 10}px)`}
-                            />
-                        ))}
+                        {data?.assignees
+                            ?.filter((x) => x.projectTaskId == null)
+                            .map((x: ProjectTaskAsigneeView, i: any) => (
+                                <Avatar
+                                    key={x.id}
+                                    size={'sm'}
+                                    name={x?.user?.fullName as string}
+                                    src={x?.user?.profilePicture as string}
+                                    border="1px solid white"
+                                    transform={`translateX(${-i * 10}px)`}
+                                />
+                            ))}
                     </HStack>
                 </HStack>
                 <Box w="full" mt="0.5rem">
                     <ProgressBar
-                        barWidth={50}
+                        barWidth={data.progress}
                         showProgress={true}
                         barColor={'brand.400'}
                         leftText="Progress"
-                        rightText={`${'6 Months'} left`}
+                        rightText={`${dateLeft} days left`}
                     />
                 </Box>
             </VStack>

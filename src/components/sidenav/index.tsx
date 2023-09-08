@@ -16,7 +16,7 @@ import { RiLineChartFill } from 'react-icons/ri';
 import { MdOutlineSupervisorAccount, MdSettings } from 'react-icons/md';
 import { BsGraphUp } from 'react-icons/bs';
 import { AiFillSchedule } from 'react-icons/ai';
-import {TbCalendarTime} from 'react-icons/tb'
+import { TbCalendarTime } from 'react-icons/tb';
 interface sidenavProps {
     openSidenav: boolean;
     setOpenSidenav: any;
@@ -329,6 +329,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             role={role}
                         />
                     )}
+                    <MenuItem
+                        change={change}
+                        linkName="project-management"
+                        menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
                     <MenuItem
                         change={change}
                         linkName="my-profile"

@@ -14,8 +14,9 @@ import { BiSolidPencil } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
 import { TableCard } from '../../Generics/TableCard';
 import { ProgressBar } from '../../Generics/ProgressBar';
+import { ProjectTaskAsigneeView } from 'src/services';
 
-export const SingleTeamMember = () => {
+export const SingleTeamMember = ({ id, teams }: { id: string; teams: any }) => {
     const tableHead = [
         'Task Assigned',
         'Hours spent',
@@ -23,28 +24,33 @@ export const SingleTeamMember = () => {
         'End Date',
         'Progress Status',
     ];
+    console.log({ teams });
+    const userDetails = teams?.value[0];
     return (
         <Box>
-            <TopBar noTitle={true} />
+            <TopBar noTitle={true} id={id} />
             <HStack
                 justify="space-between"
                 pb="1rem"
                 borderBottom="1px solid #e5e5e5"
             >
                 <TitleText
-                    title="Jamila Rufai"
-                    text={'jamila.rufai@sample.com'}
+                    title={userDetails?.user?.fullName}
+                    text={userDetails?.user?.email}
                     fontSize="1rem"
+                    gap=".1rem"
                 />
                 <TitleText
-                    title="40 Hours"
+                    title={`${userDetails?.hoursLogged} Hrs`}
                     text={'Total Logged Hours'}
                     fontSize="1rem"
+                    gap=".1rem"
                 />
                 <TitleText
-                    title="Business Analyst"
+                    title={userDetails?.user?.employeeInformation?.jobTitle}
                     text={'IT Department'}
                     fontSize="1rem"
+                    gap=".1rem"
                 />
             </HStack>
             <Box>
@@ -75,31 +81,44 @@ export const SingleTeamMember = () => {
                     </HStack>
                 </HStack>
                 <TableCard tableHead={tableHead}>
-                    <TableRow>
-                        <TableData
-                            name="Requirement Gathering"
-                            fontWeight="500"
-                        />
-
-                        <TableData name={`${50} Hrs`} fontWeight="500" />
-                        <TableData
-                            name={moment().format('DD/MM/YYYY')}
-                            fontWeight="500"
-                        />
-                        <TableData
-                            name={moment().format('DD/MM/YYYY')}
-                            fontWeight="500"
-                        />
-                        <td>
-                            <ProgressBar
-                                barWidth={100}
-                                showProgress={true}
-                                barColor={'brand.400'}
-                                leftText="Completed"
-                                rightText={`${100}%`}
+                    {teams?.value?.map((team: ProjectTaskAsigneeView) => (
+                        <TableRow key={team.id}>
+                            <TableData
+                                name={team?.projectTask?.name}
+                                fontWeight="500"
                             />
-                        </td>
-                    </TableRow>
+
+                            <TableData
+                                name={`${
+                                    team?.projectTask?.hoursSpent || 0
+                                } Hrs`}
+                                fontWeight="500"
+                            />
+                            <TableData
+                                name={moment(
+                                    team?.projectTask?.startDate,
+                                ).format('DD/MM/YYYY')}
+                                fontWeight="500"
+                            />
+                            <TableData
+                                name={moment(team?.projectTask?.endDate).format(
+                                    'DD/MM/YYYY',
+                                )}
+                                fontWeight="500"
+                            />
+                            <td>
+                                <ProgressBar
+                                    barWidth={team?.projectTask?.progress}
+                                    showProgress={true}
+                                    barColor={'brand.400'}
+                                    leftText={team?.projectTask?.status}
+                                    rightText={`${
+                                        team?.projectTask?.progress || 0
+                                    }%`}
+                                />
+                            </td>
+                        </TableRow>
+                    ))}
                 </TableCard>
             </Box>
         </Box>

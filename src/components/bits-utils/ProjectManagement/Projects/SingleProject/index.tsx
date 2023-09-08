@@ -20,11 +20,11 @@ import { TableBox } from '../../Generics/TableBox';
 import { ChartLargeCard } from '../../Dashboard/ChartLargeCard';
 import { TopBar } from './TopBar';
 
-export const SingleProjectPage = () => {
+export const SingleProjectPage = ({ id, projects }) => {
     const projectSummary = ['Task Name', 'Deadline', 'Team member', 'Workload'];
     return (
         <Box>
-            <TopBar />
+            <TopBar id={id} data={projects} />
 
             <Grid
                 mb="1.25rem"
