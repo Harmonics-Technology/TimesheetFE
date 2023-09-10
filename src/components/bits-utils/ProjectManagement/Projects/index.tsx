@@ -49,33 +49,39 @@ export const ProjectPage = ({
                     Create New Project
                 </Button>
             </Flex>
-            <Grid templateColumns={['repeat(3,1fr)']} my="2rem" w="full">
-                <TabCounts
-                    text="Not Started"
-                    count={counts.notStarted}
-                    onClick={() => filterProjects(1)}
-                />
-                <TabCounts
-                    text="In Progress"
-                    count={counts.inProgress}
-                    onClick={() => filterProjects(2)}
-                />
-                <TabCounts
-                    text="Completed"
-                    count={counts.completed}
-                    onClick={() => filterProjects(3)}
-                />
-            </Grid>
-            <Grid
-                templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
-                my="2rem"
-                w="full"
-                gap="1.5rem"
-            >
-                {projects?.value?.map((x, i) => (
-                    <ProjectCard data={x} key={i} />
-                ))}
-            </Grid>
+            <Box my="2rem">
+                <Grid templateColumns={['repeat(3,1fr)']} w="full" gap=".5rem">
+                    <TabCounts
+                        text="Not Started"
+                        count={counts.notStarted}
+                        onClick={() => filterProjects(1)}
+                        num="1"
+                        active
+                    />
+                    <TabCounts
+                        text="In Progress"
+                        count={counts.inProgress}
+                        onClick={() => filterProjects(2)}
+                        num="2"
+                    />
+                    <TabCounts
+                        text="Completed"
+                        count={counts.completed}
+                        onClick={() => filterProjects(3)}
+                        num="3"
+                    />
+                </Grid>
+                <Grid
+                    templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
+                    my="2rem"
+                    w="full"
+                    gap="1.5rem"
+                >
+                    {projects?.value?.map((x, i) => (
+                        <ProjectCard data={x} key={i} />
+                    ))}
+                </Grid>
+            </Box>
             {isOpen && (
                 <CreateProjectDrawer
                     isOpen={isOpen}

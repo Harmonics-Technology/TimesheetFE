@@ -1,4 +1,4 @@
-import { ProjectPage } from '@components/bits-utils/ProjectManagement/Projects';
+import { ProjectPage } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/ProjectPage';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';

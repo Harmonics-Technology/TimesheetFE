@@ -25,10 +25,10 @@ export const ProjectPage = ({
 
     // console.log({ projects });
     return (
-        <Box>
+        <Box bgColor="white" p="1rem" borderRadius=".6rem">
             <TeamTaskMenu
                 name={[
-                    { name: 'all', id: '', count: 5 },
+                    { name: 'all', id: '', count: 5 , active: true},
                     { name: 'not started', id: 1, count: 5 },
                     { name: 'ongoing', id: 2, count: 5 },
                     { name: 'completed', id: 3, count: 5 },

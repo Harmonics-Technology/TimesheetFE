@@ -248,3 +248,48 @@ select option {
     border: 0;
     outline: 0;
 }
+.rbc-event, .rbc-day-slot .rbc-background-event{
+    border: 1px solid #2eafa3 !important;
+    color: black !important;
+    background-color: white !important;
+    border-radius: 0 !important;
+    font-weight: 500;
+    font-size: .9rem;
+    justify-content: center;
+}
+.rbc-day-slot .rbc-events-container{
+    margin-right: 0px !important;
+}
+.rbc-timeslot-group{
+    min-height: 60px !important;
+}
+.rbc-day-slot .rbc-event-content{
+    height: fit-content !important;
+    flex: unset !important;
+}
+.rbc-label{
+    padding: 0 3.5px !important;
+    display: flex;
+    align-items: flex-end;
+}
+.rbc-allday-cell{
+    display: none;
+}
+.rbc-time-content{
+    border-top: 2px solid #2eafa3 !important;
+}
+.rbc-row{
+    min-height: 45px !important;
+    align-items: center;
+}
+.rbc-header,.rbc-time-header-content{
+    border: 0 !important;
+}
+.rbc-time-view,.rbc-time-header.rbc-overflowing{
+    border-top: 0 !important;
+    border-right: 0 !important;
+    border-left: 0 !important;
+}
+.rbc-button-link{
+    font-weight: 500;
+}

@@ -100,6 +100,7 @@ export type { PaySlipViewPagedCollectionStandardResponse } from './models/PaySli
 export type { ProblemDetails } from './models/ProblemDetails';
 export type { ProjectModel } from './models/ProjectModel';
 export type { ProjectProgressCountView } from './models/ProjectProgressCountView';
+export type { ProjectProgressCountViewListStandardResponse } from './models/ProjectProgressCountViewListStandardResponse';
 export type { ProjectProgressCountViewStandardResponse } from './models/ProjectProgressCountViewStandardResponse';
 export { ProjectStatus } from './models/ProjectStatus';
 export type { ProjectSubTaskModel } from './models/ProjectSubTaskModel';

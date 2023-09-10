@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { ProjectModel } from '../models/ProjectModel';
+import type { ProjectProgressCountViewListStandardResponse } from '../models/ProjectProgressCountViewListStandardResponse';
 import type { ProjectProgressCountViewStandardResponse } from '../models/ProjectProgressCountViewStandardResponse';
 import type { ProjectStatus } from '../models/ProjectStatus';
 import type { ProjectSubTaskModel } from '../models/ProjectSubTaskModel';
@@ -295,6 +296,26 @@ superAdminId?: string,
             url: '/api/ProjectManagement/project/status-count',
             query: {
                 'superAdminId': superAdminId,
+            },
+        });
+    }
+
+    /**
+     * @param userId 
+     * @param date 
+     * @returns ProjectProgressCountViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static listUserProjectTimesheet(
+userId?: string,
+date?: string,
+): CancelablePromise<ProjectProgressCountViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/user-timesheets',
+            query: {
+                'userId': userId,
+                'date': date,
             },
         });
     }

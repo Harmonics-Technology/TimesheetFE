@@ -322,105 +322,107 @@ export const LeaveManagement = ({
                 </Tables>
                 <Pagination data={leavelist} />
             </Box>
-            <DrawerWrapper
-                onClose={onClose}
-                isOpen={isOpen}
-                title={'Leave Application'}
-            >
-                <ActivateUserAlert
-                    desc={`PS: You have ${leaveDaysLeft} days free leave.`}
-                    color="warning"
-                />
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <SelectrixBox<LeaveModel>
-                        control={control}
-                        name="leaveTypeId"
-                        error={errors.leaveTypeId}
-                        keys="name"
-                        keyLabel="leaveTypeIcon"
-                        label="Leave Type"
-                        options={leavetypes?.value}
-                        renderOption={(option, index) => {
-                            // console.log({ option });
-                            return (
-                                <Flex key={index} gap=".4rem">
-                                    <IconPickerItem
-                                        value={option.label}
-                                        color="#2EAFA3"
-                                    />
-                                    {option.key}
-                                </Flex>
-                            );
-                        }}
-                        renderSelection={(selected, settings, deselect) => {
-                            // console.log({ selected });
-                            return (
-                                <Box className="react-selectrix rs-toggle">
-                                    <Flex gap=".4rem">
-                                        <IconPickerItem
-                                            value={selected?.label}
-                                            color="#2EAFA3"
-                                        />
-                                        {selected?.key || 'Select a type'}
-                                    </Flex>
-                                </Box>
-                            );
-                        }}
+            {isOpen && (
+                <DrawerWrapper
+                    onClose={onClose}
+                    isOpen={isOpen}
+                    title={'Leave Application'}
+                >
+                    <ActivateUserAlert
+                        desc={`PS: You have ${leaveDaysLeft} days free leave.`}
+                        color="warning"
                     />
-
-                    <Grid
-                        templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
-                        gap="1rem 2rem"
-                        mt="1.5rem"
-                    >
-                        <PrimaryDate<LeaveModel>
-                            control={control}
-                            name="startDate"
-                            label={oneDay ? 'Leave Date' : 'Start Date'}
-                            error={errors.startDate}
-                            min={new DateObject().add(3, 'days')}
-                            disableWeekend
-                        />
-                        {!oneDay && (
-                            <PrimaryDate<LeaveModel>
-                                control={control}
-                                name="endDate"
-                                label="End Date"
-                                error={errors.endDate}
-                                min={new DateObject().add(4, 'days')}
-                                disableWeekend
-                            />
-                        )}
-                    </Grid>
-                    <Checkbox
-                        size="sm"
-                        mb="1.5rem"
-                        onChange={(e) => setOneDay(e.target.checked)}
-                    >
-                        One day only
-                    </Checkbox>
-                    <VStack gap="1rem">
-                        <PrimaryTextarea<LeaveModel>
-                            label="Reason for leave"
-                            name="reasonForLeave"
-                            error={errors.reasonForLeave}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                        />
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <SelectrixBox<LeaveModel>
                             control={control}
-                            name="workAssigneeId"
-                            error={errors.workAssigneeId}
-                            keys="id"
-                            keyLabel="fullName"
-                            label="Work Assignee"
-                            options={teamMembers?.data?.value.filter(
-                                (x) => x.id !== id,
-                            )}
-                            searchable
+                            name="leaveTypeId"
+                            error={errors.leaveTypeId}
+                            keys="name"
+                            keyLabel="leaveTypeIcon"
+                            label="Leave Type"
+                            options={leavetypes?.value}
+                            renderOption={(option, index) => {
+                                // console.log({ option });
+                                return (
+                                    <Flex key={index} gap=".4rem">
+                                        <IconPickerItem
+                                            value={option.label}
+                                            color="#2EAFA3"
+                                        />
+                                        {option.key}
+                                    </Flex>
+                                );
+                            }}
+                            renderSelection={(selected, settings, deselect) => {
+                                // console.log({ selected });
+                                return (
+                                    <Box className="react-selectrix rs-toggle">
+                                        <Flex gap=".4rem">
+                                            <IconPickerItem
+                                                value={selected?.label}
+                                                color="#2EAFA3"
+                                            />
+                                            {selected?.key || 'Select a type'}
+                                        </Flex>
+                                    </Box>
+                                );
+                            }}
                         />
-                        {/* {role != 'TeamMember' && (
+
+                        <Grid
+                            templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
+                            gap="1rem 2rem"
+                            mt="1.5rem"
+                        >
+                            <PrimaryDate<LeaveModel>
+                                control={control}
+                                name="startDate"
+                                label={oneDay ? 'Leave Date' : 'Start Date'}
+                                error={errors.startDate}
+                                min={new DateObject().add(3, 'days')}
+                                disableWeekend
+                            />
+                            {!oneDay && (
+                                <PrimaryDate<LeaveModel>
+                                    control={control}
+                                    name="endDate"
+                                    label="End Date"
+                                    error={errors.endDate}
+                                    min={new DateObject().add(4, 'days')}
+                                    disableWeekend
+                                />
+                            )}
+                        </Grid>
+                        <Checkbox
+                            size="sm"
+                            mb="1.5rem"
+                            onChange={(e) => setOneDay(e.target.checked)}
+                        >
+                            One day only
+                        </Checkbox>
+                        <VStack gap="1rem">
+                            <PrimaryTextarea<LeaveModel>
+                                label="Reason for leave"
+                                name="reasonForLeave"
+                                error={errors.reasonForLeave}
+                                placeholder=""
+                                defaultValue=""
+                                register={register}
+                                color="#323232"
+                            />
+                            <SelectrixBox<LeaveModel>
+                                control={control}
+                                name="workAssigneeId"
+                                error={errors.workAssigneeId}
+                                keys="id"
+                                keyLabel="fullName"
+                                label="Work Assignee"
+                                options={teamMembers?.data?.value.filter(
+                                    (x) => x.id !== id,
+                                )}
+                                searchable
+                            />
+                            {/* {role != 'TeamMember' && (
                             <SelectrixBox<LeaveModel>
                                 control={control}
                                 name="invoiceGenerationFrequency"
@@ -432,39 +434,48 @@ export const LeaveManagement = ({
                                 searchable
                             />
                         )} */}
-                    </VStack>
+                        </VStack>
 
-                    <DrawerFooter mt="2rem" p="0">
-                        <Flex justify="space-between" w="full">
-                            <Button
-                                bgColor="#FF5B79"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                px="2rem"
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                onClick={() => onClose()}
-                            >
-                                Close
-                            </Button>
-                            <Button
-                                bgColor="brand.400"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                px="2rem"
-                                type="submit"
-                                isLoading={isSubmitting}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                <Box>Apply</Box>
-                            </Button>
-                        </Flex>
-                    </DrawerFooter>
-                </form>
-            </DrawerWrapper>
-            <ShowLeaveDetailsModal isOpen={open} onClose={close} data={data} />
+                        <DrawerFooter mt="2rem" p="0">
+                            <Flex justify="space-between" w="full">
+                                <Button
+                                    bgColor="#FF5B79"
+                                    color="white"
+                                    height="3rem"
+                                    fontSize="14px"
+                                    px="2rem"
+                                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                    onClick={() => onClose()}
+                                >
+                                    Close
+                                </Button>
+                                <Button
+                                    bgColor="brand.400"
+                                    color="white"
+                                    height="3rem"
+                                    fontSize="14px"
+                                    px="2rem"
+                                    type="submit"
+                                    isLoading={isSubmitting}
+                                    spinner={
+                                        <BeatLoader color="white" size={10} />
+                                    }
+                                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                >
+                                    <Box>Apply</Box>
+                                </Button>
+                            </Flex>
+                        </DrawerFooter>
+                    </form>
+                </DrawerWrapper>
+            )}
+            {open && (
+                <ShowLeaveDetailsModal
+                    isOpen={open}
+                    onClose={close}
+                    data={data}
+                />
+            )}
         </>
     );
 };

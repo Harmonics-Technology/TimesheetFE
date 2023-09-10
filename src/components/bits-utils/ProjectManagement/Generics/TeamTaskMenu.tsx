@@ -21,11 +21,13 @@ export const TeamTaskMenu = ({ name }) => {
             align="center"
             w="full"
             borderBottom="2px solid #e5e5e5"
+            gap="1.5rem"
         >
             {name.map((x: any) => {
-                const isActive = router.pathname.startsWith(
-                    `/${role}/project-management/${x.id}`,
-                );
+                const isActive =
+                    router.query.status !== undefined
+                        ? router.query.status == x.id
+                        : x.active;
                 return (
                     <Flex
                         borderBottom={isActive ? '2px solid' : 'none'}
@@ -36,7 +38,7 @@ export const TeamTaskMenu = ({ name }) => {
                         textTransform="capitalize"
                         fontSize=".87rem"
                         cursor="pointer"
-                        onClick={() => () => filterProjects(x.id)}
+                        onClick={() => filterProjects(x.id)}
                     >
                         {x.name}
                         <Flex
