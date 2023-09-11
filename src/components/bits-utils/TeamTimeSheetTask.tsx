@@ -12,7 +12,7 @@ import moment from 'moment';
 import { LiaAngleLeftSolid, LiaAngleRightSolid } from 'react-icons/lia';
 import { FillTimesheetModal } from './FillTimesheetModal';
 import { CustomSelectBox } from './ProjectManagement/Generics/CustomSelectBox';
-import { ProjectManagementService, ProjectTimesheetView } from 'src/services';
+import { ProjectManagementService } from 'src/services';
 import Loading from './Loading';
 
 const localizer = momentLocalizer(moment);
