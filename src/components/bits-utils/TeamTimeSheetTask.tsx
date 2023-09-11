@@ -83,7 +83,7 @@ const TeamTimeSheetTask = ({
         },
     ];
 
-    const EventList = allShift?.data?.map((obj: ProjectTimesheetView) => {
+    const EventList = allShift?.data?.map((obj: any) => {
         return {
             id: obj.id,
             title: obj.project?.name,
