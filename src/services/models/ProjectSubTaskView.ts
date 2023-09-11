@@ -10,6 +10,7 @@ export type ProjectSubTaskView = {
     id?: string;
     projectTaskId?: string;
     projectTask?: ProjectTaskView;
+    name?: string | null;
     projectTaskAsigneeId?: string;
     projectTaskAsignee?: ProjectTaskAsigneeView;
     startDate?: string;

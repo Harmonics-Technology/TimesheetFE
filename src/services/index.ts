@@ -98,6 +98,7 @@ export type { PaySlipView } from './models/PaySlipView';
 export type { PaySlipViewPagedCollection } from './models/PaySlipViewPagedCollection';
 export type { PaySlipViewPagedCollectionStandardResponse } from './models/PaySlipViewPagedCollectionStandardResponse';
 export type { ProblemDetails } from './models/ProblemDetails';
+export type { ProjectMetrics } from './models/ProjectMetrics';
 export type { ProjectModel } from './models/ProjectModel';
 export type { ProjectProgressCountView } from './models/ProjectProgressCountView';
 export type { ProjectProgressCountViewListStandardResponse } from './models/ProjectProgressCountViewListStandardResponse';

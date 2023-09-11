@@ -205,10 +205,7 @@ export const SingleTask = ({
                     <TableCard tableHead={tableHead}>
                         {tasks?.value?.map((x: ProjectSubTaskView) => (
                             <TableRow key={x.id}>
-                                <TableData
-                                    name={x?.projectTask?.name}
-                                    fontWeight="500"
-                                />
+                                <TableData name={x?.name} fontWeight="500" />
                                 <td style={{ maxWidth: '300px' }}>
                                     <HStack
                                         color="#c2cfe0"

@@ -30,14 +30,18 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         const id = JSON.parse(ctx.req.cookies.user).id;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const employeeId = JSON.parse(
             ctx.req.cookies.user,
         ).employeeInformationId;
         try {
-            const expenseType = await SettingsService.listExpenseTypes();
+            const expenseType = await SettingsService.listExpenseTypes(
+                superAdminId,
+            );
             const data = await FinancialService.listExpenses(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 employeeId,
                 pagingOptions.search,
                 pagingOptions.from,

@@ -8,6 +8,9 @@ import {
     Button,
     useToast,
     Checkbox,
+    Icon,
+    HStack,
+    Divider,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -25,6 +28,9 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { UserContext } from '@components/context/UserContext';
 import { OpenAPI, UserService, UserViewStandardResponse } from 'src/services';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { useIsAuthenticated, useMsal } from '@azure/msal-react';
+import { AuthError, InteractionStatus } from '@azure/msal-browser';
+import { BsMicrosoft } from 'react-icons/bs';
 
 const schema = yup.object().shape({
     email: yup.string().required('Email is required'),
@@ -38,6 +44,9 @@ function Login() {
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [rememberedData, setRememberedData] = useState<any>();
     const [rememberMe, setRememberMe] = useState(rememberedData?.rememberMe);
+    const [error, setError] = useState('');
+    const msal = useMsal();
+
     // console.log({ rememberedData, rememberMe });
     const changeInputType = () => {
         setPasswordVisible(!passwordVisible);
@@ -115,6 +124,21 @@ function Login() {
         }
     };
     // console.log(watch('email'), watch('password'));
+    const authenticate = async () => {
+        try {
+            const result = await msal.instance.loginPopup();
+            console.log('Home Account id:', result.account?.homeAccountId);
+            msal.instance.setActiveAccount(result.account);
+            console.log({ result });
+            // Cookies.set('token', result.data.token as string, {
+            //     // expires: expiresIn,
+            // });
+            setError('');
+        } catch (ex) {
+            const authEx = ex as AuthError;
+            setError(authEx.message);
+        }
+    };
 
     useEffect(() => {
         const isUser = Cookies.get('details');
@@ -127,6 +151,7 @@ function Login() {
             });
         }
     }, []);
+
     return (
         <Flex w="full" h="100vh" justify="center" alignItems="center">
             <Box
@@ -134,7 +159,7 @@ function Login() {
                 mx="auto"
                 boxShadow={['0', '0 20px 27px 0 rgb(0 0 0 / 10%)']}
                 h={['auto', 'auto']}
-                p="1rem 3rem 4rem"
+                p="1rem 3rem 2rem"
             >
                 <Box display="flex" justifyContent="center" w="full" my="2rem">
                     <Image src="/assets/newlogo.png" h="3rem" />
@@ -187,6 +212,7 @@ function Login() {
                         >
                             Login
                         </Button>
+
                         <Flex w="full" justify="space-between">
                             <Checkbox
                                 alignItems="center"
@@ -205,6 +231,44 @@ function Login() {
                                     Forgot Password?
                                 </Link>
                             </NextLink>
+                        </Flex>
+
+                        <Flex
+                            color="gray.400"
+                            fontSize=".9rem"
+                            align="center"
+                            w="full"
+                            gap="2rem"
+                        >
+                            <Divider bgColor="gray.400" />
+                            OR
+                            <Divider bgColor="gray.400" />
+                        </Flex>
+                        <Flex
+                            // justify="center"
+
+                            w="80%"
+                            my="1rem"
+                            cursor="pointer"
+                            onClick={authenticate}
+                            bgColor="blackAlpha.800"
+                            color="white"
+                            h="2.8rem"
+                            p=".1rem"
+                        >
+                            <Flex
+                                h="full"
+                                w="3rem"
+                                bgColor="white"
+                                align="center"
+                                justify="center"
+                                fontSize="1.5rem"
+                            >
+                                <Icon as={BsMicrosoft} color="black" />
+                            </Flex>
+                            <Text p=".7rem 1rem" fontSize=".9rem">
+                                Sign in with Microsoft
+                            </Text>
                         </Flex>
                     </VStack>
                 </form>

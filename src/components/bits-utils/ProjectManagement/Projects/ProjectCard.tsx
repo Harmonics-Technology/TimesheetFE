@@ -22,6 +22,7 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
             borderRadius=".6rem"
             bgColor="white"
             padding="1.5rem 1.5rem"
+            border="1px solid #C2CFE0"
             cursor="pointer"
             onClick={() =>
                 router.push(`/${role}/project-management/projects/${data?.id}`)

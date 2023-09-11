@@ -9,6 +9,7 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
+    Spinner,
     Text,
     VStack,
     useToast,
@@ -17,11 +18,7 @@ import React, { useEffect, useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { ShiftBtn } from './ShiftBtn';
 import { SelectrixBox } from './Selectrix';
-import {
-    ProjectManagementService,
-    ProjectTimesheetModel,
-    ShiftService,
-} from 'src/services';
+import { ProjectManagementService, ProjectTimesheetModel } from 'src/services';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -31,16 +28,27 @@ import useComponentVisible from '@components/generics/useComponentVisible';
 import { CustomDateTime } from './CustomDateTime';
 import { ProgressSlider } from './ProgressSlider';
 import { DateObject } from 'react-multi-date-picker';
+import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
 
 interface ExportProps {
     isOpen: any;
     onClose: any;
     data?: any;
+    superAdminId?: any;
+    userId?: any;
+    projectId?: any;
 }
 
 const schema = yup.object().shape({});
 
-export const FillTimesheetModal = ({ isOpen, onClose }: ExportProps) => {
+export const FillTimesheetModal = ({
+    isOpen,
+    onClose,
+    data,
+    superAdminId,
+    userId,
+    projectId,
+}: ExportProps) => {
     const {
         handleSubmit,
         control,
@@ -58,15 +66,15 @@ export const FillTimesheetModal = ({ isOpen, onClose }: ExportProps) => {
     const [endDate, setendDate] = useState<any>(new DateObject());
     const [isBillable, setisBillable] = useState<any>();
     const [loading, setLoading] = useState<any>();
-    const {
-        ref: startRef,
-        isComponentVisible: startVisible,
-        setIsComponentVisible: startIsVisible,
-    } = useComponentVisible(false);
+
     const [sliderValue, setSliderValue] = useState(0);
 
     const onSubmit = async (data: ProjectTimesheetModel) => {
         console.log({ data });
+        data.projectId = projectId;
+        data.projectTaskAsigneeId = subTasks.filter(
+            (x) => x.id == data.projectSubTaskId,
+        )[0]?.projectTaskAsigneeId;
         try {
             const result =
                 await ProjectManagementService.fillTimesheetForProject(data);
@@ -99,10 +107,10 @@ export const FillTimesheetModal = ({ isOpen, onClose }: ExportProps) => {
     };
 
     useEffect(() => {
-        setValue('startDate', startDate?.format('DD/MM/YYYY HH:mm:ss'));
+        setValue('startDate', startDate);
     }, [startDate]);
     useEffect(() => {
-        setValue('endDate', endDate?.format('DD/MM/YYYY HH:mm:ss'));
+        setValue('endDate', endDate);
     }, [endDate]);
     useEffect(() => {
         setValue('percentageOfCompletion', sliderValue);
@@ -110,6 +118,68 @@ export const FillTimesheetModal = ({ isOpen, onClose }: ExportProps) => {
     useEffect(() => {
         setValue('billable', isBillable);
     }, [isBillable]);
+
+    console.log({ startDate: watch('startDate') });
+
+    const newData = [
+        ...(data || []),
+        { id: 'operational', name: 'Operational Task' },
+    ];
+    const taskId = watch('projectTaskId');
+    const [subTasks, setSubTasks] = useState<any>([]);
+    const [err, setErr] = useState<any>([]);
+    const [operationalTasks, setOperationalTasks] = useState<any>([]);
+    useNonInitialEffect(() => {
+        async function getTasks() {
+            setLoading(true);
+            if (taskId == 'operational') {
+                try {
+                    const res =
+                        await ProjectManagementService.listOperationalTasks(
+                            0,
+                            25,
+                            superAdminId,
+                            2,
+                            userId,
+                        );
+                    if (res?.status) {
+                        setOperationalTasks(res?.data?.value);
+                        setLoading(false);
+                        return;
+                    }
+                    setErr(res?.message);
+                    setLoading(false);
+                } catch (error: any) {
+                    console.log({ error });
+                    setErr(error?.body?.message || error?.message);
+                    setLoading(false);
+                }
+                return;
+            }
+            try {
+                const res = await ProjectManagementService.listSubTasks(
+                    0,
+                    25,
+                    taskId as string,
+                    2,
+                );
+                if (res?.status) {
+                    setSubTasks(res?.data?.value);
+                    setLoading(false);
+                    return;
+                }
+                setErr(res?.message);
+                setLoading(false);
+            } catch (error: any) {
+                console.log({ error });
+                setErr(error?.body?.message || error?.message);
+                setLoading(false);
+            }
+        }
+        getTasks();
+    }, [taskId]);
+
+    console.log({ subTasks, operationalTasks });
     return (
         <Modal
             isOpen={isOpen}
@@ -132,6 +202,15 @@ export const FillTimesheetModal = ({ isOpen, onClose }: ExportProps) => {
                 maxW="100%"
             >
                 <ModalHeader textAlign="center">
+                    <Box mb="1rem">
+                        {loading ? (
+                            <Spinner size={'sm'} />
+                        ) : err ? (
+                            <Text fontSize=".8rem" color="red.300">
+                                {err}
+                            </Text>
+                        ) : null}
+                    </Box>
                     <Flex justify="space-between">
                         <Text
                             color="black"
@@ -147,7 +226,7 @@ export const FillTimesheetModal = ({ isOpen, onClose }: ExportProps) => {
 
                 <ModalBody>
                     <Box maxH="77vh" overflowY="auto" px={[2, 5]}>
-                        <Loading loading={loading} />
+                        {/* <Loading loading={loading} /> */}
                         <form>
                             <VStack
                                 align="flex-start"
@@ -163,10 +242,34 @@ export const FillTimesheetModal = ({ isOpen, onClose }: ExportProps) => {
                                     label="Project Task"
                                     error={errors.projectTaskId}
                                     keys="id"
-                                    keyLabel="start"
-                                    options={[]}
+                                    keyLabel="name"
+                                    options={newData}
                                     placeholder={'Select a task'}
                                 />
+                                {subTasks.length > 0 && (
+                                    <SelectrixBox<ProjectTimesheetModel>
+                                        control={control}
+                                        name="projectSubTaskId"
+                                        label="Sub Task"
+                                        error={errors.projectSubTaskId}
+                                        keys="id"
+                                        keyLabel="name"
+                                        options={subTasks}
+                                        placeholder={'Select a subTask'}
+                                    />
+                                )}
+                                {operationalTasks.length > 0 && (
+                                    <SelectrixBox<ProjectTimesheetModel>
+                                        control={control}
+                                        name="projectTaskId"
+                                        label="Operational Task"
+                                        error={errors.projectTaskId}
+                                        keys="id"
+                                        keyLabel="name"
+                                        options={operationalTasks}
+                                        placeholder={'Select operational task'}
+                                    />
+                                )}
                                 <CustomDateTime
                                     onChange={setstartDate}
                                     value={startDate}

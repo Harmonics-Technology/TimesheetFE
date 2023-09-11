@@ -71,6 +71,7 @@ export function TableData({
     fontWeight = '400',
     customColor,
     breakWord,
+    onClick,
 }: {
     name: any;
     border?: boolean | undefined;
@@ -81,6 +82,7 @@ export function TableData({
     fontWeight?: string;
     customColor?: any;
     breakWord?: any;
+    onClick?: any;
 }) {
     return (
         <Td
@@ -92,6 +94,8 @@ export function TableData({
             fontWeight={fontWeight}
             maxW={breakWord ? '150px' : 'unset'}
             textTransform="capitalize"
+            onClick={onClick}
+            cursor="pointer"
             // textOverflow=""
             // overflow="hidden"
             // noOfLines={1}
@@ -224,7 +228,7 @@ export function NewTableState({
     name: string | undefined | null;
     color: any;
 }) {
-    console.log({ color });
+    // console.log({ color });
     return (
         <td>
             <Box

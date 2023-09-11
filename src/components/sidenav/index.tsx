@@ -67,7 +67,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             overflowY="auto"
             boxShadow="sm"
         >
-            <Link href="/" passHref>
+            <Link href={`/${role}/dashboard`} passHref>
                 <HStack>
                     <Box h="2rem">
                         {change ? (

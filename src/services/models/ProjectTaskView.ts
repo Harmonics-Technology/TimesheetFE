@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ProjectSubTaskView } from './ProjectSubTaskView';
 import type { ProjectTaskAsigneeView } from './ProjectTaskAsigneeView';
 
 export type ProjectTaskView = {
@@ -20,4 +21,5 @@ export type ProjectTaskView = {
     status?: string | null;
     progress?: number | null;
     assignees?: Array<ProjectTaskAsigneeView> | null;
+    subTasks?: Array<ProjectSubTaskView> | null;
 };

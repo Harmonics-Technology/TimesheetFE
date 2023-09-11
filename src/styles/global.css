@@ -280,10 +280,10 @@ select option {
 }
 .rbc-row{
     min-height: 45px !important;
-    align-items: center;
 }
 .rbc-header,.rbc-time-header-content{
     border: 0 !important;
+    
 }
 .rbc-time-view,.rbc-time-header.rbc-overflowing{
     border-top: 0 !important;
@@ -293,3 +293,11 @@ select option {
 .rbc-button-link{
     font-weight: 500;
 }
+.rbc-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* .rbc-current-time-indicator{
+    display: none !important;
+} */

@@ -104,7 +104,7 @@ export const CustomSelectBox = ({
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <Text noOfLines={1} mb="0" color="#8c8c8c" fontSize=".8rem">
-                        {selectedItems ||  placeholder}
+                        {selectedItems || placeholder}
                     </Text>
                     <Icon
                         as={MdOutlineArrowDropDown}

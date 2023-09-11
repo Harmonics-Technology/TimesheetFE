@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Text, useDisclosure } from '@chakra-ui/react';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import {
@@ -12,7 +12,8 @@ import moment from 'moment';
 import { LiaAngleLeftSolid, LiaAngleRightSolid } from 'react-icons/lia';
 import { FillTimesheetModal } from './FillTimesheetModal';
 import { CustomSelectBox } from './ProjectManagement/Generics/CustomSelectBox';
-import { ProjectTimesheetView } from 'src/services';
+import { ProjectManagementService, ProjectTimesheetView } from 'src/services';
+import Loading from './Loading';
 
 const localizer = momentLocalizer(moment);
 
@@ -20,16 +21,52 @@ interface shiftProps {
     allShift: any;
     id: string;
     allProjects: any;
+    superAdminId: any;
 }
 
-const TeamTimeSheetTask = ({ allShift, id, allProjects }: shiftProps) => {
-    // console.log({ allShift, id, allProjects });
+const TeamTimeSheetTask = ({
+    allShift,
+    id,
+    allProjects,
+    superAdminId,
+}: shiftProps) => {
+    console.log({ allShift, id, allProjects });
+
+    const [tasks, setTasks] = useState<any>();
+    const [loading, setLoading] = useState<any>();
+    const [selectedProject, setSelectedProject] = useState<any>();
+    const addProject = (user) => {
+        setSelectedProject(user);
+        async function getTasks() {
+            setLoading(true);
+            try {
+                const res = await ProjectManagementService.listTasks(
+                    0,
+                    25,
+                    superAdminId,
+                    user?.id,
+                    2,
+                    id,
+                );
+                if (res?.status) {
+                    setLoading(false);
+                    setTasks(res?.data?.value);
+                    return;
+                }
+            } catch (error) {
+                console.log({ error });
+                setLoading(false);
+            }
+        }
+        getTasks();
+    };
+
     const DemoData = [
         {
             id: 0,
             title: 'All Day Event very long title',
-            start: new Date(2015, 3, 1, 9, 30, 0),
-            end: new Date(2015, 3, 1, 12, 0, 0),
+            start: new Date('2023/09/11 10:30'),
+            end: new Date(2023, 8, 11, 12, 0, 0),
         },
         {
             id: 1,
@@ -41,21 +78,31 @@ const TeamTimeSheetTask = ({ allShift, id, allProjects }: shiftProps) => {
         {
             id: 2,
             title: 'DTS STARTS',
-            start: new Date(2016, 2, 13, 0, 0, 0),
-            end: new Date(2016, 2, 20, 0, 0, 0),
+            start: new Date(2015, 3, 4, 10, 0, 0),
+            end: new Date(2015, 3, 4, 12, 14, 0),
         },
     ];
 
     const EventList = allShift?.data?.map((obj: ProjectTimesheetView) => {
         return {
             id: obj.id,
-            title: obj.projectId,
-            start: obj.startDate,
-            end: obj.endDate,
+            title: obj.project?.name,
+            start: new Date(obj.startDate as string),
+            end: new Date(obj.endDate as string),
         };
     });
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [data, setData] = useState<any>();
+    function openModal() {
+        // if (!tasks) {
+
+        //     alert('select a project to continue');
+        //     return;
+        // }
+        setData(tasks);
+        onOpen();
+    }
     function ViewNamesGroup({ views: viewNames, view, messages, onView }) {
         return viewNames.map((name) => (
             <Button
@@ -128,7 +175,7 @@ const TeamTimeSheetTask = ({ allShift, id, allProjects }: shiftProps) => {
                     justify="center"
                     fontSize=".8rem"
                     cursor="pointer"
-                    onClick={onOpen}
+                    onClick={openModal}
                 >
                     Fill my timesheet
                 </Flex>
@@ -171,7 +218,7 @@ const TeamTimeSheetTask = ({ allShift, id, allProjects }: shiftProps) => {
 
     const { defaultDate, formats, views } = useMemo(
         () => ({
-            defaultDate: new Date(2015, 3, 1),
+            defaultDate: new Date(),
             formats: {
                 dayFormat: (date, culture, localizer) =>
                     localizer.format(date, 'ddd', culture),
@@ -187,43 +234,56 @@ const TeamTimeSheetTask = ({ allShift, id, allProjects }: shiftProps) => {
         [],
     );
 
+    // console.log({ selectedProject, tasks });
     return (
         <>
+            <Loading loading={loading} />
             <Box w="full" borderBottom="1px solid #c2cfe0">
                 <Box w="40%" mb="2rem">
                     <Text fontSize=".8rem" fontWeight={500} mb=".3rem">
                         Projects
                     </Text>
                     <CustomSelectBox
-                        placeholder={'ERP Projects'}
+                        placeholder={'Select a project'}
                         customKeys={{
                             key: 'id',
-                            label: 'label',
+                            label: 'name',
                         }}
-                        data={[{ id: 'any', label: 'any' }]}
-                        items={[]}
-                        updateFunction={void 0}
+                        data={allProjects?.data?.value}
+                        items={selectedProject}
+                        updateFunction={addProject}
+                        single
+                        id="Projects"
                     />
                 </Box>
             </Box>
             <Box>
                 <Calendar
                     localizer={localizer}
-                    events={DemoData}
+                    events={EventList}
                     // startAccessor="start"
                     // endAccessor="end"
                     style={{ height: 500 }}
                     defaultView={Views.WEEK}
                     components={components}
                     defaultDate={defaultDate}
-                    min={moment('9 am', 'h a').toDate()}
+                    min={moment('8 am', 'h a').toDate()}
                     max={moment('9 pm', 'h a').toDate()}
                     formats={formats}
                     views={views}
                 />
             </Box>
 
-            {isOpen && <FillTimesheetModal isOpen={isOpen} onClose={onClose} />}
+            {isOpen && (
+                <FillTimesheetModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    data={data}
+                    superAdminId={superAdminId}
+                    userId={id}
+                    projectId={selectedProject?.id}
+                />
+            )}
         </>
     );
 };

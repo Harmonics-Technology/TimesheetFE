@@ -14,5 +14,7 @@ export type ProjectTaskAsigneeView = {
     projectTaskId?: string | null;
     projectTask?: ProjectTaskView;
     hoursLogged?: number;
+    budget?: number;
+    budgetSpent?: number;
     subTasks?: Array<ProjectSubTaskView> | null;
 };

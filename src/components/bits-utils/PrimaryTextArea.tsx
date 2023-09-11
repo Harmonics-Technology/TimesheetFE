@@ -65,7 +65,7 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
     return (
         <>
             <FormControl isInvalid={!!error}>
-                <FormLabel color={color || 'brand.100'} fontSize=".8rem">
+                <FormLabel color={color || '#33333'} fontSize=".8rem" mt="1rem">
                     {label}
                 </FormLabel>
                 <Textarea

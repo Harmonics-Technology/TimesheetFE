@@ -56,12 +56,16 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 'Team Member',
                 superAdminId,
             );
-            const expenseType = await SettingsService.listExpenseTypes();
+            const expenseType = await SettingsService.listExpenseTypes(
+                superAdminId,
+            );
             const data = await FinancialService.listAllApprovedExpenses(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
                 pagingOptions.search,
+                pagingOptions.from,
+                pagingOptions.to,
             );
             // const data = await SettingsService.listExpenseTypes();
 

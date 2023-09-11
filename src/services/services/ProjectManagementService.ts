@@ -92,6 +92,7 @@ requestBody?: ProjectTimesheetModel,
      * @param limit 
      * @param superAdminId 
      * @param status 
+     * @param userId 
      * @param search 
      * @returns ProjectViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -101,6 +102,7 @@ offset?: number,
 limit?: number,
 superAdminId?: string,
 status?: ProjectStatus,
+userId?: string,
 search?: string,
 ): CancelablePromise<ProjectViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -111,6 +113,7 @@ search?: string,
                 'Limit': limit,
                 'superAdminId': superAdminId,
                 'status': status,
+                'userId': userId,
                 'search': search,
             },
         });
@@ -122,6 +125,7 @@ search?: string,
      * @param superAdminId 
      * @param projectId 
      * @param status 
+     * @param userId 
      * @param search 
      * @returns ProjectTaskViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -132,6 +136,7 @@ limit?: number,
 superAdminId?: string,
 projectId?: string,
 status?: ProjectStatus,
+userId?: string,
 search?: string,
 ): CancelablePromise<ProjectTaskViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -143,6 +148,7 @@ search?: string,
                 'superAdminId': superAdminId,
                 'projectId': projectId,
                 'status': status,
+                'userId': userId,
                 'search': search,
             },
         });
@@ -153,6 +159,7 @@ search?: string,
      * @param limit 
      * @param superAdminId 
      * @param status 
+     * @param userId 
      * @param search 
      * @returns ProjectTaskViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -162,6 +169,7 @@ offset?: number,
 limit?: number,
 superAdminId?: string,
 status?: ProjectStatus,
+userId?: string,
 search?: string,
 ): CancelablePromise<ProjectTaskViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -172,6 +180,7 @@ search?: string,
                 'Limit': limit,
                 'superAdminId': superAdminId,
                 'status': status,
+                'userId': userId,
                 'search': search,
             },
         });
@@ -302,20 +311,52 @@ superAdminId?: string,
 
     /**
      * @param userId 
-     * @param date 
+     * @param startDate 
+     * @param endDate 
      * @returns ProjectProgressCountViewListStandardResponse Success
      * @throws ApiError
      */
     public static listUserProjectTimesheet(
 userId?: string,
-date?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<ProjectProgressCountViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/ProjectManagement/user-timesheets',
             query: {
                 'userId': userId,
-                'date': date,
+                'startDate': startDate,
+                'endDate': endDate,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param superAdminId 
+     * @param projectId 
+     * @param search 
+     * @returns ProjectTaskAsigneeViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listProjectAssigneeTasks(
+offset?: number,
+limit?: number,
+superAdminId?: string,
+projectId?: string,
+search?: string,
+): CancelablePromise<ProjectTaskAsigneeViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/project-assignee-tasks',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'superAdminId': superAdminId,
+                'projectId': projectId,
+                'search': search,
             },
         });
     }

@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ProjectMetrics } from './ProjectMetrics';
 import type { ProjectTaskAsigneeView } from './ProjectTaskAsigneeView';
 
 export type ProjectView = {
@@ -16,5 +17,6 @@ export type ProjectView = {
     documentURL?: string | null;
     progress?: number | null;
     status?: string | null;
+    projectMetrics?: ProjectMetrics;
     assignees?: Array<ProjectTaskAsigneeView> | null;
 };

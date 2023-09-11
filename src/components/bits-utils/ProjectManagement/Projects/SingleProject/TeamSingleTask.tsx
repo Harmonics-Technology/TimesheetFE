@@ -38,27 +38,22 @@ export const TeamSingleTask = ({
     id,
     project,
     tasks,
-    task,
 }: {
     id: any;
     project: any;
     tasks: any;
-    task: ProjectTaskView;
 }) => {
     const tableHead = [
-        'Task Name',
-        'Task assigned to',
-        'Hours spent',
-        'Start Date',
-        'End Date',
+        'Task/Subtak Name',
+        'Task Priority',
+        'Task Due Date',
+        'Percentage Of  Completion',
         'Status',
-        'Actions',
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
-    // console.log({ task });
+    console.log({ tasks });
     return (
         <Box>
-           
             <Flex gap=".5rem">
                 <VStack w="25%">
                     <Box
@@ -69,7 +64,7 @@ export const TeamSingleTask = ({
                         w="full"
                     >
                         <Text color="#2d3748" fontSize=".8rem" fontWeight={600}>
-                            {task?.name}
+                            {project?.name}
                         </Text>
                         <Text
                             color="#8c8c8c"
@@ -77,15 +72,15 @@ export const TeamSingleTask = ({
                             fontWeight={400}
                             my="1rem"
                         >
-                            {task?.note}
+                            {project?.note}
                         </Text>
                         <Box w="full" mt="0.5rem">
                             <ProgressBar
-                                barWidth={task?.progress}
+                                barWidth={project?.progress}
                                 showProgress={true}
                                 barColor={'brand.400'}
-                                leftText="Task Status"
-                                rightText={`${Round(task?.progress)}%`}
+                                leftText="project Status"
+                                rightText={`${Round(project?.progress)}%`}
                             />
                         </Box>
                     </Box>
@@ -100,17 +95,21 @@ export const TeamSingleTask = ({
                         <StatusBadge
                             bg="#afb6e5"
                             title="Created:"
-                            text={moment(task?.startDate).format('DD MMM YYYY')}
+                            text={moment(project?.startDate).format(
+                                'DD MMM YYYY',
+                            )}
                         />
                         <StatusBadge
                             bg="#FFA681"
                             title="Deadline:"
-                            text={moment(task?.endDate).format('DD MMM YYYY')}
+                            text={moment(project?.endDate).format(
+                                'DD MMM YYYY',
+                            )}
                         />
                         <StatusBadge
                             bg="#4BAEEA"
                             title="Status:"
-                            text={task?.status}
+                            text={project?.status}
                         />
                     </VStack>
                     <Box
@@ -124,8 +123,9 @@ export const TeamSingleTask = ({
                             Assigned Team
                         </Text>
 
-                        {task?.assignees?.map(
-                            (x: ProjectTaskAsigneeView, i) => (
+                        {project?.assignees
+                            ?.filter((b) => b.projectTaskId == null)
+                            ?.map((x: ProjectTaskAsigneeView, i) => (
                                 <HStack mt=".5rem" gap="1rem">
                                     <Avatar
                                         size={'sm'}
@@ -150,8 +150,7 @@ export const TeamSingleTask = ({
                                         </Text>
                                     </Box>
                                 </HStack>
-                            ),
-                        )}
+                            ))}
                     </Box>
                 </VStack>
                 <Box
@@ -162,7 +161,7 @@ export const TeamSingleTask = ({
                     p="1rem"
                 >
                     <Text color="#2d3748" fontSize=".8rem" fontWeight={600}>
-                        Sub-Task Assigned To Team Members
+                        My Task
                     </Text>
                     {/* <HStack justify="flex-end">
                         <Button
@@ -203,73 +202,56 @@ export const TeamSingleTask = ({
                         </HStack>
                     </HStack>
                     <TableCard tableHead={tableHead}>
-                        {tasks?.value?.map((x: ProjectSubTaskView) => (
-                            <TableRow key={x.id}>
-                                <TableData
-                                    name={x?.projectTask?.name}
-                                    fontWeight="500"
-                                />
-                                <td style={{ maxWidth: '300px' }}>
-                                    <HStack
-                                        color="#c2cfe0"
-                                        gap=".2rem"
-                                        flexWrap="wrap"
-                                    >
-                                        <Flex
-                                            border="1px solid"
-                                            borderColor="#4FD1C5"
-                                            borderRadius="25px"
-                                            justify="center"
-                                            align="center"
-                                            color="#4FD1C5"
-                                            h="1.6rem"
-                                            px="0.5rem"
+                        {tasks?.value?.map((x: ProjectTaskView) => {
+                            const priority = x?.taskPriority?.toLowerCase();
+                            return (
+                                <TableRow key={x.id}>
+                                    <TableData
+                                        name={x?.name}
+                                        fontWeight="500"
+                                        full
+                                        breakWord
+                                    />
+
+                                    <TableData
+                                        name={priority}
+                                        fontWeight="500"
+                                        customColor={
+                                            priority == 'high'
+                                                ? 'red'
+                                                : priority == 'normal'
+                                                ? 'brand.700'
+                                                : 'brand.600'
+                                        }
+                                    />
+                                    <TableData
+                                        name={moment(x?.endDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                        fontWeight="500"
+                                    />
+                                    <td>
+                                        <Box
+                                            border="1px solid #A6ACBE"
+                                            borderRadius=".25rem"
+                                            color="#a6a6a6"
+                                            fontSize=".6rem"
+                                            p=".4rem .75rem"
+                                            w='50%'
                                         >
-                                            {
-                                                x?.projectTaskAsignee?.user
-                                                    ?.fullName
-                                            }
-                                        </Flex>
-                                    </HStack>
-                                </td>
-                                <TableData
-                                    name={`${x?.hoursSpent} Hrs`}
-                                    fontWeight="500"
-                                />
-                                <TableData
-                                    name={moment(x?.startDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                    fontWeight="500"
-                                />
-                                <TableData
-                                    name={moment(x?.endDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                    fontWeight="500"
-                                />
-                                <NewTableState
-                                    name={x?.status}
-                                    color={colorSwatch(x?.status)}
-                                />
-                                <td>
-                                    <HStack color="#c2cfe0">
-                                        <Icon as={FaEye} />
-                                        <Icon as={BiSolidPencil} />
-                                    </HStack>
-                                </td>
-                            </TableRow>
-                        ))}
+                                            {x.progress}%
+                                        </Box>
+                                    </td>
+                                    <NewTableState
+                                        name={x?.status}
+                                        color={colorSwatch(x?.status)}
+                                    />
+                                </TableRow>
+                            );
+                        })}
                     </TableCard>
                 </Box>
             </Flex>
-            {isOpen && (
-                <AddSubTaskDrawer
-                    isOpen={isOpen}
-                    onClose={onClose}
-                    data={task}
-                />
-            )}
         </Box>
     );
 };

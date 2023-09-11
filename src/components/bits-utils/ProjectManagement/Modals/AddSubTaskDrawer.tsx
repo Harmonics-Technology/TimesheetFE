@@ -38,9 +38,9 @@ const schema = yup.object().shape({
     endDate: yup.string().required(),
     duration: yup.number().required(),
     // trackedByHours: yup.boolean().required(),
-    projectTaskAssigneeId: yup.string().required(),
-    note: yup.string().required(),
-    taskPriority: yup.number().required(),
+    // projectTaskAssigneeId: yup.string().required(),
+    // note: yup.string().required(),
+    // taskPriority: yup.number().required(),
     // durationInHours: yup
     //     .number()
     //     .when('trackedByHours', { is: true, then: yup.string().required() }),

@@ -7,6 +7,7 @@ import { ColoredTag } from '../../Generics/ColoredTag';
 import { CAD } from '@components/generics/functions/Naira';
 import shadeColor from '@components/generics/functions/shadeColor';
 import moment from 'moment';
+import { useRouter } from 'next/router';
 
 export const TopBar = ({
     noTitle = false,
@@ -17,6 +18,7 @@ export const TopBar = ({
     id?: any;
     data?: any;
 }) => {
+    const router = useRouter();
     return (
         <Box borderBottom={noTitle ? 'none' : '1px solid #e5e5e5'} pb="0rem">
             <Box mb="1.5rem">
@@ -24,7 +26,11 @@ export const TopBar = ({
                     name={['dashboard', 'projects', 'operational-task']}
                 />
             </Box>
-            <HStack fontSize=".875rem" cursor="pointer">
+            <HStack
+                fontSize=".875rem"
+                cursor="pointer"
+                onClick={() => router.back()}
+            >
                 <Button bgColor="#f0f0f0" h="1.5rem" w="1.5rem" minW="0">
                     <Icon as={MdOutlineArrowBackIosNew} fontSize=".8rem" />
                 </Button>
