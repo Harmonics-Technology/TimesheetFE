@@ -4,7 +4,6 @@
 
 import type { ProjectTaskAsigneeView } from './ProjectTaskAsigneeView';
 import type { ProjectTaskView } from './ProjectTaskView';
-import type { ProjectTimesheetView } from './ProjectTimesheetView';
 
 export type ProjectSubTaskView = {
     id?: string;
@@ -20,5 +19,4 @@ export type ProjectSubTaskView = {
     taskPriority?: string | null;
     note?: string | null;
     status?: string | null;
-    projectTimesheets?: Array<ProjectTimesheetView> | null;
 };

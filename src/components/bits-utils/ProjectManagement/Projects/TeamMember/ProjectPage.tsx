@@ -24,14 +24,18 @@ export const ProjectPage = ({
     const router = useRouter();
 
     // console.log({ projects });
+    const allCounts =
+        (counts.notStarted as number) +
+        (counts.inProgress as number) +
+        (counts.completed as number);
     return (
         <Box bgColor="white" p="1rem" borderRadius=".6rem">
             <TeamTaskMenu
                 name={[
-                    { name: 'all', id: '', count: 5 , active: true},
-                    { name: 'not started', id: 1, count: 5 },
-                    { name: 'ongoing', id: 2, count: 5 },
-                    { name: 'completed', id: 3, count: 5 },
+                    { name: 'all', id: '', count: allCounts, active: true },
+                    { name: 'not started', id: 1, count: counts.notStarted },
+                    { name: 'ongoing', id: 2, count: counts.inProgress },
+                    { name: 'completed', id: 3, count: counts.completed },
                 ]}
             />
             <Flex justify="flex-end" gap="1rem">

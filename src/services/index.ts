@@ -69,6 +69,7 @@ export type { LeaveViewPagedCollectionStandardResponse } from './models/LeaveVie
 export type { LeaveViewStandardResponse } from './models/LeaveViewStandardResponse';
 export type { Link } from './models/Link';
 export type { LoginModel } from './models/LoginModel';
+export type { MicrosoftIdTokenDetailsModel } from './models/MicrosoftIdTokenDetailsModel';
 export type { NotificationView } from './models/NotificationView';
 export type { NotificationViewPagedCollection } from './models/NotificationViewPagedCollection';
 export type { NotificationViewPagedCollectionStandardResponse } from './models/NotificationViewPagedCollectionStandardResponse';
@@ -118,7 +119,6 @@ export type { ProjectTaskViewPagedCollection } from './models/ProjectTaskViewPag
 export type { ProjectTaskViewPagedCollectionStandardResponse } from './models/ProjectTaskViewPagedCollectionStandardResponse';
 export type { ProjectTaskViewStandardResponse } from './models/ProjectTaskViewStandardResponse';
 export type { ProjectTimesheetModel } from './models/ProjectTimesheetModel';
-export type { ProjectTimesheetView } from './models/ProjectTimesheetView';
 export type { ProjectView } from './models/ProjectView';
 export type { ProjectViewPagedCollection } from './models/ProjectViewPagedCollection';
 export type { ProjectViewPagedCollectionStandardResponse } from './models/ProjectViewPagedCollectionStandardResponse';
@@ -166,6 +166,7 @@ export type { TimesheetHoursApprovalModel } from './models/TimesheetHoursApprova
 export type { TimeSheetMonthlyView } from './models/TimeSheetMonthlyView';
 export type { TimeSheetMonthlyViewIEnumerableStandardResponse } from './models/TimeSheetMonthlyViewIEnumerableStandardResponse';
 export type { TimeSheetMonthlyViewStandardResponse } from './models/TimeSheetMonthlyViewStandardResponse';
+export { TimesheetRecordToDownload } from './models/TimesheetRecordToDownload';
 export type { TimeSheetView } from './models/TimeSheetView';
 export type { UpdateCardDetailsModel } from './models/UpdateCardDetailsModel';
 export type { UpdateClientStripeSubscriptionModel } from './models/UpdateClientStripeSubscriptionModel';

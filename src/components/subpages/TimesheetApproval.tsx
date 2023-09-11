@@ -136,7 +136,7 @@ function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
                     isOpen={isOpen}
                     onClose={onClose}
                     data={thead}
-                    record={2}
+                    record={1}
                     fileName={'Timesheet Approval'}
                     model="users"
                 />

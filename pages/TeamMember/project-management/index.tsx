@@ -47,6 +47,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const counts =
                 await ProjectManagementService.getStatusCountForProject(
                     superAdminId,
+                    userId
                 );
             console.log({ data });
             return {

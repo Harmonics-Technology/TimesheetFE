@@ -13,7 +13,7 @@ import {
     VStack,
     Button,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Checkbox from './Checkbox';
 import { GrClose } from 'react-icons/gr';
 import { MdCancel } from 'react-icons/md';
@@ -22,6 +22,7 @@ import Cookies from 'js-cookie';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import DatePicker from 'react-multi-date-picker';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { UserContext } from '@components/context/UserContext';
 
 interface ExportProps {
     isOpen: any;
@@ -84,6 +85,9 @@ export const ExportReportModal = ({
     const startDate = fromDate?.format('YYYY-MM-DD');
     const endDate = toDate?.format('YYYY-MM-DD');
 
+    const { user } = useContext(UserContext);
+    const superAdminId = user?.superAdminId;
+
     const header = selectedId.map((e) => `rowHeaders=${e}`).join('&');
 
     // const payrollGroupId = payPartner && `PayrollGroupId=${paygroupId}`;
@@ -132,7 +136,7 @@ export const ExportReportModal = ({
                 'https://pi-commandcenterdev.azurewebsites.net'
             }/api/export/${model}?Record=${record}&${
                 payPartner && `PayrollGroupId=${paygroupId}`
-            }&${header}&StartDate=${startDate}&EndDate=${endDate}`,
+            }&${header}&StartDate=${startDate}&EndDate=${endDate}&superAdminId=${superAdminId}`,
         );
         xmlHttpRequest.setRequestHeader('Content-Type', 'application/json');
         xmlHttpRequest.setRequestHeader('Authorization', `Bearer ${token}`);

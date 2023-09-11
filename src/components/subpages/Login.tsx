@@ -11,6 +11,7 @@ import {
     Icon,
     HStack,
     Divider,
+    Spinner,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -124,19 +125,72 @@ function Login() {
         }
     };
     // console.log(watch('email'), watch('password'));
+    const [loading, setLoading] = useState<boolean>(false);
     const authenticate = async () => {
         try {
-            const result = await msal.instance.loginPopup();
-            console.log('Home Account id:', result.account?.homeAccountId);
-            msal.instance.setActiveAccount(result.account);
-            console.log({ result });
-            // Cookies.set('token', result.data.token as string, {
-            //     // expires: expiresIn,
-            // });
+            setLoading(true);
+            const res = await msal.instance.loginPopup();
+            console.log('Home Account id:', res.account?.homeAccountId);
+            msal.instance.setActiveAccount(res.account);
+            console.log({ res });
+            if (res?.account?.homeAccountId) {
+                try {
+                    const result = (await UserService.microsoftLogin(
+                        res.idTokenClaims,
+                    )) as UserViewStandardResponse;
+                    if (result.status) {
+                        setUser(result.data);
+                        Cookies.set('user', JSON.stringify(result.data));
+                        OpenAPI.TOKEN = result?.data?.token as string;
+                        result.data &&
+                            Cookies.set('token', result.data.token as string, {
+                                // expires: expiresIn,
+                            });
+                        setLoading(false);
+                        if (result.data?.twoFactorEnabled) {
+                            router.push('/login/twofalogin');
+                            return;
+                        }
+                        toast({
+                            title: `Login Successful`,
+                            status: 'success',
+                            isClosable: true,
+                            position: 'top-right',
+                        });
+                        router.query.from
+                            ? (window.location.href = decodeURIComponent(
+                                  router.query.from as unknown as string,
+                              ))
+                            : (window.location.href = `${result?.data?.role?.replaceAll(
+                                  ' ',
+                                  '',
+                              )}/dashboard`);
+                        return;
+                    }
+                    toast({
+                        title: result.message,
+                        status: 'error',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                    setLoading(false);
+                    return;
+                } catch (error: any) {
+                    console.log({ error });
+                    toast({
+                        title: error?.body?.message || error?.message,
+                        status: 'error',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                    setLoading(false);
+                }
+            }
             setError('');
         } catch (ex) {
             const authEx = ex as AuthError;
             setError(authEx.message);
+            setLoading(false);
         }
     };
 
@@ -247,7 +301,7 @@ function Login() {
                         <Flex
                             // justify="center"
 
-                            w="80%"
+                            w="fit-content"
                             my="1rem"
                             cursor="pointer"
                             onClick={authenticate}
@@ -264,7 +318,11 @@ function Login() {
                                 justify="center"
                                 fontSize="1.5rem"
                             >
-                                <Icon as={BsMicrosoft} color="black" />
+                                {loading ? (
+                                    <Spinner size="sm" color="black" />
+                                ) : (
+                                    <Icon as={BsMicrosoft} color="black" />
+                                )}
                             </Flex>
                             <Text p=".7rem 1rem" fontSize=".9rem">
                                 Sign in with Microsoft

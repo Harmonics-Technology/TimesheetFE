@@ -294,17 +294,20 @@ subtaskId?: string,
 
     /**
      * @param superAdminId 
+     * @param userId 
      * @returns ProjectProgressCountViewStandardResponse Success
      * @throws ApiError
      */
     public static getStatusCountForProject(
 superAdminId?: string,
+userId?: string,
 ): CancelablePromise<ProjectProgressCountViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/ProjectManagement/project/status-count',
             query: {
                 'superAdminId': superAdminId,
+                'userId': userId,
             },
         });
     }

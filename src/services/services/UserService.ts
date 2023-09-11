@@ -11,6 +11,7 @@ import type { ControlSettingViewStandardResponse } from '../models/ControlSettin
 import type { Enable2FAViewStandardResponse } from '../models/Enable2FAViewStandardResponse';
 import type { InitiateResetModel } from '../models/InitiateResetModel';
 import type { LoginModel } from '../models/LoginModel';
+import type { MicrosoftIdTokenDetailsModel } from '../models/MicrosoftIdTokenDetailsModel';
 import type { PasswordReset } from '../models/PasswordReset';
 import type { RegisterModel } from '../models/RegisterModel';
 import type { ShiftUsersListViewPagedCollectionStandardResponse } from '../models/ShiftUsersListViewPagedCollectionStandardResponse';
@@ -178,6 +179,22 @@ requestBody?: UpdateClientSubscriptionModel,
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/update/client-subscription',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static microsoftLogin(
+requestBody?: MicrosoftIdTokenDetailsModel,
+): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/microsoft-login',
             body: requestBody,
             mediaType: 'application/json-patch+json',
         });
