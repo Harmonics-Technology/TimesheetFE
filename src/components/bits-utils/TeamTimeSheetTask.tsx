@@ -225,8 +225,7 @@ const TeamTimeSheetTask = ({
 
     useEffect(() => {
         async function getTasks() {
-            if(selectedProject?.id){
-
+            if (selectedProject?.id) {
                 setLoading(true);
             }
             try {
