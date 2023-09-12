@@ -10,6 +10,7 @@ import {
     Stack,
     Text,
     Tr,
+    useDisclosure,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -20,6 +21,7 @@ import { CustomDatePick } from './CustomDatePick';
 import { useRouter } from 'next/router';
 import { DateObject } from 'react-multi-date-picker';
 import { BsDownload, BsFilter } from 'react-icons/bs';
+import { ExportReportModal } from './ExportReportModal';
 
 interface TableCardsProps {
     title: string;
@@ -39,6 +41,7 @@ function TableCards({
 }: TableCardsProps) {
     // console.log({ data });
     const router = useRouter();
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [fromDate, setFromDate] = useState<any>(
         new DateObject().subtract(1, 'month'),
     );
@@ -170,12 +173,23 @@ function TableCards({
                         fontSize=".7rem"
                         fontWeight="bold"
                         cursor="pointer"
+                        onClick={onOpen}
                     >
-                        <Text mb="0">Export</Text>
-                        <Icon as={BsDownload} ml=".5rem" />
+                        <Text mb="0">Export Report</Text>
+                        <Icon as={BsDownload} />
                     </HStack>
                 )}
             </Stack>
+            {isOpen && (
+                <ExportReportModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    data={thead}
+                    record={1}
+                    fileName={'Summary Report from Timba'}
+                    model="timesheet"
+                />
+            )}
         </Box>
     );
 }
