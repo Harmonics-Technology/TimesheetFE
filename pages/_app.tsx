@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import { OpenAPI } from 'src/services';
 import NextNProgress from 'nextjs-progressbar';
 import { UserProvider } from '@components/context/UserContext';
+import Script from 'next/script';
 
 function MyApp({
     Component,
@@ -45,6 +46,7 @@ function MyApp({
                     type="image/x-icon"
                 />
             </Head>
+
             <StyledThemeProvider>
                 <QueryClientProvider client={queryClient}>
                     <Hydrate state={pageProps.dehydratedState}>
@@ -59,6 +61,10 @@ function MyApp({
                     </Hydrate>
                 </QueryClientProvider>
             </StyledThemeProvider>
+            <Script
+                src="../src/asseccibility.js"
+                strategy="beforeInteractive"
+            />
         </ChakraProvider>
     );
 }
