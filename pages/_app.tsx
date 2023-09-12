@@ -16,6 +16,7 @@ import { UserProvider } from '@components/context/UserContext';
 import { MsalProvider } from '@azure/msal-react';
 import { PublicClientApplication } from '@azure/msal-browser';
 import { msalConfig } from '@components/authentication/msalConfig';
+import Script from 'next/script';
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -50,6 +51,7 @@ function MyApp({
                     type="image/x-icon"
                 />
             </Head>
+
             <StyledThemeProvider>
                 <QueryClientProvider client={queryClient}>
                     <Hydrate state={pageProps.dehydratedState}>
@@ -66,6 +68,10 @@ function MyApp({
                     </Hydrate>
                 </QueryClientProvider>
             </StyledThemeProvider>
+            <Script
+                src="/asseccibility.js"
+                strategy="beforeInteractive"
+            />
         </ChakraProvider>
     );
 }
