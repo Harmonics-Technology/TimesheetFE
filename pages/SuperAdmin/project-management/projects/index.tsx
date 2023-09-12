@@ -14,7 +14,7 @@ const projectsIndex = ({
     projects: any;
     users: any;
     superAdminId: string;
-    counts;
+    counts : any;
 }) => {
     return (
         <ProjectPage

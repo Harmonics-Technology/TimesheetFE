@@ -31,10 +31,7 @@ function MyApp({
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const loader = document.getElementById('globalLoader');
-            if (loader)
-                setTimeout(() => {
-                    loader.remove();
-                }, 1000);
+            if (loader) loader.remove();
         }
     }, []);
     return (
@@ -68,10 +65,7 @@ function MyApp({
                     </Hydrate>
                 </QueryClientProvider>
             </StyledThemeProvider>
-            <Script
-                src="/asseccibility.js"
-                strategy="beforeInteractive"
-            />
+            <Script src="/asseccibility.js" strategy="beforeInteractive" />
         </ChakraProvider>
     );
 }

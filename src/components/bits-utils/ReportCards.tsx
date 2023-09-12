@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { BsFilter } from 'react-icons/bs';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
+import { CustomDatePick } from './CustomDatePick';
 
 interface ReportProps {
     thead: any;
@@ -130,39 +131,9 @@ export const ReportCards = ({
                                     '.5rem !important',
                                 ]}
                             >
-                                <DatePicker
-                                    value={fromDate}
-                                    onChange={setFromDate}
-                                    format="MMM DD, YYYY"
-                                    render={(value, openCalendar) => {
-                                        return (
-                                            <HStack
-                                                w="fit-content"
-                                                px="1rem"
-                                                h="1.8rem"
-                                                justifyContent="center"
-                                                alignItems="center"
-                                                border="1px solid"
-                                                borderColor="gray.300"
-                                                color="gray.500"
-                                                boxShadow="sm"
-                                                borderRadius="4px"
-                                                cursor="pointer"
-                                                fontSize=".8rem"
-                                                onClick={(value) =>
-                                                    openCalendar(value)
-                                                }
-                                            >
-                                                <Text
-                                                    mb="0"
-                                                    whiteSpace="nowrap"
-                                                >
-                                                    {value}
-                                                </Text>
-                                                <Icon as={FaRegCalendarAlt} />
-                                            </HStack>
-                                        );
-                                    }}
+                                <CustomDatePick
+                                    date={fromDate}
+                                    setDate={setFromDate}
                                 />
                             </Box>
                         </HStack>
@@ -184,35 +155,7 @@ export const ReportCards = ({
                                 -
                             </Text>
 
-                            <DatePicker
-                                value={toDate}
-                                onChange={setToDate}
-                                format="MMM DD, YYYY"
-                                render={(value, openCalendar) => {
-                                    return (
-                                        <HStack
-                                            w="fit-content"
-                                            px="1rem"
-                                            h="1.8rem"
-                                            justifyContent="center"
-                                            alignItems="center"
-                                            border="1px solid"
-                                            borderColor="gray.300"
-                                            color="gray.500"
-                                            boxShadow="sm"
-                                            borderRadius="4px"
-                                            cursor="pointer"
-                                            fontSize=".8rem"
-                                            onClick={openCalendar}
-                                        >
-                                            <Text mb="0" whiteSpace="nowrap">
-                                                {value}
-                                            </Text>
-                                            <Icon as={FaRegCalendarAlt} />
-                                        </HStack>
-                                    );
-                                }}
-                            />
+                            <CustomDatePick date={toDate} setDate={setToDate} />
                         </HStack>
                     </HStack>
                     <Menu>

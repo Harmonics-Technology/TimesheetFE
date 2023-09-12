@@ -228,6 +228,33 @@ superAdminId?: string,
 ): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
+            url: '/api/Leave/pending-leaves',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param superAdminId 
+     * @returns LeaveViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listLeaveHistory(
+offset?: number,
+limit?: number,
+superAdminId?: string,
+): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
             url: '/api/Leave/treated-leaves',
             query: {
                 'Offset': offset,

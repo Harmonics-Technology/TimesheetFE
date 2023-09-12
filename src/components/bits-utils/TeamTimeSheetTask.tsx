@@ -1,7 +1,8 @@
 import { Box, Button, Flex, Text, useDisclosure } from '@chakra-ui/react';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+
 import {
     Calendar,
     momentLocalizer,
@@ -37,28 +38,6 @@ const TeamTimeSheetTask = ({
     const [selectedProject, setSelectedProject] = useState<any>();
     const addProject = (user) => {
         setSelectedProject(user);
-        async function getTasks() {
-            setLoading(true);
-            try {
-                const res = await ProjectManagementService.listTasks(
-                    0,
-                    25,
-                    superAdminId,
-                    user?.id,
-                    2,
-                    id,
-                );
-                if (res?.status) {
-                    setLoading(false);
-                    setTasks(res?.data?.value);
-                    return;
-                }
-            } catch (error) {
-                console.log({ error });
-                setLoading(false);
-            }
-        }
-        getTasks();
     };
 
     const DemoData = [
@@ -89,6 +68,7 @@ const TeamTimeSheetTask = ({
             title: obj.project?.name,
             start: new Date(obj.startDate as string),
             end: new Date(obj.endDate as string),
+            bill: obj.billable,
         };
     });
 
@@ -201,6 +181,15 @@ const TeamTimeSheetTask = ({
         return <div style={style}>{timeSlotWrapperProps.children}</div>;
     };
 
+    const eventPropGetter = useCallback((event, start, end, isSelected) => {
+        // console.log({ event, start, end, isSelected });
+        return {
+            ...(event.bill && {
+                className: 'billable',
+            }),
+        };
+    }, []);
+
     const TimeGutter = () => {
         const style = {
             padding: '0 3.5px',
@@ -233,6 +222,35 @@ const TeamTimeSheetTask = ({
         }),
         [],
     );
+
+    useEffect(() => {
+        async function getTasks() {
+            if(selectedProject?.id){
+
+                setLoading(true);
+            }
+            try {
+                const res = await ProjectManagementService.listTasks(
+                    0,
+                    25,
+                    superAdminId,
+                    selectedProject?.id || undefined,
+                    2,
+                    id,
+                );
+                if (res?.status) {
+                    console.log({ res });
+                    setLoading(false);
+                    setTasks(res?.data?.value);
+                    return;
+                }
+            } catch (error) {
+                console.log({ error });
+                setLoading(false);
+            }
+        }
+        getTasks();
+    }, [selectedProject]);
 
     // console.log({ selectedProject, tasks });
     return (
@@ -271,6 +289,8 @@ const TeamTimeSheetTask = ({
                     max={moment('9 pm', 'h a').toDate()}
                     formats={formats}
                     views={views}
+                    dayLayoutAlgorithm={'no-overlap'}
+                    eventPropGetter={eventPropGetter}
                 />
             </Box>
 

@@ -253,8 +253,8 @@ select option {
     border: 1px solid #2eafa3 !important;
     /* color: black !important; */
     /* background-color: white !important; */
-    background-color: #2eafa3 !important;
-    color: white !important;  
+    background-color: rgb(46, 67, 175) !important;
+    color: white !important;
     border-radius: 0 !important;
     font-weight: 500;
     font-size: 0.9rem;
@@ -305,3 +305,6 @@ select option {
 /* .rbc-current-time-indicator{
     display: none !important;
 } */
+.billable {
+    background-color: #2eafa3 !important;
+}

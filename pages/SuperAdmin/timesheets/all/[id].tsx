@@ -10,10 +10,18 @@ import {
 
 function all({
     timeSheets,
+    id,
 }: {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
+    id: string;
 }) {
-    return <TeamTimesheetHistory timeSheets={timeSheets} timesheet={true} />;
+    return (
+        <TeamTimesheetHistory
+            timeSheets={timeSheets}
+            timesheet={true}
+            id={id}
+        />
+    );
 }
 
 export default all;
@@ -33,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             return {
                 props: {
                     timeSheets: data,
+                    id,
                 },
             };
         } catch (error: any) {

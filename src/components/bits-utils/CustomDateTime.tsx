@@ -7,6 +7,7 @@ import { BiTimeFive } from 'react-icons/bi';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
 import TimePicker from 'react-time-picker';
+import { CustomDatePick } from './CustomDatePick';
 // import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 
 export const CustomDateTime = ({ onChange, value, label }) => {
@@ -15,13 +16,6 @@ export const CustomDateTime = ({ onChange, value, label }) => {
         isComponentVisible: startVisible,
         setIsComponentVisible: startIsVisible,
     } = useComponentVisible(false);
-
-    const dateRef = useRef<any>();
-    const handleDatePickerClose = useCallback(
-        () => dateRef.current.closeCalendar(),
-        [dateRef],
-    );
-    useOnClickOutside(dateRef, handleDatePickerClose);
 
     const newValue = moment(value).format('YYYY/MM/DD HH:mm');
     const [date, setDate] = useState<any>(
@@ -47,40 +41,7 @@ export const CustomDateTime = ({ onChange, value, label }) => {
             </FormLabel>
             <HStack gap="2rem">
                 <Box w="60%">
-                    <DatePicker
-                        containerStyle={{
-                            width: '100%',
-                        }}
-                        value={date}
-                        onChange={setDate}
-                        ref={dateRef}
-                        format="dddd, MMM DD, YYYY"
-                        // plugins={[<TimePicker position="right" />]}
-                        render={(value, openCalendar) => {
-                            return (
-                                <HStack
-                                    w="100%"
-                                    px="1rem"
-                                    h="2.5rem"
-                                    justifyContent="space-between"
-                                    alignItems="center"
-                                    border="1px solid"
-                                    borderColor="gray.300"
-                                    color="gray.500"
-                                    boxShadow="sm"
-                                    borderRadius="0"
-                                    cursor="pointer"
-                                    fontSize=".9rem"
-                                    onClick={(value) => openCalendar(value)}
-                                >
-                                    <Text mb="0" whiteSpace="nowrap">
-                                        {value}
-                                    </Text>
-                                    <Icon as={FaRegCalendarAlt} />
-                                </HStack>
-                            );
-                        }}
-                    />
+                    <CustomDatePick date={date} setDate={setDate} />
                 </Box>
                 <Box w="40%">
                     <Box w="full" ref={timeRef} pos="relative">

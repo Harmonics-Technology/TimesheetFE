@@ -33,6 +33,7 @@ interface ExportProps {
     model: any;
     payPartner?: boolean;
     paygroupId?: number;
+    id?: string;
 }
 
 export const ExportReportModal = ({
@@ -44,6 +45,7 @@ export const ExportReportModal = ({
     model,
     paygroupId,
     payPartner,
+    id,
 }: ExportProps) => {
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
@@ -136,6 +138,8 @@ export const ExportReportModal = ({
                 'https://pi-commandcenterdev.azurewebsites.net'
             }/api/export/${model}?Record=${record}&${
                 payPartner && `PayrollGroupId=${paygroupId}`
+            }&${
+                id && `EmployeeInformationId=${id}`
             }&${header}&StartDate=${startDate}&EndDate=${endDate}&superAdminId=${superAdminId}`,
         );
         xmlHttpRequest.setRequestHeader('Content-Type', 'application/json');

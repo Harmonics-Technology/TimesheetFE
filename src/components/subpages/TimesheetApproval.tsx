@@ -138,7 +138,7 @@ function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
                     data={thead}
                     record={1}
                     fileName={'Timesheet Approval'}
-                    model="users"
+                    model="timesheet"
                 />
             )}
         </>

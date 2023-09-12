@@ -48,9 +48,6 @@ function MenuItem({
                     <>
                         {option ? (
                             <Box
-                                onClick={() =>
-                                    display ? setOpenMenu(!openMenu) : void 0
-                                }
                                 overflow="hidden"
                                 transition="all .35s ease-in-out"
                                 maxH={openMenu ? 'auto' : '3rem'}
@@ -67,6 +64,11 @@ function MenuItem({
                                     p=".5rem .5rem"
                                     borderRadius="10px"
                                     boxShadow="sm"
+                                    onClick={() =>
+                                        display
+                                            ? setOpenMenu((prev) => !prev)
+                                            : void 0
+                                    }
                                 >
                                     <HStack>
                                         <Square
@@ -108,7 +110,7 @@ function MenuItem({
                                             fontSize=".9rem"
                                             pl=".5rem"
                                             noOfLines={1}
-                                            mb='0'
+                                            mb="0"
                                         >
                                             {menuTitle}
                                         </Text>
@@ -266,7 +268,7 @@ function MenuItem({
                                         fontSize=".9rem"
                                         pl=".5rem"
                                         noOfLines={1}
-                                        mb='0'
+                                        mb="0"
                                     >
                                         {menuTitle}
                                     </Text>
@@ -323,7 +325,7 @@ function MenuItem({
                                             fontSize=".9rem"
                                             pl=".5rem"
                                             noOfLines={1}
-                                            mb='0'
+                                            mb="0"
                                         >
                                             {menuTitle}
                                         </Text>
@@ -472,7 +474,7 @@ function MenuItem({
                                             fontSize=".9rem"
                                             pl=".5rem"
                                             noOfLines={1}
-                                            mb='0'
+                                            mb="0"
                                         >
                                             {menuTitle}
                                         </Text>

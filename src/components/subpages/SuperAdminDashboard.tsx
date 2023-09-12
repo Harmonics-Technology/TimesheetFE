@@ -23,7 +23,7 @@ import {
 } from '@components/bits-utils/TableData';
 import { NotificationContext } from '@components/context/NotificationContext';
 import { UserContext } from '@components/context/UserContext';
-import { CUR } from '@components/generics/functions/Naira';
+import { CAD, CUR } from '@components/generics/functions/Naira';
 import moment from 'moment';
 import { useContext, useState } from 'react';
 import {
@@ -33,7 +33,7 @@ import {
     InvoiceView,
     PaySlipView,
     PayslipUserView,
-    RecentTimeSheetView,
+    ProjectProgressCountView,
     UserView,
 } from 'src/services';
 import PayrollInvoice from './PayrollInvoice';
@@ -44,9 +44,10 @@ import ClientInvoicedInvoice from './ClientInvoicedInvoice';
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
+    counts: ProjectProgressCountView;
 }
 
-function SuperAdminDashboard({ metrics }: DashboardProps) {
+function SuperAdminDashboard({ metrics, counts }: DashboardProps) {
     const { user, subType } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -65,6 +66,10 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
     const adminMetrics = metrics?.data as DashboardView;
     console.log({ subType });
     const isClient = subType == 'premium';
+    const totalCounts =
+        (counts.notStarted as number) +
+        (counts.inProgress as number) +
+        (counts.completed as number);
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">
@@ -74,13 +79,9 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                     w="full"
                 >
                     <DashboardCard
-                        url={
-                            isClient
-                                ? `/${role}/profile-management/clients`
-                                : ''
-                        }
-                        title="client"
-                        value={adminMetrics?.totalClients}
+                        url={`/${role}/project-management/projects`}
+                        title="active projects"
+                        value={totalCounts}
                     />
                     <DashboardCard
                         url={`/${role}/profile-management/team-members`}
@@ -96,7 +97,34 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
 
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
-                        title={'Recent Timesheets'}
+                        title={'Summary Report'}
+                        url={'timesheets/approval'}
+                        hasFilter
+                        data={metrics?.data?.recentTimeSheet
+                            ?.slice(0, 4)
+                            .map((x: any, i) => (
+                                <Tr key={i}>
+                                    <TableData name={'125'} />
+                                    <TableData name={`14,000 hours`} />
+                                    <TableData name={`${'6,000'} hours`} />
+                                    <TableData name={`${'8,000'} hours`} />
+                                    <TableData name={CAD(x.actualPayout)} />
+                                    {/* <TableState name={x.status} /> */}
+                                </Tr>
+                            ))}
+                        thead={[
+                            'No of Users',
+                            'Total Hours',
+                            'Billable',
+                            'Non-Billable',
+                            'Amount',
+                            // 'Status',
+                            // 'Action',
+                        ]}
+                        link={''}
+                    />
+                    <TableCards
+                        title={'Timesheet Report'}
                         url={'timesheets/approval'}
                         data={metrics?.data?.recentTimeSheet
                             ?.slice(0, 4)
@@ -110,28 +138,34 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                                     />
                                     <TableData
                                         name={
-                                            x?.employeeInformation?.supervisor
-                                                ?.fullName
+                                            x?.employeeInformation
+                                                ?.jobTitle
                                         }
                                     />
                                     <TableData
-                                        name={`${x.expectedHours} hours`}
+                                        name={formatDate(x?.startDate)}
                                     />
-                                    <TableData name={`${x.totalHours} hours`} />
+                                    <TableData name={formatDate(x?.endDate)} />
                                     <TableData
-                                        name={`${CUR(x.expectedPayout)}`}
+                                        name={`${
+                                            x?.totalHours as unknown as string
+                                        } Hours`}
                                     />
-                                    <TableData name={CUR(x.actualPayout)} />
+                                    <TableData
+                                        name={`${
+                                            x?.approvedNumberOfHours as unknown as string
+                                        }Hours`}
+                                    />
                                     {/* <TableState name={x.status} /> */}
                                 </Tr>
                             ))}
                         thead={[
                             'Name',
-                            'Supervisor Name',
-                            'Expected Hrs',
-                            'Total Hrs',
-                            'Expected Payout',
-                            'Payout',
+                            'Job Title',
+                            'Begining Period',
+                            'Ending Period',
+                            'Total Hours',
+                            'Approved Hours',
                             // 'Status',
                             // 'Action',
                         ]}
