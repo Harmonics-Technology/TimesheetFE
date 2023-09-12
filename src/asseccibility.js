@@ -4,6 +4,7 @@
     s.src = 'https://acsbapp.com/apps/app/dist/js/app.js';
     s.async = true;
     s.onload = function () {
+        // eslint-disable-next-line no-undef
         acsbJS.init({
             statementLink: '',
             footerHtml: '',
