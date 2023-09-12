@@ -62,7 +62,7 @@ function MyApp({
                 </QueryClientProvider>
             </StyledThemeProvider>
             <Script
-                src="../src/asseccibility.js"
+                src="/asseccibility.js"
                 strategy="beforeInteractive"
             />
         </ChakraProvider>
