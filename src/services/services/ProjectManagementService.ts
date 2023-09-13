@@ -44,6 +44,22 @@ requestBody?: ProjectModel,
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
+    public static updateProject(
+requestBody?: ProjectModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-project',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
     public static createTask(
 requestBody?: ProjectTaskModel,
 ): CancelablePromise<BooleanStandardResponse> {
@@ -60,12 +76,44 @@ requestBody?: ProjectTaskModel,
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
+    public static updateTask(
+requestBody?: ProjectTaskModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-task',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
     public static createSubTask(
 requestBody?: ProjectSubTaskModel,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/ProjectManagement/create-subtask',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateSubTask(
+requestBody?: ProjectSubTaskModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-subtask',
             body: requestBody,
             mediaType: 'application/json-patch+json',
         });

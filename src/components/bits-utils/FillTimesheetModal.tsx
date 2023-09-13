@@ -131,6 +131,9 @@ export const FillTimesheetModal = ({
     const [operationalTasks, setOperationalTasks] = useState<any>([]);
     useNonInitialEffect(() => {
         async function getTasks() {
+            setErr('');
+            setOperationalTasks([]);
+            setSubTasks([]);
             setLoading(true);
             if (taskId == 'operational') {
                 try {

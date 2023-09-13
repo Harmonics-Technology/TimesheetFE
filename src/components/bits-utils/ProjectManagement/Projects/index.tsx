@@ -53,20 +53,20 @@ export const ProjectPage = ({
                 <Grid templateColumns={['repeat(3,1fr)']} w="full" gap=".5rem">
                     <TabCounts
                         text="Not Started"
-                        count={counts.notStarted}
+                        count={counts?.notStarted}
                         onClick={() => filterProjects(1)}
                         num="1"
                         active
                     />
                     <TabCounts
                         text="In Progress"
-                        count={counts.inProgress}
+                        count={counts?.inProgress}
                         onClick={() => filterProjects(2)}
                         num="2"
                     />
                     <TabCounts
                         text="Completed"
-                        count={counts.completed}
+                        count={counts?.completed}
                         onClick={() => filterProjects(3)}
                         num="3"
                     />

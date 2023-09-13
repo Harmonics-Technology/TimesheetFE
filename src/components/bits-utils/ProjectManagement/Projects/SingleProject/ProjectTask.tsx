@@ -9,7 +9,7 @@ import {
     Icon,
     Flex,
 } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { TopBar } from './TopBar';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import { TableCard } from '../../Generics/TableCard';
@@ -56,6 +56,12 @@ export const ProjectTask = ({
 
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
+    const [data, setData] = useState({ isEdit: false, raw: {} });
+
+    const openModal = (item: any) => {
+        setData({ isEdit: true, raw: item });
+        onOpen();
+    };
 
     return (
         <Box>
@@ -155,9 +161,12 @@ export const ProjectTask = ({
                                 color={colorSwatch(x?.status)}
                             />
                             <td>
-                                <HStack color="#c2cfe0" onClick={viewTask}>
-                                    <Icon as={FaEye} />
-                                    <Icon as={BiSolidPencil} />
+                                <HStack color="#c2cfe0">
+                                    <Icon as={FaEye} onClick={viewTask} />
+                                    <Icon
+                                        as={BiSolidPencil}
+                                        onClick={() => openModal(x)}
+                                    />
                                 </HStack>
                             </td>
                         </TableRow>
@@ -168,7 +177,9 @@ export const ProjectTask = ({
                 <AddNewTaskDrawer
                     isOpen={isOpen}
                     onClose={onClose}
-                    data={project}
+                    data={data.raw}
+                    project={project}
+                    isEdit={data.isEdit}
                 />
             )}
         </Box>

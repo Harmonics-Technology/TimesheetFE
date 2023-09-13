@@ -10,8 +10,9 @@ import { TableRow, TableData } from '@components/bits-utils/TableData';
 import { CAD } from '@components/generics/functions/Naira';
 import moment from 'moment';
 import { TableCard } from '../../Generics/TableCard';
+import { ProjectMetrics } from 'src/services';
 
-export const Budgets = ({id}) => {
+export const Budgets = ({ id, project }) => {
     const tableHead = [
         'Team Members',
         'Assigned Task',
@@ -22,38 +23,42 @@ export const Budgets = ({id}) => {
         'Total Hours',
         'Budget Spent',
     ];
+    console.log({ project });
+    const projectMetrics: ProjectMetrics = project.projectMetrics;
     return (
         <Box>
-            <TopBar id={id} />
+            <TopBar id={id} data={project} />
             <Grid
                 mb="1.25rem"
                 templateColumns={['repeat(1,1fr)', 'repeat(4,1fr)']}
                 gap="1.06rem"
             >
                 <MiniCards
-                    value={125}
-                    title="Total No of Projects"
-                    icon={RiBriefcase2Line}
+                    value={Math.ceil(projectMetrics.totalBudget as number)}
+                    title="Total Budget"
+                    icon={PiMoneyBold}
                     color="#2eafa3"
+                    isPrice
                 />
                 <MiniCards
-                    value={5125}
-                    title="Total No of Task"
-                    icon={BiTask}
-                    color="#FF5B79"
-                />
-                <MiniCards
-                    value={5125}
-                    title="Total No of Hours"
-                    icon={RiTimeLine}
-                    color="#2383BD"
-                />
-                <MiniCards
-                    value={12550}
+                    value={Math.ceil(projectMetrics.totalBudgetSpent as number)}
                     title="Total Budget Spent"
                     icon={PiMoneyBold}
-                    color="#F8C200"
+                    color="#FF5B79"
                     isPrice
+                />
+                <MiniCards
+                    value={Math.ceil(projectMetrics.currentBalance as number)}
+                    title="Current Balance"
+                    icon={PiMoneyBold}
+                    color="#2383BD"
+                    isPrice
+                />
+                <MiniCards
+                    value={Math.ceil(projectMetrics.totalHourSpent as number)}
+                    title="Total Hours pent"
+                    icon={PiMoneyBold}
+                    color="#F8C200"
                 />
             </Grid>
             <HStack justify="flex-end" my="2rem">

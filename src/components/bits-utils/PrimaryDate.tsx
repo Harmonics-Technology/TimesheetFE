@@ -22,7 +22,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     min?: any;
     max?: any;
     disabled?: boolean;
-    defaultValue?: string;
+    defaultValue?: any;
     disableWeekend?: boolean;
 }
 

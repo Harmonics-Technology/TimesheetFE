@@ -38,7 +38,7 @@ interface adminProps {
 }
 
 function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
-    console.log({ paymentSchedule });
+    // console.log({ paymentSchedule });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const isWeekly = paymentSchedule?.find((x) => x.scheduleType == 'Weekly');

@@ -50,11 +50,17 @@ export const AddNewTaskDrawer = ({
     onClose,
     isOpen,
     data,
+    isEdit,
+    project,
 }: {
     onClose: any;
     isOpen: boolean;
-    data: ProjectView;
+    data: any;
+    isEdit?: boolean;
+    project?: any;
 }) => {
+    const formattedPriority =
+        data.taskPriority == 'High' ? 1 : data.taskPriority == 'Medium' ? 2 : 3;
     const {
         register,
         handleSubmit,
@@ -66,18 +72,35 @@ export const AddNewTaskDrawer = ({
         resolver: yupResolver(schema),
         mode: 'all',
         defaultValues: {
-            superAdminId: data?.superAdminId,
-            projectId: data?.id,
+            superAdminId: project?.superAdminId,
+            projectId: project?.id,
+            name: isEdit ? data?.name : '',
+            startDate: isEdit ? data?.startDate : '',
+            endDate: isEdit ? data?.endDate : '',
+            duration: isEdit ? data?.duration : '',
+            note: isEdit ? data?.note : '',
+            taskPriority: isEdit ? (formattedPriority as any) : '',
+            durationInHours: data?.durationInHours,
+            id: isEdit ? data?.id : '',
+
             // trackedByHours: false,
         },
     });
 
     const toast = useToast();
     const router = useRouter();
-    const assignees = data?.assignees?.filter((x) => x.projectTaskId == null);
+    const assignees = project?.assignees?.filter(
+        (x) => x.projectTaskId == null,
+    );
     // console.log({ assignees, data });
 
-    const [selectedUser, setSelecedUser] = useState<any>([]);
+    const [selectedUser, setSelecedUser] = useState<any>(
+        data?.assignees.map((obj) => ({
+            userId: obj.userId,
+            'user.fullName': obj.user?.fullName,
+        })) || [],
+    );
+    console.log({ data, project, selectedUser });
     const addUser = (user) => {
         const filtered = selectedUser?.find((x) => x.userId === user.userId);
         if (filtered) return;
@@ -93,7 +116,9 @@ export const AddNewTaskDrawer = ({
         { id: 2, name: 'Medium' },
         { id: 3, name: 'Low' },
     ];
-    const [selectedPriority, setSelectedPriority] = useState<any>();
+    const [selectedPriority, setSelectedPriority] = useState<any>(
+        { id: formattedPriority, name: data?.taskPriority } || '',
+    );
     const selectPriority = (user) => {
         setSelectedPriority(user);
     };
@@ -105,8 +130,12 @@ export const AddNewTaskDrawer = ({
     const onSubmit = async (data: ProjectTaskModel) => {
         // console.log({ data });
         data.trackedByHours = isHours;
+
         try {
-            const result = await ProjectManagementService.createTask(data);
+            const result = isEdit
+                ? await ProjectManagementService.updateTask(data)
+                : await ProjectManagementService.createTask(data);
+
             if (result.status) {
                 toast({
                     title: result.message,
@@ -234,6 +263,7 @@ export const AddNewTaskDrawer = ({
                             error={errors.startDate}
                             min={data?.startDate}
                             max={data?.endDate}
+                            defaultValue={new Date(data?.startDate)}
                         />
                         <PrimaryDate<ProjectTaskModel>
                             control={control}
@@ -242,6 +272,7 @@ export const AddNewTaskDrawer = ({
                             error={errors.endDate}
                             min={data?.startDate}
                             max={data?.endDate}
+                            defaultValue={new Date(data?.endDate)}
                         />
                         <PrimaryInput<ProjectTaskModel>
                             label="Duration"

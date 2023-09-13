@@ -139,7 +139,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                             textTransform="capitalize"
                             mb="0"
                         >
-                            {curPage == '[id]'
+                            {curPage?.startsWith('[')
                                 ? idPage?.replace('-', ' ')
                                 : curPage?.replace('-', ' ')}
                         </Text>

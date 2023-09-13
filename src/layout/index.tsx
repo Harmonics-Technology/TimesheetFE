@@ -84,11 +84,13 @@ const Layout = ({ children }: LayoutProps) => {
                                         openSidenav={openSidenav}
                                     />
                                     <Box mt="1rem" w="95%" mx="auto">
-                                        {!activeSub && !upgrade ? (
-                                            <InactiveUser />
-                                        ) : (
+                                        {
+                                            // !activeSub && !upgrade ? (
+                                            //     <InactiveUser />
+                                            // ) : (
                                             children
-                                        )}
+                                            // )
+                                        }
                                     </Box>
                                     <Footer />
                                 </Box>

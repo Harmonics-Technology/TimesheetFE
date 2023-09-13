@@ -238,7 +238,6 @@ const TeamTimeSheetTask = ({
                     id,
                 );
                 if (res?.status) {
-                    console.log({ res });
                     setLoading(false);
                     setTasks(res?.data?.value);
                     return;
