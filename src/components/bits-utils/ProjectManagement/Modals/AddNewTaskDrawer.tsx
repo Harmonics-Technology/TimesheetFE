@@ -261,18 +261,22 @@ export const AddNewTaskDrawer = ({
                             name="startDate"
                             label="Start Date"
                             error={errors.startDate}
-                            min={data?.startDate}
-                            max={data?.endDate}
-                            defaultValue={new Date(data?.startDate)}
+                            // min={data?.startDate}
+                            // max={data?.endDate}
+                            placeholder={moment(data?.startDate).format(
+                                'DD/MM/YYYY',
+                            )}
                         />
                         <PrimaryDate<ProjectTaskModel>
                             control={control}
                             name="endDate"
                             label="End Date"
                             error={errors.endDate}
-                            min={data?.startDate}
-                            max={data?.endDate}
-                            defaultValue={new Date(data?.endDate)}
+                            // min={data?.startDate}
+                            // max={data?.endDate}
+                            placeholder={moment(data?.endDate).format(
+                                'DD/MM/YYYY',
+                            )}
                         />
                         <PrimaryInput<ProjectTaskModel>
                             label="Duration"

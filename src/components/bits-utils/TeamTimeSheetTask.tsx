@@ -64,11 +64,14 @@ const TeamTimeSheetTask = ({
 
     const EventList = allShift?.data?.map((obj: any) => {
         return {
-            id: obj.id,
-            title: obj.project?.name,
-            start: new Date(obj.startDate as string),
-            end: new Date(obj.endDate as string),
-            bill: obj.billable,
+            id: obj?.id,
+            title:
+                obj.projectSubTask?.name ||
+                obj.projectTask?.name ||
+                obj.project?.name,
+            start: new Date(obj?.startDate as string),
+            end: new Date(obj?.endDate as string),
+            bill: obj?.billable,
         };
     });
 

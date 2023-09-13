@@ -230,7 +230,7 @@ export const SingleTask = ({
                                     </HStack>
                                 </td>
                                 <TableData
-                                    name={`${x?.hoursSpent} Hrs`}
+                                    name={`${Round(x?.hoursSpent)} Hrs`}
                                     fontWeight="500"
                                 />
                                 <TableData

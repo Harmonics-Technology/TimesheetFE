@@ -66,12 +66,13 @@ export const FillTimesheetModal = ({
     const [endDate, setendDate] = useState<any>(new DateObject());
     const [isBillable, setisBillable] = useState<any>();
     const [loading, setLoading] = useState<any>();
+    const [projectsId, setProjecstId] = useState(projectId);
 
     const [sliderValue, setSliderValue] = useState(0);
 
     const onSubmit = async (data: ProjectTimesheetModel) => {
         console.log({ data });
-        data.projectId = projectId;
+        data.projectId = projectsId;
         data.projectTaskAsigneeId = subTasks.filter(
             (x) => x.id == data.projectSubTaskId,
         )[0]?.projectTaskAsigneeId;
@@ -134,6 +135,7 @@ export const FillTimesheetModal = ({
             setErr('');
             setOperationalTasks([]);
             setSubTasks([]);
+
             setLoading(true);
             if (taskId == 'operational') {
                 try {
@@ -159,12 +161,12 @@ export const FillTimesheetModal = ({
                 }
                 return;
             }
+            setProjecstId(data.find((x) => x.id == taskId).projectId);
             try {
                 const res = await ProjectManagementService.listSubTasks(
                     0,
                     25,
                     taskId as string,
-                    2,
                 );
                 if (res?.status) {
                     setSubTasks(res?.data?.value);
