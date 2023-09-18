@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const controls = await UserService.getControlSettingById(
                 superAdminId,
             );
-            // console.log({ controls });
+            //
             return {
                 props: {
                     user: data.data,
@@ -53,7 +53,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

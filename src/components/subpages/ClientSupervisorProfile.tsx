@@ -23,7 +23,7 @@ interface SupervisorProfileProps {
     userProfile?: UserView;
 }
 function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
-    // console.log({ userProfile });
+    //
     const {
         register,
         handleSubmit,
@@ -38,17 +38,16 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
             role: userProfile?.role,
         },
     });
-    // console.log(watch("role"));
+    //
 
     const toast = useToast();
     const router = useRouter();
     const onSubmit = async (data: UpdateUserModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
-        console.log({ data });
 
         try {
             const result = await UserService.adminUpdateUser(data);
-            // console.log({ result });
+            //
             if (result.status) {
                 toast({
                     title: 'Profile Update Success',
@@ -66,7 +65,6 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
                 position: 'top-right',
             });
         } catch (error) {
-            console.log(error);
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',

@@ -9,10 +9,10 @@ interface pageOptions {
 
 function Shift({ data }: pageOptions) {
     data = data?.data;
-    console.log({ data });
+
     const totalPages =
         (data?.size as number) / (data?.limit as unknown as number);
-    // console.log({ totalPages });
+    //
     const currentPage = (((data?.limit as unknown as number) +
         (data?.offset as unknown as number)) /
         (data?.limit as unknown as number)) as number;

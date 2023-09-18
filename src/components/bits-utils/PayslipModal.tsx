@@ -35,7 +35,6 @@ type Props = {
 };
 
 export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
-    console.log({ paySlip });
     const allExpenseTotal = paySlip?.payslipView?.invoice?.expenses?.reduce(
         (a, b) => a + (b?.amount as number),
         0,

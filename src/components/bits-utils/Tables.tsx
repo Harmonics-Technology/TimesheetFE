@@ -21,7 +21,7 @@ interface TablesProps {
 }
 
 function Tables({ tableHead, children, bg, color = 'brand.200' }: TablesProps) {
-    // console.log({ children });
+    //
     return (
         <TableContainer h="auto">
             <Table variant="striped" fontSize="11px">

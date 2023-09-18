@@ -51,7 +51,7 @@ export const TeamSingleTask = ({
         'Status',
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
-    console.log({ tasks });
+
     return (
         <Box>
             <Flex gap=".5rem">
@@ -237,7 +237,7 @@ export const TeamSingleTask = ({
                                             color="#a6a6a6"
                                             fontSize=".6rem"
                                             p=".4rem .75rem"
-                                            w='50%'
+                                            w="50%"
                                         >
                                             {x.progress}%
                                         </Box>

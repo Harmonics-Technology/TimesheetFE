@@ -16,7 +16,7 @@ function PageTabs({
 }) {
     const router = useRouter();
     const isActive = router.pathname.startsWith(url);
-    // console.log({ url });
+    //
     const { opens } = useContext(UserContext);
     return (
         <Flex

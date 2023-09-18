@@ -35,7 +35,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.status,
                 pagingOptions.search,
             );
-            console.log({ tasks });
 
             return {
                 props: {
@@ -46,7 +45,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log({ error });
             return {
                 props: {
                     data: [],

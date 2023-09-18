@@ -55,7 +55,7 @@ export const AccessControlSettings = ({
             setLoading(false);
         } catch (error: any) {
             setLoading(false);
-            console.log(error);
+
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',

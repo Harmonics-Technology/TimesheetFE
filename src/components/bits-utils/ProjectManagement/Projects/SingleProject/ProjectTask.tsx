@@ -41,7 +41,6 @@ export const ProjectTask = ({
     project: ProjectView;
     tasks: any;
 }) => {
-    console.log({ tasks });
     const tableHead = [
         'Task Name',
         'Task assigned to',

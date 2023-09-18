@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
         const pagingOptions = filterPagingSearchOptions(ctx);
-        // console.log({ id });
+        //
         try {
             const data = await UserService.getUserById(id);
             const teamList = await UserService.getSupervisees(
@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
-            // console.log({ data });
+            //
             return {
                 props: {
                     userProfile: data.data,
@@ -41,7 +41,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

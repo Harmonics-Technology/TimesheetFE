@@ -42,7 +42,7 @@ export const LeaveDaysDefaults = ({ leaveConfiguration }: leavesProps) => {
 
     const { user } = useContext(UserContext);
     const superAdminId = user?.superAdminId;
-    // console.log({ leaveConfiguration });
+    //
 
     const leaveconfig =
         leaveConfiguration?.isStandardEligibleDays == true ? 'Yes' : 'No';

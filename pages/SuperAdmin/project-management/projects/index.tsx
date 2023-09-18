@@ -14,7 +14,7 @@ const projectsIndex = ({
     projects: any;
     users: any;
     superAdminId: string;
-    counts : any;
+    counts: any;
 }) => {
     return (
         <ProjectPage
@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
-        // console.log({ superAdminId });
+        //
         try {
             const data = await ProjectManagementService.listProject(
                 pagingOptions.offset,
@@ -52,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 await ProjectManagementService.getStatusCountForProject(
                     superAdminId,
                 );
-            // console.log({data})
+            //
             return {
                 props: {
                     projects: data.data,
@@ -62,7 +62,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log({ error });
             return {
                 props: {
                     data: [],

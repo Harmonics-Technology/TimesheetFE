@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 export type LeaveModel = {
+    id?: string | null;
     employeeInformationId?: string;
     leaveTypeId?: string;
     startDate?: string;

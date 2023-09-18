@@ -23,7 +23,7 @@ export const ProjectPage = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
 
-    // console.log({ projects });
+    //
     const allCounts =
         (counts.notStarted as number) +
         (counts.inProgress as number) +

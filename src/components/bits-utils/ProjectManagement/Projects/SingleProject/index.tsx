@@ -22,6 +22,7 @@ import { TopBar } from './TopBar';
 
 export const SingleProjectPage = ({ id, projects }) => {
     const projectSummary = ['Task Name', 'Deadline', 'Team member', 'Workload'];
+    const status = 'completed'
     return (
         <Box>
             <TopBar id={id} data={projects} />

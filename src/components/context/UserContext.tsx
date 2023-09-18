@@ -24,7 +24,7 @@ export const UserProvider = ({ children }: { children: any }) => {
             );
         }
     }, []);
-    // console.log({ activeSub });
+    //
     return (
         <>
             <UserContext.Provider

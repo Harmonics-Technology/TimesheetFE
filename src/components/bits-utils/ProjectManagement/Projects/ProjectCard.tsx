@@ -12,11 +12,11 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
     const dateUsed = moment().diff(moment(data?.startDate), 'day');
     const dateLeft = dateDiff - dateUsed + 1;
     // const datePercent = Math.round((dateUsed / dateDiff) * 100);
-    // console.log({ dateDiff, dateUsed });
+    //
     const router = useRouter();
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
-    // console.log({ data });
+    //
     return (
         <Box
             borderRadius=".6rem"

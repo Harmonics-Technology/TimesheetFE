@@ -23,6 +23,7 @@ import {
     ProjectTaskView,
     ProjectSubTaskModel,
     ProjectManagementService,
+    ProjectSubTaskView,
 } from 'src/services';
 import { DateObject } from 'react-multi-date-picker';
 import { MdCancel } from 'react-icons/md';
@@ -50,11 +51,19 @@ export const AddSubTaskDrawer = ({
     onClose,
     isOpen,
     data,
+    subTask,
 }: {
     onClose: any;
     isOpen: boolean;
     data: ProjectTaskView;
+    subTask: ProjectSubTaskView;
 }) => {
+    const formattedPriority =
+        subTask.taskPriority == 'High'
+            ? 1
+            : data.taskPriority == 'Medium'
+            ? 2
+            : 3;
     const {
         register,
         handleSubmit,
@@ -67,6 +76,15 @@ export const AddSubTaskDrawer = ({
         mode: 'all',
         defaultValues: {
             projectTaskId: data?.id,
+            name: subTask.name,
+            duration: subTask.duration,
+            startDate: subTask.startDate,
+            endDate: subTask.endDate,
+            id: subTask.id,
+            note: subTask.note,
+            projectTaskAsigneeId: subTask.projectTaskAsigneeId,
+            taskPriority: formattedPriority as any,
+
             // trackedByHours: false,
         },
     });
@@ -78,7 +96,12 @@ export const AddSubTaskDrawer = ({
         (watch('trackedByHours') as unknown as string) == 'Track by hours'
             ? true
             : false;
-    const [selectedUser, setSelecedUser] = useState<any>([]);
+    const [selectedUser, setSelecedUser] = useState<any>(
+        {
+            id: subTask?.projectTaskAsigneeId,
+            'user.fullName': subTask?.projectTaskAsignee?.user?.fullName,
+        } || '',
+    );
     const addUser = (user) => {
         setSelecedUser(user);
     };
@@ -91,12 +114,14 @@ export const AddSubTaskDrawer = ({
         { id: 2, name: 'Medium' },
         { id: 3, name: 'Low' },
     ];
-    const [selectedPriority, setSelectedPriority] = useState<any>();
+    const [selectedPriority, setSelectedPriority] = useState<any>(
+        { id: formattedPriority, name: subTask?.taskPriority } || '',
+    );
     const selectPriority = (user) => {
         setSelectedPriority(user);
     };
     const onSubmit = async (data: ProjectSubTaskModel) => {
-        // console.log({ data });
+        //
         data.trackedByHours = isHours;
         try {
             const result = await ProjectManagementService.createSubTask(data);
@@ -139,7 +164,6 @@ export const AddSubTaskDrawer = ({
         setValue('taskPriority', selectedPriority?.id);
     }, [selectedPriority]);
 
-    console.log({ data });
     return (
         <DrawerWrapper
             onClose={onClose}
@@ -227,6 +251,9 @@ export const AddSubTaskDrawer = ({
                             error={errors.startDate}
                             min={data?.startDate}
                             max={data?.endDate}
+                            placeholder={moment(subTask?.startDate).format(
+                                'DD/MM/YYYY',
+                            )}
                         />
                         <PrimaryDate<ProjectSubTaskModel>
                             control={control}
@@ -235,6 +262,9 @@ export const AddSubTaskDrawer = ({
                             error={errors.endDate}
                             min={data?.startDate}
                             max={data?.endDate}
+                            placeholder={moment(subTask?.endDate).format(
+                                'DD/MM/YYYY',
+                            )}
                         />
 
                         <PrimaryInput<ProjectSubTaskModel>
@@ -253,7 +283,11 @@ export const AddSubTaskDrawer = ({
                         radios={['Track by days', 'Track by hours']}
                         name="trackedByHours"
                         flexDir="column"
-                        defaultValue={'Track by days'}
+                        // defaultValue={
+                        //     subTask.trackedByHours == true
+                        //         ? 'Track by hours'
+                        //         : 'Track by days'
+                        // }
                     />
                     {isHours && (
                         <PrimaryInput<ProjectSubTaskModel>

@@ -25,7 +25,6 @@ export const AddEditLeave = ({ data }: { data?: any }) => {
     const router = useRouter();
     const toast = useToast();
     const { user } = useContext(UserContext);
-    console.log({ data });
 
     const id = data?.id;
     const superAdminId = user?.superAdminId;

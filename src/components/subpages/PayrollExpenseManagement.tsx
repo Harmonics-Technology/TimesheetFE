@@ -69,7 +69,6 @@ function PayrollExpenseManagement({
     team,
     expenseType,
 }: expenseProps) {
-    console.log({ expenseType, team, expenses });
     const expensesList = expenses?.data?.value;
     const [loading, setLoading] = useState(false);
 
@@ -89,7 +88,7 @@ function PayrollExpenseManagement({
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
-            console.log({ response });
+
             setSelectedId([...response]);
             return;
         }
@@ -108,7 +107,6 @@ function PayrollExpenseManagement({
                 setLoading(true);
                 const result = await FinancialService.approveExpense(x);
                 if (result.status) {
-                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -127,7 +125,6 @@ function PayrollExpenseManagement({
                     position: 'top-right',
                 });
             } catch (error: any) {
-                console.log({ error });
                 setLoading(false);
                 toast({
                     title: error.body.message || error.message,
@@ -207,7 +204,7 @@ function PayrollExpenseManagement({
                     mb="1rem"
                     align="center"
                     flexWrap="wrap"
-                    gap='.5rem'
+                    gap=".5rem"
                 >
                     <HStack gap="1rem">
                         <Button
@@ -235,7 +232,7 @@ function PayrollExpenseManagement({
                             </Button>
                         )}
                     </HStack>
-                    <HStack ml='auto'>
+                    <HStack ml="auto">
                         <Checkbox
                             checked={
                                 expensesList?.filter(

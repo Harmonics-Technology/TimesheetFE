@@ -88,7 +88,7 @@ export const CreateProjectDrawer = ({
     const toast = useToast();
     const router = useRouter();
 
-    // console.log(watch('assignedUsers'));
+    //
 
     const onSubmit = async (data: ProjectModel) => {
         try {
@@ -137,7 +137,7 @@ export const CreateProjectDrawer = ({
         setValue('documentURL', fileDoc?.url?.cdnUrl);
     }, [fileDoc]);
 
-    // console.log({ errors });
+    //
     return (
         <DrawerWrapper
             onClose={onClose}

@@ -74,8 +74,6 @@ export const AddShiftPreference = ({ isOpen, onClose }: ExportProps) => {
         setIsComponentVisible: endIsVisible,
     } = useComponentVisible(false);
 
-    console.log({ fromDate, toDate });
-
     useEffect(() => {
         setValue(
             'duration',

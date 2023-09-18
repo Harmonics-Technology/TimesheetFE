@@ -63,7 +63,6 @@ export const PauseModal = ({ isOpen, onClose }) => {
             });
             return;
         } catch (err: any) {
-            console.log({ err });
             toast({
                 title: err.body.message || err.message,
                 status: 'error',

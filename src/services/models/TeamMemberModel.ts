@@ -51,4 +51,5 @@ export type TeamMemberModel = {
     employeeType?: string | null;
     superAdminId?: string | null;
     invoiceGenerationType?: string | null;
+    enableFinancials?: boolean;
 };

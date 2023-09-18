@@ -51,7 +51,7 @@ export const SingleEmployeeShift = ({
         'End Time',
         'Status',
     ];
-    // console.log({ userInfo });
+    //
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     return (

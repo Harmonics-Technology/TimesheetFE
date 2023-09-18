@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
+import type { BudgetSummaryReportViewStandardResponse } from '../models/BudgetSummaryReportViewStandardResponse';
+import type { MarkAsCompletedModel } from '../models/MarkAsCompletedModel';
 import type { ProjectModel } from '../models/ProjectModel';
 import type { ProjectProgressCountViewListStandardResponse } from '../models/ProjectProgressCountViewListStandardResponse';
 import type { ProjectProgressCountViewStandardResponse } from '../models/ProjectProgressCountViewStandardResponse';
@@ -364,6 +366,7 @@ userId?: string,
      * @param userId 
      * @param startDate 
      * @param endDate 
+     * @param projectId 
      * @returns ProjectProgressCountViewListStandardResponse Success
      * @throws ApiError
      */
@@ -371,6 +374,7 @@ userId?: string,
 userId?: string,
 startDate?: string,
 endDate?: string,
+projectId?: string,
 ): CancelablePromise<ProjectProgressCountViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -379,6 +383,7 @@ endDate?: string,
                 'userId': userId,
                 'startDate': startDate,
                 'endDate': endDate,
+                'projectId': projectId,
             },
         });
     }
@@ -409,6 +414,45 @@ search?: string,
                 'projectId': projectId,
                 'search': search,
             },
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @param startDate 
+     * @param endDate 
+     * @returns BudgetSummaryReportViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getSummaryReport(
+superAdminId?: string,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<BudgetSummaryReportViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/summary-report',
+            query: {
+                'superAdminId': superAdminId,
+                'StartDate': startDate,
+                'EndDate': endDate,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static markProjectOrTaskAsCompleted(
+requestBody?: MarkAsCompletedModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/completed',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
         });
     }
 

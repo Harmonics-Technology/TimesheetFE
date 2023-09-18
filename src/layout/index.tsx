@@ -39,11 +39,11 @@ const Layout = ({ children }: LayoutProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const route = `/login`;
     const urlRoute = router.asPath.split('/')[1];
-    // console.log({ urlRoute });
+    //
     const loggedInUser = user?.role?.replaceAll(' ', '');
     const { activeSub } = useContext(UserContext);
     const upgrade = router.asPath.startsWith('/SuperAdmin/account-management');
-    // console.log({ activeSub });
+    //
     useEffect(() => {
         if (
             urlRoute !== loggedInUser &&

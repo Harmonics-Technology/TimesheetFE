@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const userId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
-        // console.log({ superAdminId });
+        //
         try {
             const data = await ProjectManagementService.listProject(
                 pagingOptions.offset,
@@ -47,9 +47,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const counts =
                 await ProjectManagementService.getStatusCountForProject(
                     superAdminId,
-                    userId
+                    userId,
                 );
-            console.log({ data });
+
             return {
                 props: {
                     projects: data.data,
@@ -58,7 +58,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log({ error });
             return {
                 props: {
                     data: [],

@@ -26,10 +26,11 @@ import { ExportReportModal } from './ExportReportModal';
 interface TableCardsProps {
     title: string;
     url: string;
-    data: any[] | null | undefined;
+    data: any[] | null | undefined | any;
     thead: any[];
     link: string;
     hasFilter?: boolean;
+    exportOpened?: any;
 }
 function TableCards({
     title,
@@ -38,10 +39,10 @@ function TableCards({
     thead,
     link,
     hasFilter,
+    exportOpened,
 }: TableCardsProps) {
-    // console.log({ data });
+    //
     const router = useRouter();
-    const { isOpen, onOpen, onClose } = useDisclosure();
     const [fromDate, setFromDate] = useState<any>(
         new DateObject().subtract(1, 'month'),
     );
@@ -173,23 +174,13 @@ function TableCards({
                         fontSize=".7rem"
                         fontWeight="bold"
                         cursor="pointer"
-                        onClick={onOpen}
+                        onClick={exportOpened}
                     >
                         <Text mb="0">Export Report</Text>
                         <Icon as={BsDownload} />
                     </HStack>
                 )}
             </Stack>
-            {isOpen && (
-                <ExportReportModal
-                    isOpen={isOpen}
-                    onClose={onClose}
-                    data={thead}
-                    record={1}
-                    fileName={'Summary Report from Timba'}
-                    model="timesheet"
-                />
-            )}
         </Box>
     );
 }

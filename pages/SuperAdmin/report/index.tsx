@@ -3,15 +3,21 @@ import { withPageAuth } from '@components/generics/withPageAuth';
 import { Reports } from '@components/subpages/Reports';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { DashboardService, FinancialService, UserService } from 'src/services';
+import {
+    DashboardService,
+    FinancialService,
+    ProjectManagementService,
+    UserService,
+} from 'src/services';
 
-const index = ({ metrics, team, paymentPartner, chart }) => {
+const index = ({ metrics, team, paymentPartner, chart, summary }) => {
     return (
         <Reports
             metrics={metrics}
             team={team}
             paymentPartner={paymentPartner}
             chart={chart}
+            summary={summary}
         />
     );
 };
@@ -45,16 +51,21 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const chart = await UserService.getUserCountByPayrolltypePerYear(
                 pagingOptions.chartYear,
             );
+            const summary = await ProjectManagementService.getSummaryReport(
+                superAdminId,
+                pagingOptions.from,
+                pagingOptions.to,
+            );
             return {
                 props: {
                     metrics: data,
                     team,
                     paymentPartner,
                     chart,
+                    summary: summary.data,
                 },
             };
         } catch (error: any) {
-            console.log({ error });
             return {
                 props: {
                     data: [],

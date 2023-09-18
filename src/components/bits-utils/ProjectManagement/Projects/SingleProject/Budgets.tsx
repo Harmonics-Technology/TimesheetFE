@@ -23,7 +23,7 @@ export const Budgets = ({ id, project }) => {
         'Total Hours',
         'Budget Spent',
     ];
-    console.log({ project });
+
     const projectMetrics: ProjectMetrics = project.projectMetrics;
     return (
         <Box>

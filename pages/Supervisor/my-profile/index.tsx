@@ -17,7 +17,7 @@ function index({
     user: UserView;
     controls: ControlSettingView;
 }) {
-    return <MyProfile user={user}  controls={controls} />;
+    return <MyProfile user={user} controls={controls} />;
 }
 
 export default index;
@@ -32,7 +32,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 superAdminId,
             );
 
-            console.log({ data });
             return {
                 props: {
                     user: data.data,
@@ -40,7 +39,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

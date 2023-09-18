@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BudgetRecordToDownload } from '../models/BudgetRecordToDownload';
 import type { ExpenseRecordsToDownload } from '../models/ExpenseRecordsToDownload';
 import type { InvoiceRecord } from '../models/InvoiceRecord';
 import type { PayslipRecordToDownload } from '../models/PayslipRecordToDownload';
@@ -176,6 +177,38 @@ superAdminId?: string,
             url: '/api/Export/timesheet',
             query: {
                 'EmployeeInformationId': employeeInformationId,
+                'Record': record,
+                'rowHeaders': rowHeaders,
+                'StartDate': startDate,
+                'EndDate': endDate,
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param record 
+     * @param rowHeaders 
+     * @param startDate 
+     * @param endDate 
+     * @param superAdminId 
+     * @returns any Success
+     * @throws ApiError
+     */
+    public static exportSummaryReportRecord(
+record?: BudgetRecordToDownload,
+rowHeaders?: Array<string>,
+startDate?: string,
+endDate?: string,
+superAdminId?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Export/summary-report',
+            query: {
                 'Record': record,
                 'rowHeaders': rowHeaders,
                 'StartDate': startDate,

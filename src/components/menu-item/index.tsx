@@ -40,7 +40,7 @@ function MenuItem({
     const [openMenu, setOpenMenu] = useState(false);
     const url = `/${role}/${linkName}`;
     const { isOpen, onOpen, onClose } = useDisclosure();
-    // console.log({ display });
+    //
     return (
         <>
             <Box>

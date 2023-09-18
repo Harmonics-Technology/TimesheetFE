@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const end = format(endOfWeek(new Date()), 'yyyy-MM-dd');
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
 
-        // console.log({ start, end });
+        //
         try {
             const allShift = await ShiftService.listUsersShift(
                 pagingOptions.from || start,
@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             const shiftTypes = await ShiftService.listShiftTypes(superAdminId);
 
-            // console.log({ allShift });
+            //
             return {
                 props: {
                     allShift,

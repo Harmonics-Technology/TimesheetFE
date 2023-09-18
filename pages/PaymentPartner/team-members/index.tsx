@@ -17,7 +17,7 @@ interface TeamProps {
 }
 
 function Team({ teamList, clients, id }: TeamProps) {
-    // console.log({ team });
+    //
     return (
         <PaymentPartnerTeamManagement
             adminList={teamList}
@@ -32,7 +32,7 @@ export default Team;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const id = JSON.parse(ctx.req.cookies.user).id;
-        // console.log({ id });
+        //
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
             const clients = await UserService.listUsers('client');
@@ -53,7 +53,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

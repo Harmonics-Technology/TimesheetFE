@@ -48,7 +48,7 @@ function Login() {
     const [error, setError] = useState('');
     const msal = useMsal();
 
-    // console.log({ rememberedData, rememberMe });
+    //
     const changeInputType = () => {
         setPasswordVisible(!passwordVisible);
     };
@@ -62,7 +62,7 @@ function Login() {
         mode: 'all',
     });
     const expiresIn = new Date(new Date().getTime() + 30 * 60 * 1000);
-    // console.log({expiresIn})
+    //
     const onSubmit = async (data: LoginModel) => {
         try {
             const result = (await UserService.loginUser(
@@ -115,7 +115,7 @@ function Login() {
             });
             return;
         } catch (error: any) {
-            // console.log({ error });
+            //
             toast({
                 title: error?.message || error?.body?.message,
                 status: 'error',
@@ -124,15 +124,15 @@ function Login() {
             });
         }
     };
-    // console.log(watch('email'), watch('password'));
+    //
     const [loading, setLoading] = useState<boolean>(false);
     const authenticate = async () => {
         try {
             setLoading(true);
             const res = await msal.instance.loginPopup();
-            console.log('Home Account id:', res.account?.homeAccountId);
+
             msal.instance.setActiveAccount(res.account);
-            console.log({ res });
+
             if (res?.account?.homeAccountId) {
                 try {
                     const result = (await UserService.microsoftLogin(
@@ -176,7 +176,6 @@ function Login() {
                     setLoading(false);
                     return;
                 } catch (error: any) {
-                    console.log({ error });
                     toast({
                         title: error?.body?.message || error?.message,
                         status: 'error',

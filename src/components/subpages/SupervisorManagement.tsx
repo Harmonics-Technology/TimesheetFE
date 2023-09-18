@@ -53,7 +53,7 @@ const schema = yup.object().shape({
 });
 
 function SupervisorManagement({ adminList, client }: adminProps) {
-    // console.log({ adminList });
+    //
     const clients = client?.filter((x) => x.isActive);
     const {
         register,
@@ -71,7 +71,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    // console.log({ adminList });
+    //
 
     const [clientType, setClientType] = useState(false);
     const { addons, subType, user } = useContext(UserContext);

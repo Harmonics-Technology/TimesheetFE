@@ -24,7 +24,7 @@ export const SingleTeamMember = ({ id, teams }: { id: string; teams: any }) => {
         'End Date',
         'Progress Status',
     ];
-    console.log({ teams });
+
     const userDetails = teams?.value[0];
     return (
         <Box>

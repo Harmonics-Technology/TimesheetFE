@@ -54,7 +54,6 @@ export const BiPayScheduleSettings = ({ data }) => {
                 position: 'top-right',
             });
         } catch (error: any) {
-            console.log(error);
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -65,7 +64,7 @@ export const BiPayScheduleSettings = ({ data }) => {
     };
     return (
         <Box py="1.5rem" mb="1rem" borderBottom="1px solid #C2CFE0">
-            <Flex justify='space-between'>
+            <Flex justify="space-between">
                 <VStack align="flex-start" mb="1.5rem">
                     <Text
                         color="#002861"

@@ -48,7 +48,6 @@ function TwofaLogin() {
                     twoFactorCode,
                 )) as UserViewStandardResponse;
             if (result.status) {
-                console.log({ result });
                 toast({
                     title: `Login Successful`,
                     status: 'success',

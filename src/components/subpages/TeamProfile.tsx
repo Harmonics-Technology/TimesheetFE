@@ -77,10 +77,8 @@ function TeamProfile({
     paymentPartner,
     id,
 }: TeamProfileProps) {
-    console.log({ userProfile });
-
     const { user, addons, opens, subType } = useContext(UserContext);
-    // console.log({ user });
+    //
     const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
     const {
         register,
@@ -130,12 +128,13 @@ function TeamProfile({
     });
     const router = useRouter();
     const toast = useToast();
-    // console.log(watch('role'));
+    //
     const payroll = userProfile?.employeeInformation?.payrollType;
     const payrolls = watch('payRollTypeId');
     const onboarding = watch('fixedAmount');
     const isEligibleForLeave = watch('isEligibleForLeave');
-    // console.log({ isEligibleForLeave });
+    const includePayroll = watch('enableFinancials');
+    //
 
     const [icd, setIcd] = useState<any>('');
     const [voidCheck, setVoidCheck] = useState<any>('');
@@ -150,45 +149,35 @@ function TeamProfile({
     const showLoadingStateB = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingB(true);
+                setShowLoadingB(true);
             });
             file.done((info) => {
-                setShowLoadingB(false),
-                    console.log('File uploaded: ', info),
-                    setIcd(info);
+                setShowLoadingB(false), setIcd(info);
             });
         }
     };
     const showLoadingStateC = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingC(true);
+                setShowLoadingC(true);
             });
             file.done((info) => {
-                setShowLoadingC(false),
-                    console.log('File uploaded: ', info),
-                    setVoidCheck(info);
+                setShowLoadingC(false), setVoidCheck(info);
             });
         }
     };
     const showLoadingStateD = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingD(true);
+                setShowLoadingD(true);
             });
             file.done((info) => {
-                setShowLoadingD(false),
-                    console.log('File uploaded: ', info),
-                    setInc(info);
+                setShowLoadingD(false), setInc(info);
             });
         }
     };
 
     const downloadFile = (url: any) => {
-        console.log(url);
         axios
             .get(url, {
                 responseType: 'blob',
@@ -201,7 +190,7 @@ function TeamProfile({
     const percentageAmounts = percentageAmount?.sort(
         (a, b) => (a.fee as number) - (b.fee as number),
     );
-    // console.log({ percentageAmounts });
+    //
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [selected, setSelected] = useState(userProfile?.role as string);
     const changeUserRole = async (val) => {
@@ -228,11 +217,10 @@ function TeamProfile({
             data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
         }
         // data.clientId = userProfile?.employeeInformation?.client?.id;
-        console.log({ data });
 
         try {
             const result = await UserService.updateTeamMember(data);
-            // console.log({ result });
+            //
             if (result.status) {
                 toast({
                     title: 'Profile Update Success',
@@ -250,7 +238,6 @@ function TeamProfile({
                 position: 'top-right',
             });
         } catch (error) {
-            console.log(error);
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',
@@ -261,7 +248,7 @@ function TeamProfile({
     };
 
     const show = router.asPath.startsWith('/clients/team-members');
-    // console.log({ isDirty });
+    //
 
     useLeavePageConfirmation(isDirty && !isSubmitting);
 
@@ -521,261 +508,23 @@ function TeamProfile({
                                         },
                                     ]}
                                 />
-                                {!addons?.includes('shift management') && (
+                                {subType != 'premium' && (
                                     <TriggerBox opens={opens} />
                                 )}
                             </Box>
-                            <Box pos="relative">
-                                <SelectrixBox<TeamMemberModel>
-                                    control={control}
-                                    name="payRollTypeId"
-                                    error={errors.payRollTypeId}
-                                    keys="id"
-                                    keyLabel="label"
-                                    label="Payroll Type"
-                                    disabled={true}
-                                    placeholder={
-                                        (userProfile?.employeeInformation
-                                            ?.payrollType as string) ||
-                                        'Please Select'
-                                    }
-                                    options={[
-                                        {
-                                            id: '1',
-                                            label: 'Onshore Contract',
-                                        },
-                                        {
-                                            id: '2',
-                                            label: 'Offshore contract',
-                                        },
-                                    ]}
-                                />
-                                {/* {subType != 'full package' && (
-                                    <TriggerBox opens={opens} />
-                                )} */}
-                            </Box>
-                            {(payroll == 'ONSHORE' && payrolls == undefined) ||
-                            payroll == 'ONSHORE' ||
-                            payrolls == 1 ? (
-                                <>
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="Rate/Hr"
-                                        name="ratePerHour"
-                                        error={errors.ratePerHour}
-                                        placeholder=""
-                                        defaultValue={
-                                            userProfile?.employeeInformation
-                                                ?.ratePerHour as unknown as string
-                                        }
-                                        register={register}
-                                    />
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="Hr/Day"
-                                        name="hoursPerDay"
-                                        error={errors.hoursPerDay}
-                                        placeholder=""
-                                        defaultValue={
-                                            userProfile?.employeeInformation
-                                                ?.hoursPerDay as unknown as string
-                                        }
-                                        register={register}
-                                    />
-                                    <Box>
-                                        <Flex>
-                                            <FormLabel
-                                                textTransform="capitalize"
-                                                width="fit-content"
-                                                fontSize=".8rem"
-                                            >
-                                                Incorporation Document
-                                            </FormLabel>
-                                            <Box
-                                                cursor="pointer"
-                                                onClick={() =>
-                                                    downloadFile(
-                                                        userProfile
-                                                            ?.employeeInformation
-                                                            ?.inCorporationDocumentUrl,
-                                                    )
-                                                }
-                                            >
-                                                <AiOutlineDownload />
-                                            </Box>
-                                        </Flex>
 
-                                        <UploadCareWidget
-                                            refs={widgetApiB}
-                                            label=""
-                                            filename={icd?.name}
-                                            loading={showLoadingB}
-                                            uploadFunction={showLoadingStateB}
-                                        />
-                                    </Box>
-                                    <Box>
-                                        <Flex>
-                                            <FormLabel
-                                                textTransform="capitalize"
-                                                width="fit-content"
-                                                fontSize=".8rem"
-                                            >
-                                                Void Check
-                                            </FormLabel>
-                                            <Box
-                                                cursor="pointer"
-                                                onClick={() =>
-                                                    downloadFile(
-                                                        userProfile
-                                                            ?.employeeInformation
-                                                            ?.voidCheckUrl,
-                                                    )
-                                                }
-                                            >
-                                                <AiOutlineDownload />
-                                            </Box>
-                                        </Flex>
-
-                                        <UploadCareWidget
-                                            refs={widgetApiC}
-                                            label=""
-                                            filename={voidCheck?.name}
-                                            loading={showLoadingC}
-                                            uploadFunction={showLoadingStateC}
-                                        />
-                                    </Box>
-                                    <Box>
-                                        <Flex>
-                                            <FormLabel
-                                                textTransform="capitalize"
-                                                width="fit-content"
-                                                fontSize=".8rem"
-                                            >
-                                                Issuance Certificate
-                                            </FormLabel>
-                                            <Box
-                                                cursor="pointer"
-                                                onClick={() =>
-                                                    downloadFile(
-                                                        userProfile
-                                                            ?.employeeInformation
-                                                            ?.insuranceDocumentUrl,
-                                                    )
-                                                }
-                                            >
-                                                <AiOutlineDownload />
-                                            </Box>
-                                        </Flex>
-
-                                        <UploadCareWidget
-                                            refs={widgetApiD}
-                                            label=""
-                                            filename={inc?.name}
-                                            loading={showLoadingD}
-                                            uploadFunction={showLoadingStateD}
-                                        />
-                                    </Box>
-
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="HST No."
-                                        name="hstNumber"
-                                        error={errors.hstNumber}
-                                        placeholder=""
-                                        defaultValue={
-                                            userProfile?.employeeInformation
-                                                ?.hstNumber as unknown as string
-                                        }
-                                        register={register}
-                                    />
-                                </>
-                            ) : (
-                                <>
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="Monthly Payout"
-                                        name="monthlyPayoutRate"
-                                        error={errors.monthlyPayoutRate}
-                                        placeholder=""
-                                        defaultValue={
-                                            userProfile?.employeeInformation
-                                                ?.monthlyPayoutRate as unknown as string
-                                        }
-                                        register={register}
-                                    />
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="Hr/Day"
-                                        name="hoursPerDay"
-                                        error={errors.hoursPerDay}
-                                        placeholder=""
-                                        defaultValue={
-                                            userProfile?.employeeInformation
-                                                ?.hoursPerDay as unknown as string
-                                        }
-                                        register={register}
-                                    />
-                                    <SelectrixBox<TeamMemberModel>
-                                        control={control}
-                                        name="paymentPartnerId"
-                                        error={errors.paymentPartnerId}
-                                        keys="id"
-                                        keyLabel="firstName"
-                                        label="Payment Partner"
-                                        options={paymentPartner}
-                                        placeholder={
-                                            userProfile?.employeeInformation
-                                                ?.paymentPartner
-                                                ?.firstName as string
-                                        }
-                                    />
-                                    {/* <SelectrixBox<TeamMemberModel>
-                                        control={control}
-                                        name="payrollGroupId"
-                                        error={errors.payrollGroupId}
-                                        keys="id"
-                                        keyLabel="label"
-                                        label="Payroll Group"
-                                        placeholder={
-                                            userProfile?.employeeInformation
-                                                ?.payrollGroup ||
-                                            'Please select'
-                                        }
-                                        options={[
-                                            {
-                                                id: 1,
-                                                label: 'Pro-insight Technology',
-                                            },
-                                            {
-                                                id: 2,
-                                                label: 'Olade consulting',
-                                            },
-                                        ]}
-                                    /> */}
-                                </>
-                            )}
                             <PrimaryInput<TeamMemberModel>
-                                label="Client Rate"
-                                name="ratePerHour"
-                                error={errors.ratePerHour}
+                                label="Hr/Day"
+                                name="hoursPerDay"
+                                error={errors.hoursPerDay}
                                 placeholder=""
                                 defaultValue={
                                     userProfile?.employeeInformation
-                                        ?.ratePerHour as unknown as string
+                                        ?.hoursPerDay as unknown as string
                                 }
                                 register={register}
                             />
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="currency"
-                                error={errors.currency}
-                                keys="id"
-                                keyLabel="label"
-                                label="Currency"
-                                placeholder={
-                                    userProfile?.employeeInformation
-                                        ?.currency as string
-                                }
-                                options={[
-                                    { id: 'CAD', label: 'CAD' },
-                                    { id: 'NGN', label: 'NGN' },
-                                ]}
-                            />
+
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
                                 name="paymentFrequency"
@@ -794,85 +543,306 @@ function TeamProfile({
                                     'Please select'
                                 }
                             />
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="invoiceGenerationType"
-                                error={errors.invoiceGenerationType}
-                                keys="id"
-                                keyLabel="label"
-                                label="Invoice Type"
-                                options={[
-                                    { id: 'invoice', label: 'Invoice' },
-                                    { id: 'payroll', label: 'Payroll' },
-                                ]}
-                                placeholder={
-                                    userProfile?.employeeInformation
-                                        ?.invoiceGenerationType ||
-                                    'Please select'
-                                }
-                            />
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="fixedAmount"
-                                error={errors.fixedAmount}
-                                keys="id"
-                                keyLabel="label"
-                                label="Onboarding fee type"
-                                placeholder={
-                                    userProfile?.employeeInformation
-                                        ?.fixedAmount == true
-                                        ? 'Fixed Amount'
-                                        : 'Percentage'
-                                }
-                                options={[
-                                    { id: true, label: 'Fixed amount' },
-                                    { id: false, label: 'Percentage' },
-                                ]}
-                            />
-                            {userProfile?.employeeInformation?.fixedAmount ==
-                                false || onboarding == false ? (
-                                <SelectrixBox<TeamMemberModel>
-                                    control={control}
-                                    name="onBordingFee"
-                                    error={errors.onBordingFee}
-                                    keys="fee"
-                                    keyLabel="fee"
-                                    label="Onboarding fee"
-                                    placeholder={
-                                        userProfile?.employeeInformation
-                                            ?.onBoradingFee as unknown as string
-                                    }
-                                    options={percentageAmounts}
-                                />
-                            ) : (
-                                // : onboarding == true &&
-                                //   fixedAmount !== undefined ? (
-                                //     <Box pos="relative">
-                                //         <PrimaryInput<TeamMemberModel>
-                                //             label="Onboarding fee"
-                                //             name="onBordingFee"
-                                //             error={errors.onBordingFee}
-                                //             placeholder=""
-                                //             value={fixedAmount}
-                                //             register={register}
-                                //             readonly
-                                //         />
-                                //         <Text
-                                //             pos="absolute"
-                                //             mb="0"
-                                //             left="8%"
-                                //             top="50%"
-                                //             transform="translateY(-15%)"
-                                //             bgColor="white"
-                                //         >
-                                //             {fixedAmount}
-                                //         </Text>
-                                //     </Box>
-                                // )
-                                ''
-                            )}
                         </Grid>
                     </Box>
+                    {includePayroll && (
+                        <Box w="full">
+                            <Flex
+                                justify="space-between"
+                                align="center"
+                                my="1rem"
+                                py="1rem"
+                                borderY="1px solid"
+                                borderColor="gray.300"
+                            >
+                                <Text
+                                    textTransform="uppercase"
+                                    mb="0"
+                                    fontSize="1.3rem"
+                                    fontWeight="500"
+                                >
+                                    Payroll Data
+                                </Text>
+                            </Flex>
+                            <Grid
+                                templateColumns={[
+                                    'repeat(1,1fr)',
+                                    'repeat(3,1fr)',
+                                ]}
+                                gap="1rem 2rem"
+                            >
+                                <Box pos="relative">
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="payRollTypeId"
+                                        error={errors.payRollTypeId}
+                                        keys="id"
+                                        keyLabel="label"
+                                        label="Payroll Type"
+                                        disabled={true}
+                                        placeholder={
+                                            (userProfile?.employeeInformation
+                                                ?.payrollType as string) ||
+                                            'Please Select'
+                                        }
+                                        options={[
+                                            {
+                                                id: '1',
+                                                label: 'Onshore Contract',
+                                            },
+                                            {
+                                                id: '2',
+                                                label: 'Offshore contract',
+                                            },
+                                        ]}
+                                    />
+                                    {subType != 'premium' && (
+                                        <TriggerBox opens={opens} />
+                                    )}
+                                </Box>
+                                {(payroll == 'ONSHORE' &&
+                                    payrolls == undefined) ||
+                                payroll == 'ONSHORE' ||
+                                payrolls == 1 ? (
+                                    <>
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="Rate/Hr"
+                                            name="ratePerHour"
+                                            error={errors.ratePerHour}
+                                            placeholder=""
+                                            defaultValue={
+                                                userProfile?.employeeInformation
+                                                    ?.ratePerHour as unknown as string
+                                            }
+                                            register={register}
+                                        />
+
+                                        <Box>
+                                            <Flex>
+                                                <FormLabel
+                                                    textTransform="capitalize"
+                                                    width="fit-content"
+                                                    fontSize=".8rem"
+                                                >
+                                                    Incorporation Document
+                                                </FormLabel>
+                                                <Box
+                                                    cursor="pointer"
+                                                    onClick={() =>
+                                                        downloadFile(
+                                                            userProfile
+                                                                ?.employeeInformation
+                                                                ?.inCorporationDocumentUrl,
+                                                        )
+                                                    }
+                                                >
+                                                    <AiOutlineDownload />
+                                                </Box>
+                                            </Flex>
+
+                                            <UploadCareWidget
+                                                refs={widgetApiB}
+                                                label=""
+                                                filename={icd?.name}
+                                                loading={showLoadingB}
+                                                uploadFunction={
+                                                    showLoadingStateB
+                                                }
+                                            />
+                                        </Box>
+                                        <Box>
+                                            <Flex>
+                                                <FormLabel
+                                                    textTransform="capitalize"
+                                                    width="fit-content"
+                                                    fontSize=".8rem"
+                                                >
+                                                    Void Check
+                                                </FormLabel>
+                                                <Box
+                                                    cursor="pointer"
+                                                    onClick={() =>
+                                                        downloadFile(
+                                                            userProfile
+                                                                ?.employeeInformation
+                                                                ?.voidCheckUrl,
+                                                        )
+                                                    }
+                                                >
+                                                    <AiOutlineDownload />
+                                                </Box>
+                                            </Flex>
+
+                                            <UploadCareWidget
+                                                refs={widgetApiC}
+                                                label=""
+                                                filename={voidCheck?.name}
+                                                loading={showLoadingC}
+                                                uploadFunction={
+                                                    showLoadingStateC
+                                                }
+                                            />
+                                        </Box>
+                                        <Box>
+                                            <Flex>
+                                                <FormLabel
+                                                    textTransform="capitalize"
+                                                    width="fit-content"
+                                                    fontSize=".8rem"
+                                                >
+                                                    Issuance Certificate
+                                                </FormLabel>
+                                                <Box
+                                                    cursor="pointer"
+                                                    onClick={() =>
+                                                        downloadFile(
+                                                            userProfile
+                                                                ?.employeeInformation
+                                                                ?.insuranceDocumentUrl,
+                                                        )
+                                                    }
+                                                >
+                                                    <AiOutlineDownload />
+                                                </Box>
+                                            </Flex>
+
+                                            <UploadCareWidget
+                                                refs={widgetApiD}
+                                                label=""
+                                                filename={inc?.name}
+                                                loading={showLoadingD}
+                                                uploadFunction={
+                                                    showLoadingStateD
+                                                }
+                                            />
+                                        </Box>
+
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="HST No."
+                                            name="hstNumber"
+                                            error={errors.hstNumber}
+                                            placeholder=""
+                                            defaultValue={
+                                                userProfile?.employeeInformation
+                                                    ?.hstNumber as unknown as string
+                                            }
+                                            register={register}
+                                        />
+                                    </>
+                                ) : (
+                                    <>
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="Monthly Payout"
+                                            name="monthlyPayoutRate"
+                                            error={errors.monthlyPayoutRate}
+                                            placeholder=""
+                                            defaultValue={
+                                                userProfile?.employeeInformation
+                                                    ?.monthlyPayoutRate as unknown as string
+                                            }
+                                            register={register}
+                                        />
+                                        <SelectrixBox<TeamMemberModel>
+                                            control={control}
+                                            name="paymentPartnerId"
+                                            error={errors.paymentPartnerId}
+                                            keys="id"
+                                            keyLabel="firstName"
+                                            label="Payment Partner"
+                                            options={paymentPartner}
+                                            placeholder={
+                                                userProfile?.employeeInformation
+                                                    ?.paymentPartner
+                                                    ?.firstName as string
+                                            }
+                                        />
+                                    </>
+                                )}
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Client Rate"
+                                    name="clientRate"
+                                    error={errors.clientRate}
+                                    placeholder=""
+                                    defaultValue={
+                                        userProfile?.employeeInformation
+                                            ?.clientRate as unknown as string
+                                    }
+                                    register={register}
+                                />
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="currency"
+                                    error={errors.currency}
+                                    keys="id"
+                                    keyLabel="label"
+                                    label="Currency"
+                                    placeholder={
+                                        userProfile?.employeeInformation
+                                            ?.currency as string
+                                    }
+                                    options={[
+                                        { id: 'CAD', label: 'CAD' },
+                                        { id: 'NGN', label: 'NGN' },
+                                    ]}
+                                />
+
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="invoiceGenerationType"
+                                    error={errors.invoiceGenerationType}
+                                    keys="id"
+                                    keyLabel="label"
+                                    label="Invoice Type"
+                                    options={[
+                                        { id: 'invoice', label: 'Invoice' },
+                                        { id: 'payroll', label: 'Payroll' },
+                                    ]}
+                                    placeholder={
+                                        userProfile?.employeeInformation
+                                            ?.invoiceGenerationType ||
+                                        'Please select'
+                                    }
+                                />
+                                <SelectrixBox<TeamMemberModel>
+                                    control={control}
+                                    name="fixedAmount"
+                                    error={errors.fixedAmount}
+                                    keys="id"
+                                    keyLabel="label"
+                                    label="Onboarding fee type"
+                                    placeholder={
+                                        userProfile?.employeeInformation
+                                            ?.fixedAmount == true
+                                            ? 'Fixed Amount'
+                                            : 'Percentage'
+                                    }
+                                    options={[
+                                        { id: true, label: 'Fixed amount' },
+                                        { id: false, label: 'Percentage' },
+                                    ]}
+                                />
+                                {userProfile?.employeeInformation
+                                    ?.fixedAmount == false ||
+                                onboarding == false ? (
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="onBordingFee"
+                                        error={errors.onBordingFee}
+                                        keys="fee"
+                                        keyLabel="fee"
+                                        label="Onboarding fee"
+                                        placeholder={
+                                            userProfile?.employeeInformation
+                                                ?.onBoradingFee as unknown as string
+                                        }
+                                        options={percentageAmounts}
+                                    />
+                                ) : (
+                                    ''
+                                )}
+                            </Grid>
+                        </Box>
+                    )}
                     <Box w="full">
                         <Flex
                             justify="space-between"

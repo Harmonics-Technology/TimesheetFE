@@ -70,18 +70,27 @@ const schema = yup.object().shape({
     supervisorId: yup.string().required(),
     isActive: yup.boolean().required(),
     hoursPerDay: yup.number().required(),
-    payRollTypeId: yup.number().required(),
+    payRollTypeId: yup.number().when('enableFinancials', {
+        is: true,
+        then: yup.number().required(),
+    }),
     paymentPartnerId: yup.string().when('payRollTypeId', {
         is: 2,
         then: yup.string().required(),
     }),
-    ratePerHour: yup.string().when('payRollTypeId', {
-        is: 1,
-        then: yup.string().required(),
+    ratePerHour: yup.string().when('enableFinancials', {
+        is: true,
+        then: yup.string().when('payRollTypeId', {
+            is: 1,
+            then: yup.string().required(),
+        }),
     }),
-    hstNumber: yup.string().when('payRollTypeId', {
-        is: 1,
-        then: yup.string().required(),
+    hstNumber: yup.string().when('enableFinancials', {
+        is: true,
+        then: yup.string().when('payRollTypeId', {
+            is: 1,
+            then: yup.string().required(),
+        }),
     }),
     monthlyPayoutRate: yup.string().when('payRollTypeId', {
         is: 2,
@@ -89,14 +98,20 @@ const schema = yup.object().shape({
     }),
     currency: yup.string().required(),
     // paymentRate: yup.string().required(),
-    fixedAmount: yup.boolean().required(),
+    fixedAmount: yup.boolean().when('enableFinancials', {
+        is: true,
+        then: yup.boolean().required(),
+    }),
     title: yup.string().required(),
     startDate: yup.string().required(),
     endDate: yup.string().required(),
     dateOfBirth: yup.string().required(),
     paymentFrequency: yup.string().required(),
     address: yup.string().required(),
-    clientRate: yup.string().required(),
+    clientRate: yup.string().when('enableFinancials', {
+        is: true,
+        then: yup.string().required(),
+    }),
     timeSheetGenerationStartDate: yup.string().required(),
     isEligibleForLeave: yup.string().required(),
     employeeType: yup.string().required(),
@@ -121,7 +136,7 @@ function TeamManagement({
     leaveSettings,
 }: adminProps) {
     const client = clients?.filter((x) => x.isActive);
-    // console.log({ client });
+    //
 
     const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);
 
@@ -140,7 +155,7 @@ function TeamManagement({
 
         // },
     });
-    // console.log(watch('onBordingFee'));
+    //
     const { isOpen, onOpen, onClose } = useDisclosure();
     // const { isOpen: opened, onOpen: opens, onClose: closed } = useDisclosure();
     const { subType, user, opens } = useContext(UserContext);
@@ -148,11 +163,14 @@ function TeamManagement({
     const toast = useToast();
     const payroll = watch('payRollTypeId');
     const currency = watch('currency');
-    // console.log(watch('payRollTypeId'));
-    // console.log({ payroll });
+    //
+
+    console.log({ errors });
+    //
     const onboarding = watch('fixedAmount');
     const clientId = watch('clientId');
     const isEligibleForLeave = watch('isEligibleForLeave');
+    const includePayroll = watch('enableFinancials');
 
     const [contract, setContractFile] = useState<any>('');
     const [icd, setIcd] = useState<any>('');
@@ -174,52 +192,40 @@ function TeamManagement({
     const showLoadingStateB = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingB(true);
+                setShowLoadingB(true);
             });
             file.done((info) => {
-                setShowLoadingB(false),
-                    console.log('File uploaded: ', info),
-                    setIcd(info);
+                setShowLoadingB(false), setIcd(info);
             });
         }
     };
     const showLoadingStateC = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingC(true);
+                setShowLoadingC(true);
             });
             file.done((info) => {
-                setShowLoadingC(false),
-                    console.log('File uploaded: ', info),
-                    setVoidCheck(info);
+                setShowLoadingC(false), setVoidCheck(info);
             });
         }
     };
     const showLoadingStateD = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingD(true);
+                setShowLoadingD(true);
             });
             file.done((info) => {
-                setShowLoadingD(false),
-                    console.log('File uploaded: ', info),
-                    setInc(info);
+                setShowLoadingD(false), setInc(info);
             });
         }
     };
     const showLoadingState = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoading(true);
+                setShowLoading(true);
             });
             file.done((info) => {
-                setShowLoading(false),
-                    console.log('File uploaded: ', info),
-                    setContractFile(info);
+                setShowLoading(false), setContractFile(info);
             });
         }
     };
@@ -233,11 +239,11 @@ function TeamManagement({
             return;
         }
         setLoading(true);
-        console.log({ id });
+
         try {
             const data = await UserService.getSupervisors(id);
             setLoading(false);
-            console.log({ data });
+
             if (data.status) {
                 setSupervisors(data.data?.filter((x) => x.isActive));
                 return;
@@ -253,13 +259,13 @@ function TeamManagement({
             });
         }
     };
-    console.log({ supervisors, clientId });
+    //
 
     useEffect(() => {
         getSupervisor(clientId);
     }, [clientId]);
 
-    // console.log({ supervisors });
+    //
     const [clientType, setClientType] = useState(false);
 
     const onSubmit = async (data: TeamMemberModel) => {
@@ -305,7 +311,6 @@ function TeamManagement({
                 : (data.isEligibleForLeave = false);
         }
         data.clientId = !clientType ? user?.superAdminId : data.clientId;
-        console.log({ data });
 
         if (data.supervisorId === undefined || '') {
             toast({
@@ -326,7 +331,7 @@ function TeamManagement({
             return;
         }
 
-        console.log({ data });
+        //
 
         try {
             const result = await UserService.addTeamMember(data);
@@ -349,7 +354,6 @@ function TeamManagement({
             });
             return;
         } catch (err: any) {
-            console.log({ err });
             toast({
                 title: err.body.message || err.message,
                 status: 'error',
@@ -372,7 +376,7 @@ function TeamManagement({
 
     // subType = 'onshore';
 
-    console.log({ user });
+    //
 
     const radios = ['For me', 'For my client'];
     const { getRootProps, getRadioProps } = useRadioGroup({
@@ -626,24 +630,24 @@ function TeamManagement({
                                 <Box pos="relative">
                                     <SelectrixBox<TeamMemberModel>
                                         control={control}
-                                        name="payRollTypeId"
-                                        error={errors.payRollTypeId}
+                                        name="enableFinancials"
+                                        error={errors.enableFinancials}
                                         keys="id"
                                         keyLabel="label"
-                                        label="Payroll Type"
+                                        label="Include Payroll"
                                         placeholder={
-                                            payroll == 1
-                                                ? 'Onshore Contract'
-                                                : 'Offshore Contract'
+                                            includePayroll == true
+                                                ? 'Yes'
+                                                : 'No'
                                         }
                                         options={[
                                             {
-                                                id: 1,
-                                                label: 'Onshore Contract',
+                                                id: true,
+                                                label: 'Yes',
                                             },
                                             {
-                                                id: 2,
-                                                label: 'Offshore Contract',
+                                                id: false,
+                                                label: 'No',
                                             },
                                         ]}
                                     />
@@ -651,106 +655,15 @@ function TeamManagement({
                                         <TriggerBox opens={opens} />
                                     )}
                                 </Box>
-                                {payroll == 1 ? (
-                                    <>
-                                        <PrimaryInput<TeamMemberModel>
-                                            label="Rate/Hr"
-                                            name="ratePerHour"
-                                            error={errors.ratePerHour}
-                                            placeholder=""
-                                            type="number"
-                                            defaultValue=""
-                                            register={register}
-                                        />
-                                        <PrimaryInput<TeamMemberModel>
-                                            label="Hr/Day"
-                                            name="hoursPerDay"
-                                            error={errors.hoursPerDay}
-                                            placeholder=""
-                                            defaultValue=""
-                                            type="number"
-                                            register={register}
-                                        />
-                                        <UploadCareWidget
-                                            refs={widgetApiB}
-                                            label="Incoporation Document"
-                                            filename={icd?.name}
-                                            loading={showLoadingB}
-                                            uploadFunction={showLoadingStateB}
-                                        />
-                                        <UploadCareWidget
-                                            refs={widgetApiC}
-                                            label="Void Check"
-                                            filename={voidCheck?.name}
-                                            loading={showLoadingC}
-                                            uploadFunction={showLoadingStateC}
-                                        />
-                                        <UploadCareWidget
-                                            refs={widgetApiD}
-                                            label="Issuance Certificate"
-                                            filename={inc?.name}
-                                            loading={showLoadingD}
-                                            uploadFunction={showLoadingStateD}
-                                        />
-                                        <PrimaryInput<TeamMemberModel>
-                                            label="HST No."
-                                            name="hstNumber"
-                                            error={errors.hstNumber}
-                                            placeholder=""
-                                            defaultValue=""
-                                            type="number"
-                                            register={register}
-                                        />
-                                    </>
-                                ) : payroll == 2 ? (
-                                    <>
-                                        <PrimaryInput<TeamMemberModel>
-                                            label="Monthly Payout"
-                                            name="monthlyPayoutRate"
-                                            error={errors.monthlyPayoutRate}
-                                            placeholder=""
-                                            defaultValue=""
-                                            type="number"
-                                            register={register}
-                                        />
-                                        <PrimaryInput<TeamMemberModel>
-                                            label="Hr/Day"
-                                            name="hoursPerDay"
-                                            error={errors.hoursPerDay}
-                                            placeholder=""
-                                            defaultValue=""
-                                            register={register}
-                                        />
-
-                                        <SelectrixBox<TeamMemberModel>
-                                            control={control}
-                                            name="paymentPartnerId"
-                                            error={errors.paymentPartnerId}
-                                            keys="id"
-                                            keyLabel="firstName"
-                                            label="Payment Partner"
-                                            options={paymentPartner}
-                                        />
-                                        {/* <SelectrixBox<TeamMemberModel>
-                                        control={control}
-                                        name="payrollGroupId"
-                                        error={errors.payrollGroupId}
-                                        keys="id"
-                                        keyLabel="label"
-                                        label="Payroll Group"
-                                        options={[
-                                            {
-                                                id: 1,
-                                                label: 'Pro-insight Technology',
-                                            },
-                                            {
-                                                id: 2,
-                                                label: 'Olade consulting',
-                                            },
-                                        ]}
-                                    /> */}
-                                    </>
-                                ) : null}
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Hr/Day"
+                                    name="hoursPerDay"
+                                    error={errors.hoursPerDay}
+                                    placeholder=""
+                                    defaultValue=""
+                                    type="number"
+                                    register={register}
+                                />
                                 <Box pos="relative">
                                     <SelectrixBox<TeamMemberModel>
                                         control={control}
@@ -774,32 +687,6 @@ function TeamManagement({
                                         <TriggerBox opens={opens} />
                                     )}
                                 </Box>
-                                <PrimaryInput<TeamMemberModel>
-                                    label="Client Rate"
-                                    name="clientRate"
-                                    error={errors.clientRate}
-                                    placeholder=""
-                                    defaultValue=""
-                                    register={register}
-                                />
-                                <Box pos="relative">
-                                    <SelectrixBox<TeamMemberModel>
-                                        control={control}
-                                        name="currency"
-                                        error={errors.currency}
-                                        keys="id"
-                                        keyLabel="label"
-                                        label="Currency"
-                                        placeholder={currency as string}
-                                        options={[
-                                            { id: 'CAD', label: 'CAD' },
-                                            { id: 'NGN', label: 'NGN' },
-                                        ]}
-                                    />
-                                    {subType != 'premium' && (
-                                        <TriggerBox opens={opens} />
-                                    )}
-                                </Box>
                                 <SelectrixBox<TeamMemberModel>
                                     control={control}
                                     name="paymentFrequency"
@@ -813,69 +700,218 @@ function TeamManagement({
                                         { id: 'Monthly', label: 'Monthly' },
                                     ]}
                                 />
-                                <SelectrixBox<TeamMemberModel>
-                                    control={control}
-                                    name="invoiceGenerationType"
-                                    error={errors.invoiceGenerationType}
-                                    keys="id"
-                                    keyLabel="label"
-                                    label="Invoice Type"
-                                    options={[
-                                        { id: 'invoice', label: 'Invoice' },
-                                        { id: 'payroll', label: 'Payroll' },
-                                    ]}
-                                />
-                                <SelectrixBox<TeamMemberModel>
-                                    control={control}
-                                    name="fixedAmount"
-                                    error={errors.fixedAmount}
-                                    keys="id"
-                                    keyLabel="label"
-                                    label="Onboarding fee type"
-                                    options={[
-                                        { id: true, label: 'Fixed amount' },
-                                        { id: false, label: 'Percentage' },
-                                    ]}
-                                />
-                                {onboarding == false ? (
-                                    <SelectrixBox<TeamMemberModel>
-                                        control={control}
-                                        name="onBordingFee"
-                                        error={errors.onBordingFee}
-                                        keys="fee"
-                                        keyLabel="fee"
-                                        label="Onboarding fee"
-                                        options={percentageAmount}
-                                    />
-                                ) : (
-                                    // : onboarding == true &&
-                                    //   fixedAmount !== undefined ? (
-                                    //     <Box pos="relative">
-                                    //         <PrimaryInput<TeamMemberModel>
-                                    //             label="Onboarding fee"
-                                    //             name="onBordingFee"
-                                    //             error={errors.onBordingFee}
-                                    //             placeholder=""
-                                    //             value={fixedAmount}
-                                    //             register={register}
-                                    //             readonly
-                                    //         />
-                                    //         <Text
-                                    //             pos="absolute"
-                                    //             mb="0"
-                                    //             left="8%"
-                                    //             top="50%"
-                                    //             transform="translateY(-15%)"
-                                    //             bgColor="white"
-                                    //         >
-                                    //             {fixedAmount}
-                                    //         </Text>
-                                    //     </Box>
-                                    // )
-                                    ''
-                                )}
                             </Grid>
                         </Box>
+                        {includePayroll && (
+                            <Box w="full">
+                                <Flex
+                                    justify="space-between"
+                                    align="center"
+                                    my="1rem"
+                                    py="1rem"
+                                    borderY="1px solid"
+                                    borderColor="gray.300"
+                                >
+                                    <Text
+                                        textTransform="uppercase"
+                                        mb="0"
+                                        fontSize="1.3rem"
+                                        fontWeight="500"
+                                    >
+                                        Payroll Data
+                                    </Text>
+                                </Flex>
+
+                                <Grid
+                                    templateColumns={[
+                                        'repeat(1,1fr)',
+                                        'repeat(3,1fr)',
+                                    ]}
+                                    gap="1rem 2rem"
+                                    minW="0"
+                                >
+                                    <Box pos="relative">
+                                        <SelectrixBox<TeamMemberModel>
+                                            control={control}
+                                            name="payRollTypeId"
+                                            error={errors.payRollTypeId}
+                                            keys="id"
+                                            keyLabel="label"
+                                            label="Payroll Type"
+                                            placeholder={
+                                                payroll == 1
+                                                    ? 'Onshore Contract'
+                                                    : 'Offshore Contract'
+                                            }
+                                            options={[
+                                                {
+                                                    id: 1,
+                                                    label: 'Onshore Contract',
+                                                },
+                                                {
+                                                    id: 2,
+                                                    label: 'Offshore Contract',
+                                                },
+                                            ]}
+                                        />
+                                        {subType != 'premium' && (
+                                            <TriggerBox opens={opens} />
+                                        )}
+                                    </Box>
+                                    {payroll == 1 ? (
+                                        <>
+                                            <PrimaryInput<TeamMemberModel>
+                                                label="Rate/Hr"
+                                                name="ratePerHour"
+                                                error={errors.ratePerHour}
+                                                placeholder=""
+                                                type="number"
+                                                defaultValue=""
+                                                register={register}
+                                            />
+
+                                            <UploadCareWidget
+                                                refs={widgetApiB}
+                                                label="Incoporation Document"
+                                                filename={icd?.name}
+                                                loading={showLoadingB}
+                                                uploadFunction={
+                                                    showLoadingStateB
+                                                }
+                                            />
+                                            <UploadCareWidget
+                                                refs={widgetApiC}
+                                                label="Void Check"
+                                                filename={voidCheck?.name}
+                                                loading={showLoadingC}
+                                                uploadFunction={
+                                                    showLoadingStateC
+                                                }
+                                            />
+                                            <UploadCareWidget
+                                                refs={widgetApiD}
+                                                label="Issuance Certificate"
+                                                filename={inc?.name}
+                                                loading={showLoadingD}
+                                                uploadFunction={
+                                                    showLoadingStateD
+                                                }
+                                            />
+                                            <PrimaryInput<TeamMemberModel>
+                                                label="HST No."
+                                                name="hstNumber"
+                                                error={errors.hstNumber}
+                                                placeholder=""
+                                                defaultValue=""
+                                                type="number"
+                                                register={register}
+                                            />
+                                        </>
+                                    ) : payroll == 2 ? (
+                                        <>
+                                            <PrimaryInput<TeamMemberModel>
+                                                label="Monthly Payout"
+                                                name="monthlyPayoutRate"
+                                                error={errors.monthlyPayoutRate}
+                                                placeholder=""
+                                                defaultValue=""
+                                                type="number"
+                                                register={register}
+                                            />
+
+                                            <SelectrixBox<TeamMemberModel>
+                                                control={control}
+                                                name="paymentPartnerId"
+                                                error={errors.paymentPartnerId}
+                                                keys="id"
+                                                keyLabel="firstName"
+                                                label="Payment Partner"
+                                                options={paymentPartner}
+                                            />
+                                        </>
+                                    ) : null}
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Client Rate"
+                                        name="clientRate"
+                                        error={errors.clientRate}
+                                        placeholder=""
+                                        defaultValue={''}
+                                        register={register}
+                                    />
+                                    <Box pos="relative">
+                                        <SelectrixBox<TeamMemberModel>
+                                            control={control}
+                                            name="currency"
+                                            error={errors.currency}
+                                            keys="id"
+                                            keyLabel="label"
+                                            label="Currency"
+                                            placeholder={currency as string}
+                                            options={[
+                                                { id: 'CAD', label: 'CAD' },
+                                                { id: 'NGN', label: 'NGN' },
+                                            ]}
+                                        />
+                                        {subType != 'premium' && (
+                                            <TriggerBox opens={opens} />
+                                        )}
+                                    </Box>
+                                    {/* <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="paymentFrequency"
+                                        error={errors.paymentFrequency}
+                                        keys="id"
+                                        keyLabel="label"
+                                        label="Payment Frequency"
+                                        options={[
+                                            { id: 'Weekly', label: 'Weekly' },
+                                            {
+                                                id: 'Bi-weekly',
+                                                label: 'Bi-Weekly',
+                                            },
+                                            { id: 'Monthly', label: 'Monthly' },
+                                        ]}
+                                    /> */}
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="invoiceGenerationType"
+                                        error={errors.invoiceGenerationType}
+                                        keys="id"
+                                        keyLabel="label"
+                                        label="Invoice Type"
+                                        options={[
+                                            { id: 'invoice', label: 'Invoice' },
+                                            { id: 'payroll', label: 'Payroll' },
+                                        ]}
+                                    />
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="fixedAmount"
+                                        error={errors.fixedAmount}
+                                        keys="id"
+                                        keyLabel="label"
+                                        label="Onboarding fee type"
+                                        options={[
+                                            { id: true, label: 'Fixed amount' },
+                                            { id: false, label: 'Percentage' },
+                                        ]}
+                                    />
+                                    {onboarding == false ? (
+                                        <SelectrixBox<TeamMemberModel>
+                                            control={control}
+                                            name="onBordingFee"
+                                            error={errors.onBordingFee}
+                                            keys="fee"
+                                            keyLabel="fee"
+                                            label="Onboarding fee"
+                                            options={percentageAmount}
+                                        />
+                                    ) : (
+                                        ''
+                                    )}
+                                </Grid>
+                            </Box>
+                        )}
                         <Box w="full">
                             <Flex
                                 justify="space-between"
@@ -929,6 +965,7 @@ function TeamManagement({
                                     name="timeSheetGenerationStartDate"
                                     label="Timesheet Start Date"
                                     error={errors.timeSheetGenerationStartDate}
+                                    disableWeekend
                                     // min={new DateObject().add(3, 'days')}
                                 />
                             </Grid>

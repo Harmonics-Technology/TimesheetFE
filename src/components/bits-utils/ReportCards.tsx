@@ -134,6 +134,7 @@ export const ReportCards = ({
                                 <CustomDatePick
                                     date={fromDate}
                                     setDate={setFromDate}
+                                    format="DD/MM/YYYY"
                                 />
                             </Box>
                         </HStack>
@@ -155,7 +156,11 @@ export const ReportCards = ({
                                 -
                             </Text>
 
-                            <CustomDatePick date={toDate} setDate={setToDate} />
+                            <CustomDatePick
+                                date={toDate}
+                                setDate={setToDate}
+                                format="DD/MM/YYYY"
+                            />
                         </HStack>
                     </HStack>
                     <Menu>

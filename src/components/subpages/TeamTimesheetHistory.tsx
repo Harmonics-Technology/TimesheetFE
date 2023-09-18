@@ -26,8 +26,6 @@ function TeamTimesheetHistory({
     timesheet = false,
     id,
 }: adminProps) {
-    console.log({ timeSheets });
-
     const thead = ['Name', 'Year', 'Month', 'Approved Hours', 'Action'];
     const { onOpen, onClose, isOpen } = useDisclosure();
 

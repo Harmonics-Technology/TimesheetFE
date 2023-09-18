@@ -47,14 +47,7 @@ import { UserContext } from '@components/context/UserContext';
 import { ActivateUserAlert } from '@components/bits-utils/ActivateUserAlert';
 import { DateObject } from 'react-multi-date-picker';
 import getBusinessDateCount from '@components/bits-utils/GetBusinessDays';
-
-const schema = yup.object().shape({
-    // endDate: yup.string().required(),
-    startDate: yup.string().required(),
-    leaveTypeId: yup.string().required(),
-    reasonForLeave: yup.string().required(),
-    workAssigneeId: yup.string().required(),
-});
+import Leaveform from '@components/bits-utils/Leaveform';
 
 interface leaveProps {
     leavelist: any;
@@ -62,6 +55,7 @@ interface leaveProps {
     supervisor: any;
     leavetypes: LeaveTypeViewPagedCollection;
     id: string;
+    type?: any;
 }
 
 export const LeaveManagement = ({
@@ -70,34 +64,15 @@ export const LeaveManagement = ({
     supervisor,
     leavetypes,
     id,
+    type,
 }: leaveProps) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const { user } = useContext(UserContext);
     const router = useRouter();
-    const toast = useToast();
-    const [oneDay, setOneDay] = useState(false);
-    const leaveDaysLeft =
-        user?.numberOfDaysEligible != null && user?.numberOfDaysEligible != 0
-            ? user?.numberOfDaysEligible - user?.numberOfLeaveDaysTaken
-            : 0;
-    console.log({
-        teamMembers,
-        supervisor,
-    });
-    const {
-        register,
-        handleSubmit,
-        control,
-        watch,
-        formState: { errors, isSubmitting },
-    } = useForm<LeaveModel>({
-        resolver: yupResolver(schema),
-        mode: 'all',
-        defaultValues: {
-            employeeInformationId: id,
-        },
-    });
+    const [data, setDate] = useState<any>();
+    const [isEdit, setIsEdit] = useState(false);
+
     const route = router.asPath;
     const role = user?.role.replaceAll(' ', '');
     const thead =
@@ -135,51 +110,17 @@ export const LeaveManagement = ({
                   'Status',
                   'Action',
               ];
-    const [data, setDate] = useState<any>();
+
     const openModal = (x) => {
         setDate(x);
         onOpens();
     };
-
-    const onSubmit = async (data: LeaveModel) => {
-        oneDay == true && (data.endDate = data.startDate);
-        data.leaveTypeId = leavetypes.value?.filter(
-            (x) => x.name == data.leaveTypeId,
-        )[0].id;
-        data.noOfLeaveDaysApplied = getBusinessDateCount(
-            new Date(data?.startDate as unknown as Date),
-            new Date(data?.endDate as unknown as Date),
-        );
-
-        try {
-            const result = await LeaveService.createLeave(data);
-            if (result.status) {
-                toast({
-                    title: `Leave succesfully created, kindly await approval from your supervisor`,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                router.reload();
-                onClose();
-                return;
-            }
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
-        } catch (err: any) {
-            toast({
-                title: err?.body?.message || err?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
+    const openModals = (x) => {
+        setDate(x);
+        setIsEdit(true);
+        onOpen();
     };
+
     return (
         <>
             <Box
@@ -196,12 +137,20 @@ export const LeaveManagement = ({
                                       text: 'Leave Status',
                                       url: '/leave/management',
                                   },
+                                  {
+                                      text: 'Cancelled Leave',
+                                      url: '/leave/cancelled',
+                                  },
                               ]
                             : role == 'Supervisor' || role == 'SuperAdmin'
                             ? [
                                   {
                                       text: 'Leave Application',
                                       url: '/leave/management',
+                                  },
+                                  {
+                                      text: 'Leave Cancel Request',
+                                      url: '/leave/cancelled',
                                   },
                                   {
                                       text: 'Leave History',
@@ -216,6 +165,10 @@ export const LeaveManagement = ({
                                   {
                                       text: 'Leave Status',
                                       url: '/leave/management',
+                                  },
+                                  {
+                                      text: 'Leave Cancel Request',
+                                      url: '/leave/cancelled',
                                   },
                                   {
                                       text: 'Leave History',
@@ -315,6 +268,9 @@ export const LeaveManagement = ({
                                     id={x.id}
                                     route={route}
                                     click={() => openModal(x)}
+                                    type={type}
+                                    data={x}
+                                    edit={() => openModals(x)}
                                 />
                             </Tr>
                         ))}
@@ -323,151 +279,15 @@ export const LeaveManagement = ({
                 <Pagination data={leavelist} />
             </Box>
             {isOpen && (
-                <DrawerWrapper
-                    onClose={onClose}
+                <Leaveform
                     isOpen={isOpen}
-                    title={'Leave Application'}
-                >
-                    <ActivateUserAlert
-                        desc={`PS: You have ${leaveDaysLeft} days free leave.`}
-                        color="warning"
-                    />
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <SelectrixBox<LeaveModel>
-                            control={control}
-                            name="leaveTypeId"
-                            error={errors.leaveTypeId}
-                            keys="name"
-                            keyLabel="leaveTypeIcon"
-                            label="Leave Type"
-                            options={leavetypes?.value}
-                            renderOption={(option, index) => {
-                                // console.log({ option });
-                                return (
-                                    <Flex key={index} gap=".4rem">
-                                        <IconPickerItem
-                                            value={option.label}
-                                            color="#2EAFA3"
-                                        />
-                                        {option.key}
-                                    </Flex>
-                                );
-                            }}
-                            renderSelection={(selected, settings, deselect) => {
-                                // console.log({ selected });
-                                return (
-                                    <Box className="react-selectrix rs-toggle">
-                                        <Flex gap=".4rem">
-                                            <IconPickerItem
-                                                value={selected?.label}
-                                                color="#2EAFA3"
-                                            />
-                                            {selected?.key || 'Select a type'}
-                                        </Flex>
-                                    </Box>
-                                );
-                            }}
-                        />
-
-                        <Grid
-                            templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
-                            gap="1rem 2rem"
-                            mt="1.5rem"
-                        >
-                            <PrimaryDate<LeaveModel>
-                                control={control}
-                                name="startDate"
-                                label={oneDay ? 'Leave Date' : 'Start Date'}
-                                error={errors.startDate}
-                                min={new DateObject().add(3, 'days')}
-                                disableWeekend
-                            />
-                            {!oneDay && (
-                                <PrimaryDate<LeaveModel>
-                                    control={control}
-                                    name="endDate"
-                                    label="End Date"
-                                    error={errors.endDate}
-                                    min={new DateObject().add(4, 'days')}
-                                    disableWeekend
-                                />
-                            )}
-                        </Grid>
-                        <Checkbox
-                            size="sm"
-                            mb="1.5rem"
-                            onChange={(e) => setOneDay(e.target.checked)}
-                        >
-                            One day only
-                        </Checkbox>
-                        <VStack gap="1rem">
-                            <PrimaryTextarea<LeaveModel>
-                                label="Reason for leave"
-                                name="reasonForLeave"
-                                error={errors.reasonForLeave}
-                                placeholder=""
-                                defaultValue=""
-                                register={register}
-                                color="#323232"
-                            />
-                            <SelectrixBox<LeaveModel>
-                                control={control}
-                                name="workAssigneeId"
-                                error={errors.workAssigneeId}
-                                keys="id"
-                                keyLabel="fullName"
-                                label="Work Assignee"
-                                options={teamMembers?.data?.value.filter(
-                                    (x) => x.id !== id,
-                                )}
-                                searchable
-                            />
-                            {/* {role != 'TeamMember' && (
-                            <SelectrixBox<LeaveModel>
-                                control={control}
-                                name="invoiceGenerationFrequency"
-                                error={errors.invoiceGenerationFrequency}
-                                keys="id"
-                                keyLabel="fullName"
-                                label="Supervisor"
-                                options={supervisor?.value}
-                                searchable
-                            />
-                        )} */}
-                        </VStack>
-
-                        <DrawerFooter mt="2rem" p="0">
-                            <Flex justify="space-between" w="full">
-                                <Button
-                                    bgColor="#FF5B79"
-                                    color="white"
-                                    height="3rem"
-                                    fontSize="14px"
-                                    px="2rem"
-                                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                    onClick={() => onClose()}
-                                >
-                                    Close
-                                </Button>
-                                <Button
-                                    bgColor="brand.400"
-                                    color="white"
-                                    height="3rem"
-                                    fontSize="14px"
-                                    px="2rem"
-                                    type="submit"
-                                    isLoading={isSubmitting}
-                                    spinner={
-                                        <BeatLoader color="white" size={10} />
-                                    }
-                                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                >
-                                    <Box>Apply</Box>
-                                </Button>
-                            </Flex>
-                        </DrawerFooter>
-                    </form>
-                </DrawerWrapper>
+                    isEdit={isEdit}
+                    onClose={onClose}
+                    data={data}
+                    id={id}
+                    leavetypes={leavetypes}
+                    teamMembers={teamMembers}
+                />
             )}
             {open && (
                 <ShowLeaveDetailsModal

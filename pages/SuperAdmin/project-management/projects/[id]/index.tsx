@@ -9,7 +9,7 @@ export default projectDashboard;
 export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
     const role = JSON.parse(ctx.req.cookies.user).role.replaceAll(' ', '');
     const { id } = ctx.query;
-    // console.log(role);
+    //
     return {
         redirect: {
             permanent: false,

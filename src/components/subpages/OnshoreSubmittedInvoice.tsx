@@ -50,12 +50,12 @@ function OnshoreSubmittedInvoice({
 }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    console.log({ invoiceData });
+
     const invoice = invoiceData?.data?.value;
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
-    // console.log({ clicked });
+    //
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
@@ -72,7 +72,7 @@ function OnshoreSubmittedInvoice({
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
-            console.log({ response });
+
             setSelectedId([...response]);
             return;
         }
@@ -90,7 +90,6 @@ function OnshoreSubmittedInvoice({
                 setLoading(true);
                 const result = await FinancialService.treatSubmittedInvoice(x);
                 if (result.status) {
-                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -109,7 +108,6 @@ function OnshoreSubmittedInvoice({
                     position: 'top-right',
                 });
             } catch (error: any) {
-                console.log({ error });
                 setLoading(false);
                 toast({
                     title: error?.body?.message || error?.message,
@@ -127,7 +125,6 @@ function OnshoreSubmittedInvoice({
     );
     const pending = `/${role}/financials/invoices-team`;
     const approved = `/${role}/financials/invoices-team-treatedinvoice`;
-    console.log({ hideCheckbox });
 
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const thead = [

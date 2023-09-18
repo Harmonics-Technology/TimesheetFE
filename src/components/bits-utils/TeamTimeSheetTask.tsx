@@ -1,5 +1,11 @@
 import { Box, Button, Flex, Text, useDisclosure } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 import { useRouter } from 'next/router';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -31,8 +37,6 @@ const TeamTimeSheetTask = ({
     allProjects,
     superAdminId,
 }: shiftProps) => {
-    console.log({ allShift, id, allProjects });
-
     const [tasks, setTasks] = useState<any>();
     const [loading, setLoading] = useState<any>();
     const [selectedProject, setSelectedProject] = useState<any>();
@@ -77,13 +81,13 @@ const TeamTimeSheetTask = ({
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [data, setData] = useState<any>();
-    function openModal() {
+    function openModal(startDate?: any, endDate?: any) {
         // if (!tasks) {
 
         //     alert('select a project to continue');
         //     return;
         // }
-        setData(tasks);
+        setData({ tasks, startDate, endDate });
         onOpen();
     }
     function ViewNamesGroup({ views: viewNames, view, messages, onView }) {
@@ -185,7 +189,7 @@ const TeamTimeSheetTask = ({
     };
 
     const eventPropGetter = useCallback((event, start, end, isSelected) => {
-        // console.log({ event, start, end, isSelected });
+        //
         return {
             ...(event.bill && {
                 className: 'billable',
@@ -246,14 +250,18 @@ const TeamTimeSheetTask = ({
                     return;
                 }
             } catch (error) {
-                console.log({ error });
                 setLoading(false);
             }
         }
         getTasks();
     }, [selectedProject]);
 
-    // console.log({ selectedProject, tasks });
+    const onSelectSlot = useCallback((slotInfo) => {
+        openModal(slotInfo.start, slotInfo.end);
+        //
+    }, []);
+
+    //
     return (
         <>
             <Loading loading={loading} />
@@ -292,6 +300,8 @@ const TeamTimeSheetTask = ({
                     views={views}
                     dayLayoutAlgorithm={'no-overlap'}
                     eventPropGetter={eventPropGetter}
+                    onSelectSlot={onSelectSlot}
+                    selectable
                 />
             </Box>
 

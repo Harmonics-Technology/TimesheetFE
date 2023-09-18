@@ -57,7 +57,6 @@ export const CustomSelectBox = ({
         }
     };
     const selectData = (x: any) => {
-        console.log({ x });
         if (checkbox == true) {
             checkBoxFn(x);
         }

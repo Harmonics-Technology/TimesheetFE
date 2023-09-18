@@ -1,9 +1,9 @@
-import { filterPagingSearchOptions } from "@components/generics/filterPagingSearchOptions";
-import { withPageAuth } from "@components/generics/withPageAuth";
-import ExpenseType from "@components/subpages/ExpenseType";
-import { GetServerSideProps } from "next";
-import React from "react";
-import { ExpenseTypeView, SettingsService } from "src/services";
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
+import { withPageAuth } from '@components/generics/withPageAuth';
+import ExpenseType from '@components/subpages/ExpenseType';
+import { GetServerSideProps } from 'next';
+import React from 'react';
+import { ExpenseTypeView, SettingsService } from 'src/services';
 
 interface expenseProps {
     expenses: ExpenseTypeView[];
@@ -26,7 +26,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

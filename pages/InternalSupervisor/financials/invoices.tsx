@@ -17,7 +17,7 @@ interface PayrollType {
 }
 function payslips({ invoice }: PayrollType) {
     const { user } = useContext(UserContext);
-    console.log({ user });
+
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
@@ -65,7 +65,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

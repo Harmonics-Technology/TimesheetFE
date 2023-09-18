@@ -15,7 +15,7 @@ export const TabCounts = ({
     num: any;
     active?: any;
 }) => {
-    const formattedNumber = count.toLocaleString('en-US', {
+    const formattedNumber = count?.toLocaleString('en-US', {
         minimumIntegerDigits: 2,
         useGrouping: false,
     });

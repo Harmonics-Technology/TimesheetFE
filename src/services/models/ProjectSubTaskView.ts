@@ -19,4 +19,5 @@ export type ProjectSubTaskView = {
     taskPriority?: string | null;
     note?: string | null;
     status?: string | null;
+    trackedByHours?: boolean;
 };

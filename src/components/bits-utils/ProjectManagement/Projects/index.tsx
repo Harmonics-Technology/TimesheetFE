@@ -29,7 +29,7 @@ export const ProjectPage = ({
             },
         });
     }
-    console.log({ projects });
+
     return (
         <Box>
             <Box mb="2.5rem">

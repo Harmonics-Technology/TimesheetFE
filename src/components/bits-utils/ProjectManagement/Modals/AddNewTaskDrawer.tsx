@@ -92,21 +92,21 @@ export const AddNewTaskDrawer = ({
     const assignees = project?.assignees?.filter(
         (x) => x.projectTaskId == null,
     );
-    // console.log({ assignees, data });
+    //
 
     const [selectedUser, setSelecedUser] = useState<any>(
-        data?.assignees.map((obj) => ({
-            userId: obj.userId,
-            'user.fullName': obj.user?.fullName,
+        data?.assignees?.map((obj) => ({
+            userId: obj?.userId,
+            'user.fullName': obj?.user?.fullName,
         })) || [],
     );
-    console.log({ data, project, selectedUser });
+    //
     const addUser = (user) => {
         const filtered = selectedUser?.find((x) => x.userId === user.userId);
         if (filtered) return;
         setSelecedUser([...selectedUser, user]);
     };
-    // console.log({ selectedPriority });
+    //
     const removeUser = (id) => {
         const filtered = selectedUser?.filter((x) => x.userId !== id);
         setSelecedUser(filtered);
@@ -128,7 +128,7 @@ export const AddNewTaskDrawer = ({
             : false;
 
     const onSubmit = async (data: ProjectTaskModel) => {
-        // console.log({ data });
+        //
         data.trackedByHours = isHours;
 
         try {
@@ -261,8 +261,8 @@ export const AddNewTaskDrawer = ({
                             name="startDate"
                             label="Start Date"
                             error={errors.startDate}
-                            // min={data?.startDate}
-                            // max={data?.endDate}
+                            min={project?.startDate}
+                            max={project?.endDate}
                             placeholder={moment(data?.startDate).format(
                                 'DD/MM/YYYY',
                             )}
@@ -272,8 +272,8 @@ export const AddNewTaskDrawer = ({
                             name="endDate"
                             label="End Date"
                             error={errors.endDate}
-                            // min={data?.startDate}
-                            // max={data?.endDate}
+                            min={project?.startDate}
+                            max={project?.endDate}
                             placeholder={moment(data?.endDate).format(
                                 'DD/MM/YYYY',
                             )}
@@ -294,7 +294,11 @@ export const AddNewTaskDrawer = ({
                         radios={['Track by days', 'Track by hours']}
                         name="trackedByHours"
                         flexDir="column"
-                        defaultValue={'Track by days'}
+                        defaultValue={
+                            data.trackedByHours == true
+                                ? 'Track by hours'
+                                : 'Track by days'
+                        }
                     />
                     {isHours && (
                         <PrimaryInput<ProjectTaskModel>

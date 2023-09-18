@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
 export const PayScheduleNotify = ({ scheduleDone }: { scheduleDone: any }) => {
-    console.log({ scheduleDone });
     const router = useRouter();
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');

@@ -63,7 +63,7 @@ export const ExportReportModal = ({
                 .forEach((x) =>
                     response.push(x as string),
                 ) as unknown as string[];
-            console.log({ response });
+
             setSelectedId([...response]);
             return;
         }
@@ -75,8 +75,6 @@ export const ExportReportModal = ({
         }
         setSelectedId([...selectedId, id]);
     };
-
-    console.log({ selectedId });
 
     const [fromDate, setFromDate] = useState<any>();
     const [toDate, setToDate] = useState<any>();

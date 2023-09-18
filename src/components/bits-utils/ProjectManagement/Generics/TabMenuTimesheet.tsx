@@ -36,6 +36,7 @@ export const TabMenuTimesheet = ({name}) => {
                                 `/${role}/timesheets/${x}`,
                             )
                         }
+                        key={x}
                     >
                         {x.replaceAll('-', ' ')}
                     </Flex>

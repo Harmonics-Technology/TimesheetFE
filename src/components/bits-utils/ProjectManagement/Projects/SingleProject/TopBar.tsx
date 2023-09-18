@@ -1,5 +1,5 @@
-import { HStack, Button, Box, Icon, Text } from '@chakra-ui/react';
-import React from 'react';
+import { HStack, Button, Box, Icon, Text, Flex } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { ProjectTabs } from '../../Dashboard/ProjectTabs';
 import { TaskMenu } from '../../Generics/TaskMenu';
@@ -8,6 +8,9 @@ import { CAD } from '@components/generics/functions/Naira';
 import shadeColor from '@components/generics/functions/shadeColor';
 import moment from 'moment';
 import { useRouter } from 'next/router';
+import { ManageBtn } from '@components/bits-utils/ManageBtn';
+import markAsCompleted from '@components/generics/functions/markAsCompleted';
+import { ProjectView } from 'src/services';
 
 export const TopBar = ({
     noTitle = false,
@@ -16,9 +19,10 @@ export const TopBar = ({
 }: {
     noTitle?: boolean;
     id?: any;
-    data?: any;
+    data?: ProjectView;
 }) => {
     const router = useRouter();
+    const [loading, setLoading] = useState();
     return (
         <Box borderBottom={noTitle ? 'none' : '1px solid #e5e5e5'} pb="0rem">
             <Box mb="1.5rem">
@@ -26,18 +30,35 @@ export const TopBar = ({
                     name={['dashboard', 'projects', 'operational-task']}
                 />
             </Box>
-            <HStack
-                fontSize=".875rem"
-                cursor="pointer"
-                onClick={() => router.back()}
-            >
-                <Button bgColor="#f0f0f0" h="1.5rem" w="1.5rem" minW="0">
-                    <Icon as={MdOutlineArrowBackIosNew} fontSize=".8rem" />
-                </Button>
-                <Text color="brand.400" fontWeight={500}>
-                    Back
-                </Text>
-            </HStack>
+            <Flex justify="space-between" align="center">
+                <HStack
+                    fontSize=".875rem"
+                    cursor="pointer"
+                    onClick={() => router.back()}
+                >
+                    <Button bgColor="#f0f0f0" h="1.5rem" w="1.5rem" minW="0">
+                        <Icon as={MdOutlineArrowBackIosNew} fontSize=".8rem" />
+                    </Button>
+                    <Text color="brand.400" fontWeight={500}>
+                        Back
+                    </Text>
+                </HStack>
+
+                <ManageBtn
+                    onClick={() =>
+                        markAsCompleted(
+                            { type: 1, taskId: data?.id },
+                            setLoading,
+                        )
+                    }
+                    isLoading={loading}
+                    btn="Mark Project as Completed"
+                    bg="brand.400"
+                    w="fit-content"
+                    disabled={data?.progress !== 100}
+                    h="2rem"
+                />
+            </Flex>
             <TaskMenu
                 name={[
                     'dashboard',

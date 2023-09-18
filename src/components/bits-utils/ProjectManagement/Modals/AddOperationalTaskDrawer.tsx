@@ -88,7 +88,7 @@ export const AddOperationalTaskDrawer = ({
         setSelectedDepartment(user);
     };
     const onSubmit = async (data: ProjectTaskModel) => {
-        // console.log({ data });
+        //
         try {
             const result = await ProjectManagementService.createTask(data);
             if (result.status) {
@@ -138,7 +138,7 @@ export const AddOperationalTaskDrawer = ({
         setValue('category', selectedCategory?.id);
     }, [selectedCategory]);
 
-    // console.log({ selectedUser });
+    //
     return (
         <DrawerWrapper
             onClose={onClose}

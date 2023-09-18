@@ -73,13 +73,12 @@ const TimesheetPayrollManager = ({
     id: string;
     payPeriod: any;
 }) => {
-    console.log({ id });
     const router = useRouter();
 
     const { date } = router.query;
     const { end } = router.query;
 
-    // console.log({ date, end: lastDayOfMonth('2023-07-01') });
+    //
 
     const HighlightDate = (value: any) => {
         router.push({
@@ -102,7 +101,6 @@ const TimesheetPayrollManager = ({
         ),
     });
     const newDates = dates?.map((x) => moment(x).format('DD/MM/YY'));
-    console.log({ newDates, date, end });
 
     const newOptions = payPeriod?.map((obj) => ({
         id: `${obj.weekDate} - ${obj.lastWorkDayOfCycle}`,
@@ -111,7 +109,6 @@ const TimesheetPayrollManager = ({
         ).format('MMM DD, YYYY')}`,
     }));
 
-    console.log({ timeSheets });
     const sheet = timeSheets?.timeSheet;
     const newDate = new Date(date as unknown as string);
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -133,7 +130,7 @@ const TimesheetPayrollManager = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    // console.log({ totalHours });
+    //
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
@@ -143,7 +140,7 @@ const TimesheetPayrollManager = ({
 
     const [loading, setLoading] = useState(false);
     const [allChecked, setAllChecked] = useState<boolean>(false);
-    // console.log({ allChecked });
+    //
     const [selected, setSelected] = useState<TimesheetHoursAdditionModel[]>([]);
     const [selectedInput, setSelectedInput] = useState<
         TimesheetHoursAdditionModel[]
@@ -158,8 +155,8 @@ const TimesheetPayrollManager = ({
         }
         setSelectedInput([...selectedInput, item]);
     };
-    // console.log({ selectedInput });
-    // console.log({ selected });
+    //
+    //
 
     const {
         register,
@@ -179,7 +176,6 @@ const TimesheetPayrollManager = ({
     const preventTomorrow = addDays(new Date(), 1).toISOString();
     const [reject, setReject] = useState<any>([]);
     const showReject = (userId, chosenDate) => {
-        console.log({ chosenDate });
         const existing = reject.find((x) => x.userId == userId);
         if (existing) {
             setReject(reject.filter((x) => x.user !== userId));
@@ -196,7 +192,7 @@ const TimesheetPayrollManager = ({
                 date: x.chosenDate,
             };
         });
-        console.log({ data });
+
         try {
             const result = await TimeSheetService.rejectTimeSheetForADay(
                 id,
@@ -204,13 +200,11 @@ const TimesheetPayrollManager = ({
                 data,
             );
             if (result.status) {
-                console.log({ result });
                 router.reload();
                 return;
             }
-            console.log({ result });
         } catch (error: any) {
-            // console.log({ error });
+            //
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -220,11 +214,11 @@ const TimesheetPayrollManager = ({
     };
 
     // const generatePayroll = async (id) => {
-    //     console.log({ id });
+    //
     //     try {
     //         const data = await TimeSheetService.generatePayroll(id);
     //         if (data.status) {
-    //             console.log({ data });
+    //
     //             return;
     //         }
     //         toast({
@@ -241,7 +235,7 @@ const TimesheetPayrollManager = ({
     //             isClosable: true,
     //             position: 'top-right',
     //         });
-    //         console.log(error);
+    //
     //     }
     // };
     // const approveTimeSheetForADay = async (userId, date) => {
@@ -261,7 +255,7 @@ const TimesheetPayrollManager = ({
     //         });
     //         return;
     //     } catch (error) {
-    //         console.log(error);
+    //
     //     }
     // };
 
@@ -269,7 +263,7 @@ const TimesheetPayrollManager = ({
     //     const updateSelected = async (callback) => {
     //         // setAllChecked(!allChecked);
     //         monthlyTimesheets?.forEach(async (timeSheet: TimeSheetView) => {
-    //             console.log({ timeSheet });
+    //
     //             if (
     //                 timeSheet.employeeInformation &&
     //                 timeSheet.status == 'PENDING'
@@ -296,14 +290,14 @@ const TimesheetPayrollManager = ({
     // }
 
     const addHours = async (item) => {
-        // console.log({ userId, date, hours });
+        //
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
                 item.date,
                 item.hours,
             );
-            console.log({ data });
+
             if (data.status) {
                 return;
             }
@@ -314,7 +308,6 @@ const TimesheetPayrollManager = ({
             });
             return;
         } catch (error: any) {
-            console.log(error);
             toast({
                 status: 'error',
                 title: error.body.message || error.message,
@@ -338,7 +331,7 @@ const TimesheetPayrollManager = ({
                     selectedInput.at(0)?.date,
                     selectedInput,
                 );
-                console.log({ data });
+
                 if (data.status) {
                     setLoading(false);
                     toast({
@@ -356,7 +349,6 @@ const TimesheetPayrollManager = ({
                 });
                 return;
             } catch (error: any) {
-                console.log(error);
                 toast({
                     status: 'error',
                     title: error.body.message || error.message,
@@ -596,7 +588,7 @@ const TimesheetPayrollManager = ({
             useClickOutside(popover, close);
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
-            // console.log({ timesheets });
+            //
 
             week.push(
                 <Flex

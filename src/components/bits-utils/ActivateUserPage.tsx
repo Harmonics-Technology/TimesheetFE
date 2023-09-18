@@ -65,7 +65,7 @@ function ActivateUserPage({
     id,
 }: ActivateUserPageProps) {
     const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
-    console.log({ userProfile, supervisor, paymentPartner });
+
     const {
         register,
         handleSubmit,
@@ -109,7 +109,7 @@ function ActivateUserPage({
     });
     const router = useRouter();
     const toast = useToast();
-    console.log({ userProfile });
+
     const payroll = userProfile?.employeeInformation?.payrollType;
     const payrolls = watch('payRollTypeId');
     const onboarding = watch('fixedAmount');
@@ -128,45 +128,35 @@ function ActivateUserPage({
     const showLoadingStateB = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingB(true);
+                setShowLoadingB(true);
             });
             file.done((info) => {
-                setShowLoadingB(false),
-                    console.log('File uploaded: ', info),
-                    setIcd(info);
+                setShowLoadingB(false), setIcd(info);
             });
         }
     };
     const showLoadingStateC = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingC(true);
+                setShowLoadingC(true);
             });
             file.done((info) => {
-                setShowLoadingC(false),
-                    console.log('File uploaded: ', info),
-                    setVoidCheck(info);
+                setShowLoadingC(false), setVoidCheck(info);
             });
         }
     };
     const showLoadingStateD = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingD(true);
+                setShowLoadingD(true);
             });
             file.done((info) => {
-                setShowLoadingD(false),
-                    console.log('File uploaded: ', info),
-                    setInc(info);
+                setShowLoadingD(false), setInc(info);
             });
         }
     };
 
     const downloadFile = (url: any) => {
-        console.log(url);
         axios
             .get(url, {
                 responseType: 'blob',
@@ -192,11 +182,10 @@ function ActivateUserPage({
             data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
         }
         data.clientId = null;
-        console.log({ data });
 
         try {
             const result = await UserService.updateTeamMember(data);
-            // console.log({ result });
+            //
             if (result.status) {
                 toast({
                     title: 'Profile Update Success',
@@ -214,7 +203,6 @@ function ActivateUserPage({
                 position: 'top-right',
             });
         } catch (error) {
-            console.log(error);
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',

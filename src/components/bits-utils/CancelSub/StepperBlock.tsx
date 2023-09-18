@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react';
 
 export const StepperBlock = ({ steps, activeStep, w }) => {
-    console.log({ activeStep });
     return (
         <Stepper index={activeStep} colorScheme="brand" w={w}>
             {steps.map((step, index) => (

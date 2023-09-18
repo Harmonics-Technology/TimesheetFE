@@ -10,6 +10,11 @@ import {
     Select,
     useDisclosure,
     Image,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Spinner,
 } from '@chakra-ui/react';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import {
@@ -19,9 +24,9 @@ import {
 } from '@components/bits-utils/TableData';
 import colorSwatch from '@components/generics/colorSwatch';
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { BiSolidPencil } from 'react-icons/bi';
-import { FaEye } from 'react-icons/fa';
+import { FaEllipsisH, FaEye } from 'react-icons/fa';
 import { ProgressBar } from '../../Generics/ProgressBar';
 import { TableCard } from '../../Generics/TableCard';
 import { StatusBadge } from '../../Generics/StatusBadge';
@@ -33,6 +38,11 @@ import {
     ProjectTaskView,
 } from 'src/services';
 import { Round } from '@components/generics/functions/Round';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
+import markAsCompleted from '@components/generics/functions/markAsCompleted';
+import { ManageBtn } from '@components/bits-utils/ManageBtn';
+import { MdVerified } from 'react-icons/md';
+import { BsPenFill } from 'react-icons/bs';
 
 export const SingleTask = ({
     id,
@@ -55,7 +65,15 @@ export const SingleTask = ({
         'Actions',
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
-    // console.log({ task });
+    const [loading, setLoading] = useState();
+
+    const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
+
+    const openModal = (item: any) => {
+        setSubTask(item);
+        onOpen();
+    };
+    //
     return (
         <Box>
             <TopBar id={id} data={project} />
@@ -88,6 +106,21 @@ export const SingleTask = ({
                                 rightText={`${Round(task?.progress)}%`}
                             />
                         </Box>
+                        <Flex mt="1rem" justify="flex-end">
+                            <ManageBtn
+                                onClick={() =>
+                                    markAsCompleted(
+                                        { type: 2, taskId: task.id },
+                                        setLoading,
+                                    )
+                                }
+                                isLoading={loading}
+                                btn="Mark Task as Completed"
+                                bg="brand.400"
+                                w="fit-content"
+                                disabled={task.progress !== 100}
+                            />
+                        </Flex>
                     </Box>
                     <VStack
                         borderRadius=".2rem"
@@ -250,10 +283,55 @@ export const SingleTask = ({
                                     color={colorSwatch(x?.status)}
                                 />
                                 <td>
-                                    <HStack color="#c2cfe0">
-                                        <Icon as={FaEye} />
-                                        <Icon as={BiSolidPencil} />
-                                    </HStack>
+                                    <Menu>
+                                        <MenuButton>
+                                            <Box
+                                                fontSize="1rem"
+                                                pl="1rem"
+                                                fontWeight="bold"
+                                                cursor="pointer"
+                                                color="brand.300"
+                                            >
+                                                {loading ? (
+                                                    <Spinner size="sm" />
+                                                ) : (
+                                                    <FaEllipsisH />
+                                                )}
+                                            </Box>
+                                        </MenuButton>
+                                        <MenuList>
+                                            <MenuItem
+                                                onClick={() =>
+                                                    markAsCompleted(
+                                                        {
+                                                            type: 3,
+                                                            taskId: x?.id,
+                                                        },
+                                                        setLoading,
+                                                    )
+                                                }
+                                                w="full"
+                                            >
+                                                <Icon
+                                                    as={MdVerified}
+                                                    mr=".5rem"
+                                                    color="brand.400"
+                                                />
+                                                Mark as completed
+                                            </MenuItem>
+                                            <MenuItem
+                                                onClick={() => openModal(x)}
+                                                w="full"
+                                            >
+                                                <Icon
+                                                    as={BsPenFill}
+                                                    mr=".5rem"
+                                                    color="brand.400"
+                                                />
+                                                Edit Sub-task
+                                            </MenuItem>
+                                        </MenuList>
+                                    </Menu>
                                 </td>
                             </TableRow>
                         ))}
@@ -265,6 +343,7 @@ export const SingleTask = ({
                     isOpen={isOpen}
                     onClose={onClose}
                     data={task}
+                    subTask={subTask}
                 />
             )}
         </Box>

@@ -22,10 +22,10 @@ export const CustomDateTime = ({ onChange, value, label }) => {
         new DateObject(newValue.split(' ')[0]) || new DateObject(),
     );
     const [time, setTime] = useState<any>(
-        newValue.split(' ')[1] || moment().format('HH:mm:ss'),
+        newValue.split(' ')[1] || moment().format('HH:mm'),
     );
     const newDate = date.format('YYYY/MM/DD');
-    console.log({ newDate, date: date.format('YYYY/MM/DD'), time });
+    //
 
     useEffect(() => {
         onChange(newDate + ' ' + time);

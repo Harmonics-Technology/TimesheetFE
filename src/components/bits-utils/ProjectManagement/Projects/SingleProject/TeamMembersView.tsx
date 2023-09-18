@@ -11,7 +11,6 @@ export const TeamMembersView = ({
     teams: ProjectView;
     id: string;
 }) => {
-    console.log({ teams });
     return (
         <Box>
             <TopBar id={id} data={teams} />

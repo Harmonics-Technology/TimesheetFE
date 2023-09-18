@@ -12,6 +12,7 @@ import {
     Spinner,
     Text,
     VStack,
+    useRadioGroup,
     useToast,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
@@ -29,6 +30,9 @@ import { CustomDateTime } from './CustomDateTime';
 import { ProgressSlider } from './ProgressSlider';
 import { DateObject } from 'react-multi-date-picker';
 import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
+import InputBlank from './InputBlank';
+import moment from 'moment';
+import RadioBtn from './RadioBtn';
 
 interface ExportProps {
     isOpen: any;
@@ -62,8 +66,8 @@ export const FillTimesheetModal = ({
     const router = useRouter();
     const toast = useToast();
 
-    const [startDate, setstartDate] = useState<any>(new DateObject());
-    const [endDate, setendDate] = useState<any>(new DateObject());
+    const [startDate, setstartDate] = useState<any>(moment(data?.startDate));
+    const [endDate, setendDate] = useState<any>(moment(data.endDate));
     const [isBillable, setisBillable] = useState<any>();
     const [loading, setLoading] = useState<any>();
     const [projectsId, setProjecstId] = useState(projectId);
@@ -71,7 +75,6 @@ export const FillTimesheetModal = ({
     const [sliderValue, setSliderValue] = useState(0);
 
     const onSubmit = async (data: ProjectTimesheetModel) => {
-        console.log({ data });
         data.projectId = projectsId;
         data.projectTaskAsigneeId = subTasks.filter(
             (x) => x.id == data.projectSubTaskId,
@@ -120,13 +123,12 @@ export const FillTimesheetModal = ({
         setValue('billable', isBillable);
     }, [isBillable]);
 
-    console.log({ startDate: watch('startDate') });
-
     const newData = [
-        ...(data || []),
+        ...(data?.tasks || []),
         { id: 'operational', name: 'Operational Task' },
     ];
     const taskId = watch('projectTaskId');
+    const [useEnd, setUseEnd] = useState<boolean>(true);
     const [subTasks, setSubTasks] = useState<any>([]);
     const [err, setErr] = useState<any>([]);
     const [operationalTasks, setOperationalTasks] = useState<any>([]);
@@ -155,13 +157,12 @@ export const FillTimesheetModal = ({
                     setErr(res?.message);
                     setLoading(false);
                 } catch (error: any) {
-                    console.log({ error });
                     setErr(error?.body?.message || error?.message);
                     setLoading(false);
                 }
                 return;
             }
-            setProjecstId(data.find((x) => x.id == taskId).projectId);
+            setProjecstId(data?.tasks.find((x) => x.id == taskId).projectId);
             try {
                 const res = await ProjectManagementService.listSubTasks(
                     0,
@@ -176,7 +177,6 @@ export const FillTimesheetModal = ({
                 setErr(res?.message);
                 setLoading(false);
             } catch (error: any) {
-                console.log({ error });
                 setErr(error?.body?.message || error?.message);
                 setLoading(false);
             }
@@ -184,7 +184,30 @@ export const FillTimesheetModal = ({
         getTasks();
     }, [taskId]);
 
-    console.log({ subTasks, operationalTasks });
+    const radios = ['Use Duration', 'Use End Date'];
+    const { getRootProps, getRadioProps } = useRadioGroup({
+        name: 'selection',
+        defaultValue: 'Use End Date',
+        onChange: (value) => updateClientField(value),
+    });
+
+    const updateClientField = (value: any) => {
+        if (value == 'Use Duration') {
+            setUseEnd(false);
+        } else {
+            setUseEnd(true);
+        }
+    };
+
+    const group = getRootProps();
+
+    const changeDuration = (e: any) => {
+        const endDate = moment(watch('startDate'))
+            .add(e, 'hours')
+            .format('YYYY/MM/DD HH:mm');
+        setValue('endDate', endDate as any);
+    };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -280,11 +303,42 @@ export const FillTimesheetModal = ({
                                     value={startDate}
                                     label="Start Date & Time"
                                 />
-                                <CustomDateTime
-                                    onChange={setendDate}
-                                    value={endDate}
-                                    label="End Date & Time"
-                                />
+                                <HStack w="full" {...group} fontSize=".8rem">
+                                    {radios.map((value) => {
+                                        const radio = getRadioProps({
+                                            value,
+                                        });
+                                        return (
+                                            <RadioBtn {...radio} key={value}>
+                                                {value}
+                                            </RadioBtn>
+                                        );
+                                    })}
+                                </HStack>
+
+                                {useEnd ? (
+                                    <CustomDateTime
+                                        onChange={setendDate}
+                                        value={endDate}
+                                        label="End Date & Time"
+                                    />
+                                ) : (
+                                    <Box w="full">
+                                        <InputBlank
+                                            placeholder="Duration in hours"
+                                            label="Duration"
+                                            onChange={(e) =>
+                                                changeDuration(e.target.value)
+                                            }
+                                        />
+                                        <Text fontSize=".65rem" mt=".3rem">
+                                            Your End date and Time is:{' '}
+                                            {moment(watch('endDate')).format(
+                                                'dddd, MMM DD, YYYY hh:mm A',
+                                            )}
+                                        </Text>
+                                    </Box>
+                                )}
                                 <ProgressSlider
                                     sliderValue={sliderValue}
                                     setSliderValue={setSliderValue}

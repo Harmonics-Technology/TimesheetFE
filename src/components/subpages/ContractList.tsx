@@ -23,7 +23,6 @@ interface adminProps {
 }
 
 function ContractList({ adminList }: adminProps) {
-    console.log({ adminList });
     const router = useRouter();
 
     return (

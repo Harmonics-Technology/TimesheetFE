@@ -10,6 +10,7 @@ import {
     Circle,
     Divider,
     useDisclosure,
+    useToast,
 } from '@chakra-ui/react';
 import DashboardCard from '@components/bits-utils/DashboardCard';
 import { NotificationBox } from '@components/bits-utils/NotificationBox';
@@ -25,8 +26,9 @@ import { NotificationContext } from '@components/context/NotificationContext';
 import { UserContext } from '@components/context/UserContext';
 import { CAD, CUR } from '@components/generics/functions/Naira';
 import moment from 'moment';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
+    BudgetSummaryReportView,
     DashboardView,
     DashboardViewStandardResponse,
     ExpenseView,
@@ -41,13 +43,24 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import InvoiceTemplate from './InvoiceTemplate';
 import { Round } from '@components/generics/functions/Round';
 import ClientInvoicedInvoice from './ClientInvoicedInvoice';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
+import handleCatchErrors from '@components/generics/functions/handleCatchErrors';
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
     counts: ProjectProgressCountView;
+    summary: BudgetSummaryReportView;
+    error: any;
 }
 
-function SuperAdminDashboard({ metrics, counts }: DashboardProps) {
+function SuperAdminDashboard({
+    metrics,
+    counts,
+    summary,
+    error,
+}: DashboardProps) {
     const { user, subType } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -57,6 +70,11 @@ function SuperAdminDashboard({ metrics, counts }: DashboardProps) {
         onClose: onClosed,
     } = useDisclosure();
     const {
+        isOpen: exportOpen,
+        onOpen: exportOpened,
+        onClose: exportClose,
+    } = useDisclosure();
+    const {
         isOpen: isOpens,
         onOpen: onOpens,
         onClose: onCloses,
@@ -64,12 +82,22 @@ function SuperAdminDashboard({ metrics, counts }: DashboardProps) {
     const [clicked, setClicked] = useState<InvoiceView>();
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
-    console.log({ subType });
+
     const isClient = subType == 'premium';
     const totalCounts =
-        (counts.notStarted as number) +
-        (counts.inProgress as number) +
-        (counts.completed as number);
+        (counts?.notStarted as number) +
+        (counts?.inProgress as number) +
+        (counts?.completed as number);
+    const thead = [
+        'No Of Users',
+        'Total Hours',
+        'Billable',
+        'Non-Billable',
+        'Amount',
+    ];
+
+    handleCatchErrors(error);
+
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">
@@ -81,17 +109,17 @@ function SuperAdminDashboard({ metrics, counts }: DashboardProps) {
                     <DashboardCard
                         url={`/${role}/project-management/projects`}
                         title="active projects"
-                        value={totalCounts}
+                        value={totalCounts || 0}
                     />
                     <DashboardCard
                         url={`/${role}/profile-management/team-members`}
                         title="team members"
-                        value={adminMetrics?.totalTeamMembers}
+                        value={adminMetrics?.totalTeamMembers || 0}
                     />
                     <DashboardCard
                         url={`/${role}/profile-management/admin`}
                         title="admins"
-                        value={adminMetrics?.totalDownLines}
+                        value={adminMetrics?.totalDownLines || 0}
                     />
                 </Grid>
 
@@ -100,28 +128,35 @@ function SuperAdminDashboard({ metrics, counts }: DashboardProps) {
                         title={'Summary Report'}
                         url={'timesheets/approval'}
                         hasFilter
-                        data={metrics?.data?.recentTimeSheet
-                            ?.slice(0, 4)
-                            .map((x: any, i) => (
-                                <Tr key={i}>
-                                    <TableData name={'125'} />
-                                    <TableData name={`14,000 hours`} />
-                                    <TableData name={`${'6,000'} hours`} />
-                                    <TableData name={`${'8,000'} hours`} />
-                                    <TableData name={CAD(x.actualPayout)} />
-                                    {/* <TableState name={x.status} /> */}
-                                </Tr>
-                            ))}
-                        thead={[
-                            'No of Users',
-                            'Total Hours',
-                            'Billable',
-                            'Non-Billable',
-                            'Amount',
-                            // 'Status',
-                            // 'Action',
-                        ]}
+                        data={[0].map((x) => (
+                            <Tr key={x}>
+                                <TableData
+                                    name={Round(summary?.noOfUsers || 0)}
+                                />
+                                <TableData
+                                    name={`${Round(
+                                        summary?.totalHours || 0,
+                                    )} hours`}
+                                />
+                                <TableData
+                                    name={`${Round(
+                                        summary?.billableHours || 0,
+                                    )} hours`}
+                                />
+                                <TableData
+                                    name={`${Round(
+                                        summary?.nonBillableHours || 0,
+                                    )} hours`}
+                                />
+                                <TableData
+                                    name={CAD(Round(summary?.amount || 0))}
+                                />
+                                {/* <TableState name={x.status} /> */}
+                            </Tr>
+                        ))}
+                        thead={thead}
                         link={''}
+                        exportOpened={exportOpened}
                     />
                     <TableCards
                         title={'Timesheet Report'}
@@ -137,10 +172,7 @@ function SuperAdminDashboard({ metrics, counts }: DashboardProps) {
                                         }
                                     />
                                     <TableData
-                                        name={
-                                            x?.employeeInformation
-                                                ?.jobTitle
-                                        }
+                                        name={x?.employeeInformation?.jobTitle}
                                     />
                                     <TableData
                                         name={formatDate(x?.startDate)}
@@ -374,6 +406,16 @@ function SuperAdminDashboard({ metrics, counts }: DashboardProps) {
                 onClose={onCloses}
                 clicked={clicked}
             />
+            {exportOpen && (
+                <ExportReportModal
+                    isOpen={exportOpen}
+                    onClose={exportClose}
+                    data={thead}
+                    record={1}
+                    fileName={'Summary Report'}
+                    model="summary-report"
+                />
+            )}
         </Grid>
     );
 }

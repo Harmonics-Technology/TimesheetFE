@@ -46,7 +46,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const end = format(endOfWeek(new Date()), 'yyyy-MM-dd');
         const { id } = ctx.query;
 
-        console.log({ start, end });
         try {
             const allShift = await ShiftService.getAllSwapShifts(
                 pagingOptions.offset,

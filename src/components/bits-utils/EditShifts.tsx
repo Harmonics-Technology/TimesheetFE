@@ -67,8 +67,6 @@ export const EditShifts = ({ setShowEdit, showEdit }) => {
         setIsComponentVisible: endIsVisible,
     } = useComponentVisible(false);
 
-    console.log({ fromDate, toDate });
-
     useEffect(() => {
         setValue(
             'duration',

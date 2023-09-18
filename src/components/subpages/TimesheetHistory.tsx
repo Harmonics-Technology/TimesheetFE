@@ -1,6 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-sparse-arrays */
-import { Box, Flex, Select, Text, HStack, Input, Tr, Button, Icon, useDisclosure } from '@chakra-ui/react';
+import {
+    Box,
+    Flex,
+    Select,
+    Text,
+    HStack,
+    Input,
+    Tr,
+    Button,
+    Icon,
+    useDisclosure,
+} from '@chakra-ui/react';
 import {
     TableContract,
     TableContractAction,
@@ -24,7 +35,7 @@ interface adminProps {
 }
 
 function TimesheetHistory({ timeSheets }: adminProps) {
-    // console.log({ timeSheets });
+    //
     const router = useRouter();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const date = router.query.from as string;

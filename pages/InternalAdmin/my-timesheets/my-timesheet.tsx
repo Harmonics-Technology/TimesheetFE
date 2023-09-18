@@ -6,7 +6,11 @@ import TimesheetTeam from '@components/subpages/TimesheetTeam';
 import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { FinancialService, TimeSheetMonthlyView, TimeSheetService } from 'src/services';
+import {
+    FinancialService,
+    TimeSheetMonthlyView,
+    TimeSheetService,
+} from 'src/services';
 interface Size {
     width: number | undefined;
     height: number | undefined;
@@ -51,14 +55,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
 
         date = moment(date).format('YYYY-MM-DD');
 
-        console.log({ id, date });
         try {
             const data = await TimeSheetService.getTimeSheet(id, date, end);
             const payPeriod = await FinancialService.getPayScheduleInAMonth(
                 id,
                 date,
             );
-            // console.log({ payPeriod: payPeriod.data });
+            //
             return {
                 props: {
                     timeSheets: data.data,
@@ -67,7 +70,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

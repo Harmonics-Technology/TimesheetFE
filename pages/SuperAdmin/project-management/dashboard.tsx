@@ -15,7 +15,7 @@ export default dashboard;
 //     async (ctx: any) => {
 //         const superAdminId = JSON.parse(ctx.req.cookies.user).id;
 //         const pagingOptions = filterPagingSearchOptions(ctx);
-//         // console.log({ superAdminId });
+//         //
 //         try {
 //             const data = await ProjectManagementService.listProject(
 //                 pagingOptions.offset,
@@ -30,7 +30,7 @@ export default dashboard;
 //                 },
 //             };
 //         } catch (error: any) {
-//             console.log({ error });
+//
 //             return {
 //                 props: {
 //                     data: [],

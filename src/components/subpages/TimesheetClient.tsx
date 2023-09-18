@@ -72,9 +72,8 @@ const TimesheetSupervisor = ({
     timeSheets: TimeSheetMonthlyView;
     id: string;
 }) => {
-    console.log({ id });
     const router = useRouter();
-    console.log({ timeSheets });
+
     const sheet = timeSheets?.timeSheet;
     const { date } = router.query;
     const newDate = new Date(date as unknown as string);
@@ -97,7 +96,7 @@ const TimesheetSupervisor = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    // console.log({ totalHours });
+    //
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
@@ -107,9 +106,9 @@ const TimesheetSupervisor = ({
 
     const [loading, setLoading] = useState(false);
     const [allChecked, setAllChecked] = useState<boolean>(false);
-    // console.log({ allChecked });
+    //
     const preventTomorrow = addDays(new Date(), 1).toISOString();
-    console.log({ preventTomorrow });
+
     const [selected, setSelected] = useState<TimeSheetView[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
 
@@ -118,7 +117,7 @@ const TimesheetSupervisor = ({
             moment(x.date).format('DD/MM/YYYY') !=
             moment(preventTomorrow).format('DD/MM/YYYY'),
     );
-    // console.log({ selectedInput });
+    //
     const fillSelectedDate = (item: TimeSheetView) => {
         const existingValue = selected.find((e) => e.date == item.date);
         if (existingValue) {
@@ -151,7 +150,6 @@ const TimesheetSupervisor = ({
         }
         setSelectedInput([...selectedInput, item]);
     };
-    console.log({ selected });
 
     const {
         register,
@@ -166,7 +164,6 @@ const TimesheetSupervisor = ({
 
     const [reject, setReject] = useState<any>([]);
     const showReject = (userId, chosenDate) => {
-        console.log({ chosenDate });
         const existing = reject.find((x) => x.userId == userId);
         if (existing) {
             setReject(reject.filter((x) => x.user !== userId));
@@ -183,7 +180,7 @@ const TimesheetSupervisor = ({
                 date: x.chosenDate,
             };
         });
-        console.log({ data });
+
         try {
             const result = await TimeSheetService.rejectTimeSheetForADay(
                 id,
@@ -191,13 +188,11 @@ const TimesheetSupervisor = ({
                 data,
             );
             if (result.status) {
-                console.log({ result });
                 router.reload();
                 return;
             }
-            console.log({ result });
         } catch (error: any) {
-            // console.log({ error });
+            //
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -207,7 +202,7 @@ const TimesheetSupervisor = ({
     };
 
     const approveTimeSheetForADay = async (userId, chosenDate) => {
-        // console.log({ item });
+        //
         try {
             const data = await TimeSheetService.approveTimeSheetForADay(
                 userId,
@@ -224,12 +219,12 @@ const TimesheetSupervisor = ({
             });
             return;
         } catch (error) {
-            console.log(error);
+            //
         }
     };
 
     const addHours = async (item) => {
-        // console.log({ userId, chosenDate, hours });
+        //
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
@@ -237,7 +232,7 @@ const TimesheetSupervisor = ({
                 item.chosenDate,
                 item.hours,
             );
-            console.log({ data });
+
             if (data.status) {
                 return;
             }
@@ -248,7 +243,6 @@ const TimesheetSupervisor = ({
             });
             return;
         } catch (error: any) {
-            console.log(error);
             toast({
                 status: 'error',
                 title: error.body.message || error.message,
@@ -523,7 +517,7 @@ const TimesheetSupervisor = ({
             useClickOutside(popover, close);
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
-            // console.log({ timesheets });
+            //
 
             week.push(
                 <Flex

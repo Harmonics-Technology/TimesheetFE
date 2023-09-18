@@ -34,7 +34,7 @@ import fileDownload from 'js-file-download';
 import { UserContext } from '@components/context/UserContext';
 import { BiTrash } from 'react-icons/bi';
 import { MdVerified, MdCancel } from 'react-icons/md';
-import { BsEye } from 'react-icons/bs';
+import { BsEye, BsPencil } from 'react-icons/bs';
 import { RiInboxArchiveFill } from 'react-icons/ri';
 import shadeColor from '@components/generics/functions/shadeColor';
 
@@ -228,7 +228,7 @@ export function NewTableState({
     name: string | undefined | null;
     color: any;
 }) {
-    // console.log({ color });
+    //
     return (
         <td>
             <Box
@@ -248,7 +248,7 @@ export function NewTableState({
     );
 }
 export function TableContract({ url }: { url: any }) {
-    // console.log({ url });
+    //
     const [loading, setLoading] = useState(false);
     const downloadFile = (url: string) => {
         setLoading(true);
@@ -288,12 +288,12 @@ export function TableActions({
     const toast = useToast();
     const [loading, setLoading] = useState(false);
     const resendInvite = async (data: InitiateResetModel) => {
-        // console.log(data.email);
+        //
         try {
             setLoading(true);
             const result = await UserService.resendInvite(data);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: 'Invite Sent',
                     status: 'success',
@@ -354,10 +354,16 @@ export function LeaveActions({
     id,
     route,
     click,
+    type,
+    data,
+    edit,
 }: {
     id: any;
     route: any;
     click?: any;
+    type?: any;
+    data?: any;
+    edit?: any;
 }) {
     const toast = useToast();
     const [loading, setLoading] = useState(false);
@@ -369,7 +375,7 @@ export function LeaveActions({
             setLoading(true);
             const result = await LeaveService.treatLeave(id, type);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: result.message,
                     status: 'success',
@@ -398,12 +404,12 @@ export function LeaveActions({
         }
     };
 
-    const deleteLeave = async (id) => {
+    const deleteLeave = async (id, service) => {
         try {
             setLoading(true);
-            const result = await LeaveService.deleteLeave(id);
+            const result = await service(id);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: result.message,
                     status: 'success',
@@ -447,14 +453,29 @@ export function LeaveActions({
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
-                    {(route != `/${role}/leave-management` ||
-                        role == 'Supervisor' ||
-                        role == 'SuperAdmin') && (
+                    <MenuItem onClick={click} w="full">
+                        <Icon as={BsEye} mr=".5rem" color="brand.400" />
+                        View
+                    </MenuItem>
+                    {type == 'asTeam' && data.status == 'PENDING' && (
+                        <MenuItem onClick={edit} w="full">
+                            <Icon as={BsPencil} mr=".5rem" color="brand.400" />
+                            Edit
+                        </MenuItem>
+                    )}
+                    {type == 'asTeam' && data.status == 'APPROVED' && (
+                        <MenuItem
+                            onClick={() =>
+                                deleteLeave(id, LeaveService.cancelLeave)
+                            }
+                            w="full"
+                        >
+                            <Icon as={MdCancel} mr=".5rem" color="#D62242" />
+                            Request Cancellation
+                        </MenuItem>
+                    )}
+                    {type == 'asAdmin' && (
                         <>
-                            <MenuItem onClick={click} w="full">
-                                <Icon as={BsEye} mr=".5rem" color="brand.400" />
-                                View
-                            </MenuItem>
                             <MenuItem
                                 onClick={() => treatLeave(id, 1)}
                                 w="full"
@@ -477,12 +498,18 @@ export function LeaveActions({
                                 />{' '}
                                 Decline
                             </MenuItem>
+
+                            <MenuItem
+                                onClick={() =>
+                                    deleteLeave(id, LeaveService.deleteLeave)
+                                }
+                                w="full"
+                            >
+                                <Icon as={BiTrash} mr=".5rem" color="#D62242" />
+                                Delete
+                            </MenuItem>
                         </>
                     )}
-                    <MenuItem onClick={() => deleteLeave(id)} w="full">
-                        <Icon as={BiTrash} mr=".5rem" color="#D62242" />
-                        Delete
-                    </MenuItem>
                 </MenuList>
             </Menu>
         </td>
@@ -499,7 +526,7 @@ export function ShiftSwapActions({ id }: { id: any }) {
             setLoading(true);
             const result = await ShiftService.approveSwap(id, type);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: result.message,
                     status: 'success',
@@ -734,12 +761,11 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const toggleStatus = async (data: string) => {
-        // console.log(data.email);
+        //
         try {
             setLoading(true);
             const result = await SettingsService.toggleStatus(data);
             if (result.status) {
-                console.log({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -759,7 +785,7 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
             });
         } catch (error: any) {
             setLoading(false);
-            console.log({ error });
+
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -808,7 +834,6 @@ export function ExpenseActions({
             if (manager) {
                 const result = await FinancialService.approveExpense(data);
                 if (result.status) {
-                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -829,7 +854,6 @@ export function ExpenseActions({
             } else {
                 const result = await FinancialService.reviewExpense(data);
                 if (result.status) {
-                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -849,7 +873,6 @@ export function ExpenseActions({
                 });
             }
         } catch (error: any) {
-            console.log({ error });
             setLoading(false);
             toast({
                 title: error.body.message || error.message,
@@ -864,7 +887,6 @@ export function ExpenseActions({
             setLoading(true);
             const result = await FinancialService.declineExpense(data);
             if (result.status) {
-                console.log({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -884,7 +906,7 @@ export function ExpenseActions({
             });
         } catch (err: any) {
             setLoading(false);
-            console.log({ err });
+
             toast({
                 title: err.body.message || err?.message,
                 status: 'error',
@@ -934,7 +956,7 @@ export function PayrollActions({ id, userId }: { id: any; userId: any }) {
     //         setLoading(true);
     //         const result = await FinancialService.approvePayroll(data);
     //         if (result.status) {
-    //             console.log({ result });
+    //
     //             toast({
     //                 title: result.message,
     //                 status: 'success',
@@ -953,7 +975,7 @@ export function PayrollActions({ id, userId }: { id: any; userId: any }) {
     //             position: 'top-right',
     //         });
     //     } catch (error: any) {
-    //         console.log({ error });
+    //
     //         setLoading(false);
     //         toast({
     //             title: error.body.message || error.message,
@@ -1031,7 +1053,6 @@ export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
             setLoading(true);
             const result = await FinancialService.treatSubmittedInvoice(id);
             if (result.status) {
-                console.log({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -1050,7 +1071,6 @@ export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
                 position: 'top-right',
             });
         } catch (error: any) {
-            console.log({ error });
             setLoading(false);
             toast({
                 title: error.body.message || error.message,

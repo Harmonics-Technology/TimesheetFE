@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 
 export default function RadioCheckbox(props) {
-    // console.log({ props });
+    //
     const { getInputProps, getCheckboxProps, state, getLabelProps, htmlProps } =
         useCheckbox(props);
 

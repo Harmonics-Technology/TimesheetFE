@@ -181,7 +181,6 @@ const ScheduleData = ({ DemoData, date, url, setData, openModal }) => {
     ) => {
         const borderWidth = isStart ? '4' : '0';
         const borderColor = colord(bgColor).darken(0.25).toHex();
-        console.log({ event, schedulerData });
 
         const divStyle = {
             borderLeft: borderWidth + 'px solid ' + borderColor,
@@ -216,11 +215,11 @@ const ScheduleData = ({ DemoData, date, url, setData, openModal }) => {
         width,
         clsName,
     ) => {
-        // console.log({ schedulerData, slot });
+        //
         const hour = schedulerData.resources.filter(
             (x) => x.id == slot.slotId,
         )[0];
-        // console.log({ hour });
+        //
 
         return (
             <Flex key={slot.id} className={clsName}>

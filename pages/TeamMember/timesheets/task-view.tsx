@@ -43,7 +43,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const id = JSON.parse(ctx.req.cookies.user).id;
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
 
-        console.log({ id });
         try {
             const allShift =
                 await ProjectManagementService.listUserProjectTimesheet(
@@ -60,7 +59,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.search,
             );
 
-            console.log({ allShift, allProjects });
             return {
                 props: {
                     allShift,
