@@ -27,6 +27,7 @@ import { useRouter } from 'next/router';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { UserContext } from '@components/context/UserContext';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
 interface invoiceProps {
     invoiceList: InvoiceViewPagedCollectionStandardResponse;
@@ -111,6 +112,20 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <Box w="full" mb="1rem">
+                    <LeaveTab
+                        tabValue={[
+                            {
+                                text: 'Awaiting Submission',
+                                url: `/financials/my-invoices`,
+                            },
+                            {
+                                text: 'Submitted',
+                                url: `/financials/invoices`,
+                            },
+                        ]}
+                    />
+                </Box>
                 {selectedId?.length > 0 && (
                     <Flex align="center" justify="space-between" mb="1rem">
                         <Button

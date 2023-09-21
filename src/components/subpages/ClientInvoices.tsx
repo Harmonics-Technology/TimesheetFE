@@ -33,6 +33,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import ClientInvoicedInvoice from './ClientInvoicedInvoice';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -133,7 +134,24 @@ function ClientInvoices({ invoiceData, fileName, record }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between" mb="1rem">
+                <LeaveTab
+                    tabValue={[
+                        {
+                            text: 'Team Members',
+                            url: `/financials/invoices-team`,
+                        },
+                        {
+                            text: 'Payment Partners',
+                            url: `/financials/invoices-payment`,
+                        },
+                        {
+                            text: 'Clients',
+                            url: `/financials/invoices-client`,
+                        },
+                    ]}
+                />
+
+                <Flex justify="space-between" my="1rem">
                     <HStack gap="1rem">
                         {selectedId.length > 0 && (
                             <Button

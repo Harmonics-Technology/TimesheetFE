@@ -1,5 +1,4 @@
 import { Box, Flex } from '@chakra-ui/react';
-import PageTabs from '@components/bits-utils/PageTabs';
 import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
@@ -16,26 +15,8 @@ interface invoiceType {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
 function Invoices({ invoiceData }: invoiceType) {
-    const { user, subType } = useContext(UserContext);
-    const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/invoices-team`}
-                    tabName="Team Members"
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices-payment`}
-                    tabName="Payment Partners"
-                    upgrade={subType == 'basic'}
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices-client`}
-                    tabName="Clients"
-                    upgrade={subType !== 'premium'}
-                />
-            </Flex>
             <OnshoreSubmittedInvoice
                 invoiceData={invoiceData}
                 fileName="Team Member Pending Approval Invoice"

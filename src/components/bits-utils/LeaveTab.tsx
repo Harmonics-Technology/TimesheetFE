@@ -15,7 +15,7 @@ export const LeaveTab = ({ tabValue }: leaveProps) => {
     return (
         <HStack w="full" borderBottom="1px solid #EBEFF2" gap="1rem">
             {tabValue.map((x) => (
-                <Link href={`/${role}${x.url}`} passHref>
+                <Link href={x?.upgrade ? '' : `/${role}${x.url}`} passHref>
                     <Text
                         fontWeight="700"
                         fontSize=".9rem"

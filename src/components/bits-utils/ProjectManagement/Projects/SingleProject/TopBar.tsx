@@ -52,7 +52,7 @@ export const TopBar = ({
                         )
                     }
                     isLoading={loading}
-                    btn="Mark Project as Completed"
+                    btn="Mark Project as Complete"
                     bg="brand.400"
                     w="fit-content"
                     disabled={data?.progress !== 100}

@@ -18,6 +18,7 @@ import {
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import moment from 'moment';
 import {
     FinancialService,
@@ -118,7 +119,7 @@ function OnshoreSubmittedInvoice({
             }
         });
     };
-    const { user } = useContext(UserContext);
+    const { user, subType } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const hideCheckbox = router.asPath.startsWith(
         `/${role}/financials/treatedinvoice`,
@@ -145,8 +146,27 @@ function OnshoreSubmittedInvoice({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <LeaveTab
+                    tabValue={[
+                        {
+                            text: 'Team Members',
+                            url: `/financials/invoices-team`,
+                        },
+                        {
+                            text: 'Payment Partners',
+                            url: `/financials/invoices-payment`,
+                            upgrade: subType == 'basic',
+                        },
+                        {
+                            text: 'Clients',
+                            url: `/financials/invoices-client`,
+                            upgrade: subType !== 'premium',
+                        },
+                    ]}
+                />
+
                 <HStack
-                    mb="1rem"
+                    my="1rem"
                     bgColor="gray.50"
                     w="fit-content"
                     p=".3rem 0rem"

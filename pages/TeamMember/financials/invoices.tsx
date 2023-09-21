@@ -21,25 +21,7 @@ function payslips({ invoice }: PayrollType) {
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            {user?.payrollType === 'OFFSHORE' ? (
-                <>
-                    <TeamInvoices invoiceList={invoice} />
-                </>
-            ) : (
-                <>
-                    <Flex>
-                        <PageTabs
-                            url={`/${role}/financials/my-invoices`}
-                            tabName="Awaiting Submission"
-                        />
-                        <PageTabs
-                            url={`/${role}/financials/invoices`}
-                            tabName="Submitted"
-                        />
-                    </Flex>
-                    <TeamInvoices invoiceList={invoice} />
-                </>
-            )}
+            <TeamInvoices invoiceList={invoice} />
         </Box>
     );
 }

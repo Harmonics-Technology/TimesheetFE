@@ -11,6 +11,9 @@ import {
     Tab,
     TabPanel,
     TabPanels,
+    Thead,
+    Tr,
+    Table,
 } from '@chakra-ui/react';
 import {
     AdminPaymentScheduleView,
@@ -21,6 +24,7 @@ import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { ScheduleTable } from './ScheduleTable';
+import { TableHead, TableData } from './TableData';
 
 type Props = {
     isOpen?: any;
@@ -134,6 +138,22 @@ const AdminPaymentScheduleModal = ({
                             <Tab>Bi-Weekly</Tab>
                             <Tab>Weekly</Tab>
                         </TabList>
+                        <Table w="92%" mx="auto">
+                            <Thead>
+                                <Tr
+                                    h="3rem"
+                                    fontWeight="600"
+                                    bgColor="brand.400"
+                                    color="white"
+                                >
+                                    <TableHead name="S/N" />
+                                    <TableHead name="First Work Day" />
+                                    <TableHead name="Last Work Day" />
+                                    <TableHead name="Approval Date" />
+                                    <TableHead name="Payment Date" />
+                                </Tr>
+                            </Thead>
+                        </Table>
                         <Box maxH="70vh" overflowY="auto" px={5}>
                             <TabPanels>
                                 <TabPanel>

@@ -115,7 +115,7 @@ export const SingleTask = ({
                                     )
                                 }
                                 isLoading={loading}
-                                btn="Mark Task as Completed"
+                                btn="Mark Task as Complete"
                                 bg="brand.400"
                                 w="fit-content"
                                 disabled={task.progress !== 100}
@@ -317,7 +317,7 @@ export const SingleTask = ({
                                                     mr=".5rem"
                                                     color="brand.400"
                                                 />
-                                                Mark as completed
+                                                Mark as complete
                                             </MenuItem>
                                             <MenuItem
                                                 onClick={() => openModal(x)}

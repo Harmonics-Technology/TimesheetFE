@@ -50,6 +50,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { CUR } from '@components/generics/functions/Naira';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -199,9 +200,21 @@ function PayrollExpenseManagement({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <LeaveTab
+                    tabValue={[
+                        {
+                            text: 'Awaiting Approval',
+                            url: `/financials/expenses`,
+                        },
+                        {
+                            text: 'Approved',
+                            url: `/financials/expenses-approved`,
+                        },
+                    ]}
+                />
                 <Flex
                     justify="space-between"
-                    mb="1rem"
+                    my="1rem"
                     align="center"
                     flexWrap="wrap"
                     gap=".5rem"

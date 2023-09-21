@@ -35,6 +35,7 @@ import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { BsDownload } from 'react-icons/bs';
 import Naira from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -152,9 +153,21 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <LeaveTab
+                    tabValue={[
+                        {
+                            text: 'Pending Payrolls',
+                            url: `/financials/payrolls`,
+                        },
+                        {
+                            text: 'Processed Payrolls',
+                            url: `/financials/offshore`,
+                        },
+                    ]}
+                />
                 <Flex
                     justify="space-between"
-                    mb="1rem"
+                    my="1rem"
                     flexWrap="wrap"
                     gap=".5rem"
                 >

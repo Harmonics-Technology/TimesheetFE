@@ -19,16 +19,6 @@ function payslips({ invoice }: PayrollType) {
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/my-invoices`}
-                    tabName="Awaiting Submission"
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices`}
-                    tabName="Submitted"
-                />
-            </Flex>
             <TeamInvoices invoiceList={invoice} />
         </Box>
     );

@@ -38,6 +38,7 @@ import { UserContext } from '@components/context/UserContext';
 import { Round } from '@components/generics/functions/Round';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -125,7 +126,7 @@ function PayrollTreatPartnerInvoice({
         });
     };
 
-    const { user } = useContext(UserContext);
+    const { user, subType } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const pending = `/${role}/financials/invoices-payment`;
     const approved = `/${role}/financials/invoices-payment-2`;
@@ -149,6 +150,25 @@ function PayrollTreatPartnerInvoice({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <LeaveTab
+                    tabValue={[
+                        {
+                            text: 'Team Members',
+                            url: `/financials/invoices-team`,
+                        },
+                        {
+                            text: 'Payment Partners',
+                            url: `/financials/invoices-payment`,
+                            upgrade: subType == 'basic',
+                        },
+                        {
+                            text: 'Clients',
+                            url: `/financials/invoices-client`,
+                            upgrade: subType !== 'premium',
+                        },
+                    ]}
+                />
+
                 {/* <HStack
                     mb="1rem"
                     bgColor="gray.50"
@@ -187,7 +207,7 @@ function PayrollTreatPartnerInvoice({
                     justify={
                         selectedId.length > 0 ? 'space-between' : 'flex-end'
                     }
-                    mb="1rem"
+                    my="1rem"
                 >
                     {selectedId.length > 0 && (
                         <HStack gap="1rem">
