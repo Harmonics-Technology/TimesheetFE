@@ -44,7 +44,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             // const data = await SettingsService.listExpenseTypes();
 
-            console.log({ team, expenseType, data });
             return {
                 props: {
                     expenses: data,
@@ -53,7 +52,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

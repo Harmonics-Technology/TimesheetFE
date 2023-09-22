@@ -33,6 +33,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import ClientInvoicedInvoice from './ClientInvoicedInvoice';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -43,14 +44,14 @@ interface adminProps {
 function ClientInvoices({ invoiceData, fileName, record }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    console.log({ invoiceData });
+
     const invoice = invoiceData?.data?.value;
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
     const offshore = router.pathname.includes('financials/payrolls-approved');
     const payment = router.pathname.includes('financials/invoices-payment');
-    // console.log({ clicked });
+    //
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
@@ -67,7 +68,7 @@ function ClientInvoices({ invoiceData, fileName, record }: adminProps) {
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
-            console.log({ response });
+
             setSelectedId([...response]);
             return;
         }
@@ -85,7 +86,6 @@ function ClientInvoices({ invoiceData, fileName, record }: adminProps) {
                 setLoading(true);
                 const result = await FinancialService.treatSubmittedInvoice(x);
                 if (result.status) {
-                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -104,7 +104,6 @@ function ClientInvoices({ invoiceData, fileName, record }: adminProps) {
                     position: 'top-right',
                 });
             } catch (error: any) {
-                console.log({ error });
                 setLoading(false);
                 toast({
                     title: error.body.message || error.message,
@@ -135,7 +134,24 @@ function ClientInvoices({ invoiceData, fileName, record }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between" mb="1rem">
+                <LeaveTab
+                    tabValue={[
+                        {
+                            text: 'Team Members',
+                            url: `/financials/invoices-team`,
+                        },
+                        {
+                            text: 'Payment Partners',
+                            url: `/financials/invoices-payment`,
+                        },
+                        {
+                            text: 'Clients',
+                            url: `/financials/invoices-client`,
+                        },
+                    ]}
+                />
+
+                <Flex justify="space-between" my="1rem">
                     <HStack gap="1rem">
                         {selectedId.length > 0 && (
                             <Button

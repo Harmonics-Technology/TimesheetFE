@@ -25,16 +25,6 @@ function expenses({ expenses, team, expenseType }: ExpensesType) {
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/expenses`}
-                    tabName="Awaiting Approval"
-                />
-                <PageTabs
-                    url={`/${role}/financials/expenses-approved`}
-                    tabName="Approved"
-                />
-            </Flex>
             <PayrollExpenseManagement
                 expenses={expenses}
                 team={team}
@@ -55,16 +45,20 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 'Team Member',
                 superAdminId,
             );
-            const expenseType = await SettingsService.listExpenseTypes();
+            const expenseType = await SettingsService.listExpenseTypes(
+                superAdminId,
+            );
             const data = await FinancialService.listReviewedExpenses(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
                 pagingOptions.search,
+                pagingOptions.from,
+                pagingOptions.to,
             );
             // const data = await SettingsService.listExpenseTypes();
 
-            // console.log({ team, expenseType, data });
+            //
             return {
                 props: {
                     expenses: data,
@@ -73,7 +67,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

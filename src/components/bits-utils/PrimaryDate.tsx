@@ -5,7 +5,9 @@ import {
     GridItem,
     Text,
 } from '@chakra-ui/react';
+import useOnClickOutside from '@components/generics/useClickOutside';
 import useWindowSize from '@components/generics/useWindowSize';
+import { useRef, useCallback } from 'react';
 import { Controller, Path, FieldError, Control } from 'react-hook-form';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
 
@@ -20,7 +22,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     min?: any;
     max?: any;
     disabled?: boolean;
-    defaultValue?: string;
+    defaultValue?: any;
     disableWeekend?: boolean;
 }
 
@@ -42,9 +44,16 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
     defaultValue,
     disableWeekend,
 }: FormInputProps<TFormValues>) => {
-    // console.log({ defaultValue });
+    //
     const size: Size = useWindowSize();
     const isMobile = size.width != null && size.width <= 750;
+    const dateRef = useRef<any>();
+    const handleDatePickerClose = useCallback(
+        () => dateRef.current.closeCalendar(),
+        [dateRef],
+    );
+    useOnClickOutside(dateRef, handleDatePickerClose);
+
     return (
         <FormControl
             isInvalid={
@@ -67,6 +76,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                     <>
                         <DatePicker
                             value={defaultValue || value}
+                            ref={dateRef}
                             onChange={(date: any) => {
                                 onChange(
                                     JSON.stringify(
@@ -75,7 +85,11 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                                 );
                             }}
                             format={'DD/MM/YYYY'}
-                            inputClass={'date'}
+                            inputClass={
+                                error?.type === 'required'
+                                    ? 'dateError'
+                                    : 'date'
+                            }
                             containerClassName="dateWrapper"
                             hideOnScroll={isMobile ? false : true}
                             placeholder={placeholder || 'Please select'}

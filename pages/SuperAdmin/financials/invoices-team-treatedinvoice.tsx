@@ -20,22 +20,6 @@ function Invoices({ invoiceData }: invoiceType) {
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/invoices-team`}
-                    tabName="Team Members"
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices-payment`}
-                    tabName="Payment Partners"
-                    upgrade={subType == 'basic'}
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices-client`}
-                    tabName="Clients"
-                    upgrade={subType !== 'premium'}
-                />
-            </Flex>
             <OnshoreSubmittedInvoice
                 invoiceData={invoiceData}
                 record={4}
@@ -68,7 +52,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

@@ -44,14 +44,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 data?.data?.employeeInformation?.client?.id ||
                 data?.data?.employeeInformation?.supervisor?.employeeInformation
                     ?.client?.id;
-            // console.log({ clientId });
+            //
             const supervisor = await UserService.getClientSupervisors(
                 0,
                 18,
                 '',
                 clientId,
             );
-            // console.log({ supervisor: supervisor.data?.value });
+            //
             return {
                 props: {
                     userProfile: data.data,
@@ -61,7 +61,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

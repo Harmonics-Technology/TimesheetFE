@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 superAdminId,
                 pagingOptions.search,
             );
-            // console.log({ data });
+            //
             return {
                 props: {
                     data: data.data?.data,
@@ -28,7 +28,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

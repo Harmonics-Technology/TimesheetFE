@@ -76,7 +76,7 @@ export const AddShiftModal = ({
         setUserId(data?.resourceId);
     }, [data]);
 
-    // console.log({ fromDate, toDate });
+    //
 
     const toggleSelected = (value: any) => {
         const existingValue = selectedId?.find((e) => e.id === value.id);
@@ -131,13 +131,13 @@ export const AddShiftModal = ({
         watch('repeatStopDate') as string,
     ).format('YYYYMMDDTHHmmssZ')};BYDAY=${selectedId.map((x) => x.name)}`;
 
-    // console.log({ hoursDiff });
+    //
 
     const onSubmit = async (data: ShiftModel) => {
         // data.repeatStopDate = repeatEndDate?.format('YYYY-MM-DD HH:mm:ss');
         repeat && (data.repeatQuery = rrule);
         data.userId ? data.userId : (data.userId = userId);
-        // console.log({ data });
+        //
         try {
             const result = await ShiftService.addShift(data);
             if (result.status) {

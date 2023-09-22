@@ -41,5 +41,6 @@ export type EmployeeInformation = {
     numberOfEligibleLeaveDaysTaken?: number;
     employeeType?: string | null;
     invoiceGenerationType?: string | null;
+    enableFinancials?: boolean;
     contracts?: Array<Contract> | null;
 };

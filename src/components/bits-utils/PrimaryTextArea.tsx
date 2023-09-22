@@ -5,7 +5,13 @@ import {
     Text,
     Textarea,
 } from '@chakra-ui/react';
-import { FieldError, UseFormRegister, Path, FieldErrorsImpl, Merge } from 'react-hook-form';
+import {
+    FieldError,
+    UseFormRegister,
+    Path,
+    FieldErrorsImpl,
+    Merge,
+} from 'react-hook-form';
 
 interface FormInputProps<TFormValues extends Record<string, unknown>> {
     name: Path<TFormValues>;
@@ -25,7 +31,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     defaultValue: string | number | undefined;
     format?: string;
     value?: string | number | undefined;
-    testId?: string;
+    color?: string;
     w?: string;
     h?: string;
     padding?: string;
@@ -50,7 +56,7 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
     format,
     value,
     icon,
-    testId,
+    color,
     w = '100%',
     h,
     fontsize = '.8rem',
@@ -59,7 +65,7 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
     return (
         <>
             <FormControl isInvalid={!!error}>
-                <FormLabel color="brand.100" fontSize=".8rem">
+                <FormLabel color={color || '#33333'} fontSize=".8rem" mt="1rem">
                     {label}
                 </FormLabel>
                 <Textarea

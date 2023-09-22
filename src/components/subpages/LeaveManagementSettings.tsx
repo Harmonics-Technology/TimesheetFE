@@ -87,11 +87,10 @@ export const LeaveManagementSettings = ({
         }
     };
 
-    console.log({ leaveConfiguration });
     const updateControl = async (data: ControlSettingModel) => {
         data.superAdminId = user?.superAdminId;
         setLoading({ state: true, id: 'access' });
-        console.log({ data });
+
         try {
             const result = await UserService.updateControlSettings(access);
             if (result.status) {
@@ -114,7 +113,7 @@ export const LeaveManagementSettings = ({
             setLoading({ state: true, id: '' });
         } catch (error: any) {
             setLoading({ state: true, id: '' });
-            console.log(error);
+
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',

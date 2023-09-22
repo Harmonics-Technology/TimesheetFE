@@ -1,7 +1,7 @@
 import { Box, Circle, HStack, useRadio, Text, Icon } from '@chakra-ui/react';
 
 export default function RadioBtn(props) {
-    // console.log({ props });
+    //
     const { getInputProps, getCheckboxProps } = useRadio(props);
 
     const input = getInputProps();

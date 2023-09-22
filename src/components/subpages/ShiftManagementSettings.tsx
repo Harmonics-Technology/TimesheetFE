@@ -60,7 +60,7 @@ export const ShiftManagementSettings = ({
             time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
             time[0] = +time[0] % 12 || 12; // Adjust hours
         }
-        console.log(time);
+
         return time.join(''); // return adjusted time or original stri
     };
 
@@ -88,7 +88,7 @@ export const ShiftManagementSettings = ({
             setLoading({ status: false, id: '' });
         } catch (error: any) {
             setLoading({ status: false, id: '' });
-            console.log(error);
+
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -123,7 +123,7 @@ export const ShiftManagementSettings = ({
             setLoading({ status: true, id: '' });
         } catch (error: any) {
             setLoading({ status: true, id: '' });
-            console.log(error);
+
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',

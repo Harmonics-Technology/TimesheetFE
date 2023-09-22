@@ -1,10 +1,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BudgetRecordToDownload } from '../models/BudgetRecordToDownload';
 import type { ExpenseRecordsToDownload } from '../models/ExpenseRecordsToDownload';
 import type { InvoiceRecord } from '../models/InvoiceRecord';
 import type { PayslipRecordToDownload } from '../models/PayslipRecordToDownload';
 import type { RecordsToDownload } from '../models/RecordsToDownload';
+import type { TimesheetRecordToDownload } from '../models/TimesheetRecordToDownload';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -139,6 +141,73 @@ superAdminId?: string,
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Export/payslip',
+            query: {
+                'Record': record,
+                'rowHeaders': rowHeaders,
+                'StartDate': startDate,
+                'EndDate': endDate,
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param employeeInformationId 
+     * @param record 
+     * @param rowHeaders 
+     * @param startDate 
+     * @param endDate 
+     * @param superAdminId 
+     * @returns any Success
+     * @throws ApiError
+     */
+    public static exportTimesheetRecord(
+employeeInformationId?: string,
+record?: TimesheetRecordToDownload,
+rowHeaders?: Array<string>,
+startDate?: string,
+endDate?: string,
+superAdminId?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Export/timesheet',
+            query: {
+                'EmployeeInformationId': employeeInformationId,
+                'Record': record,
+                'rowHeaders': rowHeaders,
+                'StartDate': startDate,
+                'EndDate': endDate,
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param record 
+     * @param rowHeaders 
+     * @param startDate 
+     * @param endDate 
+     * @param superAdminId 
+     * @returns any Success
+     * @throws ApiError
+     */
+    public static exportSummaryReportRecord(
+record?: BudgetRecordToDownload,
+rowHeaders?: Array<string>,
+startDate?: string,
+endDate?: string,
+superAdminId?: string,
+): CancelablePromise<any> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Export/summary-report',
             query: {
                 'Record': record,
                 'rowHeaders': rowHeaders,

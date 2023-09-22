@@ -54,7 +54,7 @@ export const SecurityInformation = ({
         try {
             const result = await UserService.updatePassword(data.newPassword);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: result.message,
                     status: 'success',
@@ -71,7 +71,6 @@ export const SecurityInformation = ({
                 position: 'top-right',
             });
         } catch (error: any) {
-            console.log(error);
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -109,7 +108,7 @@ export const SecurityInformation = ({
             setLoading(false);
         } catch (error: any) {
             setLoading(false);
-            console.log(error);
+
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',

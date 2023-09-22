@@ -66,7 +66,7 @@ const CancelSub = () => {
         setReason([...reason, base]);
     };
     const stringifiedReason = reason.map((x) => x?.title)?.join(',');
-    console.log({ stringifiedReason });
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     const role = user?.role.replaceAll(' ', '');
     const toast = useToast();
@@ -78,7 +78,7 @@ const CancelSub = () => {
             setLoading(true);
             const result = await UserService.cancelSubscription(data);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: result.message,
                     status: 'success',

@@ -13,7 +13,7 @@ import {
     VStack,
     Button,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Checkbox from './Checkbox';
 import { GrClose } from 'react-icons/gr';
 import { MdCancel } from 'react-icons/md';
@@ -22,6 +22,7 @@ import Cookies from 'js-cookie';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import DatePicker from 'react-multi-date-picker';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { UserContext } from '@components/context/UserContext';
 
 interface ExportProps {
     isOpen: any;
@@ -32,6 +33,7 @@ interface ExportProps {
     model: any;
     payPartner?: boolean;
     paygroupId?: number;
+    id?: string;
 }
 
 export const ExportReportModal = ({
@@ -43,6 +45,7 @@ export const ExportReportModal = ({
     model,
     paygroupId,
     payPartner,
+    id,
 }: ExportProps) => {
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
@@ -60,7 +63,7 @@ export const ExportReportModal = ({
                 .forEach((x) =>
                     response.push(x as string),
                 ) as unknown as string[];
-            console.log({ response });
+
             setSelectedId([...response]);
             return;
         }
@@ -73,8 +76,6 @@ export const ExportReportModal = ({
         setSelectedId([...selectedId, id]);
     };
 
-    console.log({ selectedId });
-
     const [fromDate, setFromDate] = useState<any>();
     const [toDate, setToDate] = useState<any>();
     const [loading, setLoading] = useState(false);
@@ -83,6 +84,9 @@ export const ExportReportModal = ({
     const token = Cookies.get('token');
     const startDate = fromDate?.format('YYYY-MM-DD');
     const endDate = toDate?.format('YYYY-MM-DD');
+
+    const { user } = useContext(UserContext);
+    const superAdminId = user?.superAdminId;
 
     const header = selectedId.map((e) => `rowHeaders=${e}`).join('&');
 
@@ -132,7 +136,9 @@ export const ExportReportModal = ({
                 'https://pi-commandcenterdev.azurewebsites.net'
             }/api/export/${model}?Record=${record}&${
                 payPartner && `PayrollGroupId=${paygroupId}`
-            }&${header}&StartDate=${startDate}&EndDate=${endDate}`,
+            }&${
+                id && `EmployeeInformationId=${id}`
+            }&${header}&StartDate=${startDate}&EndDate=${endDate}&superAdminId=${superAdminId}`,
         );
         xmlHttpRequest.setRequestHeader('Content-Type', 'application/json');
         xmlHttpRequest.setRequestHeader('Authorization', `Bearer ${token}`);

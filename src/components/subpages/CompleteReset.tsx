@@ -64,7 +64,7 @@ const CompleteReset = ({ code }: { code: string }) => {
             });
             return;
         }
-        // console.log({ data });
+        //
         try {
             const result = (await UserService.completeReset(
                 data,
@@ -81,7 +81,6 @@ const CompleteReset = ({ code }: { code: string }) => {
             });
             setShowError(true);
         } catch (error) {
-            console.log(error);
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',

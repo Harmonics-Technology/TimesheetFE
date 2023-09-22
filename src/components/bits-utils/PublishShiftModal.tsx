@@ -33,7 +33,6 @@ export const PublishShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
     const start = router?.query?.from || startOfWeek(new Date());
     const end = router?.query?.to || endOfWeek(new Date());
 
-    console.log({ start, end, data });
     const [loading, setLoading] = useState(false);
 
     const onSubmit = async () => {

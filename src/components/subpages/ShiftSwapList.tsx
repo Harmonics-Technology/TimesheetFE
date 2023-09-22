@@ -30,7 +30,6 @@ interface swapProps {
 }
 
 export const ShiftSwapList = ({ allShift }: swapProps) => {
-    console.log({ allShift });
     const [search, setSearch] = useState('');
     const debounced = useDebouncedCallback(
         (search) => {
@@ -53,7 +52,7 @@ export const ShiftSwapList = ({ allShift }: swapProps) => {
             setLoading(true);
             const result = await ShiftService.approveSwap(id, type);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: result.message,
                     status: 'success',

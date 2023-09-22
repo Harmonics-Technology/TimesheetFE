@@ -13,17 +13,16 @@ export default Billing;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const userId = JSON.parse(ctx.req.cookies.user).id;
-        console.log({ userId });
+
         try {
             const data = await UserService.getUserCards(userId);
-            console.log({ data });
+
             return {
                 props: {
                     data: data.data?.data,
                 },
             };
         } catch (error: any) {
-            console.log({ error });
             return {
                 props: {
                     data: [],

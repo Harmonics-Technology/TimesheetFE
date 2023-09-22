@@ -21,4 +21,5 @@ export type LeaveView = {
     workAssignee?: UserView;
     status?: string | null;
     leaveDaysEarned?: number;
+    isCanceled?: boolean;
 };

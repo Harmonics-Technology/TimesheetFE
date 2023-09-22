@@ -50,14 +50,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         }
         date = moment(date).format('YYYY-MM-DD');
 
-        console.log({ date });
         try {
             const data = await TimeSheetService.getTimeSheet(id, date, end);
             const payPeriod = await FinancialService.getPayScheduleInAMonth(
                 id,
                 date,
             );
-            console.log({ payPeriod: payPeriod.data });
+
             return {
                 props: {
                     timeSheets: data.data,
@@ -66,7 +65,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

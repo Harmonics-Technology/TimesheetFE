@@ -77,7 +77,7 @@ function MyProfile({
     paymentSchedule?: PaymentScheduleListStandardResponse;
     controls?: ControlSettingView;
 }) {
-    // console.log({ controls });
+    //
     const isTfa = controls?.twoFactorEnabled;
     const {
         register,
@@ -134,10 +134,9 @@ function MyProfile({
         data.role = user?.role;
         data.profilePicture = info?.cdnUrl;
 
-        console.log({ data });
         try {
             const result = await UserService.updateUser(data);
-            console.log({ result });
+
             if (result.status) {
                 toast({
                     title: 'Profile Picture Update Success',
@@ -159,7 +158,7 @@ function MyProfile({
             });
         } catch (error) {
             callback();
-            console.log(error);
+
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',
@@ -172,11 +171,9 @@ function MyProfile({
     const showLoadingState = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoading(true);
+                setShowLoading(true);
             });
             file.done((info) => {
-                console.log('File uploaded: ', info), setPictureUrl(info);
                 if (info) {
                     updatePicture(user, info, reloadPage);
                     // setShowLoading(false);
@@ -191,7 +188,7 @@ function MyProfile({
         }
         try {
             const result = await UserService.updateUser(data);
-            console.log({ result });
+
             if (result.status) {
                 toast({
                     title: 'Profile Update Success',
@@ -210,7 +207,6 @@ function MyProfile({
                 position: 'top-right',
             });
         } catch (error) {
-            console.log(error);
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',
@@ -230,7 +226,7 @@ function MyProfile({
     const [twofaState, settwofaState] = useState(
         user?.twoFactorEnabled || false,
     );
-    // console.log({ twoFaData, twofaState });
+    //
 
     const twoFaSubmitFun = async () => {
         setLoading(true);
@@ -238,7 +234,7 @@ function MyProfile({
             const result = await UserService.enable2Fa(twofaState);
             if (result.status) {
                 setLoading(false);
-                // console.log({ result });
+                //
                 if (result.data?.enable2FA) {
                     setTwoFaData(result.data);
                     onOpen2Fa();

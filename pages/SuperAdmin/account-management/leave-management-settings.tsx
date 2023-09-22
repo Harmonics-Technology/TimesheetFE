@@ -14,10 +14,14 @@ import {
 interface leavesProps {
     leaves: LeaveTypeViewPagedCollectionStandardResponse;
     leaveConfiguration: LeaveConfigurationView;
-    controls: ControlSettingView
+    controls: ControlSettingView;
 }
 
-const LeaveManagets = ({ leaves, leaveConfiguration, controls }: leavesProps) => {
+const LeaveManagets = ({
+    leaves,
+    leaveConfiguration,
+    controls,
+}: leavesProps) => {
     return (
         <LeaveManagementSettings
             leaves={leaves}
@@ -53,7 +57,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

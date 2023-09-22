@@ -36,7 +36,7 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
     value,
     flexDir = 'row',
     gap = '1rem',
-    bg = 'brand.400',
+    bg,
 }: FormInputProps<TFormValues>) => {
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'framework',
@@ -61,7 +61,7 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
                         <HStack
                             aria-label={label}
                             {...field}
-                            defaultValue={value}
+                            defaultValue={defaultValue}
                             w="full"
                             {...group}
                             spacing="0"

@@ -9,21 +9,24 @@ function onboardingfee({ data }: { data: OnboardingFeeView }) {
 
 export default onboardingfee;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(async (ctx) => {
-    const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
-    try {
-        const data = await OnboardingFeeService.getFixedAmount(superAdminId);
-        return {
-            props: {
-                data: data.data,
-            },
-        };
-    } catch (error: any) {
-        console.log(error);
-        return {
-            props: {
-                data: [],
-            },
-        };
-    }
-});
+export const getServerSideProps: GetServerSideProps = withPageAuth(
+    async (ctx) => {
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        try {
+            const data = await OnboardingFeeService.getFixedAmount(
+                superAdminId,
+            );
+            return {
+                props: {
+                    data: data.data,
+                },
+            };
+        } catch (error: any) {
+            return {
+                props: {
+                    data: [],
+                },
+            };
+        }
+    },
+);

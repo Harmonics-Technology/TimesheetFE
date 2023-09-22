@@ -63,7 +63,6 @@ export const MonthPayScheduleSettings = ({ data }) => {
                 position: 'top-right',
             });
         } catch (error: any) {
-            console.log(error);
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',

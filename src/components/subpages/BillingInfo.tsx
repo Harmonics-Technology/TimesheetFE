@@ -18,14 +18,14 @@ export const BillingInfo = ({ data }: { data: Card[] }) => {
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(false);
     const toast = useToast();
-    console.log({ data });
+
     const getClientSecret = async () => {
         setLoading(true);
         try {
             const res = await UserService.addNewCard(user?.id);
             if (res.status) {
                 setLoading(false);
-                console.log({ res });
+
                 window.location.href = `${
                     process.env.NEXT_PUBLIC_TTS as string
                 }/addcard/${res.data?.subscriptionId}?client_secret=${

@@ -7,17 +7,21 @@ export const ManageBtn = ({
     btn,
     disabled,
     isLoading,
+    w = '3.75rem',
+    h = '1.5rem',
 }: {
     bg: string;
     onClick?: any;
     btn: string;
     disabled?: boolean;
     isLoading?: boolean;
+    w?: any;
+    h?: any;
 }) => {
     return (
         <Button
-            h="1.5rem"
-            w="3.75rem"
+            h={h}
+            w={w}
             borderRadius="5px"
             color="#ebeff2"
             fontSize="0.62rem"
@@ -25,7 +29,7 @@ export const ManageBtn = ({
             isLoading={isLoading}
             bgColor={bg}
             onClick={onClick}
-            // disabled={disabled}
+            isDisabled={disabled}
         >
             {btn}
         </Button>

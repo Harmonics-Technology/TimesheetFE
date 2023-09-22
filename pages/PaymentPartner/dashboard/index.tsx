@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 );
 
             //     const result = await axios.post(url, payload, { headers: headers });
-            // console.log({ result });
+            //
 
             return {
                 props: {
@@ -57,7 +57,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log({ error });
             return {
                 props: {
                     data: [],

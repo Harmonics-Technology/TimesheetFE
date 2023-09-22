@@ -75,14 +75,12 @@ const TimesheetAdmin = ({
     id: string;
     payPeriod: any;
 }) => {
-    console.log({ timeSheets });
-
     const router = useRouter();
 
     const { date } = router.query;
     const { end } = router.query;
 
-    // console.log({ date, end: lastDayOfMonth('2023-07-01') });
+    //
 
     const HighlightDate = (value: any) => {
         router.push({
@@ -105,7 +103,6 @@ const TimesheetAdmin = ({
         ),
     });
     const newDates = dates?.map((x) => moment(x).format('DD/MM/YY'));
-    console.log({ newDates, date, end });
 
     const newOptions = payPeriod?.map((obj) => ({
         id: `${obj.weekDate} - ${obj.lastWorkDayOfCycle}`,
@@ -114,7 +111,7 @@ const TimesheetAdmin = ({
         ).format('MMM DD, YYYY')}`,
     }));
 
-    // console.log({ newOptions });
+    //
     const sheet = timeSheets?.timeSheet;
 
     const newDate = new Date(date as unknown as string);
@@ -137,7 +134,7 @@ const TimesheetAdmin = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    // console.log({ totalHours });
+    //
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
@@ -147,9 +144,9 @@ const TimesheetAdmin = ({
 
     const [loading, setLoading] = useState(false);
     const [allChecked, setAllChecked] = useState<boolean>(false);
-    // console.log({ allChecked });
+    //
     const preventTomorrow = addDays(new Date(), 1).toISOString();
-    console.log({ preventTomorrow });
+
     const [selected, setSelected] = useState<TimesheetHoursApprovalModel[]>([]);
     const [selectedInput, setSelectedInput] = useState<
         TimesheetHoursAdditionModel[]
@@ -160,7 +157,7 @@ const TimesheetAdmin = ({
             moment(x.date).format('DD/MM/YYYY') !=
                 moment(preventTomorrow).format('DD/MM/YYYY') && !x.isApproved,
     );
-    // console.log({ selectedInput });
+    //
     const fillSelectedDate = (item: TimesheetHoursApprovalModel) => {
         const existingValue = selected.find((e) => e.date == item.date);
         if (existingValue) {
@@ -189,7 +186,6 @@ const TimesheetAdmin = ({
         }
         setSelectedInput([...selectedInput, item]);
     };
-    console.log({ selected });
 
     const {
         register,
@@ -220,7 +216,7 @@ const TimesheetAdmin = ({
                 date: x.chosenDate,
             };
         });
-        console.log({ data });
+
         try {
             const result = await TimeSheetService.rejectTimeSheetForADay(
                 id,
@@ -228,13 +224,11 @@ const TimesheetAdmin = ({
                 data,
             );
             if (result.status) {
-                console.log({ result });
                 router.reload();
                 return;
             }
-            console.log({ result });
         } catch (error: any) {
-            // console.log({ error });
+            //
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -244,7 +238,7 @@ const TimesheetAdmin = ({
     };
 
     const approveTimeSheetForADay = async (userId, date) => {
-        // console.log({ item });
+        //
         try {
             const data = await TimeSheetService.approveTimeSheetForADay(
                 userId,
@@ -261,19 +255,19 @@ const TimesheetAdmin = ({
             });
             return;
         } catch (error) {
-            console.log(error);
+            //
         }
     };
 
     const addHours = async (item) => {
-        // console.log({ userId, date, hours });
+        //
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
                 item.date,
                 item.hours,
             );
-            console.log({ data });
+
             if (data.status) {
                 return;
             }
@@ -284,7 +278,6 @@ const TimesheetAdmin = ({
             });
             return;
         } catch (error: any) {
-            console.log(error);
             toast({
                 status: 'error',
                 title: error.body.message || error.message,
@@ -309,7 +302,7 @@ const TimesheetAdmin = ({
                     selected.at(0)?.date,
                     selected,
                 );
-                console.log({ data });
+
                 if (data.status) {
                     setLoading(false);
                     toast({
@@ -327,7 +320,6 @@ const TimesheetAdmin = ({
                 });
                 return;
             } catch (error: any) {
-                console.log(error);
                 toast({
                     status: 'error',
                     title: error.body.message || error.message,
@@ -373,7 +365,7 @@ const TimesheetAdmin = ({
                     selectedInput.at(0)?.date,
                     selectedInput,
                 );
-                console.log({ data });
+
                 if (data.status) {
                     setLoading(false);
                     toast({
@@ -391,7 +383,6 @@ const TimesheetAdmin = ({
                 });
                 return;
             } catch (error: any) {
-                console.log(error);
                 toast({
                     status: 'error',
                     title: error.body.message || error.message,
@@ -633,8 +624,8 @@ const TimesheetAdmin = ({
             useClickOutside(popover, close);
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
-            // console.log(moment(userDate as string).format('DD/MM/YY'));
-            // console.log({ week });
+            //
+            //
 
             week.push(
                 <Flex
@@ -933,7 +924,6 @@ const TimesheetAdmin = ({
             );
             weekNumber++, (currentDate = addDays(currentDate, 7));
         }
-        console.log({ allWeeks });
 
         return (
             <>

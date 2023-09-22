@@ -54,6 +54,7 @@ import Cookies from 'js-cookie';
 import { UserContext } from '@components/context/UserContext';
 import { TimeSheetHighlight } from '@components/bits-utils/TimeSheetHighlight';
 import dynamic from 'next/dynamic';
+import { TabMenuTimesheet } from '@components/bits-utils/ProjectManagement/Generics/TabMenuTimesheet';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -72,7 +73,7 @@ const TimesheetTeam = ({
     const { date } = router.query;
     const { end } = router.query;
 
-    // console.log({ date, end: lastDayOfMonth('2023-07-01') });
+    //
 
     const HighlightDate = (value: any) => {
         router.push({
@@ -95,7 +96,6 @@ const TimesheetTeam = ({
         ),
     });
     const newDates = dates?.map((x) => moment(x).format('DD/MM/YY'));
-    console.log({ newDates, date, end });
 
     const newOptions = payPeriod?.map((obj) => ({
         id: `${obj.weekDate} - ${obj.lastWorkDayOfCycle}`,
@@ -104,7 +104,7 @@ const TimesheetTeam = ({
         ).format('MMM DD, YYYY')}`,
     }));
 
-    // console.log({ timeSheets });
+    //
     const sheet = timeSheets?.timeSheet;
     const newDate = new Date(date as unknown as string);
     const [selectedDate, setSelectedDate] = useState(new Date());
@@ -126,7 +126,7 @@ const TimesheetTeam = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    // console.log({ totalHours });
+    //
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
@@ -148,7 +148,6 @@ const TimesheetTeam = ({
         endWeek: moment(activeDate).endOf('month').format('MMM DD'),
     });
 
-    console.log({ weekDate });
     const [selectedInput, setSelectedInput] = useState<
         TimesheetHoursAdditionModel[]
     >([]);
@@ -164,9 +163,6 @@ const TimesheetTeam = ({
         }
         setSelectedInput([...selectedInput, item]);
     };
-
-    console.log({ hoursEligible });
-    console.log({ timeSheets, increaseWeek });
 
     // function ApproveAllTimeSheet() {
     //     const [loading, setLoading] = useState(false);
@@ -185,7 +181,7 @@ const TimesheetTeam = ({
     //         });
     //         router.reload();
     //     };
-    //     // console.log({ loading });
+    //     //
     //     return (
     //         <TimeSheetEstimationBtn
     //             id={1}
@@ -197,7 +193,7 @@ const TimesheetTeam = ({
     // }
 
     const addHours = async (item) => {
-        // console.log({ userId, date, hours });
+        //
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
@@ -205,7 +201,7 @@ const TimesheetTeam = ({
                 item.date,
                 item.hours,
             );
-            console.log({ data });
+
             if (data.status) {
                 return;
             }
@@ -216,7 +212,6 @@ const TimesheetTeam = ({
             });
             return;
         } catch (error: any) {
-            console.log(error);
             toast({
                 status: 'error',
                 title: error.body.message || error.message,
@@ -244,7 +239,7 @@ const TimesheetTeam = ({
                     selectedInput.at(0)?.date,
                     selectedInput,
                 );
-                console.log({ data });
+
                 if (data.status) {
                     setLoading(false);
                     toast({
@@ -262,7 +257,6 @@ const TimesheetTeam = ({
                 });
                 return;
             } catch (error: any) {
-                console.log(error);
                 toast({
                     status: 'error',
                     title: error.body.message || error.message,
@@ -319,7 +313,7 @@ const TimesheetTeam = ({
     const preventTomorrow = addDays(new Date(), 1).toISOString();
 
     const navigateWeek = (dir: string, weeks: any) => {
-        // console.log({ dir });
+        //
         if (dir == 'prev' && increaseWeek !== 0) {
             setIncreaseWeek((increaseWeek) => increaseWeek - 1);
             setWeekDate({
@@ -585,7 +579,7 @@ const TimesheetTeam = ({
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
 
-            // console.log({ notFilled });
+            //
 
             week.push(
                 <Flex
@@ -779,7 +773,7 @@ const TimesheetTeam = ({
             );
             weekNumber++, (currentDate = addDays(currentDate, 7));
         }
-        // console.log({ allWeeks });
+        //
 
         return (
             <>
@@ -853,6 +847,7 @@ const TimesheetTeam = ({
     };
     return (
         <Box pos="relative">
+            <TabMenuTimesheet name={['my-timesheet', 'task-view']} />
             <TimeSheetHighlight />
             <Box>
                 {getHeader()}

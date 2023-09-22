@@ -34,7 +34,7 @@ export default TeamDetails;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
-        // console.log({ id });
+        //
         try {
             const data = await UserService.getUserById(id);
             const clients = await UserService.listUsers('client');
@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
             );
-            console.log({ data });
+
             return {
                 props: {
                     userProfile: data.data,
@@ -53,7 +53,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

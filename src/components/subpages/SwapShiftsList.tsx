@@ -50,7 +50,7 @@ export const SwapShiftList = ({ allShift }: employeeShiftProps) => {
         'Swap shift with',
         'Status',
     ];
-    // console.log({ userInfo });
+    //
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     return (

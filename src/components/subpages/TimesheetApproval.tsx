@@ -1,6 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-sparse-arrays */
-import { Box, Flex, Select, Text, HStack, Input, Tr } from '@chakra-ui/react';
+import {
+    Box,
+    Flex,
+    Select,
+    Text,
+    HStack,
+    Input,
+    Tr,
+    Button,
+    Icon,
+    useDisclosure,
+} from '@chakra-ui/react';
 import {
     TableContractAction,
     TableData,
@@ -18,6 +29,8 @@ import FilterSearch from '@components/bits-utils/FilterSearch';
 import moment from 'moment';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { PayScheduleNotify } from '@components/bits-utils/PayScheduleNotify';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { BsDownload } from 'react-icons/bs';
 
 interface adminProps {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
@@ -25,7 +38,8 @@ interface adminProps {
 }
 
 function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
-    console.log({ paymentSchedule });
+    //
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const isWeekly = paymentSchedule?.find((x) => x.scheduleType == 'Weekly');
     const isBiWeekly = paymentSchedule?.find(
@@ -36,6 +50,16 @@ function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
         isWeekly && isWeekly?.scheduleType,
         isBiWeekly && isBiWeekly?.scheduleType,
         isMonthly && isMonthly?.scheduleType,
+    ];
+
+    const thead = [
+        'Name',
+        'Job Title',
+        'Begining Period',
+        'Ending Period',
+        'Total Hours',
+        'Approved Hours',
+        'Action',
     ];
 
     return (
@@ -50,18 +74,21 @@ function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
                     <PayScheduleNotify scheduleDone={schedules} />
                 ) : (
                     <Box>
+                        <Flex justify="flex-end" mb="1rem">
+                            <Button
+                                bgColor="brand.600"
+                                color="white"
+                                p=".5rem 1.5rem"
+                                height="fit-content"
+                                // boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                onClick={onOpen}
+                                borderRadius="25px"
+                            >
+                                Export <Icon as={BsDownload} ml=".5rem" />
+                            </Button>
+                        </Flex>
                         <FilterSearch hide={true} />
-                        <Tables
-                            tableHead={[
-                                'Name',
-                                'Job Title',
-                                'Begining Period',
-                                'Ending Period',
-                                'Total Hours',
-                                'Approved Hours',
-                                'Action',
-                            ]}
-                        >
+                        <Tables tableHead={thead}>
                             <>
                                 {timeSheets?.data?.value?.map(
                                     (x: TimeSheetApprovedView, i) => (
@@ -104,6 +131,16 @@ function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
                     </Box>
                 )}
             </Box>
+            {isOpen && (
+                <ExportReportModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    data={thead}
+                    record={1}
+                    fileName={'Timesheet Approval'}
+                    model="timesheet"
+                />
+            )}
         </>
     );
 }

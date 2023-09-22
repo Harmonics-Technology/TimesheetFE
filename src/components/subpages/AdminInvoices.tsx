@@ -35,6 +35,7 @@ import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { BsDownload } from 'react-icons/bs';
 import Naira from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -45,12 +46,12 @@ interface adminProps {
 function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    console.log({ invoiceData });
+
     const invoice = invoiceData?.data?.value;
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
-    // console.log({ clicked });
+    //
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
@@ -67,7 +68,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
-            console.log({ response });
+
             setSelectedId([...response]);
             return;
         }
@@ -85,7 +86,6 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                 setLoading(true);
                 const result = await FinancialService.treatSubmittedInvoice(x);
                 if (result.status) {
-                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -104,7 +104,6 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                     position: 'top-right',
                 });
             } catch (error: any) {
-                console.log({ error });
                 setLoading(false);
                 toast({
                     title: error?.body?.message || error?.message,
@@ -121,7 +120,6 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
         `/${role}/financials/offshore`,
     );
     const pays = router.asPath.startsWith(`/${role}/financials/payrolls`);
-    console.log({ hideCheckbox });
 
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const thead =
@@ -155,9 +153,21 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <LeaveTab
+                    tabValue={[
+                        {
+                            text: 'Pending Payrolls',
+                            url: `/financials/payrolls`,
+                        },
+                        {
+                            text: 'Processed Payrolls',
+                            url: `/financials/offshore`,
+                        },
+                    ]}
+                />
                 <Flex
                     justify="space-between"
-                    mb="1rem"
+                    my="1rem"
                     flexWrap="wrap"
                     gap=".5rem"
                 >

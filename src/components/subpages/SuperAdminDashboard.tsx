@@ -10,6 +10,7 @@ import {
     Circle,
     Divider,
     useDisclosure,
+    useToast,
 } from '@chakra-ui/react';
 import DashboardCard from '@components/bits-utils/DashboardCard';
 import { NotificationBox } from '@components/bits-utils/NotificationBox';
@@ -23,17 +24,18 @@ import {
 } from '@components/bits-utils/TableData';
 import { NotificationContext } from '@components/context/NotificationContext';
 import { UserContext } from '@components/context/UserContext';
-import { CUR } from '@components/generics/functions/Naira';
+import { CAD, CUR } from '@components/generics/functions/Naira';
 import moment from 'moment';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
+    BudgetSummaryReportView,
     DashboardView,
     DashboardViewStandardResponse,
     ExpenseView,
     InvoiceView,
     PaySlipView,
     PayslipUserView,
-    RecentTimeSheetView,
+    ProjectProgressCountView,
     UserView,
 } from 'src/services';
 import PayrollInvoice from './PayrollInvoice';
@@ -41,12 +43,24 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import InvoiceTemplate from './InvoiceTemplate';
 import { Round } from '@components/generics/functions/Round';
 import ClientInvoicedInvoice from './ClientInvoicedInvoice';
+import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
+import handleCatchErrors from '@components/generics/functions/handleCatchErrors';
 
 interface DashboardProps {
     metrics: DashboardViewStandardResponse;
+    counts: ProjectProgressCountView;
+    summary: BudgetSummaryReportView;
+    error: any;
 }
 
-function SuperAdminDashboard({ metrics }: DashboardProps) {
+function SuperAdminDashboard({
+    metrics,
+    counts,
+    summary,
+    error,
+}: DashboardProps) {
     const { user, subType } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -56,6 +70,11 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
         onClose: onClosed,
     } = useDisclosure();
     const {
+        isOpen: exportOpen,
+        onOpen: exportOpened,
+        onClose: exportClose,
+    } = useDisclosure();
+    const {
         isOpen: isOpens,
         onOpen: onOpens,
         onClose: onCloses,
@@ -63,8 +82,22 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
     const [clicked, setClicked] = useState<InvoiceView>();
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
-    console.log({ subType });
+
     const isClient = subType == 'premium';
+    const totalCounts =
+        (counts?.notStarted as number) +
+        (counts?.inProgress as number) +
+        (counts?.completed as number);
+    const thead = [
+        'No Of Users',
+        'Total Hours',
+        'Billable',
+        'Non-Billable',
+        'Amount',
+    ];
+
+    handleCatchErrors(error);
+
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">
@@ -74,29 +107,59 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                     w="full"
                 >
                     <DashboardCard
-                        url={
-                            isClient
-                                ? `/${role}/profile-management/clients`
-                                : ''
-                        }
-                        title="client"
-                        value={adminMetrics?.totalClients}
+                        url={`/${role}/project-management/projects`}
+                        title="active projects"
+                        value={totalCounts || 0}
                     />
                     <DashboardCard
                         url={`/${role}/profile-management/team-members`}
                         title="team members"
-                        value={adminMetrics?.totalTeamMembers}
+                        value={adminMetrics?.totalTeamMembers || 0}
                     />
                     <DashboardCard
                         url={`/${role}/profile-management/admin`}
                         title="admins"
-                        value={adminMetrics?.totalDownLines}
+                        value={adminMetrics?.totalDownLines || 0}
                     />
                 </Grid>
 
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
-                        title={'Recent Timesheets'}
+                        title={'Summary Report'}
+                        url={'timesheets/approval'}
+                        hasFilter
+                        data={[0].map((x) => (
+                            <Tr key={x}>
+                                <TableData
+                                    name={Round(summary?.noOfUsers || 0)}
+                                />
+                                <TableData
+                                    name={`${Round(
+                                        summary?.totalHours || 0,
+                                    )} hours`}
+                                />
+                                <TableData
+                                    name={`${Round(
+                                        summary?.billableHours || 0,
+                                    )} hours`}
+                                />
+                                <TableData
+                                    name={`${Round(
+                                        summary?.nonBillableHours || 0,
+                                    )} hours`}
+                                />
+                                <TableData
+                                    name={CAD(Round(summary?.amount || 0))}
+                                />
+                                {/* <TableState name={x.status} /> */}
+                            </Tr>
+                        ))}
+                        thead={thead}
+                        link={''}
+                        exportOpened={exportOpened}
+                    />
+                    <TableCards
+                        title={'Timesheet Report'}
                         url={'timesheets/approval'}
                         data={metrics?.data?.recentTimeSheet
                             ?.slice(0, 4)
@@ -109,29 +172,32 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                                         }
                                     />
                                     <TableData
-                                        name={
-                                            x?.employeeInformation?.supervisor
-                                                ?.fullName
-                                        }
+                                        name={x?.employeeInformation?.jobTitle}
                                     />
                                     <TableData
-                                        name={`${x.expectedHours} hours`}
+                                        name={formatDate(x?.startDate)}
                                     />
-                                    <TableData name={`${x.totalHours} hours`} />
+                                    <TableData name={formatDate(x?.endDate)} />
                                     <TableData
-                                        name={`${CUR(x.expectedPayout)}`}
+                                        name={`${
+                                            x?.totalHours as unknown as string
+                                        } Hours`}
                                     />
-                                    <TableData name={CUR(x.actualPayout)} />
+                                    <TableData
+                                        name={`${
+                                            x?.approvedNumberOfHours as unknown as string
+                                        }Hours`}
+                                    />
                                     {/* <TableState name={x.status} /> */}
                                 </Tr>
                             ))}
                         thead={[
                             'Name',
-                            'Supervisor Name',
-                            'Expected Hrs',
-                            'Total Hrs',
-                            'Expected Payout',
-                            'Payout',
+                            'Job Title',
+                            'Begining Period',
+                            'Ending Period',
+                            'Total Hours',
+                            'Approved Hours',
                             // 'Status',
                             // 'Action',
                         ]}
@@ -340,6 +406,16 @@ function SuperAdminDashboard({ metrics }: DashboardProps) {
                 onClose={onCloses}
                 clicked={clicked}
             />
+            {exportOpen && (
+                <ExportReportModal
+                    isOpen={exportOpen}
+                    onClose={exportClose}
+                    data={thead}
+                    record={1}
+                    fileName={'Summary Report'}
+                    model="summary-report"
+                />
+            )}
         </Grid>
     );
 }

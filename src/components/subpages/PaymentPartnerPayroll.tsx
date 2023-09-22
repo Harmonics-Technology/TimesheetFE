@@ -38,7 +38,6 @@ function PaymentPartnerPayroll({ payrolls, id }: expenseProps) {
     const toast = useToast();
     const [loading, setLoading] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    console.log({ payrolls });
 
     const [selectedId, setSelectedId] = useState<any[]>([]);
     const toggleSelected = (x: any, all?: boolean) => {
@@ -49,7 +48,7 @@ function PaymentPartnerPayroll({ payrolls, id }: expenseProps) {
             }
             const response: InvoiceView[] = [];
             payrollsList?.forEach((x) => response.push(x));
-            console.log({ response });
+
             setSelectedId([...response]);
             return;
         }

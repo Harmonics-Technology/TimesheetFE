@@ -228,11 +228,68 @@ superAdminId?: string,
 ): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
+            url: '/api/Leave/pending-leaves',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param superAdminId 
+     * @returns LeaveViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listLeaveHistory(
+offset?: number,
+limit?: number,
+superAdminId?: string,
+): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
             url: '/api/Leave/treated-leaves',
             query: {
                 'Offset': offset,
                 'Limit': limit,
                 'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param superAdminId 
+     * @param employeeId 
+     * @returns LeaveViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listCanceledLeave(
+offset?: number,
+limit?: number,
+superAdminId?: string,
+employeeId?: string,
+): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Leave/canceled-leaves',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'superAdminId': superAdminId,
+                'employeeId': employeeId,
             },
             errors: {
                 400: `Bad Request`,
@@ -252,6 +309,26 @@ requestBody?: LeaveModel,
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/Leave/leave',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateLeave(
+requestBody?: LeaveModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Leave/leave/update',
             body: requestBody,
             mediaType: 'application/json-patch+json',
             errors: {
@@ -298,6 +375,27 @@ id?: string,
             url: '/api/Leave/leave/delete',
             query: {
                 'id': id,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param leaveId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static cancelLeave(
+leaveId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Leave/leave/cancel',
+            query: {
+                'leaveId': leaveId,
             },
             errors: {
                 400: `Bad Request`,

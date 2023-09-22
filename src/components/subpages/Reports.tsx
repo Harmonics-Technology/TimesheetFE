@@ -34,8 +34,7 @@ import {
     UserView,
 } from 'src/services';
 
-export const Reports = ({ metrics, team, paymentPartner, chart }) => {
-    console.log({ chart });
+export const Reports = ({ metrics, team, paymentPartner, chart, summary }) => {
     const router = useRouter();
     const [fromDate, setFromDate] = useState<any>(new DateObject());
 
@@ -73,6 +72,72 @@ export const Reports = ({ metrics, team, paymentPartner, chart }) => {
             ]}
             gap="1rem"
         >
+            <ReportCards
+                title={'Summary Report'}
+                url={'timesheets/approval'}
+                data={[0].map((x) => (
+                    <Tr key={x}>
+                        <TableData name={summary?.noOfUsers || 0} />
+                        <TableData name={`${summary?.totalHours || 0} hours`} />
+                        <TableData
+                            name={`${summary?.billableHours || 0} hours`}
+                        />
+                        <TableData
+                            name={`${summary?.nonBillableHours || 0} hours`}
+                        />
+                        <TableData name={CAD(summary?.amount || 0)} />
+                        {/* <TableState name={x.status} /> */}
+                    </Tr>
+                ))}
+                thead={[
+                    'Users',
+                    'Hours',
+                    'Billable',
+                    'Non-Billable',
+                    'Amount',
+                ]}
+                link={''}
+            />
+            <ReportCards
+                title={'Timesheet Report'}
+                url={'timesheets/approval'}
+                data={metrics?.data?.recentTimeSheet
+                    ?.slice(0, 4)
+                    .map((x: any, i) => (
+                        <Tr key={i}>
+                            <TableData
+                                name={x?.employeeInformation?.user?.fullName}
+                            />
+                            <TableData
+                                name={x?.employeeInformation?.jobTitle}
+                            />
+                            <TableData name={formatDate(x?.startDate)} />
+                            <TableData name={formatDate(x?.endDate)} />
+                            <TableData
+                                name={`${
+                                    x?.totalHours as unknown as string
+                                } Hours`}
+                            />
+                            <TableData
+                                name={`${
+                                    x?.approvedNumberOfHours as unknown as string
+                                }Hours`}
+                            />
+                            {/* <TableState name={x.status} /> */}
+                        </Tr>
+                    ))}
+                thead={[
+                    'Name',
+                    'Job Title',
+                    'Start',
+                    'End',
+                    'Total',
+                    'Approved',
+                    // 'Status',
+                    // 'Action',
+                ]}
+                link={'/'}
+            />
             <ReportCards
                 title="Payroll Report"
                 url="financials/payrolls"

@@ -74,7 +74,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
             const result = await UserService.enable2Fa(twofaState);
             if (result.status) {
                 setLoading(false);
-                // console.log({ result });
+                //
                 if (result.data?.enable2FA) {
                     setTwoFaData(result.data);
                     onOpen2Fa();
@@ -111,7 +111,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
     const onSubmit = async (data: UpdateUserModel) => {
         try {
             const result = await UserService.updateUser(data);
-            // console.log({ result });
+            //
             if (result.status) {
                 toast({
                     title: 'Profile Update Success',
@@ -130,7 +130,6 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                 position: 'top-right',
             });
         } catch (error: any) {
-            console.log(error);
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',

@@ -48,6 +48,7 @@ import moment from 'moment';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { BsDownload } from 'react-icons/bs';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -67,7 +68,6 @@ function PayrollExpenseManagementApproved({
     team,
     expenseType,
 }: expenseProps) {
-    console.log({ expenseType, team, expenses });
     const expensesList = expenses?.data?.value;
     const [loading, setLoading] = useState(false);
 
@@ -87,7 +87,7 @@ function PayrollExpenseManagementApproved({
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
-            console.log({ response });
+
             setSelectedId([...response]);
             return;
         }
@@ -199,7 +199,19 @@ function PayrollExpenseManagementApproved({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between" mb="1rem">
+                <LeaveTab
+                    tabValue={[
+                        {
+                            text: 'Awaiting Approval',
+                            url: `/financials/expenses`,
+                        },
+                        {
+                            text: 'Approved',
+                            url: `/financials/expenses-approved`,
+                        },
+                    ]}
+                />
+                <Flex justify="space-between" my="1rem">
                     <HStack gap="1rem">
                         {/* <Button
                             bgColor="brand.400"

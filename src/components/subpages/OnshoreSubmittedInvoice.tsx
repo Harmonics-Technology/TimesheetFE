@@ -18,6 +18,7 @@ import {
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import moment from 'moment';
 import {
     FinancialService,
@@ -50,12 +51,12 @@ function OnshoreSubmittedInvoice({
 }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    console.log({ invoiceData });
+
     const invoice = invoiceData?.data?.value;
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
-    // console.log({ clicked });
+    //
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
@@ -72,7 +73,7 @@ function OnshoreSubmittedInvoice({
                 .forEach((x) =>
                     response.push(x.id as string),
                 ) as unknown as string[];
-            console.log({ response });
+
             setSelectedId([...response]);
             return;
         }
@@ -90,7 +91,6 @@ function OnshoreSubmittedInvoice({
                 setLoading(true);
                 const result = await FinancialService.treatSubmittedInvoice(x);
                 if (result.status) {
-                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -109,7 +109,6 @@ function OnshoreSubmittedInvoice({
                     position: 'top-right',
                 });
             } catch (error: any) {
-                console.log({ error });
                 setLoading(false);
                 toast({
                     title: error?.body?.message || error?.message,
@@ -120,14 +119,13 @@ function OnshoreSubmittedInvoice({
             }
         });
     };
-    const { user } = useContext(UserContext);
+    const { user, subType } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const hideCheckbox = router.asPath.startsWith(
         `/${role}/financials/treatedinvoice`,
     );
     const pending = `/${role}/financials/invoices-team`;
     const approved = `/${role}/financials/invoices-team-treatedinvoice`;
-    console.log({ hideCheckbox });
 
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const thead = [
@@ -148,8 +146,27 @@ function OnshoreSubmittedInvoice({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <LeaveTab
+                    tabValue={[
+                        {
+                            text: 'Team Members',
+                            url: `/financials/invoices-team`,
+                        },
+                        {
+                            text: 'Payment Partners',
+                            url: `/financials/invoices-payment`,
+                            upgrade: subType == 'basic',
+                        },
+                        {
+                            text: 'Clients',
+                            url: `/financials/invoices-client`,
+                            upgrade: subType !== 'premium',
+                        },
+                    ]}
+                />
+
                 <HStack
-                    mb="1rem"
+                    my="1rem"
                     bgColor="gray.50"
                     w="fit-content"
                     p=".3rem 0rem"

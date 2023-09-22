@@ -12,7 +12,7 @@ interface clientProps {
 }
 
 function client({ adminList }: clientProps) {
-    // console.log({ team });
+    //
     return <ClientManagement adminList={adminList} />;
 }
 
@@ -38,7 +38,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

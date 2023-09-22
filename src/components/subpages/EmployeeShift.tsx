@@ -33,7 +33,7 @@ export const EmployeeShift = ({ allShift }: employeeShiftProps) => {
         'Status',
         'Action',
     ];
-    console.log({ allShift });
+
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const showSingleUser = (x) => {

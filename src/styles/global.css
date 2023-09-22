@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=Roboto:wght@400;500&display=swap');
 @import url('./calendar.css');
 @import url('./scrollbar.css');
 @import url('./scheduler.css');
@@ -27,6 +27,14 @@
 }
 .date {
     border: 1px solid #e5e5e5;
+    height: 2.6rem;
+    /* border-radius: 5px; */
+    padding: 0 1rem;
+    box-sizing: border-box;
+    width: 100%;
+}
+.dateError {
+    border: 1px solid red;
     height: 2.6rem;
     /* border-radius: 5px; */
     padding: 0 1rem;
@@ -239,4 +247,64 @@ select option {
 .timePicker .react-time-picker__inputGroup__input {
     border: 0;
     outline: 0;
+}
+.rbc-event,
+.rbc-day-slot .rbc-background-event {
+    border: 1px solid #2eafa3 !important;
+    /* color: black !important; */
+    /* background-color: white !important; */
+    background-color: rgb(46, 67, 175) !important;
+    color: white !important;
+    border-radius: 0 !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    justify-content: center;
+}
+.rbc-day-slot .rbc-events-container {
+    margin-right: 0px !important;
+}
+.rbc-timeslot-group {
+    min-height: 60px !important;
+}
+.rbc-day-slot .rbc-event-content {
+    height: fit-content !important;
+    flex: unset !important;
+}
+.rbc-label {
+    padding: 0 3.5px !important;
+    display: flex;
+    align-items: flex-end;
+}
+.rbc-allday-cell {
+    display: none;
+}
+.rbc-time-content {
+    border-top: 2px solid #2eafa3 !important;
+}
+.rbc-row {
+    min-height: 45px !important;
+}
+.rbc-header,
+.rbc-time-header-content {
+    border: 0 !important;
+}
+.rbc-time-view,
+.rbc-time-header.rbc-overflowing {
+    border-top: 0 !important;
+    border-right: 0 !important;
+    border-left: 0 !important;
+}
+.rbc-button-link {
+    font-weight: 500;
+}
+.rbc-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* .rbc-current-time-indicator{
+    display: none !important;
+} */
+.billable {
+    background-color: #2eafa3 !important;
 }

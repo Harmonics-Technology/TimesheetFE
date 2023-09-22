@@ -17,7 +17,7 @@ export default function getBusinessDateCount(startDate, endDate) {
         ifThen(daysBeforeFirstSunday - 1, -1, 0) +
         ifThen(daysAfterLastSunday, 6, 5);
 
-    // console.log({ elapsed });
+    //
 
     return Math.round(elapsed);
 }

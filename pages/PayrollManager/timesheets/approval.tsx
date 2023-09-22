@@ -17,7 +17,12 @@ function approval({
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
     paymentSchedule: AdminPaymentScheduleView[];
 }) {
-    return <TimeSheetApproval timeSheets={timeSheets} paymentSchedule={paymentSchedule} />;
+    return (
+        <TimeSheetApproval
+            timeSheets={timeSheets}
+            paymentSchedule={paymentSchedule}
+        />
+    );
 }
 
 export default approval;
@@ -36,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const paymentSchedule = await FinancialService.getPaymentSchedules(
                 superAdminId,
             );
-            // console.log({ data: paymentSchedule.data });
+            //
             return {
                 props: {
                     timeSheets: data,
@@ -44,7 +49,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

@@ -41,8 +41,8 @@ export const UpgradeSubModal = ({ isOpen, onClose }: any) => {
     });
     const selected = Number(watch('subscriptionId')?.split('$')[1].trim());
     const balanceUnused = getSubBalance(subType, selected);
-    // console.log({ allSub });
-    // console.log({ balanceUnused, selected });
+    //
+    //
     const toast = useToast();
     const router = useRouter();
     const selectedSub = allSubs.find(
@@ -53,7 +53,7 @@ export const UpgradeSubModal = ({ isOpen, onClose }: any) => {
         data.subscriptionId = selectedSub?.id;
         data.totalAmount = balanceUnused;
         data.userId = user?.id;
-        console.log({ data });
+
         try {
             const result = await UserService.upgradeSubscription(data);
             if (result.status) {
@@ -75,7 +75,6 @@ export const UpgradeSubModal = ({ isOpen, onClose }: any) => {
             });
             return;
         } catch (err: any) {
-            console.log({ err });
             toast({
                 title: err.body.message || err.message,
                 status: 'error',
@@ -107,9 +106,7 @@ export const UpgradeSubModal = ({ isOpen, onClose }: any) => {
                     return;
                 }
                 setLoading(false);
-                console.log(res.data.message);
             } catch (error) {
-                console.log({ error });
                 setLoading(false);
             }
         };
