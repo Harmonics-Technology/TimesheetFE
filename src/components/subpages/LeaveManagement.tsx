@@ -141,6 +141,10 @@ export const LeaveManagement = ({
                                       text: 'Cancelled Leave',
                                       url: '/leave/cancelled',
                                   },
+                                  {
+                                      text: 'Leave History',
+                                      url: '/leave/history',
+                                  },
                               ]
                             : role == 'Supervisor' || role == 'SuperAdmin'
                             ? [

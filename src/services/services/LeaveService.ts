@@ -218,6 +218,7 @@ endDate?: string,
      * @param offset 
      * @param limit 
      * @param superAdminId 
+     * @param employeeId 
      * @returns LeaveViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -225,6 +226,7 @@ endDate?: string,
 offset?: number,
 limit?: number,
 superAdminId?: string,
+employeeId?: string,
 ): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -233,6 +235,7 @@ superAdminId?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'superAdminId': superAdminId,
+                'employeeId': employeeId,
             },
             errors: {
                 400: `Bad Request`,
@@ -245,6 +248,7 @@ superAdminId?: string,
      * @param offset 
      * @param limit 
      * @param superAdminId 
+     * @param employeeId 
      * @returns LeaveViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -252,6 +256,7 @@ superAdminId?: string,
 offset?: number,
 limit?: number,
 superAdminId?: string,
+employeeId?: string,
 ): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -260,6 +265,7 @@ superAdminId?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'superAdminId': superAdminId,
+                'employeeId': employeeId,
             },
             errors: {
                 400: `Bad Request`,

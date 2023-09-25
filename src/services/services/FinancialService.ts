@@ -24,6 +24,132 @@ export class FinancialService {
 
     /**
      * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomWeeklyPaymentSchedule(
+requestBody?: PayScheduleGenerationModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/weekly/custom',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomBiWeeklyPaymentSchedule(
+requestBody?: PayScheduleGenerationModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/biweekly/custom',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomMonthlyPaymentScheduleWeekPeriod(
+requestBody?: PayScheduleGenerationModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/monthly/week-period',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param paymentDay 
+     * @param superAdminId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomFullMonthPaymentSchedule(
+paymentDay?: number,
+superAdminId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/monthly/full-month',
+            query: {
+                'paymentDay': paymentDay,
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param employeeInformationId 
+     * @returns PaymentScheduleListStandardResponse Success
+     * @throws ApiError
+     */
+    public static getEmployeePaymentSchedule(
+employeeInformationId?: string,
+): CancelablePromise<PaymentScheduleListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/employee/schedule',
+            query: {
+                'employeeInformationId': employeeInformationId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @returns AdminPaymentScheduleViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static getPaymentSchedules(
+superAdminId?: string,
+): CancelablePromise<AdminPaymentScheduleViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/admin/schedules',
+            query: {
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
      * @returns ExpenseViewStandardResponse Success
      * @throws ApiError
      */
@@ -1043,50 +1169,6 @@ year: number,
     }
 
     /**
-     * @param requestBody 
-     * @returns BooleanStandardResponse Success
-     * @throws ApiError
-     */
-    public static generateCustomMonthlyPaymentScheduleWeekPeriod(
-requestBody?: PayScheduleGenerationModel,
-): CancelablePromise<BooleanStandardResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/Financial/monthly/week-period',
-            body: requestBody,
-            mediaType: 'application/json-patch+json',
-            errors: {
-                400: `Bad Request`,
-                500: `Server Error`,
-            },
-        });
-    }
-
-    /**
-     * @param paymentDay 
-     * @param superAdminId 
-     * @returns BooleanStandardResponse Success
-     * @throws ApiError
-     */
-    public static generateCustomFullMonthPaymentSchedule(
-paymentDay?: number,
-superAdminId?: string,
-): CancelablePromise<BooleanStandardResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/Financial/monthly/full-month',
-            query: {
-                'paymentDay': paymentDay,
-                'superAdminId': superAdminId,
-            },
-            errors: {
-                400: `Bad Request`,
-                500: `Server Error`,
-            },
-        });
-    }
-
-    /**
      * @param year 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
@@ -1108,46 +1190,6 @@ year: number,
     }
 
     /**
-     * @param requestBody 
-     * @returns BooleanStandardResponse Success
-     * @throws ApiError
-     */
-    public static generateCustomBiWeeklyPaymentSchedule(
-requestBody?: PayScheduleGenerationModel,
-): CancelablePromise<BooleanStandardResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/Financial/biweekly/custom',
-            body: requestBody,
-            mediaType: 'application/json-patch+json',
-            errors: {
-                400: `Bad Request`,
-                500: `Server Error`,
-            },
-        });
-    }
-
-    /**
-     * @param requestBody 
-     * @returns BooleanStandardResponse Success
-     * @throws ApiError
-     */
-    public static generateCustomWeeklyPaymentSchedule(
-requestBody?: PayScheduleGenerationModel,
-): CancelablePromise<BooleanStandardResponse> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/api/Financial/weekly/custom',
-            body: requestBody,
-            mediaType: 'application/json-patch+json',
-            errors: {
-                400: `Bad Request`,
-                500: `Server Error`,
-            },
-        });
-    }
-
-    /**
      * @param year 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
@@ -1160,48 +1202,6 @@ year: number,
             url: '/api/Financial/schedule/weekly/{year}',
             path: {
                 'year': year,
-            },
-            errors: {
-                400: `Bad Request`,
-                500: `Server Error`,
-            },
-        });
-    }
-
-    /**
-     * @param employeeInformationId 
-     * @returns PaymentScheduleListStandardResponse Success
-     * @throws ApiError
-     */
-    public static getEmployeePaymentSchedule(
-employeeInformationId?: string,
-): CancelablePromise<PaymentScheduleListStandardResponse> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/Financial/employee/schedule',
-            query: {
-                'employeeInformationId': employeeInformationId,
-            },
-            errors: {
-                400: `Bad Request`,
-                500: `Server Error`,
-            },
-        });
-    }
-
-    /**
-     * @param superAdminId 
-     * @returns AdminPaymentScheduleViewListStandardResponse Success
-     * @throws ApiError
-     */
-    public static getPaymentSchedules(
-superAdminId?: string,
-): CancelablePromise<AdminPaymentScheduleViewListStandardResponse> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/Financial/admin/schedules',
-            query: {
-                'superAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,
