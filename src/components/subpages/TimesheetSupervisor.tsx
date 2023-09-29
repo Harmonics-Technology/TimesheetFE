@@ -56,6 +56,7 @@ import Checkbox from '@components/bits-utils/Checkbox';
 import { Round } from '@components/generics/functions/Round';
 import { TimeSheetHighlight } from '@components/bits-utils/TimeSheetHighlight';
 import dynamic from 'next/dynamic';
+import { TabMenuTimesheet } from '@components/bits-utils/ProjectManagement/Generics/TabMenuTimesheet';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -918,6 +919,12 @@ const TimesheetSupervisor = ({
     };
     return (
         <Box pos="relative">
+            <TabMenuTimesheet
+                name={[
+                    { title: 'Calendar View', url: `${id}` },
+                    { title: 'Task View', url: `task/${id}` },
+                ]}
+            />
             <TimeSheetHighlight />
             <Box>
                 {getHeader()}

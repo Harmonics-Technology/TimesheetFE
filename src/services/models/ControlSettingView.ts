@@ -13,4 +13,13 @@ export type ControlSettingView = {
     allowShiftSwapRequest?: boolean;
     allowShiftSwapApproval?: boolean;
     allowIneligibleLeaveCode?: boolean;
+    weeklyBeginingPeriodDate?: string | null;
+    weeklyPaymentPeriod?: number | null;
+    biWeeklyBeginingPeriodDate?: string | null;
+    biWeeklyPaymentPeriod?: number | null;
+    isMonthlyPayScheduleFullMonth?: boolean;
+    montlyBeginingPeriodDate?: string | null;
+    monthlyPaymentPeriod?: number | null;
+    timesheetFillingReminderDay?: number | null;
+    timesheetOverdueReminderDay?: number | null;
 };

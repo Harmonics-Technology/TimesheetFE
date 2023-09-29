@@ -38,14 +38,12 @@ const localizer = momentLocalizer(moment);
 interface shiftProps {
     allShift: any;
     id: string;
-    allProjects: any;
     superAdminId: any;
 }
 
-const TeamTimeSheetTask = ({
+const SupervisorTimesheetTask = ({
     allShift,
     id,
-    allProjects,
     superAdminId,
 }: shiftProps) => {
     const [tasks, setTasks] = useState<any>();
@@ -93,16 +91,10 @@ const TeamTimeSheetTask = ({
         };
     });
 
-    console.log({ allShift });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [data, setData] = useState<any>();
-    function openModal(startDate?: any, endDate?: any) {
-        // if (!tasks) {
-
-        //     alert('select a project to continue');
-        //     return;
-        // }
-        setData({ tasks, startDate, endDate });
+    function openModal(data) {
+        setData(data);
         onOpen();
     }
     function ViewNamesGroup({ views: viewNames, view, messages, onView }) {
@@ -178,9 +170,9 @@ const TeamTimeSheetTask = ({
                     justify="center"
                     fontSize=".8rem"
                     cursor="pointer"
-                    onClick={openModal}
+                    // onClick={openModal}
                 >
-                    Fill my timesheet
+                    Approve Timesheet
                 </Flex>
             </Flex>
             // </div>
@@ -288,17 +280,8 @@ const TeamTimeSheetTask = ({
         getTasks();
     }, [selectedProject]);
 
-    const onSelectSlot = useCallback((slotInfo) => {
-        openModal(slotInfo.start, slotInfo.end);
-        //
-    }, []);
-
-    const [timesheetData, setTimesheetData] = useState();
-    const { onOpen: opens, isOpen: opened, onClose: closed } = useDisclosure();
     const onSelectEvent = useCallback((slotInfo) => {
-        setTimesheetData(slotInfo);
-        opens();
-        //
+        openModal(slotInfo);
     }, []);
 
     //
@@ -307,46 +290,29 @@ const TeamTimeSheetTask = ({
             <Box bgColor="white" borderRadius=".6rem" p=".5rem">
                 <TabMenuTimesheet
                     name={[
-                        { title: 'Calendar View', url: `my-timesheet` },
-                        { title: 'Task View', url: `task-view` },
+                        { title: 'Calendar View', url: `${id}` },
+                        { title: 'Task View', url: `task/${id}` },
                     ]}
                 />
 
                 <Loading loading={loading} />
                 <Flex
-                    justify="space-between"
+                    justify="flex-end"
                     w="full"
                     borderBottom="1px solid #c2cfe0"
                     align="flex-end"
                     pb="2rem"
                     mb="2rem"
                 >
-                    <Box w="40%">
-                        <Text fontSize=".8rem" fontWeight={500} mb=".3rem">
-                            Projects
-                        </Text>
-                        <CustomSelectBox
-                            placeholder={'Select a project'}
-                            customKeys={{
-                                key: 'id',
-                                label: 'name',
-                            }}
-                            data={allProjects?.data?.value}
-                            items={selectedProject}
-                            updateFunction={addProject}
-                            single
-                            id="Projects"
-                        />
-                    </Box>
                     <HStack>
                         {[
                             {
-                                bill: allShift?.data.billable,
+                                bill: allShift?.data?.billable,
                                 color: '#2eafa3',
                                 title: 'Billable Hours',
                             },
                             {
-                                bill: allShift?.data.nonBillable,
+                                bill: allShift?.data?.nonBillable,
                                 color: '#5dc6e7',
                                 title: 'Non Billable',
                             },
@@ -385,7 +351,6 @@ const TeamTimeSheetTask = ({
                         views={views}
                         dayLayoutAlgorithm={'no-overlap'}
                         eventPropGetter={eventPropGetter}
-                        onSelectSlot={onSelectSlot}
                         onSelectEvent={onSelectEvent}
                         selectable
                     />
@@ -393,24 +358,14 @@ const TeamTimeSheetTask = ({
             </Box>
 
             {isOpen && (
-                <FillTimesheetModal
+                <ApproveTimesheet
                     isOpen={isOpen}
                     onClose={onClose}
                     data={data}
-                    superAdminId={superAdminId}
-                    userId={id}
-                    projectId={selectedProject?.id}
-                />
-            )}
-            {opened && (
-                <ApproveTimesheet
-                    isOpen={opened}
-                    onClose={closed}
-                    data={timesheetData}
                 />
             )}
         </>
     );
 };
 
-export default TeamTimeSheetTask;
+export default SupervisorTimesheetTask;

@@ -55,7 +55,7 @@ export const TopBar = ({
                     btn="Mark Project as Complete"
                     bg="brand.400"
                     w="fit-content"
-                    disabled={data?.progress !== 100}
+                    // disabled={data?.progress !== 100}
                     h="2rem"
                 />
             </Flex>

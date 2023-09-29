@@ -10,7 +10,17 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-export const ProgressSlider = ({ label, sliderValue, setSliderValue }) => {
+export const ProgressSlider = ({
+    label,
+    sliderValue,
+    setSliderValue,
+    readonly,
+}: {
+    label: string;
+    sliderValue: any;
+    setSliderValue: any;
+    readonly?: boolean;
+}) => {
     const [showTooltip, setShowTooltip] = React.useState(false);
     return (
         <Box w="full">
@@ -24,7 +34,7 @@ export const ProgressSlider = ({ label, sliderValue, setSliderValue }) => {
             <Box w="98%" ml="auto" mb="2rem">
                 <Slider
                     id="slider"
-                    defaultValue={0}
+                    defaultValue={sliderValue}
                     min={0}
                     max={100}
                     colorScheme="teal"
@@ -32,6 +42,7 @@ export const ProgressSlider = ({ label, sliderValue, setSliderValue }) => {
                     // onChangeEnd={(val) => setSliderValue(val)}
                     onMouseEnter={() => setShowTooltip(true)}
                     onMouseLeave={() => setShowTooltip(false)}
+                    isReadOnly={readonly}
                 >
                     <SliderMark
                         value={0}

@@ -118,7 +118,7 @@ export const SingleTask = ({
                                 btn="Mark Task as Complete"
                                 bg="brand.400"
                                 w="fit-content"
-                                disabled={task.progress !== 100}
+                                // disabled={task.progress !== 100}
                             />
                         </Flex>
                     </Box>

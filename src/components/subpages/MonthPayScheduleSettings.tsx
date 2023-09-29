@@ -14,10 +14,16 @@ const Selectrix = dynamic<any>(() => import('react-selectrix'), {
 import { FinancialService, PayScheduleGenerationModel } from 'src/services';
 import * as yup from 'yup';
 import { LabelSign } from '@components/bits-utils/LabelSign';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 const schema = yup.object().shape({});
 
-export const MonthPayScheduleSettings = ({ data }) => {
+export const MonthPayScheduleSettings = ({
+    data,
+    bPeriod,
+    payday,
+    isMonth,
+}) => {
     const {
         register,
         handleSubmit,
@@ -26,11 +32,17 @@ export const MonthPayScheduleSettings = ({ data }) => {
     } = useForm<PayScheduleGenerationModel>({
         resolver: yupResolver(schema),
         mode: 'all',
+        defaultValues: {
+            startDate: bPeriod,
+            paymentDateDays: payday,
+        },
     });
     const toast = useToast();
     const router = useRouter();
 
-    const [payType, setPayType] = useState();
+    const [payType, setPayType] = useState(
+        isMonth == true ? 1 : isMonth == false ? 2 : 0,
+    );
     const { user } = useContext(UserContext);
     const superAdminId = user?.superAdminId;
 
@@ -99,13 +111,20 @@ export const MonthPayScheduleSettings = ({ data }) => {
                             { key: 2, label: '4 Weeks Period' },
                         ]}
                         onChange={(val) => setPayType(val.key)}
+                        placeholder={
+                            payType == 1
+                                ? 'Full Month'
+                                : payType == 2
+                                ? '4 Weeks Period'
+                                : ''
+                        }
                     />
                     {(payType as any) == 1 && (
                         <PrimaryInput<PayScheduleGenerationModel>
                             label="Payment Day"
                             name="paymentDateDays"
                             error={errors.paymentDateDays}
-                            placeholder="Enter the payment day"
+                            placeholder={payday || 'Enter the number of days'}
                             defaultValue=""
                             register={register}
                         />
@@ -117,15 +136,22 @@ export const MonthPayScheduleSettings = ({ data }) => {
                                 name="startDate"
                                 label="Beginning Period or  Start Date"
                                 error={errors.startDate}
+                                placeholder={
+                                    bPeriod
+                                        ? formatDate(bPeriod)
+                                        : 'Please choose a date'
+                                }
                                 // min={new Date()}
                             />
                             <PrimaryInput<PayScheduleGenerationModel>
                                 label="Payment Day"
                                 name="paymentDateDays"
                                 error={errors.paymentDateDays}
-                                placeholder="Enter the payment day"
                                 defaultValue=""
                                 register={register}
+                                placeholder={
+                                    payday || 'Enter the number of days'
+                                }
                             />
                         </HStack>
                     )}

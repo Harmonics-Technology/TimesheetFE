@@ -3,10 +3,11 @@ import { UserContext } from '@components/context/UserContext';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
-export const TabMenuTimesheet = ({name}) => {
+export const TabMenuTimesheet = ({ name }) => {
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
     const router = useRouter();
+
     return (
         <HStack
             my="2rem"
@@ -15,12 +16,10 @@ export const TabMenuTimesheet = ({name}) => {
             borderBottom="2px solid #e5e5e5"
         >
             {name.map((x: any) => {
-                const isActive = router.pathname.startsWith(
-                    `/${role}/timesheets/${x.replaceAll(
-                        ' ',
-                        '-',
-                    )}`,
+                const isActive = router.asPath.startsWith(
+                    `/${role}/timesheets/${x.url}`,
                 );
+
                 return (
                     <Flex
                         bgColor={isActive ? 'brand.400' : 'transparent'}
@@ -32,13 +31,11 @@ export const TabMenuTimesheet = ({name}) => {
                         fontSize=".87rem"
                         cursor="pointer"
                         onClick={() =>
-                            router.push(
-                                `/${role}/timesheets/${x}`,
-                            )
+                            router.push(`/${role}/timesheets/${x.url}`)
                         }
-                        key={x}
+                        key={x.url}
                     >
-                        {x.replaceAll('-', ' ')}
+                        {x.title}
                     </Flex>
                 );
             })}

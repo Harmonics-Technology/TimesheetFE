@@ -3,9 +3,9 @@
 /* eslint-disable */
 
 import type { HttpStatusCode } from './HttpStatusCode';
-import type { ProjectProgressCountView } from './ProjectProgressCountView';
+import type { ProjectTimesheetListView } from './ProjectTimesheetListView';
 
-export type ProjectProgressCountViewListStandardResponse = {
+export type ProjectTimesheetListViewStandardResponse = {
     href?: string | null;
     relations?: Array<string> | null;
     method?: string | null;
@@ -13,7 +13,7 @@ export type ProjectProgressCountViewListStandardResponse = {
     routeValues?: any;
     status?: boolean;
     message?: string | null;
-    data?: Array<ProjectProgressCountView> | null;
+    data?: ProjectTimesheetListView;
     statusCode?: HttpStatusCode;
     errors?: any;
 };

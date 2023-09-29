@@ -21,6 +21,7 @@ import moment from 'moment';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { TableState } from './TableData';
 import { IconPickerItem } from 'react-icons-picker';
+import getBusinessDateCount from './GetBusinessDays';
 
 interface ExportProps {
     isOpen: any;
@@ -132,9 +133,13 @@ export const ShowLeaveDetailsModal = ({
                                 />
                                 <SingleDetailsInfo
                                     label="Duration"
-                                    content={moment(data?.endDate).diff(
-                                        moment(data?.startDate),
-                                        'days',
+                                    content={getBusinessDateCount(
+                                        new Date(
+                                            data?.startDate as unknown as Date,
+                                        ),
+                                        new Date(
+                                            data?.endDate as unknown as Date,
+                                        ),
                                     )}
                                 />
                                 <SingleDetailsInfo

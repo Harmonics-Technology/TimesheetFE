@@ -110,7 +110,7 @@ export const AddShiftModal = ({
         reset({
             userId: '',
             note: '',
-        });
+    });
         onClose();
     };
 
