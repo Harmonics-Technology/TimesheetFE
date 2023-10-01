@@ -299,7 +299,7 @@ export const FillTimesheetModal = ({
                     0,
                     25,
                     superAdminId,
-                    projectId,
+                    (projectId as string) || undefined,
                     undefined,
                     userId,
                 );

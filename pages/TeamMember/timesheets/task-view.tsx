@@ -56,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     employeeId,
                     start,
                     end,
-                    // pagingOptions.clientId,
+                    pagingOptions.clientId,
                 );
             const allProjects = await ProjectManagementService.listProject(
                 pagingOptions.offset,

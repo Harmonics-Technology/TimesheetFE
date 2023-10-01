@@ -201,48 +201,6 @@ const TeamTimeSheetTask = ({
         );
     }
 
-    function MyWeek({
-        date,
-        localizer,
-        max = localizer.endOf(new Date(), 'day'),
-        min = localizer.startOf(new Date(), 'day'),
-        scrollToTime = localizer.startOf(new Date(), 'day'),
-        ...props
-    }) {
-        const currRange = useMemo(
-            () => MyWeek.range(date, { localizer }),
-            [date, localizer],
-        );
-
-        return (
-            // <TimeGrid
-            //     date={date}
-            //     eventOffset={15}
-            //     localizer={localizer}
-            //     max={max}
-            //     min={min}
-            //     range={currRange}
-            //     scrollToTime={scrollToTime}
-            //     {...props}
-            // />
-            <></>
-        );
-    }
-    MyWeek.range = (date, { localizer }) => {
-        const start = date;
-        const end = dates.add(start, 2, 'day');
-
-        let current = start;
-        const range = [];
-
-        while (localizer.lte(current, end, 'day')) {
-            range.push(current as unknown as any);
-            current = localizer.add(current, 1, 'day');
-        }
-
-        return range;
-    };
-
     const timeSlotWrapper = (timeSlotWrapperProps) => {
         const style =
             timeSlotWrapperProps.resource === null ||
