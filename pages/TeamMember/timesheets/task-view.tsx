@@ -36,14 +36,8 @@ export default task;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const start = format(
-            startOfMonth(new Date(pagingOptions.from)),
-            'yyyy-MM-dd',
-        );
-        const end = format(
-            endOfMonth(new Date(pagingOptions.to)),
-            'yyyy-MM-dd',
-        );
+        const start = format(startOfMonth(new Date()), 'yyyy-MM-dd');
+        const end = format(endOfMonth(new Date()), 'yyyy-MM-dd');
         const id = JSON.parse(ctx.req.cookies.user).id;
         const employeeId = JSON.parse(
             ctx.req.cookies.user,
@@ -54,8 +48,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const allShift =
                 await ProjectManagementService.listUserProjectTimesheet(
                     employeeId,
-                    start,
-                    end,
+                    pagingOptions.from || start,
+                    pagingOptions.to || end,
                     pagingOptions.clientId,
                 );
             const allProjects = await ProjectManagementService.listProject(
@@ -66,8 +60,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 id,
                 pagingOptions.search,
             );
-            console.log({ allShift, employeeId });
-
             return {
                 props: {
                     allShift,

@@ -62,30 +62,6 @@ const TeamTimeSheetTask = ({
         });
     };
 
-    const DemoData = [
-        {
-            id: 0,
-            title: 'All Day Event very long title',
-            start: new Date('2023/09/11 10:30'),
-            end: new Date(2023, 8, 11, 12, 0, 0),
-        },
-        {
-            id: 1,
-            title: 'Long Event',
-            start: new Date(2015, 3, 2, 13, 30, 0),
-            end: new Date(2015, 3, 2, 15, 0, 0),
-        },
-
-        {
-            id: 2,
-            title: 'DTS STARTS',
-            start: new Date(2015, 3, 4, 10, 0, 0),
-            end: new Date(2015, 3, 4, 12, 14, 0),
-        },
-    ];
-
-    console.log({ allShift });
-
     const EventList = allShift?.data?.projectTimesheets?.map((obj: any) => {
         return {
             id: obj?.id,
@@ -125,7 +101,7 @@ const TeamTimeSheetTask = ({
         ));
     }
     function CustomToolbar({
-        // date, // available, but not used here
+        date,
         label,
         localizer: { messages },
         onNavigate,
@@ -134,15 +110,35 @@ const TeamTimeSheetTask = ({
         views,
     }) {
         const goPrevious = () => {
-            // if()
+            const newDate = moment(date)
+                .subtract(7, 'day')
+                .format('YYYY-MM-DD');
+            const nextRange = moment(newDate)
+                .add(6, 'days')
+                .format('YYYY-MM-DD');
+            router.push({
+                query: {
+                    ...router.query,
+                    from: newDate,
+                    to: nextRange,
+                },
+            });
             onNavigate(navigate.PREVIOUS);
-            console.log({ label });
         };
         const goNext = () => {
-            // if()
+            const newDate = moment(date).add(7, 'day').format('YYYY-MM-DD');
+            const nextRange = moment(newDate)
+                .add(6, 'days')
+                .format('YYYY-MM-DD');
+
+            router.push({
+                query: {
+                    ...router.query,
+                    from: newDate,
+                    to: nextRange,
+                },
+            });
             onNavigate(navigate.NEXT);
-            const currentDate = view; // Get the date of the currently displayed view
-            console.log({ currentDate });
         };
         return (
             // <div className="rbc-toolbar">
