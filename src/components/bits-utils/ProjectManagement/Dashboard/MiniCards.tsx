@@ -1,5 +1,6 @@
 import { Box, Circle, Flex, Text, Icon } from '@chakra-ui/react';
 import { CAD, CUR } from '@components/generics/functions/Naira';
+import { Round } from '@components/generics/functions/Round';
 import shadeColor from '@components/generics/functions/shadeColor';
 import React from 'react';
 
@@ -28,7 +29,7 @@ export const MiniCards = ({
         >
             <Box>
                 <Text fontSize="1.5rem" fontWeight="600" color="black" mb="0">
-                    {isPrice ? CAD(value) : CUR(value)}
+                    {isPrice ? CAD(Round(value)) : CUR(Round(value))}
                 </Text>
                 <Text fontSize=".81rem" color="#8c8c8c" mb="0">
                     {title}

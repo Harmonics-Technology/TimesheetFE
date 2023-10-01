@@ -2,10 +2,18 @@ import { withPageAuth } from '@components/generics/withPageAuth';
 import { PayScheduleSettings } from '@components/subpages/PayScheduleSettings';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { FinancialService } from 'src/services';
+import { FinancialService, UserService } from 'src/services';
 
-const PaySchedule = ({ paymentSchedule }: { paymentSchedule: any }) => {
-    return <PayScheduleSettings paymentSchedule={paymentSchedule} />;
+const PaySchedule = ({
+    paymentSchedule,
+    data,
+}: {
+    paymentSchedule: any;
+    data: any;
+}) => {
+    return (
+        <PayScheduleSettings paymentSchedule={paymentSchedule} data={data} />
+    );
 };
 
 export default PaySchedule;
@@ -17,10 +25,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const paymentSchedule = await FinancialService.getPaymentSchedules(
                 superAdminId,
             );
-
+            const data = await UserService.getControlSettingById(superAdminId);
             return {
                 props: {
                     paymentSchedule: paymentSchedule.data,
+                    data: data.data,
                 },
             };
         } catch (error: any) {

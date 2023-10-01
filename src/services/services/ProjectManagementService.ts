@@ -5,7 +5,6 @@ import type { BooleanStandardResponse } from '../models/BooleanStandardResponse'
 import type { BudgetSummaryReportViewStandardResponse } from '../models/BudgetSummaryReportViewStandardResponse';
 import type { MarkAsCompletedModel } from '../models/MarkAsCompletedModel';
 import type { ProjectModel } from '../models/ProjectModel';
-import type { ProjectProgressCountViewListStandardResponse } from '../models/ProjectProgressCountViewListStandardResponse';
 import type { ProjectProgressCountViewStandardResponse } from '../models/ProjectProgressCountViewStandardResponse';
 import type { ProjectStatus } from '../models/ProjectStatus';
 import type { ProjectSubTaskModel } from '../models/ProjectSubTaskModel';
@@ -15,6 +14,8 @@ import type { ProjectTaskAsigneeViewPagedCollectionStandardResponse } from '../m
 import type { ProjectTaskModel } from '../models/ProjectTaskModel';
 import type { ProjectTaskViewPagedCollectionStandardResponse } from '../models/ProjectTaskViewPagedCollectionStandardResponse';
 import type { ProjectTaskViewStandardResponse } from '../models/ProjectTaskViewStandardResponse';
+import type { ProjectTimesheetApprovalModel } from '../models/ProjectTimesheetApprovalModel';
+import type { ProjectTimesheetListViewStandardResponse } from '../models/ProjectTimesheetListViewStandardResponse';
 import type { ProjectTimesheetModel } from '../models/ProjectTimesheetModel';
 import type { ProjectViewPagedCollectionStandardResponse } from '../models/ProjectViewPagedCollectionStandardResponse';
 import type { ProjectViewStandardResponse } from '../models/ProjectViewStandardResponse';
@@ -138,6 +139,22 @@ requestBody?: ProjectTimesheetModel,
     }
 
     /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static treatTimesheet(
+requestBody?: ProjectTimesheetApprovalModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/treat-timesheet',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
      * @param offset 
      * @param limit 
      * @param superAdminId 
@@ -165,6 +182,29 @@ search?: string,
                 'status': status,
                 'userId': userId,
                 'search': search,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param projectId 
+     * @returns ProjectViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listProjectAssigneeDetail(
+offset?: number,
+limit?: number,
+projectId?: string,
+): CancelablePromise<ProjectViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/projects-assignees',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'projectId': projectId,
             },
         });
     }
@@ -363,27 +403,50 @@ userId?: string,
     }
 
     /**
-     * @param userId 
+     * @param employeeId 
      * @param startDate 
      * @param endDate 
      * @param projectId 
-     * @returns ProjectProgressCountViewListStandardResponse Success
+     * @returns ProjectTimesheetListViewStandardResponse Success
      * @throws ApiError
      */
     public static listUserProjectTimesheet(
-userId?: string,
+employeeId?: string,
 startDate?: string,
 endDate?: string,
 projectId?: string,
-): CancelablePromise<ProjectProgressCountViewListStandardResponse> {
+): CancelablePromise<ProjectTimesheetListViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/ProjectManagement/user-timesheets',
             query: {
-                'userId': userId,
+                'employeeId': employeeId,
                 'startDate': startDate,
                 'endDate': endDate,
                 'projectId': projectId,
+            },
+        });
+    }
+
+    /**
+     * @param supervisorId 
+     * @param startDate 
+     * @param endDate 
+     * @returns ProjectTimesheetListViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static listSupervisorProjectTimesheet(
+supervisorId?: string,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<ProjectTimesheetListViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/supervisor-timesheets',
+            query: {
+                'supervisorId': supervisorId,
+                'startDate': startDate,
+                'endDate': endDate,
             },
         });
     }

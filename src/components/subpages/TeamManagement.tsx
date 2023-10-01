@@ -165,7 +165,6 @@ function TeamManagement({
     const currency = watch('currency');
     //
 
-    console.log({ errors });
     //
     const onboarding = watch('fixedAmount');
     const clientId = watch('clientId');

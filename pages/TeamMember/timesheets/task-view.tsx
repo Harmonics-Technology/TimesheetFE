@@ -11,6 +11,7 @@ import {
     startOfMinute,
     startOfMonth,
 } from 'date-fns';
+import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
@@ -21,15 +22,12 @@ import {
 
 const task = ({ allShift, allProjects, id, superAdminId }) => {
     return (
-        <Box bgColor="white" borderRadius=".6rem" p=".5rem">
-            <TabMenuTimesheet name={['my-timesheet', 'task-view']} />
-            <TeamTimeSheetTask
-                allShift={allShift}
-                allProjects={allProjects}
-                id={id}
-                superAdminId={superAdminId}
-            />
-        </Box>
+        <TeamTimeSheetTask
+            allShift={allShift}
+            allProjects={allProjects}
+            id={id}
+            superAdminId={superAdminId}
+        />
     );
 };
 
@@ -41,14 +39,18 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const start = format(startOfMonth(new Date()), 'yyyy-MM-dd');
         const end = format(endOfMonth(new Date()), 'yyyy-MM-dd');
         const id = JSON.parse(ctx.req.cookies.user).id;
+        const employeeId = JSON.parse(
+            ctx.req.cookies.user,
+        ).employeeInformationId;
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
 
         try {
             const allShift =
                 await ProjectManagementService.listUserProjectTimesheet(
-                    id,
+                    employeeId,
                     pagingOptions.from || start,
                     pagingOptions.to || end,
+                    pagingOptions.clientId,
                 );
             const allProjects = await ProjectManagementService.listProject(
                 pagingOptions.offset,
@@ -58,7 +60,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 id,
                 pagingOptions.search,
             );
-
             return {
                 props: {
                     allShift,
@@ -68,6 +69,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     data: [],

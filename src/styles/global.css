@@ -253,7 +253,7 @@ select option {
     border: 1px solid #2eafa3 !important;
     /* color: black !important; */
     /* background-color: white !important; */
-    background-color: rgb(46, 67, 175) !important;
+    background-color: #5dc6e7 !important;
     color: white !important;
     border-radius: 0 !important;
     font-weight: 500;
@@ -307,4 +307,24 @@ select option {
 } */
 .billable {
     background-color: #2eafa3 !important;
+    
+}
+.billable-approved {
+    background-color: #2eafa3 !important;
+    border-top: 4px solid green !important;
+    
+}
+.billable-declined {
+    background-color: #2eafa3 !important;
+    border-top: 4px solid red !important;
+    
+}
+.nbillable-approved {
+    border-top: 4px solid green !important;
+    
+}
+.nbillable-declined {
+    /* background-color: #2eafa3 !important; */
+    border-top: 4px solid red !important;
+    
 }

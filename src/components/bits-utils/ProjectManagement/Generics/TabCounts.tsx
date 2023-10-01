@@ -30,6 +30,7 @@ export const TabCounts = ({
             borderBottom={isActive ? '3px solid #ffac00' : ''}
             p="1rem"
             borderRadius=".3rem .3rem 0 0"
+            w="full"
         >
             <Text fontWeight={500} color={isActive ? 'white' : 'black'} mb="0">
                 {text}

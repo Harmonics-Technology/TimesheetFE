@@ -71,7 +71,6 @@ const Leaveform = ({
     });
 
     const onSubmit = async (data: LeaveModel) => {
-        console.log({ data, leavetypes });
         oneDay == true && (data.endDate = data.startDate);
         data.leaveTypeId =
             leavetypes.value?.filter((x) => x.name == data.leaveTypeId)[0]
@@ -113,7 +112,6 @@ const Leaveform = ({
         }
     };
 
-    console.log({ errors });
     return (
         <DrawerWrapper
             onClose={onClose}
@@ -183,7 +181,9 @@ const Leaveform = ({
                             name="endDate"
                             label="End Date"
                             error={errors.endDate}
-                            min={new DateObject().add(4, 'days')}
+                            min={new DateObject(
+                                watch('startDate') as string,
+                            ).add(4, 'days')}
                             disableWeekend
                             placeholder={data?.endDate}
                         />

@@ -10,25 +10,25 @@ import TimePicker from 'react-time-picker';
 import { CustomDatePick } from './CustomDatePick';
 // import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 
-export const CustomDateTime = ({ onChange, value, label }) => {
+export const CustomDateTime = ({ onChange, value, label, useEnd }) => {
     const {
         ref: timeRef,
         isComponentVisible: startVisible,
         setIsComponentVisible: startIsVisible,
     } = useComponentVisible(false);
 
-    const newValue = moment(value).format('YYYY/MM/DD HH:mm');
-    const [date, setDate] = useState<any>(
-        new DateObject(newValue.split(' ')[0]) || new DateObject(),
-    );
+    const newValue = moment(value).format('YYYY-MM-DD HH:mm');
+    const [date, setDate] = useState<any>();
+    // new DateObject(newValue.split(' ')[0]) || new DateObject(),
     const [time, setTime] = useState<any>(
-        newValue.split(' ')[1] || moment().format('HH:mm'),
+        newValue?.split(' ')[1] || moment().format('HH:mm'),
     );
-    const newDate = date.format('YYYY/MM/DD');
+
+    const newDate = date?.format('YYYY-MM-DD');
     //
 
     useEffect(() => {
-        onChange(newDate + ' ' + time);
+        onChange(newDate + 'T' + time);
     }, [date, time]);
     return (
         <Box w="full">
@@ -40,9 +40,10 @@ export const CustomDateTime = ({ onChange, value, label }) => {
                 {label}
             </FormLabel>
             <HStack gap="2rem">
-                <Box w="60%">
+                <Box w={useEnd ? '60%' : '60%'}>
                     <CustomDatePick date={date} setDate={setDate} />
                 </Box>
+
                 <Box w="40%">
                     <Box w="full" ref={timeRef} pos="relative">
                         <HStack

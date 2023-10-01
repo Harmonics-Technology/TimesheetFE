@@ -1,4 +1,12 @@
-import { Box, Button, Flex, Text, useDisclosure } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Flex,
+    HStack,
+    Square,
+    Text,
+    useDisclosure,
+} from '@chakra-ui/react';
 import React, {
     useCallback,
     useEffect,
@@ -21,6 +29,10 @@ import { FillTimesheetModal } from './FillTimesheetModal';
 import { CustomSelectBox } from './ProjectManagement/Generics/CustomSelectBox';
 import { ProjectManagementService } from 'src/services';
 import Loading from './Loading';
+import { TabMenuTimesheet } from './ProjectManagement/Generics/TabMenuTimesheet';
+import { Round } from '@components/generics/functions/Round';
+import { ApproveTimesheet } from './ApproveTimesheet';
+import * as dates from 'date-arithmetic';
 
 const localizer = momentLocalizer(moment);
 
@@ -37,36 +49,20 @@ const TeamTimeSheetTask = ({
     allProjects,
     superAdminId,
 }: shiftProps) => {
-    const [tasks, setTasks] = useState<any>();
-    const [loading, setLoading] = useState<any>();
+    const router = useRouter();
+    const [loading, setLoading] = useState<any>(false);
     const [selectedProject, setSelectedProject] = useState<any>();
     const addProject = (user) => {
         setSelectedProject(user);
+        router.push({
+            query: {
+                ...router.query,
+                clientId: user.id,
+            },
+        });
     };
 
-    const DemoData = [
-        {
-            id: 0,
-            title: 'All Day Event very long title',
-            start: new Date('2023/09/11 10:30'),
-            end: new Date(2023, 8, 11, 12, 0, 0),
-        },
-        {
-            id: 1,
-            title: 'Long Event',
-            start: new Date(2015, 3, 2, 13, 30, 0),
-            end: new Date(2015, 3, 2, 15, 0, 0),
-        },
-
-        {
-            id: 2,
-            title: 'DTS STARTS',
-            start: new Date(2015, 3, 4, 10, 0, 0),
-            end: new Date(2015, 3, 4, 12, 14, 0),
-        },
-    ];
-
-    const EventList = allShift?.data?.map((obj: any) => {
+    const EventList = allShift?.data?.projectTimesheets?.map((obj: any) => {
         return {
             id: obj?.id,
             title:
@@ -76,18 +72,16 @@ const TeamTimeSheetTask = ({
             start: new Date(obj?.startDate as string),
             end: new Date(obj?.endDate as string),
             bill: obj?.billable,
+            progress: obj?.percentageOfCompletion,
+            approved: obj?.status,
+            reason: obj?.reason,
         };
     });
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [data, setData] = useState<any>();
     function openModal(startDate?: any, endDate?: any) {
-        // if (!tasks) {
-
-        //     alert('select a project to continue');
-        //     return;
-        // }
-        setData({ tasks, startDate, endDate });
+        setData({ startDate, endDate });
         onOpen();
     }
     function ViewNamesGroup({ views: viewNames, view, messages, onView }) {
@@ -107,7 +101,7 @@ const TeamTimeSheetTask = ({
         ));
     }
     function CustomToolbar({
-        // date, // available, but not used here
+        date,
         label,
         localizer: { messages },
         onNavigate,
@@ -115,8 +109,40 @@ const TeamTimeSheetTask = ({
         view,
         views,
     }) {
+        const goPrevious = () => {
+            const newDate = moment(date)
+                .subtract(7, 'day')
+                .format('YYYY-MM-DD');
+            const nextRange = moment(newDate)
+                .add(6, 'days')
+                .format('YYYY-MM-DD');
+            router.push({
+                query: {
+                    ...router.query,
+                    from: newDate,
+                    to: nextRange,
+                },
+            });
+            onNavigate(navigate.PREVIOUS);
+        };
+        const goNext = () => {
+            const newDate = moment(date).add(7, 'day').format('YYYY-MM-DD');
+            const nextRange = moment(newDate)
+                .add(6, 'days')
+                .format('YYYY-MM-DD');
+
+            router.push({
+                query: {
+                    ...router.query,
+                    from: newDate,
+                    to: nextRange,
+                },
+            });
+            onNavigate(navigate.NEXT);
+        };
         return (
             // <div className="rbc-toolbar">
+
             <Flex w="full" justify="space-between" my="1rem">
                 <span className="rbc-btn-group">
                     <ViewNamesGroup
@@ -128,7 +154,7 @@ const TeamTimeSheetTask = ({
                 </span>
                 <Flex align="center" gap="1rem">
                     <Button
-                        onClick={() => onNavigate(navigate.PREVIOUS)}
+                        onClick={() => goPrevious()}
                         aria-label={messages.previous}
                         h="2.2rem"
                         w="2.5rem"
@@ -141,8 +167,8 @@ const TeamTimeSheetTask = ({
                         {label}
                     </Text>
                     <Button
-                        onClick={() => onNavigate(navigate.NEXT)}
-                        aria-label={messages.previous}
+                        onClick={() => goNext()}
+                        aria-label={messages.next}
                         h="2.2rem"
                         w="2.5rem"
                         p="0"
@@ -170,7 +196,6 @@ const TeamTimeSheetTask = ({
             // </div>
         );
     }
-    const router = useRouter();
 
     const timeSlotWrapper = (timeSlotWrapperProps) => {
         const style =
@@ -194,6 +219,22 @@ const TeamTimeSheetTask = ({
             ...(event.bill && {
                 className: 'billable',
             }),
+            ...(event.approved == 'APPROVED' &&
+                event.bill && {
+                    className: 'billable-approved',
+                }),
+            ...(event.approved == 'REJECTED' &&
+                event.bill && {
+                    className: 'billable-declined',
+                }),
+            ...(event.approved == 'APPROVED' &&
+                !event.bill && {
+                    className: 'nbillable-approved',
+                }),
+            ...(event.approved == 'REJECTED' &&
+                !event.bill && {
+                    className: 'nbillable-declined',
+                }),
         };
     }, []);
 
@@ -230,79 +271,108 @@ const TeamTimeSheetTask = ({
         [],
     );
 
-    useEffect(() => {
-        async function getTasks() {
-            if (selectedProject?.id) {
-                setLoading(true);
-            }
-            try {
-                const res = await ProjectManagementService.listTasks(
-                    0,
-                    25,
-                    superAdminId,
-                    selectedProject?.id || undefined,
-                    2,
-                    id,
-                );
-                if (res?.status) {
-                    setLoading(false);
-                    setTasks(res?.data?.value);
-                    return;
-                }
-            } catch (error) {
-                setLoading(false);
-            }
-        }
-        getTasks();
-    }, [selectedProject]);
-
     const onSelectSlot = useCallback((slotInfo) => {
         openModal(slotInfo.start, slotInfo.end);
+        //
+    }, []);
+
+    const [timesheetData, setTimesheetData] = useState();
+    const { onOpen: opens, isOpen: opened, onClose: closed } = useDisclosure();
+    const onSelectEvent = useCallback((slotInfo) => {
+        setTimesheetData(slotInfo);
+        opens();
         //
     }, []);
 
     //
     return (
         <>
-            <Loading loading={loading} />
-            <Box w="full" borderBottom="1px solid #c2cfe0">
-                <Box w="40%" mb="2rem">
-                    <Text fontSize=".8rem" fontWeight={500} mb=".3rem">
-                        Projects
-                    </Text>
-                    <CustomSelectBox
-                        placeholder={'Select a project'}
-                        customKeys={{
-                            key: 'id',
-                            label: 'name',
-                        }}
-                        data={allProjects?.data?.value}
-                        items={selectedProject}
-                        updateFunction={addProject}
-                        single
-                        id="Projects"
+            <Box bgColor="white" borderRadius=".6rem" p=".5rem">
+                <TabMenuTimesheet
+                    name={[
+                        { title: 'Calendar View', url: `my-timesheet` },
+                        { title: 'Task View', url: `task-view` },
+                    ]}
+                />
+
+                <Loading loading={loading} />
+                <Flex
+                    justify="space-between"
+                    w="full"
+                    borderBottom="1px solid #c2cfe0"
+                    align="flex-end"
+                    pb="2rem"
+                    mb="2rem"
+                >
+                    <Box w="40%">
+                        <Text fontSize=".8rem" fontWeight={500} mb=".3rem">
+                            Projects
+                        </Text>
+                        <CustomSelectBox
+                            placeholder={'Select a project'}
+                            customKeys={{
+                                key: 'id',
+                                label: 'name',
+                            }}
+                            data={allProjects?.data?.value}
+                            items={selectedProject}
+                            updateFunction={addProject}
+                            single
+                            id="Projects"
+                        />
+                    </Box>
+                    <HStack>
+                        {[
+                            {
+                                bill: allShift?.data.billable,
+                                color: '#2eafa3',
+                                title: 'Billable Hours',
+                            },
+                            {
+                                bill: allShift?.data.nonBillable,
+                                color: '#5dc6e7',
+                                title: 'Non Billable',
+                            },
+                        ].map((x, i) => (
+                            <Flex
+                                h="2.5rem"
+                                bgColor={x.color}
+                                color="white"
+                                px="1rem"
+                                align="center"
+                                key={i}
+                            >
+                                <Box>
+                                    <Box fontSize=".6rem">{x.title} :</Box>
+                                    <Box fontSize=".8rem">
+                                        {Round(x.bill) || 0}
+                                    </Box>
+                                </Box>
+                            </Flex>
+                        ))}
+                    </HStack>
+                </Flex>
+                <Box>
+                    <Calendar
+                        localizer={localizer}
+                        events={EventList}
+                        // startAccessor="start"
+                        // endAccessor="end"
+                        style={{ height: 500 }}
+                        defaultView={Views.WEEK}
+                        components={components}
+                        defaultDate={defaultDate}
+                        min={moment('8 am', 'h a').toDate()}
+                        max={moment('9 pm', 'h a').toDate()}
+                        formats={formats}
+                        views={views}
+                        dayLayoutAlgorithm={'no-overlap'}
+                        eventPropGetter={eventPropGetter}
+                        onSelectSlot={onSelectSlot}
+                        onSelectEvent={onSelectEvent}
+                        selectable
                     />
                 </Box>
-            </Box>
-            <Box>
-                <Calendar
-                    localizer={localizer}
-                    events={EventList}
-                    // startAccessor="start"
-                    // endAccessor="end"
-                    style={{ height: 500 }}
-                    defaultView={Views.WEEK}
-                    components={components}
-                    defaultDate={defaultDate}
-                    min={moment('8 am', 'h a').toDate()}
-                    max={moment('9 pm', 'h a').toDate()}
-                    formats={formats}
-                    views={views}
-                    dayLayoutAlgorithm={'no-overlap'}
-                    eventPropGetter={eventPropGetter}
-                    onSelectSlot={onSelectSlot}
-                    selectable
-                />
             </Box>
 
             {isOpen && (
@@ -312,7 +382,14 @@ const TeamTimeSheetTask = ({
                     data={data}
                     superAdminId={superAdminId}
                     userId={id}
-                    projectId={selectedProject?.id}
+                    allProjects={allProjects?.data?.value}
+                />
+            )}
+            {opened && (
+                <ApproveTimesheet
+                    isOpen={opened}
+                    onClose={closed}
+                    data={timesheetData}
                 />
             )}
         </>

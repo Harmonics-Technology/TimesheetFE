@@ -847,7 +847,12 @@ const TimesheetTeam = ({
     };
     return (
         <Box pos="relative">
-            <TabMenuTimesheet name={['my-timesheet', 'task-view']} />
+            <TabMenuTimesheet
+                name={[
+                    { title: 'Calendar View', url: `my-timesheet` },
+                    { title: 'Task View', url: `task-view` },
+                ]}
+            />
             <TimeSheetHighlight />
             <Box>
                 {getHeader()}

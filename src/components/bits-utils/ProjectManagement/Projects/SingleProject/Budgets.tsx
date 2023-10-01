@@ -12,7 +12,15 @@ import moment from 'moment';
 import { TableCard } from '../../Generics/TableCard';
 import { ProjectMetrics } from 'src/services';
 
-export const Budgets = ({ id, project }) => {
+export const Budgets = ({
+    id,
+    project,
+    budgets,
+}: {
+    id: string;
+    project: any;
+    budgets: any;
+}) => {
     const tableHead = [
         'Team Members',
         'Assigned Task',
@@ -25,6 +33,7 @@ export const Budgets = ({ id, project }) => {
     ];
 
     const projectMetrics: ProjectMetrics = project.projectMetrics;
+
     return (
         <Box>
             <TopBar id={id} data={project} />
@@ -65,37 +74,53 @@ export const Budgets = ({ id, project }) => {
                 <SubSearchComponent />
             </HStack>
             <TableCard tableHead={tableHead}>
-                <TableRow>
-                    <TableData name="Ade Adeyemi" fontWeight="500" />
+                {budgets.value
+                    ?.filter((x) => x.projectTask !== null)
+                    .map((x) => (
+                        <TableRow key={x.id}>
+                            <TableData
+                                name={x?.user?.fullName}
+                                fontWeight="500"
+                            />
 
-                    <TableData
-                        name={`Requirement Gathering`}
-                        fontWeight="500"
-                    />
-                    <TableData
-                        name={moment().format('DD/MM/YYYY')}
-                        fontWeight="500"
-                    />
-                    <TableData
-                        name={moment().format('DD/MM/YYYY')}
-                        fontWeight="500"
-                    />
-                    <TableData name={`${100} hrs`} fontWeight="500" />
-                    <TableData name={CAD(100000)} fontWeight="500" />
-                    <TableData name={`${50} hrs`} fontWeight="500" />
-                    <TableData name={CAD(50000)} fontWeight="500" />
-                </TableRow>
-                <TableRow bg="#d9d9d9">
-                    <TableData name="" fontWeight="500" />
-
-                    <TableData name={``} fontWeight="500" />
-                    <TableData name={''} fontWeight="500" />
-                    <TableData name="Total" fontWeight="500" />
-                    <TableData name={`${100} hrs`} fontWeight="500" />
-                    <TableData name={CAD(100000)} fontWeight="500" />
-                    <TableData name={`${50} hrs`} fontWeight="500" />
-                    <TableData name={CAD(50000)} fontWeight="500" />
-                </TableRow>
+                            <TableData
+                                name={x.projectTask?.name}
+                                fontWeight="500"
+                            />
+                            <TableData
+                                name={moment(x.projectTask?.startDate).format(
+                                    'DD/MM/YYYY',
+                                )}
+                                fontWeight="500"
+                            />
+                            <TableData
+                                name={moment(x.projectTask?.endDate).format(
+                                    'DD/MM/YYYY',
+                                )}
+                                fontWeight="500"
+                            />
+                            <TableData
+                                name={`${
+                                    ((moment(x.projectTask?.endDate).diff(
+                                        x.projectTask?.startDate,
+                                        'day',
+                                    ) as number) +
+                                        1) *
+                                    x.projectTask.durationInHours
+                                } hrs`}
+                                fontWeight="500"
+                            />
+                            <TableData name={CAD(x?.budget)} fontWeight="500" />
+                            <TableData
+                                name={`${x.hoursLogged} hrs`}
+                                fontWeight="500"
+                            />
+                            <TableData
+                                name={CAD(x?.budgetSpent)}
+                                fontWeight="500"
+                            />
+                        </TableRow>
+                    ))}
             </TableCard>
         </Box>
     );

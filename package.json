@@ -41,6 +41,7 @@
         "chartjs-plugin-datalabels": "^2.2.0",
         "colord": "^2.9.3",
         "cross-env": "^7.0.3",
+        "date-arithmetic": "^4.1.0",
         "date-fn": "^0.0.2",
         "date-fns": "^2.29.3",
         "faker": "^6.6.6",

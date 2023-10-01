@@ -5,8 +5,8 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import { ProjectManagementService } from 'src/services';
 
-const budget = ({ id, project }) => {
-    return <Budgets id={id} project={project} />;
+const budget = ({ id, project, budgets }) => {
+    return <Budgets id={id} project={project} budgets={budgets} />;
 };
 
 export default budget;
@@ -18,10 +18,16 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const { id } = ctx.query;
         try {
             const data = await ProjectManagementService.getProject(id);
-
+            const budgets =
+                await ProjectManagementService.listProjectAssigneeDetail(
+                    pagingOptions.offset,
+                    pagingOptions.limit,
+                    id,
+                );
             return {
                 props: {
                     project: data.data,
+                    budgets: budgets.data,
                     id,
                 },
             };

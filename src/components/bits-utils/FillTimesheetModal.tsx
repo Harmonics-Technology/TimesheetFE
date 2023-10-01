@@ -1,6 +1,7 @@
 import {
     Box,
     Checkbox,
+    Circle,
     Flex,
     HStack,
     Icon,
@@ -15,11 +16,16 @@ import {
     useRadioGroup,
     useToast,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { ShiftBtn } from './ShiftBtn';
 import { SelectrixBox } from './Selectrix';
-import { ProjectManagementService, ProjectTimesheetModel } from 'src/services';
+import {
+    ProjectManagementService,
+    ProjectTimesheetModel,
+    ProjectTimesheetRange,
+    ProjectView,
+} from 'src/services';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -33,6 +39,8 @@ import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
 import InputBlank from './InputBlank';
 import moment from 'moment';
 import RadioBtn from './RadioBtn';
+import { UserContext } from '@components/context/UserContext';
+import { eachDayOfInterval, parseISO, startOfWeek } from 'date-fns';
 
 interface ExportProps {
     isOpen: any;
@@ -41,6 +49,7 @@ interface ExportProps {
     superAdminId?: any;
     userId?: any;
     projectId?: any;
+    allProjects?: ProjectView;
 }
 
 const schema = yup.object().shape({});
@@ -51,7 +60,7 @@ export const FillTimesheetModal = ({
     data,
     superAdminId,
     userId,
-    projectId,
+    allProjects,
 }: ExportProps) => {
     const {
         handleSubmit,
@@ -70,15 +79,76 @@ export const FillTimesheetModal = ({
     const [endDate, setendDate] = useState<any>(moment(data.endDate));
     const [isBillable, setisBillable] = useState<any>();
     const [loading, setLoading] = useState<any>();
-    const [projectsId, setProjecstId] = useState(projectId);
+
+    const { user } = useContext(UserContext);
+    const hoursPerDay = user?.employeeInformation?.hoursPerDay || 8;
+
+    console.log({ hoursPerDay });
 
     const [sliderValue, setSliderValue] = useState(0);
 
+    const repeating = [
+        { id: 0, name: 'SU' },
+        { id: 1, name: 'MO' },
+        { id: 2, name: 'TU' },
+        { id: 3, name: 'WE' },
+        { id: 4, name: 'TH' },
+        { id: 5, name: 'FR' },
+        { id: 6, name: 'SA' },
+    ];
+    const [selectedId, setSelectedId] = useState<any>([]);
+
+    const formattedStartDate = moment(startDate).day();
+    console.log({ startDate, selectedId, formattedStartDate, endDate });
+    const toggleSelected = (value: any) => {
+        const existingValue = selectedId?.find((e) => e?.id === value?.id);
+        if (existingValue) {
+            const newArray = selectedId?.filter((x) => x?.id !== value?.id);
+            setSelectedId(newArray);
+            return;
+        }
+        setSelectedId([...selectedId, value]);
+    };
+
+    const [projectTimesheets, setProjectTimesheets] =
+        useState<ProjectTimesheetRange>({});
+
+    console.log({ projectTimesheets });
+    const [newProjectTimesheet, setNewProjectTimesheet] = useState([]);
+    const [duration, setDuration] = useState(0);
+
+    const firstDateOfWeek = startOfWeek(parseISO(startDate));
+    const selectedStartTime = moment(startDate).format('HH:mm');
+    const selectedEndTime = moment(endDate).format('HH:mm');
+    useEffect(() => {
+        const updatedProjectTimesheets = selectedId.map((x, i) => ({
+            ...projectTimesheets,
+            startDate: moment(firstDateOfWeek)
+                .add(x?.id, 'day')
+                .format(`YYYY-MM-DD ${selectedStartTime}`),
+            endDate: useEnd
+                ? moment(firstDateOfWeek)
+                      .add(x?.id, 'day')
+                      .format(`YYYY-MM-DD ${selectedEndTime}`)
+                : moment(
+                      moment(firstDateOfWeek)
+                          .add(x?.id, 'day')
+                          .format(`YYYY-MM-DD ${selectedStartTime}`),
+                  )
+                      .add(duration, 'hour')
+                      .format('YYYY-MM-DD HH:mm'),
+        }));
+
+        setNewProjectTimesheet(updatedProjectTimesheets);
+    }, [selectedId, projectTimesheets]);
+
+    console.log({ newProjectTimesheet });
+
     const onSubmit = async (data: ProjectTimesheetModel) => {
-        data.projectId = projectsId;
         data.projectTaskAsigneeId = subTasks.filter(
             (x) => x.id == data.projectSubTaskId,
         )[0]?.projectTaskAsigneeId;
+        data.projectTimesheets = newProjectTimesheet;
         try {
             const result =
                 await ProjectManagementService.fillTimesheetForProject(data);
@@ -111,24 +181,60 @@ export const FillTimesheetModal = ({
     };
 
     useEffect(() => {
-        setValue('startDate', startDate);
+        setProjectTimesheets({
+            ...projectTimesheets,
+            startDate,
+        });
+        setSelectedId([repeating.find((x) => x.id == formattedStartDate)]);
     }, [startDate]);
+
     useEffect(() => {
-        setValue('endDate', endDate);
-    }, [endDate]);
+        setProjectTimesheets({
+            ...projectTimesheets,
+            endDate,
+        });
+
+        const dateDiff = moment(endDate).diff(startDate, 'days') + 1;
+
+        // Get the first selected item based on formattedStartDate
+        const firstSelectedItem = repeating.find(
+            (x) => x.id === formattedStartDate,
+        );
+
+        // Create an array starting with the firstSelectedItem and mapping the rest
+        const updatedSelectedId = [
+            firstSelectedItem,
+            ...Array.from({ length: dateDiff - 1 }, (_, index) => ({
+                id: ((firstSelectedItem?.id as any) + index + 1) % 7, // Ensure the id stays within the range [0, 6] by using modulo
+                name: repeating[
+                    ((firstSelectedItem?.id as any) + index + 1) % 7
+                ].name, // Get the corresponding name
+            })),
+        ];
+
+        setSelectedId(updatedSelectedId);
+    }, [endDate, startDate, formattedStartDate]);
     useEffect(() => {
-        setValue('percentageOfCompletion', sliderValue);
+        setProjectTimesheets({
+            ...projectTimesheets,
+            percentageOfCompletion: sliderValue,
+        });
     }, [sliderValue]);
     useEffect(() => {
-        setValue('billable', isBillable);
+        setProjectTimesheets({
+            ...projectTimesheets,
+            billable: isBillable,
+        });
     }, [isBillable]);
 
+    const taskId = watch('projectTaskId');
+    const projectId = watch('projectId');
+    const [useEnd, setUseEnd] = useState<boolean>(true);
+    const [tasks, setTasks] = useState<any>([]);
     const newData = [
-        ...(data?.tasks || []),
+        ...(tasks || []),
         { id: 'operational', name: 'Operational Task' },
     ];
-    const taskId = watch('projectTaskId');
-    const [useEnd, setUseEnd] = useState<boolean>(true);
     const [subTasks, setSubTasks] = useState<any>([]);
     const [err, setErr] = useState<any>([]);
     const [operationalTasks, setOperationalTasks] = useState<any>([]);
@@ -162,7 +268,6 @@ export const FillTimesheetModal = ({
                 }
                 return;
             }
-            setProjecstId(data?.tasks.find((x) => x.id == taskId).projectId);
             try {
                 const res = await ProjectManagementService.listSubTasks(
                     0,
@@ -184,6 +289,32 @@ export const FillTimesheetModal = ({
         getTasks();
     }, [taskId]);
 
+    useNonInitialEffect(() => {
+        async function getTasks() {
+            if (projectId) {
+                setLoading(true);
+            }
+            try {
+                const res = await ProjectManagementService.listTasks(
+                    0,
+                    25,
+                    superAdminId,
+                    (projectId as string) || undefined,
+                    undefined,
+                    userId,
+                );
+                if (res?.status) {
+                    setLoading(false);
+                    setTasks(res?.data?.value);
+                    return;
+                }
+            } catch (error) {
+                setLoading(false);
+            }
+        }
+        getTasks();
+    }, [projectId]);
+
     const radios = ['Use Duration', 'Use End Date'];
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'selection',
@@ -202,10 +333,14 @@ export const FillTimesheetModal = ({
     const group = getRootProps();
 
     const changeDuration = (e: any) => {
-        const endDate = moment(watch('startDate'))
+        setDuration(e);
+        const endDate = moment(startDate)
             .add(e, 'hours')
-            .format('YYYY/MM/DD HH:mm');
-        setValue('endDate', endDate as any);
+            .format('YYYY-MM-DD HH:mm');
+        setProjectTimesheets({
+            ...projectTimesheets,
+            endDate,
+        });
     };
 
     return (
@@ -266,6 +401,16 @@ export const FillTimesheetModal = ({
                             >
                                 <SelectrixBox<ProjectTimesheetModel>
                                     control={control}
+                                    name="projectId"
+                                    label="Project"
+                                    error={errors.projectId}
+                                    keys="id"
+                                    keyLabel="name"
+                                    options={allProjects}
+                                    placeholder={'Select a project'}
+                                />
+                                <SelectrixBox<ProjectTimesheetModel>
+                                    control={control}
                                     name="projectTaskId"
                                     label="Project Task"
                                     error={errors.projectTaskId}
@@ -302,6 +447,7 @@ export const FillTimesheetModal = ({
                                     onChange={setstartDate}
                                     value={startDate}
                                     label="Start Date & Time"
+                                    useEnd={useEnd}
                                 />
                                 <HStack w="full" {...group} fontSize=".8rem">
                                     {radios.map((value) => {
@@ -321,9 +467,10 @@ export const FillTimesheetModal = ({
                                         onChange={setendDate}
                                         value={endDate}
                                         label="End Date & Time"
+                                        useEnd={useEnd}
                                     />
                                 ) : (
-                                    <Box w="full">
+                                    <Box w="full" mb=".5rem">
                                         <InputBlank
                                             placeholder="Duration in hours"
                                             label="Duration"
@@ -331,12 +478,75 @@ export const FillTimesheetModal = ({
                                                 changeDuration(e.target.value)
                                             }
                                         />
-                                        <Text fontSize=".65rem" mt=".3rem">
-                                            Your End date and Time is:{' '}
-                                            {moment(watch('endDate')).format(
-                                                'dddd, MMM DD, YYYY hh:mm A',
-                                            )}
-                                        </Text>
+                                        <HStack
+                                            gap="2rem"
+                                            w="full"
+                                            justify="space-between"
+                                            align="center"
+                                            mt=".5rem"
+                                        >
+                                            <Text
+                                                fontSize=".8rem"
+                                                w="full"
+                                                mb="0"
+                                                fontWeight={500}
+                                            >
+                                                Recur Timeslot:
+                                            </Text>
+                                            <HStack w="full">
+                                                <HStack gap=".2rem">
+                                                    {repeating.map((x) => (
+                                                        <Circle
+                                                            bgColor={
+                                                                selectedId?.find(
+                                                                    (e) =>
+                                                                        e?.id ==
+                                                                        x?.id,
+                                                                ) ||
+                                                                formattedStartDate ==
+                                                                    x?.id
+                                                                    ? 'brand.400'
+                                                                    : 'gray.200'
+                                                            }
+                                                            color={
+                                                                selectedId?.find(
+                                                                    (e) =>
+                                                                        e?.id ==
+                                                                        x?.id,
+                                                                ) ||
+                                                                formattedStartDate ==
+                                                                    x?.id
+                                                                    ? 'white'
+                                                                    : 'gray.600'
+                                                            }
+                                                            border={
+                                                                selectedId?.find(
+                                                                    (e) =>
+                                                                        e?.id ==
+                                                                        x?.id,
+                                                                ) ||
+                                                                formattedStartDate ==
+                                                                    x?.id
+                                                                    ? '2px solid #ffac00'
+                                                                    : 'none'
+                                                            }
+                                                            fontSize=".7rem"
+                                                            size="1.5rem"
+                                                            _hover={{
+                                                                border: '2px solid #ffac00',
+                                                            }}
+                                                            onClick={() =>
+                                                                toggleSelected(
+                                                                    x,
+                                                                )
+                                                            }
+                                                        >
+                                                            {x.name.charAt(0)}
+                                                        </Circle>
+                                                    ))}
+                                                </HStack>
+                                            </HStack>
+                                        </HStack>
                                     </Box>
                                 )}
                                 <ProgressSlider
