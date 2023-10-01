@@ -22,4 +22,5 @@ export type ProjectTimesheetView = {
     totalHours?: number;
     amountEarned?: number;
     status?: string | null;
+    reason?: string | null;
 };

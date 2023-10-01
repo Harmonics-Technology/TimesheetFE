@@ -48,11 +48,17 @@ const TeamTimeSheetTask = ({
     allProjects,
     superAdminId,
 }: shiftProps) => {
-    const [tasks, setTasks] = useState<any>();
-    const [loading, setLoading] = useState<any>();
+    const router = useRouter();
+    const [loading, setLoading] = useState<any>(false);
     const [selectedProject, setSelectedProject] = useState<any>();
     const addProject = (user) => {
         setSelectedProject(user);
+        router.push({
+            query: {
+                ...router.query,
+                clientId: user.id,
+            },
+        });
     };
 
     const DemoData = [
@@ -93,16 +99,10 @@ const TeamTimeSheetTask = ({
         };
     });
 
-    console.log({ allShift });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [data, setData] = useState<any>();
     function openModal(startDate?: any, endDate?: any) {
-        // if (!tasks) {
-
-        //     alert('select a project to continue');
-        //     return;
-        // }
-        setData({ tasks, startDate, endDate });
+        setData({ startDate, endDate });
         onOpen();
     }
     function ViewNamesGroup({ views: viewNames, view, messages, onView }) {
@@ -130,6 +130,11 @@ const TeamTimeSheetTask = ({
         view,
         views,
     }) {
+        const goPrevious = () => {
+            // if()
+            onNavigate(navigate.PREVIOUS);
+            console.log({ label });
+        };
         return (
             // <div className="rbc-toolbar">
 
@@ -144,7 +149,7 @@ const TeamTimeSheetTask = ({
                 </span>
                 <Flex align="center" gap="1rem">
                     <Button
-                        onClick={() => onNavigate(navigate.PREVIOUS)}
+                        onClick={() => goPrevious()}
                         aria-label={messages.previous}
                         h="2.2rem"
                         w="2.5rem"
@@ -186,7 +191,6 @@ const TeamTimeSheetTask = ({
             // </div>
         );
     }
-    const router = useRouter();
 
     const timeSlotWrapper = (timeSlotWrapperProps) => {
         const style =
@@ -261,32 +265,6 @@ const TeamTimeSheetTask = ({
         }),
         [],
     );
-
-    useEffect(() => {
-        async function getTasks() {
-            if (selectedProject?.id) {
-                setLoading(true);
-            }
-            try {
-                const res = await ProjectManagementService.listTasks(
-                    0,
-                    25,
-                    superAdminId,
-                    selectedProject?.id || undefined,
-                    2,
-                    id,
-                );
-                if (res?.status) {
-                    setLoading(false);
-                    setTasks(res?.data?.value);
-                    return;
-                }
-            } catch (error) {
-                setLoading(false);
-            }
-        }
-        getTasks();
-    }, [selectedProject]);
 
     const onSelectSlot = useCallback((slotInfo) => {
         openModal(slotInfo.start, slotInfo.end);
@@ -399,7 +377,7 @@ const TeamTimeSheetTask = ({
                     data={data}
                     superAdminId={superAdminId}
                     userId={id}
-                    projectId={selectedProject?.id}
+                    allProjects={allProjects}
                 />
             )}
             {opened && (

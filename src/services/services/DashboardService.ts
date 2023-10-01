@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { DashboardPaymentPartnerViewStandardResponse } from '../models/DashboardPaymentPartnerViewStandardResponse';
+import type { DashboardProjectManagementViewStandardResponse } from '../models/DashboardProjectManagementViewStandardResponse';
 import type { DashboardTeamMemberViewStandardResponse } from '../models/DashboardTeamMemberViewStandardResponse';
 import type { DashboardViewStandardResponse } from '../models/DashboardViewStandardResponse';
 
@@ -75,6 +76,23 @@ employeeInformationId?: string,
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Dashboard/supervisor-metrics',
+        });
+    }
+
+    /**
+     * @param superAminId 
+     * @returns DashboardProjectManagementViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getProjectManagementDashboard(
+superAminId?: string,
+): CancelablePromise<DashboardProjectManagementViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Dashboard/project-management-metrics',
+            query: {
+                'superAminId': superAminId,
+            },
         });
     }
 

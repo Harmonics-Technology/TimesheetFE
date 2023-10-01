@@ -37,15 +37,19 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const start = format(startOfMonth(new Date()), 'yyyy-MM-dd');
         const end = format(endOfMonth(new Date()), 'yyyy-MM-dd');
-        const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
+        const id = JSON.parse(ctx.req.cookies.user).id;
+        const employeeId = JSON.parse(
+            ctx.req.cookies.user,
+        ).employeeInformationId;
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
 
         try {
             const allShift =
                 await ProjectManagementService.listUserProjectTimesheet(
-                    id,
+                    employeeId,
                     pagingOptions.from || start,
                     pagingOptions.to || end,
+                    pagingOptions.clientId,
                 );
             const allProjects = await ProjectManagementService.listProject(
                 pagingOptions.offset,

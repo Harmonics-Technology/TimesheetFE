@@ -24,6 +24,7 @@ import {
     ProjectManagementService,
     ProjectTimesheetModel,
     ProjectTimesheetRange,
+    ProjectView,
 } from 'src/services';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -48,6 +49,7 @@ interface ExportProps {
     superAdminId?: any;
     userId?: any;
     projectId?: any;
+    allProjects?: ProjectView;
 }
 
 const schema = yup.object().shape({});
@@ -58,7 +60,7 @@ export const FillTimesheetModal = ({
     data,
     superAdminId,
     userId,
-    projectId,
+    allProjects,
 }: ExportProps) => {
     const {
         handleSubmit,
@@ -77,7 +79,6 @@ export const FillTimesheetModal = ({
     const [endDate, setendDate] = useState<any>(moment(data.endDate));
     const [isBillable, setisBillable] = useState<any>();
     const [loading, setLoading] = useState<any>();
-    const [projectsId, setProjecstId] = useState(projectId);
 
     const { user } = useContext(UserContext);
     const hoursPerDay = user?.employeeInformation?.hoursPerDay || 8;
@@ -144,7 +145,6 @@ export const FillTimesheetModal = ({
     console.log({ newProjectTimesheet });
 
     const onSubmit = async (data: ProjectTimesheetModel) => {
-        data.projectId = projectsId;
         data.projectTaskAsigneeId = subTasks.filter(
             (x) => x.id == data.projectSubTaskId,
         )[0]?.projectTaskAsigneeId;
@@ -227,12 +227,14 @@ export const FillTimesheetModal = ({
         });
     }, [isBillable]);
 
+    const taskId = watch('projectTaskId');
+    const projectId = watch('projectId');
+    const [useEnd, setUseEnd] = useState<boolean>(true);
+    const [tasks, setTasks] = useState<any>([]);
     const newData = [
-        ...(data?.tasks || []),
+        ...(tasks || []),
         { id: 'operational', name: 'Operational Task' },
     ];
-    const taskId = watch('projectTaskId');
-    const [useEnd, setUseEnd] = useState<boolean>(true);
     const [subTasks, setSubTasks] = useState<any>([]);
     const [err, setErr] = useState<any>([]);
     const [operationalTasks, setOperationalTasks] = useState<any>([]);
@@ -266,7 +268,6 @@ export const FillTimesheetModal = ({
                 }
                 return;
             }
-            setProjecstId(data?.tasks.find((x) => x.id == taskId).projectId);
             try {
                 const res = await ProjectManagementService.listSubTasks(
                     0,
@@ -287,6 +288,32 @@ export const FillTimesheetModal = ({
         }
         getTasks();
     }, [taskId]);
+
+    useNonInitialEffect(() => {
+        async function getTasks() {
+            if (projectId) {
+                setLoading(true);
+            }
+            try {
+                const res = await ProjectManagementService.listTasks(
+                    0,
+                    25,
+                    superAdminId,
+                    projectId || undefined,
+                    2,
+                    userId,
+                );
+                if (res?.status) {
+                    setLoading(false);
+                    setTasks(res?.data?.value);
+                    return;
+                }
+            } catch (error) {
+                setLoading(false);
+            }
+        }
+        getTasks();
+    }, [projectId]);
 
     const radios = ['Use Duration', 'Use End Date'];
     const { getRootProps, getRadioProps } = useRadioGroup({
@@ -372,6 +399,16 @@ export const FillTimesheetModal = ({
                                 mb="1rem"
                                 borderBottom="1px solid #e6e7e7"
                             >
+                                <SelectrixBox<ProjectTimesheetModel>
+                                    control={control}
+                                    name="projectId"
+                                    label="Project"
+                                    error={errors.projectId}
+                                    keys="id"
+                                    keyLabel="name"
+                                    options={allProjects}
+                                    placeholder={'Select a project'}
+                                />
                                 <SelectrixBox<ProjectTimesheetModel>
                                     control={control}
                                     name="projectTaskId"

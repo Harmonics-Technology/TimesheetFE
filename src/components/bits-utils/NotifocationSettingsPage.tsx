@@ -7,29 +7,29 @@ import {
     HStack,
     Circle,
 } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { SelectrixBox } from './Selectrix';
 import { PrimaryInput } from './PrimaryInput';
 import { ShiftBtn } from './ShiftBtn';
 import * as yup from 'yup';
 import { UserContext } from '@components/context/UserContext';
-import { formatDate } from '@components/generics/functions/formatDate';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { PayScheduleGenerationModel, FinancialService } from 'src/services';
+import { ControlSettingModel, UserService } from 'src/services';
 
 const schema = yup.object().shape({
-    startDate: yup.string().required(),
-    paymentDateDays: yup.string().required(),
+    timesheetFillingReminderDay: yup.string().required(),
+    timesheetOverdueReminderDay: yup.string().required(),
 });
 export const NotifocationSettingsPage = ({ data }: { data: any }) => {
     const {
         register,
         handleSubmit,
         control,
+        watch,
         formState: { errors, isSubmitting },
-    } = useForm<PayScheduleGenerationModel>({
+    } = useForm<ControlSettingModel>({
         resolver: yupResolver(schema),
         mode: 'all',
     });
@@ -39,21 +39,27 @@ export const NotifocationSettingsPage = ({ data }: { data: any }) => {
 
     const options = [
         { id: 1, label: 'Monday' },
-        { id: 2, label: 'Yuesday' },
+        { id: 2, label: 'Tuesday' },
         { id: 3, label: 'Wednesday' },
         { id: 4, label: 'Thursday' },
         { id: 5, label: 'Friday' },
         { id: 6, label: 'Saturday' },
         { id: 0, label: 'Sunday' },
     ];
+    const [dueDate] = useState(
+        watch('timesheetFillingReminderDay') ||
+            data.timesheetFillingReminderDay,
+    );
+    const selectedDueDate = options.find((x) => x.id == dueDate)?.label;
+    const [overdueDate] = useState(
+        watch('timesheetOverdueReminderDay') ||
+            data.timesheetFillingReminderDay,
+    );
 
-    const onSubmit = async (data: PayScheduleGenerationModel) => {
+    const onSubmit = async (data: ControlSettingModel) => {
         data.superAdminId = user?.superAdminId;
         try {
-            const result =
-                await FinancialService.generateCustomWeeklyPaymentSchedule(
-                    data,
-                );
+            const result = await UserService.updateControlSettings(data);
             if (result.status) {
                 toast({
                     title: result.message,
@@ -127,7 +133,7 @@ export const NotifocationSettingsPage = ({ data }: { data: any }) => {
                         fontWeight="400"
                         mb="0"
                     >
-                        Monday
+                        {selectedDueDate}
                     </Text>
                 </HStack>
                 <HStack>
@@ -145,25 +151,25 @@ export const NotifocationSettingsPage = ({ data }: { data: any }) => {
                         fontWeight="400"
                         mb="0"
                     >
-                        {3} days after
+                        {overdueDate} days after
                     </Text>
                 </HStack>
             </Flex>
             <form>
                 <VStack align="flex-start" gap="2rem" w="30%">
-                    <SelectrixBox<PayScheduleGenerationModel>
+                    <SelectrixBox<ControlSettingModel>
                         control={control}
-                        name="startDate"
+                        name="timesheetFillingReminderDay"
                         label="Beginning Period or  Start Date"
-                        error={errors.startDate}
+                        error={errors.timesheetFillingReminderDay}
                         options={options}
                         keys="id"
                         keyLabel="label"
                     />
-                    <PrimaryInput<PayScheduleGenerationModel>
+                    <PrimaryInput<ControlSettingModel>
                         label="Payment period"
-                        name="paymentDateDays"
-                        error={errors.paymentDateDays}
+                        name="timesheetOverdueReminderDay"
+                        error={errors.timesheetOverdueReminderDay}
                         defaultValue=""
                         register={register}
                     />

@@ -1,7 +1,8 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
+import LineChart from '@components/bits-utils/Charts/LineChart';
 import React from 'react';
 
-export const ChartLargeCard = ({ title, sub }) => {
+export const ChartLargeCard = ({ title, sub, children }) => {
     return (
         <Flex
             p="1.5rem 1.2rem"
@@ -11,7 +12,7 @@ export const ChartLargeCard = ({ title, sub }) => {
             align="center"
             justify="flex-start"
         >
-            <Box textAlign="left">
+            <Box textAlign="left" w="full">
                 <Text
                     fontSize="1.125rem"
                     fontWeight="600"
@@ -28,7 +29,9 @@ export const ChartLargeCard = ({ title, sub }) => {
                 >
                     {sub}
                 </Text>
-                <Box h="12rem"></Box>
+                <Box h="12rem" mt="1rem" w="full">
+                    {children}
+                </Box>
             </Box>
         </Flex>
     );

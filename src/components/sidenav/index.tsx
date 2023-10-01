@@ -250,7 +250,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'access control settings',
                             'payment schedule settings',
                             'personal info',
-                            'notification-settings',
+                            'notification settings',
                         ]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}

@@ -200,7 +200,9 @@ export function TableState({ name }: { name: string | undefined | null }) {
                         ? 'brand.400'
                         : name == 'PENDING'
                         ? 'brand.700'
-                        : name == 'REVIEWED' || name == 'SUBMITTED'
+                        : name == 'REVIEWED' ||
+                          name == 'SUBMITTED' ||
+                          name == 'REVIEWING'
                         ? 'brand.600'
                         : name == 'INVOICED'
                         ? '#28a3ef'
@@ -507,6 +509,32 @@ export function LeaveActions({
                             >
                                 <Icon as={BiTrash} mr=".5rem" color="#D62242" />
                                 Delete
+                            </MenuItem>
+                        </>
+                    )}
+                    {type == 'asCancel' && (
+                        <>
+                            <MenuItem
+                                onClick={() => treatLeave(id, 3)}
+                                w="full"
+                            >
+                                <Icon
+                                    as={MdVerified}
+                                    mr=".5rem"
+                                    color="brand.400"
+                                />
+                                Approve
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => treatLeave(id, 4)}
+                                w="full"
+                            >
+                                <Icon
+                                    as={MdCancel}
+                                    mr=".5rem"
+                                    color="#FF5B79"
+                                />{' '}
+                                Decline
                             </MenuItem>
                         </>
                     )}

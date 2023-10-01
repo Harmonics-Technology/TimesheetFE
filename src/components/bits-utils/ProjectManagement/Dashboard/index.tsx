@@ -16,11 +16,21 @@ import moment from 'moment';
 import colorSwatch from '@components/generics/colorSwatch';
 import { ProgressBar } from '../Generics/ProgressBar';
 import { ChartLargeCard } from './ChartLargeCard';
-import { ProjectModel } from 'src/services';
+import {
+    DashboardProjectManagementView,
+    ProjectModel,
+    ProjectView,
+} from 'src/services';
+import LineChart from '@components/bits-utils/Charts/LineChart';
+import BurnOutChart from '@components/bits-utils/Charts/BurnOutChart';
+import DoughnutChart from '@components/bits-utils/Charts/DoughnutChart';
 
-export const Dashboard = () => {
-    const status = 'completed';
-    const date = 7;
+export const Dashboard = ({
+    metrics,
+}: {
+    metrics: DashboardProjectManagementView;
+}) => {
+    console.log({ metrics });
     const projectSummary = ['Project Name', 'Due Date', 'Status', 'Progress'];
     const overdue = ['Project Name', 'Deadline', 'Overdue'];
     return (
@@ -36,25 +46,25 @@ export const Dashboard = () => {
                 gap="1.06rem"
             >
                 <MiniCards
-                    value={125}
+                    value={metrics.noOfProject}
                     title="Total No of Projects"
                     icon={RiBriefcase2Line}
                     color="#2eafa3"
                 />
                 <MiniCards
-                    value={5125}
+                    value={metrics.noOfTask}
                     title="Total No of Task"
                     icon={BiTask}
                     color="#FF5B79"
                 />
                 <MiniCards
-                    value={5125}
+                    value={metrics.totalHours}
                     title="Total No of Hours"
                     icon={RiTimeLine}
                     color="#2383BD"
                 />
                 <MiniCards
-                    value={12550}
+                    value={metrics.totalBudgetSpent}
                     title="Total Budget Spent"
                     icon={PiMoneyBold}
                     color="#F8C200"
@@ -69,28 +79,39 @@ export const Dashboard = () => {
                 <ChartMiniCard
                     title="Project Status"
                     sub="Last 30 days Jul 6 - Aug 5"
-                />
+                >
+                    <DoughnutChart chart={metrics.budgetBurnOutRates} />
+                </ChartMiniCard>
                 <TableBox title="Project summary" tableHead={projectSummary}>
-                    <TableRow>
-                        <TableData name="Time Tracking System" />
-                        <TableData name={moment().format('DD/MM/YYYY')} />
-                        <NewTableState
-                            name="Completed"
-                            color={colorSwatch('completed')}
-                        />
-                        <td>
-                            <ProgressBar
-                                barWidth={80}
-                                barColor={
-                                    status == 'completed'
-                                        ? 'brand.400'
-                                        : status == 'due'
-                                        ? '#f7e277'
-                                        : 'red'
-                                }
-                            />
-                        </td>
-                    </TableRow>
+                    {metrics.projectSummary?.map((x: ProjectView) => {
+                        const status = x.status?.toLowerCase();
+                        return (
+                            <TableRow key={x.id}>
+                                <TableData name={x.name} />
+                                <TableData
+                                    name={moment(x.startDate).format(
+                                        'DD/MM/YYYY',
+                                    )}
+                                />
+                                <NewTableState
+                                    name={status}
+                                    color={colorSwatch(status)}
+                                />
+                                <td>
+                                    <ProgressBar
+                                        barWidth={x.progress}
+                                        barColor={
+                                            status == 'completed'
+                                                ? 'brand.400'
+                                                : status == 'due'
+                                                ? '#f7e277'
+                                                : 'red'
+                                        }
+                                    />
+                                </td>
+                            </TableRow>
+                        );
+                    })}
                 </TableBox>
             </Grid>
             <Grid
@@ -101,11 +122,15 @@ export const Dashboard = () => {
                 <ChartLargeCard
                     title="Statistics"
                     sub="Operational Vs Project Task activity Rate"
-                />
+                >
+                    <LineChart chart={metrics.oprationalAndProjectTasksStats} />
+                </ChartLargeCard>
                 <ChartMiniCard
                     title="Project Status"
                     sub="Last 30 days Jul 6 - Aug 5"
-                />
+                >
+                    <DoughnutChart chart={metrics.budgetBurnOutRates} />
+                </ChartMiniCard>
             </Grid>
             <Grid
                 mb="1.25rem"
@@ -113,23 +138,35 @@ export const Dashboard = () => {
                 gap="1.06rem"
             >
                 <TableBox title="Overdue Projects" tableHead={overdue}>
-                    <TableRow>
-                        <TableData name="Time Tracking System" />
-                        <TableData name={moment().format('DD/MM/YYYY')} />
-                        <TableData
-                            name={`${date} days`}
-                            fontWeight="600"
-                            customColor={
-                                date > 7
-                                    ? '#ff5b79'
-                                    : date <= 7
-                                    ? '#f8c200'
-                                    : '#afb6e5'
-                            }
-                        />
-                    </TableRow>
+                    {metrics?.overdueProjects?.map((x) => {
+                        const date =
+                            moment().diff(moment(x.endDate), 'day') + 1;
+                        return (
+                            <TableRow>
+                                <TableData name={x.name} />
+                                <TableData
+                                    name={moment(x.startDate).format(
+                                        'DD/MM/YYYY',
+                                    )}
+                                />
+                                <TableData
+                                    name={`${date} days`}
+                                    fontWeight="600"
+                                    customColor={
+                                        date > 7
+                                            ? '#ff5b79'
+                                            : date <= 7
+                                            ? '#f8c200'
+                                            : '#afb6e5'
+                                    }
+                                />
+                            </TableRow>
+                        );
+                    })}
                 </TableBox>
-                <ChartLargeCard title="Statistics" sub="Budget Burn out rate" />
+                <ChartLargeCard title="Statistics" sub="Budget Burn out rate">
+                    <BurnOutChart chart={metrics.budgetBurnOutRates} />
+                </ChartLargeCard>
             </Grid>
         </Box>
     );
