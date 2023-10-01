@@ -3,22 +3,32 @@ import { filterPagingSearchOptions } from '@components/generics/filterPagingSear
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { ProjectManagementService, UserService } from 'src/services';
+import {
+    ProjectManagementService,
+    ProjectProgressCountView,
+    UserService,
+} from 'src/services';
 
 const projectsIndex = ({
-    projects,
+    iProjects,
+    nProjects,
+    cProjects,
     users,
     superAdminId,
     counts,
 }: {
-    projects: any;
+    iProjects: any;
+    nProjects: any;
+    cProjects: any;
     users: any;
     superAdminId: string;
-    counts: any;
+    counts: ProjectProgressCountView;
 }) => {
     return (
         <ProjectPage
-            projects={projects}
+            iProjects={iProjects}
+            nProjects={nProjects}
+            cProjects={cProjects}
             users={users}
             superAdminId={superAdminId}
             counts={counts}
@@ -33,14 +43,21 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         //
-        try {
-            const data = await ProjectManagementService.listProject(
+        const fetchProjectByStatus = (status) => {
+            const data = ProjectManagementService.listProject(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
-                pagingOptions.status || 1,
+                status,
+                undefined,
                 pagingOptions.search,
             );
+            return data;
+        };
+        try {
+            const nProgress = await fetchProjectByStatus(1);
+            const iProgress = await fetchProjectByStatus(2);
+            const cProgress = await fetchProjectByStatus(3);
             const users = await UserService.listUsers(
                 'Team Member',
                 superAdminId,
@@ -55,7 +72,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             //
             return {
                 props: {
-                    projects: data.data,
+                    iProjects: iProgress.data,
+                    nProjects: nProgress.data,
+                    cProjects: cProgress.data,
                     users: users.data,
                     superAdminId,
                     counts: counts.data,

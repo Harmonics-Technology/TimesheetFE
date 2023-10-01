@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type { DashboardPaymentPartnerViewStandardResponse } from '../models/DashboardPaymentPartnerViewStandardResponse';
 import type { DashboardProjectManagementViewStandardResponse } from '../models/DashboardProjectManagementViewStandardResponse';
+import type { DashboardProjectViewStandardResponse } from '../models/DashboardProjectViewStandardResponse';
 import type { DashboardTeamMemberViewStandardResponse } from '../models/DashboardTeamMemberViewStandardResponse';
 import type { DashboardViewStandardResponse } from '../models/DashboardViewStandardResponse';
 
@@ -92,6 +93,23 @@ superAminId?: string,
             url: '/api/Dashboard/project-management-metrics',
             query: {
                 'superAminId': superAminId,
+            },
+        });
+    }
+
+    /**
+     * @param projectId 
+     * @returns DashboardProjectViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getProjectDashboard(
+projectId?: string,
+): CancelablePromise<DashboardProjectViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Dashboard/project-metrics',
+            query: {
+                'projectId': projectId,
             },
         });
     }

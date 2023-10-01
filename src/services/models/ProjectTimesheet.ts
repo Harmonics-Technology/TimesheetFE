@@ -14,7 +14,7 @@ export type ProjectTimesheet = {
     dateModified?: string;
     projectTaskAsigneeId?: string;
     projectTaskAsignee?: ProjectTaskAsignee;
-    projectId?: string;
+    projectId?: string | null;
     project?: Project;
     projectTaskId?: string | null;
     projectTask?: ProjectTask;

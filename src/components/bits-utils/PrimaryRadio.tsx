@@ -41,7 +41,7 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'framework',
         defaultValue: defaultValue,
-        onChange: console.log,
+        onChange: void 0,
     });
 
     const group = getRootProps();

@@ -30,7 +30,6 @@ export const Dashboard = ({
 }: {
     metrics: DashboardProjectManagementView;
 }) => {
-    console.log({ metrics });
     const projectSummary = ['Project Name', 'Due Date', 'Status', 'Progress'];
     const overdue = ['Project Name', 'Deadline', 'Overdue'];
     return (
@@ -80,9 +79,28 @@ export const Dashboard = ({
                     title="Project Status"
                     sub="Last 30 days Jul 6 - Aug 5"
                 >
-                    <DoughnutChart chart={metrics.budgetBurnOutRates} />
+                    <DoughnutChart
+                        chart={[
+                            {
+                                name: 'Not started',
+                                count: metrics.projectStatusesCount?.notStarted,
+                            },
+                            {
+                                name: 'Completed',
+                                count: metrics.projectStatusesCount?.completed,
+                            },
+                            {
+                                name: 'Ongoing',
+                                count: metrics.projectStatusesCount?.ongoing,
+                            },
+                        ]}
+                    />
                 </ChartMiniCard>
-                <TableBox title="Project summary" tableHead={projectSummary}>
+                <TableBox
+                    title="Project summary"
+                    tableHead={projectSummary}
+                    url="/SuperAdmin/project-management/projects"
+                >
                     {metrics.projectSummary?.map((x: ProjectView) => {
                         const status = x.status?.toLowerCase();
                         return (
@@ -122,14 +140,30 @@ export const Dashboard = ({
                 <ChartLargeCard
                     title="Statistics"
                     sub="Operational Vs Project Task activity Rate"
+                    legend={[
+                        { text: 'Project', color: '#5C59E8' },
+                        { text: 'Operation', color: '#E46A11' },
+                    ]}
                 >
                     <LineChart chart={metrics.oprationalAndProjectTasksStats} />
                 </ChartLargeCard>
                 <ChartMiniCard
-                    title="Project Status"
+                    title="Billable & Non-billable Hours"
                     sub="Last 30 days Jul 6 - Aug 5"
                 >
-                    <DoughnutChart chart={metrics.budgetBurnOutRates} />
+                    <DoughnutChart
+                        chart={[
+                            {
+                                name: 'Non-billable Hours',
+                                count: metrics.billableAndNonBillable
+                                    ?.nonBillable,
+                            },
+                            {
+                                name: 'Billable Hours',
+                                count: metrics.billableAndNonBillable?.billable,
+                            },
+                        ]}
+                    />
                 </ChartMiniCard>
             </Grid>
             <Grid
@@ -137,7 +171,11 @@ export const Dashboard = ({
                 templateColumns={['repeat(1,1fr)', '1fr 2fr']}
                 gap="1.06rem"
             >
-                <TableBox title="Overdue Projects" tableHead={overdue}>
+                <TableBox
+                    title="Overdue Projects"
+                    tableHead={overdue}
+                    url="/SuperAdmin/project-management/projects"
+                >
                     {metrics?.overdueProjects?.map((x) => {
                         const date =
                             moment().diff(moment(x.endDate), 'day') + 1;
@@ -155,9 +193,9 @@ export const Dashboard = ({
                                     customColor={
                                         date > 7
                                             ? '#ff5b79'
-                                            : date <= 7
-                                            ? '#f8c200'
-                                            : '#afb6e5'
+                                            : date <= 3
+                                            ? '#afb6e5'
+                                            : '#f8c200'
                                     }
                                 />
                             </TableRow>

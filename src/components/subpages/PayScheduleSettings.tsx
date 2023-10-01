@@ -17,7 +17,6 @@ export const PayScheduleSettings = ({
         (x) => x.scheduleType == 'Bi-Weekly',
     );
     const isMonthly = paymentSchedule?.find((x) => x.scheduleType == 'Monthly');
-    console.log({ data });
     return (
         <Box bgColor="white" p="1.3rem" borderRadius="8px">
             <WeeklyPaySchedule

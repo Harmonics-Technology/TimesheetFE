@@ -9,7 +9,7 @@ import type { ProjectView } from './ProjectView';
 export type ProjectTimesheetView = {
     id?: string;
     projectTaskAsigneeId?: string;
-    projectId?: string;
+    projectId?: string | null;
     project?: ProjectView;
     projectTaskId?: string | null;
     projectTask?: ProjectTask;

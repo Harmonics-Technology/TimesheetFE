@@ -1,4 +1,11 @@
-import { Box, Button, Flex, Grid, useDisclosure } from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Flex,
+    Grid,
+    VStack,
+    useDisclosure,
+} from '@chakra-ui/react';
 import React from 'react';
 import { ProjectTabs } from '../Dashboard/ProjectTabs';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
@@ -9,12 +16,16 @@ import { useRouter } from 'next/router';
 import { ProjectProgressCountView } from 'src/services';
 
 export const ProjectPage = ({
-    projects,
+    iProjects,
+    nProjects,
+    cProjects,
     users,
     superAdminId,
     counts,
 }: {
-    projects: any;
+    iProjects: any;
+    nProjects: any;
+    cProjects: any;
     users: any;
     superAdminId: string;
     counts: ProjectProgressCountView;
@@ -29,7 +40,6 @@ export const ProjectPage = ({
             },
         });
     }
-
     return (
         <Box>
             <Box mb="2.5rem">
@@ -51,27 +61,48 @@ export const ProjectPage = ({
             </Flex>
             <Box my="2rem">
                 <Grid templateColumns={['repeat(3,1fr)']} w="full" gap=".5rem">
-                    <TabCounts
+                    {/* <TabCounts
                         text="Not Started"
                         count={counts?.notStarted}
                         onClick={() => filterProjects(1)}
                         num="1"
                         active
-                    />
-                    <TabCounts
-                        text="In Progress"
-                        count={counts?.inProgress}
-                        onClick={() => filterProjects(2)}
-                        num="2"
-                    />
-                    <TabCounts
-                        text="Completed"
-                        count={counts?.completed}
-                        onClick={() => filterProjects(3)}
-                        num="3"
-                    />
+                    /> */}
+                    <VStack w="full" bgColor="gray.100" p=".5rem .5rem">
+                        <TabCounts
+                            text="Not Started"
+                            count={counts?.notStarted}
+                            onClick={void 0}
+                            num="1"
+                        />
+                        {nProjects?.value?.map((x, i) => (
+                            <ProjectCard data={x} key={i} />
+                        ))}
+                    </VStack>
+                    <VStack bgColor="gray.100" p=".5rem .5rem">
+                        <TabCounts
+                            text="In Progress"
+                            count={counts?.inProgress}
+                            onClick={void 0}
+                            num="2"
+                        />
+                        {iProjects?.value?.map((x, i) => (
+                            <ProjectCard data={x} key={i} />
+                        ))}
+                    </VStack>
+                    <VStack bgColor="gray.100" p=".5rem .5rem">
+                        <TabCounts
+                            text="Completed"
+                            count={counts?.completed}
+                            onClick={void 0}
+                            num="3"
+                        />
+                        {cProjects?.value?.map((x, i) => (
+                            <ProjectCard data={x} key={i} />
+                        ))}
+                    </VStack>
                 </Grid>
-                <Grid
+                {/* <Grid
                     templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                     my="2rem"
                     w="full"
@@ -80,7 +111,7 @@ export const ProjectPage = ({
                     {projects?.value?.map((x, i) => (
                         <ProjectCard data={x} key={i} />
                     ))}
-                </Grid>
+                </Grid> */}
             </Box>
             {isOpen && (
                 <CreateProjectDrawer

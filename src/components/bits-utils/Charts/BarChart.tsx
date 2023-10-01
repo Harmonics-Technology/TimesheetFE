@@ -24,11 +24,7 @@ ChartJS.register(
     ChartDataLabels,
 );
 
-export function BarChart({
-    chart,
-}: {
-    chart: UserCountByPayrollTypeViewListStandardResponse;
-}) {
+export function BarChart({ chart }: { chart: any }) {
     const options = {
         elements: {
             bar: {
@@ -123,28 +119,16 @@ export function BarChart({
             },
         },
     };
-    const labels = chart?.data?.map((x: UserCountByPayrollTypeView) =>
-        x.month?.substring(0, 3),
-    );
+    const labels = chart?.map((x: any) => x.month?.substring(0, 3));
 
     const data = {
         labels,
         datasets: [
             {
-                label: 'Onshore Team',
-                data: chart?.data?.map(
-                    (x: UserCountByPayrollTypeView) => x.onShore,
-                ),
-                backgroundColor: '#45DAB6',
-                barPercentage: 0.4,
-            },
-            {
-                label: 'Offshore Team',
-                data: chart?.data?.map(
-                    (x: UserCountByPayrollTypeView) => x.offShore,
-                ),
-                backgroundColor: '#28A3EF',
-                barPercentage: 0.4,
+                label: 'Task completed',
+                data: chart?.map((x: any) => x.taskCompleted),
+                backgroundColor: '#4FD1C5',
+                barPercentage: 0.5,
             },
         ],
     };

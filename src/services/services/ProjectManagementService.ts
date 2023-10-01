@@ -189,6 +189,29 @@ search?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param projectId 
+     * @returns ProjectViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listProjectAssigneeDetail(
+offset?: number,
+limit?: number,
+projectId?: string,
+): CancelablePromise<ProjectViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/projects-assignees',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'projectId': projectId,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
      * @param superAdminId 
      * @param projectId 
      * @param status 

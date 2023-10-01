@@ -299,8 +299,8 @@ export const FillTimesheetModal = ({
                     0,
                     25,
                     superAdminId,
-                    projectId || undefined,
-                    2,
+                    projectId,
+                    undefined,
                     userId,
                 );
                 if (res?.status) {

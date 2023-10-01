@@ -14,6 +14,7 @@ export type ProjectTaskView = {
     department?: string | null;
     startDate?: string;
     endDate?: string;
+    durationInHours?: number;
     taskPriority?: string | null;
     note?: string | null;
     hoursSpent?: number | null;

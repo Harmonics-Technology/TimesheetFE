@@ -32,6 +32,7 @@ import Loading from './Loading';
 import { TabMenuTimesheet } from './ProjectManagement/Generics/TabMenuTimesheet';
 import { Round } from '@components/generics/functions/Round';
 import { ApproveTimesheet } from './ApproveTimesheet';
+import * as dates from 'date-arithmetic';
 
 const localizer = momentLocalizer(moment);
 
@@ -82,6 +83,8 @@ const TeamTimeSheetTask = ({
             end: new Date(2015, 3, 4, 12, 14, 0),
         },
     ];
+
+    console.log({ allShift });
 
     const EventList = allShift?.data?.projectTimesheets?.map((obj: any) => {
         return {
@@ -135,6 +138,12 @@ const TeamTimeSheetTask = ({
             onNavigate(navigate.PREVIOUS);
             console.log({ label });
         };
+        const goNext = () => {
+            // if()
+            onNavigate(navigate.NEXT);
+            const currentDate = view; // Get the date of the currently displayed view
+            console.log({ currentDate });
+        };
         return (
             // <div className="rbc-toolbar">
 
@@ -162,8 +171,8 @@ const TeamTimeSheetTask = ({
                         {label}
                     </Text>
                     <Button
-                        onClick={() => onNavigate(navigate.NEXT)}
-                        aria-label={messages.previous}
+                        onClick={() => goNext()}
+                        aria-label={messages.next}
                         h="2.2rem"
                         w="2.5rem"
                         p="0"
@@ -191,6 +200,48 @@ const TeamTimeSheetTask = ({
             // </div>
         );
     }
+
+    function MyWeek({
+        date,
+        localizer,
+        max = localizer.endOf(new Date(), 'day'),
+        min = localizer.startOf(new Date(), 'day'),
+        scrollToTime = localizer.startOf(new Date(), 'day'),
+        ...props
+    }) {
+        const currRange = useMemo(
+            () => MyWeek.range(date, { localizer }),
+            [date, localizer],
+        );
+
+        return (
+            // <TimeGrid
+            //     date={date}
+            //     eventOffset={15}
+            //     localizer={localizer}
+            //     max={max}
+            //     min={min}
+            //     range={currRange}
+            //     scrollToTime={scrollToTime}
+            //     {...props}
+            // />
+            <></>
+        );
+    }
+    MyWeek.range = (date, { localizer }) => {
+        const start = date;
+        const end = dates.add(start, 2, 'day');
+
+        let current = start;
+        const range = [];
+
+        while (localizer.lte(current, end, 'day')) {
+            range.push(current as unknown as any);
+            current = localizer.add(current, 1, 'day');
+        }
+
+        return range;
+    };
 
     const timeSlotWrapper = (timeSlotWrapperProps) => {
         const style =
@@ -377,7 +428,7 @@ const TeamTimeSheetTask = ({
                     data={data}
                     superAdminId={superAdminId}
                     userId={id}
-                    allProjects={allProjects}
+                    allProjects={allProjects?.data?.value}
                 />
             )}
             {opened && (
