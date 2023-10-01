@@ -155,11 +155,7 @@ function ClientManagement({ adminList }: adminProps) {
                         p=".5rem 1.5rem"
                         height="fit-content"
                         boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        onClick={
-                            addons?.includes('client management')
-                                ? onOpen
-                                : void 0
-                        }
+                        onClick={onOpen}
                     >
                         +Client
                     </Button>
