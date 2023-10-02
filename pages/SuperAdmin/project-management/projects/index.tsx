@@ -62,7 +62,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 'Team Member',
                 superAdminId,
                 pagingOptions.offset,
-                pagingOptions.limit || 50,
+                80,
                 pagingOptions.search,
             );
             const counts =

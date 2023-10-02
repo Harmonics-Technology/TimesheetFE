@@ -88,7 +88,7 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                         showProgress={true}
                         barColor={'brand.400'}
                         leftText="Progress"
-                        rightText={`${dateLeft} days left`}
+                        rightText={`${dateLeft < 0 ? 0 : dateLeft} days left`}
                     />
                 </Box>
             </VStack>

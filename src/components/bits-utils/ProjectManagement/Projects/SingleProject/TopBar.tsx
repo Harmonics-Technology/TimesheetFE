@@ -1,4 +1,12 @@
-import { HStack, Button, Box, Icon, Text, Flex } from '@chakra-ui/react';
+import {
+    HStack,
+    Button,
+    Box,
+    Icon,
+    Text,
+    Flex,
+    useToast,
+} from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { ProjectTabs } from '../../Dashboard/ProjectTabs';
@@ -22,7 +30,9 @@ export const TopBar = ({
     data?: ProjectView;
 }) => {
     const router = useRouter();
+    const toast = useToast();
     const [loading, setLoading] = useState();
+    const [status, setStatus] = useState(data?.status);
     return (
         <Box borderBottom={noTitle ? 'none' : '1px solid #e5e5e5'} pb="0rem">
             <Box mb="1.5rem">
@@ -49,13 +59,15 @@ export const TopBar = ({
                         markAsCompleted(
                             { type: 1, taskId: data?.id },
                             setLoading,
+                            toast,
+                            setStatus,
                         )
                     }
                     isLoading={loading}
                     btn="Mark Project as Complete"
                     bg="brand.400"
                     w="fit-content"
-                    // disabled={data?.progress !== 100}
+                    disabled={status == 'Completed'}
                     h="2rem"
                 />
             </Flex>

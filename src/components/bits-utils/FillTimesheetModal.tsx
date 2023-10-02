@@ -381,7 +381,7 @@ export const FillTimesheetModal = ({
                             textAlign="center"
                             fontWeight="semibold"
                         >
-                            Fill My Timesheet For The {'ERP'} Project
+                            Fill My Timesheet
                         </Text>
                         <Icon as={GrClose} onClick={onClose} cursor="pointer" />
                     </Flex>

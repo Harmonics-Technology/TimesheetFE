@@ -15,6 +15,7 @@ import {
     MenuItem,
     MenuList,
     Spinner,
+    useToast,
 } from '@chakra-ui/react';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import {
@@ -66,8 +67,10 @@ export const SingleTask = ({
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [loading, setLoading] = useState();
+    const toast = useToast();
 
     const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
+    const [status, setStatus] = useState(task?.status);
 
     const openModal = (item: any) => {
         setSubTask(item);
@@ -112,13 +115,15 @@ export const SingleTask = ({
                                     markAsCompleted(
                                         { type: 2, taskId: task.id },
                                         setLoading,
+                                        toast,
+                                        setStatus,
                                     )
                                 }
                                 isLoading={loading}
                                 btn="Mark Task as Complete"
                                 bg="brand.400"
                                 w="fit-content"
-                                // disabled={task.progress !== 100}
+                                disabled={status == 'Completed'}
                             />
                         </Flex>
                     </Box>
@@ -236,105 +241,119 @@ export const SingleTask = ({
                         </HStack>
                     </HStack>
                     <TableCard tableHead={tableHead}>
-                        {tasks?.value?.map((x: ProjectSubTaskView) => (
-                            <TableRow key={x.id}>
-                                <TableData name={x?.name} fontWeight="500" />
-                                <td style={{ maxWidth: '300px' }}>
-                                    <HStack
-                                        color="#c2cfe0"
-                                        gap=".2rem"
-                                        flexWrap="wrap"
-                                    >
-                                        <Flex
-                                            border="1px solid"
-                                            borderColor="#4FD1C5"
-                                            borderRadius="25px"
-                                            justify="center"
-                                            align="center"
-                                            color="#4FD1C5"
-                                            h="1.6rem"
-                                            px="0.5rem"
+                        {tasks?.value?.map((x: ProjectSubTaskView) => {
+                            const [taskStatus, setTaskStatus] = useState(
+                                x?.status,
+                            );
+                            return (
+                                <TableRow key={x.id}>
+                                    <TableData
+                                        name={x?.name}
+                                        fontWeight="500"
+                                    />
+                                    <td style={{ maxWidth: '300px' }}>
+                                        <HStack
+                                            color="#c2cfe0"
+                                            gap=".2rem"
+                                            flexWrap="wrap"
                                         >
-                                            {
-                                                x?.projectTaskAsignee?.user
-                                                    ?.fullName
-                                            }
-                                        </Flex>
-                                    </HStack>
-                                </td>
-                                <TableData
-                                    name={`${Round(x?.hoursSpent)} Hrs`}
-                                    fontWeight="500"
-                                />
-                                <TableData
-                                    name={moment(x?.startDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                    fontWeight="500"
-                                />
-                                <TableData
-                                    name={moment(x?.endDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                    fontWeight="500"
-                                />
-                                <NewTableState
-                                    name={x?.status}
-                                    color={colorSwatch(x?.status)}
-                                />
-                                <td>
-                                    <Menu>
-                                        <MenuButton>
-                                            <Box
-                                                fontSize="1rem"
-                                                pl="1rem"
-                                                fontWeight="bold"
-                                                cursor="pointer"
-                                                color="brand.300"
+                                            <Flex
+                                                border="1px solid"
+                                                borderColor="#4FD1C5"
+                                                borderRadius="25px"
+                                                justify="center"
+                                                align="center"
+                                                color="#4FD1C5"
+                                                h="1.6rem"
+                                                px="0.5rem"
                                             >
-                                                {loading ? (
-                                                    <Spinner size="sm" />
-                                                ) : (
-                                                    <FaEllipsisH />
-                                                )}
-                                            </Box>
-                                        </MenuButton>
-                                        <MenuList>
-                                            <MenuItem
-                                                onClick={() =>
-                                                    markAsCompleted(
-                                                        {
-                                                            type: 3,
-                                                            taskId: x?.id,
-                                                        },
-                                                        setLoading,
-                                                    )
+                                                {
+                                                    x?.projectTaskAsignee?.user
+                                                        ?.fullName
                                                 }
-                                                w="full"
-                                            >
-                                                <Icon
-                                                    as={MdVerified}
-                                                    mr=".5rem"
-                                                    color="brand.400"
-                                                />
-                                                Mark as complete
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() => openModal(x)}
-                                                w="full"
-                                            >
-                                                <Icon
-                                                    as={BsPenFill}
-                                                    mr=".5rem"
-                                                    color="brand.400"
-                                                />
-                                                Edit Sub-task
-                                            </MenuItem>
-                                        </MenuList>
-                                    </Menu>
-                                </td>
-                            </TableRow>
-                        ))}
+                                            </Flex>
+                                        </HStack>
+                                    </td>
+                                    <TableData
+                                        name={`${Round(x?.hoursSpent)} Hrs`}
+                                        fontWeight="500"
+                                    />
+                                    <TableData
+                                        name={moment(x?.startDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                        fontWeight="500"
+                                    />
+                                    <TableData
+                                        name={moment(x?.endDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                        fontWeight="500"
+                                    />
+                                    <NewTableState
+                                        name={x?.status}
+                                        color={colorSwatch(x?.status)}
+                                    />
+                                    <td>
+                                        <Menu>
+                                            <MenuButton>
+                                                <Box
+                                                    fontSize="1rem"
+                                                    pl="1rem"
+                                                    fontWeight="bold"
+                                                    cursor="pointer"
+                                                    color="brand.300"
+                                                >
+                                                    {loading ? (
+                                                        <Spinner size="sm" />
+                                                    ) : (
+                                                        <FaEllipsisH />
+                                                    )}
+                                                </Box>
+                                            </MenuButton>
+                                            <MenuList>
+                                                <MenuItem
+                                                    onClick={() =>
+                                                        markAsCompleted(
+                                                            {
+                                                                type: 3,
+                                                                taskId: x?.id,
+                                                            },
+                                                            setLoading,
+                                                            toast,
+                                                            setTaskStatus,
+                                                        )
+                                                    }
+                                                    w="full"
+                                                    disabled={
+                                                        taskStatus ==
+                                                        'Completed'
+                                                    }
+                                                >
+                                                    <Icon
+                                                        as={MdVerified}
+                                                        mr=".5rem"
+                                                        color="brand.400"
+                                                    />
+                                                    Mark as complete
+                                                </MenuItem>
+                                                <MenuItem
+                                                    onClick={() => openModal(x)}
+                                                    w="full"
+                                                >
+                                                    <Icon
+                                                        as={BsPenFill}
+                                                        mr=".5rem"
+                                                        color="brand.400"
+                                                    />
+                                                    Edit Sub-task
+                                                </MenuItem>
+                                            </MenuList>
+                                        </Menu>
+                                    </td>
+                                </TableRow>
+                            );
+                        })}
                     </TableCard>
                 </Box>
             </Flex>

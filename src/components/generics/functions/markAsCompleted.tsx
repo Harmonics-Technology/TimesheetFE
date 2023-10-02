@@ -1,10 +1,14 @@
-import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { ProjectManagementService } from 'src/services';
+import { useToastMessages } from '../useToastMessages';
 
-export default async function markAsCompleted(data, setLoading) {
-    const toast = useToast();
-    const router = useRouter();
+export default async function markAsCompleted(
+    data,
+    setLoading,
+    toast,
+    setStatus,
+) {
+    // const { showToastSuccess, showToastError } = useToastMessages();
     data.isCompleted = true;
     setLoading(true);
     try {
@@ -12,13 +16,13 @@ export default async function markAsCompleted(data, setLoading) {
             await ProjectManagementService.markProjectOrTaskAsCompleted(data);
         if (result.status) {
             toast({
-                title: 'Profile Update Success',
+                title: 'Success',
                 status: 'success',
                 isClosable: true,
                 position: 'top-right',
             });
+            setStatus('Completed');
             setLoading(false);
-            router.reload();
             return;
         }
         toast({
@@ -37,4 +41,5 @@ export default async function markAsCompleted(data, setLoading) {
         });
         setLoading(false);
     }
+    return;
 }
