@@ -13,7 +13,7 @@ export const TeamMembersView = ({
 }) => {
     return (
         <Box>
-            <TopBar id={id} data={teams} />
+            <TopBar id={id} data={teams} users={[]}/>
             <Grid
                 my="1.25rem"
                 templateColumns={['repeat(1,1fr)', 'repeat(4,1fr)']}

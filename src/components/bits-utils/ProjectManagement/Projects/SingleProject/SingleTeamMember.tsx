@@ -28,7 +28,7 @@ export const SingleTeamMember = ({ id, teams }: { id: string; teams: any }) => {
     const userDetails = teams?.value[0];
     return (
         <Box>
-            <TopBar noTitle={true} id={id} />
+            <TopBar noTitle={true} id={id} users={[]}/>
             <HStack
                 justify="space-between"
                 pb="1rem"
