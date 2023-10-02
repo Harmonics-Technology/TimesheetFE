@@ -4,15 +4,16 @@ import { withPageAuth } from '@components/generics/withPageAuth';
 import { id } from 'date-fns/locale';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { ProjectManagementService } from 'src/services';
+import { ProjectManagementService, UserService } from 'src/services';
 
-const ProjectSingleTask = ({ projectId, task, tasks, project }) => {
+const ProjectSingleTask = ({ projectId, task, tasks, project, users }) => {
     return (
         <SingleTask
             id={projectId}
             project={project}
             tasks={tasks}
             task={task}
+            users={users}
         />
     );
 };
@@ -35,6 +36,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.status,
                 pagingOptions.search,
             );
+            const users = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
+                pagingOptions.offset,
+                80,
+                pagingOptions.search,
+            );
 
             return {
                 props: {
@@ -42,6 +50,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     task: task.data,
                     projectId,
                     tasks: tasks.data,
+                    users: users.data,
                 },
             };
         } catch (error: any) {

@@ -29,15 +29,17 @@ export const SingleProjectPage = ({
     id,
     projects,
     metrics,
+    users,
 }: {
     id: string;
     projects: any;
     metrics: DashboardProjectView;
+    users: any;
 }) => {
     const projectSummary = ['Task Name', 'Deadline', 'Team member', 'Workload'];
     return (
         <Box>
-            <TopBar id={id} data={projects} />
+            <TopBar id={id} data={projects} users={users} />
 
             <Grid
                 mb="1.25rem"

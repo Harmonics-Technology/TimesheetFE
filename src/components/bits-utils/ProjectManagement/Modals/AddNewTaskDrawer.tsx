@@ -219,7 +219,7 @@ export const AddNewTaskDrawer = ({
                             py="1rem"
                         >
                             {selectedUser?.length > 0 && (
-                                <HStack mb=".5rem">
+                                <HStack mb=".5rem" flexWrap="wrap" w="full">
                                     {selectedUser?.map((x: any, i: any) => (
                                         <HStack
                                             borderRadius="25px"

@@ -6,6 +6,7 @@ import {
     Text,
     Flex,
     useToast,
+    useDisclosure,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
@@ -19,20 +20,25 @@ import { useRouter } from 'next/router';
 import { ManageBtn } from '@components/bits-utils/ManageBtn';
 import markAsCompleted from '@components/generics/functions/markAsCompleted';
 import { ProjectView } from 'src/services';
+import { EditProjectDrawer } from '../../Modals/EditProjectDrawer';
 
 export const TopBar = ({
     noTitle = false,
     id,
     data,
+    users,
 }: {
     noTitle?: boolean;
     id?: any;
     data?: ProjectView;
+    users: any;
 }) => {
     const router = useRouter();
     const toast = useToast();
     const [loading, setLoading] = useState();
     const [status, setStatus] = useState(data?.status);
+    const { onOpen, isOpen, onClose } = useDisclosure();
+
     return (
         <Box borderBottom={noTitle ? 'none' : '1px solid #e5e5e5'} pb="0rem">
             <Box mb="1.5rem">
@@ -54,22 +60,32 @@ export const TopBar = ({
                     </Text>
                 </HStack>
 
-                <ManageBtn
-                    onClick={() =>
-                        markAsCompleted(
-                            { type: 1, taskId: data?.id },
-                            setLoading,
-                            toast,
-                            setStatus,
-                        )
-                    }
-                    isLoading={loading}
-                    btn="Mark Project as Complete"
-                    bg="brand.400"
-                    w="fit-content"
-                    disabled={status == 'Completed'}
-                    h="2rem"
-                />
+                <HStack gap="1rem">
+                    <ManageBtn
+                        onClick={() =>
+                            markAsCompleted(
+                                { type: 1, taskId: data?.id },
+                                setLoading,
+                                toast,
+                                setStatus,
+                            )
+                        }
+                        isLoading={loading}
+                        btn="Mark Project as Complete"
+                        bg="brand.400"
+                        w="fit-content"
+                        disabled={status == 'Completed'}
+                        h="2rem"
+                    />
+                    <ManageBtn
+                        onClick={() => onOpen()}
+                        isLoading={loading}
+                        btn="Edit Project"
+                        bg="brand.400"
+                        w="fit-content"
+                        h="2rem"
+                    />
+                </HStack>
             </Flex>
             <TaskMenu
                 name={[
@@ -119,6 +135,14 @@ export const TopBar = ({
                         </HStack>
                     </Box>
                 </HStack>
+            )}
+            {isOpen && (
+                <EditProjectDrawer
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    users={users}
+                    data={data}
+                />
             )}
         </Box>
     );

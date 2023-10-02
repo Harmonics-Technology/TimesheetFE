@@ -50,11 +50,13 @@ export const SingleTask = ({
     project,
     tasks,
     task,
+    users,
 }: {
     id: any;
     project: any;
     tasks: any;
     task: ProjectTaskView;
+    users: any;
 }) => {
     const tableHead = [
         'Task Name',
@@ -79,7 +81,7 @@ export const SingleTask = ({
     //
     return (
         <Box>
-            <TopBar id={id} data={project} />
+            <TopBar id={id} data={project} users={users} />
             <Flex gap=".5rem">
                 <VStack w="25%">
                     <Box
