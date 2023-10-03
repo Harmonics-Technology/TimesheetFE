@@ -45,7 +45,6 @@ const schema = yup.object().shape({
 });
 
 function SupervisorManagement({ adminList, clientId }: adminProps) {
-    console.log({ adminList, clientId });
     const {
         register,
         handleSubmit,

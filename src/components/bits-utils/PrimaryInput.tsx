@@ -59,6 +59,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
     borderColor = 'gray.300',
     icon,
     h = '2.6rem',
+    w = 'full',
     readonly = false,
 }: FormInputProps<TFormValues>) => {
     return (
@@ -88,6 +89,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                     borderColor={borderColor}
                     borderRadius="0"
                     h={h}
+                    w={w}
                     isReadOnly={readonly}
                 />
                 {icon && (

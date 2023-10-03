@@ -8,9 +8,11 @@ import type { ExpenseViewPagedCollectionStandardResponse } from '../models/Expen
 import type { ExpenseViewStandardResponse } from '../models/ExpenseViewStandardResponse';
 import type { InvoiceViewPagedCollectionStandardResponse } from '../models/InvoiceViewPagedCollectionStandardResponse';
 import type { InvoiceViewStandardResponse } from '../models/InvoiceViewStandardResponse';
+import type { ObjectStandardResponse } from '../models/ObjectStandardResponse';
 import type { PaymentPartnerInvoiceModel } from '../models/PaymentPartnerInvoiceModel';
 import type { PaymentScheduleListStandardResponse } from '../models/PaymentScheduleListStandardResponse';
 import type { PayrollViewPagedCollectionStandardResponse } from '../models/PayrollViewPagedCollectionStandardResponse';
+import type { PayScheduleGenerationModel } from '../models/PayScheduleGenerationModel';
 import type { PaySlipViewPagedCollectionStandardResponse } from '../models/PaySlipViewPagedCollectionStandardResponse';
 import type { RejectPaymentPartnerInvoiceModel } from '../models/RejectPaymentPartnerInvoiceModel';
 
@@ -19,6 +21,132 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class FinancialService {
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomWeeklyPaymentSchedule(
+requestBody?: PayScheduleGenerationModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/weekly/custom',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomBiWeeklyPaymentSchedule(
+requestBody?: PayScheduleGenerationModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/biweekly/custom',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomMonthlyPaymentScheduleWeekPeriod(
+requestBody?: PayScheduleGenerationModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/monthly/week-period',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param paymentDay 
+     * @param superAdminId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static generateCustomFullMonthPaymentSchedule(
+paymentDay?: number,
+superAdminId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/monthly/full-month',
+            query: {
+                'paymentDay': paymentDay,
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param employeeInformationId 
+     * @returns PaymentScheduleListStandardResponse Success
+     * @throws ApiError
+     */
+    public static getEmployeePaymentSchedule(
+employeeInformationId?: string,
+): CancelablePromise<PaymentScheduleListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/employee/schedule',
+            query: {
+                'employeeInformationId': employeeInformationId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @returns AdminPaymentScheduleViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static getPaymentSchedules(
+superAdminId?: string,
+): CancelablePromise<AdminPaymentScheduleViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/admin/schedules',
+            query: {
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
 
     /**
      * @param requestBody 
@@ -43,6 +171,7 @@ requestBody?: ExpenseModel,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param employeeInformationId 
      * @param search 
      * @param startDate 
@@ -53,6 +182,7 @@ requestBody?: ExpenseModel,
     public static listExpenses(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 employeeInformationId?: string,
 search?: string,
 startDate?: string,
@@ -64,6 +194,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'employeeInformationId': employeeInformationId,
                 'search': search,
                 'StartDate': startDate,
@@ -145,6 +276,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -154,6 +286,7 @@ endDate?: string,
     public static listReviewedExpenses(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -164,6 +297,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -462,6 +596,7 @@ requestBody?: Array<string>,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -471,6 +606,7 @@ requestBody?: Array<string>,
     public static listAllApprovedExpenses(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -481,6 +617,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -495,6 +632,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -504,6 +642,7 @@ endDate?: string,
     public static listInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -514,6 +653,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -528,6 +668,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -537,6 +678,7 @@ endDate?: string,
     public static listSubmittedOnshoreInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -547,6 +689,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -561,6 +704,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -570,6 +714,7 @@ endDate?: string,
     public static listSubmittedOffshoreInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -580,6 +725,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -594,6 +740,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -604,6 +751,7 @@ endDate?: string,
     public static listSubmittedInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -615,6 +763,7 @@ payrollTypeFilter?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -641,7 +790,7 @@ payrollTypeFilter?: number,
 offset?: number,
 limit?: number,
 search?: string,
-payrollGroupId?: number,
+payrollGroupId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -699,6 +848,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -709,6 +859,7 @@ endDate?: string,
     public static listInvoicedInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -720,6 +871,7 @@ payrollTypeFilter?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -913,7 +1065,7 @@ limit?: number,
 offset?: number,
 limit?: number,
 search?: string,
-payrollGroupId?: number,
+payrollGroupId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -1059,18 +1211,18 @@ year: number,
     }
 
     /**
-     * @param employeeInformationId 
-     * @returns PaymentScheduleListStandardResponse Success
+     * @param superAdminId 
+     * @returns ObjectStandardResponse Success
      * @throws ApiError
      */
-    public static getEmployeePaymentSchedule(
-employeeInformationId?: string,
-): CancelablePromise<PaymentScheduleListStandardResponse> {
+    public static getMonthlyPaySchedule(
+superAdminId?: string,
+): CancelablePromise<ObjectStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/Financial/employee/schedule',
+            url: '/api/Financial/monthly',
             query: {
-                'employeeInformationId': employeeInformationId,
+                'superAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,
@@ -1080,13 +1232,64 @@ employeeInformationId?: string,
     }
 
     /**
-     * @returns AdminPaymentScheduleViewListStandardResponse Success
+     * @param superAdminId 
+     * @returns ObjectStandardResponse Success
      * @throws ApiError
      */
-    public static getPaymentSchedules(): CancelablePromise<AdminPaymentScheduleViewListStandardResponse> {
+    public static getBiWeeklyPaySchedule(
+superAdminId?: string,
+): CancelablePromise<ObjectStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/Financial/admin/schedules',
+            url: '/api/Financial/biweekly',
+            query: {
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @returns ObjectStandardResponse Success
+     * @throws ApiError
+     */
+    public static getWeeklyPaySchedule(
+superAdminId?: string,
+): CancelablePromise<ObjectStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/weekly',
+            query: {
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param employeeInformationId 
+     * @param date 
+     * @returns ObjectStandardResponse Success
+     * @throws ApiError
+     */
+    public static getPayScheduleInAMonth(
+employeeInformationId?: string,
+date?: string,
+): CancelablePromise<ObjectStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/month-schedules',
+            query: {
+                'employeeInformationId': employeeInformationId,
+                'date': date,
+            },
             errors: {
                 400: `Bad Request`,
                 500: `Server Error`,
@@ -1117,6 +1320,7 @@ requestBody?: PaymentPartnerInvoiceModel,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param payrollGroupId 
      * @param startDate 
@@ -1127,8 +1331,9 @@ requestBody?: PaymentPartnerInvoiceModel,
     public static listPaymentPartnerInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
-payrollGroupId?: number,
+payrollGroupId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -1138,6 +1343,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'payrollGroupId': payrollGroupId,
                 'StartDate': startDate,
@@ -1161,7 +1367,7 @@ endDate?: string,
      * @throws ApiError
      */
     public static listPayrollGroupInvoices(
-payrollGroupId?: number,
+payrollGroupId?: string,
 offset?: number,
 limit?: number,
 search?: string,
@@ -1225,6 +1431,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -1234,6 +1441,7 @@ endDate?: string,
     public static listInvoicesHistories(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -1244,6 +1452,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -1269,7 +1478,7 @@ endDate?: string,
 offset?: number,
 limit?: number,
 search?: string,
-payrollGroupId?: number,
+payrollGroupId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
@@ -1294,6 +1503,7 @@ endDate?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -1303,6 +1513,7 @@ endDate?: string,
     public static listAllClientInvoices(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -1313,6 +1524,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,

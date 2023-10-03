@@ -13,6 +13,7 @@ const index = ({ teamMembers, supervisor, leavelist, leavetypes, id }) => {
             leavelist={leavelist}
             leavetypes={leavetypes}
             id={id}
+            type={'asTeam'}
         />
     );
 };
@@ -24,11 +25,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
         const clientId = JSON.parse(ctx.req.cookies.user).clientId;
-        console.log({ user: JSON.parse(ctx.req.cookies.user) });
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        //
         try {
             const teamMembers = await UserService.getClientTeamMembers(
                 pagingOptions.offset,
-                25,
+                50,
                 pagingOptions.search,
                 clientId,
                 pagingOptions.from,
@@ -40,20 +42,28 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             //     pagingOptions.search,
             //     clientId,
             // );
-            const leavelist = await LeaveService.listLeaves(
+            // const leavelist = await LeaveService.listLeaves(
+            //     pagingOptions.offset,
+            //     pagingOptions.limit,
+            //     superAdminId,
+            //     undefined,
+            //     id,
+            //     pagingOptions.search,
+            //     pagingOptions.from,
+            //     pagingOptions.to,
+            // );
+            const leavelist = await LeaveService.listAllPendingLeaves(
                 pagingOptions.offset,
                 pagingOptions.limit,
-                undefined,
+                superAdminId,
                 id,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
             );
-            // console.log({ leavelist });
             const leavetypes = await LeaveService.leaveTypes(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
             );
+
             return {
                 props: {
                     teamMembers,
@@ -64,7 +74,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

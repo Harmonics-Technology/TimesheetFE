@@ -51,7 +51,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const end = format(endOfWeek(new Date()), 'yyyy-MM-dd');
         const id = JSON.parse(ctx.req.cookies.user).id;
 
-        console.log({ start, end });
         try {
             const allShift = await ShiftService.getUserShift(
                 pagingOptions.offset,

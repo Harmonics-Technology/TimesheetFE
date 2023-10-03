@@ -22,11 +22,12 @@ export const Hst = ({ data }: { data: OnboardingFeeView }) => {
     } = useForm<OnboardingFeeModel>({
         mode: 'all',
         defaultValues: {
-            onboardingTypeId: 3,
+            onboardingType: 'hst',
         },
     });
     const toast = useToast();
     const onSubmit = async (data: OnboardingFeeModel) => {
+        data.superAdminId = user?.superAdminId;
         try {
             const result = await OnboardingFeeService.addFee(data);
             if (result.status) {

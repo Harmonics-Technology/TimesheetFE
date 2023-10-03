@@ -9,7 +9,7 @@ export default index;
 
 export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
     const role = JSON.parse(ctx.req.cookies.user).role.replaceAll(' ', '');
-    // console.log(role);
+    //
     return {
         redirect: {
             permanent: false,

@@ -37,7 +37,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             const paymentSchedule =
                 await FinancialService.getEmployeePaymentSchedule(id);
-            console.log({ data });
 
             return {
                 props: {
@@ -46,7 +45,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

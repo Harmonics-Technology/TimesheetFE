@@ -12,7 +12,7 @@ interface clientProps {
 }
 
 function client({ adminList }: clientProps) {
-    // console.log({ team });
+    //
     return <ClientManagement adminList={adminList} />;
 }
 
@@ -21,9 +21,11 @@ export default client;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await UserService.listUsers(
                 'client',
+                superAdminId,
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
@@ -36,7 +38,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

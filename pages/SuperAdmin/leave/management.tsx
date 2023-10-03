@@ -13,6 +13,7 @@ const index = ({ teamMembers, supervisor, leavelist, leavetypes, id }) => {
             leavelist={leavelist}
             leavetypes={leavetypes}
             id={id}
+            type={'asAdmin'}
         />
     );
 };
@@ -24,7 +25,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const id = JSON.parse(ctx.req.cookies.user).id;
         const clientId = JSON.parse(ctx.req.cookies.user).clientId;
-        // console.log({ id });
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        //
         try {
             // const teamMembers = await UserService.getClientTeamMembers(
             //     pagingOptions.offset,
@@ -40,16 +42,17 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             //     pagingOptions.search,
             //     clientId,
             // );
-            const leavelist = await LeaveService.listLeaves(
+            const leavelist = await LeaveService.listAllPendingLeaves(
                 pagingOptions.offset,
                 pagingOptions.limit,
-                undefined,
-                undefined,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
+                superAdminId,
+                // undefined,
+                // undefined,
+                // pagingOptions.search,
+                // pagingOptions.from,
+                // pagingOptions.to,
             );
-            // console.log({ leavelist });
+            //
             // const leavetypes = await LeaveService.leaveTypes(
             //     pagingOptions.offset,
             //     pagingOptions.limit,
@@ -64,7 +67,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

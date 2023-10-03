@@ -22,7 +22,7 @@ import {
     TableStatus,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -40,7 +40,7 @@ interface select {
 }
 
 import dynamic from 'next/dynamic';
-const Selectrix = dynamic<select>(() => import('react-selectrix'), {
+const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
 import {
@@ -61,6 +61,7 @@ import { BsDownload } from 'react-icons/bs';
 import Cookies from 'js-cookie';
 import moment from 'moment';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -70,6 +71,7 @@ const schema = yup.object().shape({
 });
 
 function ProfileManagementAdmin({ adminList, team }: adminProps) {
+    const { user, subType } = useContext(UserContext);
     const {
         register,
         handleSubmit,
@@ -84,10 +86,11 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    // console.log(watch("organizationName"));
-    // console.log({ newUser });
+    //
+    //
 
     const onSubmit = async (data: RegisterModel) => {
+        data.superAdminId = user?.superAdminId;
         try {
             const result = await UserService.create(data);
             if (result.status) {
@@ -149,7 +152,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
         try {
             const data = await UserService.getUserById(id);
             setLoading(false);
-            console.log({ data });
+
             if (data.status) {
                 setUserDetail((prevState) => ({
                     ...prevState,
@@ -168,7 +171,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
 
     const createFromTeam = async (e: any) => {
         e.preventDefault();
-        console.log({ userDetail });
+
         setIsLoading(true);
         try {
             const result = await UserService.adminUpdateUser(userDetail);
@@ -299,7 +302,11 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                                 keys="title"
                                 keyLabel="title"
                                 label="Role"
-                                options={roles.slice(0, 3)}
+                                options={
+                                    subType == 'basic'
+                                        ? [{ title: 'Admin' }]
+                                        : roles.slice(1, 3)
+                                }
                             />
                         </Grid>
                     ) : null}
@@ -391,11 +398,20 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                                             Role
                                         </FormLabel>
                                         <Selectrix
-                                            options={roles.slice(3, 5)}
                                             customKeys={{
                                                 key: 'id',
                                                 label: 'title',
                                             }}
+                                            options={
+                                                subType == 'basic'
+                                                    ? [
+                                                          {
+                                                              id: 'admin',
+                                                              title: 'Internal Admin',
+                                                          },
+                                                      ]
+                                                    : roles.slice(3, 6)
+                                            }
                                             onChange={(value: any) =>
                                                 setUserDetail((exist) => ({
                                                     ...exist,

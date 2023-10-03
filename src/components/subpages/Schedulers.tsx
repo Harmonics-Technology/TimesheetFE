@@ -76,7 +76,7 @@ class ShiftManagementInterface extends Component<Props, State> {
     }
 
     shiftDate(data) {
-        // console.log(data.startDate.$d);
+        //
         // Router.push({
         //     query: {
         //         from: moment(data.startDate.$d).format('YYYY-MM-DD'),
@@ -171,7 +171,6 @@ class ShiftManagementInterface extends Component<Props, State> {
     };
 
     ops2 = (schedulerData, event) => {
-        console.log({ event });
         this.props.deleteShiftItem(
             event.rrule ? event.recurringEventId : event.id,
         );
@@ -248,7 +247,7 @@ class ShiftManagementInterface extends Component<Props, State> {
     ) => {
         const borderWidth = isStart ? '4' : '0';
         const borderColor = colord(bgColor).darken(0.25).toHex();
-        // console.log({ event, schedulerData });
+        //
 
         const divStyle = {
             borderLeft: borderWidth + 'px solid ' + borderColor,
@@ -283,11 +282,11 @@ class ShiftManagementInterface extends Component<Props, State> {
         width,
         clsName,
     ) => {
-        // console.log({ schedulerData, slot });
+        //
         const hour = schedulerData.resources.filter(
             (x) => x.id == slot.slotId,
         )[0];
-        // console.log({ hour });
+        //
 
         return (
             <Flex key={slot.id} className={clsName}>

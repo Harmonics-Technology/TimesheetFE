@@ -39,7 +39,6 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
     const clientMetrics = metrics?.data as DashboardClientView;
     const { messages, markAsRead, loading } = useContext(NotificationContext);
 
-    console.log({ metrics, role });
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
             <VStack gap="1rem">

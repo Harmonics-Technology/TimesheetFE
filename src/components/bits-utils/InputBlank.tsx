@@ -5,9 +5,9 @@ import {
     InputGroup,
     InputRightElement,
     Text,
-} from "@chakra-ui/react";
-import React from "react";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+} from '@chakra-ui/react';
+import React from 'react';
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 
 interface InputProps {
     type?: string;
@@ -31,7 +31,7 @@ function InputBlank({
     disableLabel,
     onChange,
     defaultValue,
-    fontSize = ".8rem",
+    fontSize = '.8rem',
 }: InputProps) {
     return (
         <FormControl>

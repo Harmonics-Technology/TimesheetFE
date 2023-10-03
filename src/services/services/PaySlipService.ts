@@ -52,6 +52,7 @@ payrollTypeFilter?: number,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -62,6 +63,7 @@ payrollTypeFilter?: number,
     public static getAllPaySlips(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -73,6 +75,7 @@ payrollTypeFilter?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,

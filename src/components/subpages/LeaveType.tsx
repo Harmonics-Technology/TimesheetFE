@@ -60,7 +60,6 @@ export const LeaveType = ({ leaves }: leaveProps) => {
     const router = useRouter();
     const toast = useToast();
     const [data, setData] = useState<any>();
-    console.log({ data });
 
     const openModal = (x) => {
         setData(x);
@@ -246,7 +245,7 @@ export const LeaveType = ({ leaves }: leaveProps) => {
                     <Button
                         mt="1rem"
                         p=".5rem"
-                        // onClick={() => console.log('new')}
+                        // onClick={() =>
                     >
                         <IconPicker
                             onChange={(v) => setIconLabel(v)}

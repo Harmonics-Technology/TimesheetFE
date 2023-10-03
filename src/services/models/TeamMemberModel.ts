@@ -16,6 +16,8 @@ export type TeamMemberModel = {
     organizationAddress?: string | null;
     invoiceGenerationFrequency?: string | null;
     term?: number | null;
+    clientSubscriptionId?: string | null;
+    commandCenterClientId?: string | null;
     id?: string;
     payRollTypeId?: number;
     payrollGroupId?: number | null;
@@ -47,4 +49,7 @@ export type TeamMemberModel = {
     numberOfDaysEligible?: number | null;
     numberOfHoursEligible?: number | null;
     employeeType?: string | null;
+    superAdminId?: string | null;
+    invoiceGenerationType?: string | null;
+    enableFinancials?: boolean;
 };

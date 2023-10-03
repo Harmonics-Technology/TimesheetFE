@@ -1,13 +1,25 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
+import type { CancelSubscriptionModel } from '../models/CancelSubscriptionModel';
+import type { CardsStandardResponse } from '../models/CardsStandardResponse';
+import type { ClientSubscriptionResponseViewModelStandardResponse } from '../models/ClientSubscriptionResponseViewModelStandardResponse';
+import type { CommandCenterAddCardResponseStandardResponse } from '../models/CommandCenterAddCardResponseStandardResponse';
+import type { ControlSettingModel } from '../models/ControlSettingModel';
+import type { ControlSettingViewStandardResponse } from '../models/ControlSettingViewStandardResponse';
 import type { Enable2FAViewStandardResponse } from '../models/Enable2FAViewStandardResponse';
 import type { InitiateResetModel } from '../models/InitiateResetModel';
 import type { LoginModel } from '../models/LoginModel';
+import type { MicrosoftIdTokenDetailsModel } from '../models/MicrosoftIdTokenDetailsModel';
 import type { PasswordReset } from '../models/PasswordReset';
 import type { RegisterModel } from '../models/RegisterModel';
 import type { ShiftUsersListViewPagedCollectionStandardResponse } from '../models/ShiftUsersListViewPagedCollectionStandardResponse';
+import type { SubscriptionHistoryViewModelStandardResponse } from '../models/SubscriptionHistoryViewModelStandardResponse';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
+import type { UpdateCardDetailsModel } from '../models/UpdateCardDetailsModel';
+import type { UpdateClientStripeSubscriptionModel } from '../models/UpdateClientStripeSubscriptionModel';
+import type { UpdateClientSubscriptionModel } from '../models/UpdateClientSubscriptionModel';
 import type { UpdateUserModel } from '../models/UpdateUserModel';
 import type { UserCountByPayrollTypeViewListStandardResponse } from '../models/UserCountByPayrollTypeViewListStandardResponse';
 import type { UserProfileViewStandardResponse } from '../models/UserProfileViewStandardResponse';
@@ -108,6 +120,39 @@ requestBody?: PasswordReset,
     }
 
     /**
+     * @param superAdminId 
+     * @returns ControlSettingViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getControlSettingById(
+superAdminId?: string,
+): CancelablePromise<ControlSettingViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/control-settings',
+            query: {
+                'superAdminId': superAdminId,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateControlSettings(
+requestBody?: ControlSettingModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/update-control-settings',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
      * @param requestBody 
      * @returns UserViewStandardResponse Success
      * @throws ApiError
@@ -118,6 +163,38 @@ requestBody?: UpdateUserModel,
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/update',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateClientSubscription(
+requestBody?: UpdateClientSubscriptionModel,
+): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/update/client-subscription',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static microsoftLogin(
+requestBody?: MicrosoftIdTokenDetailsModel,
+): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/microsoft-login',
             body: requestBody,
             mediaType: 'application/json-patch+json',
         });
@@ -173,6 +250,7 @@ userId: string,
 
     /**
      * @param role 
+     * @param superAdminId 
      * @param offset 
      * @param limit 
      * @param search 
@@ -183,6 +261,7 @@ userId: string,
      */
     public static listUsers(
 role: string,
+superAdminId?: string,
 offset?: number,
 limit?: number,
 search?: string,
@@ -196,6 +275,7 @@ endDate?: string,
                 'role': role,
             },
             query: {
+                'superAdminId': superAdminId,
                 'Offset': offset,
                 'Limit': limit,
                 'Search': search,
@@ -349,6 +429,7 @@ clientId: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param startDate 
      * @param endDate 
      * @returns ShiftUsersListViewPagedCollectionStandardResponse Success
@@ -357,6 +438,7 @@ clientId: string,
     public static listShiftUsers(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<ShiftUsersListViewPagedCollectionStandardResponse> {
@@ -366,6 +448,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'startDate': startDate,
                 'endDate': endDate,
             },
@@ -570,6 +653,179 @@ year?: number,
             url: '/api/User/chart/teammembers-by-payrolls',
             query: {
                 'year': year,
+            },
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @param offset 
+     * @param limit 
+     * @param search 
+     * @returns SubscriptionHistoryViewModelStandardResponse Success
+     * @throws ApiError
+     */
+    public static getClientSubscriptionHistory(
+superAdminId?: string,
+offset?: number,
+limit?: number,
+search?: string,
+): CancelablePromise<SubscriptionHistoryViewModelStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/subscription/history',
+            query: {
+                'superAdminId': superAdminId,
+                'Offset': offset,
+                'Limit': limit,
+                'search': search,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static cancelSubscription(
+requestBody?: CancelSubscriptionModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/subscription/cancel',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param subscriptionId 
+     * @param pauseDuration 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static pauseSubscription(
+subscriptionId?: string,
+pauseDuration?: number,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/subscription/pause',
+            query: {
+                'subscriptionId': subscriptionId,
+                'pauseDuration': pauseDuration,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns ClientSubscriptionResponseViewModelStandardResponse Success
+     * @throws ApiError
+     */
+    public static upgradeSubscription(
+requestBody?: UpdateClientStripeSubscriptionModel,
+): CancelablePromise<ClientSubscriptionResponseViewModelStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/subscription/upgrade',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param userId 
+     * @returns CardsStandardResponse Success
+     * @throws ApiError
+     */
+    public static getUserCards(
+userId?: string,
+): CancelablePromise<CardsStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/billing/cards',
+            query: {
+                'userId': userId,
+            },
+        });
+    }
+
+    /**
+     * @param userId 
+     * @returns CommandCenterAddCardResponseStandardResponse Success
+     * @throws ApiError
+     */
+    public static addNewCard(
+userId?: string,
+): CancelablePromise<CommandCenterAddCardResponseStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/billing/add-card',
+            query: {
+                'userId': userId,
+            },
+        });
+    }
+
+    /**
+     * @param userId 
+     * @param paymentMethod 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static setAsDefaulCard(
+userId?: string,
+paymentMethod?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/billing/set-as-default',
+            query: {
+                'userId': userId,
+                'paymentMethod': paymentMethod,
+            },
+        });
+    }
+
+    /**
+     * @param userId 
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateUserCardDetails(
+userId?: string,
+requestBody?: UpdateCardDetailsModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/billing/update-card',
+            query: {
+                'userId': userId,
+            },
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param userId 
+     * @param paymentMethod 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static deletePaymentCard(
+userId?: string,
+paymentMethod?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/billing/delete-card',
+            query: {
+                'userId': userId,
+                'paymentMethod': paymentMethod,
             },
         });
     }

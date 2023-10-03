@@ -18,7 +18,7 @@ export const ScheduleTable = ({
     paymentSchedule,
     exportPDF,
 }: {
-    paymentSchedule: AdminPaymentScheduleView;
+    paymentSchedule: AdminPaymentScheduleView | undefined;
     exportPDF: () => void;
 }) => {
     return (
@@ -30,20 +30,6 @@ export const ScheduleTable = ({
                     borderY="2px solid"
                     borderColor="gray.200"
                 >
-                    <Thead>
-                        <Tr
-                            h="3rem"
-                            fontWeight="600"
-                            bgColor="brand.400"
-                            color="white"
-                        >
-                            <TableHead name="S/N" />
-                            <TableHead name="First Work Day" />
-                            <TableHead name="Last Work Day" />
-                            <TableHead name="Approval Date" />
-                            <TableHead name="Payment Date" />
-                        </Tr>
-                    </Thead>
                     <Tbody>
                         {paymentSchedule?.schedules?.map(
                             (x: PaymentSchedule, i) => (

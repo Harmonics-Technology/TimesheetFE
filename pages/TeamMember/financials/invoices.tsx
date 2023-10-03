@@ -17,29 +17,11 @@ interface PayrollType {
 }
 function payslips({ invoice }: PayrollType) {
     const { user } = useContext(UserContext);
-    console.log({ user });
+
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            {user?.payrollType === 'OFFSHORE' ? (
-                <>
-                    <TeamInvoices invoiceList={invoice} />
-                </>
-            ) : (
-                <>
-                    <Flex>
-                        <PageTabs
-                            url={`/${role}/financials/my-invoices`}
-                            tabName="Awaiting Submission"
-                        />
-                        <PageTabs
-                            url={`/${role}/financials/invoices`}
-                            tabName="Submitted"
-                        />
-                    </Flex>
-                    <TeamInvoices invoiceList={invoice} />
-                </>
-            )}
+            <TeamInvoices invoiceList={invoice} />
         </Box>
     );
 }
@@ -65,7 +47,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

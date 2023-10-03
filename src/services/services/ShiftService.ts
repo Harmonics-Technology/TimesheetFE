@@ -3,6 +3,8 @@
 /* eslint-disable */
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { ShiftModel } from '../models/ShiftModel';
+import type { ShiftTypeModel } from '../models/ShiftTypeModel';
+import type { ShiftTypeViewStandardResponse } from '../models/ShiftTypeViewStandardResponse';
 import type { ShiftViewListStandardResponse } from '../models/ShiftViewListStandardResponse';
 import type { ShiftViewStandardResponse } from '../models/ShiftViewStandardResponse';
 import type { SwapViewPagedCollectionStandardResponse } from '../models/SwapViewPagedCollectionStandardResponse';
@@ -13,6 +15,88 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class ShiftService {
+
+    /**
+     * @param requestBody 
+     * @returns ShiftTypeViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static createShiftType(
+requestBody?: ShiftTypeModel,
+): CancelablePromise<ShiftTypeViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Shift/add-shift-type',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @returns ShiftTypeViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static listShiftTypes(
+superAdminId?: string,
+): CancelablePromise<Array<ShiftTypeViewStandardResponse>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Shift/shift-types',
+            query: {
+                'superAdminId': superAdminId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateShiftType(
+requestBody?: ShiftTypeModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Shift/shift-type/update',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param id 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static deleteShiftType(
+id?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Shift/shift-type/delete',
+            query: {
+                'id': id,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
 
     /**
      * @param requestBody 
@@ -37,6 +121,7 @@ requestBody?: ShiftModel,
     /**
      * @param startDate 
      * @param endDate 
+     * @param superAdminId 
      * @param userId 
      * @param isPublished 
      * @returns ShiftViewListStandardResponse Success
@@ -45,6 +130,7 @@ requestBody?: ShiftModel,
     public static listUsersShift(
 startDate?: string,
 endDate?: string,
+superAdminId?: string,
 userId?: string,
 isPublished?: boolean,
 ): CancelablePromise<ShiftViewListStandardResponse> {
@@ -54,6 +140,7 @@ isPublished?: boolean,
             query: {
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'SuperAdminId': superAdminId,
                 'UserId': userId,
                 'isPublished': isPublished,
             },
@@ -69,6 +156,7 @@ isPublished?: boolean,
      * @param limit 
      * @param startDate 
      * @param endDate 
+     * @param superAdminId 
      * @param userId 
      * @returns UsersShiftViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -78,6 +166,7 @@ offset?: number,
 limit?: number,
 startDate?: string,
 endDate?: string,
+superAdminId?: string,
 userId?: string,
 ): CancelablePromise<UsersShiftViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -88,6 +177,7 @@ userId?: string,
                 'Limit': limit,
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'SuperAdminId': superAdminId,
                 'UserId': userId,
             },
             errors: {
@@ -102,6 +192,7 @@ userId?: string,
      * @param limit 
      * @param startDate 
      * @param endDate 
+     * @param superAdminId 
      * @param userId 
      * @returns UsersShiftViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -111,6 +202,7 @@ offset?: number,
 limit?: number,
 startDate?: string,
 endDate?: string,
+superAdminId?: string,
 userId?: string,
 ): CancelablePromise<UsersShiftViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -121,6 +213,7 @@ userId?: string,
                 'Limit': limit,
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'SuperAdminId': superAdminId,
                 'UserId': userId,
             },
             errors: {
@@ -178,12 +271,14 @@ id?: string,
     /**
      * @param shiftId 
      * @param shiftToSwapId 
+     * @param superAdminId 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static swapShift(
 shiftId?: string,
 shiftToSwapId?: string,
+superAdminId?: string,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -191,6 +286,7 @@ shiftToSwapId?: string,
             query: {
                 'ShiftId': shiftId,
                 'ShiftToSwapId': shiftToSwapId,
+                'SuperAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,
@@ -202,12 +298,14 @@ shiftToSwapId?: string,
     /**
      * @param id 
      * @param action 
+     * @param superAdminId 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static approveSwap(
 id?: string,
 action?: number,
+superAdminId?: string,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -215,6 +313,7 @@ action?: number,
             query: {
                 'id': id,
                 'action': action,
+                'superAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,
@@ -253,12 +352,14 @@ userId?: string,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @returns SwapViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getAllSwapShifts(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 ): CancelablePromise<SwapViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -266,6 +367,7 @@ limit?: number,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,

@@ -43,12 +43,15 @@ export default expenses;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const payrollGroupId = 2;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const payrollGroupId = '2';
         try {
             const data = await FinancialService.listPaymentPartnerInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 pagingOptions.search,
+                payrollGroupId,
                 pagingOptions.from,
                 pagingOptions.to,
             );
@@ -60,7 +63,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

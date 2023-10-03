@@ -26,18 +26,18 @@ export default index;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const url = 'https://www.lemonade.finance/api/lemonade/getExchange';
-        const payload = {
-            from: 'CAD',
-            to: 'NGN',
-        };
-        const headers = {
-            'Content-Type': 'application/json',
-            Origin: 'https://www.lemonade.finance',
-            Referer:
-                'https://www.lemonade.finance/international-money-transfer',
-            'Access-Control-Allow-Origin': '*',
-        };
+        // const url = 'https://www.lemonade.finance/api/lemonade/getExchange';
+        // const payload = {
+        //     from: 'CAD',
+        //     to: 'NGN',
+        // };
+        // const headers = {
+        //     'Content-Type': 'application/json',
+        //     Origin: 'https://www.lemonade.finance',
+        //     Referer:
+        //         'https://www.lemonade.finance/international-money-transfer',
+        //     'Access-Control-Allow-Origin': '*',
+        // };
         try {
             const metrics = await DashboardService.getPayrollManagerMetrics();
             const pendingPayrolls =
@@ -46,8 +46,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     pagingOptions.limit,
                 );
 
-            // const result = await axios.post(url, payload, { headers: headers });
-            // console.log({ result });
+            //     const result = await axios.post(url, payload, { headers: headers });
+            //
 
             return {
                 props: {
@@ -57,7 +57,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log({ error });
             return {
                 props: {
                     data: [],

@@ -27,6 +27,7 @@ import { useRouter } from 'next/router';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { UserContext } from '@components/context/UserContext';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
 interface invoiceProps {
     invoiceList: InvoiceViewPagedCollectionStandardResponse;
@@ -50,7 +51,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
             invoice?.forEach((x) =>
                 response.push(x.id as string),
             ) as unknown as string[];
-            console.log({ response });
+
             setSelectedId([...response]);
             return;
         }
@@ -62,7 +63,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
         }
         setSelectedId([...selectedId, id]);
     };
-    console.log({ selectedId });
+
     const submitted = router.asPath.includes('/financials/invoices');
 
     const submitInvoiceItem = async () => {
@@ -71,7 +72,6 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                 setLoading(true);
                 const result = await FinancialService.submitInvoice(x);
                 if (result.status) {
-                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -90,7 +90,6 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                     position: 'top-right',
                 });
             } catch (error: any) {
-                console.log({ error });
                 setLoading(false);
                 toast({
                     title: error.body.message || error.message,
@@ -113,6 +112,20 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <Box w="full" mb="1rem">
+                    <LeaveTab
+                        tabValue={[
+                            {
+                                text: 'Awaiting Submission',
+                                url: `/financials/my-invoices`,
+                            },
+                            {
+                                text: 'Submitted',
+                                url: `/financials/invoices`,
+                            },
+                        ]}
+                    />
+                </Box>
                 {selectedId?.length > 0 && (
                     <Flex align="center" justify="space-between" mb="1rem">
                         <Button

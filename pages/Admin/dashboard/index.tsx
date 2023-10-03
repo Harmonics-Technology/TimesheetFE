@@ -1,41 +1,52 @@
-import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import SadminDashboard from '@components/subpages/SadminDashboard';
+import SuperAdminDashboard from '@components/subpages/SuperAdminDashboard';
 import { GetServerSideProps } from 'next';
-import { DashboardService, UserService } from 'src/services';
+import { DashboardService, ProjectManagementService } from 'src/services';
 interface DashboardProps {
     metrics: any;
-    team: any;
+    counts: any;
+    summary: any;
+    error: any;
 }
 
-function index({ metrics, team }: DashboardProps) {
-    return <SadminDashboard metrics={metrics} team={team} />;
+function index({ metrics, counts, summary, error }: DashboardProps) {
+    return (
+        <SuperAdminDashboard
+            metrics={metrics}
+            counts={counts}
+            summary={summary}
+            error={error}
+        />
+    );
 }
 
 export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
-    async (ctx) => {
-        const pagingOptions = filterPagingSearchOptions(ctx);
+    async (ctx: any) => {
+        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
+        //
         try {
-            const data = await DashboardService.getAdminMetrics();
-            const team = await UserService.listUsers(
-                'Team Member',
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-            );
-            // console.log({ data });
+            const data = await DashboardService.getAdminMetrics(superAdminId);
+            const counts =
+                await ProjectManagementService.getStatusCountForProject(
+                    superAdminId,
+                );
             return {
                 props: {
                     metrics: data,
-                    team,
+                    counts: counts.data,
                 },
             };
         } catch (error: any) {
             return {
                 props: {
                     data: [],
+                    error: {
+                        body: error.body,
+                        request: error.request,
+                        status: error.status,
+                    },
                 },
             };
         }

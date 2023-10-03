@@ -21,7 +21,6 @@ interface adminProps {
 }
 
 function TimesheetHistory({ timeSheets }: adminProps) {
-    console.log({ timeSheets });
     const router = useRouter();
     const date = router.query.from as string;
 

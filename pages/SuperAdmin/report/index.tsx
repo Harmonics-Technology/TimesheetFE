@@ -3,15 +3,21 @@ import { withPageAuth } from '@components/generics/withPageAuth';
 import { Reports } from '@components/subpages/Reports';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { DashboardService, FinancialService, UserService } from 'src/services';
+import {
+    DashboardService,
+    FinancialService,
+    ProjectManagementService,
+    UserService,
+} from 'src/services';
 
-const index = ({ metrics, team, paymentPartner, chart }) => {
+const index = ({ metrics, team, paymentPartner, chart, summary }) => {
     return (
         <Reports
             metrics={metrics}
             team={team}
             paymentPartner={paymentPartner}
             chart={chart}
+            summary={summary}
         />
     );
 };
@@ -21,10 +27,12 @@ export default index;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const data = await DashboardService.getAdminMetrics();
+            const data = await DashboardService.getAdminMetrics(superAdminId);
             const team = await UserService.listUsers(
                 'Team Member',
+                superAdminId,
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
@@ -36,12 +44,17 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     pagingOptions.offset,
                     pagingOptions.limit,
                     pagingOptions.search,
-                    pagingOptions.paySlipFilter || 1,
+                    pagingOptions.paySlipFilter || superAdminId,
                     pagingOptions.from,
                     pagingOptions.to,
                 );
             const chart = await UserService.getUserCountByPayrolltypePerYear(
                 pagingOptions.chartYear,
+            );
+            const summary = await ProjectManagementService.getSummaryReport(
+                superAdminId,
+                pagingOptions.from,
+                pagingOptions.to,
             );
             return {
                 props: {
@@ -49,6 +62,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     team,
                     paymentPartner,
                     chart,
+                    summary: summary.data,
                 },
             };
         } catch (error: any) {

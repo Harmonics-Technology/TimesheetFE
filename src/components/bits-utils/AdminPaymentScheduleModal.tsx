@@ -11,6 +11,9 @@ import {
     Tab,
     TabPanel,
     TabPanels,
+    Thead,
+    Tr,
+    Table,
 } from '@chakra-ui/react';
 import {
     AdminPaymentScheduleView,
@@ -21,6 +24,7 @@ import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { ScheduleTable } from './ScheduleTable';
+import { TableHead, TableData } from './TableData';
 
 type Props = {
     isOpen?: any;
@@ -33,16 +37,16 @@ const AdminPaymentScheduleModal = ({
     onClose,
     paymentSchedule,
 }: Props) => {
-    const monthlySchedule = (
-        paymentSchedule?.data as AdminPaymentScheduleView
+    const monthlySchedule = paymentSchedule?.data?.filter(
+        (x) => x.scheduleType == 'Monthly',
     )[0];
-    const biWeeklySchedule = (
-        paymentSchedule?.data as AdminPaymentScheduleView
-    )[1];
-    const weeklySchedule = (
-        paymentSchedule?.data as AdminPaymentScheduleView
-    )[2];
-    const exportPDF = (type: AdminPaymentScheduleView) => {
+    const biWeeklySchedule = paymentSchedule?.data?.filter(
+        (x) => x.scheduleType == 'Bi-Weekly',
+    )[0];
+    const weeklySchedule = paymentSchedule?.data?.filter(
+        (x) => x.scheduleType == 'Weekly',
+    )[0];
+    const exportPDF = (type: AdminPaymentScheduleView | undefined) => {
         const unit = 'pt';
         const size = 'A4'; // Use A1, A2, A3 or A4
         const orientation = 'portrait'; // portrait or landscape
@@ -52,7 +56,7 @@ const AdminPaymentScheduleModal = ({
 
         doc.setFontSize(15);
 
-        const title = `${type.scheduleType} Schedule`;
+        const title = `${type?.scheduleType} Schedule`;
         const headers = [
             [
                 'S/N',
@@ -92,7 +96,7 @@ const AdminPaymentScheduleModal = ({
         doc.text(title, marginLeft, 40);
         //@ts-ignore
         doc.autoTable(content);
-        doc.save(`${type.scheduleType} schedule.pdf`);
+        doc.save(`${type?.scheduleType} schedule.pdf`);
     };
     return (
         <Modal
@@ -128,13 +132,29 @@ const AdminPaymentScheduleModal = ({
                 </ModalHeader>
 
                 <ModalBody>
-                    <Box maxH="70vh" overflowY="auto" px={5}>
-                        <Tabs isFitted variant="enclosed">
-                            <TabList mb="1em">
-                                <Tab>Monthly</Tab>
-                                <Tab>Bi-Weekly</Tab>
-                                <Tab>Weekly</Tab>
-                            </TabList>
+                    <Tabs isFitted variant="enclosed">
+                        <TabList mb="1em">
+                            <Tab>Monthly</Tab>
+                            <Tab>Bi-Weekly</Tab>
+                            <Tab>Weekly</Tab>
+                        </TabList>
+                        <Table w="92%" mx="auto">
+                            <Thead>
+                                <Tr
+                                    h="3rem"
+                                    fontWeight="600"
+                                    bgColor="brand.400"
+                                    color="white"
+                                >
+                                    <TableHead name="S/N" />
+                                    <TableHead name="First Work Day" />
+                                    <TableHead name="Last Work Day" />
+                                    <TableHead name="Approval Date" />
+                                    <TableHead name="Payment Date" />
+                                </Tr>
+                            </Thead>
+                        </Table>
+                        <Box maxH="70vh" overflowY="auto" px={5}>
                             <TabPanels>
                                 <TabPanel>
                                     <ScheduleTable
@@ -161,8 +181,8 @@ const AdminPaymentScheduleModal = ({
                                     />
                                 </TabPanel>
                             </TabPanels>
-                        </Tabs>
-                    </Box>
+                        </Box>
+                    </Tabs>
                 </ModalBody>
             </ModalContent>
         </Modal>

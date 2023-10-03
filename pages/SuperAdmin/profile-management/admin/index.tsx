@@ -15,7 +15,7 @@ interface adminProps {
 }
 
 function admin({ adminList, team }: adminProps) {
-    // console.log({ team });
+    //
     return <ProfileManagementAdmin adminList={adminList} team={team} />;
 }
 
@@ -24,10 +24,15 @@ export default admin;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const team = await UserService.listUsers('Team Member');
+            const team = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
+            );
             const data = await UserService.listUsers(
                 'admins',
+                superAdminId,
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
@@ -41,7 +46,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

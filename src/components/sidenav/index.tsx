@@ -1,11 +1,10 @@
-import { Box, HStack, VStack, Text, Divider, Image } from '@chakra-ui/react';
+import { Box, HStack, VStack, Divider, Image } from '@chakra-ui/react';
 import { UserContext } from '@components/context/UserContext';
 import MenuItem from '@components/menu-item';
 import Link from 'next/link';
 import { useContext } from 'react';
 import {
     FaCalendar,
-    FaCogs,
     FaCreditCard,
     FaFile,
     FaHome,
@@ -14,9 +13,10 @@ import {
     FaUsers,
 } from 'react-icons/fa';
 import { RiLineChartFill } from 'react-icons/ri';
-import { MdOutlineSupervisorAccount } from 'react-icons/md';
+import { MdOutlineSupervisorAccount, MdSettings } from 'react-icons/md';
 import { BsGraphUp } from 'react-icons/bs';
 import { AiFillSchedule } from 'react-icons/ai';
+import { TbCalendarTime } from 'react-icons/tb';
 interface sidenavProps {
     openSidenav: boolean;
     setOpenSidenav: any;
@@ -24,10 +24,34 @@ interface sidenavProps {
 }
 
 function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
-    const { user } = useContext(UserContext);
-    // console.log({ user });
+    const { user, subType, activeSub } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
 
+    const profile =
+        subType == 'basic'
+            ? [
+                  'admin',
+                  { show: true, name: 'clients' },
+                  'supervisors',
+                  'team members',
+              ]
+            : subType == 'standard'
+            ? [
+                  'admin',
+                  { show: true, name: 'clients' },
+                  'supervisors',
+                  'team members',
+                  'payment partners',
+              ]
+            : subType == 'premium'
+            ? [
+                  'admin',
+                  { show: false, name: 'clients' },
+                  'supervisors',
+                  'team members',
+                  'payment partners',
+              ]
+            : [{ show: true, name: 'admin' }];
     return (
         <Box
             bgColor={change ? 'brand.400' : 'white'}
@@ -43,29 +67,29 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             overflowY="auto"
             boxShadow="sm"
         >
-            <Link href="/" passHref>
+            <Link href={`/${role}/dashboard`} passHref>
                 <HStack>
                     <Box h="2rem">
                         {change ? (
-                            <Image src="/assets/logob.png" h="full" />
+                            <Image src="/assets/newlogob.png" h="full" />
                         ) : (
-                            <Image src="/assets/logo.png" h="full" />
+                            <Image src="/assets/newlogo.png" h="full" />
                         )}
                     </Box>
-                    <Text
+                    {/* <Text
                         fontWeight="600"
                         fontSize=".875rem"
                         color={change ? 'white' : 'brand.200'}
                     >
                         Admin Timesheet
-                    </Text>
+                    </Text> */}
                 </HStack>
             </Link>
             <Divider my="2rem" />
             {role == 'SuperAdmin' ? (
                 <VStack
                     align="left"
-                    gap={change ? '.5rem' : '1.5rem'}
+                    gap={change ? '.8rem' : '1.5rem'}
                     pr="1rem"
                     pb="5rem"
                 >
@@ -87,13 +111,8 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         option={true}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                        dropDown={[
-                            'admin',
-                            'clients',
-                            'supervisors',
-                            'team members',
-                            'payment partners',
-                        ]}
+                        dropDown={profile}
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -104,6 +123,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['approval', 'history']}
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -114,11 +134,12 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            'expenses',
-                            'payrolls',
-                            'payslips',
-                            'invoices',
+                            { show: subType == 'basic', name: 'expenses' },
+                            { show: subType == 'basic', name: 'payrolls' },
+                            { show: subType == 'basic', name: 'payslips' },
+                            { show: subType == 'basic', name: 'invoices' },
                         ]}
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -129,8 +150,9 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
+                        display={activeSub}
                     />
-                    <MenuItem
+                    {/* <MenuItem
                         change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
@@ -139,8 +161,8 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
-                    />
-                    <MenuItem
+                    /> */}
+                    {/* <MenuItem
                         change={change}
                         linkName="settings"
                         menuTitle="Settings"
@@ -154,7 +176,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         ]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
-                    />
+                    /> */}
                     <MenuItem
                         change={change}
                         linkName="report"
@@ -164,6 +186,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -174,6 +197,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -184,12 +208,59 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="project-management"
+                        menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="account-management"
+                        menuTitle="Account settings"
+                        icon={<MdSettings opacity=".8" />}
+                        option={true}
+                        dropDown={[
+                            'manage subscription',
+                            'expense type',
+                            'onboarding fee',
+                            'hst settings',
+                            'leave management settings',
+                            {
+                                show: subType == 'basic',
+                                name: 'shift management settings',
+                            },
+                            'access control settings',
+                            'payment schedule settings',
+                            'personal info',
+                            'notification settings',
+                        ]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
                     />
                 </VStack>
             ) : role == 'TeamMember' ? (
                 <VStack
                     align="left"
-                    gap={change ? '.5rem' : '1.5rem'}
+                    gap={change ? '.8rem' : '1.5rem'}
                     pr="1rem"
                 >
                     <MenuItem
@@ -222,7 +293,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={
-                            user?.payrollType === 'OFFSHORE'
+                            user?.invoiceType == 'payroll'
                                 ? ['my expenses', 'my payslips']
                                 : ['my expenses', 'my payslips', 'my invoices']
                         }
@@ -261,6 +332,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     )}
                     <MenuItem
                         change={change}
+                        linkName="project-management"
+                        menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -273,7 +360,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             ) : role == 'Supervisor' ? (
                 <VStack
                     align="left"
-                    gap={change ? '.5rem' : '1.5rem'}
+                    gap={change ? '.8rem' : '1.5rem'}
                     pr="1rem"
                 >
                     <MenuItem
@@ -325,6 +412,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
+                        display={true}
                     />
                     <MenuItem
                         change={change}
@@ -340,7 +428,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             ) : role == 'InternalSupervisor' ? (
                 <VStack
                     align="left"
-                    gap={change ? '.5rem' : '1.5rem'}
+                    gap={change ? '.8rem' : '1.5rem'}
                     pr="1rem"
                 >
                     <MenuItem
@@ -443,7 +531,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             ) : role == 'PaymentPartner' ? (
                 <VStack
                     align="left"
-                    gap={change ? '.5rem' : '1.5rem'}
+                    gap={change ? '.8rem' : '1.5rem'}
                     pr="1rem"
                 >
                     <MenuItem
@@ -511,7 +599,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             ) : role == 'PayrollManager' ? (
                 <VStack
                     align="left"
-                    gap={change ? '.5rem' : '1.5rem'}
+                    gap={change ? '.8rem' : '1.5rem'}
                     pr="1rem"
                 >
                     <MenuItem
@@ -587,7 +675,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             ) : role == 'InternalPayrollManager' ? (
                 <VStack
                     align="left"
-                    gap={change ? '.5rem' : '1.5rem'}
+                    gap={change ? '.8rem' : '1.5rem'}
                     pr="1rem"
                 >
                     <MenuItem
@@ -710,7 +798,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             ) : role == 'Admin' ? (
                 <VStack
                     align="left"
-                    gap={change ? '.5rem' : '1.5rem'}
+                    gap={change ? '.8rem' : '1.5rem'}
                     pr="1rem"
                 >
                     <MenuItem
@@ -731,12 +819,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         option={true}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                        dropDown={[
-                            'clients',
-                            'supervisors',
-                            'team members',
-                            'payment partners',
-                        ]}
+                        dropDown={profile}
                     />
                     <MenuItem
                         change={change}
@@ -786,7 +869,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             ) : role == 'InternalAdmin' ? (
                 <VStack
                     align="left"
-                    gap={change ? '.5rem' : '1.5rem'}
+                    gap={change ? '.8rem' : '1.5rem'}
                     pr="1rem"
                 >
                     <MenuItem
@@ -807,12 +890,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         option={true}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
-                        dropDown={[
-                            'clients',
-                            'supervisors',
-                            'team members',
-                            'payment partners',
-                        ]}
+                        dropDown={profile}
                     />
                     <MenuItem
                         change={change}
@@ -909,7 +987,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             ) : role == 'client' ? (
                 <VStack
                     align="left"
-                    gap={change ? '.5rem' : '1.5rem'}
+                    gap={change ? '.8rem' : '1.5rem'}
                     pr="1rem"
                 >
                     <MenuItem
@@ -1009,7 +1087,7 @@ export default SideNav;
 
 // function SideNav({ openSidenav, setOpenSidenav }: sidenavProps) {
 //     const { user } = useContext(UserContext);
-//     // console.log({ user });
+//     //
 //     const role = user?.role?.replaceAll(' ', '');
 //     const closeToggle = () => {
 //         setOpenSidenav(false);
@@ -1034,7 +1112,7 @@ export default SideNav;
 //             <Link href="/" passHref>
 //                 <HStack>
 //                     <Box h="2rem">
-//                         <Image src="/assets/logo.png" h="full" />
+//                         <Image src="/assets/newlogo.png" h="full" />
 //                     </Box>
 //                     <Text fontWeight="600" fontSize=".875rem" color="brand.300">
 //                         Admin Timesheet

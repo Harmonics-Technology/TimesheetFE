@@ -6,7 +6,11 @@ import TimesheetSupervisor from '@components/subpages/TimesheetSupervisor';
 import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { TimeSheetMonthlyView, TimeSheetService } from 'src/services';
+import {
+    FinancialService,
+    TimeSheetMonthlyView,
+    TimeSheetService,
+} from 'src/services';
 interface Size {
     width: number | undefined;
     height: number | undefined;
@@ -15,14 +19,20 @@ interface Size {
 function SingleTimeSheet({
     timeSheets,
     id,
+    payPeriod,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
+    payPeriod: any;
 }) {
     const size: Size = useWindowSize();
     return (
         <>
-            <TimesheetSupervisor timeSheets={timeSheets} id={id} />
+            <TimesheetSupervisor
+                timeSheets={timeSheets}
+                id={id}
+                payPeriod={payPeriod}
+            />
         </>
     );
 }
@@ -32,27 +42,33 @@ export default SingleTimeSheet;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
-
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const { end } = ctx.query;
         let { date } = ctx.query;
         if (date === undefined) {
-            date = moment(new Date()).format('YYYY-MM-DD');
+            date = new Date();
         }
+        date = moment(date).format('YYYY-MM-DD');
 
-        console.log({ date });
         try {
-            const data = await TimeSheetService.getTimeSheet(id, date);
-            console.log({ data });
+            const data = await TimeSheetService.getTimeSheet(id, date, end);
+            const payPeriod = await FinancialService.getPayScheduleInAMonth(
+                id,
+                date,
+            );
+
             return {
                 props: {
                     timeSheets: data.data,
+                    payPeriod: payPeriod.data,
                     id,
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],
+                    payPeriod: [],
                 },
             };
         }

@@ -17,9 +17,10 @@ export default index;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
 
         try {
-            const data = await DashboardService.getAdminMetrics();
+            const data = await DashboardService.getAdminMetrics(superAdminId);
 
             return {
                 props: {

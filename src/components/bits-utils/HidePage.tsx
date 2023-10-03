@@ -21,7 +21,7 @@ function HidePage() {
                     w="full"
                     h="full"
                     objectFit="cover"
-                    src="/assets/logo.png"
+                    src="/assets/newlogo.png"
                 />
             </Circle>
             <Box textAlign="center" mt="1rem" color="white">

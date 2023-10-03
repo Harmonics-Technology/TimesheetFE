@@ -20,7 +20,7 @@ function SingleTimeSheet({
     timeSheets: TimeSheetMonthlyView;
     id: string;
 }) {
-    // console.log({ id });
+    //
     const size: Size = useWindowSize();
     return (
         <>
@@ -40,10 +40,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             date = moment(new Date()).format('YYYY-MM-DD');
         }
 
-        console.log({ id });
         try {
             const data = await TimeSheetService.getTimeSheet(id, date);
-            console.log({ data });
+
             return {
                 props: {
                     timeSheets: data.data,
@@ -51,7 +50,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

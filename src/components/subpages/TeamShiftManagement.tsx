@@ -28,7 +28,6 @@ interface shiftProps {
 }
 
 const TeamShiftManagement = ({ allShift, id, shiftUser }: shiftProps) => {
-    console.log({ allShift, id });
     const DemoData = {
         events: [
             {
@@ -126,13 +125,11 @@ const TeamShiftManagement = ({ allShift, id, shiftUser }: shiftProps) => {
         // ResourceList,
     };
 
-    console.log({ ShiftData });
-
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: open, onOpen: opens, onClose: close } = useDisclosure();
     const [data, setData] = useState();
     const [schedule, setSchedule] = useState();
-    console.log({ schedule });
+
     const router = useRouter();
     const toast = useToast();
     const fromDate = router?.query?.from;

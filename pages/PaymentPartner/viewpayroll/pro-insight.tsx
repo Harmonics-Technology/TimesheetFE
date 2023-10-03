@@ -41,7 +41,7 @@ export default expenses;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const payrollGroupId = 1;
+        const payrollGroupId = pagingOptions.clientId;
         try {
             const data = await FinancialService.listPayrollGroupInvoices(
                 payrollGroupId,
@@ -59,7 +59,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

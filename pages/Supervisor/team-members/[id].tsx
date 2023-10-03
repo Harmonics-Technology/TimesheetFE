@@ -34,15 +34,20 @@ export default TeamDetails;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
-        // console.log({ id });
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        //
         try {
             const data = await UserService.getUserById(id);
-            const clients = await UserService.listUsers('client');
-            const supervisor = await UserService.listUsers('supervisor');
+            const clients = await UserService.listUsers('client', superAdminId);
+            const supervisor = await UserService.listUsers(
+                'supervisor',
+                superAdminId,
+            );
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
+                superAdminId,
             );
-            console.log({ data });
+
             return {
                 props: {
                     userProfile: data.data,
@@ -53,7 +58,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

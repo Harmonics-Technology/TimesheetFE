@@ -8,7 +8,7 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import { ShiftService, UserService } from 'src/services';
 
-const schedule = ({ allShift, shiftUser }) => {
+const schedule = ({ allShift, shiftUser, shiftTypes }) => {
     return (
         <Box
             bgColor="white"
@@ -32,7 +32,11 @@ const schedule = ({ allShift, shiftUser }) => {
                     },
                 ]}
             />
-            <ShiftManagement allShift={allShift} shiftUser={shiftUser} />
+            <ShiftManagement
+                allShift={allShift}
+                shiftUser={shiftUser}
+                shiftTypes={shiftTypes}
+            />
         </Box>
     );
 };
@@ -44,25 +48,30 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const start = format(startOfWeek(new Date()), 'yyyy-MM-dd');
         const end = format(endOfWeek(new Date()), 'yyyy-MM-dd');
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
 
-        console.log({ start, end });
+        //
         try {
             const allShift = await ShiftService.listUsersShift(
                 pagingOptions.from || start,
                 pagingOptions.to || end,
+                superAdminId,
             );
             const shiftUser = await UserService.listShiftUsers(
                 pagingOptions.offset,
                 pagingOptions.shiftLimit,
+                superAdminId,
                 pagingOptions.from || start,
                 pagingOptions.to || end,
             );
+            const shiftTypes = await ShiftService.listShiftTypes(superAdminId);
 
-            // console.log({ allShift });
+            //
             return {
                 props: {
                     allShift,
                     shiftUser,
+                    shiftTypes,
                 },
             };
         } catch (error: any) {

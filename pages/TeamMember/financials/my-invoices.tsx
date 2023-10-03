@@ -19,16 +19,6 @@ function payslips({ invoice }: PayrollType) {
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/my-invoices`}
-                    tabName="Awaiting Submission"
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices`}
-                    tabName="Submitted"
-                />
-            </Flex>
             <TeamInvoices invoiceList={invoice} />
         </Box>
     );
@@ -56,7 +46,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

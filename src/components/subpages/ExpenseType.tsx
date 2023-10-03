@@ -20,7 +20,7 @@ import {
     ToggleStatus,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -32,6 +32,7 @@ import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -44,7 +45,6 @@ interface ExpenseCreate {
 }
 
 function ExpenseType({ expenses }: expenseProps) {
-    console.log({ expenses });
     const {
         register,
         handleSubmit,
@@ -56,11 +56,16 @@ function ExpenseType({ expenses }: expenseProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
+    const { user } = useContext(UserContext);
 
     const onSubmit = async (data: ExpenseCreate) => {
         const body = data.name;
+        const superAdminId = user?.superAdminId;
         try {
-            const result = await SettingsService.createExpenseType(body);
+            const result = await SettingsService.createExpenseType(
+                body,
+                superAdminId,
+            );
             if (result.status) {
                 toast({
                     title: `Successfully created`,

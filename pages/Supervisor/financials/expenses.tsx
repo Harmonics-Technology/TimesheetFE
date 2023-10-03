@@ -32,9 +32,17 @@ export default expenses;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const team = await UserService.getSupervisees();
-            const expenseType = await SettingsService.listExpenseTypes();
+            const team = await UserService.getSupervisees(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+                superAdminId,
+            );
+            const expenseType = await SettingsService.listExpenseTypes(
+                superAdminId,
+            );
             const data = await FinancialService.listSuperviseesExpenses(
                 pagingOptions.offset,
                 pagingOptions.limit,
@@ -44,7 +52,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             // const data = await SettingsService.listExpenseTypes();
 
-            console.log({ team, expenseType, data });
             return {
                 props: {
                     expenses: data,
@@ -54,7 +61,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

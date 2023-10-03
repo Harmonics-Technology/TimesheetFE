@@ -18,6 +18,7 @@ import {
     addMonths,
     lastDayOfMonth,
     isWeekend,
+    eachDayOfInterval,
 } from 'date-fns';
 
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
@@ -51,18 +52,60 @@ import useClickOutside from '@components/generics/useClickOutside';
 import { Round } from '@components/generics/functions/Round';
 import Cookies from 'js-cookie';
 import { UserContext } from '@components/context/UserContext';
+import { TimeSheetHighlight } from '@components/bits-utils/TimeSheetHighlight';
+import dynamic from 'next/dynamic';
+import { TabMenuTimesheet } from '@components/bits-utils/ProjectManagement/Generics/TabMenuTimesheet';
+const Selectrix = dynamic<any>(() => import('react-selectrix'), {
+    ssr: false,
+});
 
 const TimesheetTeam = ({
     timeSheets,
     id,
+    payPeriod,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
+    payPeriod: any;
 }) => {
     const router = useRouter();
-    // console.log({ timeSheets });
-    const sheet = timeSheets?.timeSheet;
+
     const { date } = router.query;
+    const { end } = router.query;
+
+    //
+
+    const HighlightDate = (value: any) => {
+        router.push({
+            query: {
+                ...router.query,
+                date: value?.split(' - ')[0] || new Date(),
+                end: value?.split(' - ')[1] || new Date(),
+            },
+        });
+    };
+    const dates = eachDayOfInterval({
+        start: new Date(
+            moment(date as string).format('MM/DD/YYYY') ||
+                (moment() as unknown as string),
+        ),
+        end: new Date(
+            moment((end as string) || (date as string)).format(
+                'MM/DD/YYYY',
+            ) as unknown as string,
+        ),
+    });
+    const newDates = dates?.map((x) => moment(x).format('DD/MM/YY'));
+
+    const newOptions = payPeriod?.map((obj) => ({
+        id: `${obj.weekDate} - ${obj.lastWorkDayOfCycle}`,
+        label: `${moment(obj.weekDate).format('MMM DD')} - ${moment(
+            obj.lastWorkDayOfCycle,
+        ).format('MMM DD, YYYY')}`,
+    }));
+
+    //
+    const sheet = timeSheets?.timeSheet;
     const newDate = new Date(date as unknown as string);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [activeDate, setActiveDate] = useState(
@@ -83,7 +126,7 @@ const TimesheetTeam = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    // console.log({ totalHours });
+    //
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
@@ -105,7 +148,6 @@ const TimesheetTeam = ({
         endWeek: moment(activeDate).endOf('month').format('MMM DD'),
     });
 
-    console.log({ weekDate });
     const [selectedInput, setSelectedInput] = useState<
         TimesheetHoursAdditionModel[]
     >([]);
@@ -121,9 +163,6 @@ const TimesheetTeam = ({
         }
         setSelectedInput([...selectedInput, item]);
     };
-
-    console.log({ hoursEligible });
-    console.log({ timeSheets, increaseWeek });
 
     // function ApproveAllTimeSheet() {
     //     const [loading, setLoading] = useState(false);
@@ -142,7 +181,7 @@ const TimesheetTeam = ({
     //         });
     //         router.reload();
     //     };
-    //     // console.log({ loading });
+    //     //
     //     return (
     //         <TimeSheetEstimationBtn
     //             id={1}
@@ -154,7 +193,7 @@ const TimesheetTeam = ({
     // }
 
     const addHours = async (item) => {
-        // console.log({ userId, date, hours });
+        //
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
@@ -162,7 +201,7 @@ const TimesheetTeam = ({
                 item.date,
                 item.hours,
             );
-            console.log({ data });
+
             if (data.status) {
                 return;
             }
@@ -173,7 +212,6 @@ const TimesheetTeam = ({
             });
             return;
         } catch (error: any) {
-            console.log(error);
             toast({
                 status: 'error',
                 title: error.body.message || error.message,
@@ -201,7 +239,7 @@ const TimesheetTeam = ({
                     selectedInput.at(0)?.date,
                     selectedInput,
                 );
-                console.log({ data });
+
                 if (data.status) {
                     setLoading(false);
                     toast({
@@ -219,7 +257,6 @@ const TimesheetTeam = ({
                 });
                 return;
             } catch (error: any) {
-                console.log(error);
                 toast({
                     status: 'error',
                     title: error.body.message || error.message,
@@ -258,6 +295,7 @@ const TimesheetTeam = ({
             query: {
                 ...router.query,
                 date: moment(addMonths(activeDate, 1)).format('YYYY-MM-DD'),
+                end: undefined,
             },
         });
         router.reload();
@@ -267,6 +305,7 @@ const TimesheetTeam = ({
             query: {
                 ...router.query,
                 date: moment(subMonths(activeDate, 1)).format('YYYY-MM-DD'),
+                end: undefined,
             },
         });
         router.reload();
@@ -274,7 +313,7 @@ const TimesheetTeam = ({
     const preventTomorrow = addDays(new Date(), 1).toISOString();
 
     const navigateWeek = (dir: string, weeks: any) => {
-        // console.log({ dir });
+        //
         if (dir == 'prev' && increaseWeek !== 0) {
             setIncreaseWeek((increaseWeek) => increaseWeek - 1);
             setWeekDate({
@@ -540,11 +579,21 @@ const TimesheetTeam = ({
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
 
-            // console.log({ notFilled });
+            //
 
             week.push(
                 <Flex
-                    border={['0', '1px solid #e5e5e5']}
+                    border={[
+                        '0',
+                        newDates?.length > 1 &&
+                        newDates.includes(
+                            moment((userDate as string) || '01/01/2021').format(
+                                'DD/MM/YY',
+                            ),
+                        )
+                            ? '0.1rem solid rgba(46, 175, 163, .7)'
+                            : '1px solid #e5e5e5',
+                    ]}
                     height={['auto', '4rem']}
                     // color={['gray.500', 'inherit']}
                     fontSize={['.5rem', '.8rem']}
@@ -724,7 +773,7 @@ const TimesheetTeam = ({
             );
             weekNumber++, (currentDate = addDays(currentDate, 7));
         }
-        // console.log({ allWeeks });
+        //
 
         return (
             <>
@@ -797,7 +846,14 @@ const TimesheetTeam = ({
         );
     };
     return (
-        <Box>
+        <Box pos="relative">
+            <TabMenuTimesheet
+                name={[
+                    { title: 'Calendar View', url: `my-timesheet` },
+                    { title: 'Task View', url: `task-view` },
+                ]}
+            />
+            <TimeSheetHighlight />
             <Box>
                 {getHeader()}
                 <Box
@@ -817,6 +873,24 @@ const TimesheetTeam = ({
                 mb={['3rem', '0']}
                 p={['1rem 1rem', '1rem 2rem']}
             >
+                <Box w="40%" mb="2rem">
+                    <Text fontSize=".8rem" fontWeight={500} mb=".3rem">
+                        Pay Period
+                    </Text>
+                    <Selectrix
+                        placeholder={`${moment(date).format(
+                            'MMM DD,',
+                        )} - ${moment(
+                            end || lastDayOfMonth(new Date(date as string)),
+                        ).format('MMM DD, YYYY')}`}
+                        customKeys={{
+                            key: 'id',
+                            label: 'label',
+                        }}
+                        options={newOptions}
+                        onChange={(e) => HighlightDate(e.key)}
+                    />
+                </Box>
                 <Flex
                     w="100%"
                     mr="auto"

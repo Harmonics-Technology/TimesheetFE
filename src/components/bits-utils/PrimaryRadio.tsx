@@ -21,6 +21,9 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     control: Control<TFormValues>;
     radios?: any;
     value?: string;
+    flexDir?: any;
+    gap?: any;
+    bg?: any;
 }
 
 export const PrimaryRadio = <TFormValues extends Record<string, any>>({
@@ -31,11 +34,14 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
     defaultValue = undefined,
     radios,
     value,
+    flexDir = 'row',
+    gap = '1rem',
+    bg,
 }: FormInputProps<TFormValues>) => {
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'framework',
         defaultValue: defaultValue,
-        onChange: console.log,
+        onChange: void 0,
     });
 
     const group = getRootProps();
@@ -46,7 +52,7 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
                     error?.type === 'required' || error?.message !== undefined
                 }
             >
-                <Text fontSize="1rem" fontWeight="500">
+                <Text fontSize="1rem" fontWeight="500" mb=".7rem">
                     {label}
                 </Text>
                 <Controller
@@ -55,13 +61,21 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
                         <HStack
                             aria-label={label}
                             {...field}
-                            defaultValue={value}
+                            defaultValue={defaultValue}
                             w="full"
                             {...group}
+                            spacing="0"
+                            gap={gap}
+                            flexDir={flexDir}
+                            align="flex-start"
                         >
-                            {radios.map((value) => {
+                            {radios.map((value, index) => {
                                 const radio = getRadioProps({ value });
-                                return <RadioBtn {...radio}>{value}</RadioBtn>;
+                                return (
+                                    <RadioBtn {...radio} key={index} bg={bg}>
+                                        {value}
+                                    </RadioBtn>
+                                );
                             })}
                         </HStack>
                         // </HStack>

@@ -28,14 +28,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     pagingOptions.offset,
                     pagingOptions.limit,
                 );
-            console.log({ data });
+
             return {
                 props: {
                     timeSheets: data,
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

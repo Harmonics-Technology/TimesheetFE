@@ -16,7 +16,12 @@ interface PayrollType {
 }
 function expenses({ payrolls, paymentSchedule }: PayrollType) {
     return (
-        <AdminPayslip payrolls={payrolls} paymentSchedule={paymentSchedule} />
+        <AdminPayslip
+            payrolls={payrolls}
+            paymentSchedule={paymentSchedule}
+            record={1}
+            fileName="Payslip"
+        />
     );
 }
 
@@ -25,17 +30,20 @@ export default expenses;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await PaySlipService.getAllPaySlips(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,
                 pagingOptions.paySlipFilter,
             );
-            const paymentSchedule =
-                await FinancialService.getPaymentSchedules();
+            const paymentSchedule = await FinancialService.getPaymentSchedules(
+                superAdminId,
+            );
 
             return {
                 props: {
@@ -44,7 +52,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

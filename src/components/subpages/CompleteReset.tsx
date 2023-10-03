@@ -42,6 +42,7 @@ const CompleteReset = ({ code }: { code: string }) => {
         mode: 'all',
     });
     const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
     const [confirmPass, setConfirmPass] = useState('');
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [passwordVisibleB, setPasswordVisibleB] = useState<boolean>(false);
@@ -63,21 +64,23 @@ const CompleteReset = ({ code }: { code: string }) => {
             });
             return;
         }
-        // console.log({ data });
+        //
         try {
-            const result = await UserService.completeReset(data);
-            if (result.status) {
+            const result = (await UserService.completeReset(
+                data,
+            )) as unknown as any;
+            if (result.result.status) {
                 setShowSuccess(true);
                 return;
             }
             toast({
-                title: result.message,
+                title: result.result.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
             });
+            setShowError(true);
         } catch (error) {
-            console.log(error);
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',
@@ -103,7 +106,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                         w="full"
                         my="2rem"
                     >
-                        <Image src="/assets/logo.png" h="3rem" />
+                        <Image src="/assets/newlogo.png" h="3rem" />
                     </Box>
                     <Text
                         fontSize="35px"
@@ -111,10 +114,25 @@ const CompleteReset = ({ code }: { code: string }) => {
                         w={['100%', '100%']}
                         lineHeight="1"
                         textAlign="center"
+                        mb="1rem"
                     >
                         Reset Password!
                     </Text>
 
+                    {showError && (
+                        <Flex
+                            bgColor="red.100"
+                            borderRadius="6px"
+                            p=".5rem 1rem"
+                            mb="1rem"
+                        >
+                            <Text fontSize=".9rem" color="red">
+                                Error: Password reset link can be used only once
+                                and it seems like this code has been used
+                                before. If not so, please contact admin.
+                            </Text>
+                        </Flex>
+                    )}
                     <form onSubmit={handleSubmit(onSubmit)}>
                         {showSuccess ? (
                             <Flex flexDirection="column" align="center">
@@ -123,6 +141,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     w="70%"
                                     fontWeight="500"
                                     textAlign="center"
+                                    mb="1rem"
                                 >
                                     Password reset completed, you can now{' '}
                                     <Link href="/login" passHref>
@@ -149,7 +168,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                                 </Link>
                             </Flex>
                         ) : (
-                            <VStack w="full" spacing=".7rem">
+                            <VStack w="full" spacing="1rem">
                                 <PrimaryInput<PasswordReset>
                                     register={register}
                                     name="newPassword"
@@ -192,7 +211,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     bgColor="brand.400"
                                     // mt={["2rem", "0"]}
                                 >
-                                    Login
+                                    Complete Reset
                                 </Button>
                             </VStack>
                         )}

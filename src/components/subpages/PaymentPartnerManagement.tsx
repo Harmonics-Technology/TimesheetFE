@@ -22,7 +22,7 @@ import {
     TableStatus,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -48,6 +48,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import Cookies from 'js-cookie';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -61,7 +62,8 @@ const schema = yup.object().shape({
 });
 
 function PaymentPartnerManagement({ adminList }: adminProps) {
-    // console.log({ adminList });
+    //
+    const { user } = useContext(UserContext);
     const {
         register,
         handleSubmit,
@@ -77,9 +79,9 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    // console.log(watch("organizationPhone"));
+    //
     const [same, setSame] = useState(false);
-    // console.log({ same });
+    //
 
     const onSubmit = async (data: RegisterModel) => {
         {
@@ -89,7 +91,8 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                   (data.phoneNumber = data.organizationPhone))
                 : null;
         }
-        console.log({ data });
+        data.superAdminId = user?.superAdminId;
+
         try {
             const result = await UserService.create(data);
             if (result.status) {

@@ -26,6 +26,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const data = await TimeSheetService.getTeamMemberRecentTimeSheet(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                id,
                 pagingOptions.from,
                 pagingOptions.to,
             );
@@ -35,7 +36,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

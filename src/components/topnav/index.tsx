@@ -39,8 +39,6 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     const { user } = useContext(UserContext);
     const role = user?.role;
 
-    console.log({ user });
-
     const curPage = router.pathname.split('/').at(-1);
     const idPage = router.pathname.split('/').at(-2);
     const { messages } = useContext(NotificationContext);
@@ -79,7 +77,14 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                     </Text>
                     <Link
                         passHref
-                        href={`/${role?.replace(' ', '')}/my-profile`}
+                        href={
+                            role == 'Super Admin'
+                                ? `/${role?.replaceAll(
+                                      ' ',
+                                      '',
+                                  )}/account-management/personal-info`
+                                : `/${role?.replaceAll(' ', '')}/my-profile`
+                        }
                     >
                         <Text
                             mb="0"
@@ -132,7 +137,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                             textTransform="capitalize"
                             mb="0"
                         >
-                            {curPage == '[id]'
+                            {curPage?.startsWith('[')
                                 ? idPage?.replace('-', ' ')
                                 : curPage?.replace('-', ' ')}
                         </Text>

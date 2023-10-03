@@ -18,7 +18,6 @@ interface ExpensesType {
     expenseType: ExpenseTypeView[];
 }
 function expenses({ expenses, id, expenseType }: ExpensesType) {
-    console.log({ id });
     return (
         <TeamExpenses expenses={expenses} id={id} expenseType={expenseType} />
     );
@@ -45,7 +44,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             // const data = await SettingsService.listExpenseTypes();
 
-            console.log({ data });
             return {
                 props: {
                     expenses: data,
@@ -54,7 +52,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

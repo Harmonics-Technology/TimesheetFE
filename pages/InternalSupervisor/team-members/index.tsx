@@ -1,22 +1,30 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import SupervisorTeamMember from '@components/subpages/SupervisorTeamMember';
+import TeamManagement from '@components/subpages/TeamManagement';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { UserService, UserView } from 'src/services';
+import {
+    LeaveConfigurationView,
+    LeaveService,
+    UserService,
+    UserView,
+    UserViewPagedCollectionStandardResponse,
+} from 'src/services';
 interface TeamProps {
-    teamList: UserView[];
-    id: string;
+    teamList: UserViewPagedCollectionStandardResponse;
+    clients: UserView[];
     paymentPartner: UserView[];
+    leaveSettings: LeaveConfigurationView;
 }
 
-function Team({ teamList, id, paymentPartner }: TeamProps) {
-    console.log({ teamList });
+function Team({ teamList, clients, paymentPartner, leaveSettings }: TeamProps) {
+    //
     return (
-        <SupervisorTeamMember
+        <TeamManagement
             adminList={teamList}
-            id={id}
+            clients={clients}
             paymentPartner={paymentPartner}
+            leaveSettings={leaveSettings}
         />
     );
 }
@@ -26,26 +34,34 @@ export default Team;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const id = JSON.parse(ctx.req.cookies.user).id;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const paymentPartner = await UserService.listUsers(
-                'payment partner',
-            );
-            const data = await UserService.getSupervisees(
+            const data = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
+                pagingOptions.from,
+                pagingOptions.to,
             );
-            console.log({ data });
+            const clients = await UserService.listUsers('client', superAdminId);
+            const paymentPartner = await UserService.listUsers(
+                'payment partner',
+                superAdminId,
+            );
+            const leaveSettings = await LeaveService.getLeaveConfiguration(
+                superAdminId,
+            );
             return {
                 props: {
                     teamList: data,
-                    id: id,
+                    clients: clients?.data?.value,
                     paymentPartner: paymentPartner?.data?.value,
+                    leaveSettings: leaveSettings.data,
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

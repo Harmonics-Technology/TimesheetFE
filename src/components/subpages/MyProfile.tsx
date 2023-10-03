@@ -19,6 +19,7 @@ import {
     FormControl,
     FormLabel,
     Switch,
+    Icon,
 } from '@chakra-ui/react';
 import React, { useContext, useRef, useState } from 'react';
 import { FaTimes, FaUser } from 'react-icons/fa';
@@ -30,6 +31,7 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { UserContext } from '@components/context/UserContext';
 import {
     AdminPaymentScheduleViewListStandardResponse,
+    ControlSettingView,
     Enable2FAView,
     PaymentSchedule,
     PaymentScheduleListStandardResponse,
@@ -49,6 +51,7 @@ import ConfirmModal from '@components/bits-utils/ConfirmModal';
 import ProfileConfirmModal from '@components/bits-utils/ProfileConfirmModal';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { BsCameraFill } from 'react-icons/bs';
+import { FcCancel } from 'react-icons/fc';
 import TableCards from '@components/bits-utils/TableCards';
 import { TableData } from '@components/bits-utils/TableData';
 import PaymentScheduleModal from '@components/bits-utils/PaymentScheduleModal';
@@ -68,11 +71,14 @@ const schema = yup.object().shape({
 function MyProfile({
     user,
     paymentSchedule,
+    controls,
 }: {
     user: any;
     paymentSchedule?: PaymentScheduleListStandardResponse;
+    controls?: ControlSettingView;
 }) {
-    console.log({ user });
+    //
+    const isTfa = controls?.twoFactorEnabled;
     const {
         register,
         handleSubmit,
@@ -127,10 +133,10 @@ function MyProfile({
         data.phoneNumber = user?.phoneNumber;
         data.role = user?.role;
         data.profilePicture = info?.cdnUrl;
-        console.log({ data });
+
         try {
             const result = await UserService.updateUser(data);
-            console.log({ result });
+
             if (result.status) {
                 toast({
                     title: 'Profile Picture Update Success',
@@ -138,7 +144,8 @@ function MyProfile({
                     isClosable: true,
                     position: 'top-right',
                 });
-                Cookies.set('user', JSON.stringify(result.data));
+
+                // Cookies.set('user', JSON.stringify(result.data));
                 callback();
                 return;
             }
@@ -151,7 +158,7 @@ function MyProfile({
             });
         } catch (error) {
             callback();
-            console.log(error);
+
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',
@@ -164,11 +171,9 @@ function MyProfile({
     const showLoadingState = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoading(true);
+                setShowLoading(true);
             });
             file.done((info) => {
-                console.log('File uploaded: ', info), setPictureUrl(info);
                 if (info) {
                     updatePicture(user, info, reloadPage);
                     // setShowLoading(false);
@@ -183,7 +188,7 @@ function MyProfile({
         }
         try {
             const result = await UserService.updateUser(data);
-            console.log({ result });
+
             if (result.status) {
                 toast({
                     title: 'Profile Update Success',
@@ -191,7 +196,7 @@ function MyProfile({
                     isClosable: true,
                     position: 'top-right',
                 });
-                Cookies.set('user', JSON.stringify(result.data));
+                // Cookies.set('user', JSON.stringify(result.data));
                 router.reload();
                 return;
             }
@@ -202,7 +207,6 @@ function MyProfile({
                 position: 'top-right',
             });
         } catch (error) {
-            console.log(error);
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',
@@ -222,7 +226,7 @@ function MyProfile({
     const [twofaState, settwofaState] = useState(
         user?.twoFactorEnabled || false,
     );
-    // console.log({ twoFaData, twofaState });
+    //
 
     const twoFaSubmitFun = async () => {
         setLoading(true);
@@ -230,7 +234,7 @@ function MyProfile({
             const result = await UserService.enable2Fa(twofaState);
             if (result.status) {
                 setLoading(false);
-                // console.log({ result });
+                //
                 if (result.data?.enable2FA) {
                     setTwoFaData(result.data);
                     onOpen2Fa();
@@ -264,9 +268,9 @@ function MyProfile({
         }
     };
 
-    useNonInitialEffect(() => {
-        twoFaSubmitFun();
-    }, [twofaState]);
+    // useNonInitialEffect(() => {
+    //     twoFaSubmitFun();
+    // }, [twofaState]);
 
     return (
         <Box>
@@ -565,6 +569,7 @@ function MyProfile({
                     boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
                     w="full"
                     mb="1.5rem"
+                    pos="relative"
                 >
                     <VStack align="flex-start" w={['full', '60%']} gap="1rem">
                         <Box>
@@ -572,6 +577,7 @@ function MyProfile({
                                 color="#484747"
                                 fontWeight="500"
                                 lineHeight="150%"
+                                mb="1rem"
                             >
                                 Two factor authentication
                             </Text>
@@ -664,6 +670,24 @@ function MyProfile({
                             </Box>
                         </form> */}
                     </VStack>
+                    {!isTfa && (
+                        <HStack
+                            pos="absolute"
+                            bgColor="rgba(250,250,250,.8)"
+                            w="full"
+                            h="full"
+                            top="0"
+                            justify="center"
+                            align="center"
+                            onClick={() => void 0}
+                        >
+                            <Icon as={FcCancel} />
+                            <Text>
+                                This feature has been disabled by your
+                                organization admin
+                            </Text>
+                        </HStack>
+                    )}
                 </Box>
 
                 <Box
@@ -679,9 +703,9 @@ function MyProfile({
                         color="white"
                         height="4rem"
                         fontSize="15px"
-                        type="submit"
+                        // type="submit"
                         isLoading={isSubmitting}
-                        onClick={() => handleSubmit(onSubmit)}
+                        onClick={handleSubmit(onSubmit)}
                         spinner={<BeatLoader color="white" size={10} />}
                         w="98%"
                         boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"

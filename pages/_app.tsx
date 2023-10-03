@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from '@definitions/chakra/theme';
@@ -13,6 +13,12 @@ import Cookies from 'js-cookie';
 import { OpenAPI } from 'src/services';
 import NextNProgress from 'nextjs-progressbar';
 import { UserProvider } from '@components/context/UserContext';
+import { MsalProvider } from '@azure/msal-react';
+import { PublicClientApplication } from '@azure/msal-browser';
+import { msalConfig } from '@components/authentication/msalConfig';
+import Script from 'next/script';
+
+const msalInstance = new PublicClientApplication(msalConfig);
 
 function MyApp({
     Component,
@@ -27,10 +33,7 @@ function MyApp({
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const loader = document.getElementById('globalLoader');
-            if (loader)
-                setTimeout(() => {
-                    loader.remove();
-                }, 1000);
+            if (loader) loader.remove();
         }
     }, []);
     return (
@@ -41,22 +44,30 @@ function MyApp({
                     content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
                 />
                 <title>Timesheet</title>
-                <link rel="icon" href="/assets/logo.png" type="image/x-icon" />
+                <link
+                    rel="icon"
+                    href="/assets/newfav.jpg"
+                    type="image/x-icon"
+                />
             </Head>
+
             <StyledThemeProvider>
                 <QueryClientProvider client={queryClient}>
                     <Hydrate state={pageProps.dehydratedState}>
                         <RootStoreProvider>
-                            <UserProvider>
-                                <NextNProgress color="#2EAFA3" />
-                                <Layout>
-                                    <Component {...pageProps} />
-                                </Layout>
-                            </UserProvider>
+                            <MsalProvider instance={msalInstance}>
+                                <UserProvider>
+                                    <NextNProgress color="#2EAFA3" />
+                                    <Layout>
+                                        <Component {...pageProps} />
+                                    </Layout>
+                                </UserProvider>
+                            </MsalProvider>
                         </RootStoreProvider>
                     </Hydrate>
                 </QueryClientProvider>
             </StyledThemeProvider>
+            <Script src="/asseccibility.js" strategy="beforeInteractive" />
         </ChakraProvider>
     );
 }

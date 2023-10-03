@@ -117,6 +117,22 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
                 </ModalHeader>
 
                 <ModalBody>
+                    <Table w="95%" mx="auto">
+                        <Thead>
+                            <Tr
+                                h="3rem"
+                                fontWeight="600"
+                                bgColor="brand.400"
+                                color="white"
+                            >
+                                <TableHead name="S/N" />
+                                <TableHead name="First Work Day" />
+                                <TableHead name="Last Work Day" />
+                                <TableHead name="Approval Date" />
+                                <TableHead name="Payment Date" />
+                            </Tr>
+                        </Thead>
+                    </Table>
                     <Box maxH="70vh" overflowY="auto" px={5}>
                         <TableContainer>
                             <Table
@@ -125,19 +141,6 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
                                 borderY="2px solid"
                                 borderColor="gray.200"
                             >
-                                <Thead>
-                                    <Tr
-                                        h="3rem"
-                                        fontWeight="600"
-                                        bgColor="brand.400"
-                                        color="white"
-                                    >
-                                        <TableHead name="First Work Day" />
-                                        <TableHead name="Last Work Day" />
-                                        <TableHead name="Approval Date" />
-                                        <TableHead name="Payment Date" />
-                                    </Tr>
-                                </Thead>
                                 <Tbody>
                                     {paymentSchedule?.data?.map(
                                         (x: PaymentSchedule, i) => (

@@ -16,20 +16,27 @@ import { BsFillInfoCircleFill } from 'react-icons/bs';
 interface TablesProps {
     tableHead: string[];
     children: ReactNode;
+    bg?: string;
+    color?: string;
 }
 
-function Tables({ tableHead, children }: TablesProps) {
-    console.log({ children });
+function Tables({ tableHead, children, bg, color = 'brand.200' }: TablesProps) {
+    //
     return (
         <TableContainer h="auto">
             <Table variant="striped" fontSize="11px">
                 <Thead>
-                    <Tr w="full" h="2rem" borderBottom="1px solid #f2f2f2">
+                    <Tr
+                        w="full"
+                        h="2rem"
+                        borderBottom="1px solid #f2f2f2"
+                        bgColor={bg}
+                    >
                         {tableHead.map((x, i) => (
                             <Th
                                 pl="1rem"
                                 fontSize="12px"
-                                color="brand.200"
+                                color={color}
                                 fontWeight="700"
                                 // color="gray.500"
                                 // textTransform="capitalize"

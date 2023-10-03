@@ -89,7 +89,7 @@ function InvoiceTemplate({
                                 )}.pdf`}
                                 author="KendoReact Team"
                             >
-                                <Text>Pro Insight Technology</Text>
+                                {/* <Text>Pro Insight Technology</Text> */}
                                 <Flex
                                     bgColor="brand.400"
                                     color="white"
@@ -120,9 +120,15 @@ function InvoiceTemplate({
                                             Billed To
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
-                                            Pro insight technology <br />
-                                            201 New York Ibeju Leki, 201
-                                            New-York Ibeju Leki
+                                            {
+                                                clicked?.employeeInformation
+                                                    ?.client?.organizationName
+                                            }{' '}
+                                            <br />
+                                            {
+                                                clicked?.employeeInformation
+                                                    ?.client?.address
+                                            }
                                         </Text>
                                         {/* <Text fontSize=".9rem" fontWeight="600">
                                     Address

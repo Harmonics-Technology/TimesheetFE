@@ -12,6 +12,7 @@ import {
     addMonths,
     lastDayOfMonth,
     isWeekend,
+    eachDayOfInterval,
 } from 'date-fns';
 
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
@@ -53,6 +54,12 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import useClickOutside from '@components/generics/useClickOutside';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { Round } from '@components/generics/functions/Round';
+import { TimeSheetHighlight } from '@components/bits-utils/TimeSheetHighlight';
+import dynamic from 'next/dynamic';
+import { TabMenuTimesheet } from '@components/bits-utils/ProjectManagement/Generics/TabMenuTimesheet';
+const Selectrix = dynamic<any>(() => import('react-selectrix'), {
+    ssr: false,
+});
 
 interface approveDate {
     userId: string;
@@ -69,15 +76,48 @@ const schema = yup.object().shape({
 const TimesheetSupervisor = ({
     timeSheets,
     id,
+    payPeriod,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
+    payPeriod: any;
 }) => {
-    console.log({ id });
     const router = useRouter();
-    console.log({ timeSheets });
-    const sheet = timeSheets?.timeSheet;
+
     const { date } = router.query;
+    const { end } = router.query;
+
+    const HighlightDate = (value: any) => {
+        router.push({
+            query: {
+                ...router.query,
+                date: value?.split(' - ')[0] || new Date(),
+                end: value?.split(' - ')[1] || new Date(),
+            },
+        });
+    };
+    const dates = eachDayOfInterval({
+        start: new Date(
+            moment(date as string).format('MM/DD/YYYY') ||
+                (moment() as unknown as string),
+        ),
+        end: new Date(
+            moment((end as string) || (date as string)).format(
+                'MM/DD/YYYY',
+            ) as unknown as string,
+        ),
+    });
+    const newDates = dates?.map((x) => moment(x).format('DD/MM/YY'));
+
+    const newOptions = payPeriod?.map((obj) => ({
+        id: `${obj.weekDate} - ${obj.lastWorkDayOfCycle}`,
+        label: `${moment(obj.weekDate).format('MMM DD')} - ${moment(
+            obj.lastWorkDayOfCycle,
+        ).format('MMM DD, YYYY')}`,
+    }));
+
+    //
+    const sheet = timeSheets?.timeSheet;
     const newDate = new Date(date as unknown as string);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [activeDate, setActiveDate] = useState(
@@ -98,7 +138,7 @@ const TimesheetSupervisor = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    // console.log({ totalHours });
+    //
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
@@ -108,9 +148,9 @@ const TimesheetSupervisor = ({
 
     const [loading, setLoading] = useState(false);
     const [allChecked, setAllChecked] = useState<boolean>(false);
-    // console.log({ allChecked });
+    //
     const preventTomorrow = addDays(new Date(), 1).toISOString();
-    console.log({ preventTomorrow });
+
     const [selected, setSelected] = useState<TimesheetHoursApprovalModel[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
 
@@ -119,7 +159,7 @@ const TimesheetSupervisor = ({
             moment(x.date).format('DD/MM/YYYY') !=
                 moment(preventTomorrow).format('DD/MM/YYYY') && !x.isApproved,
     );
-    // console.log({ selectedInput });
+    //
     const fillSelectedDate = (item: TimesheetHoursApprovalModel) => {
         const existingValue = selected.find((e) => e.date == item.date);
         if (existingValue) {
@@ -152,7 +192,6 @@ const TimesheetSupervisor = ({
         }
         setSelectedInput([...selectedInput, item]);
     };
-    console.log({ selected });
 
     const {
         register,
@@ -167,7 +206,6 @@ const TimesheetSupervisor = ({
 
     const [reject, setReject] = useState<any>([]);
     const showReject = (userId, chosenDate) => {
-        console.log({ chosenDate });
         const existing = reject.find((x) => x.userId == userId);
         if (existing) {
             setReject(reject.filter((x) => x.user !== userId));
@@ -184,7 +222,7 @@ const TimesheetSupervisor = ({
                 date: x.chosenDate,
             };
         });
-        console.log({ data });
+
         try {
             const result = await TimeSheetService.rejectTimeSheetForADay(
                 id,
@@ -192,13 +230,11 @@ const TimesheetSupervisor = ({
                 data,
             );
             if (result.status) {
-                console.log({ result });
                 router.reload();
                 return;
             }
-            console.log({ result });
         } catch (error: any) {
-            // console.log({ error });
+            //
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -208,7 +244,7 @@ const TimesheetSupervisor = ({
     };
 
     const approveTimeSheetForADay = async (userId, chosenDate) => {
-        // console.log({ item });
+        //
         try {
             const data = await TimeSheetService.approveTimeSheetForADay(
                 userId,
@@ -225,19 +261,19 @@ const TimesheetSupervisor = ({
             });
             return;
         } catch (error) {
-            console.log(error);
+            //
         }
     };
 
     const addHours = async (item) => {
-        // console.log({ userId, chosenDate, hours });
+        //
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
                 item.chosenDate,
                 item.hours,
             );
-            console.log({ data });
+
             if (data.status) {
                 return;
             }
@@ -248,7 +284,6 @@ const TimesheetSupervisor = ({
             });
             return;
         } catch (error: any) {
-            console.log(error);
             toast({
                 status: 'error',
                 title: error.body.message || error.message,
@@ -273,7 +308,7 @@ const TimesheetSupervisor = ({
                     selected.at(0)?.date,
                     selected,
                 );
-                console.log({ data });
+
                 if (data.status) {
                     setLoading(false);
                     toast({
@@ -291,7 +326,6 @@ const TimesheetSupervisor = ({
                 });
                 return;
             } catch (error: any) {
-                console.log(error);
                 toast({
                     status: 'error',
                     title: error.body.message || error.message,
@@ -360,6 +394,7 @@ const TimesheetSupervisor = ({
             query: {
                 ...router.query,
                 date: moment(addMonths(activeDate, 1)).format('YYYY-MM-DD'),
+                end: undefined,
             },
         });
         router.reload();
@@ -369,6 +404,7 @@ const TimesheetSupervisor = ({
             query: {
                 ...router.query,
                 date: moment(subMonths(activeDate, 1)).format('YYYY-MM-DD'),
+                end: undefined,
             },
         });
         router.reload();
@@ -557,11 +593,19 @@ const TimesheetSupervisor = ({
             useClickOutside(popover, close);
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
-            // console.log({ timesheets });
+            //
 
             week.push(
                 <Flex
-                    border={['0', '1px solid #e5e5e5']}
+                    border={[
+                        '0',
+                        newDates?.length > 1 &&
+                        newDates.includes(
+                            moment(userDate as string).format('DD/MM/YY'),
+                        )
+                            ? '0.1rem solid rgba(46, 175, 163, .7)'
+                            : '1px solid #e5e5e5',
+                    ]}
                     height={['auto', '4rem']}
                     // color={['gray.500', 'inherit']}
                     fontSize={['.5rem', '.8rem']}
@@ -874,7 +918,14 @@ const TimesheetSupervisor = ({
         );
     };
     return (
-        <Box>
+        <Box pos="relative">
+            <TabMenuTimesheet
+                name={[
+                    { title: 'Calendar View', url: `${id}` },
+                    { title: 'Task View', url: `task/${id}` },
+                ]}
+            />
+            <TimeSheetHighlight />
             <Box>
                 {getHeader()}
                 <Box p={['0rem 1rem 0', '1rem 2rem 0']} bgColor="white">
@@ -901,6 +952,24 @@ const TimesheetSupervisor = ({
                 mb={['3rem', '0']}
                 p={['1rem 1rem', '1rem 2rem']}
             >
+                <Box w="40%" mb="2rem">
+                    <Text fontSize=".8rem" fontWeight={500} mb=".3rem">
+                        Pay Period
+                    </Text>
+                    <Selectrix
+                        placeholder={`${moment(date).format(
+                            'MMM DD,',
+                        )} - ${moment(
+                            end || lastDayOfMonth(new Date(date as string)),
+                        ).format('MMM DD, YYYY')}`}
+                        customKeys={{
+                            key: 'id',
+                            label: 'label',
+                        }}
+                        options={newOptions}
+                        onChange={(e) => HighlightDate(e.key)}
+                    />
+                </Box>
                 <Flex
                     w="100%"
                     mr="auto"

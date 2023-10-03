@@ -64,8 +64,8 @@ function PayrollInvoice({
     const hst =
         calculatePercentage(allInvoiceTotal, clicked?.hst) / exchangeRate;
     const hstNaira = hst * exchangeRate;
-    // console.log({ allInvoiceTotal, hst, hstNaira });
-    // console.log({ clicked });
+    //
+    //
     const [loading, setLoading] = useState<boolean>(false);
     const toast = useToast();
     const router = useRouter();
@@ -77,7 +77,6 @@ function PayrollInvoice({
                 clicked?.id,
             );
             if (result.status) {
-                console.log({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -97,7 +96,6 @@ function PayrollInvoice({
                 position: 'top-right',
             });
         } catch (error: any) {
-            console.log({ error });
             setLoading(false);
             toast({
                 title: error.body.message || error.message,
@@ -142,7 +140,7 @@ function PayrollInvoice({
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Box overflowY="auto" px={5} maxH="80vh">
+                        <Box maxH="70vh">
                             <PDFExport
                                 ref={ref}
                                 paperSize="A4"
@@ -194,85 +192,91 @@ function PayrollInvoice({
                                 </Text> */}
                                     </Box>
                                 </Flex>
-                                <Box
-                                    my="2rem"
-                                    border="1px solid"
-                                    borderColor="gray.300"
-                                    borderX="none"
-                                >
-                                    <Tables
-                                        tableHead={[
-                                            'Name',
-                                            'Pay Period',
-                                            'Amount (₦)',
-                                            'Amount ($)',
-                                            // 'Fees',
-                                            // 'Total',
-                                        ]}
+                                <Box overflowY="auto" px={5} maxH="50vh">
+                                    <Box
+                                        my="2rem"
+                                        border="1px solid"
+                                        borderColor="gray.300"
+                                        borderX="none"
                                     >
-                                        <>
-                                            {clicked?.children?.map((x, i) => (
-                                                <>
-                                                    <Tr key={i}>
-                                                        <TableData
-                                                            name={x?.name}
-                                                        />
-                                                        <TableData
-                                                            name={`${formatDate(
-                                                                x?.startDate,
-                                                            )} - ${formatDate(
-                                                                x?.endDate,
-                                                            )}`}
-                                                        />
-                                                        <TableData
-                                                            name={`${Naira(
-                                                                (x?.totalAmount as number) -
-                                                                    (
-                                                                        x?.expenses as unknown as ExpenseView[]
-                                                                    )?.reduce(
-                                                                        (
-                                                                            a,
-                                                                            b,
-                                                                        ) =>
-                                                                            a +
-                                                                            (b?.amount as number),
-                                                                        0,
-                                                                    ),
-                                                            )} ${
-                                                                x?.expenses
-                                                                    ?.length !==
-                                                                0
-                                                                    ? `+ ${Naira(
-                                                                          x.expenses?.reduce(
-                                                                              (
-                                                                                  a,
-                                                                                  b,
-                                                                              ) =>
-                                                                                  a +
-                                                                                  (b?.amount as number),
-                                                                              0,
-                                                                          ),
-                                                                      )}`
-                                                                    : ''
-                                                            }`}
-                                                            classes={
-                                                                x?.expenses
-                                                                    ?.length !==
-                                                                0
-                                                                    ? 'green'
-                                                                    : ''
-                                                            }
-                                                        />
+                                        <Tables
+                                            tableHead={[
+                                                'Name',
+                                                'Pay Period',
+                                                'Amount (₦)',
+                                                'Amount ($)',
+                                                // 'Fees',
+                                                // 'Total',
+                                            ]}
+                                        >
+                                            <>
+                                                {clicked?.children?.map(
+                                                    (x, i) => (
+                                                        <>
+                                                            <Tr key={i}>
+                                                                <TableData
+                                                                    name={
+                                                                        x?.name
+                                                                    }
+                                                                />
+                                                                <TableData
+                                                                    name={`${formatDate(
+                                                                        x?.startDate,
+                                                                    )} - ${formatDate(
+                                                                        x?.endDate,
+                                                                    )}`}
+                                                                />
+                                                                <TableData
+                                                                    name={`${Naira(
+                                                                        (x?.totalAmount as number) -
+                                                                            (
+                                                                                x?.expenses as unknown as ExpenseView[]
+                                                                            )?.reduce(
+                                                                                (
+                                                                                    a,
+                                                                                    b,
+                                                                                ) =>
+                                                                                    a +
+                                                                                    (b?.amount as number),
+                                                                                0,
+                                                                            ),
+                                                                    )} ${
+                                                                        x
+                                                                            ?.expenses
+                                                                            ?.length !==
+                                                                        0
+                                                                            ? `+ ${Naira(
+                                                                                  x.expenses?.reduce(
+                                                                                      (
+                                                                                          a,
+                                                                                          b,
+                                                                                      ) =>
+                                                                                          a +
+                                                                                          (b?.amount as number),
+                                                                                      0,
+                                                                                  ),
+                                                                              )}`
+                                                                            : ''
+                                                                    }`}
+                                                                    classes={
+                                                                        x
+                                                                            ?.expenses
+                                                                            ?.length !==
+                                                                        0
+                                                                            ? 'green'
+                                                                            : ''
+                                                                    }
+                                                                />
 
-                                                        <TableData
-                                                            name={CAD(
-                                                                Round(
-                                                                    (x?.totalAmount as number) /
-                                                                        exchangeRate,
-                                                                ),
-                                                            )}
-                                                        />
-                                                        {/* <TableData
+                                                                <TableData
+                                                                    name={CAD(
+                                                                        Round(
+                                                                            (x?.totalAmount as number) /
+                                                                                exchangeRate,
+                                                                        ),
+                                                                    )}
+                                                                />
+                                                                {/* <TableData
                                                             name={CAD(
                                                                 x
                                                                     .employeeInformation
@@ -290,7 +294,7 @@ function PayrollInvoice({
                                                                           ?.onBoradingFee,
                                                             )}
                                                         /> */}
-                                                        {/* <TableData
+                                                                {/* <TableData
                                                             name={
                                                                 x
                                                                     .employeeInformation
@@ -310,69 +314,70 @@ function PayrollInvoice({
                                                                       (x?.totalAmount as number)
                                                             }
                                                         /> */}
-                                                        {/* <TableData
+                                                                {/* <TableData
                                                             name={
                                                                 clicked?.totalPay
                                                             }
                                                         /> */}
-                                                    </Tr>
-                                                </>
-                                            ))}
-                                        </>
-                                    </Tables>
-                                </Box>
-                                <Box w="30%">
-                                    <InputBlank
-                                        defaultValue={
-                                            exchangeRate as unknown as string
-                                        }
-                                        placeholder=""
-                                        label="Exchange Rate"
-                                        fontSize=".8rem"
-                                    />
-                                </Box>
-                                <Box w="fit-content" ml="auto">
-                                    <Flex
-                                        flexDirection="column"
-                                        w="fit-content"
-                                    >
-                                        <InvoiceTotalText
-                                            label="Subtotal"
-                                            cur={'$'}
-                                            value={CUR(
-                                                Round(
-                                                    allInvoiceTotal /
-                                                        exchangeRate,
-                                                ),
-                                            )}
+                                                            </Tr>
+                                                        </>
+                                                    ),
+                                                )}
+                                            </>
+                                        </Tables>
+                                    </Box>
+                                    <Box w="30%">
+                                        <InputBlank
+                                            defaultValue={
+                                                exchangeRate as unknown as string
+                                            }
+                                            placeholder=""
+                                            label="Exchange Rate"
+                                            fontSize=".8rem"
                                         />
-                                        <InvoiceTotalText
-                                            label="Hst"
-                                            value={CUR(Round(hst))}
-                                            cur="$"
-                                            hst={clicked?.hst}
-                                        />
-                                        <Box
-                                            border="2px dashed"
-                                            borderColor="gray.300"
-                                            borderX="none"
-                                            pt="1em"
+                                    </Box>
+                                    <Box w="fit-content" ml="auto">
+                                        <Flex
+                                            flexDirection="column"
+                                            w="fit-content"
                                         >
                                             <InvoiceTotalText
+                                                label="Subtotal"
                                                 cur={'$'}
-                                                label="Total"
                                                 value={CUR(
                                                     Round(
-                                                        (allInvoiceTotal +
-                                                            hstNaira) /
+                                                        allInvoiceTotal /
                                                             exchangeRate,
                                                     ),
                                                 )}
                                             />
-                                        </Box>
-                                    </Flex>
-                                </Box>
-                                {/* <Text
+                                            <InvoiceTotalText
+                                                label="Hst"
+                                                value={CUR(Round(hst))}
+                                                cur="$"
+                                                hst={clicked?.hst}
+                                            />
+                                            <Box
+                                                border="2px dashed"
+                                                borderColor="gray.300"
+                                                borderX="none"
+                                                pt="1em"
+                                            >
+                                                <InvoiceTotalText
+                                                    cur={'$'}
+                                                    label="Total"
+                                                    value={CUR(
+                                                        Round(
+                                                            (allInvoiceTotal +
+                                                                hstNaira) /
+                                                                exchangeRate,
+                                                        ),
+                                                    )}
+                                                />
+                                            </Box>
+                                        </Flex>
+                                    </Box>
+                                    {/* <Text
                                     textAlign="center"
                                     fontSize=".7rem"
                                     my="2rem"
@@ -382,6 +387,7 @@ function PayrollInvoice({
                                         'YYYY-MM-DD HH:mm:ss',
                                     )}
                                 </Text> */}
+                                </Box>
                             </PDFExport>
                         </Box>
                         <HStack justify="center" mt="4rem">

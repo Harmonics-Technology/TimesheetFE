@@ -18,4 +18,7 @@ export type RegisterModel = {
     organizationAddress?: string | null;
     invoiceGenerationFrequency?: string | null;
     term?: number | null;
+    clientSubscriptionId?: string | null;
+    commandCenterClientId?: string | null;
+    superAdminId?: string | null;
 };

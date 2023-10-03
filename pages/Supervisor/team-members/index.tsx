@@ -11,7 +11,6 @@ interface TeamProps {
 }
 
 function Team({ teamList, id, paymentPartner }: TeamProps) {
-    console.log({ teamList });
     return (
         <SupervisorTeamMember
             adminList={teamList}
@@ -27,9 +26,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         const id = JSON.parse(ctx.req.cookies.user).id;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
+                superAdminId,
             );
             const data = await UserService.getSupervisees(
                 pagingOptions.offset,
@@ -39,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
-            console.log({ data });
+
             return {
                 props: {
                     teamList: data,
@@ -48,7 +49,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

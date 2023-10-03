@@ -6,7 +6,11 @@ import TimesheetTeam from '@components/subpages/TimesheetTeam';
 import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { TimeSheetMonthlyView, TimeSheetService } from 'src/services';
+import {
+    FinancialService,
+    TimeSheetMonthlyView,
+    TimeSheetService,
+} from 'src/services';
 interface Size {
     width: number | undefined;
     height: number | undefined;
@@ -15,9 +19,11 @@ interface Size {
 function SingleTimeSheet({
     timeSheets,
     id,
+    payPeriod,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
+    payPeriod: any;
 }) {
     const size: Size = useWindowSize();
 
@@ -26,7 +32,11 @@ function SingleTimeSheet({
             {/* {size.width != null && size.width <= 1025 ? (
                 <HidePage />
             ) : ( */}
-            <TimesheetTeam timeSheets={timeSheets} id={id} />
+            <TimesheetTeam
+                timeSheets={timeSheets}
+                id={id}
+                payPeriod={payPeriod}
+            />
             {/* )} */}
         </>
     );
@@ -36,31 +46,34 @@ export default SingleTimeSheet;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        // console.log({
-        //     ctx: JSON.parse(ctx.req.cookies.user).employeeInformationId,
-        // });
         const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
-        // console.log({ id });
-
+        const { end } = ctx.query;
         let { date } = ctx.query;
         if (date === undefined) {
-            date = moment(new Date()).format('YYYY-MM-DD');
+            date = new Date();
         }
 
+        date = moment(date).format('YYYY-MM-DD');
+
         try {
-            const data = await TimeSheetService.getTimeSheet(id, date);
-            console.log({ data });
+            const data = await TimeSheetService.getTimeSheet(id, date, end);
+            const payPeriod = await FinancialService.getPayScheduleInAMonth(
+                id,
+                date,
+            );
+            //
             return {
                 props: {
                     timeSheets: data.data,
+                    payPeriod: payPeriod.data,
                     id,
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],
+                    payPeriod: [],
                 },
             };
         }

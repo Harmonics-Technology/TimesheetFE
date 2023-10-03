@@ -36,7 +36,7 @@ function ForgotPassword() {
         try {
             const result = await UserService.initiateReset('', data);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: result.message,
                     status: 'success',
@@ -53,7 +53,6 @@ function ForgotPassword() {
                 position: 'top-right',
             });
         } catch (error) {
-            console.log({ error });
             toast({
                 title: `check your network connection and try again`,
                 status: 'error',
@@ -72,7 +71,7 @@ function ForgotPassword() {
                 p="1rem 3rem 4rem"
             >
                 <Box display="flex" justifyContent="center" w="full" my="2rem">
-                    <Image src="/assets/logo.png" h="3rem" />
+                    <Image src="/assets/newlogo.png" h="3rem" />
                 </Box>
                 <Text
                     fontSize="35px"

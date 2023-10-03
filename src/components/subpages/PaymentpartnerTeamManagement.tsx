@@ -94,7 +94,7 @@ const schema = yup.object().shape({
 
 function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
     const client = clients?.filter((x) => x.isActive);
-    console.log({ client });
+
     const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);
 
     const {
@@ -115,11 +115,11 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    // console.log(watch("payRollTypeId"));
+    //
     const payroll = watch('payRollTypeId');
     const clientId = watch('clientId');
     const onboarding = watch('fixedAmount');
-    // console.log({ payroll });
+    //
 
     const [contract, setContractFile] = useState<any>('');
     const [icd, setIcd] = useState<any>('');
@@ -141,52 +141,40 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
     const showLoadingStateB = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingB(true);
+                setShowLoadingB(true);
             });
             file.done((info) => {
-                setShowLoadingB(false),
-                    console.log('File uploaded: ', info),
-                    setIcd(info);
+                setShowLoadingB(false), setIcd(info);
             });
         }
     };
     const showLoadingStateC = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingC(true);
+                setShowLoadingC(true);
             });
             file.done((info) => {
-                setShowLoadingC(false),
-                    console.log('File uploaded: ', info),
-                    setVoidCheck(info);
+                setShowLoadingC(false), setVoidCheck(info);
             });
         }
     };
     const showLoadingStateD = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoadingD(true);
+                setShowLoadingD(true);
             });
             file.done((info) => {
-                setShowLoadingD(false),
-                    console.log('File uploaded: ', info),
-                    setInc(info);
+                setShowLoadingD(false), setInc(info);
             });
         }
     };
     const showLoadingState = (file) => {
         if (file) {
             file.progress((info) => {
-                console.log('File progress: ', info.progress),
-                    setShowLoading(true);
+                setShowLoading(true);
             });
             file.done((info) => {
-                setShowLoading(false),
-                    console.log('File uploaded: ', info),
-                    setContractFile(info);
+                setShowLoading(false), setContractFile(info);
             });
         }
     };
@@ -200,11 +188,11 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
             return;
         }
         setLoading(true);
-        console.log({ id });
+
         try {
             const data = await UserService.getSupervisors(id);
             setLoading(false);
-            console.log({ data });
+
             if (data.status) {
                 setSupervisors(data.data?.filter((x) => x.isActive));
                 return;
@@ -220,13 +208,10 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
             });
         }
     };
-    console.log({ supervisors });
 
     useEffect(() => {
         getSupervisor(clientId);
     }, [clientId]);
-
-    console.log({ supervisors });
 
     const onSubmit = async (data: TeamMemberModel) => {
         if (data.fixedAmount == true) {
@@ -265,7 +250,6 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                 : (data.monthlyPayoutRate as number);
         }
         data.clientId = null;
-        console.log({ data });
 
         if (data.supervisorId === undefined || '') {
             toast({
@@ -285,8 +269,6 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
             });
             return;
         }
-
-        console.log({ data });
 
         try {
             const result = await UserService.addTeamMember(data);
@@ -309,7 +291,6 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
             });
             return;
         } catch (err: any) {
-            console.log({ err });
             toast({
                 title: err.body.message || err.message,
                 status: 'error',

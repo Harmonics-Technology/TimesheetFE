@@ -66,7 +66,7 @@ export const SwapRequestModal = ({
     });
     // employee = employee.data?.value;
 
-    // console.log({ data });
+    //
 
     const router = useRouter();
     const toast = useToast();
@@ -77,14 +77,13 @@ export const SwapRequestModal = ({
     const [employeeShift, setEmployeeShift] = useState<any>();
     const [loading, setLoading] = useState<any>();
     const [selected, setSelected] = useState<any>();
-    console.log({ selected });
 
     const getEmployeeShift = async (id: any) => {
         if (id === undefined) {
             return;
         }
         setLoading(true);
-        console.log({ id });
+
         try {
             const data = await ShiftService.getUserShift(
                 0,
@@ -94,7 +93,7 @@ export const SwapRequestModal = ({
                 id,
             );
             setLoading(false);
-            console.log({ data });
+
             if (data.status) {
                 setEmployeeShift(data.data?.value);
                 return;
@@ -116,7 +115,6 @@ export const SwapRequestModal = ({
     }, [selectedUser]);
 
     const onSubmit = async (data: ExportProps) => {
-        console.log({ data });
         try {
             const result = await ShiftService.swapShift(
                 data.shiftId as string,
@@ -207,7 +205,6 @@ export const SwapRequestModal = ({
                                         'Select the day and shift you want swap'
                                     }
                                     renderOption={(option, index) => {
-                                        console.log({ option });
                                         return (
                                             <>
                                                 {option ? (
@@ -239,7 +236,7 @@ export const SwapRequestModal = ({
                                         settings,
                                         deselect,
                                     ) => {
-                                        // console.log({ selected });
+                                        //
                                         return (
                                             <Box className="react-selectrix rs-toggle">
                                                 <Flex gap=".4rem">
@@ -301,7 +298,7 @@ export const SwapRequestModal = ({
                                         }}
                                         placeholder={'Select the shift'}
                                         renderOption={(option, index) => {
-                                            // console.log({ option });
+                                            //
                                             return (
                                                 <Flex key={index} gap=".4rem">
                                                     {`${moment(

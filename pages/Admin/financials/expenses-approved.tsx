@@ -29,7 +29,7 @@ function expenses({ expenses, team, expenseType }: ExpensesType) {
             <Flex>
                 <PageTabs
                     url={`/${role}/financials/expenses`}
-                    tabName="Reviewed"
+                    tabName="Awaiting Approval"
                 />
                 <PageTabs
                     url={`/${role}/financials/expenses-approved`}
@@ -50,17 +50,22 @@ export default expenses;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const team = await UserService.listUsers('Team Member');
+            const team = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
+            );
             const expenseType = await SettingsService.listExpenseTypes();
             const data = await FinancialService.listAllApprovedExpenses(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 pagingOptions.search,
             );
             // const data = await SettingsService.listExpenseTypes();
 
-            console.log({ team, expenseType, data });
+            //
             return {
                 props: {
                     expenses: data,
@@ -69,7 +74,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
-            console.log(error);
             return {
                 props: {
                     data: [],

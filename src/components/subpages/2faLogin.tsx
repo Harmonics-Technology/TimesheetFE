@@ -48,7 +48,6 @@ function TwofaLogin() {
                     twoFactorCode,
                 )) as UserViewStandardResponse;
             if (result.status) {
-                console.log({ result });
                 toast({
                     title: `Login Successful`,
                     status: 'success',
@@ -94,7 +93,7 @@ function TwofaLogin() {
                 p="1rem 3rem 4rem"
             >
                 <Box display="flex" justifyContent="center" w="full" my="2rem">
-                    <Image src="/assets/logo.png" h="3rem" />
+                    <Image src="/assets/newlogo.png" h="3rem" />
                 </Box>
 
                 <form onSubmit={handleSubmit(onSubmit)}>

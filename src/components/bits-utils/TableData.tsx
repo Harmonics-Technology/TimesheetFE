@@ -12,6 +12,7 @@ import {
     Tooltip,
     Icon,
     Text,
+    Tr,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import NextLink from 'next/link';
@@ -33,7 +34,9 @@ import fileDownload from 'js-file-download';
 import { UserContext } from '@components/context/UserContext';
 import { BiTrash } from 'react-icons/bi';
 import { MdVerified, MdCancel } from 'react-icons/md';
-import { BsEye } from 'react-icons/bs';
+import { BsEye, BsPencil } from 'react-icons/bs';
+import { RiInboxArchiveFill } from 'react-icons/ri';
+import shadeColor from '@components/generics/functions/shadeColor';
 
 export function TableHead({
     name,
@@ -65,6 +68,10 @@ export function TableData({
     borderColor,
     classes,
     full,
+    fontWeight = '400',
+    customColor,
+    breakWord,
+    onClick,
 }: {
     name: any;
     border?: boolean | undefined;
@@ -72,6 +79,10 @@ export function TableData({
     borderColor?: string;
     classes?: any;
     full?: boolean;
+    fontWeight?: string;
+    customColor?: any;
+    breakWord?: any;
+    onClick?: any;
 }) {
     return (
         <Td
@@ -80,7 +91,11 @@ export function TableData({
             borderRightColor={borderColor}
             paddingInlineStart="1rem"
             className={classes}
-            // maxW="120px"
+            fontWeight={fontWeight}
+            maxW={breakWord ? '150px' : 'unset'}
+            textTransform="capitalize"
+            onClick={onClick}
+            cursor="pointer"
             // textOverflow=""
             // overflow="hidden"
             // noOfLines={1}
@@ -89,13 +104,24 @@ export function TableData({
                     ? 'brand.700'
                     : name == 'ONSHORE'
                     ? 'brand.400'
+                    : customColor
+                    ? customColor
                     : 'black'
             }
         >
             <Tooltip label={name} hasArrow>
-                {full ? name : name?.toString()?.substring(0, 20) || ''}
+                <Text whiteSpace={breakWord ? 'normal' : 'unset'}>
+                    {full ? name : name?.toString()?.substring(0, 20) || ''}
+                </Text>
             </Tooltip>
         </Td>
+    );
+}
+export function TableRow({ children, bg }: { children: any; bg?: string }) {
+    return (
+        <Tr border="1px solid #EFEFEF" bgColor={bg || 'white'}>
+            {children}
+        </Tr>
     );
 }
 export function TableDataShiftDate({
@@ -174,7 +200,9 @@ export function TableState({ name }: { name: string | undefined | null }) {
                         ? 'brand.400'
                         : name == 'PENDING'
                         ? 'brand.700'
-                        : name == 'REVIEWED' || name == 'SUBMITTED'
+                        : name == 'REVIEWED' ||
+                          name == 'SUBMITTED' ||
+                          name == 'REVIEWING'
                         ? 'brand.600'
                         : name == 'INVOICED'
                         ? '#28a3ef'
@@ -195,8 +223,34 @@ export function TableState({ name }: { name: string | undefined | null }) {
         </td>
     );
 }
+export function NewTableState({
+    name,
+    color,
+}: {
+    name: string | undefined | null;
+    color: any;
+}) {
+    //
+    return (
+        <td>
+            <Box
+                fontSize=".75rem"
+                bgColor={shadeColor(color, 0.3)}
+                borderRadius="4px"
+                color={color}
+                fontWeight="500"
+                padding=".4rem .4rem"
+                width="fit-content"
+                cursor="pointer"
+                textTransform="capitalize"
+            >
+                {name || 'Inactive'}
+            </Box>
+        </td>
+    );
+}
 export function TableContract({ url }: { url: any }) {
-    // console.log({ url });
+    //
     const [loading, setLoading] = useState(false);
     const downloadFile = (url: string) => {
         setLoading(true);
@@ -236,12 +290,12 @@ export function TableActions({
     const toast = useToast();
     const [loading, setLoading] = useState(false);
     const resendInvite = async (data: InitiateResetModel) => {
-        // console.log(data.email);
+        //
         try {
             setLoading(true);
             const result = await UserService.resendInvite(data);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: 'Invite Sent',
                     status: 'success',
@@ -302,10 +356,16 @@ export function LeaveActions({
     id,
     route,
     click,
+    type,
+    data,
+    edit,
 }: {
     id: any;
     route: any;
     click?: any;
+    type?: any;
+    data?: any;
+    edit?: any;
 }) {
     const toast = useToast();
     const [loading, setLoading] = useState(false);
@@ -317,7 +377,7 @@ export function LeaveActions({
             setLoading(true);
             const result = await LeaveService.treatLeave(id, type);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: result.message,
                     status: 'success',
@@ -346,12 +406,12 @@ export function LeaveActions({
         }
     };
 
-    const deleteLeave = async (id) => {
+    const deleteLeave = async (id, service) => {
         try {
             setLoading(true);
-            const result = await LeaveService.deleteLeave(id);
+            const result = await service(id);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: result.message,
                     status: 'success',
@@ -395,14 +455,29 @@ export function LeaveActions({
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
-                    {(route != `/${role}/leave-management` ||
-                        role == 'Supervisor' ||
-                        role == 'SuperAdmin') && (
+                    <MenuItem onClick={click} w="full">
+                        <Icon as={BsEye} mr=".5rem" color="brand.400" />
+                        View
+                    </MenuItem>
+                    {type == 'asTeam' && data.status == 'PENDING' && (
+                        <MenuItem onClick={edit} w="full">
+                            <Icon as={BsPencil} mr=".5rem" color="brand.400" />
+                            Edit
+                        </MenuItem>
+                    )}
+                    {type == 'asTeam' && data.status == 'APPROVED' && (
+                        <MenuItem
+                            onClick={() =>
+                                deleteLeave(id, LeaveService.cancelLeave)
+                            }
+                            w="full"
+                        >
+                            <Icon as={MdCancel} mr=".5rem" color="#D62242" />
+                            Request Cancellation
+                        </MenuItem>
+                    )}
+                    {type == 'asAdmin' && (
                         <>
-                            <MenuItem onClick={click} w="full">
-                                <Icon as={BsEye} mr=".5rem" color="brand.400" />
-                                View
-                            </MenuItem>
                             <MenuItem
                                 onClick={() => treatLeave(id, 1)}
                                 w="full"
@@ -425,12 +500,44 @@ export function LeaveActions({
                                 />{' '}
                                 Decline
                             </MenuItem>
+
+                            <MenuItem
+                                onClick={() =>
+                                    deleteLeave(id, LeaveService.deleteLeave)
+                                }
+                                w="full"
+                            >
+                                <Icon as={BiTrash} mr=".5rem" color="#D62242" />
+                                Delete
+                            </MenuItem>
                         </>
                     )}
-                    <MenuItem onClick={() => deleteLeave(id)} w="full">
-                        <Icon as={BiTrash} mr=".5rem" color="#D62242" />
-                        Delete
-                    </MenuItem>
+                    {type == 'asCancel' && (
+                        <>
+                            <MenuItem
+                                onClick={() => treatLeave(id, 3)}
+                                w="full"
+                            >
+                                <Icon
+                                    as={MdVerified}
+                                    mr=".5rem"
+                                    color="brand.400"
+                                />
+                                Approve
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => treatLeave(id, 4)}
+                                w="full"
+                            >
+                                <Icon
+                                    as={MdCancel}
+                                    mr=".5rem"
+                                    color="#FF5B79"
+                                />{' '}
+                                Decline
+                            </MenuItem>
+                        </>
+                    )}
                 </MenuList>
             </Menu>
         </td>
@@ -447,7 +554,7 @@ export function ShiftSwapActions({ id }: { id: any }) {
             setLoading(true);
             const result = await ShiftService.approveSwap(id, type);
             if (result.status) {
-                // console.log({ result });
+                //
                 toast({
                     title: result.message,
                     status: 'success',
@@ -606,18 +713,23 @@ export function TableContractAction({
                 <MenuList>
                     <MenuItem>
                         {timeSheets === true ? (
-                            <NextLink
-                                href={
-                                    date !== undefined
-                                        ? `/${role}/timesheets/${id}?date=${date}`
-                                        : `/${role}/timesheets/${id}`
-                                }
-                                passHref
-                            >
-                                <Link width="100%" textDecor="none !important">
-                                    View Timesheet
-                                </Link>
-                            </NextLink>
+                            <>
+                                <NextLink
+                                    href={
+                                        date !== undefined
+                                            ? `/${role}/timesheets/${id}?date=${date}`
+                                            : `/${role}/timesheets/${id}`
+                                    }
+                                    passHref
+                                >
+                                    <Link
+                                        width="100%"
+                                        textDecor="none !important"
+                                    >
+                                        View Timesheet
+                                    </Link>
+                                </NextLink>
+                            </>
                         ) : supervisor === true ? (
                             <NextLink
                                 href={`/Supervisor/timesheets/${id}`}
@@ -651,6 +763,22 @@ export function TableContractAction({
                             </NextLink>
                         )}
                     </MenuItem>
+                    {timeSheets === true && !team && (
+                        <MenuItem>
+                            <NextLink
+                                href={
+                                    date !== undefined
+                                        ? `/${role}/timesheets/${id}?date=${date}`
+                                        : `/${role}/timesheets/all/${id}`
+                                }
+                                passHref
+                            >
+                                <Link width="100%" textDecor="none !important">
+                                    View Details
+                                </Link>
+                            </NextLink>
+                        </MenuItem>
+                    )}
                 </MenuList>
             </Menu>
         </td>
@@ -661,12 +789,11 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const toggleStatus = async (data: string) => {
-        // console.log(data.email);
+        //
         try {
             setLoading(true);
             const result = await SettingsService.toggleStatus(data);
             if (result.status) {
-                console.log({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -686,7 +813,7 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
             });
         } catch (error: any) {
             setLoading(false);
-            console.log({ error });
+
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -735,7 +862,6 @@ export function ExpenseActions({
             if (manager) {
                 const result = await FinancialService.approveExpense(data);
                 if (result.status) {
-                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -756,7 +882,6 @@ export function ExpenseActions({
             } else {
                 const result = await FinancialService.reviewExpense(data);
                 if (result.status) {
-                    console.log({ result });
                     toast({
                         title: result.message,
                         status: 'success',
@@ -776,7 +901,6 @@ export function ExpenseActions({
                 });
             }
         } catch (error: any) {
-            console.log({ error });
             setLoading(false);
             toast({
                 title: error.body.message || error.message,
@@ -791,7 +915,6 @@ export function ExpenseActions({
             setLoading(true);
             const result = await FinancialService.declineExpense(data);
             if (result.status) {
-                console.log({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -811,7 +934,7 @@ export function ExpenseActions({
             });
         } catch (err: any) {
             setLoading(false);
-            console.log({ err });
+
             toast({
                 title: err.body.message || err?.message,
                 status: 'error',
@@ -861,7 +984,7 @@ export function PayrollActions({ id, userId }: { id: any; userId: any }) {
     //         setLoading(true);
     //         const result = await FinancialService.approvePayroll(data);
     //         if (result.status) {
-    //             console.log({ result });
+    //
     //             toast({
     //                 title: result.message,
     //                 status: 'success',
@@ -880,7 +1003,7 @@ export function PayrollActions({ id, userId }: { id: any; userId: any }) {
     //             position: 'top-right',
     //         });
     //     } catch (error: any) {
-    //         console.log({ error });
+    //
     //         setLoading(false);
     //         toast({
     //             title: error.body.message || error.message,
@@ -958,7 +1081,6 @@ export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
             setLoading(true);
             const result = await FinancialService.treatSubmittedInvoice(id);
             if (result.status) {
-                console.log({ result });
                 toast({
                     title: result.message,
                     status: 'success',
@@ -977,7 +1099,6 @@ export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
                 position: 'top-right',
             });
         } catch (error: any) {
-            console.log({ error });
             setLoading(false);
             toast({
                 title: error.body.message || error.message,
@@ -1019,6 +1140,57 @@ export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
                             </Link>
                         </NextLink>
                     </MenuItem> */}
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+export function TableSubscriptionActions({
+    x,
+    openRenew,
+    // openPayment,
+    setData,
+}: {
+    x: any;
+    openRenew: any;
+    // openPayment: any;
+    setData: any;
+}) {
+    const openRenewSub = () => {
+        setData(x);
+        openRenew();
+    };
+    const upgradeSub = () => {
+        setData(x);
+        // openPayment();
+    };
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        <FaEllipsisH />
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    <MenuItem onClick={openRenewSub} w="full">
+                        <Icon as={MdVerified} mr=".5rem" color="#777777" />
+                        Renew Subscription
+                    </MenuItem>
+                    <MenuItem onClick={upgradeSub} w="full">
+                        <Icon
+                            as={RiInboxArchiveFill}
+                            mr=".5rem"
+                            color="#777777"
+                        />
+                        Upgrade Subscription
+                    </MenuItem>
                 </MenuList>
             </Menu>
         </td>

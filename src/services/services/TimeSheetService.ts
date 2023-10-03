@@ -8,6 +8,7 @@ import type { TimeSheetHistoryViewPagedCollectionStandardResponse } from '../mod
 import type { TimesheetHoursAdditionModel } from '../models/TimesheetHoursAdditionModel';
 import type { TimesheetHoursApprovalModel } from '../models/TimesheetHoursApprovalModel';
 import type { TimeSheetMonthlyViewIEnumerableStandardResponse } from '../models/TimeSheetMonthlyViewIEnumerableStandardResponse';
+import type { TimeSheetMonthlyViewStandardResponse } from '../models/TimeSheetMonthlyViewStandardResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -18,6 +19,7 @@ export class TimeSheetService {
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -27,6 +29,7 @@ export class TimeSheetService {
     public static listTimeSheetHistories(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -37,6 +40,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -47,19 +51,45 @@ endDate?: string,
     /**
      * @param employeeInformationId 
      * @param date 
-     * @returns TimeSheetMonthlyViewIEnumerableStandardResponse Success
+     * @param endDate 
+     * @returns TimeSheetMonthlyViewStandardResponse Success
      * @throws ApiError
      */
     public static getTimeSheet(
 employeeInformationId?: string,
 date?: string,
-): CancelablePromise<TimeSheetMonthlyViewIEnumerableStandardResponse> {
+endDate?: string,
+): CancelablePromise<TimeSheetMonthlyViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/TimeSheet/monthly',
             query: {
                 'employeeInformationId': employeeInformationId,
                 'date': date,
+                'endDate': endDate,
+            },
+        });
+    }
+
+    /**
+     * @param employeeInformationId 
+     * @param startDate 
+     * @param endDate 
+     * @returns TimeSheetMonthlyViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getTimesheetByPaySchedule(
+employeeInformationId?: string,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<TimeSheetMonthlyViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/TimeSheet/schedule',
+            query: {
+                'employeeInformationId': employeeInformationId,
+                'startDate': startDate,
+                'endDate': endDate,
             },
         });
     }
@@ -155,6 +185,7 @@ requestBody?: Array<TimesheetHoursAdditionModel>,
     /**
      * @param offset 
      * @param limit 
+     * @param superAdminId 
      * @param search 
      * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -162,6 +193,7 @@ requestBody?: Array<TimesheetHoursAdditionModel>,
     public static listApprovedTimeSheet(
 offset?: number,
 limit?: number,
+superAdminId?: string,
 search?: string,
 ): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -170,6 +202,7 @@ search?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'superAdminId': superAdminId,
                 'search': search,
             },
         });
@@ -262,6 +295,7 @@ limit?: number,
     /**
      * @param offset 
      * @param limit 
+     * @param employeeInformationId 
      * @param startDate 
      * @param endDate 
      * @returns TimeSheetHistoryViewPagedCollectionStandardResponse Success
@@ -270,6 +304,7 @@ limit?: number,
     public static getTeamMemberRecentTimeSheet(
 offset?: number,
 limit?: number,
+employeeInformationId?: string,
 startDate?: string,
 endDate?: string,
 ): CancelablePromise<TimeSheetHistoryViewPagedCollectionStandardResponse> {
@@ -279,6 +314,7 @@ endDate?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
+                'employeeInformationId': employeeInformationId,
                 'StartDate': startDate,
                 'EndDate': endDate,
             },

@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ClientSubscriptionResponseViewModel } from './ClientSubscriptionResponseViewModel';
+import type { ControlSettingView } from './ControlSettingView';
 import type { EmployeeInformationView } from './EmployeeInformationView';
 
 export type UserView = {
@@ -20,6 +22,7 @@ export type UserView = {
     employeeInformation?: EmployeeInformationView;
     clientId?: string | null;
     client?: UserView;
+    superAdminId?: string | null;
     phoneNumber?: string | null;
     organizationName?: string | null;
     organizationEmail?: string | null;
@@ -37,4 +40,6 @@ export type UserView = {
     numberOfLeaveDaysTaken?: number | null;
     numberOfHoursEligible?: number | null;
     employeeType?: string | null;
+    controlSettingView?: ControlSettingView;
+    subscriptiobDetails?: ClientSubscriptionResponseViewModel;
 };

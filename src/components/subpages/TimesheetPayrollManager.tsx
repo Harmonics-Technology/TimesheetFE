@@ -12,11 +12,16 @@ import {
     addMonths,
     lastDayOfMonth,
     isWeekend,
+    eachDayOfInterval,
 } from 'date-fns';
 
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { MdArrowDropDown, MdOutlineBookmarkAdd } from 'react-icons/md';
 import { BiX, BiCheck } from 'react-icons/bi';
+import dynamic from 'next/dynamic';
+const Selectrix = dynamic<any>(() => import('react-selectrix'), {
+    ssr: false,
+});
 import {
     Box,
     Checkbox,
@@ -53,6 +58,7 @@ import { Button } from '..';
 import BeatLoader from 'react-spinners/BeatLoader';
 import useClickOutside from '@components/generics/useClickOutside';
 import { Round } from '@components/generics/functions/Round';
+import { TimeSheetHighlight } from '@components/bits-utils/TimeSheetHighlight';
 
 const schema = yup.object().shape({
     reason: yup.string().required(),
@@ -61,15 +67,49 @@ const schema = yup.object().shape({
 const TimesheetPayrollManager = ({
     timeSheets,
     id,
+    payPeriod,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
+    payPeriod: any;
 }) => {
-    console.log({ id });
     const router = useRouter();
-    console.log({ timeSheets });
-    const sheet = timeSheets?.timeSheet;
+
     const { date } = router.query;
+    const { end } = router.query;
+
+    //
+
+    const HighlightDate = (value: any) => {
+        router.push({
+            query: {
+                ...router.query,
+                date: value?.split(' - ')[0] || new Date(),
+                end: value?.split(' - ')[1] || new Date(),
+            },
+        });
+    };
+    const dates = eachDayOfInterval({
+        start: new Date(
+            moment(date as string).format('MM/DD/YYYY') ||
+                (moment() as unknown as string),
+        ),
+        end: new Date(
+            moment((end as string) || (date as string)).format(
+                'MM/DD/YYYY',
+            ) as unknown as string,
+        ),
+    });
+    const newDates = dates?.map((x) => moment(x).format('DD/MM/YY'));
+
+    const newOptions = payPeriod?.map((obj) => ({
+        id: `${obj.weekDate} - ${obj.lastWorkDayOfCycle}`,
+        label: `${moment(obj.weekDate).format('MMM DD')} - ${moment(
+            obj.lastWorkDayOfCycle,
+        ).format('MMM DD, YYYY')}`,
+    }));
+
+    const sheet = timeSheets?.timeSheet;
     const newDate = new Date(date as unknown as string);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [activeDate, setActiveDate] = useState(
@@ -90,7 +130,7 @@ const TimesheetPayrollManager = ({
     }
     const totalHours =
         hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    // console.log({ totalHours });
+    //
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
@@ -100,7 +140,7 @@ const TimesheetPayrollManager = ({
 
     const [loading, setLoading] = useState(false);
     const [allChecked, setAllChecked] = useState<boolean>(false);
-    // console.log({ allChecked });
+    //
     const [selected, setSelected] = useState<TimesheetHoursAdditionModel[]>([]);
     const [selectedInput, setSelectedInput] = useState<
         TimesheetHoursAdditionModel[]
@@ -115,8 +155,8 @@ const TimesheetPayrollManager = ({
         }
         setSelectedInput([...selectedInput, item]);
     };
-    // console.log({ selectedInput });
-    // console.log({ selected });
+    //
+    //
 
     const {
         register,
@@ -136,7 +176,6 @@ const TimesheetPayrollManager = ({
     const preventTomorrow = addDays(new Date(), 1).toISOString();
     const [reject, setReject] = useState<any>([]);
     const showReject = (userId, chosenDate) => {
-        console.log({ chosenDate });
         const existing = reject.find((x) => x.userId == userId);
         if (existing) {
             setReject(reject.filter((x) => x.user !== userId));
@@ -153,7 +192,7 @@ const TimesheetPayrollManager = ({
                 date: x.chosenDate,
             };
         });
-        console.log({ data });
+
         try {
             const result = await TimeSheetService.rejectTimeSheetForADay(
                 id,
@@ -161,13 +200,11 @@ const TimesheetPayrollManager = ({
                 data,
             );
             if (result.status) {
-                console.log({ result });
                 router.reload();
                 return;
             }
-            console.log({ result });
         } catch (error: any) {
-            // console.log({ error });
+            //
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -177,11 +214,11 @@ const TimesheetPayrollManager = ({
     };
 
     // const generatePayroll = async (id) => {
-    //     console.log({ id });
+    //
     //     try {
     //         const data = await TimeSheetService.generatePayroll(id);
     //         if (data.status) {
-    //             console.log({ data });
+    //
     //             return;
     //         }
     //         toast({
@@ -198,7 +235,7 @@ const TimesheetPayrollManager = ({
     //             isClosable: true,
     //             position: 'top-right',
     //         });
-    //         console.log(error);
+    //
     //     }
     // };
     // const approveTimeSheetForADay = async (userId, date) => {
@@ -218,7 +255,7 @@ const TimesheetPayrollManager = ({
     //         });
     //         return;
     //     } catch (error) {
-    //         console.log(error);
+    //
     //     }
     // };
 
@@ -226,7 +263,7 @@ const TimesheetPayrollManager = ({
     //     const updateSelected = async (callback) => {
     //         // setAllChecked(!allChecked);
     //         monthlyTimesheets?.forEach(async (timeSheet: TimeSheetView) => {
-    //             console.log({ timeSheet });
+    //
     //             if (
     //                 timeSheet.employeeInformation &&
     //                 timeSheet.status == 'PENDING'
@@ -253,14 +290,14 @@ const TimesheetPayrollManager = ({
     // }
 
     const addHours = async (item) => {
-        // console.log({ userId, date, hours });
+        //
 
         try {
             const data = await TimeSheetService.addWorkHoursForADay(
                 item.date,
                 item.hours,
             );
-            console.log({ data });
+
             if (data.status) {
                 return;
             }
@@ -271,7 +308,6 @@ const TimesheetPayrollManager = ({
             });
             return;
         } catch (error: any) {
-            console.log(error);
             toast({
                 status: 'error',
                 title: error.body.message || error.message,
@@ -295,7 +331,7 @@ const TimesheetPayrollManager = ({
                     selectedInput.at(0)?.date,
                     selectedInput,
                 );
-                console.log({ data });
+
                 if (data.status) {
                     setLoading(false);
                     toast({
@@ -313,7 +349,6 @@ const TimesheetPayrollManager = ({
                 });
                 return;
             } catch (error: any) {
-                console.log(error);
                 toast({
                     status: 'error',
                     title: error.body.message || error.message,
@@ -352,6 +387,7 @@ const TimesheetPayrollManager = ({
             query: {
                 ...router.query,
                 date: moment(addMonths(activeDate, 1)).format('YYYY-MM-DD'),
+                end: undefined,
             },
         });
         router.reload();
@@ -361,6 +397,7 @@ const TimesheetPayrollManager = ({
             query: {
                 ...router.query,
                 date: moment(subMonths(activeDate, 1)).format('YYYY-MM-DD'),
+                end: undefined,
             },
         });
         router.reload();
@@ -551,11 +588,21 @@ const TimesheetPayrollManager = ({
             useClickOutside(popover, close);
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
-            // console.log({ timesheets });
+            //
 
             week.push(
                 <Flex
-                    border={['0', '1px solid #e5e5e5']}
+                    border={[
+                        '0',
+                        newDates?.length > 1 &&
+                        newDates.includes(
+                            moment((userDate as string) || '01/01/2021').format(
+                                'DD/MM/YY',
+                            ),
+                        )
+                            ? '0.1rem solid rgba(46, 175, 163, .7)'
+                            : '1px solid #e5e5e5',
+                    ]}
                     height={['auto', '4rem']}
                     // color={['gray.500', 'inherit']}
                     fontSize={['.5rem', '.8rem']}
@@ -855,7 +902,8 @@ const TimesheetPayrollManager = ({
     };
 
     return (
-        <Box>
+        <Box pos="relative">
+            <TimeSheetHighlight />
             <Box>
                 {getHeader()}
                 <Box
@@ -875,6 +923,24 @@ const TimesheetPayrollManager = ({
                 mb={['3rem', '0']}
                 p={['1rem 1rem', '1rem 2rem']}
             >
+                <Box w="40%" mb="2rem">
+                    <Text fontSize=".8rem" fontWeight={500} mb=".3rem">
+                        Pay Period
+                    </Text>
+                    <Selectrix
+                        placeholder={`${moment(date).format(
+                            'MMM DD,',
+                        )} - ${moment(
+                            end || lastDayOfMonth(new Date(date as string)),
+                        ).format('MMM DD, YYYY')}`}
+                        customKeys={{
+                            key: 'id',
+                            label: 'label',
+                        }}
+                        options={newOptions}
+                        onChange={(e) => HighlightDate(e.key)}
+                    />
+                </Box>
                 <Flex
                     w="100%"
                     mr="auto"
