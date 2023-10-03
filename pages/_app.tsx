@@ -25,7 +25,9 @@ function MyApp({
     pageProps,
 }: AppProps<{ dehydratedState: unknown }>): JSX.Element {
     const queryClient = new QueryClient();
-    OpenAPI.BASE = process.env.NEXT_PUBLIC_API_BASEURL as string;
+    OpenAPI.BASE =
+        (process.env.NEXT_PUBLIC_API_BASEURL as string) ||
+        'https://timesheetapiprod.azurewebsites.net';
     OpenAPI.TOKEN = Cookies.get('token') as string;
 
     useEffect(() => {
