@@ -20,4 +20,5 @@ export type ProjectSubTaskView = {
     note?: string | null;
     status?: string | null;
     trackedByHours?: boolean;
+    percentageOfCompletion?: number;
 };

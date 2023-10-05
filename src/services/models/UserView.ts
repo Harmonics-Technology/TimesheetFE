@@ -40,6 +40,7 @@ export type UserView = {
     numberOfLeaveDaysTaken?: number | null;
     numberOfHoursEligible?: number | null;
     employeeType?: string | null;
+    hoursPerDay?: number | null;
     controlSettingView?: ControlSettingView;
     subscriptiobDetails?: ClientSubscriptionResponseViewModel;
 };

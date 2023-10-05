@@ -183,7 +183,7 @@ const Leaveform = ({
                             error={errors.endDate}
                             min={new DateObject(
                                 watch('startDate') as string,
-                            ).add(4, 'days')}
+                            ).add(0, 'days')}
                             disableWeekend
                             placeholder={data?.endDate}
                         />

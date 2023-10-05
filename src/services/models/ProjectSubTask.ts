@@ -23,5 +23,6 @@ export type ProjectSubTask = {
     taskPriority?: string | null;
     note?: string | null;
     isCompleted?: boolean;
+    percentageOfCompletion?: number;
     projectTimesheets?: Array<ProjectTimesheet> | null;
 };

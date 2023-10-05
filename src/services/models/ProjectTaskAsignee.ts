@@ -20,5 +20,6 @@ export type ProjectTaskAsignee = {
     hoursLogged?: number;
     budget?: number | null;
     budgetSpent?: number | null;
+    disabled?: boolean;
     subTasks?: Array<ProjectSubTask> | null;
 };

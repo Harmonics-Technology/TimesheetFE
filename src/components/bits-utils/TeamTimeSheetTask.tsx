@@ -33,6 +33,7 @@ import { TabMenuTimesheet } from './ProjectManagement/Generics/TabMenuTimesheet'
 import { Round } from '@components/generics/functions/Round';
 import { ApproveTimesheet } from './ApproveTimesheet';
 import * as dates from 'date-arithmetic';
+import { TaskTimesheetModal } from './TaskTimesheetModal';
 
 const localizer = momentLocalizer(moment);
 
@@ -386,7 +387,7 @@ const TeamTimeSheetTask = ({
                 />
             )}
             {opened && (
-                <ApproveTimesheet
+                <TaskTimesheetModal
                     isOpen={opened}
                     onClose={closed}
                     data={timesheetData}

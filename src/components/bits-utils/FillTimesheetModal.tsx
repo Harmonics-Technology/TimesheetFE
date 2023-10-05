@@ -126,11 +126,13 @@ export const FillTimesheetModal = ({
             startDate: moment(firstDateOfWeek)
                 .add(x?.id, 'day')
                 .format(`YYYY-MM-DD ${selectedStartTime}`),
-            endDate: useEnd
-                ? moment(firstDateOfWeek)
-                      .add(x?.id, 'day')
-                      .format(`YYYY-MM-DD ${selectedEndTime}`)
-                : moment(
+            endDate: 
+            // useEnd
+            //     ? moment(firstDateOfWeek)
+            //           .add(x?.id, 'day')
+            //           .format(`YYYY-MM-DD ${selectedEndTime}`)
+            //     : 
+                moment(
                       moment(firstDateOfWeek)
                           .add(x?.id, 'day')
                           .format(`YYYY-MM-DD ${selectedStartTime}`),
@@ -188,6 +190,8 @@ export const FillTimesheetModal = ({
         setSelectedId([repeating.find((x) => x.id == formattedStartDate)]);
     }, [startDate]);
 
+    
+
     useEffect(() => {
         setProjectTimesheets({
             ...projectTimesheets,
@@ -232,7 +236,7 @@ export const FillTimesheetModal = ({
     const [useEnd, setUseEnd] = useState<boolean>(true);
     const [tasks, setTasks] = useState<any>([]);
     const newData = [
-        ...(tasks || []),
+        ...(allProjects as ProjectView[] || []),
         { id: 'operational', name: 'Operational Task' },
     ];
     const [subTasks, setSubTasks] = useState<any>([]);
@@ -241,33 +245,11 @@ export const FillTimesheetModal = ({
     useNonInitialEffect(() => {
         async function getTasks() {
             setErr('');
-            setOperationalTasks([]);
+            
             setSubTasks([]);
 
             setLoading(true);
-            if (taskId == 'operational') {
-                try {
-                    const res =
-                        await ProjectManagementService.listOperationalTasks(
-                            0,
-                            25,
-                            superAdminId,
-                            2,
-                            userId,
-                        );
-                    if (res?.status) {
-                        setOperationalTasks(res?.data?.value);
-                        setLoading(false);
-                        return;
-                    }
-                    setErr(res?.message);
-                    setLoading(false);
-                } catch (error: any) {
-                    setErr(error?.body?.message || error?.message);
-                    setLoading(false);
-                }
-                return;
-            }
+            
             try {
                 const res = await ProjectManagementService.listSubTasks(
                     0,
@@ -293,6 +275,30 @@ export const FillTimesheetModal = ({
         async function getTasks() {
             if (projectId) {
                 setLoading(true);
+            }
+            setOperationalTasks([]);
+            if (taskId == 'operational') {
+                try {
+                    const res =
+                        await ProjectManagementService.listOperationalTasks(
+                            0,
+                            25,
+                            superAdminId,
+                            2,
+                            userId,
+                        );
+                    if (res?.status) {
+                        setOperationalTasks(res?.data?.value);
+                        setLoading(false);
+                        return;
+                    }
+                    setErr(res?.message);
+                    setLoading(false);
+                } catch (error: any) {
+                    setErr(error?.body?.message || error?.message);
+                    setLoading(false);
+                }
+                return;
             }
             try {
                 const res = await ProjectManagementService.listTasks(
@@ -342,6 +348,7 @@ export const FillTimesheetModal = ({
             endDate,
         });
     };
+    console.log({tasks, subTasks})
 
     return (
         <Modal
@@ -406,7 +413,7 @@ export const FillTimesheetModal = ({
                                     error={errors.projectId}
                                     keys="id"
                                     keyLabel="name"
-                                    options={allProjects}
+                                    options={newData}
                                     placeholder={'Select a project'}
                                 />
                                 <SelectrixBox<ProjectTimesheetModel>
@@ -416,7 +423,7 @@ export const FillTimesheetModal = ({
                                     error={errors.projectTaskId}
                                     keys="id"
                                     keyLabel="name"
-                                    options={newData}
+                                    options={tasks}
                                     placeholder={'Select a task'}
                                 />
                                 {subTasks.length > 0 && (
@@ -447,7 +454,7 @@ export const FillTimesheetModal = ({
                                     onChange={setstartDate}
                                     value={startDate}
                                     label="Start Date & Time"
-                                    useEnd={useEnd}
+                                    useEnd={false}
                                 />
                                 <HStack w="full" {...group} fontSize=".8rem">
                                     {radios.map((value) => {
@@ -466,7 +473,7 @@ export const FillTimesheetModal = ({
                                     <CustomDateTime
                                         onChange={setendDate}
                                         value={endDate}
-                                        label="End Date & Time"
+                                        label="End Date"
                                         useEnd={useEnd}
                                     />
                                 ) : (
@@ -483,7 +490,7 @@ export const FillTimesheetModal = ({
                                             w="full"
                                             justify="space-between"
                                             align="center"
-                                            mt=".5rem"
+                                            mt="1rem"
                                         >
                                             <Text
                                                 fontSize=".8rem"
@@ -550,7 +557,7 @@ export const FillTimesheetModal = ({
                                     </Box>
                                 )}
                                 <ProgressSlider
-                                    sliderValue={sliderValue}
+                                    sliderValue={subTasks.percentageOfCompletion || tasks.percentageOfCompletion || sliderValue}
                                     setSliderValue={setSliderValue}
                                     label="Percentage Of Completion"
                                 />

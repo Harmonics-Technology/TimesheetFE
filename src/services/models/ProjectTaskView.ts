@@ -21,6 +21,8 @@ export type ProjectTaskView = {
     subTaskCount?: number | null;
     status?: string | null;
     progress?: number | null;
+    percentageOfCompletion?: number;
+    isCompleted?: boolean;
     assignees?: Array<ProjectTaskAsigneeView> | null;
     subTasks?: Array<ProjectSubTaskView> | null;
 };

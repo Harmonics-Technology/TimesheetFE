@@ -110,7 +110,7 @@ export const TaskTimesheetModal = ({ isOpen, onClose, data }: ExportProps) => {
                             textAlign="center"
                             fontWeight="semibold"
                         >
-                            Approve Timesheet
+                            View Timesheet Details
                         </Text>
                         <Icon as={GrClose} onClick={onClose} cursor="pointer" />
                     </Flex>

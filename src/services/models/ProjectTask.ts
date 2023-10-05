@@ -22,6 +22,7 @@ export type ProjectTask = {
     taskPriority?: string | null;
     note?: string | null;
     isCompleted?: boolean;
+    percentageOfCompletion?: number;
     subTasks?: Array<ProjectSubTask> | null;
     assignees?: Array<ProjectTaskAsignee> | null;
 };

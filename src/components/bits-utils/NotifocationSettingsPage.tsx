@@ -53,7 +53,7 @@ export const NotifocationSettingsPage = ({ data }: { data: any }) => {
     const selectedDueDate = options.find((x) => x.id == dueDate)?.label;
     const [overdueDate] = useState(
         watch('timesheetOverdueReminderDay') ||
-            data.timesheetFillingReminderDay,
+            data.timesheetOverdueReminderDay,
     );
 
     const onSubmit = async (data: ControlSettingModel) => {
@@ -151,7 +151,7 @@ export const NotifocationSettingsPage = ({ data }: { data: any }) => {
                         fontWeight="400"
                         mb="0"
                     >
-                        {overdueDate} days after
+                        {overdueDate} days after due date
                     </Text>
                 </HStack>
             </Flex>
@@ -160,14 +160,14 @@ export const NotifocationSettingsPage = ({ data }: { data: any }) => {
                     <SelectrixBox<ControlSettingModel>
                         control={control}
                         name="timesheetFillingReminderDay"
-                        label="Beginning Period or  Start Date"
+                        label="Timesheet Submission Due Date"
                         error={errors.timesheetFillingReminderDay}
                         options={options}
                         keys="id"
                         keyLabel="label"
                     />
                     <PrimaryInput<ControlSettingModel>
-                        label="Payment period"
+                        label="Timesheet Overdue Date"
                         name="timesheetOverdueReminderDay"
                         error={errors.timesheetOverdueReminderDay}
                         defaultValue=""

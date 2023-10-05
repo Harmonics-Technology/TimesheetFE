@@ -18,5 +18,6 @@ export type ProjectView = {
     progress?: number | null;
     status?: string | null;
     projectMetrics?: ProjectMetrics;
+    isCompleted?: boolean;
     assignees?: Array<ProjectTaskAsigneeView> | null;
 };

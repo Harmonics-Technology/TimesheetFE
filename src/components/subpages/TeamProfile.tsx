@@ -531,7 +531,7 @@ function TeamProfile({
                                 error={errors.paymentFrequency}
                                 keys="id"
                                 keyLabel="label"
-                                label="Payment Frequency"
+                                label="Timesheet Frequency"
                                 options={[
                                     { id: 'Weekly', label: 'Weekly' },
                                     { id: 'Bi-weekly', label: 'Bi-Weekly' },

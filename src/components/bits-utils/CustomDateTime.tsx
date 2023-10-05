@@ -40,11 +40,13 @@ export const CustomDateTime = ({ onChange, value, label, useEnd }) => {
                 {label}
             </FormLabel>
             <HStack gap="2rem">
-                <Box w={useEnd ? '60%' : '60%'}>
+                <Box w={useEnd ? '100%' : '60%'}>
                     <CustomDatePick date={date} setDate={setDate} />
                 </Box>
 
-                <Box w="40%">
+                {
+                    !useEnd && (
+                        <Box w="40%">
                     <Box w="full" ref={timeRef} pos="relative">
                         <HStack
                             w="100%"
@@ -88,6 +90,10 @@ export const CustomDateTime = ({ onChange, value, label, useEnd }) => {
                         )}
                     </Box>
                 </Box>
+                    )
+                }
+
+                
             </HStack>
         </Box>
     );

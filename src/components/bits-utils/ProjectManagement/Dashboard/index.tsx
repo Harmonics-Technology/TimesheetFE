@@ -101,7 +101,7 @@ export const Dashboard = ({
                     tableHead={projectSummary}
                     url="/SuperAdmin/project-management/projects"
                 >
-                    {metrics.projectSummary?.map((x: ProjectView) => {
+                    {metrics.projectSummary?.slice(0, 3)?.map((x: ProjectView) => {
                         const status = x.status?.toLowerCase();
                         return (
                             <TableRow key={x.id}>
@@ -176,7 +176,7 @@ export const Dashboard = ({
                     tableHead={overdue}
                     url="/SuperAdmin/project-management/projects"
                 >
-                    {metrics?.overdueProjects?.map((x) => {
+                    {metrics?.overdueProjects?.slice(0, 3)?.map((x) => {
                         const date =
                             moment().diff(moment(x.endDate), 'day') + 1;
                         return (

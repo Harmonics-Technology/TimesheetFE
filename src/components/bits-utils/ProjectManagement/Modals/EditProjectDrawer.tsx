@@ -43,7 +43,7 @@ const schema = yup.object().shape({
     budget: yup.string().required(),
     assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
     note: yup.string().required(),
-    documentURL: yup.string().required(),
+    // documentURL: yup.string().required(),
 });
 
 export const EditProjectDrawer = ({
@@ -94,9 +94,11 @@ export const EditProjectDrawer = ({
             });
         }
     };
+
+    const assigneeWithTaskId = data?.assignees?.filter((x) => x.projectTaskId === null);
     const [selectedUser, setSelecedUser] = useState<any>(
-        data?.assignees?.map((obj) => ({
-            userId: obj?.userId,
+        assigneeWithTaskId?.map((obj) => ({
+            id: obj?.userId,
             fullName: obj?.user?.fullName,
         })) || [],
     );
@@ -106,18 +108,20 @@ export const EditProjectDrawer = ({
         setSelecedUser([...selectedUser, user]);
     };
     const removeUser = (id) => {
+        console.log({id});
         const filtered = selectedUser?.filter((x) => x.id !== id);
         setSelecedUser(filtered);
     };
 
     const toast = useToast();
     const router = useRouter();
+    console.log({selectedUser, data, users, assigneeWithTaskId})
 
     //
 
     const onSubmit = async (data: ProjectModel) => {
         try {
-            const result = await ProjectManagementService.createProject(data);
+            const result = await ProjectManagementService.updateProject(data);
             if (result.status) {
                 toast({
                     title: result.message,
@@ -161,6 +165,7 @@ export const EditProjectDrawer = ({
     useEffect(() => {
         setValue('documentURL', fileDoc?.url?.cdnUrl);
     }, [fileDoc]);
+
 
     //
     return (
