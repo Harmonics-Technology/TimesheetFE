@@ -34,6 +34,7 @@ import { Round } from '@components/generics/functions/Round';
 import { ApproveTimesheet } from './ApproveTimesheet';
 import * as dates from 'date-arithmetic';
 import { TaskTimesheetModal } from './TaskTimesheetModal';
+import { startOfWeek } from 'date-fns';
 
 const localizer = momentLocalizer(moment);
 
@@ -110,8 +111,9 @@ const TeamTimeSheetTask = ({
         view,
         views,
     }) {
+        const firstDay = startOfWeek(date)
         const goPrevious = () => {
-            const newDate = moment(date)
+            const newDate = moment(firstDay)
                 .subtract(7, 'day')
                 .format('YYYY-MM-DD');
             const nextRange = moment(newDate)
@@ -127,7 +129,7 @@ const TeamTimeSheetTask = ({
             onNavigate(navigate.PREVIOUS);
         };
         const goNext = () => {
-            const newDate = moment(date).add(7, 'day').format('YYYY-MM-DD');
+            const newDate = moment(firstDay).add(7, 'day').format('YYYY-MM-DD');
             const nextRange = moment(newDate)
                 .add(6, 'days')
                 .format('YYYY-MM-DD');
@@ -253,10 +255,10 @@ const TeamTimeSheetTask = ({
         timeSlotWrapper: timeSlotWrapper,
         toolbar: CustomToolbar,
     };
-
+    const {from} = router.query
     const { defaultDate, formats, views } = useMemo(
         () => ({
-            defaultDate: new Date(),
+            defaultDate: new Date(from as unknown as string || new Date()),
             formats: {
                 dayFormat: (date, culture, localizer) =>
                     localizer.format(date, 'ddd', culture),

@@ -33,6 +33,7 @@ import { TabMenuTimesheet } from './ProjectManagement/Generics/TabMenuTimesheet'
 import { Round } from '@components/generics/functions/Round';
 import { ApproveTimesheet } from './ApproveTimesheet';
 import { ApproveAllTimesheet } from './ApproveAllTimesheet';
+import { startOfWeek } from 'date-fns';
 
 const localizer = momentLocalizer(moment);
 
@@ -116,7 +117,7 @@ const SupervisorTimesheetTask = ({
         ));
     }
     function CustomToolbar({
-        // date, // available, but not used here
+        date, 
         label,
         localizer: { messages },
         onNavigate,
@@ -124,7 +125,40 @@ const SupervisorTimesheetTask = ({
         view,
         views,
     }) {
+        const firstDay = startOfWeek(date)
+        const goPrevious = () => {
+            const newDate = moment(firstDay)
+                .subtract(7, 'day')
+                .format('YYYY-MM-DD');
+            const nextRange = moment(newDate)
+                .add(6, 'days')
+                .format('YYYY-MM-DD');
+            router.push({
+                query: {
+                    ...router.query,
+                    from: newDate,
+                    to: nextRange,
+                },
+            });
+            onNavigate(navigate.PREVIOUS);
+        };
+        const goNext = () => {
+            const newDate = moment(firstDay).add(7, 'day').format('YYYY-MM-DD');
+            const nextRange = moment(newDate)
+                .add(6, 'days')
+                .format('YYYY-MM-DD');
+
+            router.push({
+                query: {
+                    ...router.query,
+                    from: newDate,
+                    to: nextRange,
+                },
+            });
+            onNavigate(navigate.NEXT);
+        };
         return (
+            
             // <div className="rbc-toolbar">
 
             <Flex w="full" justify="space-between" my="1rem">
@@ -138,7 +172,7 @@ const SupervisorTimesheetTask = ({
                 </span>
                 <Flex align="center" gap="1rem">
                     <Button
-                        onClick={() => onNavigate(navigate.PREVIOUS)}
+                        onClick={() => goPrevious()}
                         aria-label={messages.previous}
                         h="2.2rem"
                         w="2.5rem"
@@ -151,7 +185,7 @@ const SupervisorTimesheetTask = ({
                         {label}
                     </Text>
                     <Button
-                        onClick={() => onNavigate(navigate.NEXT)}
+                        onClick={() => goNext()}
                         aria-label={messages.previous}
                         h="2.2rem"
                         w="2.5rem"
@@ -238,9 +272,10 @@ const SupervisorTimesheetTask = ({
         toolbar: CustomToolbar,
     };
 
+    const {from} = router.query
     const { defaultDate, formats, views } = useMemo(
         () => ({
-            defaultDate: new Date(),
+            defaultDate: new Date(from as unknown as string || new Date()),
             formats: {
                 dayFormat: (date, culture, localizer) =>
                     localizer.format(date, 'ddd', culture),
