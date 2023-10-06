@@ -75,15 +75,21 @@ export const FillTimesheetModal = ({
     const router = useRouter();
     const toast = useToast();
 
-    const [startDate, setstartDate] = useState<any>(moment(data?.startDate));
+    function isValidDateTime(dateTime) {
+        return dateTime && !isNaN(new Date(dateTime).getTime());
+      }
+    const initialStartDate = isValidDateTime(data?.startDate)
+    ? moment(data.startDate)
+    : moment().format('YYYY-MM-DD 09:00');
+    const [startDate, setstartDate] = useState<any>(
+       initialStartDate
+    );
     const [endDate, setendDate] = useState<any>(moment(data.endDate));
     const [isBillable, setisBillable] = useState<any>();
     const [loading, setLoading] = useState<any>();
 
     const { user } = useContext(UserContext);
     const hoursPerDay = user?.employeeInformation?.hoursPerDay || 8;
-
-    console.log({ hoursPerDay });
 
     const [sliderValue, setSliderValue] = useState(0);
 
@@ -126,13 +132,15 @@ export const FillTimesheetModal = ({
             startDate: moment(firstDateOfWeek)
                 .add(x?.id, 'day')
                 .format(`YYYY-MM-DD ${selectedStartTime}`),
-            endDate: 
-            // useEnd
-            //     ? moment(firstDateOfWeek)
-            //           .add(x?.id, 'day')
-            //           .format(`YYYY-MM-DD ${selectedEndTime}`)
-            //     : 
-                moment(
+            endDate: useEnd
+                ? moment(
+                      moment(firstDateOfWeek)
+                          .add(x?.id, 'day')
+                          .format(`YYYY-MM-DD ${selectedStartTime}`),
+                  )
+                      .add(hoursPerDay, 'hour')
+                      .format('YYYY-MM-DD HH:mm')
+                : moment(
                       moment(firstDateOfWeek)
                           .add(x?.id, 'day')
                           .format(`YYYY-MM-DD ${selectedStartTime}`),
@@ -190,8 +198,6 @@ export const FillTimesheetModal = ({
         setSelectedId([repeating.find((x) => x.id == formattedStartDate)]);
     }, [startDate]);
 
-    
-
     useEffect(() => {
         setProjectTimesheets({
             ...projectTimesheets,
@@ -236,7 +242,7 @@ export const FillTimesheetModal = ({
     const [useEnd, setUseEnd] = useState<boolean>(true);
     const [tasks, setTasks] = useState<any>([]);
     const newData = [
-        ...(allProjects as ProjectView[] || []),
+        ...((allProjects as ProjectView[]) || []),
         { id: 'operational', name: 'Operational Task' },
     ];
     const [subTasks, setSubTasks] = useState<any>([]);
@@ -245,11 +251,11 @@ export const FillTimesheetModal = ({
     useNonInitialEffect(() => {
         async function getTasks() {
             setErr('');
-            
+
             setSubTasks([]);
 
             setLoading(true);
-            
+
             try {
                 const res = await ProjectManagementService.listSubTasks(
                     0,
@@ -277,6 +283,8 @@ export const FillTimesheetModal = ({
                 setLoading(true);
             }
             setOperationalTasks([]);
+            setErr('');
+            setSubTasks([]);
             if (taskId == 'operational') {
                 try {
                     const res =
@@ -348,7 +356,20 @@ export const FillTimesheetModal = ({
             endDate,
         });
     };
-    console.log({tasks, subTasks})
+
+    // const [selectedSubTask, setSelectedSubTask] = useState()
+    const selectedTask = tasks.find(
+        (task) => task.id === watch('projectTaskId'),
+    );
+    const selectedSubTask = subTasks.find(
+        (subTask) => subTask.id === watch('projectSubTaskId'),
+    );
+    useNonInitialEffect(() => {
+        setSliderValue(
+            selectedSubTask?.percentageOfCompletion ||
+                selectedTask?.percentageOfCompletion,
+        );
+    }, [taskId, watch('projectSubTaskId')]);
 
     return (
         <Modal
@@ -363,7 +384,7 @@ export const FillTimesheetModal = ({
             <ModalContent
                 py={5}
                 borderRadius="0px"
-                w={['88%', '30%']}
+                w={['88%', '35%']}
                 // overflow="hidden"
                 maxH="100vh"
                 pos="fixed"
@@ -557,7 +578,7 @@ export const FillTimesheetModal = ({
                                     </Box>
                                 )}
                                 <ProgressSlider
-                                    sliderValue={subTasks.percentageOfCompletion || tasks.percentageOfCompletion || sliderValue}
+                                    sliderValue={sliderValue}
                                     setSliderValue={setSliderValue}
                                     label="Percentage Of Completion"
                                 />

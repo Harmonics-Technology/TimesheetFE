@@ -32,6 +32,7 @@ import Loading from './Loading';
 import { TabMenuTimesheet } from './ProjectManagement/Generics/TabMenuTimesheet';
 import { Round } from '@components/generics/functions/Round';
 import { ApproveTimesheet } from './ApproveTimesheet';
+import { ApproveAllTimesheet } from './ApproveAllTimesheet';
 
 const localizer = momentLocalizer(moment);
 
@@ -92,6 +93,7 @@ const SupervisorTimesheetTask = ({
     });
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: opened, onOpen: onOpened, onClose: closed } = useDisclosure();
     const [data, setData] = useState<any>();
     function openModal(data) {
         setData(data);
@@ -170,7 +172,7 @@ const SupervisorTimesheetTask = ({
                     justify="center"
                     fontSize=".8rem"
                     cursor="pointer"
-                    // onClick={openModal}
+                    onClick={onOpened}
                 >
                     Approve Timesheet
                 </Flex>
@@ -361,6 +363,13 @@ const SupervisorTimesheetTask = ({
                 <ApproveTimesheet
                     isOpen={isOpen}
                     onClose={onClose}
+                    data={data}
+                />
+            )}
+             {opened && (
+                <ApproveAllTimesheet
+                    isOpen={opened}
+                    onClose={closed}
                     data={data}
                 />
             )}

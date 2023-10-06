@@ -35,6 +35,7 @@ export const ProgressSlider = ({
                 <Slider
                     id="slider"
                     defaultValue={sliderValue}
+                    value={sliderValue}
                     min={0}
                     max={100}
                     colorScheme="teal"

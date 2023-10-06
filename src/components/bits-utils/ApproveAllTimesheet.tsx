@@ -27,24 +27,28 @@ import { ProgressSlider } from './ProgressSlider';
 import TaskTitleHolder from './TaskTitleHolder';
 import { formatDate } from '@components/generics/functions/formatDate';
 import moment from 'moment';
+import { CustomDateTime } from './CustomDateTime';
 
 interface ExportProps {
     isOpen: any;
     onClose: any;
     data?: any;
 }
-export const ApproveTimesheet = ({ isOpen, onClose, data }: ExportProps) => {
-    console.log({data})
+export const ApproveAllTimesheet = ({ isOpen, onClose, data }: ExportProps) => {
     const [cancel, setCancel] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [comment, setComment] = useState<string>();
-    const [startDate, setstartDate] = useState<string>( moment( data.start).format('YYYY-MM-DD'));
-    const [endDate, setendDate] = useState<string>(moment( data.end).format('YYYY-MM-DD'));
+    const [startDate, setstartDate] = useState<string>(
+        moment().format('YYYY-MM-DD'),
+    );
+    const [endDate, setendDate] = useState<string>(
+        moment().format('YYYY-MM-DD'),
+    );
     const toast = useToast();
 
     const approveTimesheet = async (approve) => {
         const formData = {
-            timesheetId: data.id,
+            timesheetId: data?.id,
             approve: approve,
             reason: !approve ? comment : undefined,
             startDate,
@@ -78,7 +82,7 @@ export const ApproveTimesheet = ({ isOpen, onClose, data }: ExportProps) => {
         } catch (err: any) {
             setLoading(true);
             toast({
-                title: err?.body?.message || err?.message,
+                title:  err?.message || err?.body?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -132,63 +136,19 @@ export const ApproveTimesheet = ({ isOpen, onClose, data }: ExportProps) => {
                                 gap="1rem"
                                 mb="2rem"
                             >
-                                <HStack
-                                    justify="space-between"
-                                    w="full"
-                                    align="flex-start"
-                                >
-                                    <TaskTitleHolder
-                                        title="Project Task"
-                                        sub={data.title}
-                                    />
-
-                                    <Flex
-                                        justify="center"
-                                        align="center"
-                                        bgColor={
-                                            data.approved == 'PENDING'
-                                                ? 'brand.700'
-                                                : data.approved == 'APPROVED'
-                                                ? 'brand.400'
-                                                : 'red'
-                                        }
-                                        color="white"
-                                        borderRadius="10px"
-                                        fontSize=".8rem"
-                                        p=".2rem 1rem"
-                                    >
-                                        {data?.approved}
-                                    </Flex>
-                                </HStack>
-                                <TaskTitleHolder
-                                    title="Start Date & Time"
-                                    sub={moment(data.start).format(
-                                        'dddd DD MMMM, YYYY hh:mm A',
-                                    )}
+                                <CustomDateTime
+                                    onChange={setstartDate}
+                                    value={startDate}
+                                    label="From"
+                                    useEnd={true}
                                 />
-                                <TaskTitleHolder
-                                    title="End Date & Time"
-                                    sub={moment(data.end).format(
-                                        'dddd DD MMMM, YYYY hh:mm A',
-                                    )}
+                                <CustomDateTime
+                                    onChange={setendDate}
+                                    value={endDate}
+                                    label="To"
+                                    useEnd={true}
                                 />
-                                {data.reason && (
-                                    <TaskTitleHolder
-                                        title="Rejection reason"
-                                        sub={data.reason}
-                                    />
-                                )}
                             </VStack>
-                            <Box>
-                                <TaskTitleHolder title="Percentage Of Completion" />
-
-                                <ProgressSlider
-                                    sliderValue={data?.progress}
-                                    setSliderValue={() => void 0}
-                                    label=""
-                                    readonly
-                                />
-                            </Box>
 
                             {cancel ? (
                                 <>

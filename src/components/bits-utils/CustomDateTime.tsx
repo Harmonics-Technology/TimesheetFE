@@ -16,7 +16,6 @@ export const CustomDateTime = ({ onChange, value, label, useEnd }) => {
         isComponentVisible: startVisible,
         setIsComponentVisible: startIsVisible,
     } = useComponentVisible(false);
-
     const newValue = moment(value).format('YYYY-MM-DD HH:mm');
     const [date, setDate] = useState<any>();
     // new DateObject(newValue.split(' ')[0]) || new DateObject(),
