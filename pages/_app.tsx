@@ -51,7 +51,7 @@ function MyApp({
                 />
             </Head>
 
-            <StyledThemeProvider>
+            {/* <StyledThemeProvider> */}
                 <QueryClientProvider client={queryClient}>
                     <Hydrate state={pageProps.dehydratedState}>
                         <RootStoreProvider>
@@ -66,7 +66,7 @@ function MyApp({
                         </RootStoreProvider>
                     </Hydrate>
                 </QueryClientProvider>
-            </StyledThemeProvider>
+            {/* </StyledThemeProvider> */}
             <Script src="/asseccibility.js" strategy="beforeInteractive" />
         </ChakraProvider>
     );

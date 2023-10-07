@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "next dev",
-        "build": "next build  && rm -rf ./.next/cache",
+        "build": "next build",
         "start": "next start",
         "svgr": "npx @svgr/cli -d src/components/icons --ignore-existing --icon --typescript public/icons",
         "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
