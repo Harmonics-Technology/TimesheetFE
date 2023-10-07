@@ -154,41 +154,7 @@ export const FillTimesheetModal = ({
 
     console.log({ newProjectTimesheet });
 
-    const onSubmit = async (data: ProjectTimesheetModel) => {
-        data.projectTaskAsigneeId = subTasks.filter(
-            (x) => x.id == data.projectSubTaskId,
-        )[0]?.projectTaskAsigneeId;
-        data.projectTimesheets = newProjectTimesheet;
-        try {
-            const result =
-                await ProjectManagementService.fillTimesheetForProject(data);
-            if (result.status) {
-                toast({
-                    title: result.message,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                router.reload();
-                onClose();
-                return;
-            }
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
-        } catch (err: any) {
-            toast({
-                title: err?.body?.message || err?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+
 
     useEffect(() => {
         setProjectTimesheets({
@@ -357,13 +323,49 @@ export const FillTimesheetModal = ({
         });
     };
 
-    // const [selectedSubTask, setSelectedSubTask] = useState()
-    const selectedTask = tasks.find(
-        (task) => task.id === watch('projectTaskId'),
+    const selectedTask = tasks?.find(
+        (task) => task?.id === watch('projectTaskId'),
     );
-    const selectedSubTask = subTasks.find(
-        (subTask) => subTask.id === watch('projectSubTaskId'),
+    const selectedSubTask = subTasks?.find(
+        (subTask) => subTask?.id === watch('projectSubTaskId'),
     );
+
+    console.log({selectedTask,selectedSubTask})
+
+    const onSubmit = async (data: ProjectTimesheetModel) => {
+        data.projectTaskAsigneeId = selectedSubTask?.projectTaskAsigneeId || selectedTask.assignees.find((x)=> x.userId == userId)?.id;
+        data.projectTimesheets = newProjectTimesheet;
+        try {
+            const result =
+                await ProjectManagementService.fillTimesheetForProject(data);
+            if (result.status) {
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.reload();
+                onClose();
+                return;
+            }
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        } catch (err: any) {
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
     useNonInitialEffect(() => {
         setSliderValue(
             selectedSubTask?.percentageOfCompletion ||

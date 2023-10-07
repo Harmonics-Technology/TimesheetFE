@@ -74,6 +74,7 @@ const TimesheetTeam = ({
     const { end } = router.query;
 
     //
+    const enableFinancials = (timeSheets as any)?.timeSheet[0]?.employeeInformation?.enableFinancials;
 
     const HighlightDate = (value: any) => {
         router.push({
@@ -895,10 +896,13 @@ const TimesheetTeam = ({
                     w="100%"
                     mr="auto"
                     flexWrap="wrap"
-                    display={['flex', 'grid']}
+                    display={['flex', enableFinancials ? 'grid': 'flex']}
                     gridTemplateColumns={'repeat(5,1fr)'}
                     gap={['0rem 1rem', '0']}
+                    justifyContent={['center','flex-end']}
                 >
+                    {enableFinancials && (<>
+                    
                     <TimeSheetEstimation
                         label="Expected Total Hours"
                         data={`${expectedHours} HR`}
@@ -933,6 +937,7 @@ const TimesheetTeam = ({
                         }
                         tip="Number of hours you worked this month x Rate per hour"
                     />
+                    </>)}
 
                     <ApproveSelected />
                     {/* <ApproveAllTimeSheet /> */}

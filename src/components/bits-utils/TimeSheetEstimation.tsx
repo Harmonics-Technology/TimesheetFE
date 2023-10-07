@@ -71,7 +71,7 @@ export function TimeSheetEstimationBtn({
 }) {
     const router = useRouter();
     return (
-        <Flex flexDirection="column" width="100%">
+        <Flex flexDirection="column" width="fit-content">
             <Flex
                 border={['none', '1px solid #e5e5e5']}
                 m="0"

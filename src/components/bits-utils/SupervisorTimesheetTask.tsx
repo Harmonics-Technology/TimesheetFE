@@ -54,8 +54,7 @@ const SupervisorTimesheetTask = ({
     const addProject = (user) => {
         setSelectedProject(user);
     };
-    const assigneeId = allShift.data?.projectTimesheets[0]?.projectTaskAsigneeId
-    // console.log({allShift, assigneeId})
+    console.log({allShift})
     
     const EventList = allShift?.data?.projectTimesheets?.map((obj: any) => {
         return {
@@ -70,7 +69,7 @@ const SupervisorTimesheetTask = ({
             progress: obj?.percentageOfCompletion,
             approved: obj?.status,
             reason: obj?.reason,
-            assigneeId: obj?.projectTaskAsigneeId,
+            assigneeId:id,
         };
     });
 
@@ -386,7 +385,7 @@ const SupervisorTimesheetTask = ({
                 <ApproveAllTimesheet
                     isOpen={opened}
                     onClose={closed}
-                    data={assigneeId}
+                    data={id}
                 />
             )}
         </>
