@@ -343,7 +343,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                 >
                                     <Text mb=".5rem">In Words</Text>
                                     <Text mb="0" textTransform="capitalize">
-                                        {numWords(payTotal)}{' '}
+                                        {numWords(payTotal as number)}{' '}
                                         {paySlip?.payslipView?.invoice
                                             ?.employeeInformation?.currency ==
                                         'CAD'
