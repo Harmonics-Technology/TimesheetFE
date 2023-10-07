@@ -70,6 +70,8 @@ const Leaveform = ({
         },
     });
 
+    console.log({user})
+
     const onSubmit = async (data: LeaveModel) => {
         oneDay == true && (data.endDate = data.startDate);
         data.leaveTypeId =

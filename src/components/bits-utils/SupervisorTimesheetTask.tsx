@@ -54,29 +54,9 @@ const SupervisorTimesheetTask = ({
     const addProject = (user) => {
         setSelectedProject(user);
     };
-
-    const DemoData = [
-        {
-            id: 0,
-            title: 'All Day Event very long title',
-            start: new Date('2023/09/11 10:30'),
-            end: new Date(2023, 8, 11, 12, 0, 0),
-        },
-        {
-            id: 1,
-            title: 'Long Event',
-            start: new Date(2015, 3, 2, 13, 30, 0),
-            end: new Date(2015, 3, 2, 15, 0, 0),
-        },
-
-        {
-            id: 2,
-            title: 'DTS STARTS',
-            start: new Date(2015, 3, 4, 10, 0, 0),
-            end: new Date(2015, 3, 4, 12, 14, 0),
-        },
-    ];
-
+    const assigneeId = allShift.data?.projectTimesheets[0]?.projectTaskAsigneeId
+    // console.log({allShift, assigneeId})
+    
     const EventList = allShift?.data?.projectTimesheets?.map((obj: any) => {
         return {
             id: obj?.id,
@@ -90,6 +70,7 @@ const SupervisorTimesheetTask = ({
             progress: obj?.percentageOfCompletion,
             approved: obj?.status,
             reason: obj?.reason,
+            assigneeId: obj?.projectTaskAsigneeId,
         };
     });
 
@@ -405,7 +386,7 @@ const SupervisorTimesheetTask = ({
                 <ApproveAllTimesheet
                     isOpen={opened}
                     onClose={closed}
-                    data={data}
+                    data={assigneeId}
                 />
             )}
         </>

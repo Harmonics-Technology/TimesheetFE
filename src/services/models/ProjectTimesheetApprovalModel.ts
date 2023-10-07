@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 export type ProjectTimesheetApprovalModel = {
+    projectTaskAsigneeId?: string;
     timesheetId?: string | null;
     approve?: boolean;
     reason?: string | null;

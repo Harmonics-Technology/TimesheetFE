@@ -35,6 +35,8 @@ export const ShowLeaveDetailsModal = ({
     data,
 }: ExportProps) => {
     const status = data?.status;
+
+    console.log({data})
     return (
         <Modal
             isOpen={isOpen}
@@ -170,6 +172,13 @@ export const ShowLeaveDetailsModal = ({
                                             ?.numberOfDaysEligible as number) -
                                             (data?.employeeInformation
                                                 ?.numberOfLeaveDaysTaken as number) ||
+                                        0
+                                    }
+                                />
+                                 <SingleDetailsInfo
+                                    label="Number of Leave Days Earned"
+                                    content={
+                                        data?.leaveDaysEarned ||
                                         0
                                     }
                                 />

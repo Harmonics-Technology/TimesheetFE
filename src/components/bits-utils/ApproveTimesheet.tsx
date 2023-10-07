@@ -44,6 +44,7 @@ export const ApproveTimesheet = ({ isOpen, onClose, data }: ExportProps) => {
 
     const approveTimesheet = async (approve) => {
         const formData = {
+            projectTaskAsigneeId: data.assigneeId,
             timesheetId: data.id,
             approve: approve,
             reason: !approve ? comment : undefined,
