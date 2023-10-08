@@ -17,14 +17,14 @@ RUN yarn build
 EXPOSE 3000
 CMD yarn start
 
-ENV NODE_ENV production
-ENV NEXT_PUBLIC_API_BASEURL ${API_BASEURL}
+# ENV NODE_ENV production
+# ENV NEXT_PUBLIC_API_BASEURL ${API_BASEURL}
 
-COPY . .
+# COPY . .
 
-RUN yarn install --frozen-lockfile
+# RUN yarn install --frozen-lockfile
 
-RUN yarn build
+# RUN yarn build
 
-CMD [ "yarn", "start" ]
+# CMD [ "yarn", "start" ]
 
