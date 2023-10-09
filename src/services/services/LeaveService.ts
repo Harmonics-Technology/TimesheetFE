@@ -251,6 +251,7 @@ employeeId?: string,
      * @param offset 
      * @param limit 
      * @param superAdminId 
+     * @param supervisorId 
      * @param employeeId 
      * @returns LeaveViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -259,6 +260,7 @@ employeeId?: string,
 offset?: number,
 limit?: number,
 superAdminId?: string,
+supervisorId?: string,
 employeeId?: string,
 ): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -268,6 +270,7 @@ employeeId?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'superAdminId': superAdminId,
+                'supervisorId': supervisorId,
                 'employeeId': employeeId,
             },
             errors: {
@@ -281,6 +284,7 @@ employeeId?: string,
      * @param offset 
      * @param limit 
      * @param superAdminId 
+     * @param supervisorId 
      * @param employeeId 
      * @returns LeaveViewPagedCollectionStandardResponse Success
      * @throws ApiError
@@ -289,6 +293,7 @@ employeeId?: string,
 offset?: number,
 limit?: number,
 superAdminId?: string,
+supervisorId?: string,
 employeeId?: string,
 ): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
@@ -298,6 +303,7 @@ employeeId?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'superAdminId': superAdminId,
+                'supervisorId': supervisorId,
                 'employeeId': employeeId,
             },
             errors: {

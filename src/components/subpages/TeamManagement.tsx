@@ -354,7 +354,7 @@ function TeamManagement({
             return;
         } catch (err: any) {
             toast({
-                title: err.body.message || err.message,
+                title: err.message || err.body.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',

@@ -42,15 +42,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             //     pagingOptions.search,
             //     clientId,
             // );
-            const leavelist = await LeaveService.listLeaves(
+            const leavelist = await LeaveService.listLeaveHistory(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
-                id,
-                undefined,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
+                id,  
             );
             //
             // const leavetypes = await LeaveService.leaveTypes(
