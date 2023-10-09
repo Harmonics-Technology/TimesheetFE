@@ -107,7 +107,7 @@ export const Dashboard = ({
                             <TableRow key={x.id}>
                                 <TableData name={x.name} />
                                 <TableData
-                                    name={moment(x.startDate).format(
+                                    name={moment(x.endDate).format(
                                         'DD/MM/YYYY',
                                     )}
                                 />

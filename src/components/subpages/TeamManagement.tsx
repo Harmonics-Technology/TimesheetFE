@@ -74,9 +74,12 @@ const schema = yup.object().shape({
         is: true,
         then: yup.number().required(),
     }),
-    paymentPartnerId: yup.string().when('payRollTypeId', {
-        is: 2,
-        then: yup.string().required(),
+    paymentPartnerId: yup.string().when('enableFinancials', {
+        is: true,
+        then: yup.string().when('payRollTypeId', {
+            is: 2,
+            then: yup.string().required(),
+        }),
     }),
     ratePerHour: yup.string().when('enableFinancials', {
         is: true,
@@ -92,9 +95,12 @@ const schema = yup.object().shape({
             then: yup.string().required(),
         }),
     }),
-    monthlyPayoutRate: yup.string().when('payRollTypeId', {
-        is: 2,
-        then: yup.string().required(),
+    monthlyPayoutRate: yup.string().when('enableFinancials', {
+        is: true,
+        then: yup.string().when('payRollTypeId', {
+            is: 2,
+            then: yup.string().required(),
+        }),
     }),
     currency: yup.string().required(),
     // paymentRate: yup.string().required(),

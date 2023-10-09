@@ -48,8 +48,6 @@ export const ApproveTimesheet = ({ isOpen, onClose, data }: ExportProps) => {
             timesheetId: data.id,
             approve: approve,
             reason: !approve ? comment : undefined,
-            startDate,
-            endDate,
         };
         setLoading(true);
         try {
