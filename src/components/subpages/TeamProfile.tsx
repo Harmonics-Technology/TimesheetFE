@@ -124,6 +124,8 @@ function TeamProfile({
             employeeType: userProfile?.employeeInformation?.employeeType,
             invoiceGenerationType:
                 userProfile?.employeeInformation?.invoiceGenerationType,
+            enableFinancials:
+                userProfile?.employeeInformation?.enableFinancials,
         },
     });
     const router = useRouter();
