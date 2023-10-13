@@ -37,7 +37,7 @@ export const SingleProjectPage = ({
     users: any;
 }) => {
     const projectSummary = ['Task Name', 'Deadline', 'Team member', 'Workload'];
-    console.log({metrics});
+    console.log({ metrics });
     return (
         <Box>
             <TopBar id={id} data={projects} users={users} />
@@ -81,6 +81,8 @@ export const SingleProjectPage = ({
                 <TableBox title="Upcoming Deadlines" tableHead={projectSummary}>
                     {metrics?.upcomingDeadlines?.slice(0, 3)?.map((x) => {
                         const status = x.status?.toLowerCase();
+                        const pastDate =
+                            moment().diff(moment(x.endDate), 'days') < 0;
                         return (
                             <TableRow key={x.id}>
                                 <TableData name={x.name} />
@@ -101,10 +103,17 @@ export const SingleProjectPage = ({
                                                 ? 'brand.400'
                                                 : status == 'ongoing'
                                                 ? '#f7e277'
+                                                : status == 'ongoing' &&
+                                                  pastDate
+                                                ? 'red'
+                                                : status == 'not started'
+                                                ? 'gray.100'
                                                 : 'red'
                                         }
                                         showProgress
-                                        rightText={`${Round(x.percentageOfCompletion)}%`}
+                                        rightText={`${Round(
+                                            x.percentageOfCompletion,
+                                        )}%`}
                                     />
                                 </td>
                             </TableRow>

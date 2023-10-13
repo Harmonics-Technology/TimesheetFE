@@ -101,35 +101,44 @@ export const Dashboard = ({
                     tableHead={projectSummary}
                     url="/SuperAdmin/project-management/projects"
                 >
-                    {metrics.projectSummary?.slice(0, 3)?.map((x: ProjectView) => {
-                        const status = x.status?.toLowerCase();
-                        return (
-                            <TableRow key={x.id}>
-                                <TableData name={x.name} />
-                                <TableData
-                                    name={moment(x.endDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
-                                <NewTableState
-                                    name={status}
-                                    color={colorSwatch(status)}
-                                />
-                                <td>
-                                    <ProgressBar
-                                        barWidth={x.progress}
-                                        barColor={
-                                            status == 'completed'
-                                                ? 'brand.400'
-                                                : status == 'due'
-                                                ? '#f7e277'
-                                                : 'red'
-                                        }
+                    {metrics.projectSummary
+                        ?.slice(0, 3)
+                        ?.map((x: ProjectView) => {
+                            const status = x.status?.toLowerCase();
+                            const pastDate =
+                                moment().diff(moment(x.endDate), 'days') < 0;
+                            return (
+                                <TableRow key={x.id}>
+                                    <TableData name={x.name} />
+                                    <TableData
+                                        name={moment(x.endDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
                                     />
-                                </td>
-                            </TableRow>
-                        );
-                    })}
+                                    <NewTableState
+                                        name={status}
+                                        color={colorSwatch(status)}
+                                    />
+                                    <td>
+                                        <ProgressBar
+                                            barWidth={x.progress}
+                                            barColor={
+                                                status == 'completed'
+                                                    ? 'brand.400'
+                                                    : status == 'ongoing'
+                                                    ? '#f7e277'
+                                                    : status == 'ongoing' &&
+                                                      pastDate
+                                                    ? 'red'
+                                                    : status == 'not started'
+                                                    ? 'gray.100'
+                                                    : 'red'
+                                            }
+                                        />
+                                    </td>
+                                </TableRow>
+                            );
+                        })}
                 </TableBox>
             </Grid>
             <Grid

@@ -168,7 +168,10 @@ export const AddSubTaskDrawer = ({
         <DrawerWrapper
             onClose={onClose}
             isOpen={isOpen}
-            title={'Add New Sub-Task'}
+            title={
+                // isEdit ? 'Edit Sub-Task':
+                'Add New Sub-Task'
+            }
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack align="flex-start" spacing="1.5rem">

@@ -172,7 +172,7 @@ export const EditProjectDrawer = ({
         <DrawerWrapper
             onClose={onClose}
             isOpen={isOpen}
-            title={'Create A New Project'}
+            title={'Edit Project'}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack align="flex-start" spacing="1rem">

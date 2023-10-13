@@ -61,6 +61,7 @@ import useClickOutside from '@components/generics/useClickOutside';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { Round } from '@components/generics/functions/Round';
 import { TimeSheetHighlight } from '@components/bits-utils/TimeSheetHighlight';
+import { TabMenuTimesheet } from '@components/bits-utils/ProjectManagement/Generics/TabMenuTimesheet';
 
 const schema = yup.object().shape({
     reason: yup.string().required(),
@@ -953,6 +954,12 @@ const TimesheetAdmin = ({
 
     return (
         <Box pos="relative">
+            <TabMenuTimesheet
+                name={[
+                    { title: 'Calendar View', url: `${id}` },
+                    { title: 'Task View', url: `task/${id}` },
+                ]}
+            />
             <TimeSheetHighlight />
             <Box>
                 {getHeader()}

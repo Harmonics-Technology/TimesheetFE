@@ -179,7 +179,11 @@ export const AddNewTaskDrawer = ({
     }, [selectedPriority]);
 
     return (
-        <DrawerWrapper onClose={onClose} isOpen={isOpen} title={'Add New Task'}>
+        <DrawerWrapper
+            onClose={onClose}
+            isOpen={isOpen}
+            title={isEdit ? 'Edit Task' : 'Add New Task'}
+        >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack align="flex-start" spacing="1.5rem">
                     <PrimaryInput<ProjectTaskModel>

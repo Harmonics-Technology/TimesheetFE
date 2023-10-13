@@ -118,7 +118,7 @@ const schema = yup.object().shape({
         is: true,
         then: yup.string().required(),
     }),
-    timeSheetGenerationStartDate: yup.string().required(),
+    // timeSheetGenerationStartDate: yup.string().required(),
     isEligibleForLeave: yup.string().required(),
     employeeType: yup.string().required(),
     numberOfDaysEligible: yup.string().when('isEligibleForLeave', {
@@ -965,14 +965,14 @@ function TeamManagement({
                                     error={errors.endDate}
                                     min={new DateObject().add(3, 'days')}
                                 />
-                                <PrimaryDate<TeamMemberModel>
+                                {/* <PrimaryDate<TeamMemberModel>
                                     control={control}
                                     name="timeSheetGenerationStartDate"
                                     label="Timesheet Start Date"
                                     error={errors.timeSheetGenerationStartDate}
                                     disableWeekend
                                     // min={new DateObject().add(3, 'days')}
-                                />
+                                /> */}
                             </Grid>
                             <UploadCareWidget
                                 refs={widgetApi}
