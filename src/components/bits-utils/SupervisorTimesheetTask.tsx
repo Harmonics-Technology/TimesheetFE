@@ -3,17 +3,10 @@ import {
     Button,
     Flex,
     HStack,
-    Square,
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -25,15 +18,12 @@ import {
 } from 'react-big-calendar';
 import moment from 'moment';
 import { LiaAngleLeftSolid, LiaAngleRightSolid } from 'react-icons/lia';
-import { FillTimesheetModal } from './FillTimesheetModal';
-import { CustomSelectBox } from './ProjectManagement/Generics/CustomSelectBox';
-import { ProjectManagementService } from 'src/services';
-import Loading from './Loading';
 import { TabMenuTimesheet } from './ProjectManagement/Generics/TabMenuTimesheet';
 import { Round } from '@components/generics/functions/Round';
 import { ApproveTimesheet } from './ApproveTimesheet';
 import { ApproveAllTimesheet } from './ApproveAllTimesheet';
 import { startOfWeek } from 'date-fns';
+import { CheckboxCircle } from './CheckboxCircle';
 
 const localizer = momentLocalizer(moment);
 
@@ -48,14 +38,6 @@ const SupervisorTimesheetTask = ({
     id,
     superAdminId,
 }: shiftProps) => {
-    const [tasks, setTasks] = useState<any>();
-    const [loading, setLoading] = useState<any>();
-    const [selectedProject, setSelectedProject] = useState<any>();
-    const addProject = (user) => {
-        setSelectedProject(user);
-    };
-    console.log({allShift})
-    
     const EventList = allShift?.data?.projectTimesheets?.map((obj: any) => {
         return {
             id: obj?.id,
@@ -69,16 +51,28 @@ const SupervisorTimesheetTask = ({
             progress: obj?.percentageOfCompletion,
             approved: obj?.status,
             reason: obj?.reason,
-            assigneeId:id,
+            assigneeId: id,
         };
     });
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { isOpen: opened, onOpen: onOpened, onClose: closed } = useDisclosure();
+    const {
+        isOpen: opened,
+        onOpen: onOpened,
+        onClose: closed,
+    } = useDisclosure();
     const [data, setData] = useState<any>();
+    const [noneSelected, setNoneSelected] = useState<any>();
     function openModal(data) {
         setData(data);
         onOpen();
+    }
+    function openApproveModal() {
+        if (checked.length <= 0) {
+            setNoneSelected(true);
+            return;
+        }
+        onOpened();
     }
     function ViewNamesGroup({ views: viewNames, view, messages, onView }) {
         return viewNames.map((name) => (
@@ -97,7 +91,7 @@ const SupervisorTimesheetTask = ({
         ));
     }
     function CustomToolbar({
-        date, 
+        date,
         label,
         localizer: { messages },
         onNavigate,
@@ -105,7 +99,7 @@ const SupervisorTimesheetTask = ({
         view,
         views,
     }) {
-        const firstDay = startOfWeek(date)
+        const firstDay = startOfWeek(date);
         const goPrevious = () => {
             const newDate = moment(firstDay)
                 .subtract(7, 'day')
@@ -138,7 +132,6 @@ const SupervisorTimesheetTask = ({
             onNavigate(navigate.NEXT);
         };
         return (
-            
             // <div className="rbc-toolbar">
 
             <Flex w="full" justify="space-between" my="1rem">
@@ -186,7 +179,7 @@ const SupervisorTimesheetTask = ({
                     justify="center"
                     fontSize=".8rem"
                     cursor="pointer"
-                    onClick={onOpened}
+                    onClick={openApproveModal}
                 >
                     Approve Timesheet
                 </Flex>
@@ -246,16 +239,42 @@ const SupervisorTimesheetTask = ({
         };
         return <p style={style}>TIME</p>;
     };
+
+    const [checked, setChecked] = useState<any>([]);
+    const updateSelection = (date) => {
+        setNoneSelected(false);
+        const exists = checked.find((x) => x == date);
+        if (exists) {
+            setChecked(checked.filter((x) => x !== date));
+            return;
+        }
+        setChecked([...checked, `${date}`]);
+    };
+    const MyCustomHeader = ({ label, date }) => {
+        const formattedDate = moment(date).format('YYYY-MM-DD');
+        return (
+            <Flex gap=".5rem" align="center">
+                <div>{label}</div>
+                <CheckboxCircle
+                    label={label}
+                    onClick={() => updateSelection(formattedDate)}
+                    checked={checked.find((x) => x == formattedDate)}
+                    noneSelected={noneSelected}
+                />
+            </Flex>
+        );
+    };
     const components = {
         timeGutterHeader: TimeGutter,
         timeSlotWrapper: timeSlotWrapper,
         toolbar: CustomToolbar,
+        week: { header: MyCustomHeader },
     };
 
-    const {from} = router.query
+    const { from } = router.query;
     const { defaultDate, formats, views } = useMemo(
         () => ({
-            defaultDate: new Date(from as unknown as string || new Date()),
+            defaultDate: new Date((from as unknown as string) || new Date()),
             formats: {
                 dayFormat: (date, culture, localizer) =>
                     localizer.format(date, 'ddd', culture),
@@ -271,32 +290,6 @@ const SupervisorTimesheetTask = ({
         [],
     );
 
-    useEffect(() => {
-        async function getTasks() {
-            if (selectedProject?.id) {
-                setLoading(true);
-            }
-            try {
-                const res = await ProjectManagementService.listTasks(
-                    0,
-                    25,
-                    superAdminId,
-                    selectedProject?.id || undefined,
-                    2,
-                    id,
-                );
-                if (res?.status) {
-                    setLoading(false);
-                    setTasks(res?.data?.value);
-                    return;
-                }
-            } catch (error) {
-                setLoading(false);
-            }
-        }
-        getTasks();
-    }, [selectedProject]);
-
     const onSelectEvent = useCallback((slotInfo) => {
         openModal(slotInfo);
     }, []);
@@ -311,8 +304,6 @@ const SupervisorTimesheetTask = ({
                         { title: 'Task View', url: `task/${id}` },
                     ]}
                 />
-
-                <Loading loading={loading} />
                 <Flex
                     justify="flex-end"
                     w="full"
@@ -381,11 +372,12 @@ const SupervisorTimesheetTask = ({
                     data={data}
                 />
             )}
-             {opened && (
+            {opened && (
                 <ApproveAllTimesheet
                     isOpen={opened}
                     onClose={closed}
-                    data={id}
+                    id={id}
+                    data={checked}
                 />
             )}
         </>

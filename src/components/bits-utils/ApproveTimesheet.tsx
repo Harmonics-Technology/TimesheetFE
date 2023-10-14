@@ -1,7 +1,5 @@
 import {
     Box,
-    Checkbox,
-    Circle,
     Flex,
     FormLabel,
     HStack,
@@ -20,13 +18,11 @@ import React, { useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { ShiftBtn } from './ShiftBtn';
 import { ProjectManagementService } from 'src/services';
-
-import router, { useRouter } from 'next/router';
 import { ProgressSlider } from './ProgressSlider';
 
 import TaskTitleHolder from './TaskTitleHolder';
-import { formatDate } from '@components/generics/functions/formatDate';
 import moment from 'moment';
+import { useRouter } from 'next/router';
 
 interface ExportProps {
     isOpen: any;
@@ -34,12 +30,11 @@ interface ExportProps {
     data?: any;
 }
 export const ApproveTimesheet = ({ isOpen, onClose, data }: ExportProps) => {
-    console.log({data})
+    // console.log({ data });
+    const router = useRouter();
     const [cancel, setCancel] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [comment, setComment] = useState<string>();
-    const [startDate, setstartDate] = useState<string>( moment( data.start).format('YYYY-MM-DD'));
-    const [endDate, setendDate] = useState<string>(moment( data.end).format('YYYY-MM-DD'));
     const toast = useToast();
 
     const approveTimesheet = async (approve) => {

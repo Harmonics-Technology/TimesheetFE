@@ -2,8 +2,8 @@ import { Flex, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import React from 'react';
 
 interface ICheckbox {
-    checked: any;
-    onChange: any;
+    checked?: any;
+    onChange?: any;
     label?: string;
     mb?: string;
     disabled?: boolean;

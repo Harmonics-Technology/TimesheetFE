@@ -22,4 +22,5 @@ export type ControlSettingView = {
     monthlyPaymentPeriod?: number | null;
     timesheetFillingReminderDay?: number | null;
     timesheetOverdueReminderDay?: number | null;
+    allowUsersTofillFutureTimesheet?: boolean;
 };

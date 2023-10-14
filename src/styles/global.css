@@ -5,6 +5,7 @@
 @import url('./scrollbar.css');
 @import url('./scheduler.css');
 @import url('./toggleswitch.css');
+@import url('./circularcheckbox.css');
 
 .phone-input {
     /* border: 1px solid #e5e5e5; */

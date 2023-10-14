@@ -180,6 +180,26 @@ export const AccessControlSettings = ({
                 </Flex>
             </Box>
 
+            <Box w="full" py="1.5rem" borderBottom="1px solid #C2CFE0">
+                <Flex justify="space-between" w="90%">
+                    <TitleText
+                        title="Allow Future timesheet submission"
+                        text="Give Users access to submit timesheet at a date later in the future."
+                    />
+                    <ToggleSwitch
+                        label="timesheet"
+                        onChange={() =>
+                            setAccess({
+                                ...access,
+                                adminReport:
+                                    !access.allowUsersTofillFutureTimesheet,
+                            })
+                        }
+                        checked={access.allowUsersTofillFutureTimesheet}
+                    />
+                </Flex>
+            </Box>
+
             <Box my="2rem">
                 <ShiftBtn
                     text="Save"

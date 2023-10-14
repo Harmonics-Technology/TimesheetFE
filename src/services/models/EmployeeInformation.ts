@@ -34,7 +34,6 @@ export type EmployeeInformation = {
     monthlyPayoutRate?: number | null;
     paymentFrequency?: string | null;
     onBoradingFee?: number;
-    timeSheetGenerationStartDate?: string;
     isEligibleForLeave?: boolean | null;
     numberOfDaysEligible?: number | null;
     numberOfHoursEligible?: number | null;
