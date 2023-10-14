@@ -31,24 +31,27 @@ import { CustomSelectBox } from '../Generics/CustomSelectBox';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 
-const schema = yup.object().shape({
-    name: yup.string().required(),
-    startDate: yup.string().required(),
-    endDate: yup.string().required(),
-    duration: yup.string().required(),
-    budget: yup.string().required(),
-    budgetThreshold: yup.string().required(),
-    assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
-    note: yup.string().required(),
-    documentURL: yup.string().required(),
-});
-
 export const CreateProjectDrawer = ({
     onClose,
     isOpen,
     users,
     superAdminId,
 }) => {
+    const [currentBudget, setCurrenntBudget] = useState(0);
+    const schema = yup.object().shape({
+        name: yup.string().required(),
+        startDate: yup.string().required(),
+        endDate: yup.string().required(),
+        duration: yup.string().required(),
+        budget: yup.number().required(),
+        budgetThreshold: yup.number().required().max(currentBudget),
+        assignedUsers: yup
+            .array()
+            .min(1, 'Select atleast one assignee')
+            .required(),
+        note: yup.string().required(),
+        documentURL: yup.string().required(),
+    });
     const {
         register,
         handleSubmit,
@@ -127,6 +130,11 @@ export const CreateProjectDrawer = ({
     useEffect(() => {
         setValue('duration', dateDiff + 1 || 0);
     }, [watch('startDate'), watch('endDate')]);
+
+    const budget = watch('budget');
+    useEffect(() => {
+        setCurrenntBudget(budget as number);
+    }, [budget]);
 
     useEffect(() => {
         setValue(

@@ -181,7 +181,9 @@ const SupervisorTimesheetTask = ({
                     cursor="pointer"
                     onClick={openApproveModal}
                 >
-                    Approve Timesheet
+                    Approve{' '}
+                    {checked?.length > 0 ? `${checked?.length} day(s)` : ''}{' '}
+                    Timesheet
                 </Flex>
             </Flex>
             // </div>
