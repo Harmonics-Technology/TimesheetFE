@@ -37,6 +37,7 @@ const schema = yup.object().shape({
     endDate: yup.string().required(),
     duration: yup.string().required(),
     budget: yup.string().required(),
+    budgetThreshold: yup.string().required(),
     assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
     note: yup.string().required(),
     documentURL: yup.string().required(),
@@ -188,6 +189,14 @@ export const CreateProjectDrawer = ({
                         label="Budget"
                         name="budget"
                         error={errors.budget}
+                        placeholder=""
+                        defaultValue=""
+                        register={register}
+                    />
+                    <PrimaryInput<ProjectModel>
+                        label="Budget Threshold"
+                        name="budgetThreshold"
+                        error={errors.budgetThreshold}
                         placeholder=""
                         defaultValue=""
                         register={register}

@@ -14,4 +14,5 @@ export type ProjectModel = {
     note?: string | null;
     documentURL?: string | null;
     statusId?: number;
+    budgetThreshold?: number | null;
 };

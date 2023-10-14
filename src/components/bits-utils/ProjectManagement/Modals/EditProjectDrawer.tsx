@@ -70,6 +70,7 @@ export const EditProjectDrawer = ({
         defaultValues: {
             superAdminId: data?.superAdminId,
             budget: data?.budget,
+            budgetThreshold: data?.budgetThreshold,
             documentURL: data?.documentURL,
             duration: data?.duration,
             endDate: data?.endDate,
@@ -95,7 +96,9 @@ export const EditProjectDrawer = ({
         }
     };
 
-    const assigneeWithTaskId = data?.assignees?.filter((x) => x.projectTaskId === null);
+    const assigneeWithTaskId = data?.assignees?.filter(
+        (x) => x.projectTaskId === null,
+    );
     const [selectedUser, setSelecedUser] = useState<any>(
         assigneeWithTaskId?.map((obj) => ({
             id: obj?.userId,
@@ -108,14 +111,14 @@ export const EditProjectDrawer = ({
         setSelecedUser([...selectedUser, user]);
     };
     const removeUser = (id) => {
-        console.log({id});
+        console.log({ id });
         const filtered = selectedUser?.filter((x) => x.id !== id);
         setSelecedUser(filtered);
     };
 
     const toast = useToast();
     const router = useRouter();
-    console.log({selectedUser, data, users, assigneeWithTaskId})
+    console.log({ selectedUser, data, users, assigneeWithTaskId });
 
     //
 
@@ -166,14 +169,9 @@ export const EditProjectDrawer = ({
         setValue('documentURL', fileDoc?.url?.cdnUrl);
     }, [fileDoc]);
 
-
     //
     return (
-        <DrawerWrapper
-            onClose={onClose}
-            isOpen={isOpen}
-            title={'Edit Project'}
-        >
+        <DrawerWrapper onClose={onClose} isOpen={isOpen} title={'Edit Project'}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack align="flex-start" spacing="1rem">
                     <PrimaryInput<ProjectModel>
@@ -224,6 +222,14 @@ export const EditProjectDrawer = ({
                         label="Budget"
                         name="budget"
                         error={errors.budget}
+                        placeholder=""
+                        defaultValue=""
+                        register={register}
+                    />
+                    <PrimaryInput<ProjectModel>
+                        label="Budget Threshold"
+                        name="budgetThreshold"
+                        error={errors.budgetThreshold}
                         placeholder=""
                         defaultValue=""
                         register={register}

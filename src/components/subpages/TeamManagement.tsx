@@ -88,11 +88,11 @@ const schema = yup.object().shape({
             then: yup.string().required(),
         }),
     }),
-    hstNumber: yup.string().when('enableFinancials', {
+    hstNumber: yup.number().when('enableFinancials', {
         is: true,
-        then: yup.string().when('payRollTypeId', {
+        then: yup.number().when('payRollTypeId', {
             is: 1,
-            then: yup.string().required(),
+            then: yup.number().required(),
         }),
     }),
     monthlyPayoutRate: yup.string().when('enableFinancials', {
@@ -946,7 +946,7 @@ function TeamManagement({
                             <Grid
                                 templateColumns={[
                                     'repeat(1,1fr)',
-                                    'repeat(3,1fr)',
+                                    'repeat(2,1fr)',
                                 ]}
                                 gap="1rem 2rem"
                                 my="1.5rem"

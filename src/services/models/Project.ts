@@ -19,5 +19,6 @@ export type Project = {
     isCompleted?: boolean;
     budgetSpent?: number;
     hoursSpent?: number;
+    budgetThreshold?: number;
     assignees?: Array<ProjectTaskAsignee> | null;
 };

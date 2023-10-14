@@ -19,5 +19,6 @@ export type ProjectView = {
     status?: string | null;
     projectMetrics?: ProjectMetrics;
     isCompleted?: boolean;
+    budgetThreshold?: number;
     assignees?: Array<ProjectTaskAsigneeView> | null;
 };
