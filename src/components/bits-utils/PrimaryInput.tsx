@@ -91,6 +91,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                     h={h}
                     w={w}
                     isReadOnly={readonly}
+                    step=".01"
                 />
                 {icon && (
                     <InputRightElement
