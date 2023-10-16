@@ -48,25 +48,25 @@ export const SingleProjectPage = ({
                 gap="1.06rem"
             >
                 <MiniCards
-                    value={metrics.resources}
+                    value={metrics?.resources}
                     title="Resources"
                     icon={RiBriefcase2Line}
                     color="#2eafa3"
                 />
                 <MiniCards
-                    value={metrics.totalTasks}
+                    value={metrics?.totalTasks}
                     title="Total No of Task"
                     icon={BiTask}
                     color="#FF5B79"
                 />
                 <MiniCards
-                    value={metrics.totalHours}
+                    value={metrics?.totalHours}
                     title="Total No of Hours"
                     icon={RiTimeLine}
                     color="#2383BD"
                 />
                 <MiniCards
-                    value={metrics.budgetSpentAndRemain?.budgetSpent}
+                    value={metrics?.budgetSpentAndRemain?.budgetSpent}
                     title="Total Budget Spent"
                     icon={PiMoneyBold}
                     color="#F8C200"

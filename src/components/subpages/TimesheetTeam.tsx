@@ -74,7 +74,8 @@ const TimesheetTeam = ({
     const { end } = router.query;
 
     //
-    const enableFinancials = (timeSheets as any)?.timeSheet[0]?.employeeInformation?.enableFinancials;
+    const enableFinancials = (timeSheets as any)?.timeSheet[0]
+        ?.employeeInformation?.enableFinancials;
 
     const HighlightDate = (value: any) => {
         router.push({
@@ -663,19 +664,20 @@ const TimesheetTeam = ({
                             fontSize={['.6rem', '.9rem']}
                             p={['0', '1rem']}
                             defaultValue={
-                                isWeekend(
-                                    new Date(timesheets?.date as string),
-                                ) ||
-                                moment(timesheets?.date).format(
-                                    'DD/MM/YYYY',
-                                ) ===
-                                    moment(preventTomorrow).format(
-                                        'DD/MM/YYYY',
-                                    ) ||
-                                (notFilled && timesheets?.hours == 0)
-                                    ? // timesheets?.status == 'PENDING'
-                                      '---'
-                                    : timesheets?.hours
+                                // isWeekend(
+                                //     new Date(timesheets?.date as string),
+                                // ) ||
+                                // moment(timesheets?.date).format(
+                                //     'DD/MM/YYYY',
+                                // ) ===
+                                //     moment(preventTomorrow).format(
+                                //         'DD/MM/YYYY',
+                                //     ) ||
+                                // (notFilled && timesheets?.hours == 0)
+                                //     ? // timesheets?.status == 'PENDING'
+                                //       '---'
+                                //     :
+                                timesheets?.hours || '---'
                             }
                             placeholder="---"
                             textAlign="center"
@@ -683,14 +685,13 @@ const TimesheetTeam = ({
                             border="0"
                             readOnly={timesheets?.status == 'APPROVED'}
                             disabled={
-                                timesheets == undefined ||
-                                isWeekend(
-                                    new Date(timesheets?.date as string),
-                                ) ||
-                                moment(timesheets?.date).format(
-                                    'DD/MM/YYYY',
-                                ) ===
-                                    moment(preventTomorrow).format('DD/MM/YYYY')
+                                // timesheets == undefined ||
+                                isWeekend(new Date(currentDate))
+                                // ||
+                                // moment(timesheets?.date).format(
+                                //     'DD/MM/YYYY',
+                                // ) ===
+                                //     moment(preventTomorrow).format('DD/MM/YYYY')
                             }
                             onChange={(e) =>
                                 fillTimeInDate({
@@ -896,48 +897,51 @@ const TimesheetTeam = ({
                     w="100%"
                     mr="auto"
                     flexWrap="wrap"
-                    display={['flex', enableFinancials ? 'grid': 'flex']}
+                    display={['flex', enableFinancials ? 'grid' : 'flex']}
                     gridTemplateColumns={'repeat(5,1fr)'}
                     gap={['0rem 1rem', '0']}
-                    justifyContent={['center','flex-end']}
+                    justifyContent={['center', 'flex-end']}
                 >
-                    {enableFinancials && (<>
-                    
-                    <TimeSheetEstimation
-                        label="Expected Total Hours"
-                        data={`${expectedHours} HR`}
-                        tip="Number of hours you are expected to work this month"
-                    />
+                    {enableFinancials && (
+                        <>
+                            <TimeSheetEstimation
+                                label="Expected Total Hours"
+                                data={`${expectedHours} HR`}
+                                tip="Number of hours you are expected to work this month"
+                            />
 
-                    {/* <TimeSheetEstimation
+                            {/* <TimeSheetEstimation
                         label="Total Hours Worked"
                         data={`${totalHours} HR`}
                         tip="Number of hours you worked this month"
                     /> */}
-                    <TimeSheetEstimation
-                        label="Total Hours Approved"
-                        data={`${timeSheets?.totalApprovedHours || 0} HR`}
-                        tip="Number of hours approved by your supervisor"
-                    />
-                    <TimeSheetEstimation
-                        label="Expected Payout"
-                        data={
-                            currency === 'NGN'
-                                ? Naira(expectedPay)
-                                : CAD(expectedPay)
-                        }
-                        tip="Total amount you are expected to be paid this month"
-                    />
-                    <TimeSheetEstimation
-                        label="Actual Payout"
-                        data={
-                            currency === 'NGN'
-                                ? Naira(actualPayout)
-                                : CAD(actualPayout)
-                        }
-                        tip="Number of hours you worked this month x Rate per hour"
-                    />
-                    </>)}
+                            <TimeSheetEstimation
+                                label="Total Hours Approved"
+                                data={`${
+                                    timeSheets?.totalApprovedHours || 0
+                                } HR`}
+                                tip="Number of hours approved by your supervisor"
+                            />
+                            <TimeSheetEstimation
+                                label="Expected Payout"
+                                data={
+                                    currency === 'NGN'
+                                        ? Naira(expectedPay)
+                                        : CAD(expectedPay)
+                                }
+                                tip="Total amount you are expected to be paid this month"
+                            />
+                            <TimeSheetEstimation
+                                label="Actual Payout"
+                                data={
+                                    currency === 'NGN'
+                                        ? Naira(actualPayout)
+                                        : CAD(actualPayout)
+                                }
+                                tip="Number of hours you worked this month x Rate per hour"
+                            />
+                        </>
+                    )}
 
                     <ApproveSelected />
                     {/* <ApproveAllTimeSheet /> */}

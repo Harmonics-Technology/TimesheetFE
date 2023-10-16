@@ -1,4 +1,7 @@
 import {
+    Alert,
+    AlertDescription,
+    AlertIcon,
     Box,
     Button,
     DrawerFooter,
@@ -9,6 +12,7 @@ import {
     Icon,
     Text,
     VStack,
+    useDisclosure,
     useToast,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
@@ -31,6 +35,7 @@ import {
 import { useRouter } from 'next/router';
 import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 import moment from 'moment';
+import { ShowPrompt } from './ShowPrompt';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -67,7 +72,8 @@ export const AddNewTaskDrawer = ({
         control,
         watch,
         setValue,
-        formState: { errors, isSubmitting },
+        trigger,
+        formState: { errors, isSubmitting, isValid },
     } = useForm<ProjectTaskModel>({
         resolver: yupResolver(schema),
         mode: 'all',
@@ -127,6 +133,19 @@ export const AddNewTaskDrawer = ({
             ? true
             : false;
 
+    const {
+        isOpen: isOpened,
+        onClose: onClosed,
+        onOpen: onOpened,
+    } = useDisclosure();
+
+    const projectEndDate = moment(project?.endDate).format('YYYY-MM-DD');
+    const taskEndDate = watch('endDate');
+
+    const extendDate =
+        moment(taskEndDate).diff(projectEndDate, 'days', true) > 0;
+    console.log({ extendDate, projectEndDate, project, taskEndDate });
+
     const onSubmit = async (data: ProjectTaskModel) => {
         //
         data.trackedByHours = isHours;
@@ -163,6 +182,17 @@ export const AddNewTaskDrawer = ({
             });
         }
     };
+    const submitForm = () => {
+        if (!isValid) {
+            trigger();
+            return;
+        }
+        if (extendDate) {
+            onOpened();
+            return;
+        }
+        handleSubmit(onSubmit)();
+    };
 
     useEffect(() => {
         setValue(
@@ -184,195 +214,212 @@ export const AddNewTaskDrawer = ({
             isOpen={isOpen}
             title={isEdit ? 'Edit Task' : 'Add New Task'}
         >
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <VStack align="flex-start" spacing="1.5rem">
-                    <PrimaryInput<ProjectTaskModel>
-                        label="Task Name"
-                        name="name"
-                        error={errors.name}
-                        placeholder=""
-                        defaultValue=""
-                        register={register}
-                    />
-                    <Box w="full">
-                        <FormLabel
-                            textTransform="capitalize"
-                            width="fit-content"
-                            fontSize=".8rem"
-                        >
-                            Assign this Project to
-                        </FormLabel>
+            {/* <form> */}
+            <VStack align="flex-start" spacing="1.5rem">
+                <PrimaryInput<ProjectTaskModel>
+                    label="Task Name"
+                    name="name"
+                    error={errors.name}
+                    placeholder=""
+                    defaultValue=""
+                    register={register}
+                />
+                <Box w="full">
+                    <FormLabel
+                        textTransform="capitalize"
+                        width="fit-content"
+                        fontSize=".8rem"
+                    >
+                        Assign this Project to
+                    </FormLabel>
 
-                        <CustomSelectBox
-                            data={assignees}
-                            updateFunction={addUser}
-                            items={selectedUser}
-                            customKeys={{
-                                key: 'userId',
-                                label: 'user.fullName',
-                            }}
-                            checkbox={true}
-                            id="users"
-                            error={errors?.assignedUsers}
-                            removeFn={removeUser}
-                        />
-                        <Box
-                            mt="1rem"
-                            borderY="1px solid #e5e5e5"
-                            w="full"
-                            py="1rem"
-                        >
-                            {selectedUser?.length > 0 && (
-                                <HStack mb=".5rem" flexWrap="wrap" w="full">
-                                    {selectedUser?.map((x: any, i: any) => (
-                                        <HStack
-                                            borderRadius="25px"
-                                            border="1px solid #e5e5e5"
+                    <CustomSelectBox
+                        data={assignees}
+                        updateFunction={addUser}
+                        items={selectedUser}
+                        customKeys={{
+                            key: 'userId',
+                            label: 'user.fullName',
+                        }}
+                        checkbox={true}
+                        id="users"
+                        error={errors?.assignedUsers}
+                        removeFn={removeUser}
+                    />
+                    <Box
+                        mt="1rem"
+                        borderY="1px solid #e5e5e5"
+                        w="full"
+                        py="1rem"
+                    >
+                        {selectedUser?.length > 0 && (
+                            <HStack mb=".5rem" flexWrap="wrap" w="full">
+                                {selectedUser?.map((x: any, i: any) => (
+                                    <HStack
+                                        borderRadius="25px"
+                                        border="1px solid #e5e5e5"
+                                        fontSize=".6rem"
+                                        color="#707683"
+                                        key={i}
+                                        p=".1rem .4rem"
+                                    >
+                                        <Text
                                             fontSize=".6rem"
                                             color="#707683"
-                                            key={i}
-                                            p=".1rem .4rem"
+                                            mb="0"
                                         >
-                                            <Text
-                                                fontSize=".6rem"
-                                                color="#707683"
-                                                mb="0"
-                                            >
-                                                {x['user.fullName']}
-                                            </Text>
-                                            {/* <Icon
+                                            {x['user.fullName']}
+                                        </Text>
+                                        {/* <Icon
                                                 as={MdCancel}
                                                 onClick={() =>
                                                     removeUser(x?.id)
                                                 }
                                             /> */}
-                                        </HStack>
-                                    ))}
-                                </HStack>
-                            )}
-                            <Text fontSize=".6rem" color="#707683" mb="0">
-                                These team members were added to this project
-                            </Text>
-                        </Box>
+                                    </HStack>
+                                ))}
+                            </HStack>
+                        )}
+                        <Text fontSize=".6rem" color="#707683" mb="0">
+                            These team members were added to this project
+                        </Text>
                     </Box>
-                    <Grid
-                        templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
-                        gap="1rem 1rem"
-                        w="full"
-                    >
-                        <PrimaryDate<ProjectTaskModel>
-                            control={control}
-                            name="startDate"
-                            label="Start Date"
-                            error={errors.startDate}
-                            min={project?.startDate}
-                            max={project?.endDate}
-                            placeholder={moment(data?.startDate).format(
-                                'DD/MM/YYYY',
-                            )}
-                        />
-                        <PrimaryDate<ProjectTaskModel>
-                            control={control}
-                            name="endDate"
-                            label="End Date"
-                            error={errors.endDate}
-                            min={project?.startDate}
-                            max={project?.endDate}
-                            placeholder={moment(data?.endDate).format(
-                                'DD/MM/YYYY',
-                            )}
-                        />
-                        <PrimaryInput<ProjectTaskModel>
-                            label="Duration"
-                            name="duration"
-                            error={errors.duration}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                            readonly={true}
-                        />
-                    </Grid>
-                    <PrimaryRadio
+                </Box>
+                <Grid
+                    templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
+                    gap="1rem 1rem"
+                    w="full"
+                >
+                    <PrimaryDate<ProjectTaskModel>
                         control={control}
-                        error={errors.trackedByHours}
-                        radios={['Track by days', 'Track by hours']}
-                        name="trackedByHours"
-                        flexDir="column"
-                        defaultValue={
-                            data.trackedByHours == true
-                                ? 'Track by hours'
-                                : 'Track by days'
-                        }
+                        name="startDate"
+                        label="Start Date"
+                        error={errors.startDate}
+                        min={project?.startDate}
+                        // max={project?.endDate}
+                        placeholder={moment(data?.startDate).format(
+                            'DD/MM/YYYY',
+                        )}
                     />
-                    {isHours && (
-                        <PrimaryInput<ProjectTaskModel>
-                            label="Duration"
-                            name="durationInHours"
-                            error={errors.durationInHours}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                            // readonly={readonly}
-                        />
-                    )}
+                    <PrimaryDate<ProjectTaskModel>
+                        control={control}
+                        name="endDate"
+                        label="End Date"
+                        error={errors.endDate}
+                        min={project?.startDate}
+                        // max={project?.endDate}
+                        placeholder={moment(data?.endDate).format('DD/MM/YYYY')}
+                    />
 
-                    <Box w="full">
-                        <FormLabel
-                            textTransform="capitalize"
-                            width="fit-content"
-                            fontSize=".8rem"
-                        >
-                            Task priority
-                        </FormLabel>
-                        <CustomSelectBox
-                            data={priority}
-                            updateFunction={selectPriority}
-                            items={selectedPriority}
-                            customKeys={{ key: 'id', label: 'name' }}
-                            id="priority"
-                            error={errors?.taskPriority}
-                            single
-                        />
-                    </Box>
-
-                    <PrimaryTextarea<ProjectTaskModel>
-                        label="Notes"
-                        color="#707683"
-                        name="note"
-                        error={errors.note}
+                    <PrimaryInput<ProjectTaskModel>
+                        label="Duration"
+                        name="duration"
+                        error={errors.duration}
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        readonly={true}
                     />
+                </Grid>
+                {extendDate && (
+                    <Alert status="error" fontSize=".8rem">
+                        <AlertIcon />
+                        <AlertDescription>
+                            The selected end date may extend the end date of the
+                            project.
+                        </AlertDescription>
+                    </Alert>
+                )}
+                <PrimaryRadio
+                    control={control}
+                    error={errors.trackedByHours}
+                    radios={['Track by days', 'Track by hours']}
+                    name="trackedByHours"
+                    flexDir="column"
+                    defaultValue={
+                        data.trackedByHours == true
+                            ? 'Track by hours'
+                            : 'Track by days'
+                    }
+                />
+                {isHours && (
+                    <PrimaryInput<ProjectTaskModel>
+                        label="Duration"
+                        name="durationInHours"
+                        error={errors.durationInHours}
+                        placeholder=""
+                        defaultValue=""
+                        register={register}
+                        // readonly={readonly}
+                    />
+                )}
 
-                    <DrawerFooter my="2rem" p="0" w="full">
-                        <Flex justify="space-between" w="full">
-                            <Button
-                                bgColor="#FF5B79"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                onClick={() => onClose()}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                bgColor="brand.400"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                type="submit"
-                                isLoading={isSubmitting}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                Save
-                            </Button>
-                        </Flex>
-                    </DrawerFooter>
-                </VStack>
-            </form>
+                <Box w="full">
+                    <FormLabel
+                        textTransform="capitalize"
+                        width="fit-content"
+                        fontSize=".8rem"
+                    >
+                        Task priority
+                    </FormLabel>
+                    <CustomSelectBox
+                        data={priority}
+                        updateFunction={selectPriority}
+                        items={selectedPriority}
+                        customKeys={{ key: 'id', label: 'name' }}
+                        id="priority"
+                        error={errors?.taskPriority}
+                        single
+                    />
+                </Box>
+
+                <PrimaryTextarea<ProjectTaskModel>
+                    label="Notes"
+                    color="#707683"
+                    name="note"
+                    error={errors.note}
+                    placeholder=""
+                    defaultValue=""
+                    register={register}
+                />
+
+                <DrawerFooter my="2rem" p="0" w="full">
+                    <Flex justify="space-between" w="full">
+                        <Button
+                            bgColor="#FF5B79"
+                            color="white"
+                            height="3rem"
+                            fontSize="14px"
+                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                            onClick={() => onClose()}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            bgColor="brand.400"
+                            color="white"
+                            height="3rem"
+                            fontSize="14px"
+                            type="submit"
+                            isLoading={isSubmitting}
+                            spinner={<BeatLoader color="white" size={10} />}
+                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                            onClick={submitForm}
+                        >
+                            Save
+                        </Button>
+                    </Flex>
+                </DrawerFooter>
+            </VStack>
+            {/* </form> */}
+            {isOpened && (
+                <ShowPrompt
+                    isOpen={isOpened}
+                    onClose={onClosed}
+                    onSubmit={handleSubmit(onSubmit)}
+                    loading={isSubmitting}
+                />
+            )}
         </DrawerWrapper>
     );
 };

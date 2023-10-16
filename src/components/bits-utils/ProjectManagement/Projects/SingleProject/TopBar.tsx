@@ -79,7 +79,6 @@ export const TopBar = ({
                     />
                     <ManageBtn
                         onClick={() => onOpen()}
-                        isLoading={loading}
                         btn="Edit Project"
                         bg="brand.400"
                         w="fit-content"

@@ -154,11 +154,7 @@ const TimesheetSupervisor = ({
     const [selected, setSelected] = useState<TimesheetHoursApprovalModel[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
 
-    const timesheetALl = monthlyTimesheets?.filter(
-        (x) =>
-            moment(x.date).format('DD/MM/YYYY') !=
-                moment(preventTomorrow).format('DD/MM/YYYY') && !x.isApproved,
-    );
+    const timesheetALl = monthlyTimesheets?.filter((x) => !x.isApproved);
     //
     const fillSelectedDate = (item: TimesheetHoursApprovalModel) => {
         const existingValue = selected.find((e) => e.date == item.date);
@@ -646,18 +642,17 @@ const TimesheetSupervisor = ({
                                         approve: timesheets?.isApproved,
                                     });
                                 }}
-                                disabled={
+                                isDisabled={
                                     timesheets?.status === 'APPROVED' ||
-                                    timesheets == undefined ||
-                                    isWeekend(
-                                        new Date(timesheets?.date as string),
-                                    ) ||
-                                    moment(timesheets?.date).format(
-                                        'YYYY-MM-DD',
-                                    ) ===
-                                        moment(preventTomorrow).format(
-                                            'YYYY-MM-DD',
-                                        )
+                                    // timesheets == undefined ||
+                                    isWeekend(new Date(currentDate)) ||
+                                    !timesheets?.date
+                                    // ||moment(timesheets?.date).format(
+                                    //     'YYYY-MM-DD',
+                                    // ) ===
+                                    //     moment(preventTomorrow).format(
+                                    //         'YYYY-MM-DD',
+                                    //     )
                                 }
                                 as={Button}
                                 minW="unset"
@@ -673,18 +668,17 @@ const TimesheetSupervisor = ({
                                     setSingleReject(!singleReject);
                                     showReject(userId, userDate);
                                 }}
-                                disabled={
+                                isDisabled={
                                     timesheets?.status === 'REJECTED' ||
-                                    timesheets == undefined ||
-                                    isWeekend(
-                                        new Date(timesheets?.date as string),
-                                    ) ||
-                                    moment(timesheets?.date).format(
-                                        'YYYY-MM-DD',
-                                    ) ===
-                                        moment(preventTomorrow).format(
-                                            'YYYY-MM-DD',
-                                        )
+                                    // timesheets == undefined ||
+                                    isWeekend(new Date(currentDate)) ||
+                                    !timesheets?.date
+                                    // ||moment(timesheets?.date).format(
+                                    //     'YYYY-MM-DD',
+                                    // ) ===
+                                    //     moment(preventTomorrow).format(
+                                    //         'YYYY-MM-DD',
+                                    //     )
                                 }
                                 as={Button}
                                 minW="unset"
@@ -791,34 +785,36 @@ const TimesheetSupervisor = ({
                             fontSize={['.6rem', '.9rem']}
                             p={['0', '1rem']}
                             defaultValue={
-                                isWeekend(
-                                    new Date(timesheets?.date as string),
-                                ) ||
-                                moment(timesheets?.date).format(
-                                    'DD/MM/YYYY',
-                                ) ===
-                                    moment(preventTomorrow).format(
-                                        'DD/MM/YYYY',
-                                    ) ||
-                                (notFilled && timesheets?.hours == 0)
-                                    ? // timesheets?.status == 'PENDING'
-                                      '---'
-                                    : timesheets?.hours
+                                // isWeekend(
+                                //     new Date(timesheets?.date as string),
+                                // ) ||
+                                // moment(timesheets?.date).format(
+                                //     'DD/MM/YYYY',
+                                // ) ===
+                                //     moment(preventTomorrow).format(
+                                //         'DD/MM/YYYY',
+                                //     ) ||
+                                // (notFilled && timesheets?.hours == 0)
+                                //     ? // timesheets?.status == 'PENDING'
+                                //       '---'
+                                //     :
+                                timesheets?.hours || '---'
                             }
                             placeholder="---"
                             textAlign="center"
                             h="full"
                             border="0"
-                            // readOnly
-                            disabled={
-                                timesheets == undefined ||
-                                isWeekend(
-                                    new Date(timesheets?.date as string),
-                                ) ||
-                                moment(timesheets?.date).format(
-                                    'DD/MM/YYYY',
-                                ) ===
-                                    moment(preventTomorrow).format('DD/MM/YYYY')
+                            readOnly
+                            isDisabled={
+                                // timesheets == undefined ||
+                                // isWeekend(
+                                //     new Date(timesheets?.date as string),
+                                // ) ||
+                                // moment(timesheets?.date).format(
+                                //     'DD/MM/YYYY',
+                                // ) ===
+                                //     moment(preventTomorrow).format('DD/MM/YYYY')
+                                false
                             }
                             onChange={(e) =>
                                 fillTimeInDate({
@@ -930,7 +926,10 @@ const TimesheetSupervisor = ({
                 {getHeader()}
                 <Box p={['0rem 1rem 0', '1rem 2rem 0']} bgColor="white">
                     <Checkbox
-                        checked={selected?.length == timesheetALl?.length}
+                        checked={
+                            selected?.length > 0 &&
+                            selected?.length == timesheetALl?.length
+                        }
                         onChange={() => fillAllDate()}
                         label="Select All"
                     />
@@ -975,7 +974,7 @@ const TimesheetSupervisor = ({
                     mr="auto"
                     flexWrap="wrap"
                     display={['flex', 'grid']}
-                    gridTemplateColumns={'repeat(6,1fr)'}
+                    gridTemplateColumns={'repeat(4,1fr)'}
                     gap={['0rem 1rem', '0']}
                 >
                     <TimeSheetEstimation
