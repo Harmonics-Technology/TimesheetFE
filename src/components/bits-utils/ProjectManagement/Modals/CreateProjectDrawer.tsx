@@ -172,7 +172,7 @@ export const CreateProjectDrawer = ({
                             name="startDate"
                             label="Start Date"
                             error={errors.startDate}
-                            min={new DateObject()}
+                            // min={new DateObject()}
                         />
 
                         <PrimaryDate<ProjectModel>
@@ -180,7 +180,7 @@ export const CreateProjectDrawer = ({
                             name="endDate"
                             label="End Date"
                             error={errors.endDate}
-                            min={new DateObject().add(1, 'days')}
+                            // min={new DateObject().add(1, 'days')}
                         />
 
                         <PrimaryInput<ProjectModel>

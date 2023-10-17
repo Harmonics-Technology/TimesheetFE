@@ -37,7 +37,6 @@ export const SingleProjectPage = ({
     users: any;
 }) => {
     const projectSummary = ['Task Name', 'Deadline', 'Team member', 'Workload'];
-    console.log({ metrics });
     return (
         <Box>
             <TopBar id={id} data={projects} users={users} />
@@ -128,16 +127,16 @@ export const SingleProjectPage = ({
                         chart={[
                             {
                                 name: 'Budget spent',
-                                count: metrics.budgetSpentAndRemain
+                                count: metrics?.budgetSpentAndRemain
                                     ?.budgetSpent,
                             },
                             {
                                 name: 'Remaining Budget',
-                                count: metrics.budgetSpentAndRemain
+                                count: metrics?.budgetSpentAndRemain
                                     ?.budgetRemain,
                             },
                         ]}
-                        total={metrics.budgetSpentAndRemain?.budget}
+                        total={metrics?.budgetSpentAndRemain?.budget}
                     />
                 </ChartMiniCard>
             </Grid>
@@ -154,15 +153,15 @@ export const SingleProjectPage = ({
                         chart={[
                             {
                                 name: 'Not started',
-                                count: metrics.projectTaskStatus?.notStarted,
+                                count: metrics?.projectTaskStatus?.notStarted,
                             },
                             {
                                 name: 'Completed',
-                                count: metrics.projectTaskStatus?.completed,
+                                count: metrics?.projectTaskStatus?.completed,
                             },
                             {
                                 name: 'Ongoing',
-                                count: metrics.projectTaskStatus?.ongoing,
+                                count: metrics?.projectTaskStatus?.ongoing,
                             },
                         ]}
                     />
@@ -171,7 +170,7 @@ export const SingleProjectPage = ({
                     title="Number of Task completed"
                     sub="Operational Vs Project Task activity Rate"
                 >
-                    <BarChart chart={metrics.monthlyCompletedTasks} />
+                    <BarChart chart={metrics?.monthlyCompletedTasks} />
                 </ChartLargeCard>
             </Grid>
         </Box>

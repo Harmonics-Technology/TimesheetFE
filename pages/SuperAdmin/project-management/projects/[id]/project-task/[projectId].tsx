@@ -6,10 +6,10 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import { ProjectManagementService, UserService } from 'src/services';
 
-const ProjectSingleTask = ({ projectId, task, tasks, project, users }) => {
+const ProjectSingleTask = ({ projectId, task, tasks, project, users, id }) => {
     return (
         <SingleTask
-            id={projectId}
+            id={id}
             project={project}
             tasks={tasks}
             task={task}
@@ -49,6 +49,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     project: data.data,
                     task: task.data,
                     projectId,
+                    id,
                     tasks: tasks.data,
                     users: users.data,
                 },

@@ -16,6 +16,8 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
     const router = useRouter();
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
+    const status = data?.status?.toLowerCase();
+    const pastDate = moment().diff(moment(data.endDate), 'days') < 0;
     //
     return (
         <Box
@@ -86,7 +88,17 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                     <ProgressBar
                         barWidth={data.progress}
                         showProgress={true}
-                        barColor={'brand.400'}
+                        barColor={
+                            status == 'completed'
+                                ? 'brand.400'
+                                : status == 'ongoing'
+                                ? '#f7e277'
+                                : status == 'ongoing' && pastDate
+                                ? 'red'
+                                : status == 'not started'
+                                ? 'gray.100'
+                                : 'red'
+                        }
                         leftText="Progress"
                         rightText={`${dateLeft < 0 ? 0 : dateLeft} days left`}
                     />

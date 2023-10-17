@@ -72,13 +72,14 @@ export const SingleTask = ({
     const toast = useToast();
 
     const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
-    const [status, setStatus] = useState(task?.status);
+    const [status, setStatus] = useState(task?.status?.toLowerCase());
 
     const openModal = (item: any) => {
         setSubTask(item);
         onOpen();
     };
-    //
+    const pastDate = moment().diff(moment(task?.endDate), 'days') < 0;
+
     return (
         <Box>
             <TopBar id={id} data={project} users={users} />
@@ -104,11 +105,23 @@ export const SingleTask = ({
                         </Text>
                         <Box w="full" mt="0.5rem">
                             <ProgressBar
-                                barWidth={task?.progress}
+                                barWidth={task?.percentageOfCompletion}
                                 showProgress={true}
-                                barColor={'brand.400'}
+                                barColor={
+                                    status == 'completed'
+                                        ? 'brand.400'
+                                        : status == 'ongoing'
+                                        ? '#f7e277'
+                                        : status == 'ongoing' && pastDate
+                                        ? 'red'
+                                        : status == 'not started'
+                                        ? 'gray.100'
+                                        : 'red'
+                                }
                                 leftText="Task Status"
-                                rightText={`${Round(task?.progress)}%`}
+                                rightText={`${Round(
+                                    task?.percentageOfCompletion,
+                                )}%`}
                             />
                         </Box>
                         <Flex mt="1rem" justify="flex-end">

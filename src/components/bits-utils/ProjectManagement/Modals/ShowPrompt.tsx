@@ -50,8 +50,8 @@ export const ShowPrompt = ({ isOpen, onClose, onSubmit, loading }) => {
                             px={['1.5rem', '.5rem']}
                             fontWeight="400"
                         >
-                            The selected end date appears to be more than the
-                            end date of the project and may extend the end date
+                            The selected end date exceeds the
+                            end date of the project and will extend the end date
                             of the project
                             <br />
                             Do you want to continue?

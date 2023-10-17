@@ -181,6 +181,7 @@ export const ProjectTask = ({
                     data={data.raw}
                     project={project}
                     isEdit={data.isEdit}
+                    setData={setData}
                 />
             )}
         </Box>

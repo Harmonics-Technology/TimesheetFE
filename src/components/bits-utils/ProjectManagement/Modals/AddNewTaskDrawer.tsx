@@ -57,15 +57,21 @@ export const AddNewTaskDrawer = ({
     data,
     isEdit,
     project,
+    setData,
 }: {
     onClose: any;
     isOpen: boolean;
     data: any;
     isEdit?: boolean;
     project?: any;
+    setData?: any;
 }) => {
     const formattedPriority =
-        data.taskPriority == 'High' ? 1 : data.taskPriority == 'Medium' ? 2 : 3;
+        data?.taskPriority == 'High'
+            ? 1
+            : data?.taskPriority == 'Medium'
+            ? 2
+            : 3;
     const {
         register,
         handleSubmit,
@@ -144,7 +150,12 @@ export const AddNewTaskDrawer = ({
 
     const extendDate =
         moment(taskEndDate).diff(projectEndDate, 'days', true) > 0;
-    console.log({ extendDate, projectEndDate, project, taskEndDate });
+    // console.log({ extendDate, projectEndDate, project, taskEndDate });
+
+    const closeModal = () => {
+        onClose();
+        setData({ isEdit: false, raw: {} });
+    };
 
     const onSubmit = async (data: ProjectTaskModel) => {
         //
@@ -210,7 +221,7 @@ export const AddNewTaskDrawer = ({
 
     return (
         <DrawerWrapper
-            onClose={onClose}
+            onClose={closeModal}
             isOpen={isOpen}
             title={isEdit ? 'Edit Task' : 'Add New Task'}
         >
@@ -325,8 +336,8 @@ export const AddNewTaskDrawer = ({
                     <Alert status="error" fontSize=".8rem">
                         <AlertIcon />
                         <AlertDescription>
-                            The selected end date may extend the end date of the
-                            project.
+                            The selected end date will extend the end date of
+                            the project.
                         </AlertDescription>
                     </Alert>
                 )}
@@ -391,7 +402,9 @@ export const AddNewTaskDrawer = ({
                             height="3rem"
                             fontSize="14px"
                             boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            onClick={() => onClose()}
+                            onClick={() => {
+                                closeModal();
+                            }}
                         >
                             Cancel
                         </Button>
