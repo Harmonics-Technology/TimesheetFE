@@ -28,8 +28,8 @@ export const Budgets = ({
         'Assigned Task',
         'Start Date',
         'End Date',
-        'Expected Hours',
-        'Budget',
+        // 'Expected Hours',
+        // 'Budget',
         'Total Hours',
         'Budget Spent',
     ];
@@ -101,7 +101,7 @@ export const Budgets = ({
                                 )}
                                 fontWeight="500"
                             />
-                            <TableData
+                            {/* <TableData
                                 name={`${
                                     ((moment(x.projectTask?.endDate).diff(
                                         x.projectTask?.startDate,
@@ -111,8 +111,8 @@ export const Budgets = ({
                                     x.projectTask.durationInHours
                                 } hrs`}
                                 fontWeight="500"
-                            />
-                            <TableData name={CAD(x?.budget)} fontWeight="500" />
+                            /> */}
+                            {/* <TableData name={CAD(x?.budget)} fontWeight="500" /> */}
                             <TableData
                                 name={`${x.hoursLogged} hrs`}
                                 fontWeight="500"
