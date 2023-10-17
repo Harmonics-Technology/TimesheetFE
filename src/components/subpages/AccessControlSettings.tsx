@@ -191,7 +191,7 @@ export const AccessControlSettings = ({
                         onChange={() =>
                             setAccess({
                                 ...access,
-                                adminReport:
+                                allowUsersTofillFutureTimesheet:
                                     !access.allowUsersTofillFutureTimesheet,
                             })
                         }
