@@ -53,6 +53,7 @@ export const TeamSingleTask = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const status = tasks?.status?.toLowerCase();
+    const pastDate = moment().diff(moment(tasks?.endDate), 'days') < 0;
 
     return (
         <Box>
@@ -251,7 +252,7 @@ export const TeamSingleTask = ({
                                             p=".4rem .75rem"
                                             w="50%"
                                         >
-                                            {x.progress}%
+                                            {x.percentageOfCompletion}%
                                         </Box>
                                     </td>
                                     <NewTableState
