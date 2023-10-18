@@ -52,6 +52,8 @@ export const TeamSingleTask = ({
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
 
+    const status = tasks?.status?.toLowerCase();
+
     return (
         <Box>
             <Flex gap=".5rem">
@@ -78,7 +80,17 @@ export const TeamSingleTask = ({
                             <ProgressBar
                                 barWidth={project?.progress}
                                 showProgress={true}
-                                barColor={'brand.400'}
+                                barColor={
+                                    status == 'completed'
+                                        ? 'brand.400'
+                                        : status == 'ongoing'
+                                        ? '#f7e277'
+                                        : status == 'ongoing' && pastDate
+                                        ? 'red'
+                                        : status == 'not started'
+                                        ? 'gray.100'
+                                        : 'red'
+                                }
                                 leftText="project Status"
                                 rightText={`${Round(project?.progress)}%`}
                             />

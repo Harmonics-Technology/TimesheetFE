@@ -2,6 +2,7 @@ import HidePage from '@components/bits-utils/HidePage';
 import useWindowSize from '@components/generics/useWindowSize';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import TimesheetAdmin from '@components/subpages/TimesheetAdmin';
+import { endOfMonth, startOfMonth } from 'date-fns';
 import moment from 'moment';
 import { GetServerSideProps } from 'next';
 import React from 'react';
@@ -42,10 +43,13 @@ export default SingleTimeSheet;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const { id } = ctx.query;
-        const { end } = ctx.query;
+        let { end } = ctx.query;
         let { date } = ctx.query;
         if (date === undefined) {
-            date = new Date();
+            date = new Date(startOfMonth(new Date()));
+        }
+        if (end === undefined) {
+            end = new Date(endOfMonth(new Date()));
         }
 
         date = moment(date).format('YYYY-MM-DD');

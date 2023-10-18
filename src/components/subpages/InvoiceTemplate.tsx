@@ -167,8 +167,10 @@ function InvoiceTemplate({
                                                 }
                                             />
                                             <TableData
-                                                name={`${formatDate(
+                                                name={`${moment(
                                                     clicked?.startDate,
+                                                ).format(
+                                                    'MMM DD',
                                                 )} - ${formatDate(
                                                     clicked?.endDate,
                                                 )}`}

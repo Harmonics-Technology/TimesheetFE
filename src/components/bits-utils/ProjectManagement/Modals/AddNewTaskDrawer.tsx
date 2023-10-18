@@ -336,7 +336,7 @@ export const AddNewTaskDrawer = ({
                     <Alert status="error" fontSize=".8rem">
                         <AlertIcon />
                         <AlertDescription>
-                            The selected end date will extend the end date of
+                            The end date you entered will extend the end date of
                             the project.
                         </AlertDescription>
                     </Alert>

@@ -191,7 +191,7 @@ export const EditProjectDrawer = ({
                             name="startDate"
                             label="Start Date"
                             error={errors.startDate}
-                            min={new DateObject()}
+                            // min={new DateObject()}
                             placeholder={moment(data?.startDate).format(
                                 'DD/MM/YYYY',
                             )}
@@ -202,7 +202,7 @@ export const EditProjectDrawer = ({
                             name="endDate"
                             label="End Date"
                             error={errors.endDate}
-                            min={new DateObject().add(1, 'days')}
+                            // min={new DateObject().add(1, 'days')}
                             placeholder={moment(data?.endDate).format(
                                 'DD/MM/YYYY',
                             )}

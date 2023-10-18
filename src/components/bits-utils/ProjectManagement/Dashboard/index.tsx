@@ -24,6 +24,7 @@ import {
 import LineChart from '@components/bits-utils/Charts/LineChart';
 import BurnOutChart from '@components/bits-utils/Charts/BurnOutChart';
 import DoughnutChart from '@components/bits-utils/Charts/DoughnutChart';
+import { Round } from '@components/generics/functions/Round';
 
 export const Dashboard = ({
     metrics,
@@ -134,6 +135,7 @@ export const Dashboard = ({
                                                     ? 'gray.100'
                                                     : 'red'
                                             }
+                                            rightText={`${Round(x.progress)}%`}
                                         />
                                     </td>
                                 </TableRow>

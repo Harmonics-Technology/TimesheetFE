@@ -21,7 +21,7 @@ export default async function markAsCompleted(
                 isClosable: true,
                 position: 'top-right',
             });
-            setStatus('Completed');
+            setStatus('completed');
             setLoading(false);
             return;
         }

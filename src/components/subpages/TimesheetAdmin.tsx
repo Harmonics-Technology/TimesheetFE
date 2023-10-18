@@ -610,7 +610,7 @@ const TimesheetAdmin = ({
                     currentDate.toLocaleDateString(),
             )[0];
             const userId = timesheets?.employeeInformationId as string;
-            const userDate = timesheets?.date;
+            const userDate = moment(currentDate).format('YYYY-MM-DD');
             const [singleReject, setSingleReject] = useState(false);
             const {
                 isOpen: isVisible,
@@ -631,7 +631,7 @@ const TimesheetAdmin = ({
                         '0',
                         newDates?.length > 1 &&
                         newDates.includes(
-                            moment((userDate as string) || '01/01/2021').format(
+                            moment((userDate as string) || '2021-01-01').format(
                                 'DD/MM/YY',
                             ),
                         )

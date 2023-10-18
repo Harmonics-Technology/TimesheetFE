@@ -569,7 +569,8 @@ const TimesheetTeam = ({
                     currentDate.toLocaleDateString(),
             )[0];
             const userId = timesheets?.employeeInformationId as string;
-            const userDate = moment(timesheets?.date).format('YYYY-MM-DD');
+
+            const userDate = moment(currentDate).format('YYYY-MM-DD');
             const {
                 isOpen: isVisible,
                 onClose,
@@ -880,10 +881,10 @@ const TimesheetTeam = ({
                         Pay Period
                     </Text>
                     <Selectrix
-                        placeholder={`${moment(date).format(
-                            'MMM DD,',
-                        )} - ${moment(
-                            end || lastDayOfMonth(new Date(date as string)),
+                        placeholder={`${moment(
+                            date || startOfMonth(new Date()),
+                        ).format('MMM DD,')} - ${moment(
+                            end || lastDayOfMonth(new Date()),
                         ).format('MMM DD, YYYY')}`}
                         customKeys={{
                             key: 'id',
