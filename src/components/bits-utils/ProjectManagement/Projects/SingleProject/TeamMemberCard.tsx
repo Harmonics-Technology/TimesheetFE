@@ -15,6 +15,7 @@ export const TeamMemberCard = ({
     const router = useRouter();
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
+    // console.log({ data });
     return (
         <HStack
             borderRadius=".6rem"

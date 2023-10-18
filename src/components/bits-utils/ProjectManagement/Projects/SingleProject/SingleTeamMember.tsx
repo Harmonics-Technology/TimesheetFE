@@ -26,9 +26,14 @@ export const SingleTeamMember = ({ id, teams }: { id: string; teams: any }) => {
     ];
 
     const userDetails = teams?.value[0];
+    const totalHours = teams?.value?.reduce(
+        (a, b) => a + (b?.hoursLogged as number),
+        0,
+    );
+
     return (
         <Box>
-            <TopBar noTitle={true} id={id} users={[]}/>
+            <TopBar noTitle={true} id={id} users={[]} />
             <HStack
                 justify="space-between"
                 pb="1rem"
@@ -41,7 +46,7 @@ export const SingleTeamMember = ({ id, teams }: { id: string; teams: any }) => {
                     gap=".1rem"
                 />
                 <TitleText
-                    title={`${userDetails?.hoursLogged} Hrs`}
+                    title={`${totalHours} Hrs`}
                     text={'Total Logged Hours'}
                     fontSize="1rem"
                     gap=".1rem"
@@ -55,8 +60,8 @@ export const SingleTeamMember = ({ id, teams }: { id: string; teams: any }) => {
             </HStack>
             <Box>
                 <HStack py="1rem" justify="space-between">
-                    <HStack>
-                        <HStack w="full">
+                    <HStack w="40%">
+                        <HStack w="fit-content">
                             <Image
                                 src="/assets/filter.png"
                                 alt="filter"
@@ -81,44 +86,65 @@ export const SingleTeamMember = ({ id, teams }: { id: string; teams: any }) => {
                     </HStack>
                 </HStack>
                 <TableCard tableHead={tableHead}>
-                    {teams?.value?.map((team: ProjectTaskAsigneeView) => (
-                        <TableRow key={team.id}>
-                            <TableData
-                                name={team?.projectTask?.name}
-                                fontWeight="500"
-                            />
-
-                            <TableData
-                                name={`${
-                                    team?.projectTask?.hoursSpent || 0
-                                } Hrs`}
-                                fontWeight="500"
-                            />
-                            <TableData
-                                name={moment(
-                                    team?.projectTask?.startDate,
-                                ).format('DD/MM/YYYY')}
-                                fontWeight="500"
-                            />
-                            <TableData
-                                name={moment(team?.projectTask?.endDate).format(
-                                    'DD/MM/YYYY',
-                                )}
-                                fontWeight="500"
-                            />
-                            <td>
-                                <ProgressBar
-                                    barWidth={team?.projectTask?.progress}
-                                    showProgress={true}
-                                    barColor={'brand.400'}
-                                    leftText={team?.projectTask?.status}
-                                    rightText={`${
-                                        team?.projectTask?.progress || 0
-                                    }%`}
+                    {teams?.value?.map((team: ProjectTaskAsigneeView) => {
+                        const status = team?.projectTask?.status?.toLowerCase();
+                        const pastDate =
+                            moment().diff(
+                                moment(team?.projectTask?.endDate),
+                                'days',
+                            ) < 0;
+                        return (
+                            <TableRow key={team.id}>
+                                <TableData
+                                    name={team?.projectTask?.name}
+                                    fontWeight="500"
                                 />
-                            </td>
-                        </TableRow>
-                    ))}
+
+                                <TableData
+                                    name={`${team?.hoursLogged || 0} Hrs`}
+                                    fontWeight="500"
+                                />
+                                <TableData
+                                    name={moment(
+                                        team?.projectTask?.startDate,
+                                    ).format('DD/MM/YYYY')}
+                                    fontWeight="500"
+                                />
+                                <TableData
+                                    name={moment(
+                                        team?.projectTask?.endDate,
+                                    ).format('DD/MM/YYYY')}
+                                    fontWeight="500"
+                                />
+                                <td>
+                                    <ProgressBar
+                                        barWidth={
+                                            team?.projectTask
+                                                ?.percentageOfCompletion
+                                        }
+                                        showProgress={true}
+                                        barColor={
+                                            status == 'completed'
+                                                ? 'brand.400'
+                                                : status == 'ongoing'
+                                                ? '#f7e277'
+                                                : status == 'ongoing' &&
+                                                  pastDate
+                                                ? 'red'
+                                                : status == 'not started'
+                                                ? 'gray.100'
+                                                : 'red'
+                                        }
+                                        leftText={team?.projectTask?.status}
+                                        rightText={`${
+                                            team?.projectTask
+                                                ?.percentageOfCompletion || 0
+                                        }%`}
+                                    />
+                                </td>
+                            </TableRow>
+                        );
+                    })}
                 </TableCard>
             </Box>
         </Box>
