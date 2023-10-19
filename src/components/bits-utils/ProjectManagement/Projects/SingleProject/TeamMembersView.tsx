@@ -13,14 +13,14 @@ export const TeamMembersView = ({
 }) => {
     return (
         <Box>
-            <TopBar id={id} data={teams} users={[]}/>
+            <TopBar id={id} data={teams} users={[]} />
             <Grid
                 my="1.25rem"
                 templateColumns={['repeat(1,1fr)', 'repeat(4,1fr)']}
                 gap="1.06rem"
             >
                 {teams?.assignees
-                    ?.filter((x) => x.projectTaskId == null)
+                    // ?.filter((x) => x.projectTaskId == null)
                     ?.map((item, index) => (
                         <TeamMemberCard data={item} id={id} key={index} />
                     ))}
