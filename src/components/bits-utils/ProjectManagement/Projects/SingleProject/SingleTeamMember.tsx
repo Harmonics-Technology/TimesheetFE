@@ -92,7 +92,7 @@ export const SingleTeamMember = ({ id, teams }: { id: string; teams: any }) => {
                             moment().diff(
                                 moment(team?.projectTask?.endDate),
                                 'days',
-                            ) < 0;
+                            ) > 0;
                         return (
                             <TableRow key={team.id}>
                                 <TableData
@@ -126,11 +126,11 @@ export const SingleTeamMember = ({ id, teams }: { id: string; teams: any }) => {
                                         barColor={
                                             status == 'completed'
                                                 ? 'brand.400'
-                                                : status == 'ongoing'
-                                                ? '#f7e277'
                                                 : status == 'ongoing' &&
                                                   pastDate
                                                 ? 'red'
+                                                : status == 'ongoing'
+                                                ? '#f7e277'
                                                 : status == 'not started'
                                                 ? 'gray.100'
                                                 : 'red'

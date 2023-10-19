@@ -81,7 +81,7 @@ export const SingleProjectPage = ({
                     {metrics?.upcomingDeadlines?.slice(0, 3)?.map((x) => {
                         const status = x.status?.toLowerCase();
                         const pastDate =
-                            moment().diff(moment(x.endDate), 'days') < 0;
+                            moment().diff(moment(x.endDate), 'days') > 0;
                         return (
                             <TableRow key={x.id}>
                                 <TableData name={x.name} />
@@ -100,11 +100,11 @@ export const SingleProjectPage = ({
                                         barColor={
                                             status == 'completed'
                                                 ? 'brand.400'
-                                                : status == 'ongoing'
-                                                ? '#f7e277'
                                                 : status == 'ongoing' &&
                                                   pastDate
                                                 ? 'red'
+                                                : status == 'ongoing'
+                                                ? '#f7e277'
                                                 : status == 'not started'
                                                 ? 'gray.100'
                                                 : 'red'

@@ -990,10 +990,10 @@ const TimesheetAdmin = ({
                         Pay Period
                     </Text>
                     <Selectrix
-                        placeholder={`${moment(date).format(
-                            'MMM DD,',
-                        )} - ${moment(
-                            end || lastDayOfMonth(new Date(date as string)),
+                        placeholder={`${moment(
+                            date || startOfMonth(new Date()),
+                        ).format('MMM DD,')} - ${moment(
+                            end || lastDayOfMonth(new Date()),
                         ).format('MMM DD, YYYY')}`}
                         customKeys={{
                             key: 'id',

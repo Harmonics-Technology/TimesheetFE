@@ -28,6 +28,8 @@ export const AccessControlSettings = ({
         adminReport: controls?.adminReport,
         adminExpenseTypeAndHST: controls?.adminExpenseTypeAndHST,
         superAdminId: user?.superAdminId,
+        allowUsersTofillFutureTimesheet:
+            controls?.allowUsersTofillFutureTimesheet,
     });
 
     const updateControl = async (data: ControlSettingModel) => {

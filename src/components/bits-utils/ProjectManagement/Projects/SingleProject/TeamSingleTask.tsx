@@ -52,8 +52,8 @@ export const TeamSingleTask = ({
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const status = tasks?.status?.toLowerCase();
-    const pastDate = moment().diff(moment(tasks?.endDate), 'days') < 0;
+    const status = project?.status?.toLowerCase();
+    const pastDate = moment().diff(moment(project?.endDate), 'days') > 0;
 
     return (
         <Box>
@@ -84,15 +84,15 @@ export const TeamSingleTask = ({
                                 barColor={
                                     status == 'completed'
                                         ? 'brand.400'
-                                        : status == 'ongoing'
-                                        ? '#f7e277'
                                         : status == 'ongoing' && pastDate
                                         ? 'red'
+                                        : status == 'ongoing'
+                                        ? '#f7e277'
                                         : status == 'not started'
                                         ? 'gray.100'
                                         : 'red'
                                 }
-                                leftText="project Status"
+                                leftText="Project Status"
                                 rightText={`${Round(project?.progress)}%`}
                             />
                         </Box>

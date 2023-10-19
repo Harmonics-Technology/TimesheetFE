@@ -107,7 +107,7 @@ export const Dashboard = ({
                         ?.map((x: ProjectView) => {
                             const status = x.status?.toLowerCase();
                             const pastDate =
-                                moment().diff(moment(x.endDate), 'days') < 0;
+                                moment().diff(moment(x.endDate), 'days') > 0;
                             return (
                                 <TableRow key={x.id}>
                                     <TableData name={x.name} />
@@ -126,11 +126,11 @@ export const Dashboard = ({
                                             barColor={
                                                 status == 'completed'
                                                     ? 'brand.400'
-                                                    : status == 'ongoing'
-                                                    ? '#f7e277'
                                                     : status == 'ongoing' &&
                                                       pastDate
                                                     ? 'red'
+                                                    : status == 'ongoing'
+                                                    ? '#f7e277'
                                                     : status == 'not started'
                                                     ? 'gray.100'
                                                     : 'red'

@@ -78,7 +78,7 @@ export const SingleTask = ({
         setSubTask(item);
         onOpen();
     };
-    const pastDate = moment().diff(moment(task?.endDate), 'days') < 0;
+    const pastDate = moment().diff(moment(task?.endDate), 'days') > 0;
 
     return (
         <Box>
@@ -110,10 +110,10 @@ export const SingleTask = ({
                                 barColor={
                                     status == 'completed'
                                         ? 'brand.400'
-                                        : status == 'ongoing'
-                                        ? '#f7e277'
                                         : status == 'ongoing' && pastDate
                                         ? 'red'
+                                        : status == 'ongoing'
+                                        ? '#f7e277'
                                         : status == 'not started'
                                         ? 'gray.100'
                                         : 'red'

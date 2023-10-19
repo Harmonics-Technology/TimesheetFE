@@ -174,6 +174,7 @@ function InvoiceTemplate({
                                                 )} - ${formatDate(
                                                     clicked?.endDate,
                                                 )}`}
+                                                full
                                             />
                                             <TableData
                                                 name={clicked?.invoiceType}

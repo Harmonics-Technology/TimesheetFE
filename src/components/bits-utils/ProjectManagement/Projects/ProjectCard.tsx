@@ -17,7 +17,7 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const status = data?.status?.toLowerCase();
-    const pastDate = moment().diff(moment(data.endDate), 'days') < 0;
+    const pastDate = moment().diff(moment(data.endDate), 'days') > 0;
     //
     return (
         <Box
@@ -91,10 +91,10 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                         barColor={
                             status == 'completed'
                                 ? 'brand.400'
-                                : status == 'ongoing'
-                                ? '#f7e277'
                                 : status == 'ongoing' && pastDate
                                 ? 'red'
+                                : status == 'ongoing'
+                                ? '#f7e277'
                                 : status == 'not started'
                                 ? 'gray.100'
                                 : 'red'
