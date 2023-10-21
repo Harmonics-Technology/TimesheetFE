@@ -139,6 +139,7 @@ function PaymentPayrollHistory({ payrolls, id }: expenseProps) {
                 </Tables>
                 <Pagination data={payrolls} />
             </Box>
+            {/* @ts-ignore */}
             <GenerateInvoiceModal
                 isOpen={isOpen}
                 onClose={onClose}
