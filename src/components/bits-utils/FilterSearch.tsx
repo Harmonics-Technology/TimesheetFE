@@ -28,10 +28,14 @@ function FilterSearch({
     hide = false,
     hides = false,
     searchOptions,
+    options = [],
+    onChange,
 }: {
     hide?: boolean;
     hides?: boolean;
     searchOptions?: string;
+    options?: any[];
+    onChange?: any;
 }) {
     const [search, setSearch] = useState('');
     const router = useRouter();
@@ -105,19 +109,13 @@ function FilterSearch({
                         </Text>
                         <Select
                             w="fit-content"
-                            onChange={(e) =>
-                                router.push({
-                                    query: {
-                                        paySlipFilter: e.target.value,
-                                    },
-                                })
-                            }
+                            onChange={onChange}
                             borderRadius="0"
                             fontSize=".8rem"
                         >
-                            <option value="">All</option>
-                            <option value={1}>Onshore</option>
-                            <option value={2}>Offshore</option>
+                            {options.map((x) => (
+                                <option value={x.id}>{x.title}</option>
+                            ))}
                         </Select>
                     </Box>
                     <HStack fontSize=".8rem" w="fit-content" mb={['1rem', '0']}>

@@ -34,15 +34,22 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const id = JSON.parse(ctx.req.cookies.user).id;
         //
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const clients = await UserService.listUsers('client');
+            const clients = await UserService.listUsers(
+                'client',
+                superAdminId,
+                pagingOptions.offset,
+                40,
+                pagingOptions.search,
+            );
             const data = await UserService.getPaymentPartnerTeamMembers(
                 pagingOptions.offset,
-                pagingOptions.limit,
+                40,
                 pagingOptions.search,
                 id,
-                pagingOptions.from,
-                pagingOptions.to,
+                // pagingOptions.from,
+                // pagingOptions.to,
             );
 
             return {

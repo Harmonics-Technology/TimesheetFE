@@ -21,6 +21,7 @@ import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import { formatDate } from '@components/generics/functions/formatDate';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
+import { Round } from '@components/generics/functions/Round';
 
 function InvoiceTemplate({
     isOpen,
@@ -261,7 +262,9 @@ function InvoiceTemplate({
                                                                     name={`${
                                                                         x?.currency
                                                                     } ${CUR(
-                                                                        x?.amount,
+                                                                        Round(
+                                                                            x?.amount,
+                                                                        ),
                                                                     )}`}
                                                                 />
                                                             </Tr>
@@ -305,7 +308,9 @@ function InvoiceTemplate({
                                                         ?.currency
                                                 }
                                                 value={CUR(
-                                                    clicked?.totalAmount as number,
+                                                    Round(
+                                                        clicked?.totalAmount as number,
+                                                    ),
                                                 )}
                                             />
                                         </Box>

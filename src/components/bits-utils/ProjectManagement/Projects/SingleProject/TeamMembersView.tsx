@@ -20,7 +20,7 @@ export const TeamMembersView = ({
                 gap="1.06rem"
             >
                 {teams?.assignees
-                    // ?.filter((x) => x.projectTaskId == null)
+                    ?.filter((x) => x.projectTaskId == null)
                     ?.map((item, index) => (
                         <TeamMemberCard data={item} id={id} key={index} />
                     ))}

@@ -77,13 +77,11 @@ export const FillTimesheetModal = ({
 
     function isValidDateTime(dateTime) {
         return dateTime && !isNaN(new Date(dateTime).getTime());
-      }
+    }
     const initialStartDate = isValidDateTime(data?.startDate)
-    ? moment(data.startDate)
-    : moment().format('YYYY-MM-DD 09:00');
-    const [startDate, setstartDate] = useState<any>(
-       initialStartDate
-    );
+        ? moment(data.startDate)
+        : moment().format('YYYY-MM-DD 09:00');
+    const [startDate, setstartDate] = useState<any>(initialStartDate);
     const [endDate, setendDate] = useState<any>(moment(data.endDate));
     const [isBillable, setisBillable] = useState<any>();
     const [loading, setLoading] = useState<any>();
@@ -153,8 +151,6 @@ export const FillTimesheetModal = ({
     }, [selectedId, projectTimesheets]);
 
     console.log({ newProjectTimesheet });
-
-
 
     useEffect(() => {
         setProjectTimesheets({
@@ -330,10 +326,12 @@ export const FillTimesheetModal = ({
         (subTask) => subTask?.id === watch('projectSubTaskId'),
     );
 
-    console.log({selectedTask,selectedSubTask})
+    console.log({ selectedTask, selectedSubTask });
 
     const onSubmit = async (data: ProjectTimesheetModel) => {
-        data.projectTaskAsigneeId = selectedSubTask?.projectTaskAsigneeId || selectedTask.assignees.find((x)=> x.userId == userId)?.id;
+        data.projectTaskAsigneeId =
+            selectedSubTask?.projectTaskAsigneeId ||
+            selectedTask.assignees.find((x) => x.userId == userId)?.id;
         data.projectTimesheets = newProjectTimesheet;
         try {
             const result =

@@ -33,7 +33,7 @@ import { UserContext } from '@components/context/UserContext';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { BsDownload } from 'react-icons/bs';
-import Naira from '@components/generics/functions/Naira';
+import Naira, { CAD } from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
@@ -117,7 +117,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const hideCheckbox = router.asPath.startsWith(
-        `/${role}/financials/offshore`,
+        `/${role}/financials/submitted-payrolls`,
     );
     const pays = router.asPath.startsWith(`/${role}/financials/payrolls`);
 
@@ -125,7 +125,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
     const thead =
         hideCheckbox || pays
             ? [
-                  'Payroll Group',
+                  'Client Name',
                   'Name',
                   'Amount',
                   'Created On',
@@ -161,7 +161,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                         },
                         {
                             text: 'Processed Payrolls',
-                            url: `/financials/offshore`,
+                            url: `/financials/submitted-payrolls`,
                         },
                     ]}
                 />
@@ -181,7 +181,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                             isLoading={loading}
                             spinner={<BeatLoader color="white" size={10} />}
                             boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            disabled={selectedId.length < 1}
+                            isDisabled={selectedId.length < 1}
                         >
                             Approve
                         </Button>
@@ -222,8 +222,8 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                                 <TableData
                                     name={
                                         hideCheckbox || pays
-                                            ? x.employeeInformation
-                                                  ?.payrollGroup
+                                            ? x.employeeInformation?.client
+                                                  ?.fullName
                                             : x.invoiceReference
                                     }
                                 />
@@ -234,7 +234,14 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                                         x.name
                                     }
                                 />
-                                <TableData name={Naira(Round(x.totalAmount))} />
+                                <TableData
+                                    name={
+                                        x?.employeeInformation?.currency ==
+                                        'NGN'
+                                            ? Naira(Round(x.totalAmount))
+                                            : CAD(Round(x.totalAmount))
+                                    }
+                                />
                                 <TableData name={formatDate(x.dateCreated)} />
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />

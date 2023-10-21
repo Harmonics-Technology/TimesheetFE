@@ -1357,9 +1357,10 @@ endDate?: string,
     }
 
     /**
-     * @param payrollGroupId 
+     * @param superAdminId 
      * @param offset 
      * @param limit 
+     * @param payrollGroupId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -1367,9 +1368,10 @@ endDate?: string,
      * @throws ApiError
      */
     public static listPayrollGroupInvoices(
-payrollGroupId?: string,
+superAdminId?: string,
 offset?: number,
 limit?: number,
+payrollGroupId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -1378,9 +1380,10 @@ endDate?: string,
             method: 'GET',
             url: '/api/Financial/payroll-group/invoices',
             query: {
-                'payrollGroupId': payrollGroupId,
+                'superAdminId': superAdminId,
                 'Offset': offset,
                 'Limit': limit,
+                'payrollGroupId': payrollGroupId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,

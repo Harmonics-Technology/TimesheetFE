@@ -293,7 +293,8 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={
-                            user?.invoiceType == 'payroll'
+                            user?.invoiceGenerationType?.toLowerCase() ==
+                            'payroll'
                                 ? ['my expenses', 'my payslips']
                                 : ['my expenses', 'my payslips', 'my invoices']
                         }

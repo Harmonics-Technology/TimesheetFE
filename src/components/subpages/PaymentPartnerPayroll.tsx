@@ -16,6 +16,7 @@ import Tables from '@components/bits-utils/Tables';
 import {
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
+    UserView,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
@@ -26,13 +27,25 @@ import Checkbox from '@components/bits-utils/Checkbox';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { GenerateInvoiceModal } from '@components/bits-utils/GenerateInvoiceModal';
 import { formatDate } from '@components/generics/functions/formatDate';
+import dynamic from 'next/dynamic';
+import { Round } from '@components/generics/functions/Round';
+const Selectrix = dynamic<any>(() => import('react-selectrix'), {
+    ssr: false,
+});
 
 interface expenseProps {
     payrolls: InvoiceViewPagedCollectionStandardResponse;
     id: number;
+    clients: UserView[];
+    superAdminId: string;
 }
 
-function PaymentPartnerPayroll({ payrolls, id }: expenseProps) {
+function PaymentPartnerPayroll({
+    payrolls,
+    id,
+    clients,
+    superAdminId,
+}: expenseProps) {
     const payrollsList = payrolls?.data?.value;
     const router = useRouter();
     const toast = useToast();
@@ -61,6 +74,23 @@ function PaymentPartnerPayroll({ payrolls, id }: expenseProps) {
         setSelectedId([...selectedId, x]);
     };
 
+    const filterClientsInvoice = (filter: string) => {
+        router.push({
+            query: {
+                clientId: filter,
+                // offset: 0,
+            },
+        });
+    };
+
+    const newClient = clients.map((obj) => {
+        return { id: obj.id, title: obj.fullName };
+    });
+    const newData = [
+        ...(newClient || []),
+        { id: superAdminId, title: 'Main Organization' },
+    ];
+
     return (
         <>
             <Box
@@ -69,6 +99,19 @@ function PaymentPartnerPayroll({ payrolls, id }: expenseProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
+                <Box mb="1rem" w="20%">
+                    {/* <Selectrix
+                        options={clients}
+                        searchable
+                        customKeys={{
+                            key: 'id',
+                            label: 'fullName',
+                        }}
+                        onChange={(value: any) =>
+                            filterClientsInvoice(value.key)
+                        }
+                    /> */}
+                </Box>
                 {selectedId.length !== 0 && (
                     <Flex gap="1rem" justify="space-between" mb="1rem">
                         <Box>
@@ -96,7 +139,11 @@ function PaymentPartnerPayroll({ payrolls, id }: expenseProps) {
                         />
                     </Flex>
                 )}
-                <FilterSearch />
+                <FilterSearch
+                    hides
+                    options={newData}
+                    onChange={filterClientsInvoice}
+                />
                 <Tables
                     tableHead={[
                         'Name',
@@ -127,7 +174,7 @@ function PaymentPartnerPayroll({ payrolls, id }: expenseProps) {
                                 />
                                 <TableData name={`${x.totalHours} HRS`} />
                                 {/* <TableData name={x.rate} /> */}
-                                <TableData name={x.totalAmount} />
+                                <TableData name={Round(x.totalAmount)} />
                                 {/* <TableContractAction
                                     id={x.employeeInformationId}
                                     timeSheets={true}
@@ -153,6 +200,7 @@ function PaymentPartnerPayroll({ payrolls, id }: expenseProps) {
                 onClose={onClose}
                 clicked={selectedId}
                 id={id}
+                client={newData}
             />
         </>
     );

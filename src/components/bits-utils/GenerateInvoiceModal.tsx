@@ -52,6 +52,7 @@ type Props = {
     onClose?: any;
     clicked: any;
     id: any;
+    client: any;
 };
 const schema = yup.object().shape({
     rate: yup.string().required(),
@@ -62,6 +63,7 @@ export const GenerateInvoiceModal = ({
     onClose,
     clicked,
     id,
+    client,
 }: Props) => {
     const toast = useToast();
     const router = useRouter();
@@ -109,6 +111,8 @@ export const GenerateInvoiceModal = ({
     //     hstNaira,
     //     hst,
     // });
+
+    const clientName = client.find((x) => x.id == id).title;
 
     const onSubmit = async (data: PaymentPartnerInvoiceModel) => {
         data.invoiceIds = invoicesId;
@@ -186,10 +190,7 @@ export const GenerateInvoiceModal = ({
                             fontWeight="semibold"
                             px={5}
                         >
-                            For{' '}
-                            {id == 1
-                                ? 'Pro-Insight Consulting'
-                                : 'Olade Consulting'}
+                            For {clientName}
                         </Text>
                         <Box overflowY="auto" px={5} maxH="80vh">
                             <form onSubmit={handleSubmit(onSubmit)}>
@@ -246,27 +247,34 @@ export const GenerateInvoiceModal = ({
                                                     />
                                                     <TableData
                                                         name={`${Naira(
-                                                            (x?.totalAmount as number) -
-                                                                (
-                                                                    x?.expenses as unknown as ExpenseView[]
-                                                                )?.reduce(
-                                                                    (a, b) =>
-                                                                        a +
-                                                                        (b?.amount as number),
-                                                                    0,
-                                                                ),
+                                                            Round(
+                                                                (x?.totalAmount as number) -
+                                                                    (
+                                                                        x?.expenses as unknown as ExpenseView[]
+                                                                    )?.reduce(
+                                                                        (
+                                                                            a,
+                                                                            b,
+                                                                        ) =>
+                                                                            a +
+                                                                            (b?.amount as number),
+                                                                        0,
+                                                                    ),
+                                                            ),
                                                         )} ${
                                                             x?.expenses
                                                                 ?.length !== 0
                                                                 ? `+ ${Naira(
-                                                                      x.expenses?.reduce(
-                                                                          (
-                                                                              a,
-                                                                              b,
-                                                                          ) =>
-                                                                              a +
-                                                                              (b?.amount as number),
-                                                                          0,
+                                                                      Round(
+                                                                          x.expenses?.reduce(
+                                                                              (
+                                                                                  a,
+                                                                                  b,
+                                                                              ) =>
+                                                                                  a +
+                                                                                  (b?.amount as number),
+                                                                              0,
+                                                                          ),
                                                                       ),
                                                                   )}`
                                                                 : ''
@@ -343,7 +351,13 @@ export const GenerateInvoiceModal = ({
                                         >
                                             <InvoiceTotalText
                                                 label="Total ($)"
-                                                value={CUR(Round(total))}
+                                                value={CUR(
+                                                    Round(
+                                                        total !== Infinity
+                                                            ? total
+                                                            : 0,
+                                                    ),
+                                                )}
                                                 cur={'$'}
                                             />
                                         </Box>
