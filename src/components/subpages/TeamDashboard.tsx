@@ -189,7 +189,7 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                         thead={[
                             'Start Date',
                             'End Date',
-                            'Payment Date',
+                            'Processed Date',
                             'Total Hours',
                             'Total Amount',
                         ]}

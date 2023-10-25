@@ -51,14 +51,10 @@ function InvoiceTemplate({
                 isOpen={isOpen}
                 isCentered
             >
-                <ModalOverlay
-                    bg="blackAlpha.300"
-                    backdropFilter="blur(10px) hue-rotate(90deg)"
-                />
                 <ModalContent
                     py={5}
                     borderRadius="0"
-                    w={['88%', '50%']}
+                    w={['88%', '55%']}
                     maxW="unset"
                     overflow="hidden"
                     // maxH="100vh"
@@ -105,11 +101,11 @@ function InvoiceTemplate({
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             Issued Date:{' '}
-                                            {formatDate(clicked?.startDate)}
+                                            {formatDate(clicked?.dateCreated)}
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             Due Date:{' '}
-                                            {formatDate(clicked?.endDate)}
+                                            {formatDate(clicked?.paymentDate)}
                                         </Text>
                                     </Box>
                                     <Box maxW="35%" textAlign="right">
@@ -154,6 +150,8 @@ function InvoiceTemplate({
                                             'Name',
                                             'Pay Period',
                                             'Type',
+                                            'Hours',
+                                            'Rate/Hr',
                                             `Pay (${clicked?.employeeInformation?.currency})`,
                                             // 'Fee',
                                             // 'Total',
@@ -181,12 +179,23 @@ function InvoiceTemplate({
                                                 name={clicked?.invoiceType}
                                             />
                                             <TableData
+                                                name={clicked?.totalHours}
+                                            />
+                                            <TableData
+                                                name={
+                                                    clicked?.employeeInformation
+                                                        ?.ratePerHour
+                                                }
+                                            />
+                                            <TableData
                                                 name={`${
                                                     clicked?.employeeInformation
                                                         ?.currency
                                                 } ${CUR(
-                                                    (clicked?.totalAmount as number) -
-                                                        (allExpenseTotal as number),
+                                                    Round(
+                                                        (clicked?.totalAmount as number) -
+                                                            (allExpenseTotal as number),
+                                                    ),
                                                 )}`}
                                             />
                                             {/* <TableData

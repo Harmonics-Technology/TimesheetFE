@@ -37,6 +37,9 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { MiniTabs } from '@components/bits-utils/MiniTabs';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
+import { Round } from '@components/generics/functions/Round';
+import { PaymentPrompt } from '@components/bits-utils/ProjectManagement/Modals/PaymentPrompt';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -56,6 +59,7 @@ function OnshoreSubmittedInvoice({
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
+    // console.log({ invoice });
     //
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
@@ -85,6 +89,12 @@ function OnshoreSubmittedInvoice({
         }
         setSelectedId([...selectedId, id]);
     };
+
+    const {
+        isOpen: isOpened,
+        onOpen: onOpened,
+        onClose: onClosed,
+    } = useDisclosure();
     const approveInvoiceItems = async () => {
         selectedId.forEach(async (x) => {
             try {
@@ -131,7 +141,10 @@ function OnshoreSubmittedInvoice({
     const thead = [
         'Invoice No',
         'Name',
+        'Amount',
         'Created On',
+        // 'Total Hours',
+        // 'Rate/Hr',
         'Start Date',
         'End Date',
         'Status',
@@ -187,13 +200,13 @@ function OnshoreSubmittedInvoice({
                                 color="white"
                                 p=".5rem 1.5rem"
                                 height="fit-content"
-                                onClick={() => approveInvoiceItems()}
+                                onClick={onOpened}
                                 isLoading={loading}
                                 spinner={<BeatLoader color="white" size={10} />}
                                 borderRadius="0"
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
                             >
-                                Approve
+                                Process
                             </Button>
                         </HStack>
                     )}
@@ -236,7 +249,16 @@ function OnshoreSubmittedInvoice({
                                         x.name
                                     }
                                 />
+                                <TableData
+                                    name={
+                                        x?.employeeInformation?.currency ==
+                                        'NGN'
+                                            ? Naira(Round(x.totalAmount))
+                                            : CAD(Round(x.totalAmount))
+                                    }
+                                />
                                 <TableData name={formatDate(x.dateCreated)} />
+
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />
                                 <TableState name={x.status as string} />
@@ -266,19 +288,31 @@ function OnshoreSubmittedInvoice({
                 </Tables>
                 <Pagination data={invoiceData} />
             </Box>
-            <InvoiceTemplate
-                isOpen={isOpen}
-                onClose={onClose}
-                clicked={clicked}
-            />
-            <ExportReportModal
-                isOpen={open}
-                onClose={close}
-                data={thead}
-                record={record}
-                fileName={fileName}
-                model="invoice"
-            />
+            {isOpen && (
+                <InvoiceTemplate
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    clicked={clicked}
+                />
+            )}
+            {isOpened && (
+                <PaymentPrompt
+                    isOpen={isOpened}
+                    onClose={onClosed}
+                    onSubmit={approveInvoiceItems}
+                    loading={loading}
+                />
+            )}
+            {open && (
+                <ExportReportModal
+                    isOpen={open}
+                    onClose={close}
+                    data={thead}
+                    record={record}
+                    fileName={fileName}
+                    model="invoice"
+                />
+            )}
         </>
     );
 }

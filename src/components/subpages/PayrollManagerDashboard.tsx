@@ -108,9 +108,11 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                         }
                                     />
                                     <TableData
-                                        name={`${x.expectedHours} hours`}
+                                        name={`${Round(x.expectedHours)} hours`}
                                     />
-                                    <TableData name={`${x.totalHours} hours`} />
+                                    <TableData
+                                        name={`${Round(x.totalHours)} hours`}
+                                    />
                                     <TableData
                                         name={`${CUR(x.expectedPayout)}`}
                                     />

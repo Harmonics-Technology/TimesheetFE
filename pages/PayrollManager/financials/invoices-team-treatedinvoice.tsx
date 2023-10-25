@@ -16,26 +16,8 @@ interface invoiceType {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
 function Invoices({ invoiceData }: invoiceType) {
-    const { user, subType, addons } = useContext(UserContext);
-    const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/invoices`}
-                    tabName="Team Members"
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices-payment`}
-                    tabName="Payment Partners"
-                    upgrade={subType == 'onshore'}
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices-client`}
-                    tabName="Clients"
-                    upgrade={!addons.includes('client management')}
-                />
-            </Flex>
             <OnshoreSubmittedInvoice
                 invoiceData={invoiceData}
                 record={4}

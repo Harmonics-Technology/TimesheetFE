@@ -75,10 +75,6 @@ function RejectInvoiceModal({
                 isOpen={isOpen}
                 isCentered
             >
-                <ModalOverlay
-                    bg="blackAlpha.300"
-                    backdropFilter="blur(10px) hue-rotate(90deg)"
-                />
                 <ModalContent
                     py={5}
                     borderRadius="0"

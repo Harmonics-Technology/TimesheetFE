@@ -103,7 +103,7 @@ export const MonthPayScheduleSettings = ({
                 <LabelSign data={data ? 'Configured!' : 'Not Configured!'} />
             </Flex>
             <form>
-                <VStack w="40%" spacing="1.5rem" align="flex-start">
+                <VStack w="50%" spacing="1.5rem" align="flex-start">
                     <Selectrix
                         label="Payment Type"
                         options={[
@@ -130,7 +130,7 @@ export const MonthPayScheduleSettings = ({
                         />
                     )}
                     {(payType as any) == 2 && (
-                        <HStack w="full" spacing="1rem">
+                        <HStack w="full" spacing="1rem" align="flex-end">
                             <PrimaryDate<PayScheduleGenerationModel>
                                 control={control}
                                 name="startDate"
@@ -144,7 +144,7 @@ export const MonthPayScheduleSettings = ({
                                 // min={new Date()}
                             />
                             <PrimaryInput<PayScheduleGenerationModel>
-                                label="Payment Day"
+                                label="Payment Date Offset (in days)"
                                 name="paymentDateDays"
                                 error={errors.paymentDateDays}
                                 defaultValue=""

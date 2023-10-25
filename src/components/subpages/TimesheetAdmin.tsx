@@ -610,7 +610,7 @@ const TimesheetAdmin = ({
                     currentDate.toLocaleDateString(),
             )[0];
             const userId = timesheets?.employeeInformationId as string;
-            const userDate = moment(currentDate).format('YYYY-MM-DD');
+            const userDate = moment(currentDate).format('YYYY-MM-DDTHH:mm:ss');
             const [singleReject, setSingleReject] = useState(false);
             const {
                 isOpen: isVisible,

@@ -43,11 +43,13 @@ export function TableHead({
     border,
     value,
     borderColor,
+    p,
 }: {
     name: string | number | undefined | null;
     border?: boolean | undefined;
     value?: string;
     borderColor?: string;
+    p?: any;
 }) {
     return (
         <Th
@@ -55,6 +57,7 @@ export function TableHead({
             borderColor={borderColor}
             borderRightColor={borderColor}
             color="inherit"
+            paddingInlineStart={p}
         >
             {name}
         </Th>
@@ -465,17 +468,23 @@ export function LeaveActions({
                             Edit
                         </MenuItem>
                     )}
-                    {type == 'asTeam' && data.status == 'APPROVED' && (
-                        <MenuItem
-                            onClick={() =>
-                                deleteLeave(id, LeaveService.cancelLeave)
-                            }
-                            w="full"
-                        >
-                            <Icon as={MdCancel} mr=".5rem" color="#D62242" />
-                            Request Cancellation
-                        </MenuItem>
-                    )}
+                    {type == 'asTeam' &&
+                        (data.status == 'APPROVED' ||
+                            data.status == 'PENDING') && (
+                            <MenuItem
+                                onClick={() =>
+                                    deleteLeave(id, LeaveService.cancelLeave)
+                                }
+                                w="full"
+                            >
+                                <Icon
+                                    as={MdCancel}
+                                    mr=".5rem"
+                                    color="#D62242"
+                                />
+                                Request Cancellation
+                            </MenuItem>
+                        )}
                     {type == 'asAdmin' && (
                         <>
                             <MenuItem

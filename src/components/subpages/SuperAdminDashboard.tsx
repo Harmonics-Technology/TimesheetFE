@@ -353,12 +353,12 @@ function SuperAdminDashboard({
                                     />
                                     <TableData name={x.invoiceReference} />
                                     <TableData
+                                        name={formatDate(x.dateCreated)}
+                                    />
+                                    <TableData
                                         name={CUR(
                                             Round(x.totalAmount as number),
                                         )}
-                                    />
-                                    <TableData
-                                        name={formatDate(x.dateCreated)}
                                     />
                                     <TableState name={x.status as string} />
                                     <InvoiceAction
@@ -377,8 +377,8 @@ function SuperAdminDashboard({
                         thead={[
                             'Name on Invoice',
                             'Invoice No',
-                            'Amount',
                             'Generated on',
+                            'Amount',
                             'Status',
                             'Action',
                         ]}

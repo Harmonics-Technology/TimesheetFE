@@ -134,11 +134,11 @@ export const LeaveManagement = ({
                         role == 'TeamMember'
                             ? [
                                   {
-                                      text: 'Leave Status',
+                                      text: 'Leave Request',
                                       url: '/leave/management',
                                   },
                                   {
-                                      text: 'Cancelled Leave',
+                                      text: 'Leave cancellation request',
                                       url: '/leave/cancelled',
                                   },
                                   {
@@ -153,7 +153,7 @@ export const LeaveManagement = ({
                                       url: '/leave/management',
                                   },
                                   {
-                                      text: 'Leave Cancel Request',
+                                      text: 'Leave cancellation request',
                                       url: '/leave/cancelled',
                                   },
                                   {
@@ -171,7 +171,7 @@ export const LeaveManagement = ({
                                       url: '/leave/management',
                                   },
                                   {
-                                      text: 'Leave Cancel Request',
+                                      text: 'Leave cancellation request',
                                       url: '/leave/cancelled',
                                   },
                                   {

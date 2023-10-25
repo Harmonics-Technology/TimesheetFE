@@ -25,16 +25,6 @@ function expenses({ expenses, team, expenseType }: ExpensesType) {
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/expenses`}
-                    tabName="Awaiting Approval"
-                />
-                <PageTabs
-                    url={`/${role}/financials/expenses-approved`}
-                    tabName="Approved"
-                />
-            </Flex>
             <PayrollExpenseManagement
                 expenses={expenses}
                 team={team}

@@ -126,10 +126,10 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
                                 color="white"
                             >
                                 <TableHead name="S/N" />
-                                <TableHead name="First Work Day" />
-                                <TableHead name="Last Work Day" />
-                                <TableHead name="Approval Date" />
-                                <TableHead name="Payment Date" />
+                                <TableHead name="First Work Day" p="0" />
+                                <TableHead name="Last Work Day" p="0" />
+                                <TableHead name="Approval Date" p="0" />
+                                <TableHead name="Payment Date" p="0" />
                             </Tr>
                         </Thead>
                     </Table>

@@ -288,7 +288,7 @@ function TeamProfile({
     };
     return (
         <>
-            {!userProfile?.isActive && role?.includes('Admin') && (
+            {/* {!userProfile?.isActive && role?.includes('Admin') && (
                 <ActivateUserAlert
                     title="Activate Account!"
                     desc="This user needs your approval to be onboarded"
@@ -297,7 +297,7 @@ function TeamProfile({
                     loading={loading}
                     onClick={ActivateUserProfile}
                 />
-            )}
+            )} */}
             <Box
                 bgColor="white"
                 borderRadius="15px"

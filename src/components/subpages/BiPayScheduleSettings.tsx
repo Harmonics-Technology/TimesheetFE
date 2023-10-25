@@ -1,4 +1,5 @@
 import { Box, Flex, HStack, Text, VStack, useToast } from '@chakra-ui/react';
+import InputBlank from '@components/bits-utils/InputBlank';
 import { LabelSign } from '@components/bits-utils/LabelSign';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
@@ -6,6 +7,7 @@ import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import { UserContext } from '@components/context/UserContext';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { yupResolver } from '@hookform/resolvers/yup';
+import moment from 'moment';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
@@ -14,7 +16,10 @@ import * as yup from 'yup';
 
 const schema = yup.object().shape({
     startDate: yup.string().required(),
-    paymentDateDays: yup.string().required(),
+    paymentDateDays: yup
+        .number()
+        .required()
+        .max(14, 'Select between 1 - 14 days'),
 });
 
 export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
@@ -22,6 +27,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
         register,
         handleSubmit,
         control,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<PayScheduleGenerationModel>({
         resolver: yupResolver(schema),
@@ -34,6 +40,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
     const toast = useToast();
     const router = useRouter();
     const { user } = useContext(UserContext);
+    const endDate = moment(watch('startDate')).add(14, 'days');
 
     const onSubmit = async (data: PayScheduleGenerationModel) => {
         data.superAdminId = user?.superAdminId;
@@ -86,7 +93,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                 <LabelSign data={data ? 'Configured!' : 'Not Configured!'} />
             </Flex>
             <form>
-                <HStack w="40%" spacing="1rem">
+                <HStack w="70%" spacing="1rem" align="flex-end" mb="1rem">
                     <PrimaryDate<PayScheduleGenerationModel>
                         control={control}
                         name="startDate"
@@ -99,14 +106,40 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                         }
                         // min={new Date()}
                     />
+                    <InputBlank
+                        label="End Date"
+                        defaultValue=""
+                        placeholder={endDate?.format('DD/MM/YYYY')}
+                    />
+                    <Box w="full">
+                        <Text fontSize="12px" color="#8C8C8C" w="full" mb="0">
+                            This end date is filled automatically after
+                            selecting start date{' '}
+                        </Text>
+                    </Box>
+                </HStack>
+                <HStack w="70%" spacing="1rem" align="flex-end">
                     <PrimaryInput<PayScheduleGenerationModel>
-                        label="Payment period"
+                        label="Payment Date Offset (in days)"
                         name="paymentDateDays"
                         error={errors.paymentDateDays}
                         defaultValue=""
                         register={register}
                         placeholder={payday || 'Enter the number of days'}
                     />
+                    <InputBlank
+                        label="Day"
+                        defaultValue=""
+                        placeholder={moment(endDate)
+                            .add(watch('paymentDateDays'), 'days')
+                            .format('dddd')}
+                    />
+                    <Box w="full">
+                        <Text fontSize="12px" color="#8C8C8C" w="full" mb="0">
+                            This end date is filled automatically after
+                            selecting start date{' '}
+                        </Text>
+                    </Box>
                 </HStack>
                 <Box my="2rem">
                     <ShiftBtn

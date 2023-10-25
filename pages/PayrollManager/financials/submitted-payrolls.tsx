@@ -19,16 +19,6 @@ function payrolls({ invoiceData }: InvoiceType) {
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/payrolls`}
-                    tabName="Pending Payrolls"
-                />
-                <PageTabs
-                    url={`/${role}/financials/offshore`}
-                    tabName="Processed Payrolls"
-                />
-            </Flex>
             <AdminInvoices
                 invoiceData={invoiceData}
                 record={2}

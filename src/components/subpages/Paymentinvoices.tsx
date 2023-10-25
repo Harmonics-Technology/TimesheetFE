@@ -68,10 +68,6 @@ function Paymentinvoices({
                 isOpen={isOpen}
                 isCentered
             >
-                <ModalOverlay
-                    bg="blackAlpha.300"
-                    backdropFilter="blur(10px) hue-rotate(90deg)"
-                />
                 <ModalContent
                     py={5}
                     borderRadius="0"
@@ -122,11 +118,11 @@ function Paymentinvoices({
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             Issued Date:{' '}
-                                            {formatDate(clicked?.startDate)}
+                                            {formatDate(clicked?.dateCreated)}
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             Due Date:{' '}
-                                            {formatDate(clicked?.endDate)}
+                                            {formatDate(clicked?.paymentDate)}
                                         </Text>
                                     </Box>
                                     <Box maxW="35%" textAlign="right">

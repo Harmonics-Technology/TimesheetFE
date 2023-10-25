@@ -70,7 +70,7 @@ const Leaveform = ({
         },
     });
 
-    console.log({user})
+    console.log({ user });
 
     const onSubmit = async (data: LeaveModel) => {
         oneDay == true && (data.endDate = data.startDate);
@@ -114,6 +114,8 @@ const Leaveform = ({
             });
         }
     };
+
+    console.log({ teamMembers, id });
 
     return (
         <DrawerWrapper
@@ -174,7 +176,7 @@ const Leaveform = ({
                         name="startDate"
                         label={oneDay ? 'Leave Date' : 'Start Date'}
                         error={errors.startDate}
-                        min={new DateObject().add(3, 'days')}
+                        min={new DateObject().add(0, 'days')}
                         disableWeekend
                         placeholder={data?.startDate}
                     />
@@ -217,7 +219,7 @@ const Leaveform = ({
                         keyLabel="fullName"
                         label="Work Assignee"
                         options={teamMembers?.data?.value.filter(
-                            (x) => x.id !== id,
+                            (x) => x.employeeInformationId !== id,
                         )}
                         searchable
                         placeholder={data?.workAssignee?.fullName}

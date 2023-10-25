@@ -13,7 +13,7 @@ interface InputProps {
     type?: string;
     icon?: boolean;
     label?: string;
-    placeholder?: string;
+    placeholder?: any;
     passwordVisible?: boolean;
     changeVisibility?: any;
     disableLabel?: boolean;
