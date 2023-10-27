@@ -66,7 +66,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({

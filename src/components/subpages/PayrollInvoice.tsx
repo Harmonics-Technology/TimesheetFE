@@ -85,7 +85,7 @@ function PayrollInvoice({
                 });
                 onClose();
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);

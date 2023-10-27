@@ -122,7 +122,7 @@ const AdminPaymentScheduleModal = ({
                     <>
                         <Text
                             fontSize="1.1rem"
-                            mb="1rem"
+                            mt="1rem"
                             px={['1.5rem', '3.3rem']}
                             fontWeight="700"
                         >
@@ -131,14 +131,14 @@ const AdminPaymentScheduleModal = ({
                     </>
                 </ModalHeader>
 
-                <ModalBody>
+                <ModalBody w="95%" mx="auto">
                     <Tabs isFitted variant="enclosed">
                         <TabList mb="1em">
                             <Tab>Monthly</Tab>
                             <Tab>Bi-Weekly</Tab>
                             <Tab>Weekly</Tab>
                         </TabList>
-                        <Table w="92%" mx="auto">
+                        <Table>
                             <Thead>
                                 <Tr
                                     h="3rem"
@@ -154,7 +154,7 @@ const AdminPaymentScheduleModal = ({
                                 </Tr>
                             </Thead>
                         </Table>
-                        <Box maxH="70vh" overflowY="auto" px={5}>
+                        <Box maxH="65vh" overflowY="auto">
                             <TabPanels>
                                 <TabPanel>
                                     <ScheduleTable

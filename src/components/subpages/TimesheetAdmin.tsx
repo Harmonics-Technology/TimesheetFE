@@ -116,12 +116,11 @@ const TimesheetAdmin = ({
     //
     const sheet = timeSheets?.timeSheet;
 
-    const newDate = new Date(date as unknown as string);
+    const newDate = new Date(moment(date).format('MM/DD/YYYY'));
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [activeDate, setActiveDate] = useState(
+    const activeDate =
         //@ts-ignore
-        newDate instanceof Date && !isNaN(newDate) ? newDate : new Date(),
-    );
+        newDate instanceof Date && !isNaN(newDate) ? newDate : new Date();
     const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
         sheet as TimeSheetView[],
     );
@@ -222,7 +221,7 @@ const TimesheetAdmin = ({
                 data,
             );
             if (result.status) {
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
         } catch (error: any) {
@@ -308,7 +307,7 @@ const TimesheetAdmin = ({
                         title: 'Successful',
                         position: 'top-right',
                     });
-                    router.reload();
+                    router.replace(router.asPath);
                     return;
                 }
                 toast({
@@ -339,7 +338,7 @@ const TimesheetAdmin = ({
         //         title: 'Successful',
         //         position: 'top-right',
         //     });
-        //     router.reload();
+        //      router.replace(router.asPath);
         // };
         return (
             <TimeSheetEstimationBtn
@@ -371,7 +370,7 @@ const TimesheetAdmin = ({
                         title: 'Successful',
                         position: 'top-right',
                     });
-                    router.reload();
+                    router.replace(router.asPath);
                     return;
                 }
                 toast({
@@ -399,7 +398,7 @@ const TimesheetAdmin = ({
         //         title: 'Successful',
         //         position: 'top-right',
         //     });
-        //     router.reload();
+        //      router.replace(router.asPath);
         //     return;
         // };
         return (
@@ -414,26 +413,34 @@ const TimesheetAdmin = ({
         );
     }
 
-    const nextMonth = async () => {
-        await router.push({
+    const nextMonth = () => {
+        router.push({
             query: {
                 ...router.query,
-                date: moment(addMonths(activeDate, 1)).format('YYYY-MM-DD'),
-                end: undefined,
+                date: moment(startOfMonth(addMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
+                end: moment(endOfMonth(addMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
             },
         });
-        router.reload();
     };
-    const prevMonth = async () => {
-        await router.push({
+
+    const prevMonth = () => {
+        router.push({
             query: {
                 ...router.query,
-                date: moment(subMonths(activeDate, 1)).format('YYYY-MM-DD'),
-                end: undefined,
+                date: moment(startOfMonth(subMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
+                end: moment(endOfMonth(subMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
             },
         });
-        router.reload();
     };
+
     // format(
     //     lastDayOfMonth(subMonths(activeDate, 1)),
     //     'yyyy-MM-dd',
@@ -619,6 +626,9 @@ const TimesheetAdmin = ({
             } = useDisclosure({ defaultIsOpen: false });
             const close = useCallback(() => onClose(), []);
             const popover = useRef(null);
+            const hoursEligible = timesheets?.employeeInformation
+                ?.numberOfHoursEligible as number;
+
             useClickOutside(popover, close);
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
@@ -815,6 +825,7 @@ const TimesheetAdmin = ({
                         h="1.5rem"
                         mt=".3rem"
                         alignItems="center"
+                        key={userDate}
                     >
                         <Input
                             type="number"
@@ -855,6 +866,19 @@ const TimesheetAdmin = ({
                                     date: moment(userDate).format('YYYY-MM-DD'),
                                     hours: e.target.value as unknown as number,
                                 })
+                            }
+                            color={
+                                timesheets?.onLeave &&
+                                timesheets?.onLeaveAndEligibleForLeave &&
+                                (timesheets?.hours as number) <= hoursEligible
+                                    ? 'blue'
+                                    : (timesheets?.onLeave &&
+                                          !timesheets?.onLeaveAndEligibleForLeave) ||
+                                      (timesheets?.onLeave == true &&
+                                          (timesheets?.hours as number) >
+                                              hoursEligible)
+                                    ? 'red'
+                                    : 'green'
                             }
                         />
 

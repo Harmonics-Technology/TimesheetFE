@@ -193,7 +193,7 @@ function ActivateUserPage({
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({
@@ -223,7 +223,7 @@ function ActivateUserPage({
                     status: 'success',
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);

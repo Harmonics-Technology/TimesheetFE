@@ -94,7 +94,7 @@ export const EditShifts = ({ setShowEdit, showEdit }) => {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 setShowEdit({ id: '', value: false });
                 return;
             }

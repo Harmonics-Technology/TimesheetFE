@@ -37,7 +37,7 @@ export const EditSavedCard = ({ data, setEditCard }) => {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 setEditCard({ id: '', value: false });
                 return;
             }

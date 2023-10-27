@@ -111,7 +111,7 @@ export const ShiftManagementSettings = ({
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({

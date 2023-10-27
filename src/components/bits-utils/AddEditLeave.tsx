@@ -40,7 +40,7 @@ export const AddEditLeave = ({ data }: { data?: any }) => {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({
@@ -71,7 +71,7 @@ export const AddEditLeave = ({ data }: { data?: any }) => {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({

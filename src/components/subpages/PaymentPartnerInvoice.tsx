@@ -93,7 +93,7 @@ function PaymentPartnerInvoice({
                         position: 'top-right',
                     });
                     setLoading(false);
-                    router.reload();
+                    router.replace(router.asPath);
                     return;
                 }
                 setLoading(false);
@@ -206,7 +206,7 @@ function PaymentPartnerInvoice({
                                 />
                                 <TableData
                                     name={Naira(
-                                        x.totalAmount as number,
+                                        Round(x.totalAmount as number),
                                         // *
                                         //     (x.rate as unknown as number),
                                     )}

@@ -42,7 +42,7 @@ export const SavedCard = ({
             );
             if (res.status) {
                 setLoading({ status: false, type: '' });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading({ status: false, type: '' });
@@ -72,7 +72,7 @@ export const SavedCard = ({
                     status: 'success',
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading({ status: false, type: '' });

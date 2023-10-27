@@ -200,7 +200,7 @@ function PaymentPartnerDashboard({
                         color="white"
                         w="full"
                         bgColor="black"
-                        onClick={() => router.reload()}
+                        onClick={() =>  router.replace(router.asPath)}
                         // h="2rem"
                         // borderRadius="0"
                     >

@@ -388,7 +388,7 @@ export function LeaveActions({
                     position: 'top-right',
                 });
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -422,7 +422,7 @@ export function LeaveActions({
                     position: 'top-right',
                 });
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -571,7 +571,7 @@ export function ShiftSwapActions({ id }: { id: any }) {
                     position: 'top-right',
                 });
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -810,7 +810,7 @@ export function ToggleStatus({ id, status }: { id: any; status: string }) {
                     position: 'top-right',
                 });
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -878,7 +878,7 @@ export function ExpenseActions({
                         position: 'top-right',
                     });
                     setLoading(false);
-                    router.reload();
+                    router.replace(router.asPath);
                     return;
                 }
                 setLoading(false);
@@ -898,7 +898,7 @@ export function ExpenseActions({
                         position: 'top-right',
                     });
                     setLoading(false);
-                    router.reload();
+                    router.replace(router.asPath);
                     return;
                 }
                 setLoading(false);
@@ -931,7 +931,7 @@ export function ExpenseActions({
                     position: 'top-right',
                 });
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -1001,7 +1001,7 @@ export function PayrollActions({ id, userId }: { id: any; userId: any }) {
     //                 position: 'top-right',
     //             });
     //             setLoading(false);
-    //             router.reload();
+    //              router.replace(router.asPath);
     //             return;
     //         }
     //         setLoading(false);
@@ -1097,7 +1097,7 @@ export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
                     position: 'top-right',
                 });
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);

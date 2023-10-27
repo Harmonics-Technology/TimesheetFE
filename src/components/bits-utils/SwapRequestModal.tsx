@@ -127,7 +127,7 @@ export const SwapRequestModal = ({
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 onClose();
                 return;
             }

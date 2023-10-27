@@ -92,7 +92,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 onClose();
                 return;
             }

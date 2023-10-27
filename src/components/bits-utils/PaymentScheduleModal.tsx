@@ -107,7 +107,7 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
                     <>
                         <Text
                             fontSize="1.1rem"
-                            mb="1rem"
+                            mt="1rem"
                             px={['1.5rem', '3.3rem']}
                             fontWeight="700"
                         >
@@ -116,8 +116,8 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
                     </>
                 </ModalHeader>
 
-                <ModalBody>
-                    <Table w="95%" mx="auto">
+                <ModalBody w="95%" mx="auto">
+                    <Table>
                         <Thead>
                             <Tr
                                 h="3rem"
@@ -133,7 +133,7 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
                             </Tr>
                         </Thead>
                     </Table>
-                    <Box maxH="70vh" overflowY="auto" px={5}>
+                    <Box maxH="65vh" overflowY="auto">
                         <TableContainer>
                             <Table
                                 variant="striped"
@@ -145,6 +145,7 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
                                     {paymentSchedule?.data?.map(
                                         (x: PaymentSchedule, i) => (
                                             <Tr key={i}>
+                                                <TableData name={++i} />
                                                 <TableData
                                                     name={formatDate(
                                                         x.weekDate,
@@ -172,7 +173,7 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
                             </Table>
                         </TableContainer>
                     </Box>
-                    <Flex justify="flex-end" mt="2rem">
+                    <Flex justify="flex-end" my="2rem">
                         <Button
                             w="40%"
                             h="3.5rem"

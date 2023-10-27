@@ -66,7 +66,7 @@ export const OnboardingPercent = ({ data }: { data: OnboardingFeeView[] }) => {
                     status: 'success',
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({
@@ -97,7 +97,7 @@ export const OnboardingPercent = ({ data }: { data: OnboardingFeeView[] }) => {
                         status: 'success',
                         position: 'top-right',
                     });
-                    router.reload();
+                    router.replace(router.asPath);
                     return;
                 }
                 setLoading(false);

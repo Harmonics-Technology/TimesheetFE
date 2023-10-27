@@ -55,7 +55,7 @@ function SuperadminProfile({ userProfile }: SuperadminProfileProps) {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({

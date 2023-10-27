@@ -45,6 +45,7 @@ function Paymentinvoices({
             ref.current.save();
         }
     }
+    // console.log({ clicked });
     const exchangeRate = clicked?.rate as unknown as number;
     const allInvoiceTotal = (
         clicked?.children as unknown as InvoiceView[]
@@ -60,6 +61,12 @@ function Paymentinvoices({
         calculatePercentage(allInvoiceTotal, clicked?.hst) / exchangeRate;
     const hstNaira = hst * exchangeRate;
     const status = clicked?.status;
+
+    const paymentDate =
+        moment('2023-10-27').day() == 5
+            ? moment('2023-10-27').weekday(12)
+            : moment('2023-10-27').weekday(5);
+
     return (
         <>
             <Modal
@@ -121,8 +128,7 @@ function Paymentinvoices({
                                             {formatDate(clicked?.dateCreated)}
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
-                                            Due Date:{' '}
-                                            {formatDate(clicked?.paymentDate)}
+                                            Due Date: {formatDate(paymentDate)}
                                         </Text>
                                     </Box>
                                     <Box maxW="35%" textAlign="right">
@@ -135,8 +141,10 @@ function Paymentinvoices({
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             {clicked?.payrollGroupName} <br />
-                                            201 New York Ibeju Leki, 201
-                                            New-York Ibeju Leki
+                                            {
+                                                clicked?.createdByUser
+                                                    ?.organizationAddress
+                                            }
                                         </Text>
                                         {/* <Text fontSize=".9rem" fontWeight="600">
                                     Address
@@ -178,31 +186,35 @@ function Paymentinvoices({
                                                         />
                                                         <TableData
                                                             name={`${Naira(
-                                                                (x?.totalAmount as number) -
-                                                                    (
-                                                                        x?.expenses as unknown as ExpenseView[]
-                                                                    )?.reduce(
+                                                                Round(
+                                                                    (x?.totalAmount as number) -
                                                                         (
-                                                                            a,
-                                                                            b,
-                                                                        ) =>
-                                                                            a +
-                                                                            (b?.amount as number),
-                                                                        0,
-                                                                    ),
+                                                                            x?.expenses as unknown as ExpenseView[]
+                                                                        )?.reduce(
+                                                                            (
+                                                                                a,
+                                                                                b,
+                                                                            ) =>
+                                                                                a +
+                                                                                (b?.amount as number),
+                                                                            0,
+                                                                        ),
+                                                                ),
                                                             )} ${
                                                                 x?.expenses
                                                                     ?.length !==
                                                                 0
                                                                     ? `+ ${Naira(
-                                                                          x.expenses?.reduce(
-                                                                              (
-                                                                                  a,
-                                                                                  b,
-                                                                              ) =>
-                                                                                  a +
-                                                                                  (b?.amount as number),
-                                                                              0,
+                                                                          Round(
+                                                                              x.expenses?.reduce(
+                                                                                  (
+                                                                                      a,
+                                                                                      b,
+                                                                                  ) =>
+                                                                                      a +
+                                                                                      (b?.amount as number),
+                                                                                  0,
+                                                                              ),
                                                                           ),
                                                                       )}`
                                                                     : ''
@@ -234,7 +246,7 @@ function Paymentinvoices({
                                                                     ?.fixedAmount ==
                                                                 false
                                                                     ? '%'
-                                                                    : 'flat'
+                                                                    : ''
                                                             }`}
                                                         />
                                                     </Tr>

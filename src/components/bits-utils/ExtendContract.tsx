@@ -106,7 +106,7 @@ function ExtendContract({ extend, setExtend, clickedItem }: contractProps) {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 setExtend(!extend);
                 return;
             }

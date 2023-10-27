@@ -159,7 +159,7 @@ const ShiftManagement = ({ allShift, shiftUser, shiftTypes }: shiftProps) => {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 onClose();
                 return;
             }
@@ -191,7 +191,7 @@ const ShiftManagement = ({ allShift, shiftUser, shiftTypes }: shiftProps) => {
     const url = `${role}/shift-management/schedule`;
 
     useNonInitialEffect(() => {
-        router.reload();
+        router.replace(router.asPath);
     }, [router.isReady]);
 
     return (

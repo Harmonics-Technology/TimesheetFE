@@ -86,7 +86,7 @@ const CancelSub = () => {
                     position: 'top-right',
                 });
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);

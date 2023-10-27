@@ -81,7 +81,7 @@ export const LeaveType = ({ leaves }: leaveProps) => {
                     position: 'top-right',
                 });
                 onClose();
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({
@@ -113,7 +113,7 @@ export const LeaveType = ({ leaves }: leaveProps) => {
                     position: 'top-right',
                 });
                 onClose();
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({
@@ -146,7 +146,7 @@ export const LeaveType = ({ leaves }: leaveProps) => {
                     position: 'top-right',
                 });
                 onClose();
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({

@@ -120,7 +120,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                     position: 'top-right',
                 });
                 // Cookies.set('user', JSON.stringify(result.data));
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({

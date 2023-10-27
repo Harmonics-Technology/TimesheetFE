@@ -41,7 +41,7 @@ const ConfirmModal = ({ isOpen, onClose, id }: Props) => {
                     position: 'top-right',
                 });
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
                 onClose();
                 return;
             }

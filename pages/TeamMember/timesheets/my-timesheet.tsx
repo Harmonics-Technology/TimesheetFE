@@ -65,6 +65,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 id,
                 date,
             );
+
+            console.log('fetching');
             //
             return {
                 props: {

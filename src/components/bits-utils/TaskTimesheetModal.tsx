@@ -57,7 +57,7 @@ export const TaskTimesheetModal = ({ isOpen, onClose, data }: ExportProps) => {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 setLoading(true);
                 onClose();
                 return;

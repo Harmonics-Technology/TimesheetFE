@@ -55,7 +55,7 @@ function Pagination({ data, shift }: pageOptions) {
                           offset: data.nextOffset,
                       },
                   });
-            // shift && router.reload();
+            // shift &&  router.replace(router.asPath);
         }
         if (direction == 'last' && last != null) {
             link = last?.split('?')[1] ?? false;

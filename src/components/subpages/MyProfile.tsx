@@ -109,7 +109,7 @@ function MyProfile({
 
     const reloadPage = () => {
         setShowLoading(false);
-        router.reload();
+        router.replace(router.asPath);
     };
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -197,7 +197,7 @@ function MyProfile({
                     position: 'top-right',
                 });
                 // Cookies.set('user', JSON.stringify(result.data));
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({

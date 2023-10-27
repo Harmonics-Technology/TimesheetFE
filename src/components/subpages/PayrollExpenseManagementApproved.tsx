@@ -114,7 +114,7 @@ function PayrollExpenseManagementApproved({
                     position: 'top-right',
                 });
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -160,7 +160,7 @@ function PayrollExpenseManagementApproved({
                     position: 'top-right',
                 });
                 onClose();
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({

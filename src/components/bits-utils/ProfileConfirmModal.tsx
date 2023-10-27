@@ -53,7 +53,7 @@ const ProfileConfirmModal = ({ isOpen, onClose, user }: Props) => {
                     position: 'top-right',
                 });
                 Cookies.set('user', JSON.stringify(result.data));
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({

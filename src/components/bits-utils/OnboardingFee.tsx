@@ -36,7 +36,7 @@ export const OnboardingFee = ({ data }: { data: OnboardingFeeView }) => {
                     status: 'success',
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
         } catch (err: any) {

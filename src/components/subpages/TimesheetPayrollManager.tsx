@@ -170,7 +170,7 @@ const TimesheetPayrollManager = ({
     });
 
     const reloadPage = () => {
-        router.reload();
+        router.replace(router.asPath);
     };
 
     const preventTomorrow = addDays(new Date(), 1).toISOString();
@@ -200,7 +200,7 @@ const TimesheetPayrollManager = ({
                 data,
             );
             if (result.status) {
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
         } catch (error: any) {
@@ -339,7 +339,7 @@ const TimesheetPayrollManager = ({
                         title: 'Successful',
                         position: 'top-right',
                     });
-                    router.reload();
+                    router.replace(router.asPath);
                     return;
                 }
                 toast({
@@ -367,7 +367,7 @@ const TimesheetPayrollManager = ({
         //         title: 'Successful',
         //         position: 'top-right',
         //     });
-        //     router.reload();
+        //      router.replace(router.asPath);
         //     return;
         // };
         return (
@@ -390,7 +390,7 @@ const TimesheetPayrollManager = ({
                 end: undefined,
             },
         });
-        router.reload();
+        router.replace(router.asPath);
     };
     const prevMonth = async () => {
         await router.push({
@@ -400,7 +400,7 @@ const TimesheetPayrollManager = ({
                 end: undefined,
             },
         });
-        router.reload();
+        router.replace(router.asPath);
     };
 
     const getHeader = () => {

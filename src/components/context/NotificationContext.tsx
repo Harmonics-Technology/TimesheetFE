@@ -23,7 +23,7 @@ export const NotificationProvider = ({ children }: { children: any }) => {
             //
             if (data.status) {
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
             }
         } catch (error: any) {
             setLoading(false);

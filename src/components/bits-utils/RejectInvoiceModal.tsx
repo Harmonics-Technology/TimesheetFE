@@ -56,7 +56,7 @@ function RejectInvoiceModal({
                 data,
             );
             if (result.status) {
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
         } catch (error) {

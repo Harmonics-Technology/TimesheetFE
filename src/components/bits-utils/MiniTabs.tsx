@@ -10,8 +10,8 @@ export const MiniTabs = ({ url, text }) => {
             <Flex
                 align="center"
                 h="43px"
-                bgColor={router.asPath == url ? 'brand.400' : 'transparent'}
-                color={router.asPath == url ? 'white' : '#484747'}
+                bgColor={router.pathname == url ? 'brand.400' : 'transparent'}
+                color={router.pathname == url ? 'white' : '#484747'}
             >
                 <Text
                     mb="0"

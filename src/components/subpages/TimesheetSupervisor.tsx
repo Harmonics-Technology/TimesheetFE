@@ -120,10 +120,9 @@ const TimesheetSupervisor = ({
     const sheet = timeSheets?.timeSheet;
     const newDate = new Date(date as unknown as string);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [activeDate, setActiveDate] = useState(
+    const activeDate =
         //@ts-ignore
-        newDate instanceof Date && !isNaN(newDate) ? newDate : new Date(),
-    );
+        newDate instanceof Date && !isNaN(newDate) ? newDate : new Date();
     const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
         sheet as TimeSheetView[],
     );
@@ -226,7 +225,7 @@ const TimesheetSupervisor = ({
                 data,
             );
             if (result.status) {
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
         } catch (error: any) {
@@ -312,7 +311,7 @@ const TimesheetSupervisor = ({
                         title: 'Successful',
                         position: 'top-right',
                     });
-                    router.reload();
+                    router.replace(router.asPath);
                     return;
                 }
                 toast({
@@ -343,7 +342,7 @@ const TimesheetSupervisor = ({
         //         title: 'Successful',
         //         position: 'top-right',
         //     });
-        //     router.reload();
+        //      router.replace(router.asPath);
         // };
         return (
             <TimeSheetEstimationBtn
@@ -370,7 +369,7 @@ const TimesheetSupervisor = ({
                 title: 'Successful',
                 position: 'top-right',
             });
-            router.reload();
+            router.replace(router.asPath);
             return;
         };
         return (
@@ -385,25 +384,32 @@ const TimesheetSupervisor = ({
         );
     }
 
-    const nextMonth = async () => {
-        await router.push({
+    const nextMonth = () => {
+        router.push({
             query: {
                 ...router.query,
-                date: moment(addMonths(activeDate, 1)).format('YYYY-MM-DD'),
-                end: undefined,
+                date: moment(startOfMonth(addMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
+                end: moment(endOfMonth(addMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
             },
         });
-        router.reload();
     };
-    const prevMonth = async () => {
-        await router.push({
+
+    const prevMonth = () => {
+        router.push({
             query: {
                 ...router.query,
-                date: moment(subMonths(activeDate, 1)).format('YYYY-MM-DD'),
-                end: undefined,
+                date: moment(startOfMonth(subMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
+                end: moment(endOfMonth(subMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
             },
         });
-        router.reload();
     };
 
     const getHeader = () => {
@@ -577,7 +583,7 @@ const TimesheetSupervisor = ({
                     currentDate.toLocaleDateString(),
             )[0];
             const userId = timesheets?.employeeInformationId as string;
-            const userDate = timesheets?.date;
+            const userDate = moment(currentDate).format('YYYY-MM-DD');
             const [singleReject, setSingleReject] = useState(false);
             const {
                 isOpen: isVisible,
@@ -587,6 +593,8 @@ const TimesheetSupervisor = ({
             const close = useCallback(() => onClose(), []);
             const popover = useRef(null);
             useClickOutside(popover, close);
+            const hoursEligible = timesheets?.employeeInformation
+                ?.numberOfHoursEligible as number;
             const notFilled =
                 moment(timesheets?.date) > moment(timesheets?.dateModified);
             //
@@ -779,6 +787,7 @@ const TimesheetSupervisor = ({
                         h="1.5rem"
                         mt=".3rem"
                         alignItems="center"
+                        key={userDate}
                     >
                         <Input
                             type="number"
@@ -823,6 +832,19 @@ const TimesheetSupervisor = ({
                                         moment(userDate).format('YYYY-MM-DD'),
                                     hours: e.target.value,
                                 })
+                            }
+                            color={
+                                timesheets?.onLeave &&
+                                timesheets?.onLeaveAndEligibleForLeave &&
+                                (timesheets?.hours as number) <= hoursEligible
+                                    ? 'blue'
+                                    : (timesheets?.onLeave &&
+                                          !timesheets?.onLeaveAndEligibleForLeave) ||
+                                      (timesheets?.onLeave == true &&
+                                          (timesheets?.hours as number) >
+                                              hoursEligible)
+                                    ? 'red'
+                                    : 'green'
                             }
                         />
 

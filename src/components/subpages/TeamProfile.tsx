@@ -230,7 +230,7 @@ function TeamProfile({
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({
@@ -268,7 +268,7 @@ function TeamProfile({
                     status: 'success',
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);

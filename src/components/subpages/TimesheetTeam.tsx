@@ -73,7 +73,6 @@ const TimesheetTeam = ({
     const { date } = router.query;
     const { end } = router.query;
 
-
     //
     const enableFinancials = (timeSheets as any)?.timeSheet[0]
         ?.employeeInformation?.enableFinancials;
@@ -109,15 +108,16 @@ const TimesheetTeam = ({
 
     //
     const sheet = timeSheets?.timeSheet;
-    const newDate = new Date(date as unknown as string);
+    const newDate = new Date(moment(date).format('MM/DD/YYYY'));
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [activeDate, setActiveDate] = useState(
+    const activeDate =
         //@ts-ignore
-        newDate instanceof Date && !isNaN(newDate) ? newDate : new Date(),
-    );
+        newDate instanceof Date && !isNaN(newDate) ? newDate : new Date();
+
     const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
         sheet as TimeSheetView[],
     );
+
     const toast = useToast();
 
     let hoursWorked: any[] = [] || 0;
@@ -154,8 +154,6 @@ const TimesheetTeam = ({
     const [selectedInput, setSelectedInput] = useState<
         TimesheetHoursAdditionModel[]
     >([]);
-    const { user } = useContext(UserContext);
-    const hoursEligible = user?.numberOfHoursEligible;
 
     const fillTimeInDate = (item: TimesheetHoursAdditionModel) => {
         const existingValue = selectedInput.find((e) => e.date == item.date);
@@ -182,7 +180,7 @@ const TimesheetTeam = ({
     //             setLoading(false);
     //             return;
     //         });
-    //         router.reload();
+    //          router.replace(router.asPath);
     //     };
     //     //
     //     return (
@@ -250,7 +248,7 @@ const TimesheetTeam = ({
                         title: 'Successful',
                         position: 'top-right',
                     });
-                    router.reload();
+                    router.replace(router.asPath);
                     return;
                 }
                 toast({
@@ -278,7 +276,7 @@ const TimesheetTeam = ({
         //         title: 'Successful',
         //         position: 'top-right',
         //     });
-        //     router.reload();
+        //      router.replace(router.asPath);
         //     return;
         // };
         return (
@@ -293,25 +291,32 @@ const TimesheetTeam = ({
         );
     }
 
-    const nextMonth = async () => {
-        await router.push({
+    const nextMonth = () => {
+        router.push({
             query: {
                 ...router.query,
-                date: moment(addMonths(activeDate, 1)).format('YYYY-MM-DD'),
-                end: undefined,
+                date: moment(startOfMonth(addMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
+                end: moment(endOfMonth(addMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
             },
         });
-        router.reload();
     };
-    const prevMonth = async () => {
-        await router.push({
+
+    const prevMonth = () => {
+        router.push({
             query: {
                 ...router.query,
-                date: moment(subMonths(activeDate, 1)).format('YYYY-MM-DD'),
-                end: undefined,
+                date: moment(startOfMonth(subMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
+                end: moment(endOfMonth(subMonths(activeDate, 1))).format(
+                    'YYYY-MM-DD',
+                ),
             },
         });
-        router.reload();
     };
     const preventTomorrow = addDays(new Date(), 1).toISOString();
 
@@ -572,6 +577,8 @@ const TimesheetTeam = ({
             const userId = timesheets?.employeeInformationId as string;
 
             const userDate = moment(currentDate).format('YYYY-MM-DD');
+            const hoursEligible = timesheets?.employeeInformation
+                ?.numberOfHoursEligible as number;
             const {
                 isOpen: isVisible,
                 onClose,
@@ -660,6 +667,7 @@ const TimesheetTeam = ({
                         h="1.5rem"
                         mt=".3rem"
                         alignItems="center"
+                        key={userDate}
                     >
                         <Input
                             type="number"

@@ -88,7 +88,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                     position: 'top-right',
                 });
                 onClose();
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             toast({

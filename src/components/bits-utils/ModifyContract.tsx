@@ -105,7 +105,7 @@ function modifyContract({ modify, setmodify, clickedItem }: contractProps) {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.reload();
+                router.replace(router.asPath);
                 setmodify(!modify);
                 return;
             }

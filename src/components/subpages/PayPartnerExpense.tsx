@@ -70,7 +70,7 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
                     position: 'top-right',
                 });
                 setLoading(false);
-                router.reload();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
