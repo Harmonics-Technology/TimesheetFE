@@ -114,22 +114,8 @@ const TimesheetTeam = ({
         //@ts-ignore
         newDate instanceof Date && !isNaN(newDate) ? newDate : new Date();
 
-    const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
-        sheet as TimeSheetView[],
-    );
-
     const toast = useToast();
 
-    let hoursWorked: any[] = [] || 0;
-    monthlyTimesheets?.forEach((x) => {
-        hoursWorked.push(x.hours);
-    });
-    if (hoursWorked.length > 0) {
-        hoursWorked = hoursWorked.reduce((a, b) => a + b);
-    }
-    const totalHours =
-        hoursWorked.length == 0 ? 0 : (hoursWorked as unknown as number);
-    //
     const expectedHours = (timeSheets?.expectedWorkHours as number) || 0;
     const approvedHours = (timeSheets?.totalApprovedHours as number) || 0;
     const expectedPay = (timeSheets?.expectedPay as number) || 0;
@@ -569,11 +555,15 @@ const TimesheetTeam = ({
         let sumOfHours = 0;
         for (let day = 0; day < 7; day++) {
             const cloneDate = currentDate;
-            const timesheets = monthlyTimesheets?.filter(
+            const timesheets = sheet?.find(
                 (x) =>
                     new Date(x.date as string).toLocaleDateString() ==
                     currentDate.toLocaleDateString(),
-            )[0];
+            );
+            const [timesheetHours, setTimesheetHours] = useState(0);
+            useEffect(() => {
+                setTimesheetHours(timesheets?.hours as number);
+            }, [timesheets]);
             const userId = timesheets?.employeeInformationId as string;
 
             const userDate = moment(currentDate).format('YYYY-MM-DD');
@@ -633,7 +623,7 @@ const TimesheetTeam = ({
                                 // borderRadius="10px"
                                 borderBottom="4px solid"
                                 borderColor={
-                                    timesheets.isApproved == true
+                                    timesheets?.isApproved == true
                                         ? 'green'
                                         : 'red'
                                 }
@@ -641,21 +631,21 @@ const TimesheetTeam = ({
                                 p="1rem"
                                 zIndex={800}
                                 bgColor={
-                                    timesheets.isApproved == true
+                                    timesheets?.isApproved == true
                                         ? 'green.100'
                                         : 'red.100'
                                 }
                                 ref={popover}
                             >
                                 <Text fontWeight="700" mb="1rem">
-                                    {timesheets.isApproved == true
+                                    {timesheets?.isApproved == true
                                         ? 'Approved!'
                                         : 'Rejected'}
                                 </Text>
                                 <Text fontWeight="500" mb="0">
-                                    {timesheets.isApproved == true
+                                    {timesheets?.isApproved == true
                                         ? 'Good Job!'
-                                        : timesheets.rejectionReason}
+                                        : timesheets?.rejectionReason}
                                 </Text>
                             </Box>
                         )}
@@ -673,7 +663,7 @@ const TimesheetTeam = ({
                             type="number"
                             fontSize={['.6rem', '.9rem']}
                             p={['0', '1rem']}
-                            defaultValue={
+                            value={
                                 // isWeekend(
                                 //     new Date(timesheets?.date as string),
                                 // ) ||
@@ -687,7 +677,7 @@ const TimesheetTeam = ({
                                 //     ? // timesheets?.status == 'PENDING'
                                 //       '---'
                                 //     :
-                                timesheets?.hours || '---'
+                                timesheetHours || '---'
                             }
                             placeholder="---"
                             textAlign="center"
@@ -703,12 +693,13 @@ const TimesheetTeam = ({
                                 // ) ===
                                 //     moment(preventTomorrow).format('DD/MM/YYYY')
                             }
-                            onChange={(e) =>
+                            onChange={(e) => {
+                                setTimesheetHours(Number(e.target.value));
                                 fillTimeInDate({
                                     date: userDate,
                                     hours: e.target.value as unknown as number,
-                                })
-                            }
+                                });
+                            }}
                             color={
                                 timesheets?.onLeave &&
                                 timesheets?.onLeaveAndEligibleForLeave &&

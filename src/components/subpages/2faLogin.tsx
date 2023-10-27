@@ -54,16 +54,21 @@ function TwofaLogin() {
                     isClosable: true,
                     position: 'top-right',
                 });
-                setUser(result.data);
                 Cookies.set('user', JSON.stringify(result.data));
+                OpenAPI.TOKEN = result?.data?.token as string;
+                setUser(result.data);
                 router.query.from
-                    ? (window.location.href = decodeURIComponent(
-                          router.query.from as unknown as string,
-                      ))
-                    : (window.location.href = `/${result?.data?.role?.replaceAll(
-                          ' ',
-                          '',
-                      )}/dashboard`);
+                    ? router.push(
+                          decodeURIComponent(
+                              router.query.from as unknown as string,
+                          ),
+                      )
+                    : router.push(
+                          `${result?.data?.role?.replaceAll(
+                              ' ',
+                              '',
+                          )}/dashboard`,
+                      );
 
                 return;
             }

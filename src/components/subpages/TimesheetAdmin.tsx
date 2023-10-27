@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     format,
     startOfWeek,
@@ -83,7 +83,6 @@ const TimesheetAdmin = ({
 
     //
 
-    console.log({ timeSheets });
     const HighlightDate = (value: any) => {
         router.push({
             query: {
@@ -121,15 +120,18 @@ const TimesheetAdmin = ({
     const activeDate =
         //@ts-ignore
         newDate instanceof Date && !isNaN(newDate) ? newDate : new Date();
-    const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
-        sheet as TimeSheetView[],
-    );
+    // const [monthlyTimesheets, setMonthlyTimesheets] =
+    //     useState<TimeSheetView[]>();
+
+    // useEffect(() => {
+    //     setMonthlyTimesheets(sheet as TimeSheetView[]);
+    // }, [sheet]);
     // const [checked, setChecked] = useState(false);
     const toast = useToast();
     let hoursWorked: any[] = [];
-    monthlyTimesheets?.forEach((x) => {
-        hoursWorked.push(x.hours);
-    });
+    // monthlyTimesheets?.forEach((x) => {
+    //     hoursWorked.push(x.hours);
+    // });
     if (hoursWorked.length > 0) {
         hoursWorked = hoursWorked.reduce((a, b) => a + b);
     }
@@ -153,8 +155,9 @@ const TimesheetAdmin = ({
         TimesheetHoursAdditionModel[]
     >([]);
 
-    const timesheetALl = monthlyTimesheets?.filter((x) => !x.isApproved);
+    const timesheetALl = sheet?.filter((x) => !x.isApproved);
     //
+
     const fillSelectedDate = (item: TimesheetHoursApprovalModel) => {
         const existingValue = selected.find((e) => e.date == item.date);
         if (existingValue) {
@@ -166,12 +169,12 @@ const TimesheetAdmin = ({
     };
 
     const fillAllDate = () => {
-        const exists = timesheetALl.length === selected.length;
+        const exists = timesheetALl?.length === selected.length;
         if (exists) {
             setSelected([]);
             return;
         }
-        setSelected(timesheetALl);
+        setSelected(timesheetALl as any);
     };
 
     const fillTimeInDate = (item: TimesheetHoursAdditionModel) => {
@@ -609,13 +612,20 @@ const TimesheetAdmin = ({
         const total: any[] = [];
         const week: any[] = [];
         let sumOfHours = 0;
+
         for (let day = 0; day < 7; day++) {
             const cloneDate = currentDate;
-            const timesheets = monthlyTimesheets?.filter(
+            const timesheets = sheet?.find(
                 (x) =>
                     new Date(x.date as string).toLocaleDateString() ==
                     currentDate.toLocaleDateString(),
-            )[0];
+            );
+            const [timesheetHours, setTimesheetHours] = useState(0);
+
+            useEffect(() => {
+                setTimesheetHours(timesheets?.hours as number);
+            }, [timesheets]);
+
             const userId = timesheets?.employeeInformationId as string;
             const userDate = moment(currentDate).format('YYYY-MM-DDTHH:mm:ss');
             const [singleReject, setSingleReject] = useState(false);
@@ -628,6 +638,8 @@ const TimesheetAdmin = ({
             const popover = useRef(null);
             const hoursEligible = timesheets?.employeeInformation
                 ?.numberOfHoursEligible as number;
+
+            // console.log({ timesheets });
 
             useClickOutside(popover, close);
             const notFilled =
@@ -791,7 +803,7 @@ const TimesheetAdmin = ({
                                 // borderRadius="10px"
                                 borderBottom="4px solid"
                                 borderColor={
-                                    timesheets.isApproved == true
+                                    timesheets?.isApproved == true
                                         ? 'green'
                                         : 'red'
                                 }
@@ -799,21 +811,21 @@ const TimesheetAdmin = ({
                                 p="1rem"
                                 zIndex={800}
                                 bgColor={
-                                    timesheets.isApproved == true
+                                    timesheets?.isApproved == true
                                         ? 'green.100'
                                         : 'red.100'
                                 }
                                 ref={popover}
                             >
                                 <Text fontWeight="700" mb="1rem">
-                                    {timesheets.isApproved == true
+                                    {timesheets?.isApproved == true
                                         ? 'Approved!'
                                         : 'Rejected'}
                                 </Text>
                                 <Text fontWeight="500" mb="0">
-                                    {timesheets.isApproved == true
+                                    {timesheets?.isApproved == true
                                         ? 'Good Job!'
-                                        : timesheets.rejectionReason}
+                                        : timesheets?.rejectionReason}
                                 </Text>
                             </Box>
                         )}
@@ -831,7 +843,7 @@ const TimesheetAdmin = ({
                             type="number"
                             fontSize={['.6rem', '.9rem']}
                             p={['0', '1rem']}
-                            defaultValue={
+                            value={
                                 // isWeekend(
                                 //     new Date(timesheets?.date as string),
                                 // ) ||
@@ -845,7 +857,7 @@ const TimesheetAdmin = ({
                                 //     ? // timesheets?.status == 'PENDING'
                                 //       '---'
                                 //     :
-                                timesheets?.hours || '---'
+                                timesheetHours || '---'
                             }
                             placeholder="---"
                             textAlign="center"
@@ -861,12 +873,13 @@ const TimesheetAdmin = ({
                                 // ) ===
                                 //     moment(preventTomorrow).format('DD/MM/YYYY')
                             }
-                            onChange={(e) =>
+                            onChange={(e) => {
+                                setTimesheetHours(Number(e.target.value));
                                 fillTimeInDate({
                                     date: moment(userDate).format('YYYY-MM-DD'),
                                     hours: e.target.value as unknown as number,
-                                })
-                            }
+                                });
+                            }}
                             color={
                                 timesheets?.onLeave &&
                                 timesheets?.onLeaveAndEligibleForLeave &&

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     format,
     startOfWeek,
@@ -123,13 +123,10 @@ const TimesheetSupervisor = ({
     const activeDate =
         //@ts-ignore
         newDate instanceof Date && !isNaN(newDate) ? newDate : new Date();
-    const [monthlyTimesheets, setMonthlyTimesheets] = useState<TimeSheetView[]>(
-        sheet as TimeSheetView[],
-    );
     // const [checked, setChecked] = useState(false);
     const toast = useToast();
     let hoursWorked: any[] = [];
-    monthlyTimesheets?.forEach((x) => {
+    sheet?.forEach((x) => {
         hoursWorked.push(x.hours);
     });
     if (hoursWorked.length > 0) {
@@ -153,7 +150,7 @@ const TimesheetSupervisor = ({
     const [selected, setSelected] = useState<TimesheetHoursApprovalModel[]>([]);
     const [selectedInput, setSelectedInput] = useState<approveDate[]>([]);
 
-    const timesheetALl = monthlyTimesheets?.filter((x) => !x.isApproved);
+    const timesheetALl = sheet?.filter((x) => !x.isApproved);
     //
     const fillSelectedDate = (item: TimesheetHoursApprovalModel) => {
         const existingValue = selected.find((e) => e.date == item.date);
@@ -166,12 +163,12 @@ const TimesheetSupervisor = ({
     };
 
     const fillAllDate = () => {
-        const exists = timesheetALl.length === selected.length;
+        const exists = timesheetALl?.length === selected.length;
         if (exists) {
             setSelected([]);
             return;
         }
-        setSelected(timesheetALl);
+        setSelected(timesheetALl as any);
     };
 
     const fillTimeInDate = (item: approveDate) => {
@@ -577,11 +574,15 @@ const TimesheetSupervisor = ({
         let sumOfHours = 0;
         for (let day = 0; day < 7; day++) {
             const cloneDate = currentDate;
-            const timesheets = monthlyTimesheets?.filter(
+            const timesheets = sheet?.find(
                 (x) =>
                     new Date(x.date as string).toLocaleDateString() ==
                     currentDate.toLocaleDateString(),
-            )[0];
+            );
+            const [timesheetHours, setTimesheetHours] = useState(0);
+            useEffect(() => {
+                setTimesheetHours(timesheets?.hours as number);
+            }, [timesheets]);
             const userId = timesheets?.employeeInformationId as string;
             const userDate = moment(currentDate).format('YYYY-MM-DD');
             const [singleReject, setSingleReject] = useState(false);
@@ -753,7 +754,7 @@ const TimesheetSupervisor = ({
                                 // borderRadius="10px"
                                 borderBottom="4px solid"
                                 borderColor={
-                                    timesheets.isApproved == true
+                                    timesheets?.isApproved == true
                                         ? 'green'
                                         : 'red'
                                 }
@@ -761,21 +762,21 @@ const TimesheetSupervisor = ({
                                 p="1rem"
                                 zIndex={800}
                                 bgColor={
-                                    timesheets.isApproved == true
+                                    timesheets?.isApproved == true
                                         ? 'green.100'
                                         : 'red.100'
                                 }
                                 ref={popover}
                             >
                                 <Text fontWeight="700" mb="1rem">
-                                    {timesheets.isApproved == true
+                                    {timesheets?.isApproved == true
                                         ? 'Approved!'
                                         : 'Rejected'}
                                 </Text>
                                 <Text fontWeight="500" mb="0">
-                                    {timesheets.isApproved == true
+                                    {timesheets?.isApproved == true
                                         ? 'Good Job!'
-                                        : timesheets.rejectionReason}
+                                        : timesheets?.rejectionReason}
                                 </Text>
                             </Box>
                         )}
@@ -793,7 +794,7 @@ const TimesheetSupervisor = ({
                             type="number"
                             fontSize={['.6rem', '.9rem']}
                             p={['0', '1rem']}
-                            defaultValue={
+                            value={
                                 // isWeekend(
                                 //     new Date(timesheets?.date as string),
                                 // ) ||
@@ -807,7 +808,7 @@ const TimesheetSupervisor = ({
                                 //     ? // timesheets?.status == 'PENDING'
                                 //       '---'
                                 //     :
-                                timesheets?.hours || '---'
+                                timesheetHours || '---'
                             }
                             placeholder="---"
                             textAlign="center"
@@ -825,14 +826,15 @@ const TimesheetSupervisor = ({
                                 //     moment(preventTomorrow).format('DD/MM/YYYY')
                                 false
                             }
-                            onChange={(e) =>
+                            onChange={(e) => {
+                                setTimesheetHours(Number(e.target.value));
                                 fillTimeInDate({
                                     userId: userId,
                                     chosenDate:
                                         moment(userDate).format('YYYY-MM-DD'),
                                     hours: e.target.value,
-                                })
-                            }
+                                });
+                            }}
                             color={
                                 timesheets?.onLeave &&
                                 timesheets?.onLeaveAndEligibleForLeave &&

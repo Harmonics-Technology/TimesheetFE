@@ -33,7 +33,10 @@ function MyApp({
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const loader = document.getElementById('globalLoader');
-            if (loader) loader.remove();
+            if (loader)
+                setTimeout(() => {
+                    loader.remove();
+                }, 500);
         }
     }, []);
     return (
@@ -52,20 +55,20 @@ function MyApp({
             </Head>
 
             {/* <StyledThemeProvider> */}
-                <QueryClientProvider client={queryClient}>
-                    <Hydrate state={pageProps.dehydratedState}>
-                        <RootStoreProvider>
-                            <MsalProvider instance={msalInstance}>
-                                <UserProvider>
-                                    <NextNProgress color="#2EAFA3" />
-                                    <Layout>
-                                        <Component {...pageProps} />
-                                    </Layout>
-                                </UserProvider>
-                            </MsalProvider>
-                        </RootStoreProvider>
-                    </Hydrate>
-                </QueryClientProvider>
+            <QueryClientProvider client={queryClient}>
+                <Hydrate state={pageProps.dehydratedState}>
+                    <RootStoreProvider>
+                        <MsalProvider instance={msalInstance}>
+                            <UserProvider>
+                                <NextNProgress color="#2EAFA3" />
+                                <Layout>
+                                    <Component {...pageProps} />
+                                </Layout>
+                            </UserProvider>
+                        </MsalProvider>
+                    </RootStoreProvider>
+                </Hydrate>
+            </QueryClientProvider>
             {/* </StyledThemeProvider> */}
             <Script src="/asseccibility.js" strategy="beforeInteractive" />
         </ChakraProvider>
