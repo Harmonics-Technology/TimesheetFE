@@ -360,7 +360,7 @@ function TeamManagement({
             return;
         } catch (err: any) {
             toast({
-                title: err.message || err.body.message,
+                title: err?.message || err?.body?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -413,6 +413,7 @@ function TeamManagement({
                 isEligibleForLeave: false,
                 payRollTypeId: subType == 'premium' ? 2 : 1,
                 currency: subType != 'premium' ? 'CAD' : 'NGN',
+                clientRate: 0,
             });
         }
     }, []);
@@ -835,14 +836,16 @@ function TeamManagement({
                                             />
                                         </>
                                     ) : null}
-                                    <PrimaryInput<TeamMemberModel>
-                                        label="Client Rate"
-                                        name="clientRate"
-                                        error={errors.clientRate}
-                                        placeholder=""
-                                        defaultValue={''}
-                                        register={register}
-                                    />
+                                    {clientType && (
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="Client Rate"
+                                            name="clientRate"
+                                            error={errors.clientRate}
+                                            placeholder=""
+                                            defaultValue={''}
+                                            register={register}
+                                        />
+                                    )}
                                     <Box pos="relative">
                                         <SelectrixBox<TeamMemberModel>
                                             control={control}
@@ -889,18 +892,26 @@ function TeamManagement({
                                             { id: 'payroll', label: 'Payroll' },
                                         ]}
                                     />
-                                    <SelectrixBox<TeamMemberModel>
-                                        control={control}
-                                        name="fixedAmount"
-                                        error={errors.fixedAmount}
-                                        keys="id"
-                                        keyLabel="label"
-                                        label="Onboarding fee type"
-                                        options={[
-                                            { id: true, label: 'Fixed amount' },
-                                            { id: false, label: 'Percentage' },
-                                        ]}
-                                    />
+                                    {clientType && (
+                                        <SelectrixBox<TeamMemberModel>
+                                            control={control}
+                                            name="fixedAmount"
+                                            error={errors.fixedAmount}
+                                            keys="id"
+                                            keyLabel="label"
+                                            label="Onboarding fee type"
+                                            options={[
+                                                {
+                                                    id: true,
+                                                    label: 'Fixed amount',
+                                                },
+                                                {
+                                                    id: false,
+                                                    label: 'Percentage',
+                                                },
+                                            ]}
+                                        />
+                                    )}
                                     {onboarding == false ? (
                                         <SelectrixBox<TeamMemberModel>
                                             control={control}

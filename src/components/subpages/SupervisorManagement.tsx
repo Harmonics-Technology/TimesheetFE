@@ -77,9 +77,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
     const { addons, subType, user } = useContext(UserContext);
 
     useEffect(() => {
-        addons?.includes('client management')
-            ? setClientType(true)
-            : setClientType(false);
+        subType == 'premium' ? setClientType(true) : setClientType(false);
     }, []);
 
     const onSubmit = async (data: RegisterModel) => {

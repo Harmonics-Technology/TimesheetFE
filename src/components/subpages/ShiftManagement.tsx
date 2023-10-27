@@ -104,6 +104,7 @@ const ShiftManagement = ({ allShift, shiftUser, shiftTypes }: shiftProps) => {
         ],
     };
 
+    // console.log({ allShift });
     const EventList = allShift?.data?.map((obj) => {
         return {
             id: obj.id,
