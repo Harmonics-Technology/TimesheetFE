@@ -18,26 +18,10 @@ interface invoiceType {
     clients: any;
 }
 function Invoices({ invoiceData, paygroupId, clients }: invoiceType) {
-    const { user, subType, addons } = useContext(UserContext);
+    const { user, subType } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/invoices-team`}
-                    tabName="Team Members"
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices-payment`}
-                    tabName="Payment Partners"
-                    upgrade={subType == 'onshore'}
-                />
-                <PageTabs
-                    url={`/${role}/financials/invoices-client`}
-                    tabName="Clients"
-                    upgrade={!addons.includes('client management')}
-                />
-            </Flex>
             <PayrollTreatPartnerInvoice
                 invoiceData={invoiceData}
                 record={5}

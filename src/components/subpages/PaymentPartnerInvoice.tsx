@@ -33,9 +33,17 @@ import { Round } from '@components/generics/functions/Round';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
+    clients: any;
+    id: any;
+    superAdminId: any;
 }
 
-function PaymentPartnerInvoice({ invoiceData }: adminProps) {
+function PaymentPartnerInvoice({
+    invoiceData,
+    clients,
+    id,
+    superAdminId,
+}: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
 
@@ -107,6 +115,21 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
         });
     };
 
+    const filterClientsInvoice = (filter: string) => {
+        router.push({
+            query: {
+                clientId: filter,
+            },
+        });
+    };
+    const newClient = clients.map((obj) => {
+        return { id: obj.id, title: obj.fullName };
+    });
+    const newData = [
+        ...(newClient || []),
+        { id: superAdminId, title: 'Main Organization' },
+    ];
+
     return (
         <>
             <Box
@@ -145,7 +168,11 @@ function PaymentPartnerInvoice({ invoiceData }: adminProps) {
                         />
                     </Flex>
                 )}
-                <FilterSearch />
+                <FilterSearch
+                    hides
+                    options={newData}
+                    onChange={filterClientsInvoice}
+                />
                 <Tables
                     tableHead={[
                         'Name on Invoice',

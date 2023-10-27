@@ -7,16 +7,16 @@ interface DashboardProps {
     metrics: any;
     counts: any;
     summary: any;
-    error: any;
+    // error: any;
 }
 
-function index({ metrics, counts, summary, error }: DashboardProps) {
+function index({ metrics, counts, summary }: DashboardProps) {
     return (
         <SuperAdminDashboard
             metrics={metrics}
             counts={counts}
             summary={summary}
-            error={error}
+            // error={error}
         />
     );
 }
@@ -50,11 +50,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             return {
                 props: {
                     data: [],
-                    error: {
-                        body: error.body,
-                        request: error.request,
-                        status: error.status,
-                    },
+                    // error: {
+                    //     body: error?.body,
+                    //     request: error?.request,
+                    //     status: error?.status,
+                    // },
                 },
             };
         }

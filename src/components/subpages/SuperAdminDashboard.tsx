@@ -52,15 +52,15 @@ interface DashboardProps {
     metrics: DashboardViewStandardResponse;
     counts: ProjectProgressCountView;
     summary: BudgetSummaryReportView;
-    error: any;
+    // error: any;
 }
 
 function SuperAdminDashboard({
     metrics,
     counts,
     summary,
-    error,
-}: DashboardProps) {
+}: // error,
+DashboardProps) {
     const { user, subType } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -96,7 +96,7 @@ function SuperAdminDashboard({
         'Amount',
     ];
 
-    handleCatchErrors(error);
+    // handleCatchErrors(error);
 
     return (
         <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">

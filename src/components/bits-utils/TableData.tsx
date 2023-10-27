@@ -207,7 +207,7 @@ export function TableState({ name }: { name: string | undefined | null }) {
                           name == 'SUBMITTED' ||
                           name == 'REVIEWING'
                         ? 'brand.600'
-                        : name == 'INVOICED'
+                        : name == 'INVOICED' || name == 'PROCESSED'
                         ? '#28a3ef'
                         : name == 'In progress'
                         ? 'gray.400'

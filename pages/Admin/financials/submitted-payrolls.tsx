@@ -3,9 +3,7 @@ import PageTabs from '@components/bits-utils/PageTabs';
 import { UserContext } from '@components/context/UserContext';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import AdminPayroll from '@components/subpages/AdminPayroll';
-import PaymentPartnerInvoice from '@components/subpages/PaymentPartnerInvoice';
-import PaymentPartnerPayroll from '@components/subpages/PaymentPartnerPayroll';
+import AdminInvoices from '@components/subpages/AdminInvoices';
 import { GetServerSideProps } from 'next';
 import React, { useContext } from 'react';
 import {
@@ -13,46 +11,43 @@ import {
     InvoiceViewPagedCollectionStandardResponse,
 } from 'src/services';
 
-interface PayrollType {
-    invoice: InvoiceViewPagedCollectionStandardResponse;
+interface InvoiceType {
+    invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
-function expenses({ invoice }: PayrollType) {
+function payrolls({ invoiceData }: InvoiceType) {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/invoices/pro-insight`}
-                    tabName="Pro-insight consulting"
-                />
-                <PageTabs
-                    url={`/${role}/invoices/olade`}
-                    tabName="Olade Consulting"
-                />
-            </Flex>
-            <PaymentPartnerInvoice invoiceData={invoice} />
+            <AdminInvoices
+                invoiceData={invoiceData}
+                record={2}
+                fileName="Approved Payrolls"
+            />
         </Box>
     );
 }
 
-export default expenses;
+export default payrolls;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const data = await FinancialService.listInvoicesByPaymentPartner(
+            const data = await FinancialService.listSubmittedInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 pagingOptions.search,
-                pagingOptions.clientId,
                 pagingOptions.from,
                 pagingOptions.to,
+                2,
             );
+
             return {
                 props: {
-                    invoice: data,
+                    invoiceData: data,
                 },
             };
         } catch (error: any) {

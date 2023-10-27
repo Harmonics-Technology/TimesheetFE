@@ -178,12 +178,7 @@ function OnshoreSubmittedInvoice({
                     ]}
                 />
 
-                <HStack
-                    my="1rem"
-                    bgColor="gray.50"
-                    w="fit-content"
-                    p=".3rem 0rem"
-                >
+                <HStack my="1rem" w="100%" borderBottom="1px solid #c4c4c4">
                     <MiniTabs url={pending} text={'Pending Approval'} />
                     <MiniTabs url={approved} text={'All Processed'} />
                 </HStack>
@@ -214,7 +209,7 @@ function OnshoreSubmittedInvoice({
                         {!hideCheckbox && (
                             <Checkbox
                                 checked={
-                                    invoice?.length !== 0 &&
+                                    selectedId?.length !== 0 &&
                                     invoice?.filter(
                                         (x) => x.status !== 'INVOICED',
                                     ).length == selectedId?.length

@@ -44,6 +44,7 @@ interface adminProps {
 }
 
 function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
+    // console.log({ invoiceData });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
 
@@ -127,20 +128,20 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
             ? [
                   'Client Name',
                   'Name',
-                  'Amount',
                   'Created On',
                   'Start Date',
                   'End Date',
+                  'Amount',
                   'Status',
                   // 'Action',
               ]
             : [
                   'Invoice No',
                   'Name',
-                  'Amount',
                   'Created On',
                   'Start Date',
                   'End Date',
+                  'Amount',
                   'Status',
                   // 'Action',
               ];
@@ -223,7 +224,7 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                                     name={
                                         hideCheckbox || pays
                                             ? x.employeeInformation?.client
-                                                  ?.fullName
+                                                  ?.organizationName
                                             : x.invoiceReference
                                     }
                                 />
@@ -234,6 +235,9 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                                         x.name
                                     }
                                 />
+                                <TableData name={formatDate(x.dateCreated)} />
+                                <TableData name={formatDate(x.startDate)} />
+                                <TableData name={formatDate(x.endDate)} />
                                 <TableData
                                     name={
                                         x?.employeeInformation?.currency ==
@@ -242,9 +246,6 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                                             : CAD(Round(x.totalAmount))
                                     }
                                 />
-                                <TableData name={formatDate(x.dateCreated)} />
-                                <TableData name={formatDate(x.startDate)} />
-                                <TableData name={formatDate(x.endDate)} />
                                 <TableState name={x.status as string} />
                                 <InvoiceAction
                                     data={x}
