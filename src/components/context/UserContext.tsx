@@ -1,6 +1,7 @@
 import { useDisclosure } from '@chakra-ui/react';
 import UpgradePromptModal from '@components/bits-utils/UpgradePromptModal';
 import Cookies from 'js-cookie';
+import moment from 'moment';
 import { createContext } from 'react';
 
 export const UserContext = createContext<any | null>(null);
@@ -14,8 +15,12 @@ export const UserProvider = ({ children }: { children: any }) => {
         subType = JSON.parse(users)
             ?.subscriptiobDetails?.data?.subscription?.name?.split(' ')[0]
             ?.toLowerCase();
+        const daysLeft = moment(
+            JSON.parse(users)?.subscriptiobDetails?.data?.endDate,
+        ).diff(moment(), 'day');
         activeSub =
-            JSON.parse(users)?.subscriptiobDetails?.data?.status == 'ACTIVE'
+            JSON.parse(users)?.subscriptiobDetails?.data?.status == 'ACTIVE' &&
+            daysLeft <= 0
                 ? true
                 : false;
     }
