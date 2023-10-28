@@ -56,7 +56,7 @@ function TwoFaModal({
     const router = useRouter();
     const toast = useToast();
     const [otp, setOtp] = useState<any>();
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const twoFactorCode = user?.twoFactorCode;
     //
     const [codeText, setCodeText] = useState(false);
@@ -75,7 +75,6 @@ function TwoFaModal({
                 twoFactorCode,
             );
             if (result.status) {
-                setUser(result.data);
                 Cookies.set('user', JSON.stringify(result.data));
                 onClose();
                 toast({

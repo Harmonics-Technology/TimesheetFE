@@ -74,7 +74,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
     //
 
     const [clientType, setClientType] = useState(false);
-    const { addons, subType, user } = useContext(UserContext);
+    const { subType, user } = useContext(UserContext);
 
     useEffect(() => {
         subType == 'premium' ? setClientType(true) : setClientType(false);

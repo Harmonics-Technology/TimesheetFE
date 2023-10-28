@@ -29,7 +29,7 @@ const schema = yup.object().shape({
 
 function TwofaLogin() {
     const router = useRouter();
-    const { setUser, user } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const twoFactorCode = user?.twoFactorCode;
     const toast = useToast();
     const {
@@ -56,7 +56,6 @@ function TwofaLogin() {
                 });
                 Cookies.set('user', JSON.stringify(result.data));
                 OpenAPI.TOKEN = result?.data?.token as string;
-                setUser(result.data);
                 router.query.from
                     ? router.push(
                           decodeURIComponent(

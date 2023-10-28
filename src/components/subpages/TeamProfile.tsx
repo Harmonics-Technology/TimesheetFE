@@ -77,7 +77,7 @@ function TeamProfile({
     paymentPartner,
     id,
 }: TeamProfileProps) {
-    const { user, addons, opens, subType } = useContext(UserContext);
+    const { user, opens, subType } = useContext(UserContext);
     //
     const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
     const {
@@ -879,9 +879,6 @@ function TeamProfile({
                                         eligible == true ? 'Yes' : 'No'
                                     }
                                 />
-                                {addons != 'leave management' && (
-                                    <TriggerBox opens={opens} />
-                                )}
                             </Box>
 
                             {(isEligibleForLeave as unknown as string) ==

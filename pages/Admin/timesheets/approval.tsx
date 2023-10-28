@@ -32,15 +32,19 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const data = await TimeSheetService.listApprovedTimeSheet(
-                pagingOptions.offset,
-                pagingOptions.limit,
-                superAdminId,
-                pagingOptions.search,
-            );
+            let data: unknown    = [];
             const paymentSchedule = await FinancialService.getPaymentSchedules(
                 superAdminId,
             );
+            if (paymentSchedule.data) {
+                data = await TimeSheetService.listApprovedTimeSheet(
+                    pagingOptions.offset,
+                    pagingOptions.limit,
+                    superAdminId,
+                    pagingOptions.search,
+                );
+            }
+
             //
             return {
                 props: {

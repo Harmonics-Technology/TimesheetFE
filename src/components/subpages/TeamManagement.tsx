@@ -1020,9 +1020,6 @@ function TeamManagement({
                                     control={control}
                                     error={errors.isEligibleForLeave}
                                 />
-                                {/* {!addons?.includes('leave management') && (
-                                    <TriggerBox opens={opens} />
-                                )} */}
                             </Box>
                             {(isEligibleForLeave as unknown as string) ==
                                 'Yes' && (

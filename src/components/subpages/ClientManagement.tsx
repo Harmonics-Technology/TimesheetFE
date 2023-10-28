@@ -68,7 +68,7 @@ const schema = yup.object().shape({
 
 function ClientManagement({ adminList }: adminProps) {
     //
-    const { user, addons } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const {
         register,
         handleSubmit,

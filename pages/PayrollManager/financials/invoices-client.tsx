@@ -16,8 +16,6 @@ interface invoiceType {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
 function Invoices({ invoiceData }: invoiceType) {
-    const { user, subType, addons } = useContext(UserContext);
-    const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
             <ClientInvoices

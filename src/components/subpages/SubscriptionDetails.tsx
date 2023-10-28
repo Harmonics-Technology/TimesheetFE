@@ -37,6 +37,10 @@ export const SubscriptionDetails = ({ data }) => {
     const curSub = user?.subscriptiobDetails?.data;
     const { onOpen, isOpen, onClose } = useDisclosure();
     const router = useRouter();
+    const daysLeft = moment(userInfo?.subscriptiobDetails?.data?.endDate).diff(
+        moment(),
+        'day',
+    );
 
     // const currentSub: any = user?.subscriptiobDetails?.data?.subscription;
 
@@ -102,9 +106,7 @@ export const SubscriptionDetails = ({ data }) => {
                         text={`${formatDate(
                             userInfo?.subscriptiobDetails?.data?.endDate,
                         )}
-                        (${moment(
-                            userInfo?.subscriptiobDetails?.data?.endDate,
-                        ).diff(moment(), 'day')}
+                        (${daysLeft <= 0 ? 0 : daysLeft}
                         days)`}
                     />
                 </VStack>

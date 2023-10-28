@@ -18,8 +18,6 @@ interface invoiceType {
     clients: any;
 }
 function Invoices({ invoiceData, paygroupId, clients }: invoiceType) {
-    const { user, subType, addons } = useContext(UserContext);
-    const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
             <PayrollTreatPartnerInvoice

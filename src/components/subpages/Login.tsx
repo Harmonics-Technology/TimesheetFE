@@ -39,7 +39,7 @@ const schema = yup.object().shape({
 
 function Login() {
     const router = useRouter();
-    const { setUser } = useContext(UserContext);
+    // const { setUser } = useContext(UserContext);
     const toast = useToast();
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [rememberedData, setRememberedData] = useState<any>();
@@ -80,7 +80,6 @@ function Login() {
                 }
 
                 Cookies.set('user', JSON.stringify(result.data));
-                setUser(result.data);
                 result.data &&
                     Cookies.set('token', result.data.token as string, {
                         // expires: expiresIn,
@@ -142,7 +141,6 @@ function Login() {
                         res.idTokenClaims,
                     )) as UserViewStandardResponse;
                     if (result.status) {
-                        setUser(result.data);
                         Cookies.set('user', JSON.stringify(result.data));
                         OpenAPI.TOKEN = result?.data?.token as string;
                         result.data &&
