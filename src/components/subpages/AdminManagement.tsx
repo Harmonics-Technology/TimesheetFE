@@ -44,6 +44,7 @@ const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
 import {
+    ControlSettingView,
     ExportService,
     RegisterModel,
     UserService,
@@ -71,7 +72,8 @@ const schema = yup.object().shape({
 });
 
 function ProfileManagementAdmin({ adminList, team }: adminProps) {
-    const { user, subType } = useContext(UserContext);
+    const { user, subType, accessControls } = useContext(UserContext);
+    const userAccess: ControlSettingView = accessControls;
     const {
         register,
         handleSubmit,
@@ -214,18 +216,20 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex justify="space-between" mb="1rem">
-                    <Button
-                        bgColor="brand.400"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        onClick={onOpen}
-                        display={admin ? 'none' : 'flex'}
-                        borderRadius="0"
-                    >
-                        +Admin
-                    </Button>
+                    {userAccess.adminOBoarding && (
+                        <Button
+                            bgColor="brand.400"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            height="fit-content"
+                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                            onClick={onOpen}
+                            display={admin ? 'none' : 'flex'}
+                            borderRadius="0"
+                        >
+                            +Admin
+                        </Button>
+                    )}
 
                     <Button
                         bgColor="brand.600"

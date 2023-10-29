@@ -1,38 +1,33 @@
+import { SingleTeamMember } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/SingleTeamMember';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import ContractList from '@components/subpages/ContractList';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import {
-    ContractService,
-    ContractViewPagedCollectionStandardResponse,
-} from 'src/services';
-interface adminProps {
-    adminList: ContractViewPagedCollectionStandardResponse;
-}
+import { ProjectManagementService } from 'src/services';
 
-function admin({ adminList }: adminProps) {
-    return <ContractList adminList={adminList} />;
-}
+const index = ({ id, teams }) => {
+    return <SingleTeamMember id={id} teams={teams} />;
+};
 
-export default admin;
+export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
-    async (ctx) => {
+    async (ctx: any) => {
+        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const { id } = ctx.query;
+        const { teamId } = ctx.query;
         try {
-            const data = await ContractService.listContracts(
+            const data = await ProjectManagementService.getUserTasks(
                 pagingOptions.offset,
                 pagingOptions.limit,
-                superAdminId,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
+                teamId,
+                id,
             );
             return {
                 props: {
-                    adminList: data,
+                    teams: data.data,
+                    id,
                 },
             };
         } catch (error: any) {

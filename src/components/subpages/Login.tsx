@@ -85,28 +85,39 @@ function Login() {
                         // expires: expiresIn,
                     });
                 OpenAPI.TOKEN = result?.data?.token as string;
+
                 if (result.data?.twoFactorEnabled) {
                     router.push('/login/twofalogin');
                     return;
                 }
-                toast({
-                    title: `Login Successful`,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                router.query.from
-                    ? router.push(
-                          decodeURIComponent(
-                              router.query.from as unknown as string,
-                          ),
-                      )
-                    : router.push(
-                          `${result?.data?.role?.replaceAll(
-                              ' ',
-                              '',
-                          )}/dashboard`,
-                      );
+                const getControlSettings =
+                    await UserService.getControlSettingById(
+                        result.data?.superAdminId as string,
+                    );
+                if (getControlSettings.status) {
+                    Cookies.set(
+                        'access-controls',
+                        JSON.stringify(getControlSettings.data),
+                    );
+                    toast({
+                        title: `Login Successful`,
+                        status: 'success',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                    router.query.from
+                        ? router.push(
+                              decodeURIComponent(
+                                  router.query.from as unknown as string,
+                              ),
+                          )
+                        : router.push(
+                              `${result?.data?.role?.replaceAll(
+                                  ' ',
+                                  '',
+                              )}/dashboard`,
+                          );
+                }
                 return;
             }
             toast({
@@ -159,13 +170,17 @@ function Login() {
                             position: 'top-right',
                         });
                         router.query.from
-                            ? (window.location.href = decodeURIComponent(
-                                  router.query.from as unknown as string,
-                              ))
-                            : (window.location.href = `${result?.data?.role?.replaceAll(
-                                  ' ',
-                                  '',
-                              )}/dashboard`);
+                            ? router.push(
+                                  decodeURIComponent(
+                                      router.query.from as unknown as string,
+                                  ),
+                              )
+                            : router.push(
+                                  `${result?.data?.role?.replaceAll(
+                                      ' ',
+                                      '',
+                                  )}/dashboard`,
+                              );
                         return;
                     }
                     toast({

@@ -34,6 +34,7 @@ interface adminProps {
 }
 
 import {
+    ControlSettingView,
     RegisterModel,
     UserService,
     UserView,
@@ -63,7 +64,8 @@ const schema = yup.object().shape({
 
 function PaymentPartnerManagement({ adminList }: adminProps) {
     //
-    const { user } = useContext(UserContext);
+    const { user, accessControls } = useContext(UserContext);
+    const userAccess: ControlSettingView = accessControls;
     const {
         register,
         handleSubmit,
@@ -135,16 +137,18 @@ function PaymentPartnerManagement({ adminList }: adminProps) {
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex justify="space-between" mb="1rem">
-                    <Button
-                        bgColor="brand.400"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        onClick={onOpen}
-                    >
-                        +Payment Partner
-                    </Button>
+                    {userAccess.adminOBoarding && (
+                        <Button
+                            bgColor="brand.400"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            height="fit-content"
+                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                            onClick={onOpen}
+                        >
+                            +Payment Partner
+                        </Button>
+                    )}
                     <Button
                         bgColor="brand.600"
                         color="white"

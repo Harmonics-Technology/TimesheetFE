@@ -13,7 +13,7 @@ const index = ({ teamMembers, supervisor, leavelist, leavetypes, id }) => {
             leavelist={leavelist}
             leavetypes={leavetypes}
             id={id}
-            type="asTeamHistory"
+            type={'asCancel'}
         />
     );
 };
@@ -23,9 +23,9 @@ export default index;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const id = JSON.parse(ctx.req.cookies.user).employeeInformationId;
-        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const id = JSON.parse(ctx.req.cookies.user).id;
         const clientId = JSON.parse(ctx.req.cookies.user).clientId;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         //
         try {
             // const teamMembers = await UserService.getClientTeamMembers(
@@ -42,12 +42,15 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             //     pagingOptions.search,
             //     clientId,
             // );
-            const leavelist = await LeaveService.listLeaveHistory(
+            const leavelist = await LeaveService.listCanceledLeave(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
-                undefined,
-                id,
+                // undefined,
+                // undefined,
+                // pagingOptions.search,
+                // pagingOptions.from,
+                // pagingOptions.to,
             );
             //
             // const leavetypes = await LeaveService.leaveTypes(

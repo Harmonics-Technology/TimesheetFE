@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useContext } from 'react';
 import {
     FaCalendar,
+    FaCogs,
     FaCreditCard,
     FaFile,
     FaHome,
@@ -17,6 +18,7 @@ import { MdOutlineSupervisorAccount, MdSettings } from 'react-icons/md';
 import { BsGraphUp } from 'react-icons/bs';
 import { AiFillSchedule } from 'react-icons/ai';
 import { TbCalendarTime } from 'react-icons/tb';
+import { ControlSettingView } from 'src/services';
 interface sidenavProps {
     openSidenav: boolean;
     setOpenSidenav: any;
@@ -24,8 +26,11 @@ interface sidenavProps {
 }
 
 function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
-    const { user, subType, activeSub } = useContext(UserContext);
+    const { user, subType, activeSub, accessControls } =
+        useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
+
+    const userAccess: ControlSettingView = accessControls;
 
     const profile =
         subType == 'basic'
@@ -801,6 +806,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     align="left"
                     gap={change ? '.8rem' : '1.5rem'}
                     pr="1rem"
+                    pb="5rem"
                 >
                     <MenuItem
                         change={change}
@@ -812,6 +818,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                     />
+
                     <MenuItem
                         change={change}
                         linkName="profile-management"
@@ -832,7 +839,8 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['approval', 'history']}
                     />
-                    {/* <MenuItem change={change}
+                    <MenuItem
+                        change={change}
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -845,7 +853,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'payslips',
                             'invoices',
                         ]}
-                    /> */}
+                    />
                     <MenuItem
                         change={change}
                         linkName="contracts"
@@ -856,6 +864,78 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                     />
+                    {userAccess.adminReport && (
+                        <MenuItem
+                            change={change}
+                            linkName="report"
+                            menuTitle="Reports"
+                            icon={<BsGraphUp opacity=".8" />}
+                            option={false}
+                            dropDown={[]}
+                            setOpenSidenav={setOpenSidenav}
+                            role={role}
+                            display={activeSub}
+                        />
+                    )}
+                    <MenuItem
+                        change={change}
+                        linkName="leave"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="shift-management"
+                        menuTitle="Shift Management"
+                        icon={<AiFillSchedule opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="project-management"
+                        menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    {userAccess.adminExpenseTypeAndHST && (
+                        <MenuItem
+                            change={change}
+                            linkName="settings"
+                            menuTitle="Settings"
+                            icon={<FaCogs opacity=".8" />}
+                            option={true}
+                            dropDown={[
+                                'expense type',
+                                'onboarding fees',
+                                'hst settings',
+                            ]}
+                            setOpenSidenav={setOpenSidenav}
+                            role={role}
+                        />
+                    )}
                     <MenuItem
                         change={change}
                         linkName="my-profile"

@@ -40,6 +40,7 @@ import {
     UserService,
     UserView,
     UserViewPagedCollectionStandardResponse,
+    ControlSettingView,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
@@ -164,7 +165,8 @@ function TeamManagement({
     //
     const { isOpen, onOpen, onClose } = useDisclosure();
     // const { isOpen: opened, onOpen: opens, onClose: closed } = useDisclosure();
-    const { subType, user, opens } = useContext(UserContext);
+    const { user, opens, subType, accessControls } = useContext(UserContext);
+    const userAccess: ControlSettingView = accessControls;
     const router = useRouter();
     const toast = useToast();
     const payroll = watch('payRollTypeId');
@@ -427,16 +429,18 @@ function TeamManagement({
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex justify="space-between" mb="1rem">
-                    <Button
-                        bgColor="brand.400"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        onClick={onOpen}
-                    >
-                        +Team Member
-                    </Button>
+                    {userAccess.adminOBoarding && (
+                        <Button
+                            bgColor="brand.400"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            height="fit-content"
+                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                            onClick={onOpen}
+                        >
+                            +Team Member
+                        </Button>
+                    )}
                     <Button
                         bgColor="brand.600"
                         color="white"

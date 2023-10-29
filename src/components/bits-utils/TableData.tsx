@@ -482,6 +482,23 @@ export function LeaveActions({
                                     mr=".5rem"
                                     color="#D62242"
                                 />
+                                Cancel Request
+                            </MenuItem>
+                        )}
+                         {type == 'asTeamHistory' &&
+                        (data.status == 'APPROVED' ||
+                            data.status == 'PENDING') && (
+                            <MenuItem
+                                onClick={() =>
+                                    deleteLeave(id, LeaveService.cancelLeave)
+                                }
+                                w="full"
+                            >
+                                <Icon
+                                    as={MdCancel}
+                                    mr=".5rem"
+                                    color="#D62242"
+                                />
                                 Request Cancellation
                             </MenuItem>
                         )}

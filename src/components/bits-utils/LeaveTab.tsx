@@ -12,6 +12,7 @@ export const LeaveTab = ({ tabValue }: leaveProps) => {
     const { user } = useContext(UserContext);
     const router = useRouter();
     const role = user?.role?.replaceAll(' ', '');
+
     return (
         <HStack w="full" borderBottom="1px solid #EBEFF2" gap="1rem">
             {tabValue.map((x) => (
@@ -20,7 +21,7 @@ export const LeaveTab = ({ tabValue }: leaveProps) => {
                         fontWeight="700"
                         fontSize=".9rem"
                         color={
-                            router.asPath.startsWith(`/${role}${x.url}`)
+                            router.pathname == `/${role}${x.url}`
                                 ? 'black'
                                 : ' #A6ACBE'
                         }
@@ -29,7 +30,7 @@ export const LeaveTab = ({ tabValue }: leaveProps) => {
                             color: 'brand.400',
                         }}
                         borderBottom={
-                            router.asPath.startsWith(`/${role}${x.url}`)
+                            router.pathname == `/${role}${x.url}`
                                 ? '4px solid #2EAFA3'
                                 : '0'
                         }

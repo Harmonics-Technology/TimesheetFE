@@ -9,6 +9,7 @@ export const UserProvider = ({ children }: { children: any }) => {
     let user;
     let subType;
     let activeSub;
+    let accessControls;
     const users = Cookies.get('user') as unknown as string;
     if (users !== undefined) {
         user = JSON.parse(users);
@@ -24,6 +25,10 @@ export const UserProvider = ({ children }: { children: any }) => {
                 ? true
                 : false;
     }
+    const access = Cookies.get('access-controls') as unknown as string;
+    if (users !== undefined && access !== undefined) {
+        accessControls = JSON.parse(access);
+    }
 
     const { isOpen, onOpen: opens, onClose } = useDisclosure();
 
@@ -34,6 +39,7 @@ export const UserProvider = ({ children }: { children: any }) => {
                     user,
                     subType,
                     activeSub,
+                    accessControls,
                     opens,
                 }}
             >

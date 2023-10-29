@@ -28,6 +28,7 @@ interface adminProps {
     client: UserView[];
 }
 import {
+    ControlSettingView,
     RegisterModel,
     UserService,
     UserView,
@@ -74,7 +75,8 @@ function SupervisorManagement({ adminList, client }: adminProps) {
     //
 
     const [clientType, setClientType] = useState(false);
-    const { subType, user } = useContext(UserContext);
+    const { subType, user, accessControls } = useContext(UserContext);
+    const userAccess : ControlSettingView = accessControls
 
     useEffect(() => {
         subType == 'premium' ? setClientType(true) : setClientType(false);
@@ -125,6 +127,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex justify="space-between" mb="1rem">
+                {userAccess.adminOBoarding && (
                     <Button
                         bgColor="brand.400"
                         color="white"
@@ -135,6 +138,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
                     >
                         +Supervisor
                     </Button>
+                )}
                     <Button
                         bgColor="brand.600"
                         color="white"

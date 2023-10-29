@@ -182,7 +182,7 @@ export const LeaveManagement = ({
                     }
                 />
                 <Flex justify="space-between" my="1rem">
-                    {role != 'Supervisor' && role != 'SuperAdmin' && (
+                    {type == 'asTeam' && (
                         <Button
                             bgColor="brand.400"
                             color="white"

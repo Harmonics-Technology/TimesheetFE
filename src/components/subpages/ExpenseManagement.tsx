@@ -30,6 +30,7 @@ import * as yup from 'yup';
 import { RiMailSendFill } from 'react-icons/ri';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import {
+    ControlSettingView,
     ExpenseModel,
     ExpenseTypeView,
     ExpenseView,
@@ -48,6 +49,7 @@ import { CUR } from '@components/generics/functions/Naira';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { DateObject } from 'react-multi-date-picker';
 import { UserContext } from '@components/context/UserContext';
+import { FaEllipsisH } from 'react-icons/fa';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -76,6 +78,8 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
+    const { accessControls } = useContext(UserContext);
+    const userAccess: ControlSettingView = accessControls;
 
     const onSubmit = async (data: ExpenseModel) => {
         try {
@@ -167,7 +171,14 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                                     )}`}
                                 />
                                 <TableState name={x.status as string} />
-                                <ExpenseActions id={x} />
+                                {userAccess.adminReport ? (
+                                    <ExpenseActions id={x} />
+                                ) : (
+                                    <td>
+                                        {' '}
+                                        <FaEllipsisH />
+                                    </td>
+                                )}
                                 {/* <td>
                                     {x.status == 'APPROVED' && <Checkbox />}
                                 </td> */}

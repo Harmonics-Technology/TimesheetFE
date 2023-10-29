@@ -23,7 +23,7 @@ import {
     TableState,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { Widget } from '@uploadcare/react-widget';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -40,6 +40,7 @@ import {
     ContractModel,
     ContractService,
     ContractView,
+    ControlSettingView,
     UserView,
 } from 'src/services';
 import { useRouter } from 'next/router';
@@ -51,6 +52,8 @@ import ConfirmModal from './ConfirmModal';
 import FilterSearch from './FilterSearch';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { UserContext } from '@components/context/UserContext';
+import { FaEllipsisH } from 'react-icons/fa';
 
 const schema = yup.object().shape({
     title: yup.string().required(),
@@ -63,6 +66,8 @@ function TeamManagement({ userProfile }: adminProps) {
     const [modify, setModify] = useState<boolean>(false);
     const [extend, setExtend] = useState<boolean>(false);
     const [clickedItem, setClickedItem] = useState<ContractView>({});
+    const { accessControls } = useContext(UserContext);
+    const userAccess: ControlSettingView = accessControls;
     //
     const {
         register,
@@ -200,13 +205,19 @@ function TeamManagement({ userProfile }: adminProps) {
                                     />
                                     <TableContract url={x.document} />
                                     <TableState name={x.status as string} />
-                                    <TableContractOptions
-                                        id={opened}
-                                        modify={setModify}
-                                        extend={setExtend}
-                                        clicked={setClickedItem}
-                                        data={x}
-                                    />
+                                    {userAccess.adminContractManagement ? (
+                                        <TableContractOptions
+                                            id={opened}
+                                            modify={setModify}
+                                            extend={setExtend}
+                                            clicked={setClickedItem}
+                                            data={x}
+                                        />
+                                    ) : (
+                                        <td>
+                                            <FaEllipsisH />
+                                        </td>
+                                    )}
                                 </Tr>
                             ),
                         )}
