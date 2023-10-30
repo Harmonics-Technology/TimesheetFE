@@ -41,6 +41,7 @@ export type UserView = {
     numberOfHoursEligible?: number | null;
     employeeType?: string | null;
     hoursPerDay?: number | null;
+    invoiceGenerationType?: string | null;
     controlSettingView?: ControlSettingView;
     subscriptiobDetails?: ClientSubscriptionResponseViewModel;
 };

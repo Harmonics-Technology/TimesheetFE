@@ -62,9 +62,15 @@ interface expenseProps {
     expenses: ExpenseViewPagedCollectionStandardResponse;
     team: UserView[];
     expenseType: ExpenseTypeView[];
+    isSuperAdmin?: boolean;
 }
 
-function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
+function ExpenseManagement({
+    expenses,
+    team,
+    expenseType,
+    isSuperAdmin,
+}: expenseProps) {
     const expensesList = expenses?.data?.value;
     const {
         register,
@@ -171,7 +177,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                                     )}`}
                                 />
                                 <TableState name={x.status as string} />
-                                {userAccess.adminReport ? (
+                                {userAccess?.adminReport || isSuperAdmin ? (
                                     <ExpenseActions id={x} />
                                 ) : (
                                     <td>

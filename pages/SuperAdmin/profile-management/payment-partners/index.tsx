@@ -13,7 +13,7 @@ interface PaymentPartnerProps {
 
 function PaymentPartner({ PaymentPartnerList }: PaymentPartnerProps) {
     //
-    return <PaymentPartnerManagement adminList={PaymentPartnerList} />;
+    return <PaymentPartnerManagement adminList={PaymentPartnerList} isSuperAdmin />;
 }
 
 export default PaymentPartner;

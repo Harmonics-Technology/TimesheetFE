@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import {
     format,
     startOfWeek,
@@ -40,6 +40,7 @@ import TimeSheetEstimation, {
     TimeSheetEstimationBtn,
 } from '@components/bits-utils/TimeSheetEstimation';
 import {
+    ControlSettingView,
     RejectTimesheetModel,
     TimeSheetMonthlyView,
     TimeSheetService,
@@ -62,6 +63,7 @@ import Checkbox from '@components/bits-utils/Checkbox';
 import { Round } from '@components/generics/functions/Round';
 import { TimeSheetHighlight } from '@components/bits-utils/TimeSheetHighlight';
 import { TabMenuTimesheet } from '@components/bits-utils/ProjectManagement/Generics/TabMenuTimesheet';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     reason: yup.string().required(),
@@ -71,15 +73,20 @@ const TimesheetAdmin = ({
     timeSheets,
     id,
     payPeriod,
+    isSuperAdmin,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
     payPeriod: any;
+    isSuperAdmin?: any;
 }) => {
     const router = useRouter();
 
     const { date } = router.query;
     const { end } = router.query;
+
+    const { accessControls } = useContext(UserContext);
+    const userAccess: ControlSettingView = accessControls;
 
     //
 
@@ -1076,9 +1083,10 @@ const TimesheetAdmin = ({
                         }
                         tip="Number of hours you worked this month x Rate per hour"
                     />
-
-                    <ApproveSelectedInput />
-                    <ApproveSelected />
+                    {isSuperAdmin && <ApproveSelectedInput />}
+                    {(userAccess?.adminReport || isSuperAdmin) && (
+                        <ApproveSelected />
+                    )}
                 </Flex>
             </Box>
         </Box>

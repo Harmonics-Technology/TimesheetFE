@@ -864,7 +864,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                     />
-                    {userAccess.adminReport && (
+                    {userAccess?.adminReport && (
                         <MenuItem
                             change={change}
                             linkName="report"
@@ -920,7 +920,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                                 : false
                         }
                     />
-                    {userAccess.adminExpenseTypeAndHST && (
+                    {userAccess?.adminExpenseTypeAndHST && (
                         <MenuItem
                             change={change}
                             linkName="settings"

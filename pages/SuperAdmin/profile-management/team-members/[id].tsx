@@ -25,6 +25,7 @@ function TeamDetails({
             supervisor={supervisor}
             paymentPartner={paymentPartner}
             id={id}
+            isSuperAdmin
         />
     );
 }

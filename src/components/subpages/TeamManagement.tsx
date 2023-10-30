@@ -32,6 +32,7 @@ interface adminProps {
     clients: UserView[];
     paymentPartner: UserView[];
     leaveSettings: LeaveConfigurationView;
+    isSuperAdmin?: boolean;
 }
 
 import {
@@ -141,6 +142,7 @@ function TeamManagement({
     clients,
     paymentPartner,
     leaveSettings,
+    isSuperAdmin,
 }: adminProps) {
     const client = clients?.filter((x) => x.isActive);
     //
@@ -429,7 +431,7 @@ function TeamManagement({
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex justify="space-between" mb="1rem">
-                    {userAccess.adminOBoarding && (
+                    {(userAccess?.adminOBoarding || isSuperAdmin) && (
                         <Button
                             bgColor="brand.400"
                             color="white"

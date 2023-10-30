@@ -33,6 +33,7 @@ function SingleTimeSheet({
                 timeSheets={timeSheets}
                 id={id}
                 payPeriod={payPeriod}
+                isSuperAdmin
             />
         </>
     );

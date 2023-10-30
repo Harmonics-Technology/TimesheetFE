@@ -34,6 +34,7 @@ import moment from 'moment';
 
 interface adminProps {
     userProfile?: UserView;
+    isSuperAdmin?: boolean;
 }
 
 import {
@@ -61,7 +62,7 @@ const schema = yup.object().shape({
     endDate: yup.string().required(),
 });
 
-function TeamManagement({ userProfile }: adminProps) {
+function ContractTable({ userProfile, isSuperAdmin }: adminProps) {
     const [contract, setContractFile] = useState<any>('');
     const [modify, setModify] = useState<boolean>(false);
     const [extend, setExtend] = useState<boolean>(false);
@@ -205,7 +206,8 @@ function TeamManagement({ userProfile }: adminProps) {
                                     />
                                     <TableContract url={x.document} />
                                     <TableState name={x.status as string} />
-                                    {userAccess.adminContractManagement ? (
+                                    {userAccess?.adminContractManagement ||
+                                    isSuperAdmin ? (
                                         <TableContractOptions
                                             id={opened}
                                             modify={setModify}
@@ -371,4 +373,4 @@ function TeamManagement({ userProfile }: adminProps) {
     );
 }
 
-export default TeamManagement;
+export default ContractTable;

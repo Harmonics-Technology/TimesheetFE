@@ -68,6 +68,7 @@ interface TeamProfileProps {
     supervisor: UserView[];
     paymentPartner: UserView[];
     id: string;
+    isSuperAdmin?: boolean;
 }
 
 function TeamProfile({
@@ -76,6 +77,7 @@ function TeamProfile({
     supervisor,
     paymentPartner,
     id,
+    isSuperAdmin,
 }: TeamProfileProps) {
     const { user, opens, subType } = useContext(UserContext);
     //
@@ -911,7 +913,10 @@ function TeamProfile({
                             ) : null}
                         </Grid>
                     </Box>
-                    <ContractTable userProfile={userProfile} />
+                    <ContractTable
+                        userProfile={userProfile}
+                        isSuperAdmin={isSuperAdmin}
+                    />
                 </form>
                 <HStack
                     flexDir={['column', 'row']}

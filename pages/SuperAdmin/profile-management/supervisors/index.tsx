@@ -15,7 +15,7 @@ interface adminProps {
 
 function admin({ adminList, client }: adminProps) {
     //
-    return <SupervisorManagement adminList={adminList} client={client} />;
+    return <SupervisorManagement adminList={adminList} client={client} isSuperAdmin />;
 }
 
 export default admin;

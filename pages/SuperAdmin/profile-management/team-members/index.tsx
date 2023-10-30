@@ -25,6 +25,7 @@ function Team({ teamList, clients, paymentPartner, leaveSettings }: TeamProps) {
             clients={clients}
             paymentPartner={paymentPartner}
             leaveSettings={leaveSettings}
+            isSuperAdmin
         />
     );
 }

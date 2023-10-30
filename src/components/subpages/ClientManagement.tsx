@@ -31,6 +31,7 @@ import { RiMailSendFill } from 'react-icons/ri';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
+    isSuperAdmin?: boolean;
 }
 
 import {
@@ -67,7 +68,7 @@ const schema = yup.object().shape({
     term: yup.number().required(),
 });
 
-function ClientManagement({ adminList }: adminProps) {
+function ClientManagement({ adminList, isSuperAdmin }: adminProps) {
     //
     const { user, accessControls } = useContext(UserContext);
     const userAccess: ControlSettingView = accessControls;
@@ -151,7 +152,7 @@ function ClientManagement({ adminList }: adminProps) {
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex justify="space-between" mb="1rem">
-                    {userAccess.adminOBoarding && (
+                    {(userAccess?.adminOBoarding || isSuperAdmin) && (
                         <Button
                             bgColor="brand.400"
                             color="white"

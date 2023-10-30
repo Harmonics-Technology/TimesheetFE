@@ -13,7 +13,7 @@ interface clientProps {
 
 function client({ adminList }: clientProps) {
     //
-    return <ClientManagement adminList={adminList} />;
+    return <ClientManagement adminList={adminList} isSuperAdmin />;
 }
 
 export default client;

@@ -26,6 +26,7 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     client: UserView[];
+    isSuperAdmin?: boolean;
 }
 import {
     ControlSettingView,
@@ -53,7 +54,7 @@ const schema = yup.object().shape({
     email: yup.string().email().required(),
 });
 
-function SupervisorManagement({ adminList, client }: adminProps) {
+function SupervisorManagement({ adminList, client, isSuperAdmin }: adminProps) {
     //
     const clients = client?.filter((x) => x.isActive);
     const {
@@ -76,7 +77,7 @@ function SupervisorManagement({ adminList, client }: adminProps) {
 
     const [clientType, setClientType] = useState(false);
     const { subType, user, accessControls } = useContext(UserContext);
-    const userAccess : ControlSettingView = accessControls
+    const userAccess: ControlSettingView = accessControls;
 
     useEffect(() => {
         subType == 'premium' ? setClientType(true) : setClientType(false);
@@ -127,18 +128,18 @@ function SupervisorManagement({ adminList, client }: adminProps) {
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex justify="space-between" mb="1rem">
-                {userAccess.adminOBoarding && (
-                    <Button
-                        bgColor="brand.400"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        onClick={onOpen}
-                    >
-                        +Supervisor
-                    </Button>
-                )}
+                    {(userAccess?.adminOBoarding || isSuperAdmin) && (
+                        <Button
+                            bgColor="brand.400"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            height="fit-content"
+                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                            onClick={onOpen}
+                        >
+                            +Supervisor
+                        </Button>
+                    )}
                     <Button
                         bgColor="brand.600"
                         color="white"

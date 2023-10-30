@@ -32,6 +32,7 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     team: UserView[];
+    isSuperAdmin?: boolean;
 }
 interface select {
     options: UserView[];
@@ -71,7 +72,7 @@ const schema = yup.object().shape({
     email: yup.string().email().required(),
 });
 
-function ProfileManagementAdmin({ adminList, team }: adminProps) {
+function ProfileManagementAdmin({ adminList, team, isSuperAdmin }: adminProps) {
     const { user, subType, accessControls } = useContext(UserContext);
     const userAccess: ControlSettingView = accessControls;
     const {
@@ -216,7 +217,7 @@ function ProfileManagementAdmin({ adminList, team }: adminProps) {
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex justify="space-between" mb="1rem">
-                    {userAccess.adminOBoarding && (
+                    {(userAccess?.adminOBoarding || isSuperAdmin) && (
                         <Button
                             bgColor="brand.400"
                             color="white"
