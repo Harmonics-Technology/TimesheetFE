@@ -28,6 +28,7 @@ function Invoices({ invoiceData, paygroupId, clients }: invoiceType) {
                 paygroupId={paygroupId}
                 fileName="Proinsight invoices from payment partner"
                 clients={clients}
+                isSuperAdmin
             />
         </Box>
     );

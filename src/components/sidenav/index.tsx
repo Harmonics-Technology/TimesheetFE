@@ -288,6 +288,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['my timesheet', 'timesheet history']}
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -303,6 +304,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                                 ? ['my expenses', 'my payslips']
                                 : ['my expenses', 'my payslips', 'my invoices']
                         }
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -313,6 +315,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -323,6 +326,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
+                        display={activeSub}
                     />
                     {user?.employeeType?.toLowerCase() == 'shift' && (
                         <MenuItem
@@ -334,6 +338,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             dropDown={[]}
                             setOpenSidenav={setOpenSidenav}
                             role={role}
+                            display={activeSub}
                         />
                     )}
                     <MenuItem
@@ -388,6 +393,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -398,6 +404,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['approval', 'history']}
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -408,6 +415,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['expenses']}
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -849,7 +857,10 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
                             'expenses',
-                            'payrolls',
+                            {
+                                show: userAccess?.adminCanViewPayrolls,
+                                name: 'payrolls',
+                            },
                             'payslips',
                             'invoices',
                         ]}
@@ -877,17 +888,19 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             display={activeSub}
                         />
                     )}
-                    <MenuItem
-                        change={change}
-                        linkName="leave"
-                        menuTitle="Leave Management"
-                        icon={<FaFile opacity=".8" />}
-                        option={false}
-                        setOpenSidenav={setOpenSidenav}
-                        dropDown={[]}
-                        role={role}
-                        display={activeSub}
-                    />
+                    {userAccess?.adminLeaveManagement && (
+                        <MenuItem
+                            change={change}
+                            linkName="leave"
+                            menuTitle="Leave Management"
+                            icon={<FaFile opacity=".8" />}
+                            option={false}
+                            setOpenSidenav={setOpenSidenav}
+                            dropDown={[]}
+                            role={role}
+                            display={activeSub}
+                        />
+                    )}
                     <MenuItem
                         change={change}
                         linkName="shift-management"

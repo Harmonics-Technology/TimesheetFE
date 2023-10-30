@@ -23,6 +23,7 @@ function expenses({ invoiceData }: InvoiceType) {
                 invoiceData={invoiceData}
                 record={1}
                 fileName="Pending Payrolls"
+                isSuperAdmin
             />
         </Box>
     );

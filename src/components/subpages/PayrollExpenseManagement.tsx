@@ -23,7 +23,7 @@ import {
     TableState,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -31,6 +31,7 @@ import * as yup from 'yup';
 import { RiMailSendFill } from 'react-icons/ri';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import {
+    ControlSettingView,
     ExpenseModel,
     ExpenseTypeView,
     ExpenseView,
@@ -51,6 +52,7 @@ import { CUR } from '@components/generics/functions/Naira';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -63,15 +65,19 @@ interface expenseProps {
     expenses: ExpenseViewPagedCollectionStandardResponse;
     team: UserView[];
     expenseType: ExpenseTypeView[];
+    isSuperAdmin?: boolean;
 }
 
 function PayrollExpenseManagement({
     expenses,
     team,
     expenseType,
+    isSuperAdmin,
 }: expenseProps) {
     const expensesList = expenses?.data?.value;
     const [loading, setLoading] = useState(false);
+    const { accessControls } = useContext(UserContext);
+    const userAccess: ControlSettingView = accessControls;
 
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
@@ -296,6 +302,10 @@ function PayrollExpenseManagement({
                                             }
                                             onChange={(e) =>
                                                 toggleSelected(x.id as string)
+                                            }
+                                            disabled={
+                                                !userAccess?.adminCanApproveExpense ||
+                                                !isSuperAdmin
                                             }
                                         />
                                     </td>

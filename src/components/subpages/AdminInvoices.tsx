@@ -19,6 +19,7 @@ import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
 import moment from 'moment';
 import {
+    ControlSettingView,
     FinancialService,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
@@ -36,14 +37,21 @@ import { BsDownload } from 'react-icons/bs';
 import Naira, { CAD } from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
+import NoAccess from '@components/bits-utils/NoAccess';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
     fileName?: string;
     record?: number;
+    isSuperAdmin?: boolean;
 }
 
-function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
+function AdminInvoices({
+    invoiceData,
+    fileName,
+    record,
+    isSuperAdmin,
+}: adminProps) {
     // console.log({ invoiceData });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
@@ -115,8 +123,9 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
             }
         });
     };
-    const { user } = useContext(UserContext);
+    const { user, accessControls } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
+    const userAccess: ControlSettingView = accessControls;
     const hideCheckbox = router.asPath.startsWith(
         `/${role}/financials/submitted-payrolls`,
     );
@@ -166,112 +175,148 @@ function AdminInvoices({ invoiceData, fileName, record }: adminProps) {
                         },
                     ]}
                 />
-                <Flex
-                    justify="space-between"
-                    my="1rem"
-                    flexWrap="wrap"
-                    gap=".5rem"
-                >
-                    <HStack gap="1rem">
-                        <Button
-                            bgColor="brand.600"
-                            color="white"
-                            p=".5rem 1.5rem"
-                            height="fit-content"
-                            onClick={() => approveInvoiceItems()}
-                            isLoading={loading}
-                            spinner={<BeatLoader color="white" size={10} />}
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            isDisabled={selectedId.length < 1}
-                        >
-                            Approve
-                        </Button>
-                    </HStack>
-
-                    <HStack ml="auto">
-                        {!hideCheckbox && (
-                            <Checkbox
-                                checked={
-                                    invoice?.length !== 0 &&
-                                    invoice?.filter(
-                                        (x) => x.status !== 'INVOICED',
-                                    ).length == selectedId?.length
-                                }
-                                onChange={() => toggleSelected('', true)}
-                                label="Select All"
-                            />
-                        )}
-                        {record !== undefined && (
-                            <Button
-                                bgColor="brand.600"
-                                color="white"
-                                p=".5rem 1.5rem"
-                                height="fit-content"
-                                onClick={onOpens}
-                                borderRadius="25px"
-                            >
-                                Download <Icon as={BsDownload} ml=".5rem" />
-                            </Button>
-                        )}
-                    </HStack>
-                </Flex>
-                <FilterSearch />
-                <Tables tableHead={thead}>
+                {userAccess?.adminCanApprovePayrolls || isSuperAdmin ? (
                     <>
-                        {invoiceData?.data?.value?.map((x: InvoiceView) => (
-                            <Tr key={x.id}>
-                                <TableData
-                                    name={
-                                        hideCheckbox || pays
-                                            ? x.employeeInformation?.client
-                                                  ?.organizationName
-                                            : x.invoiceReference
+                        <Flex
+                            justify="space-between"
+                            my="1rem"
+                            flexWrap="wrap"
+                            gap=".5rem"
+                        >
+                            <HStack gap="1rem">
+                                <Button
+                                    bgColor="brand.600"
+                                    color="white"
+                                    p=".5rem 1.5rem"
+                                    height="fit-content"
+                                    onClick={() => approveInvoiceItems()}
+                                    isLoading={loading}
+                                    spinner={
+                                        <BeatLoader color="white" size={10} />
                                     }
-                                />
-                                <TableData
-                                    name={
-                                        x.payrollGroupName ||
-                                        x.paymentPartnerName ||
-                                        x.name
-                                    }
-                                />
-                                <TableData name={formatDate(x.dateCreated)} />
-                                <TableData name={formatDate(x.startDate)} />
-                                <TableData name={formatDate(x.endDate)} />
-                                <TableData
-                                    name={
-                                        x?.employeeInformation?.currency ==
-                                        'NGN'
-                                            ? Naira(Round(x.totalAmount))
-                                            : CAD(Round(x.totalAmount))
-                                    }
-                                />
-                                <TableState name={x.status as string} />
-                                <InvoiceAction
-                                    data={x}
-                                    onOpen={onOpen}
-                                    clicked={setClicked}
-                                />
+                                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                    isDisabled={selectedId.length < 1}
+                                >
+                                    Approve
+                                </Button>
+                            </HStack>
+
+                            <HStack ml="auto">
                                 {!hideCheckbox && (
-                                    <td>
-                                        <Checkbox
-                                            checked={
-                                                selectedId.find(
-                                                    (e) => e === x.id,
-                                                ) || ''
-                                            }
-                                            onChange={(e) =>
-                                                toggleSelected(x.id as string)
-                                            }
-                                            disabled={x.status === 'INVOICED'}
-                                        />
-                                    </td>
+                                    <Checkbox
+                                        checked={
+                                            invoice?.length !== 0 &&
+                                            invoice?.filter(
+                                                (x) => x.status !== 'INVOICED',
+                                            ).length == selectedId?.length
+                                        }
+                                        onChange={() =>
+                                            toggleSelected('', true)
+                                        }
+                                        label="Select All"
+                                    />
                                 )}
-                            </Tr>
-                        ))}
+                                {record !== undefined && (
+                                    <Button
+                                        bgColor="brand.600"
+                                        color="white"
+                                        p=".5rem 1.5rem"
+                                        height="fit-content"
+                                        onClick={onOpens}
+                                        borderRadius="25px"
+                                    >
+                                        Download{' '}
+                                        <Icon as={BsDownload} ml=".5rem" />
+                                    </Button>
+                                )}
+                            </HStack>
+                        </Flex>
+                        <FilterSearch />
+                        <Tables tableHead={thead}>
+                            <>
+                                {invoiceData?.data?.value?.map(
+                                    (x: InvoiceView) => (
+                                        <Tr key={x.id}>
+                                            <TableData
+                                                name={
+                                                    hideCheckbox || pays
+                                                        ? x.employeeInformation
+                                                              ?.client
+                                                              ?.organizationName
+                                                        : x.invoiceReference
+                                                }
+                                            />
+                                            <TableData
+                                                name={
+                                                    x.payrollGroupName ||
+                                                    x.paymentPartnerName ||
+                                                    x.name
+                                                }
+                                            />
+                                            <TableData
+                                                name={formatDate(x.dateCreated)}
+                                            />
+                                            <TableData
+                                                name={formatDate(x.startDate)}
+                                            />
+                                            <TableData
+                                                name={formatDate(x.endDate)}
+                                            />
+                                            <TableData
+                                                name={
+                                                    x?.employeeInformation
+                                                        ?.currency == 'NGN'
+                                                        ? Naira(
+                                                              Round(
+                                                                  x.totalAmount,
+                                                              ),
+                                                          )
+                                                        : CAD(
+                                                              Round(
+                                                                  x.totalAmount,
+                                                              ),
+                                                          )
+                                                }
+                                            />
+                                            <TableState
+                                                name={x.status as string}
+                                            />
+                                            <InvoiceAction
+                                                data={x}
+                                                onOpen={onOpen}
+                                                clicked={setClicked}
+                                            />
+                                            {!hideCheckbox && (
+                                                <td>
+                                                    <Checkbox
+                                                        checked={
+                                                            selectedId.find(
+                                                                (e) =>
+                                                                    e === x.id,
+                                                            ) || ''
+                                                        }
+                                                        onChange={(e) =>
+                                                            toggleSelected(
+                                                                x.id as string,
+                                                            )
+                                                        }
+                                                        disabled={
+                                                            x.status ===
+                                                            'INVOICED'
+                                                        }
+                                                    />
+                                                </td>
+                                            )}
+                                        </Tr>
+                                    ),
+                                )}
+                            </>
+                        </Tables>
+                        <Pagination data={invoiceData} />
                     </>
-                </Tables>
-                <Pagination data={invoiceData} />
+                ) : (
+                    <NoAccess />
+                )}
             </Box>
             <InvoiceTemplate
                 isOpen={isOpen}

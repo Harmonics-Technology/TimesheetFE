@@ -18,11 +18,12 @@ function payrolls({ invoiceData }: InvoiceType) {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     return (
-        <Box>
+    <Box>
             <AdminInvoices
                 invoiceData={invoiceData}
                 record={2}
                 fileName="Approved Payrolls"
+                isSuperAdmin
             />
         </Box>
     );

@@ -29,6 +29,7 @@ function expenses({ expenses, team, expenseType }: ExpensesType) {
                 expenses={expenses}
                 team={team}
                 expenseType={expenseType}
+                isSuperAdmin
             />
         </Box>
     );

@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import {
     format,
     startOfWeek,
@@ -1084,7 +1090,7 @@ const TimesheetAdmin = ({
                         tip="Number of hours you worked this month x Rate per hour"
                     />
                     {isSuperAdmin && <ApproveSelectedInput />}
-                    {(userAccess?.adminReport || isSuperAdmin) && (
+                    {(userAccess?.adminCanApproveTimesheet || isSuperAdmin) && (
                         <ApproveSelected />
                     )}
                 </Flex>

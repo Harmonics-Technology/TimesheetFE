@@ -23,4 +23,11 @@ export type ControlSettingView = {
     timesheetFillingReminderDay?: number | null;
     timesheetOverdueReminderDay?: number | null;
     allowUsersTofillFutureTimesheet?: boolean;
+    adminCanApproveExpense?: boolean;
+    adminCanApproveTimesheet?: boolean;
+    adminCanApprovePayrolls?: boolean;
+    adminCanViewPayrolls?: boolean;
+    adminCanViewTeamMemberInvoice?: boolean;
+    adminCanViewPaymentPartnerInvoice?: boolean;
+    adminCanViewClientInvoice?: boolean;
 };

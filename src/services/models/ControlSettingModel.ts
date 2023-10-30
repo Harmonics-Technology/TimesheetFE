@@ -24,4 +24,11 @@ export type ControlSettingModel = {
     timesheetFillingReminderDay?: number | null;
     timesheetOverdueReminderDay?: number | null;
     allowUsersTofillFutureTimesheet?: boolean | null;
+    adminCanApproveExpense?: boolean | null;
+    adminCanApproveTimesheet?: boolean | null;
+    adminCanApprovePayrolls?: boolean | null;
+    adminCanViewPayrolls?: boolean | null;
+    adminCanViewTeamMemberInvoice?: boolean | null;
+    adminCanViewPaymentPartnerInvoice?: boolean | null;
+    adminCanViewClientInvoice?: boolean | null;
 };

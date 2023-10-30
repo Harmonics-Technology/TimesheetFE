@@ -30,7 +30,6 @@ import * as yup from 'yup';
 import { RiMailSendFill } from 'react-icons/ri';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import {
-    ControlSettingView,
     ExpenseModel,
     ExpenseTypeView,
     ExpenseView,
@@ -62,15 +61,9 @@ interface expenseProps {
     expenses: ExpenseViewPagedCollectionStandardResponse;
     team: UserView[];
     expenseType: ExpenseTypeView[];
-    isSuperAdmin?: boolean;
 }
 
-function ExpenseManagement({
-    expenses,
-    team,
-    expenseType,
-    isSuperAdmin,
-}: expenseProps) {
+function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
     const expensesList = expenses?.data?.value;
     const {
         register,
@@ -84,8 +77,6 @@ function ExpenseManagement({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
-    const { accessControls } = useContext(UserContext);
-    const userAccess: ControlSettingView = accessControls;
 
     const onSubmit = async (data: ExpenseModel) => {
         try {
@@ -177,14 +168,9 @@ function ExpenseManagement({
                                     )}`}
                                 />
                                 <TableState name={x.status as string} />
-                                {userAccess?.adminReport || isSuperAdmin ? (
-                                    <ExpenseActions id={x} />
-                                ) : (
-                                    <td>
-                                        {' '}
-                                        <FaEllipsisH />
-                                    </td>
-                                )}
+
+                                <ExpenseActions id={x} />
+
                                 {/* <td>
                                     {x.status == 'APPROVED' && <Checkbox />}
                                 </td> */}
