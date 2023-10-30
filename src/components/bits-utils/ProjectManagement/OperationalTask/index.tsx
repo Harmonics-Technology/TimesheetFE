@@ -40,7 +40,7 @@ export const OperationalTask = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const router = useRouter();
-    const filterByStatus = (val:string) => {
+    const filterByStatus = (val: string) => {
         router.push({
             query: {
                 ...router.query,
@@ -159,7 +159,7 @@ export const OperationalTask = ({
                                 <ProgressBar
                                     barWidth={x?.progress}
                                     showProgress={true}
-                                    rightText={`${x?.progress}%`}
+                                    rightText={`${x?.progress || 0}%`}
                                     barColor="brand.400"
                                 />
                             </td>
