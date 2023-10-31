@@ -111,9 +111,9 @@ const ShiftManagement = ({ allShift, shiftUser, shiftTypes }: shiftProps) => {
             start: obj.start,
             end: obj.end,
             resourceId: obj.userId,
-            title: obj.title,
+            title: obj.title == null ? 'Shift' : obj.title,
             rrule: obj.repeatQuery,
-            bgColor: obj.color,
+            bgColor: obj.color == null ? '#000000' : obj.color,
         };
     });
 

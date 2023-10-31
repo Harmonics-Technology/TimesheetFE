@@ -65,8 +65,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.to || end,
             );
             const shiftTypes = await ShiftService.listShiftTypes(superAdminId);
-
-            //
             return {
                 props: {
                     allShift,
@@ -75,6 +73,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     data: [],
