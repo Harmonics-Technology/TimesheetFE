@@ -282,7 +282,7 @@ function Paymentinvoices({
                                         />
                                         <InvoiceTotalText
                                             label="Subtotal(₦)"
-                                            cur={'$'}
+                                            cur={'₦'}
                                             value={CUR(Round(allInvoiceTotal))}
                                         />
                                         <InvoiceTotalText

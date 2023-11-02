@@ -147,7 +147,7 @@ const TimesheetAdmin = ({
             //@ts-ignore
             newDate instanceof Date && !isNaN(newDate) ? newDate : new Date(),
         );
-    }, [newDate]);
+    }, [sheet]);
     const toast = useToast();
     let hoursWorked: any[] = [];
     // monthlyTimesheets?.forEach((x) => {
