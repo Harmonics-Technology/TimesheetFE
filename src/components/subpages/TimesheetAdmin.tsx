@@ -130,9 +130,11 @@ const TimesheetAdmin = ({
 
     const newDate = new Date(moment(date).format('MM/DD/YYYY'));
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const activeDate =
+    const [activeDate, setActiveDate] = useState(
         //@ts-ignore
-        newDate instanceof Date && !isNaN(newDate) ? newDate : new Date();
+        newDate instanceof Date && !isNaN(newDate) ? newDate : new Date(),
+    );
+
     // const [monthlyTimesheets, setMonthlyTimesheets] =
     //     useState<TimeSheetView[]>();
 
@@ -140,6 +142,12 @@ const TimesheetAdmin = ({
     //     setMonthlyTimesheets(sheet as TimeSheetView[]);
     // }, [sheet]);
     // const [checked, setChecked] = useState(false);
+    useEffect(() => {
+        setActiveDate(
+            //@ts-ignore
+            newDate instanceof Date && !isNaN(newDate) ? newDate : new Date(),
+        );
+    }, [newDate]);
     const toast = useToast();
     let hoursWorked: any[] = [];
     // monthlyTimesheets?.forEach((x) => {
@@ -182,7 +190,7 @@ const TimesheetAdmin = ({
     };
 
     const fillAllDate = () => {
-        const exists = timesheetALl?.length === selected.length;
+        const exists = timesheetALl?.length === selected?.length;
         if (exists) {
             setSelected([]);
             return;
@@ -771,9 +779,12 @@ const TimesheetAdmin = ({
                                 >
                                     <Flex
                                         justify="flex-end"
-                                        onClick={() =>
-                                            setSingleReject(!singleReject)
-                                        }
+                                        onClick={() => {
+                                            userAccess?.adminCanApproveTimesheet ||
+                                            isSuperAdmin
+                                                ? setSingleReject(!singleReject)
+                                                : void 0;
+                                        }}
                                     >
                                         <FaTimes />
                                     </Flex>

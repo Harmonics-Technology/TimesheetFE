@@ -43,6 +43,8 @@ function InvoiceTemplate({
         0,
     );
     const exchangeRate = clicked?.rate as unknown as number;
+
+    console.log({ clicked });
     return (
         <>
             <Modal

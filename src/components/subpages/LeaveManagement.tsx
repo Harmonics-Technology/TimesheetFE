@@ -146,7 +146,7 @@ export const LeaveManagement = ({
                                       url: '/leave/history',
                                   },
                               ]
-                            : role == 'Supervisor' || role == 'SuperAdmin'
+                            : role == 'Supervisor' || type == 'asAdmin'
                             ? [
                                   {
                                       text: 'Leave Application',
@@ -230,7 +230,7 @@ export const LeaveManagement = ({
                                     </Flex>
                                 </td>
                                 <TableData name={x.workAssignee?.fullName} />
-                                {(role == 'SuperAdmin' ||
+                                {(type == 'asAdmin' ||
                                     role == 'InternalSupervisor') && (
                                     <TableData
                                         name={

@@ -175,7 +175,7 @@ function AdminInvoices({
                         },
                     ]}
                 />
-                {userAccess?.adminCanApprovePayrolls || isSuperAdmin ? (
+                {userAccess?.adminCanViewPayrolls || isSuperAdmin ? (
                     <>
                         <Flex
                             justify="space-between"
@@ -184,21 +184,27 @@ function AdminInvoices({
                             gap=".5rem"
                         >
                             <HStack gap="1rem">
-                                <Button
-                                    bgColor="brand.600"
-                                    color="white"
-                                    p=".5rem 1.5rem"
-                                    height="fit-content"
-                                    onClick={() => approveInvoiceItems()}
-                                    isLoading={loading}
-                                    spinner={
-                                        <BeatLoader color="white" size={10} />
-                                    }
-                                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                    isDisabled={selectedId.length < 1}
-                                >
-                                    Approve
-                                </Button>
+                                {(userAccess?.adminCanApprovePayrolls ||
+                                    isSuperAdmin) && (
+                                    <Button
+                                        bgColor="brand.600"
+                                        color="white"
+                                        p=".5rem 1.5rem"
+                                        height="fit-content"
+                                        onClick={() => approveInvoiceItems()}
+                                        isLoading={loading}
+                                        spinner={
+                                            <BeatLoader
+                                                color="white"
+                                                size={10}
+                                            />
+                                        }
+                                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                        isDisabled={selectedId.length < 1}
+                                    >
+                                        Approve
+                                    </Button>
+                                )}
                             </HStack>
 
                             <HStack ml="auto">

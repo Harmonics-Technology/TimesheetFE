@@ -29,7 +29,11 @@ import { useRouter } from 'next/router';
 import Paymentinvoices from './Paymentinvoices';
 import Naira, { CAD } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
+import dynamic from 'next/dynamic';
 import { Round } from '@components/generics/functions/Round';
+const Selectrix = dynamic<any>(() => import('react-selectrix'), {
+    ssr: false,
+});
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -126,8 +130,8 @@ function PaymentPartnerInvoice({
         return { id: obj.id, title: obj.fullName };
     });
     const newData = [
-        ...(newClient || []),
         { id: superAdminId, title: 'Main Organization' },
+        ...(newClient || []),
     ];
 
     return (
@@ -171,7 +175,19 @@ function PaymentPartnerInvoice({
                 <FilterSearch
                     hides
                     options={newData}
-                    onChange={filterClientsInvoice}
+                    filter={
+                        <Selectrix
+                            options={newData}
+                            searchable
+                            customKeys={{
+                                key: 'id',
+                                label: 'title',
+                            }}
+                            onChange={(value: any) =>
+                                filterClientsInvoice(value.key)
+                            }
+                        />
+                    }
                 />
                 <Tables
                     tableHead={[

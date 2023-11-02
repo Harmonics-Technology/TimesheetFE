@@ -87,8 +87,9 @@ function PaymentPartnerPayroll({
         return { id: obj.id, title: obj.fullName };
     });
     const newData = [
-        ...(newClient || []),
+         { id: '', title: 'All' },
         { id: superAdminId, title: 'Main Organization' },
+        ...(newClient || []),
     ];
 
     return (
@@ -142,7 +143,19 @@ function PaymentPartnerPayroll({
                 <FilterSearch
                     hides
                     options={newData}
-                    onChange={filterClientsInvoice}
+                    filter={
+                        <Selectrix
+                            options={newData}
+                            searchable
+                            customKeys={{
+                                key: 'id',
+                                label: 'title',
+                            }}
+                            onChange={(value: any) =>
+                                filterClientsInvoice(value.key)
+                            }
+                        />
+                    }
                 />
                 <Tables
                     tableHead={[

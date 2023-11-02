@@ -857,10 +857,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
                             'expenses',
-                            {
-                                show: userAccess?.adminCanViewPayrolls,
-                                name: 'payrolls',
-                            },
+                            'payrolls',
                             'payslips',
                             'invoices',
                         ]}

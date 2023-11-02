@@ -23,6 +23,7 @@ function payrolls({ invoiceData }: InvoiceType) {
                 invoiceData={invoiceData}
                 record={2}
                 fileName="Approved Payrolls"
+                 isSuperAdmin
             />
         </Box>
     );

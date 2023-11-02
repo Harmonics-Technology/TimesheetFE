@@ -23,6 +23,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const clientId = pagingOptions?.clientId;
+        // console.log({ clientId });
         try {
             const data = await FinancialService.listPayrollGroupInvoices(
                 superAdminId,
@@ -50,6 +51,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     data: [],

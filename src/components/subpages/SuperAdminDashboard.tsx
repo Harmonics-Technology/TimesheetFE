@@ -52,6 +52,7 @@ interface DashboardProps {
     metrics: DashboardViewStandardResponse;
     counts: ProjectProgressCountView;
     summary: BudgetSummaryReportView;
+    isSuperAdmin?: boolean;
     // error: any;
 }
 
@@ -59,6 +60,7 @@ function SuperAdminDashboard({
     metrics,
     counts,
     summary,
+    isSuperAdmin,
 }: // error,
 DashboardProps) {
     const { user, subType } = useContext(UserContext);
@@ -124,40 +126,42 @@ DashboardProps) {
                 </Grid>
 
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
-                    <TableCards
-                        title={'Summary Report'}
-                        url={'timesheets/approval'}
-                        hasFilter
-                        data={[0].map((x) => (
-                            <Tr key={x}>
-                                <TableData
-                                    name={Round(summary?.noOfUsers || 0)}
-                                />
-                                <TableData
-                                    name={`${Round(
-                                        summary?.totalHours || 0,
-                                    )} hours`}
-                                />
-                                <TableData
-                                    name={`${Round(
-                                        summary?.billableHours || 0,
-                                    )} hours`}
-                                />
-                                <TableData
-                                    name={`${Round(
-                                        summary?.nonBillableHours || 0,
-                                    )} hours`}
-                                />
-                                <TableData
-                                    name={CAD(Round(summary?.amount || 0))}
-                                />
-                                {/* <TableState name={x.status} /> */}
-                            </Tr>
-                        ))}
-                        thead={thead}
-                        link={''}
-                        exportOpened={exportOpened}
-                    />
+                    {isSuperAdmin && (
+                        <TableCards
+                            title={'Summary Report'}
+                            url={'timesheets/approval'}
+                            hasFilter
+                            data={[0].map((x) => (
+                                <Tr key={x}>
+                                    <TableData
+                                        name={Round(summary?.noOfUsers || 0)}
+                                    />
+                                    <TableData
+                                        name={`${Round(
+                                            summary?.totalHours || 0,
+                                        )} hours`}
+                                    />
+                                    <TableData
+                                        name={`${Round(
+                                            summary?.billableHours || 0,
+                                        )} hours`}
+                                    />
+                                    <TableData
+                                        name={`${Round(
+                                            summary?.nonBillableHours || 0,
+                                        )} hours`}
+                                    />
+                                    <TableData
+                                        name={CAD(Round(summary?.amount || 0))}
+                                    />
+                                    {/* <TableState name={x.status} /> */}
+                                </Tr>
+                            ))}
+                            thead={thead}
+                            link={''}
+                            exportOpened={exportOpened}
+                        />
+                    )}
                     <TableCards
                         title={'Timesheet Report'}
                         url={'timesheets/approval'}

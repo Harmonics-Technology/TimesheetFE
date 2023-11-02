@@ -22,6 +22,7 @@ function Invoices({ invoiceData }: invoiceType) {
                 invoiceData={invoiceData}
                 fileName="Team Member Pending Approval Invoice"
                 record={3}
+                isSuperAdmin
             />
         </Box>
     );

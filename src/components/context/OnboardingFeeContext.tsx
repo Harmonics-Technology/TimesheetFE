@@ -1,15 +1,20 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { OnboardingFeeService } from 'src/services';
+import { UserContext } from './UserContext';
 
 export const OnboardingFeeContext = createContext<any | null>(null);
 export const OnboardingFeeProvider = ({ children }: { children: any }) => {
     const [fixedAmount, setFixedAmount] = useState<any>();
     const [percentageAmount, setPercentageAmount] = useState<any>();
     const [hstAmount, setHstAmount] = useState<any>();
+    const { user } = useContext(UserContext);
+    const superAdminId = user?.superAdmin;
     useEffect(() => {
         const getFixedAmount = async () => {
             try {
-                const data = await OnboardingFeeService.getFixedAmount();
+                const data = await OnboardingFeeService.getFixedAmount(
+                    superAdminId,
+                );
                 if (data.status) {
                     setFixedAmount(data.data?.fee);
                 }
@@ -20,7 +25,11 @@ export const OnboardingFeeProvider = ({ children }: { children: any }) => {
         const getPercentageAmount = async () => {
             try {
                 const data =
-                    await OnboardingFeeService.listPercentageOnboardingFees();
+                    await OnboardingFeeService.listPercentageOnboardingFees(
+                        0,
+                        17,
+                        superAdminId,
+                    );
                 if (data.status) {
                     setPercentageAmount(data.data?.value);
                 }
@@ -30,7 +39,7 @@ export const OnboardingFeeProvider = ({ children }: { children: any }) => {
         };
         const getHstAmount = async () => {
             try {
-                const data = await OnboardingFeeService.getHst();
+                const data = await OnboardingFeeService.getHst(superAdminId);
                 if (data.status) {
                     setHstAmount(data.data);
                 }

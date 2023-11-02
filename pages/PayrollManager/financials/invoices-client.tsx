@@ -22,6 +22,7 @@ function Invoices({ invoiceData }: invoiceType) {
                 invoiceData={invoiceData}
                 record={6}
                 fileName="Client Invoice"
+                isSuperAdmin
             />
         </Box>
     );

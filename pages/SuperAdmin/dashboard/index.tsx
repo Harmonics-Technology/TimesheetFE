@@ -16,6 +16,7 @@ function index({ metrics, counts, summary }: DashboardProps) {
             metrics={metrics}
             counts={counts}
             summary={summary}
+            isSuperAdmin
             // error={error}
         />
     );

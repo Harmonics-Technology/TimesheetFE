@@ -163,7 +163,7 @@ const TimesheetSupervisor = ({
     };
 
     const fillAllDate = () => {
-        const exists = timesheetALl?.length === selected.length;
+        const exists = timesheetALl?.length === selected?.length;
         if (exists) {
             setSelected([]);
             return;
@@ -584,7 +584,7 @@ const TimesheetSupervisor = ({
                 setTimesheetHours(timesheets?.hours as number);
             }, [timesheets]);
             const userId = timesheets?.employeeInformationId as string;
-            const userDate = moment(currentDate).format('YYYY-MM-DD');
+            const userDate = moment(currentDate).format('YYYY-MM-DDTHH:mm:ss');
             const [singleReject, setSingleReject] = useState(false);
             const {
                 isOpen: isVisible,

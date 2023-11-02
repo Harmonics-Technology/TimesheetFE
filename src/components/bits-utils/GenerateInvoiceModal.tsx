@@ -130,6 +130,7 @@ export const GenerateInvoiceModal = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                onClose();
                 return;
             }
             toast({

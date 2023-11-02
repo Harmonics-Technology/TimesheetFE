@@ -29,13 +29,13 @@ function FilterSearch({
     hides = false,
     searchOptions,
     options = [],
-    onChange,
+    filter,
 }: {
     hide?: boolean;
     hides?: boolean;
     searchOptions?: string;
     options?: any[];
-    onChange?: any;
+    filter?: any;
 }) {
     const [search, setSearch] = useState('');
     const router = useRouter();
@@ -88,7 +88,7 @@ function FilterSearch({
         <>
             <Flex
                 justify="space-between"
-                align={['unset', 'center']}
+                align={['unset', 'flex-end']}
                 mb="1.5rem"
                 flexDirection={['column', 'row']}
             >
@@ -107,7 +107,7 @@ function FilterSearch({
                         <Text noOfLines={1} mb="0">
                             Filter By
                         </Text>
-                        <Select
+                        {/* <Select
                             w="fit-content"
                             onChange={onChange}
                             borderRadius="0"
@@ -116,7 +116,8 @@ function FilterSearch({
                             {options.map((x) => (
                                 <option value={x.id}>{x.title}</option>
                             ))}
-                        </Select>
+                        </Select> */}
+                        {filter}
                     </Box>
                     <HStack fontSize=".8rem" w="fit-content" mb={['1rem', '0']}>
                         <Select

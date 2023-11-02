@@ -91,7 +91,10 @@ export const PaymentPrompt = ({ isOpen, onClose, onSubmit, loading }) => {
 
                                 isLoading={loading}
                                 spinner={<BeatLoader color="white" size={10} />}
-                                onClick={() => onSubmit()}
+                                onClick={() => {
+                                    onSubmit();
+                                    onClose();
+                                }}
                             >
                                 Yes
                             </Button>

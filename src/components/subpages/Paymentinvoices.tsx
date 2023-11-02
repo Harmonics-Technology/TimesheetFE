@@ -271,7 +271,7 @@ function Paymentinvoices({
                                         w="fit-content"
                                     >
                                         <InvoiceTotalText
-                                            label="Subtotal"
+                                            label="Subtotal($)"
                                             cur={'$'}
                                             value={CUR(
                                                 Round(
@@ -279,6 +279,11 @@ function Paymentinvoices({
                                                         exchangeRate,
                                                 ),
                                             )}
+                                        />
+                                        <InvoiceTotalText
+                                            label="Subtotal(₦)"
+                                            cur={'$'}
+                                            value={CUR(Round(allInvoiceTotal))}
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
