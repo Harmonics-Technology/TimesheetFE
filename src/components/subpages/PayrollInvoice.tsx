@@ -105,6 +105,10 @@ function PayrollInvoice({
             });
         }
     };
+    const paymentDate =
+        moment('2023-10-27').day() == 5
+            ? moment('2023-10-27').weekday(12)
+            : moment('2023-10-27').weekday(5);
     return (
         <>
             <Modal
@@ -166,8 +170,7 @@ function PayrollInvoice({
                                             {formatDate(clicked?.dateCreated)}
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
-                                            Due Date:{' '}
-                                            {formatDate(clicked?.paymentDate)}
+                                            Due Date: {formatDate(paymentDate)}
                                         </Text>
                                     </Box>
                                     <Box maxW="35%" textAlign="right">
@@ -180,8 +183,11 @@ function PayrollInvoice({
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
                                             {clicked?.payrollGroupName} <br />
-                                            201 New York Ibeju Leki, 201
-                                            New-York Ibeju Leki
+                                            {
+                                                clicked?.employeeInformation
+                                                    ?.client
+                                                    ?.organizationAddress
+                                            }
                                         </Text>
                                         {/* <Text fontSize=".9rem" fontWeight="600">
                                     Address
@@ -224,32 +230,36 @@ function PayrollInvoice({
                                                                 />
                                                                 <TableData
                                                                     name={`${Naira(
-                                                                        (x?.totalAmount as number) -
-                                                                            (
-                                                                                x?.expenses as unknown as ExpenseView[]
-                                                                            )?.reduce(
+                                                                        Round(
+                                                                            (x?.totalAmount as number) -
                                                                                 (
-                                                                                    a,
-                                                                                    b,
-                                                                                ) =>
-                                                                                    a +
-                                                                                    (b?.amount as number),
-                                                                                0,
-                                                                            ),
+                                                                                    x?.expenses as unknown as ExpenseView[]
+                                                                                )?.reduce(
+                                                                                    (
+                                                                                        a,
+                                                                                        b,
+                                                                                    ) =>
+                                                                                        a +
+                                                                                        (b?.amount as number),
+                                                                                    0,
+                                                                                ),
+                                                                        ),
                                                                     )} ${
                                                                         x
                                                                             ?.expenses
                                                                             ?.length !==
                                                                         0
                                                                             ? `+ ${Naira(
-                                                                                  x.expenses?.reduce(
-                                                                                      (
-                                                                                          a,
-                                                                                          b,
-                                                                                      ) =>
-                                                                                          a +
-                                                                                          (b?.amount as number),
-                                                                                      0,
+                                                                                  Round(
+                                                                                      x.expenses?.reduce(
+                                                                                          (
+                                                                                              a,
+                                                                                              b,
+                                                                                          ) =>
+                                                                                              a +
+                                                                                              (b?.amount as number),
+                                                                                          0,
+                                                                                      ),
                                                                                   ),
                                                                               )}`
                                                                             : ''

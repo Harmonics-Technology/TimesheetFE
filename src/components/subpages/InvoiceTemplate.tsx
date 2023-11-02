@@ -126,7 +126,8 @@ function InvoiceTemplate({
                                             <br />
                                             {
                                                 clicked?.employeeInformation
-                                                    ?.client?.address
+                                                    ?.client
+                                                    ?.organizationAddress
                                             }
                                         </Text>
                                         {/* <Text fontSize=".9rem" fontWeight="600">

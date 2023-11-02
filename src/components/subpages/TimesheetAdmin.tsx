@@ -316,8 +316,8 @@ const TimesheetAdmin = ({
     function ApproveSelected() {
         const [loading, setLoading] = useState(false);
         const updateSelected = async () => {
+            setLoading(true);
             try {
-                setLoading(true);
                 const data = await TimeSheetService.approveTimeSheetForADay(
                     id,
                     selected.at(0)?.date,
@@ -379,8 +379,8 @@ const TimesheetAdmin = ({
     function ApproveSelectedInput() {
         const [loading, setLoading] = useState(false);
         const updateSelected = async () => {
+            setLoading(true);
             try {
-                setLoading(true);
                 const data = await TimeSheetService.addWorkHoursForADay(
                     id,
                     selectedInput.at(0)?.date,
@@ -388,13 +388,13 @@ const TimesheetAdmin = ({
                 );
 
                 if (data.status) {
-                    setLoading(false);
                     toast({
                         status: 'success',
                         title: 'Successful',
                         position: 'top-right',
                     });
                     router.replace(router.asPath);
+                    setLoading(false);
                     return;
                 }
                 toast({
