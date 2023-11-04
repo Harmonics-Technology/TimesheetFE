@@ -165,6 +165,7 @@ function TeamManagement({
         // },
     });
     //
+    console.log({ errors });
     const { isOpen, onOpen, onClose } = useDisclosure();
     // const { isOpen: opened, onOpen: opens, onClose: closed } = useDisclosure();
     const { user, opens, subType, accessControls } = useContext(UserContext);
