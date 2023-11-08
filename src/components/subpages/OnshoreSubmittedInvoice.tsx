@@ -146,12 +146,12 @@ function OnshoreSubmittedInvoice({
     const thead = [
         'Invoice No',
         'Name',
-        'Amount',
         'Created On',
         // 'Total Hours',
         // 'Rate/Hr',
         'Start Date',
         'End Date',
+        'Amount',
         'Status',
         // 'Action',
     ];
