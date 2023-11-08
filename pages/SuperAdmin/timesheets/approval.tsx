@@ -37,10 +37,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.limit,
                 superAdminId,
                 pagingOptions.search,
+                // pagingOptions.clientId
             );
             const paymentSchedule = await FinancialService.getPaymentSchedules(
                 superAdminId,
             );
+
+            // console.log(paymentSchedule);
 
             return {
                 props: {

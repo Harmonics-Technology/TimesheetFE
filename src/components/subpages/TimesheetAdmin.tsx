@@ -743,10 +743,15 @@ const TimesheetAdmin = ({
                                 size={['.7rem', '1rem']}
                                 bgColor={!singleReject ? 'gray.400' : 'red.500'}
                                 color="white"
-                                onClick={() => {
-                                    setSingleReject(!singleReject);
-                                    showReject(userId, userDate);
-                                }}
+                                onClick={
+                                    userAccess?.adminCanApproveTimesheet ||
+                                    isSuperAdmin
+                                        ? () => {
+                                              setSingleReject(!singleReject);
+                                              showReject(userId, userDate);
+                                          }
+                                        : void 0
+                                }
                                 isDisabled={
                                     timesheets?.status === 'REJECTED' ||
                                     // timesheets == undefined ||
@@ -780,10 +785,7 @@ const TimesheetAdmin = ({
                                     <Flex
                                         justify="flex-end"
                                         onClick={() => {
-                                            userAccess?.adminCanApproveTimesheet ||
-                                            isSuperAdmin
-                                                ? setSingleReject(!singleReject)
-                                                : void 0;
+                                            setSingleReject(!singleReject);
                                         }}
                                     >
                                         <FaTimes />
@@ -1089,7 +1091,7 @@ const TimesheetAdmin = ({
                                 ? Naira(expectedPay)
                                 : CAD(expectedPay)
                         }
-                        tip="Total amount you are expected to be paid this month"
+                        tip="Total amount you are expected to be paid this pay period if you work your full hours"
                     />
                     <TimeSheetEstimation
                         label="Actual Payout"

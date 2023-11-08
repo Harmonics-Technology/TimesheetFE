@@ -1023,7 +1023,7 @@ const TimesheetSupervisor = ({
                                 ? Naira(expectedPay)
                                 : CAD(expectedPay)
                         }
-                        tip="Total amount you are expected to be paid this month"
+                        tip="Total amount you are expected to be paid this pay period if you work your full hours"
                     />
                     <TimeSheetEstimation
                         label="Actual Payout"

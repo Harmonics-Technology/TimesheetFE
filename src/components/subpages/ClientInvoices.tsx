@@ -37,6 +37,8 @@ import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { UserContext } from '@components/context/UserContext';
 import NoAccess from '@components/bits-utils/NoAccess';
+import { CUR } from '@components/generics/functions/Naira';
+import { Round } from '@components/generics/functions/Round';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -236,6 +238,9 @@ function ClientInvoices({
                                             />
                                             <TableData
                                                 name={formatDate(x.endDate)}
+                                            />
+                                            <TableData
+                                                name={CUR(Round(x.totalAmount))}
                                             />
                                             <TableState
                                                 name={x.status as string}

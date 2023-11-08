@@ -165,7 +165,7 @@ function TeamManagement({
         // },
     });
     //
-    console.log({ errors });
+    // console.log({ errors });
     const { isOpen, onOpen, onClose } = useDisclosure();
     // const { isOpen: opened, onOpen: opens, onClose: closed } = useDisclosure();
     const { user, opens, subType, accessControls } = useContext(UserContext);
@@ -419,6 +419,7 @@ function TeamManagement({
                 payRollTypeId: subType == 'premium' ? 2 : 1,
                 currency: subType != 'premium' ? 'CAD' : 'NGN',
                 clientRate: 0,
+                // fixedAmount: true,
             });
         }
     }, []);
@@ -899,26 +900,26 @@ function TeamManagement({
                                             { id: 'payroll', label: 'Payroll' },
                                         ]}
                                     />
-                                    {clientType && (
-                                        <SelectrixBox<TeamMemberModel>
-                                            control={control}
-                                            name="fixedAmount"
-                                            error={errors.fixedAmount}
-                                            keys="id"
-                                            keyLabel="label"
-                                            label="Onboarding fee type"
-                                            options={[
-                                                {
-                                                    id: true,
-                                                    label: 'Fixed amount',
-                                                },
-                                                {
-                                                    id: false,
-                                                    label: 'Percentage',
-                                                },
-                                            ]}
-                                        />
-                                    )}
+                                    {/* {clientType && ( */}
+                                    <SelectrixBox<TeamMemberModel>
+                                        control={control}
+                                        name="fixedAmount"
+                                        error={errors.fixedAmount}
+                                        keys="id"
+                                        keyLabel="label"
+                                        label="Onboarding fee type"
+                                        options={[
+                                            {
+                                                id: true,
+                                                label: 'Fixed amount',
+                                            },
+                                            {
+                                                id: false,
+                                                label: 'Percentage',
+                                            },
+                                        ]}
+                                    />
+                                    {/* )} */}
                                     {onboarding == false ? (
                                         <SelectrixBox<TeamMemberModel>
                                             control={control}

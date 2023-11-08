@@ -314,7 +314,16 @@ export const GenerateInvoiceModal = ({
                                         w="fit-content"
                                     >
                                         <InvoiceTotalText
-                                            label="Subtotal"
+                                            label="Subtotal (₦)"
+                                            value={
+                                                allInvoiceTotal == Infinity
+                                                    ? 0
+                                                    : Round(allInvoiceTotal)
+                                            }
+                                            cur={'$'}
+                                        />
+                                        <InvoiceTotalText
+                                            label="Subtotal ($)"
                                             value={
                                                 allInvoiceTotal /
                                                     exchangeRate ==

@@ -39,7 +39,9 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
         (a, b) => a + (b?.amount as number),
         0,
     );
-    const payTotal = paySlip?.payslipView?.invoice?.totalAmount;
+    const payTotal = Math.ceil(
+        Number(paySlip?.payslipView?.invoice?.totalAmount),
+    );
     const netPay = (payTotal as number) - (allExpenseTotal as number);
 
     const ref = useRef<any>(null);
@@ -186,7 +188,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                             )} `}
                                         />
                                         <PayslipInfoTag
-                                            title={'Pay Date'}
+                                            title={'Processed Date'}
                                             value={formatDate(
                                                 paySlip?.payslipView?.invoice
                                                     ?.dateCreated,

@@ -87,7 +87,7 @@ function PaymentPartnerPayroll({
         return { id: obj.id, title: obj.fullName };
     });
     const newData = [
-         { id: '', title: 'All' },
+        { id: '', title: 'All' },
         { id: superAdminId, title: 'Main Organization' },
         ...(newClient || []),
     ];
@@ -174,6 +174,13 @@ function PaymentPartnerPayroll({
                         {payrollsList?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
                                 <TableData name={x.name} />
+                                <TableData
+                                    name={
+                                        x.payrollGroupName ||
+                                        x.createdByUser?.client
+                                            ?.organizationName
+                                    }
+                                />
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />
                                 <TableData

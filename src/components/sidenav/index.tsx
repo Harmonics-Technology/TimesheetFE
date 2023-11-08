@@ -939,7 +939,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             option={true}
                             dropDown={[
                                 'expense type',
-                                'onboarding fees',
+                                // 'onboarding fee',
                                 'hst settings',
                             ]}
                             setOpenSidenav={setOpenSidenav}

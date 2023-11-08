@@ -1,4 +1,12 @@
-import { Box, Flex, HStack, Text, VStack, useToast } from '@chakra-ui/react';
+import {
+    Box,
+    Flex,
+    Grid,
+    HStack,
+    Text,
+    VStack,
+    useToast,
+} from '@chakra-ui/react';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
@@ -15,6 +23,10 @@ import { FinancialService, PayScheduleGenerationModel } from 'src/services';
 import * as yup from 'yup';
 import { LabelSign } from '@components/bits-utils/LabelSign';
 import { formatDate } from '@components/generics/functions/formatDate';
+import InputBlank from '@components/bits-utils/InputBlank';
+import PayscheduleBottomNote from '@components/bits-utils/PayscheduleBottomNote';
+import { PayscheduleSidenote } from '@components/bits-utils/PayscheduleSidenote';
+import moment from 'moment';
 
 const schema = yup.object().shape({});
 
@@ -28,6 +40,7 @@ export const MonthPayScheduleSettings = ({
         register,
         handleSubmit,
         control,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<PayScheduleGenerationModel>({
         resolver: yupResolver(schema),
@@ -45,6 +58,7 @@ export const MonthPayScheduleSettings = ({
     );
     const { user } = useContext(UserContext);
     const superAdminId = user?.superAdminId;
+    const endDate = moment(watch('startDate')).add(27, 'days');
 
     const onSubmit = async (data: PayScheduleGenerationModel) => {
         data.superAdminId = superAdminId;
@@ -84,87 +98,128 @@ export const MonthPayScheduleSettings = ({
         }
     };
     return (
-        <Box py="1.5rem" mb="1rem" borderBottom="1px solid #C2CFE0">
-            <Flex justify="space-between">
-                <VStack align="flex-start" mb="1.5rem">
-                    <Text
-                        color="#002861"
-                        fontSize="0.93rem"
-                        fontWeight="500"
-                        mb="0"
-                    >
-                        Monthly Payment Schedule
-                    </Text>
-                    <Text color="#002861" fontSize="0.93rem" mb="0">
-                        Payment is processed for either a full month or a 4
-                        weeks period
-                    </Text>
-                </VStack>
-                <LabelSign data={data ? 'Configured!' : 'Not Configured!'} />
-            </Flex>
-            <form>
-                <VStack w="50%" spacing="1.5rem" align="flex-start">
-                    <Selectrix
-                        label="Payment Type"
-                        options={[
-                            { key: 1, label: 'Full Month' },
-                            { key: 2, label: '4 Weeks Period' },
-                        ]}
-                        onChange={(val) => setPayType(val.key)}
-                        placeholder={
-                            payType == 1
-                                ? 'Full Month'
-                                : payType == 2
-                                ? '4 Weeks Period'
-                                : ''
-                        }
-                    />
-                    {(payType as any) == 1 && (
-                        <PrimaryInput<PayScheduleGenerationModel>
-                            label="Payment Day"
-                            name="paymentDateDays"
-                            error={errors.paymentDateDays}
-                            placeholder={payday || 'Enter the number of days'}
-                            defaultValue=""
-                            register={register}
+        <Grid
+            h="full"
+            borderBottom="1px solid #C2CFE0"
+            py="1.5rem"
+            mb="1rem"
+            templateColumns={['1fr', 'repeat(2, 1fr)']}
+        >
+            <Box w="full">
+                <Flex justify="space-between">
+                    <VStack align="flex-start" mb="1.5rem">
+                        <Text
+                            color="#002861"
+                            fontSize="0.93rem"
+                            fontWeight="500"
+                            mb="0"
+                        >
+                            Monthly Payment Schedule
+                        </Text>
+                        <Text color="#002861" fontSize="0.93rem" mb="0">
+                            Payment is processed for either a full month or a 4
+                            weeks period
+                        </Text>
+                    </VStack>
+                    {/* <LabelSign
+                        data={data ? 'Configured!' : 'Not Configured!'}
+                    /> */}
+                </Flex>
+                <form>
+                    <VStack w="90%" spacing="1.5rem" align="flex-start">
+                        <Selectrix
+                            label="Payment Type"
+                            options={[
+                                { key: 1, label: 'Full Month' },
+                                { key: 2, label: '4 Weeks Period' },
+                            ]}
+                            onChange={(val) => setPayType(val.key)}
+                            placeholder={
+                                payType == 1
+                                    ? 'Full Month'
+                                    : payType == 2
+                                    ? '4 Weeks Period'
+                                    : ''
+                            }
                         />
-                    )}
-                    {(payType as any) == 2 && (
-                        <HStack w="full" spacing="1rem" align="flex-end">
-                            <PrimaryDate<PayScheduleGenerationModel>
-                                control={control}
-                                name="startDate"
-                                label="Beginning Period or  Start Date"
-                                error={errors.startDate}
-                                placeholder={
-                                    bPeriod
-                                        ? formatDate(bPeriod)
-                                        : 'Please choose a date'
-                                }
-                                // min={new Date()}
-                            />
+                        {(payType as any) == 1 && (
                             <PrimaryInput<PayScheduleGenerationModel>
-                                label="Payment Date Offset (in days)"
+                                label="Payment Day"
                                 name="paymentDateDays"
                                 error={errors.paymentDateDays}
-                                defaultValue=""
-                                register={register}
                                 placeholder={
                                     payday || 'Enter the number of days'
                                 }
+                                defaultValue=""
+                                register={register}
                             />
-                        </HStack>
-                    )}
-                </VStack>
-                <Box my="2rem">
-                    <ShiftBtn
-                        text="Save"
-                        bg="brand.400"
-                        onClick={handleSubmit(onSubmit)}
-                        loading={isSubmitting}
-                    />
-                </Box>
-            </form>
-        </Box>
+                        )}
+                        {(payType as any) == 2 && (
+                            <>
+                                <HStack
+                                    w="full"
+                                    spacing="1rem"
+                                    align="flex-end"
+                                >
+                                    <PrimaryDate<PayScheduleGenerationModel>
+                                        control={control}
+                                        name="startDate"
+                                        label="Beginning Period or  Start Date"
+                                        error={errors.startDate}
+                                        placeholder={
+                                            bPeriod
+                                                ? formatDate(bPeriod)
+                                                : 'Please choose a date'
+                                        }
+                                        // min={new Date()}
+                                    />
+                                    <InputBlank
+                                        label="End Date"
+                                        defaultValue=""
+                                        placeholder={endDate?.format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                    />
+                                </HStack>
+                                <HStack w="90%" spacing="1rem" align="flex-end">
+                                    <PrimaryInput<PayScheduleGenerationModel>
+                                        label="Payment Date Offset (in days)"
+                                        name="paymentDateDays"
+                                        error={errors.paymentDateDays}
+                                        defaultValue=""
+                                        register={register}
+                                        placeholder={
+                                            payday || 'Enter the number of days'
+                                        }
+                                    />
+                                    <InputBlank
+                                        label="Day"
+                                        defaultValue=""
+                                        placeholder={moment(endDate)
+                                            .add(
+                                                watch('paymentDateDays'),
+                                                'days',
+                                            )
+                                            .format('dddd')}
+                                    />
+                                </HStack>
+                                <Box mt="32px">
+                                    <PayscheduleBottomNote />
+                                </Box>
+                            </>
+                        )}
+                    </VStack>
+                    <Box my="2rem">
+                        <ShiftBtn
+                            text="Save"
+                            bg="brand.400"
+                            onClick={handleSubmit(onSubmit)}
+                            loading={isSubmitting}
+                        />
+                    </Box>
+                </form>
+            </Box>
+            <PayscheduleSidenote />
+        </Grid>
     );
 };

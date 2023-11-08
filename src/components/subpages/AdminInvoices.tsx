@@ -38,6 +38,7 @@ import Naira, { CAD } from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import NoAccess from '@components/bits-utils/NoAccess';
+import { PaymentPrompt } from '@components/bits-utils/ProjectManagement/Modals/PaymentPrompt';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -52,8 +53,13 @@ function AdminInvoices({
     record,
     isSuperAdmin,
 }: adminProps) {
-    // console.log({ invoiceData });
+    console.log({ invoiceData });
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isOpened,
+        onOpen: onOpened,
+        onClose: onClosed,
+    } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
 
     const invoice = invoiceData?.data?.value;
@@ -191,7 +197,13 @@ function AdminInvoices({
                                         color="white"
                                         p=".5rem 1.5rem"
                                         height="fit-content"
-                                        onClick={() => approveInvoiceItems()}
+                                        onClick={() =>
+                                            //    selectedId?.employeeInformation
+                                            //         ?.payrollType == 'ONSHORE'
+                                            //         ? onOpened()
+                                            //         :
+                                            approveInvoiceItems()
+                                        }
                                         isLoading={loading}
                                         spinner={
                                             <BeatLoader
@@ -213,7 +225,7 @@ function AdminInvoices({
                                         checked={
                                             invoice?.length !== 0 &&
                                             invoice?.filter(
-                                                (x) => x.status !== 'INVOICED',
+                                                (x) => x.status !== 'PROCESSED',
                                             ).length == selectedId?.length
                                         }
                                         onChange={() =>
@@ -285,13 +297,20 @@ function AdminInvoices({
                                                 }
                                             />
                                             <TableState
-                                                name={x.status as string}
+                                                name={
+                                                    x.status == 'REVIEWING' ||
+                                                    x.status == 'REVIEWED'
+                                                        ? 'APPROVED'
+                                                        : (x.status as string)
+                                                }
                                             />
+
                                             <InvoiceAction
                                                 data={x}
                                                 onOpen={onOpen}
                                                 clicked={setClicked}
                                             />
+
                                             {!hideCheckbox && (
                                                 <td>
                                                     <Checkbox
@@ -324,11 +343,13 @@ function AdminInvoices({
                     <NoAccess />
                 )}
             </Box>
-            <InvoiceTemplate
-                isOpen={isOpen}
-                onClose={onClose}
-                clicked={clicked}
-            />
+            {isOpen && (
+                <InvoiceTemplate
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    clicked={clicked}
+                />
+            )}
             <ExportReportModal
                 isOpen={open}
                 onClose={close}
@@ -337,6 +358,14 @@ function AdminInvoices({
                 fileName={fileName}
                 model="invoice"
             />
+            {isOpened && (
+                <PaymentPrompt
+                    isOpen={isOpened}
+                    onClose={onClosed}
+                    onSubmit={approveInvoiceItems}
+                    loading={loading}
+                />
+            )}
         </>
     );
 }

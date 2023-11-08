@@ -268,6 +268,16 @@ function OnshoreSubmittedInvoice({
                                                 }
                                             />
                                             <TableData
+                                                name={formatDate(x.dateCreated)}
+                                            />
+
+                                            <TableData
+                                                name={formatDate(x.startDate)}
+                                            />
+                                            <TableData
+                                                name={formatDate(x.endDate)}
+                                            />
+                                            <TableData
                                                 name={
                                                     x?.employeeInformation
                                                         ?.currency == 'NGN'
@@ -282,16 +292,6 @@ function OnshoreSubmittedInvoice({
                                                               ),
                                                           )
                                                 }
-                                            />
-                                            <TableData
-                                                name={formatDate(x.dateCreated)}
-                                            />
-
-                                            <TableData
-                                                name={formatDate(x.startDate)}
-                                            />
-                                            <TableData
-                                                name={formatDate(x.endDate)}
                                             />
                                             <TableState
                                                 name={x.status as string}

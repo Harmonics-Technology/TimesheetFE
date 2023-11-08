@@ -29,6 +29,10 @@ import moment from 'moment';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { BsDownload } from 'react-icons/bs';
+import dynamic from 'next/dynamic';
+const Selectrix = dynamic<any>(() => import('react-selectrix'), {
+    ssr: false,
+});
 
 interface adminProps {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
@@ -48,6 +52,19 @@ function TimesheetHistory({ timeSheets }: adminProps) {
         'Total Hours',
         'Approved Hours',
         'Action',
+    ];
+    const filterClientsInvoice = (filter: string) => {
+        router.push({
+            query: {
+                clientId: filter,
+            },
+        });
+    };
+
+    const newData = [
+        { id: 1, title: 'Weekly' },
+        { id: 2, title: 'Bi - Weekly' },
+        { id: 3, title: 'Monthly' },
     ];
 
     return (
@@ -71,7 +88,22 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                         Export <Icon as={BsDownload} ml=".5rem" />
                     </Button>
                 </Flex>
-                <FilterSearch />
+                <FilterSearch
+                    hides
+                    filter={
+                        <Selectrix
+                            options={newData}
+                            searchable
+                            customKeys={{
+                                key: 'id',
+                                label: 'title',
+                            }}
+                            onChange={(value: any) =>
+                                filterClientsInvoice(value.key)
+                            }
+                        />
+                    }
+                />
                 <Tables tableHead={thead}>
                     <>
                         {timeSheets?.data?.value?.map(

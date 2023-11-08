@@ -31,6 +31,10 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { PayScheduleNotify } from '@components/bits-utils/PayScheduleNotify';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { BsDownload } from 'react-icons/bs';
+import dynamic from 'next/dynamic';
+const Selectrix = dynamic<any>(() => import('react-selectrix'), {
+    ssr: false,
+});
 
 interface adminProps {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
@@ -62,6 +66,20 @@ function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
         'Action',
     ];
 
+    const filterClientsInvoice = (filter: string) => {
+        router.push({
+            query: {
+                clientId: filter,
+            },
+        });
+    };
+
+    const newData = [
+        { id: 1, title: 'Weekly' },
+        { id: 2, title: 'Bi - Weekly' },
+        { id: 3, title: 'Monthly' },
+    ];
+
     return (
         <>
             <Box
@@ -87,7 +105,23 @@ function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
                                 Export <Icon as={BsDownload} ml=".5rem" />
                             </Button>
                         </Flex>
-                        <FilterSearch hide={true} />
+                        <FilterSearch
+                            hide={true}
+                            hides
+                            filter={
+                                <Selectrix
+                                    options={newData}
+                                    searchable
+                                    customKeys={{
+                                        key: 'id',
+                                        label: 'title',
+                                    }}
+                                    onChange={(value: any) =>
+                                        filterClientsInvoice(value.key)
+                                    }
+                                />
+                            }
+                        />
                         <Tables tableHead={thead}>
                             <>
                                 {timeSheets?.data?.value?.map(

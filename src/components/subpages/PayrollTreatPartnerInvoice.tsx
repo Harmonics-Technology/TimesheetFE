@@ -296,15 +296,17 @@ function PayrollTreatPartnerInvoice({
                                             <TableData
                                                 name={CAD(
                                                     Round(
-                                                        x.totalAmount as number,
+                                                        (x.totalAmount as number) /
+                                                            (x.rate as unknown as number),
                                                     ),
                                                 )}
                                             />
                                             <TableData
                                                 name={Naira(
                                                     Round(
-                                                        (x.totalAmount as number) *
-                                                            (x.rate as unknown as number),
+                                                        x.totalAmount as number,
+                                                        // *
+                                                        //     (x.rate as unknown as number),
                                                     ),
                                                 )}
                                             />

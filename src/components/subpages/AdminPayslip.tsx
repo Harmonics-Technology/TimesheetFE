@@ -20,6 +20,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import AdminPaymentScheduleModal from '@components/bits-utils/AdminPaymentScheduleModal';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
+import { Round } from '@components/generics/functions/Round';
 
 interface expenseProps {
     payrolls: PayslipUserViewPagedCollectionStandardResponse;
@@ -128,12 +129,16 @@ function AdminPayslip({
                                             ?.employeeInformation?.currency ==
                                         'CAD'
                                             ? CAD(
-                                                  x?.payslipView?.invoice
-                                                      ?.totalAmount as number,
+                                                  Round(
+                                                      x?.payslipView?.invoice
+                                                          ?.totalAmount as number,
+                                                  ),
                                               )
                                             : Naira(
-                                                  x?.payslipView?.invoice
-                                                      ?.totalAmount as number,
+                                                  Round(
+                                                      x?.payslipView?.invoice
+                                                          ?.totalAmount as number,
+                                                  ),
                                               )
                                     }
                                 />

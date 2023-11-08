@@ -485,7 +485,7 @@ export function LeaveActions({
                                 Cancel Request
                             </MenuItem>
                         )}
-                         {type == 'asTeamHistory' &&
+                    {type == 'asTeamHistory' &&
                         (data.status == 'APPROVED' ||
                             data.status == 'PENDING') && (
                             <MenuItem
@@ -1149,16 +1149,18 @@ export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
-                    <MenuItem
-                        onClick={
-                            x?.status == 'APPROVED'
-                                ? () => void 0
-                                : () => approveInvoiceItems()
-                        }
-                        w="full"
-                    >
-                        Treat item
-                    </MenuItem>
+                    {x?.status != 'APPROVED' && (
+                        <MenuItem
+                            onClick={
+                                x?.status == 'APPROVED'
+                                    ? () => void 0
+                                    : () => approveInvoiceItems()
+                            }
+                            w="full"
+                        >
+                            Treat item
+                        </MenuItem>
+                    )}
                     {/* <MenuItem w="full">
                         <NextLink href={`${route}/${id}`} passHref>
                             <Link width="100%" textDecor="none !important">

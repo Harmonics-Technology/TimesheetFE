@@ -63,9 +63,9 @@ function Paymentinvoices({
     const status = clicked?.status;
 
     const paymentDate =
-        moment('2023-10-27').day() == 5
-            ? moment('2023-10-27').weekday(12)
-            : moment('2023-10-27').weekday(5);
+        moment(clicked?.dateCreated).day() == 5
+            ? moment(clicked?.dateCreated).weekday(12)
+            : moment(clicked?.dateCreated).weekday(5);
 
     return (
         <>

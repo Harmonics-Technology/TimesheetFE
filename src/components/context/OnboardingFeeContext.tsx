@@ -8,7 +8,7 @@ export const OnboardingFeeProvider = ({ children }: { children: any }) => {
     const [percentageAmount, setPercentageAmount] = useState<any>();
     const [hstAmount, setHstAmount] = useState<any>();
     const { user } = useContext(UserContext);
-    const superAdminId = user?.superAdmin;
+    const superAdminId = user?.superAdminId;
     useEffect(() => {
         const getFixedAmount = async () => {
             try {
