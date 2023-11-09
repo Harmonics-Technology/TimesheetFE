@@ -85,7 +85,7 @@ function SupervisorManagement({ adminList, client, isSuperAdmin }: adminProps) {
 
     const onSubmit = async (data: RegisterModel) => {
         data.superAdminId = user?.superAdminId;
-        data.clientId = !clientType ? user?.superAdminId : data.clientId;
+        data.clientId = !data.clientId ? user?.superAdminId : data.clientId;
         try {
             const result = await UserService.create(data);
             if (result.status) {
