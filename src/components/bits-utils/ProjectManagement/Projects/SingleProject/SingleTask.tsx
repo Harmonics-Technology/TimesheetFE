@@ -45,6 +45,7 @@ import { ManageBtn } from '@components/bits-utils/ManageBtn';
 import { MdVerified } from 'react-icons/md';
 import { BsPenFill } from 'react-icons/bs';
 import { ShowPrompt } from '../../Modals/ShowPrompt';
+import { useRouter } from 'next/router';
 
 export const SingleTask = ({
     id,
@@ -76,6 +77,7 @@ export const SingleTask = ({
     } = useDisclosure();
     const [loading, setLoading] = useState();
     const toast = useToast();
+    const router = useRouter();
 
     const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
     const [status, setStatus] = useState(task?.status?.toLowerCase());
@@ -332,7 +334,7 @@ export const SingleTask = ({
                                                     <MenuItem
                                                         onClick={onOpen}
                                                         w="full"
-                                                        disabled={
+                                                        isDisabled={
                                                             taskStatus ==
                                                             'completed'
                                                         }
@@ -374,6 +376,7 @@ export const SingleTask = ({
                                                     setLoading,
                                                     toast,
                                                     setTaskStatus,
+                                                    router,
                                                 )
                                             }
                                             loading={loading}
@@ -404,6 +407,7 @@ export const SingleTask = ({
                             setLoading,
                             toast,
                             setStatus,
+                            router,
                         )
                     }
                     loading={loading}

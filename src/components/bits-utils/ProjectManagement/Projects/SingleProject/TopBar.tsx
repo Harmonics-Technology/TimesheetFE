@@ -152,6 +152,7 @@ export const TopBar = ({
                             setLoading,
                             toast,
                             setStatus,
+                            router,
                         )
                     }
                     loading={loading}

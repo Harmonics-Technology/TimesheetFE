@@ -167,6 +167,7 @@ export const CustomSelectBox = ({
                                                         x.key,
                                                 )}
                                                 colorScheme="brand"
+                                                pointerEvents="none"
                                             />
                                         )}
                                         <FormLabel
@@ -176,6 +177,7 @@ export const CustomSelectBox = ({
                                             cursor="pointer"
                                             htmlFor={id || 'label'}
                                             mb="0"
+                                            pointerEvents="none"
                                         >
                                             {x.label}
                                         </FormLabel>
