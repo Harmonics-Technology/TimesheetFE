@@ -353,6 +353,7 @@ function TeamManagement({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset()
                 onClose();
                 return;
             }

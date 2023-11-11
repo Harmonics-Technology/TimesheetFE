@@ -55,6 +55,7 @@ const Leaveform = ({
         handleSubmit,
         control,
         watch,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<LeaveModel>({
         resolver: yupResolver(schema),
@@ -70,7 +71,7 @@ const Leaveform = ({
         },
     });
 
-    console.log({ user });
+    // console.log({ user });
 
     const onSubmit = async (data: LeaveModel) => {
         oneDay == true && (data.endDate = data.startDate);
@@ -95,6 +96,7 @@ const Leaveform = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset()
                 onClose();
                 return;
             }

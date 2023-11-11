@@ -69,6 +69,7 @@ export const AddSubTaskDrawer = ({
         handleSubmit,
         control,
         watch,
+        reset,
         setValue,
         formState: { errors, isSubmitting },
     } = useForm<ProjectSubTaskModel>({
@@ -133,6 +134,7 @@ export const AddSubTaskDrawer = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset();
                 onClose();
                 return;
             }

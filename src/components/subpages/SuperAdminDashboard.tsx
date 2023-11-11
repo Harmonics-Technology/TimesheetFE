@@ -239,8 +239,15 @@ DashboardProps) {
                                     <TableData
                                         name={CUR(Round(x.totalAmount))}
                                     />
-                                    <TableState name={x.status as string} />
-                                    <TableInvoiceActions id={x.id} x={x} />
+                                    <TableState
+                                        name={
+                                            x.status == 'REVIEWING' ||
+                                            x.status == 'REVIEWED'
+                                                ? 'APPROVED'
+                                                : (x.status as string)
+                                        }
+                                    />
+                                    {/* <TableInvoiceActions id={x.id} x={x} /> */}
                                 </Tr>
                             ))}
                         thead={[
@@ -250,7 +257,7 @@ DashboardProps) {
                             'Pay Period',
                             'Salary',
                             'Status',
-                            'Action',
+                            // 'Action',
                         ]}
                         link={'/'}
                     />

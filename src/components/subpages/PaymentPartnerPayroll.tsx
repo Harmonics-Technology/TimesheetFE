@@ -160,6 +160,7 @@ function PaymentPartnerPayroll({
                 <Tables
                     tableHead={[
                         'Name',
+                        'Organization',
                         'Start Date',
                         'End Date',
                         'Payment Date',
@@ -177,8 +178,7 @@ function PaymentPartnerPayroll({
                                 <TableData
                                     name={
                                         x.payrollGroupName ||
-                                        x.createdByUser?.client
-                                            ?.organizationName
+                                        x.createdByUser?.clientName
                                     }
                                 />
                                 <TableData name={formatDate(x.startDate)} />

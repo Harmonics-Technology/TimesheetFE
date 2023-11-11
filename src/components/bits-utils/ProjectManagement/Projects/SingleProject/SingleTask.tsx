@@ -44,6 +44,7 @@ import markAsCompleted from '@components/generics/functions/markAsCompleted';
 import { ManageBtn } from '@components/bits-utils/ManageBtn';
 import { MdVerified } from 'react-icons/md';
 import { BsPenFill } from 'react-icons/bs';
+import { ShowPrompt } from '../../Modals/ShowPrompt';
 
 export const SingleTask = ({
     id,
@@ -68,6 +69,11 @@ export const SingleTask = ({
         'Actions',
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isOpened,
+        onOpen: onOpened,
+        onClose: onClosed,
+    } = useDisclosure();
     const [loading, setLoading] = useState();
     const toast = useToast();
 
@@ -126,19 +132,12 @@ export const SingleTask = ({
                         </Box>
                         <Flex mt="1rem" justify="flex-end">
                             <ManageBtn
-                                onClick={() =>
-                                    markAsCompleted(
-                                        { type: 2, taskId: task.id },
-                                        setLoading,
-                                        toast,
-                                        setStatus,
-                                    )
-                                }
+                                onClick={onOpened}
                                 isLoading={loading}
                                 btn="Mark Task as Complete"
                                 bg="brand.400"
                                 w="fit-content"
-                                disabled={status == 'Completed'}
+                                disabled={status == 'completed'}
                             />
                         </Flex>
                     </Box>
@@ -258,115 +257,130 @@ export const SingleTask = ({
                     <TableCard tableHead={tableHead}>
                         {tasks?.value?.map((x: ProjectSubTaskView) => {
                             const [taskStatus, setTaskStatus] = useState(
-                                x?.status,
+                                x?.status?.toLowerCase(),
                             );
+                            const { isOpen, onOpen, onClose } = useDisclosure();
+                            const [loading, setLoading] = useState();
                             return (
-                                <TableRow key={x.id}>
-                                    <TableData
-                                        name={x?.name}
-                                        fontWeight="500"
-                                    />
-                                    <td style={{ maxWidth: '300px' }}>
-                                        <HStack
-                                            color="#c2cfe0"
-                                            gap=".2rem"
-                                            flexWrap="wrap"
-                                        >
-                                            <Flex
-                                                border="1px solid"
-                                                borderColor="#4FD1C5"
-                                                borderRadius="25px"
-                                                justify="center"
-                                                align="center"
-                                                color="#4FD1C5"
-                                                h="1.6rem"
-                                                px="0.5rem"
+                                <>
+                                    <TableRow key={x.id}>
+                                        <TableData
+                                            name={x?.name}
+                                            fontWeight="500"
+                                        />
+                                        <td style={{ maxWidth: '300px' }}>
+                                            <HStack
+                                                color="#c2cfe0"
+                                                gap=".2rem"
+                                                flexWrap="wrap"
                                             >
-                                                {
-                                                    x?.projectTaskAsignee?.user
-                                                        ?.fullName
-                                                }
-                                            </Flex>
-                                        </HStack>
-                                    </td>
-                                    <TableData
-                                        name={`${Round(x?.hoursSpent)} Hrs`}
-                                        fontWeight="500"
-                                    />
-                                    <TableData
-                                        name={moment(x?.startDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
-                                        fontWeight="500"
-                                    />
-                                    <TableData
-                                        name={moment(x?.endDate).format(
-                                            'DD/MM/YYYY',
-                                        )}
-                                        fontWeight="500"
-                                    />
-                                    <NewTableState
-                                        name={x?.status}
-                                        color={colorSwatch(x?.status)}
-                                    />
-                                    <td>
-                                        <Menu>
-                                            <MenuButton>
-                                                <Box
-                                                    fontSize="1rem"
-                                                    pl="1rem"
-                                                    fontWeight="bold"
-                                                    cursor="pointer"
-                                                    color="brand.300"
+                                                <Flex
+                                                    border="1px solid"
+                                                    borderColor="#4FD1C5"
+                                                    borderRadius="25px"
+                                                    justify="center"
+                                                    align="center"
+                                                    color="#4FD1C5"
+                                                    h="1.6rem"
+                                                    px="0.5rem"
                                                 >
-                                                    {loading ? (
-                                                        <Spinner size="sm" />
-                                                    ) : (
-                                                        <FaEllipsisH />
-                                                    )}
-                                                </Box>
-                                            </MenuButton>
-                                            <MenuList>
-                                                <MenuItem
-                                                    onClick={() =>
-                                                        markAsCompleted(
-                                                            {
-                                                                type: 3,
-                                                                taskId: x?.id,
-                                                            },
-                                                            setLoading,
-                                                            toast,
-                                                            setTaskStatus,
-                                                        )
+                                                    {
+                                                        x?.projectTaskAsignee
+                                                            ?.user?.fullName
                                                     }
-                                                    w="full"
-                                                    disabled={
-                                                        taskStatus ==
-                                                        'Completed'
-                                                    }
-                                                >
-                                                    <Icon
-                                                        as={MdVerified}
-                                                        mr=".5rem"
-                                                        color="brand.400"
-                                                    />
-                                                    Mark as complete
-                                                </MenuItem>
-                                                <MenuItem
-                                                    onClick={() => openModal(x)}
-                                                    w="full"
-                                                >
-                                                    <Icon
-                                                        as={BsPenFill}
-                                                        mr=".5rem"
-                                                        color="brand.400"
-                                                    />
-                                                    Edit Sub-task
-                                                </MenuItem>
-                                            </MenuList>
-                                        </Menu>
-                                    </td>
-                                </TableRow>
+                                                </Flex>
+                                            </HStack>
+                                        </td>
+                                        <TableData
+                                            name={`${Round(x?.hoursSpent)} Hrs`}
+                                            fontWeight="500"
+                                        />
+                                        <TableData
+                                            name={moment(x?.startDate).format(
+                                                'DD/MM/YYYY',
+                                            )}
+                                            fontWeight="500"
+                                        />
+                                        <TableData
+                                            name={moment(x?.endDate).format(
+                                                'DD/MM/YYYY',
+                                            )}
+                                            fontWeight="500"
+                                        />
+                                        <NewTableState
+                                            name={x?.status}
+                                            color={colorSwatch(x?.status)}
+                                        />
+                                        <td>
+                                            <Menu>
+                                                <MenuButton>
+                                                    <Box
+                                                        fontSize="1rem"
+                                                        pl="1rem"
+                                                        fontWeight="bold"
+                                                        cursor="pointer"
+                                                        color="brand.300"
+                                                    >
+                                                        {loading ? (
+                                                            <Spinner size="sm" />
+                                                        ) : (
+                                                            <FaEllipsisH />
+                                                        )}
+                                                    </Box>
+                                                </MenuButton>
+                                                <MenuList>
+                                                    <MenuItem
+                                                        onClick={onOpen}
+                                                        w="full"
+                                                        disabled={
+                                                            taskStatus ==
+                                                            'completed'
+                                                        }
+                                                    >
+                                                        <Icon
+                                                            as={MdVerified}
+                                                            mr=".5rem"
+                                                            color="brand.400"
+                                                        />
+                                                        Mark as complete
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        onClick={() =>
+                                                            openModal(x)
+                                                        }
+                                                        w="full"
+                                                    >
+                                                        <Icon
+                                                            as={BsPenFill}
+                                                            mr=".5rem"
+                                                            color="brand.400"
+                                                        />
+                                                        Edit Sub-task
+                                                    </MenuItem>
+                                                </MenuList>
+                                            </Menu>
+                                        </td>
+                                    </TableRow>
+                                    {isOpen && (
+                                        <ShowPrompt
+                                            isOpen={isOpen}
+                                            onClose={onClose}
+                                            onSubmit={() =>
+                                                markAsCompleted(
+                                                    {
+                                                        type: 3,
+                                                        taskId: x?.id,
+                                                    },
+                                                    setLoading,
+                                                    toast,
+                                                    setTaskStatus,
+                                                )
+                                            }
+                                            loading={loading}
+                                            text={`Marking this sub task as complete will prevent any further timesheet submissions for this sub task.<br/> Are you sure you want to proceed?`}
+                                        />
+                                    )}
+                                </>
                             );
                         })}
                     </TableCard>
@@ -378,6 +392,22 @@ export const SingleTask = ({
                     onClose={onClose}
                     data={task}
                     subTask={subTask}
+                />
+            )}
+            {isOpened && (
+                <ShowPrompt
+                    isOpen={isOpened}
+                    onClose={onClosed}
+                    onSubmit={() =>
+                        markAsCompleted(
+                            { type: 2, taskId: task.id },
+                            setLoading,
+                            toast,
+                            setStatus,
+                        )
+                    }
+                    loading={loading}
+                    text={`Marking this task as complete will prevent any further timesheet submissions for this task.<br/> Are you sure you want to proceed?`}
                 />
             )}
         </Box>

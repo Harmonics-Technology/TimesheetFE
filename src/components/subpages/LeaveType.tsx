@@ -45,6 +45,7 @@ export const LeaveType = ({ leaves }: leaveProps) => {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<LeaveTypeModel>({
         resolver: yupResolver(schema),
@@ -146,6 +147,7 @@ export const LeaveType = ({ leaves }: leaveProps) => {
                     position: 'top-right',
                 });
                 onClose();
+                reset()
                 router.replace(router.asPath);
                 return;
             }

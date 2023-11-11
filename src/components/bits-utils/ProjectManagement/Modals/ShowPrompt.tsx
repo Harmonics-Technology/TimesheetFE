@@ -14,7 +14,7 @@ import React from 'react';
 import { FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
 import BeatLoader from 'react-spinners/BeatLoader';
 
-export const ShowPrompt = ({ isOpen, onClose, onSubmit, loading }) => {
+export const ShowPrompt = ({ isOpen, onClose, onSubmit, loading, text }) => {
     return (
         <Modal
             isOpen={isOpen}
@@ -49,12 +49,8 @@ export const ShowPrompt = ({ isOpen, onClose, onSubmit, loading }) => {
                             mb="1rem"
                             px={['1.5rem', '.5rem']}
                             fontWeight="400"
-                        >
-                            The end date you entered exceeds the end date of the
-                            project and will extend the end date of the project
-                            <br />
-                            Do you want to continue?
-                        </Text>
+                            dangerouslySetInnerHTML={{ __html: text }}
+                        ></Text>
                     </>
                 </ModalHeader>
 
@@ -83,16 +79,18 @@ export const ShowPrompt = ({ isOpen, onClose, onSubmit, loading }) => {
                                 width="full"
                                 bgColor="brand.400"
                                 color="white"
-                                // _hover={{
-                                //   bgColor: 'white',
-                                //   color: 'brand.800',
-                                //   border: '1px solid',
-                                //   borderColor: 'brand.800',
-                                // }}
-
+                                _hover={{
+                                    bgColor: 'white',
+                                    color: 'brand.400',
+                                    border: '1px solid',
+                                    borderColor: 'brand.400',
+                                }}
                                 isLoading={loading}
                                 spinner={<BeatLoader color="white" size={10} />}
-                                onClick={() => onSubmit()}
+                                onClick={() => {
+                                    onSubmit();
+                                    onClose();
+                                }}
                             >
                                 Yes
                             </Button>

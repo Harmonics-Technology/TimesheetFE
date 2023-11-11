@@ -103,6 +103,7 @@ function ClientTeamManagement({
         handleSubmit,
         control,
         watch,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(schema),
@@ -239,6 +240,7 @@ function ClientTeamManagement({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset()
                 onClose();
                 return;
             }

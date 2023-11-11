@@ -102,6 +102,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
         handleSubmit,
         control,
         watch,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(schema),
@@ -244,6 +245,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset()
                 onClose();
                 return;
             }

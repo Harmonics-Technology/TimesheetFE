@@ -80,6 +80,7 @@ function ProfileManagementAdmin({ adminList, team, isSuperAdmin }: adminProps) {
         handleSubmit,
         watch,
         control,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),
@@ -104,6 +105,7 @@ function ProfileManagementAdmin({ adminList, team, isSuperAdmin }: adminProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset();
                 onClose();
                 return;
             }
@@ -187,6 +189,7 @@ function ProfileManagementAdmin({ adminList, team, isSuperAdmin }: adminProps) {
                     position: 'top-right',
                 });
                 onClose();
+                reset();
                 return;
             }
             toast({

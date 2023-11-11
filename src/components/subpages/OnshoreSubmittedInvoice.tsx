@@ -48,6 +48,7 @@ interface adminProps {
     fileName?: string;
     record?: number;
     isSuperAdmin?: boolean;
+    teamUrl?: string
 }
 
 function OnshoreSubmittedInvoice({
@@ -55,6 +56,7 @@ function OnshoreSubmittedInvoice({
     fileName,
     record,
     isSuperAdmin,
+    teamUrl
 }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
@@ -168,7 +170,7 @@ function OnshoreSubmittedInvoice({
                     tabValue={[
                         {
                             text: 'Team Members',
-                            url: `/financials/invoices-team`,
+                            url: teamUrl,
                         },
                         {
                             text: 'Payment Partners',

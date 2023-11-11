@@ -63,6 +63,7 @@ export const EditProjectDrawer = ({
         control,
         setValue,
         watch,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<ProjectModel>({
         resolver: yupResolver(schema),
@@ -134,6 +135,7 @@ export const EditProjectDrawer = ({
                 });
                 router.replace(router.asPath);
                 onClose();
+                reset();
                 return;
             }
             toast({

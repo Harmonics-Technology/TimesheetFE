@@ -46,6 +46,7 @@ function modifyContract({ modify, setmodify, clickedItem }: contractProps) {
         register,
         handleSubmit,
         control,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<ContractModel>({
         resolver: yupResolver(schema),
@@ -106,6 +107,7 @@ function modifyContract({ modify, setmodify, clickedItem }: contractProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset()
                 setmodify(!modify);
                 return;
             }

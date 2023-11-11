@@ -47,10 +47,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.limit,
                 superAdminId,
                 id,
-                // undefined,
-                // pagingOptions.search,
-                // pagingOptions.from,
-                // pagingOptions.to,
+                undefined,
+                pagingOptions.search,
+                pagingOptions.from,
+                pagingOptions.to,
             );
             //
             // const leavetypes = await LeaveService.leaveTypes(

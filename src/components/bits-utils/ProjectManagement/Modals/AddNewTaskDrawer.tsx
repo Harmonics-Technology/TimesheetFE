@@ -79,6 +79,7 @@ export const AddNewTaskDrawer = ({
         watch,
         setValue,
         trigger,
+        reset,
         formState: { errors, isSubmitting, isValid },
     } = useForm<ProjectTaskModel>({
         resolver: yupResolver(schema),
@@ -174,6 +175,7 @@ export const AddNewTaskDrawer = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset();
                 onClose();
                 return;
             }
@@ -431,6 +433,10 @@ export const AddNewTaskDrawer = ({
                     onClose={onClosed}
                     onSubmit={handleSubmit(onSubmit)}
                     loading={isSubmitting}
+                    text={`The end date you entered exceeds the end date of the
+                    project and will extend the end date of the project
+                    <br />
+                    Do you want to continue?`}
                 />
             )}
         </DrawerWrapper>

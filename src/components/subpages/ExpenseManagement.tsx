@@ -69,6 +69,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
         register,
         handleSubmit,
         control,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<ExpenseModel>({
         resolver: yupResolver(schema),
@@ -89,6 +90,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                     position: 'top-right',
                 });
                 onClose();
+                reset();
                 router.replace(router.asPath);
                 return;
             }

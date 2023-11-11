@@ -25,6 +25,7 @@ function Invoices({ invoiceData }: invoiceType) {
                 record={4}
                 fileName="Team Members Processed Invoice"
                 isSuperAdmin
+                teamUrl="/financials/invoices-team-treated-invoice"
             />
         </Box>
     );

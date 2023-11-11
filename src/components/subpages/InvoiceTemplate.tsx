@@ -149,16 +149,27 @@ function InvoiceTemplate({
                                         Payroll
                                     </Text> */}
                                     <Tables
-                                        tableHead={[
-                                            'Name',
-                                            'Pay Period',
-                                            'Type',
-                                            'Hours',
-                                            'Rate/Hr',
-                                            `Pay (${clicked?.employeeInformation?.currency})`,
-                                            // 'Fee',
-                                            // 'Total',
-                                        ]}
+                                        tableHead={
+                                            clicked?.employeeInformation
+                                                ?.payrollType == 'ONSHORE'
+                                                ? [
+                                                      'Name',
+                                                      'Pay Period',
+                                                      'Type',
+                                                      'Hours',
+                                                      'Rate/Hr',
+                                                      `Pay (${clicked?.employeeInformation?.currency})`,
+                                                  ]
+                                                : [
+                                                      'Name',
+                                                      'Pay Period',
+                                                      'Type',
+                                                      'Hours',
+                                                      `Pay (${clicked?.employeeInformation?.currency})`,
+                                                      // 'Fee',
+                                                      // 'Total',
+                                                  ]
+                                        }
                                     >
                                         <Tr key={clicked?.id}>
                                             <TableData
@@ -184,12 +195,16 @@ function InvoiceTemplate({
                                             <TableData
                                                 name={clicked?.totalHours}
                                             />
-                                            <TableData
-                                                name={
-                                                    clicked?.employeeInformation
-                                                        ?.ratePerHour
-                                                }
-                                            />
+                                            {clicked?.employeeInformation
+                                                ?.payrollType == 'ONSHORE' && (
+                                                <TableData
+                                                    name={
+                                                        clicked
+                                                            ?.employeeInformation
+                                                            ?.ratePerHour
+                                                    }
+                                                />
+                                            )}
                                             <TableData
                                                 name={`${
                                                     clicked?.employeeInformation

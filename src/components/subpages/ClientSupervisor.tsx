@@ -48,8 +48,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
     const {
         register,
         handleSubmit,
-        watch,
-        control,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),
@@ -74,6 +73,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                 reset()
                 onClose();
                 return;
             }

@@ -79,6 +79,7 @@ function PayrollExpenseManagement({
     const { accessControls } = useContext(UserContext);
     const userAccess: ControlSettingView = accessControls;
 
+
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
@@ -147,6 +148,7 @@ function PayrollExpenseManagement({
         register,
         handleSubmit,
         control,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<ExpenseModel>({
         resolver: yupResolver(schema),
@@ -167,6 +169,7 @@ function PayrollExpenseManagement({
                     position: 'top-right',
                 });
                 onClose();
+                reset();
                 router.replace(router.asPath);
                 return;
             }
@@ -292,7 +295,7 @@ function PayrollExpenseManagement({
                                     )}`}
                                 />
                                 <TableState name={x.status as string} />
-                                {x.status === 'REVIEWED' && (
+                                {x.status === 'PENDING' && (
                                     <td>
                                         <Checkbox
                                             checked={
@@ -304,8 +307,8 @@ function PayrollExpenseManagement({
                                                 toggleSelected(x.id as string)
                                             }
                                             disabled={
-                                                !userAccess?.adminCanApproveExpense ||
-                                                !isSuperAdmin
+                                                !isSuperAdmin &&
+                                                !userAccess?.adminCanApproveExpense
                                             }
                                         />
                                     </td>

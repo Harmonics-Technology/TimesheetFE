@@ -100,6 +100,17 @@ function PayrollExpenseManagementApproved({
         setSelectedId([...selectedId, id]);
     };
 
+    const {
+        register,
+        handleSubmit,
+        control,
+        reset,
+        formState: { errors, isSubmitting },
+    } = useForm<ExpenseModel>({
+        resolver: yupResolver(schema),
+        mode: 'all',
+    });
+
     const generateInvoice = async () => {
         try {
             setLoading(true);
@@ -114,6 +125,7 @@ function PayrollExpenseManagementApproved({
                     position: 'top-right',
                 });
                 setLoading(false);
+                reset();
                 router.replace(router.asPath);
                 return;
             }
@@ -136,15 +148,6 @@ function PayrollExpenseManagementApproved({
         }
     };
 
-    const {
-        register,
-        handleSubmit,
-        control,
-        formState: { errors, isSubmitting },
-    } = useForm<ExpenseModel>({
-        resolver: yupResolver(schema),
-        mode: 'all',
-    });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
@@ -160,6 +163,7 @@ function PayrollExpenseManagementApproved({
                     position: 'top-right',
                 });
                 onClose();
+                reset();
                 router.replace(router.asPath);
                 return;
             }

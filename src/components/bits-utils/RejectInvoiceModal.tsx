@@ -27,10 +27,12 @@ function RejectInvoiceModal({
     isOpen,
     onClose,
     clicked,
+    closeAll,
 }: {
     isOpen: boolean;
     onClose: any;
     clicked: InvoiceView | undefined;
+    closeAll: any;
 }) {
     const schema = yup.object().shape({
         rejectionReason: yup.string().required(),
@@ -58,6 +60,7 @@ function RejectInvoiceModal({
             if (result.status) {
                 router.replace(router.asPath);
                 onClose();
+                closeAll();
                 return;
             }
         } catch (error) {

@@ -58,6 +58,7 @@ export const CreateProjectDrawer = ({
         control,
         setValue,
         watch,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<ProjectModel>({
         resolver: yupResolver(schema),
@@ -105,6 +106,7 @@ export const CreateProjectDrawer = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset();
                 onClose();
                 return;
             }

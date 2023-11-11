@@ -76,6 +76,7 @@ function ClientManagement({ adminList, isSuperAdmin }: adminProps) {
         register,
         handleSubmit,
         control,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),
@@ -112,6 +113,7 @@ function ClientManagement({ adminList, isSuperAdmin }: adminProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset()
                 onClose();
                 return;
             }

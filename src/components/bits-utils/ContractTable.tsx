@@ -74,6 +74,7 @@ function ContractTable({ userProfile, isSuperAdmin }: adminProps) {
         register,
         handleSubmit,
         control,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<ContractModel>({
         resolver: yupResolver(schema),
@@ -125,6 +126,7 @@ function ContractTable({ userProfile, isSuperAdmin }: adminProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset()
                 onClose();
                 return;
             }

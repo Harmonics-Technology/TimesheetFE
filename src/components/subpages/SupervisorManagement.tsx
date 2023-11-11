@@ -60,7 +60,7 @@ function SupervisorManagement({ adminList, client, isSuperAdmin }: adminProps) {
     const {
         register,
         handleSubmit,
-        watch,
+        reset,
         control,
         formState: { errors, isSubmitting },
     } = useForm<RegisterModel>({
@@ -97,6 +97,7 @@ function SupervisorManagement({ adminList, client, isSuperAdmin }: adminProps) {
                 });
                 router.replace(router.asPath);
                 onClose();
+                reset()
                 return;
             }
             toast({

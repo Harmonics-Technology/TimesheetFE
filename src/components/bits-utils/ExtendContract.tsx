@@ -46,6 +46,7 @@ function ExtendContract({ extend, setExtend, clickedItem }: contractProps) {
         register,
         handleSubmit,
         control,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<ContractModel>({
         resolver: yupResolver(schema),
@@ -107,6 +108,7 @@ function ExtendContract({ extend, setExtend, clickedItem }: contractProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset();
                 setExtend(!extend);
                 return;
             }

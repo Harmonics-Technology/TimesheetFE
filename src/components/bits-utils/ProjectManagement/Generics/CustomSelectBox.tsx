@@ -10,6 +10,7 @@ import {
     Input,
     Text,
 } from '@chakra-ui/react';
+import useComponentVisible from '@components/generics/useComponentVisible';
 import React, { useEffect, useState } from 'react';
 import { MdOutlineArrowDropDown } from 'react-icons/md';
 
@@ -42,6 +43,11 @@ export const CustomSelectBox = ({
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState<any>();
+    const {
+        ref: selectRef,
+        isComponentVisible,
+        setIsComponentVisible,
+    } = useComponentVisible(false);
     const dataAsFiltered = single
         ? data
         : data.filter((x) => !items?.some((user) => user.id === x.id));
@@ -62,7 +68,7 @@ export const CustomSelectBox = ({
         }
         setSelected(x);
         updateFunction({ [customKeys.key]: x.id, [customKeys.label]: x.label });
-        setIsOpen(false);
+        // setIsOpen(false);
     };
 
     const selectedItems = single
@@ -87,7 +93,7 @@ export const CustomSelectBox = ({
                 error?.type === 'required' || error?.message !== undefined
             }
         >
-            <Box w="full" pos="relative">
+            <Box w="full" pos="relative" ref={selectRef}>
                 <Flex
                     justify="space-between"
                     w="full"
@@ -100,7 +106,7 @@ export const CustomSelectBox = ({
                     h={h || '2.6rem'}
                     align="center"
                     px=".5rem"
-                    onClick={() => setIsOpen(!isOpen)}
+                    onClick={() => setIsComponentVisible(!isComponentVisible)}
                 >
                     <Text noOfLines={1} mb="0" color="#8c8c8c" fontSize=".8rem">
                         {selectedItems || placeholder}
@@ -112,7 +118,7 @@ export const CustomSelectBox = ({
                         color="#6a7f9d"
                     />
                 </Flex>
-                {isOpen && (
+                {isComponentVisible && (
                     <Box
                         w="full"
                         boxShadow={'md'}

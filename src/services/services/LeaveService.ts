@@ -220,6 +220,9 @@ endDate?: string,
      * @param superAdminId 
      * @param supervisorId 
      * @param employeeId 
+     * @param search 
+     * @param startDate 
+     * @param endDate 
      * @returns LeaveViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -229,6 +232,9 @@ limit?: number,
 superAdminId?: string,
 supervisorId?: string,
 employeeId?: string,
+search?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -239,6 +245,9 @@ employeeId?: string,
                 'superAdminId': superAdminId,
                 'supervisorId': supervisorId,
                 'employeeId': employeeId,
+                'search': search,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -253,6 +262,9 @@ employeeId?: string,
      * @param superAdminId 
      * @param supervisorId 
      * @param employeeId 
+     * @param search 
+     * @param startDate 
+     * @param endDate 
      * @returns LeaveViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -262,6 +274,9 @@ limit?: number,
 superAdminId?: string,
 supervisorId?: string,
 employeeId?: string,
+search?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -272,6 +287,9 @@ employeeId?: string,
                 'superAdminId': superAdminId,
                 'supervisorId': supervisorId,
                 'employeeId': employeeId,
+                'search': search,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,
@@ -286,6 +304,9 @@ employeeId?: string,
      * @param superAdminId 
      * @param supervisorId 
      * @param employeeId 
+     * @param search 
+     * @param startDate 
+     * @param endDate 
      * @returns LeaveViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -295,6 +316,9 @@ limit?: number,
 superAdminId?: string,
 supervisorId?: string,
 employeeId?: string,
+search?: string,
+startDate?: string,
+endDate?: string,
 ): CancelablePromise<LeaveViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -305,6 +329,9 @@ employeeId?: string,
                 'superAdminId': superAdminId,
                 'supervisorId': supervisorId,
                 'employeeId': employeeId,
+                'search': search,
+                'StartDate': startDate,
+                'EndDate': endDate,
             },
             errors: {
                 400: `Bad Request`,

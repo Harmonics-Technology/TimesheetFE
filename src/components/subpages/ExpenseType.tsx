@@ -48,6 +48,7 @@ function ExpenseType({ expenses }: expenseProps) {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<ExpenseCreate>({
         resolver: yupResolver(schema),
@@ -74,6 +75,7 @@ function ExpenseType({ expenses }: expenseProps) {
                     position: 'top-right',
                 });
                 onClose();
+                reset()
                 router.replace(router.asPath);
                 return;
             }

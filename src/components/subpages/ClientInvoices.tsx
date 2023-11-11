@@ -135,6 +135,7 @@ function ClientInvoices({
         'Created on',
         'Start Date',
         'End Date',
+        'Amount',
         'Status',
         'Action',
     ];

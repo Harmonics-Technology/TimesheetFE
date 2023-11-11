@@ -49,6 +49,7 @@ export const AddOperationalTaskDrawer = ({
         control,
         watch,
         setValue,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<ProjectTaskModel>({
         resolver: yupResolver(schema),
@@ -99,6 +100,7 @@ export const AddOperationalTaskDrawer = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
+                reset();
                 onClose();
                 return;
             }

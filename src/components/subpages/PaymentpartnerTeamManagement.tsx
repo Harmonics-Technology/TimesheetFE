@@ -102,6 +102,7 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
         handleSubmit,
         control,
         watch,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(schema),
@@ -281,6 +282,7 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                 });
                 router.replace(router.asPath);
                 onClose();
+                reset()
                 return;
             }
             toast({

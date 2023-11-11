@@ -439,6 +439,7 @@ function PayrollInvoice({
                 isOpen={isOpened}
                 onClose={onClosed}
                 clicked={clicked}
+                closeAll={onClose}
             />
         </>
     );

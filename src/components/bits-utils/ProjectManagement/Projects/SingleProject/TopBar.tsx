@@ -21,6 +21,7 @@ import { ManageBtn } from '@components/bits-utils/ManageBtn';
 import markAsCompleted from '@components/generics/functions/markAsCompleted';
 import { ProjectView } from 'src/services';
 import { EditProjectDrawer } from '../../Modals/EditProjectDrawer';
+import { ShowPrompt } from '../../Modals/ShowPrompt';
 
 export const TopBar = ({
     noTitle = false,
@@ -36,8 +37,13 @@ export const TopBar = ({
     const router = useRouter();
     const toast = useToast();
     const [loading, setLoading] = useState();
-    const [status, setStatus] = useState(data?.status);
+    const [status, setStatus] = useState(data?.status?.toLowerCase());
     const { onOpen, isOpen, onClose } = useDisclosure();
+    const {
+        onOpen: onOpened,
+        isOpen: isOpened,
+        onClose: onClosed,
+    } = useDisclosure();
 
     return (
         <Box borderBottom={noTitle ? 'none' : '1px solid #e5e5e5'} pb="0rem">
@@ -62,19 +68,12 @@ export const TopBar = ({
 
                 <HStack gap="1rem">
                     <ManageBtn
-                        onClick={() =>
-                            markAsCompleted(
-                                { type: 1, taskId: data?.id },
-                                setLoading,
-                                toast,
-                                setStatus,
-                            )
-                        }
+                        onClick={onOpened}
                         isLoading={loading}
                         btn="Mark Project as Complete"
                         bg="brand.400"
                         w="fit-content"
-                        disabled={status == 'Completed'}
+                        disabled={status == 'completed'}
                         h="2rem"
                     />
                     <ManageBtn
@@ -141,6 +140,22 @@ export const TopBar = ({
                     onClose={onClose}
                     users={users}
                     data={data}
+                />
+            )}
+            {isOpened && (
+                <ShowPrompt
+                    isOpen={isOpened}
+                    onClose={onClosed}
+                    onSubmit={() =>
+                        markAsCompleted(
+                            { type: 1, taskId: data?.id },
+                            setLoading,
+                            toast,
+                            setStatus,
+                        )
+                    }
+                    loading={loading}
+                    text={`Marking this project as complete will prevent any further timesheet submissions for this project.<br/> Are you sure you want to proceed?`}
                 />
             )}
         </Box>
