@@ -318,9 +318,13 @@ export const GenerateInvoiceModal = ({
                                             value={
                                                 allInvoiceTotal == Infinity
                                                     ? 0
-                                                    : Round(allInvoiceTotal)
+                                                    : CUR(
+                                                          Round(
+                                                              allInvoiceTotal,
+                                                          ),
+                                                      )
                                             }
-                                            cur={'$'}
+                                            cur={''}
                                         />
                                         <InvoiceTotalText
                                             label="Subtotal ($)"
@@ -329,12 +333,14 @@ export const GenerateInvoiceModal = ({
                                                     exchangeRate ==
                                                 Infinity
                                                     ? 0
-                                                    : Round(
-                                                          allInvoiceTotal /
-                                                              exchangeRate,
+                                                    : CUR(
+                                                          Round(
+                                                              allInvoiceTotal /
+                                                                  exchangeRate,
+                                                          ),
                                                       )
                                             }
-                                            cur={'$'}
+                                            cur={''}
                                         />
                                         <InvoiceTotalText
                                             label="Hst"
@@ -342,7 +348,7 @@ export const GenerateInvoiceModal = ({
                                             //     hst == Infinity ? 0 : Round(hst)
                                             // }
                                             value={0}
-                                            cur={'$'}
+                                            cur={''}
                                         />
                                         {/* <InvoiceTotalText
                                             label="Total (₦)"
@@ -364,7 +370,7 @@ export const GenerateInvoiceModal = ({
                                                             : 0,
                                                     ),
                                                 )}
-                                                cur={'$'}
+                                                cur={''}
                                             />
                                         </Box>
                                     </Flex>

@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            let data: unknown    = [];
+            let data: unknown = [];
             const paymentSchedule = await FinancialService.getPaymentSchedules(
                 superAdminId,
             );
@@ -42,6 +42,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     pagingOptions.limit,
                     superAdminId,
                     pagingOptions.search,
+                    Number(pagingOptions.clientId),
                 );
             }
 

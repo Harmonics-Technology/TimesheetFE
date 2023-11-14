@@ -48,7 +48,7 @@ interface adminProps {
     fileName?: string;
     record?: number;
     isSuperAdmin?: boolean;
-    teamUrl?: string
+    teamUrl?: string;
 }
 
 function OnshoreSubmittedInvoice({
@@ -56,7 +56,7 @@ function OnshoreSubmittedInvoice({
     fileName,
     record,
     isSuperAdmin,
-    teamUrl
+    teamUrl,
 }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
@@ -139,10 +139,10 @@ function OnshoreSubmittedInvoice({
     const role = user?.role.replaceAll(' ', '');
     const userAccess: ControlSettingView = accessControls;
     const hideCheckbox = router.asPath.startsWith(
-        `/${role}/financials/treatedinvoice`,
+        `/${role}/financials/invoices-team-treated-invoice`,
     );
     const pending = `/${role}/financials/invoices-team`;
-    const approved = `/${role}/financials/invoices-team-treatedinvoice`;
+    const approved = `/${role}/financials/invoices-team-treated-invoice`;
 
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const thead = [
@@ -231,7 +231,7 @@ function OnshoreSubmittedInvoice({
                                         checked={
                                             selectedId?.length !== 0 &&
                                             invoice?.filter(
-                                                (x) => x.status !== 'INVOICED',
+                                                (x) => x.status !== 'PROCESSED',
                                             ).length == selectedId?.length
                                         }
                                         onChange={() =>
@@ -319,7 +319,7 @@ function OnshoreSubmittedInvoice({
                                                         }
                                                         disabled={
                                                             x.status ===
-                                                            'INVOICED'
+                                                            'PROCESSED'
                                                         }
                                                     />
                                                 </td>

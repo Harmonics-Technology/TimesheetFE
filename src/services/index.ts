@@ -183,6 +183,7 @@ export type { TeamMemberModel } from './models/TeamMemberModel';
 export type { TimeSheetApprovedView } from './models/TimeSheetApprovedView';
 export type { TimeSheetApprovedViewPagedCollection } from './models/TimeSheetApprovedViewPagedCollection';
 export type { TimeSheetApprovedViewPagedCollectionStandardResponse } from './models/TimeSheetApprovedViewPagedCollectionStandardResponse';
+export { TimesheetFilterByUserPayrollType } from './models/TimesheetFilterByUserPayrollType';
 export type { TimeSheetHistoryView } from './models/TimeSheetHistoryView';
 export type { TimeSheetHistoryViewPagedCollection } from './models/TimeSheetHistoryViewPagedCollection';
 export type { TimeSheetHistoryViewPagedCollectionStandardResponse } from './models/TimeSheetHistoryViewPagedCollectionStandardResponse';

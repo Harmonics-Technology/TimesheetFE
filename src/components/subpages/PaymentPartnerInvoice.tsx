@@ -55,6 +55,8 @@ function PaymentPartnerInvoice({
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
+
+    console.log({invoice})
     //
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {

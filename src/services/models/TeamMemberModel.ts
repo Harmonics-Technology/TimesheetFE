@@ -43,7 +43,7 @@ export type TeamMemberModel = {
     monthlyPayoutRate?: number | null;
     paymentFrequency?: string | null;
     isActive?: boolean;
-    onBordingFee?: number;
+    onBoradingFee?: number;
     isEligibleForLeave?: boolean | null;
     numberOfDaysEligible?: number | null;
     numberOfHoursEligible?: number | null;

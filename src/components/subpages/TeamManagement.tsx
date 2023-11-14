@@ -131,7 +131,7 @@ const schema = yup.object().shape({
         is: 'Yes',
         then: yup.string().required(),
     }),
-    onBordingFee: yup.string().when('fixedAmount', {
+    onBoradingFee: yup.string().when('fixedAmount', {
         is: false,
         then: yup.string().required(),
     }),
@@ -281,7 +281,7 @@ function TeamManagement({
     const onSubmit = async (data: TeamMemberModel) => {
         data.superAdminId = user?.superAdminId;
         if (data.fixedAmount == true) {
-            data.onBordingFee = fixedAmount;
+            data.onBoradingFee = fixedAmount;
         }
         if (contract !== '') {
             data.document = `${contract.cdnUrl} ${contract.name}`;
@@ -353,7 +353,7 @@ function TeamManagement({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                reset()
+                reset();
                 onClose();
                 return;
             }
@@ -413,7 +413,7 @@ function TeamManagement({
             reset({
                 clientId: userDetails.superAdminId,
                 role: 'Team Member',
-                onBordingFee: fixedAmount,
+                onBoradingFee: fixedAmount,
                 employeeType: 'regular',
                 numberOfDaysEligible: leaveSettings?.eligibleLeaveDays,
                 isEligibleForLeave: false,
@@ -924,8 +924,8 @@ function TeamManagement({
                                     {onboarding == false ? (
                                         <SelectrixBox<TeamMemberModel>
                                             control={control}
-                                            name="onBordingFee"
-                                            error={errors.onBordingFee}
+                                            name="onBoradingFee"
+                                            error={errors.onBoradingFee}
                                             keys="fee"
                                             keyLabel="fee"
                                             label="Onboarding fee"

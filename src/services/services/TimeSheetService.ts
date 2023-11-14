@@ -4,6 +4,7 @@
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { RejectTimesheetModel } from '../models/RejectTimesheetModel';
 import type { TimeSheetApprovedViewPagedCollectionStandardResponse } from '../models/TimeSheetApprovedViewPagedCollectionStandardResponse';
+import type { TimesheetFilterByUserPayrollType } from '../models/TimesheetFilterByUserPayrollType';
 import type { TimeSheetHistoryViewPagedCollectionStandardResponse } from '../models/TimeSheetHistoryViewPagedCollectionStandardResponse';
 import type { TimesheetHoursAdditionModel } from '../models/TimesheetHoursAdditionModel';
 import type { TimesheetHoursApprovalModel } from '../models/TimesheetHoursApprovalModel';
@@ -23,6 +24,7 @@ export class TimeSheetService {
      * @param search 
      * @param startDate 
      * @param endDate 
+     * @param userFilter 
      * @returns TimeSheetHistoryViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -33,6 +35,7 @@ superAdminId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
+userFilter?: TimesheetFilterByUserPayrollType,
 ): CancelablePromise<TimeSheetHistoryViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -44,6 +47,7 @@ endDate?: string,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'userFilter': userFilter,
             },
         });
     }
@@ -187,6 +191,7 @@ requestBody?: Array<TimesheetHoursAdditionModel>,
      * @param limit 
      * @param superAdminId 
      * @param search 
+     * @param userFilter 
      * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -195,6 +200,7 @@ offset?: number,
 limit?: number,
 superAdminId?: string,
 search?: string,
+userFilter?: TimesheetFilterByUserPayrollType,
 ): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -204,6 +210,7 @@ search?: string,
                 'Limit': limit,
                 'superAdminId': superAdminId,
                 'search': search,
+                'userFilter': userFilter,
             },
         });
     }
@@ -327,6 +334,7 @@ endDate?: string,
      * @param search 
      * @param startDate 
      * @param endDate 
+     * @param userFilter 
      * @returns TimeSheetHistoryViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -336,6 +344,7 @@ limit?: number,
 search?: string,
 startDate?: string,
 endDate?: string,
+userFilter?: TimesheetFilterByUserPayrollType,
 ): CancelablePromise<TimeSheetHistoryViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -346,6 +355,7 @@ endDate?: string,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'userFilter': userFilter,
             },
         });
     }
@@ -356,6 +366,7 @@ endDate?: string,
      * @param search 
      * @param startDate 
      * @param endDate 
+     * @param userFilter 
      * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -365,6 +376,7 @@ limit?: number,
 search?: string,
 startDate?: string,
 endDate?: string,
+userFilter?: TimesheetFilterByUserPayrollType,
 ): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -375,6 +387,7 @@ endDate?: string,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'userFilter': userFilter,
             },
         });
     }
