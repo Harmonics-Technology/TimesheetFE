@@ -180,7 +180,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
 
     const onSubmit = async (data: TeamMemberModel) => {
         if (data.fixedAmount == true) {
-            data.onBordingFee = fixedAmount;
+            data.onBoradingFee = fixedAmount;
         }
         if (contract !== '') {
             data.document = `${contract.cdnUrl} ${contract.name}`;
@@ -245,7 +245,7 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                reset()
+                reset();
                 onClose();
                 return;
             }
@@ -601,8 +601,8 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                             {onboarding == false ? (
                                 <SelectrixBox<TeamMemberModel>
                                     control={control}
-                                    name="onBordingFee"
-                                    error={errors.onBordingFee}
+                                    name="onBoradingFee"
+                                    error={errors.onBoradingFee}
                                     keys="fee"
                                     keyLabel="fee"
                                     label="Onboarding fee"
@@ -614,8 +614,8 @@ function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
                                 //     <Box pos="relative">
                                 //         <PrimaryInput<TeamMemberModel>
                                 //             label="Onboarding fee"
-                                //             name="onBordingFee"
-                                //             error={errors.onBordingFee}
+                                //             name="onBoradingFee"
+                                //             error={errors.onBoradingFee}
                                 //             placeholder=""
                                 //             value={fixedAmount}
                                 //             register={register}

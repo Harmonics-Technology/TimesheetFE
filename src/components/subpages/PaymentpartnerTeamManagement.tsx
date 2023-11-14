@@ -216,7 +216,7 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
 
     const onSubmit = async (data: TeamMemberModel) => {
         if (data.fixedAmount == true) {
-            data.onBordingFee = fixedAmount;
+            data.onBoradingFee = fixedAmount;
         }
         if (contract !== '') {
             data.document = `${contract.cdnUrl} ${contract.name}`;
@@ -282,7 +282,7 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                 });
                 router.replace(router.asPath);
                 onClose();
-                reset()
+                reset();
                 return;
             }
             toast({
@@ -629,8 +629,8 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                             {onboarding == false ? (
                                 <SelectrixBox<TeamMemberModel>
                                     control={control}
-                                    name="onBordingFee"
-                                    error={errors.onBordingFee}
+                                    name="onBoradingFee"
+                                    error={errors.onBoradingFee}
                                     keys="fee"
                                     keyLabel="fee"
                                     label="Onboarding fee"
@@ -642,8 +642,8 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                                 //     <Box pos="relative">
                                 //         <PrimaryInput<TeamMemberModel>
                                 //             label="Onboarding fee"
-                                //             name="onBordingFee"
-                                //             error={errors.onBordingFee}
+                                //             name="onBoradingFee"
+                                //             error={errors.onBoradingFee}
                                 //             placeholder=""
                                 //             value={fixedAmount}
                                 //             register={register}

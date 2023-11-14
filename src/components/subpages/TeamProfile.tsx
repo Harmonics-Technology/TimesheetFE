@@ -113,7 +113,7 @@ function TeamProfile({
             paymentFrequency:
                 userProfile?.employeeInformation?.paymentFrequency,
             fixedAmount: userProfile?.employeeInformation?.fixedAmount,
-            onBordingFee: userProfile?.employeeInformation?.onBoradingFee,
+            onBoradingFee: userProfile?.employeeInformation?.onBoradingFee,
             monthlyPayoutRate:
                 userProfile?.employeeInformation?.monthlyPayoutRate,
             payrollGroupId: userProfile?.employeeInformation?.payrollGroupId,
@@ -209,7 +209,7 @@ function TeamProfile({
             : data.payrollGroupId;
 
         if (data.fixedAmount == true) {
-            data.onBordingFee = fixedAmount;
+            data.onBoradingFee = fixedAmount;
         }
         if (icd !== '') {
             data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
@@ -830,8 +830,8 @@ function TeamProfile({
                                 onboarding == false ? (
                                     <SelectrixBox<TeamMemberModel>
                                         control={control}
-                                        name="onBordingFee"
-                                        error={errors.onBordingFee}
+                                        name="onBoradingFee"
+                                        error={errors.onBoradingFee}
                                         keys="fee"
                                         keyLabel="fee"
                                         label="Onboarding fee"
