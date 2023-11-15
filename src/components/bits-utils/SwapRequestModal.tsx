@@ -10,6 +10,7 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
+    Select,
     Square,
     Text,
     VStack,
@@ -43,6 +44,7 @@ interface ExportProps {
     employeeId?: string | null | undefined;
     shiftId?: string | null | undefined;
     shiftSwapId?: string | null | undefined;
+    allShift?: any;
 }
 
 const schema = yup.object().shape({});
@@ -52,6 +54,7 @@ export const SwapRequestModal = ({
     onClose,
     data,
     employee,
+    allShift,
 }: ExportProps) => {
     const {
         register,
@@ -78,41 +81,41 @@ export const SwapRequestModal = ({
     const [loading, setLoading] = useState<any>();
     const [selected, setSelected] = useState<any>();
 
-    const getEmployeeShift = async (id: any) => {
-        if (id === undefined) {
-            return;
-        }
-        setLoading(true);
+    // const getEmployeeShift = async (id: any) => {
+    //     if (id === undefined) {
+    //         return;
+    //     }
+    //     setLoading(true);
 
-        try {
-            const data = await ShiftService.getUserShift(
-                0,
-                20,
-                format(new Date(start as any), 'yyyy-MM-dd'),
-                format(new Date(end as any), 'yyyy-MM-dd'),
-                id,
-            );
-            setLoading(false);
+    //     try {
+    //         const data = await ShiftService.getUserShift(
+    //             0,
+    //             20,
+    //             format(new Date(start as any), 'yyyy-MM-dd'),
+    //             format(new Date(end as any), 'yyyy-MM-dd'),
+    //             id,
+    //         );
+    //         setLoading(false);
 
-            if (data.status) {
-                setEmployeeShift(data.data?.value);
-                return;
-            }
-            setLoading(false);
-        } catch (err: any) {
-            setLoading(false);
-            toast({
-                title: err?.body?.message || err.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    //         if (data.status) {
+    //             setEmployeeShift(data.data?.value);
+    //             return;
+    //         }
+    //         setLoading(false);
+    //     } catch (err: any) {
+    //         setLoading(false);
+    //         toast({
+    //             title: err?.body?.message || err.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
 
-    useNonInitialEffect(() => {
-        getEmployeeShift(selectedUser);
-    }, [selectedUser]);
+    // useNonInitialEffect(() => {
+    //     getEmployeeShift(selectedUser);
+    // }, [selectedUser]);
 
     const onSubmit = async (data: ExportProps) => {
         try {
@@ -140,7 +143,7 @@ export const SwapRequestModal = ({
             return;
         } catch (err: any) {
             toast({
-                title: err?.body?.message || err?.message,
+                title: err?.message || err?.body?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -193,73 +196,27 @@ export const SwapRequestModal = ({
                                 gap="1rem"
                                 mb="1rem"
                             >
-                                <SelectrixBox<ExportProps>
-                                    control={control}
+                                <PrimarySelect
+                                    register={register}
+                                    error={errors.shiftSwapId}
                                     name="shiftSwapId"
                                     label="My Shift"
-                                    error={errors.shiftSwapId}
-                                    keys="id"
-                                    keyLabel="start"
-                                    options={data?.data}
-                                    placeholder={
-                                        'Select the day and shift you want swap'
-                                    }
-                                    renderOption={(option, index) => {
-                                        return (
-                                            <>
-                                                {option ? (
-                                                    <Flex
-                                                        key={index}
-                                                        gap=".4rem"
-                                                    >
+                                    placeholder="Select the day and shift you want swap"
+                                    options={
+                                        <>
+                                            {data?.data.map((x) => (
+                                                <option value={x.id}>
+                                                    <Flex gap=".4rem">
                                                         {`${moment(
-                                                            option.label,
+                                                            x.start,
                                                         ).format(
                                                             'ddd DD/MM/YYYY',
-                                                        )} - ${
-                                                            moment(
-                                                                option.label,
-                                                            ).format('A') ==
-                                                            'AM'
-                                                                ? 'Morning Shift'
-                                                                : 'Night Shift'
-                                                        }`}
+                                                        )} - ${x?.title}`}
                                                     </Flex>
-                                                ) : (
-                                                    'Select the day and shift you want to swap'
-                                                )}
-                                            </>
-                                        );
-                                    }}
-                                    renderSelection={(
-                                        selected,
-                                        settings,
-                                        deselect,
-                                    ) => {
-                                        //
-                                        return (
-                                            <Box className="react-selectrix rs-toggle">
-                                                <Flex gap=".4rem">
-                                                    {(
-                                                        <Flex gap=".4rem">
-                                                            {`${moment(
-                                                                selected?.label,
-                                                            ).format(
-                                                                'ddd DD/MM/YYYY',
-                                                            )} - ${
-                                                                moment(
-                                                                    selected?.label,
-                                                                ).format('A') ==
-                                                                'AM'
-                                                                    ? 'Morning Shift'
-                                                                    : 'Night Shift'
-                                                            }`}
-                                                        </Flex>
-                                                    ) || 'Select a type'}
-                                                </Flex>
-                                            </Box>
-                                        );
-                                    }}
+                                                </option>
+                                            ))}
+                                        </>
+                                    }
                                 />
 
                                 <Grid
@@ -269,86 +226,57 @@ export const SwapRequestModal = ({
                                     ]}
                                     gap="1rem 2rem"
                                     minW="0"
+                                    w="100%"
                                 >
-                                    <SelectrixBox<ExportProps>
-                                        control={control}
+                                    <PrimarySelect
+                                        register={register}
                                         name="employeeId"
                                         label="Employee"
                                         error={errors.employeeId}
-                                        keys="userId"
-                                        keyLabel="fullName"
-                                        options={employee.data?.value}
-                                        placeholder={'Select employee'}
+                                        placeholder="Select employee"
+                                        options={
+                                            <>
+                                                {employee.data?.value.map(
+                                                    (x) => (
+                                                        <option
+                                                            value={x.userId}
+                                                        >
+                                                            {x?.fullName}
+                                                        </option>
+                                                    ),
+                                                )}
+                                            </>
+                                        }
                                     />
-                                    <SelectrixBox<ExportProps>
-                                        control={control}
+                                    <PrimarySelect
+                                        register={register}
                                         name="shiftId"
                                         label="Employee Shift"
                                         error={errors.shiftId}
-                                        keys="id"
-                                        keyLabel="start"
+                                        placeholder="Select the shift"
                                         options={
-                                            employeeShift !== undefined
-                                                ? employeeShift
-                                                : []
-                                        }
-                                        customOnchange={(value) => {
-                                            setValue('shiftId', value.key);
-                                            setSelected(value);
-                                        }}
-                                        placeholder={'Select the shift'}
-                                        renderOption={(option, index) => {
-                                            //
-                                            return (
-                                                <Flex key={index} gap=".4rem">
-                                                    {`${moment(
-                                                        option.label,
-                                                    ).format(
-                                                        'ddd DD/MM/YYYY',
-                                                    )} - ${
-                                                        moment(
-                                                            option.label,
-                                                        ).format('A') == 'AM'
-                                                            ? 'Morning Shift'
-                                                            : 'Night Shift'
-                                                    }`}
-                                                </Flex>
-                                            );
-                                        }}
-                                        renderSelection={(
-                                            selected,
-                                            settings,
-                                            deselect,
-                                        ) => {
-                                            // const data = setSelected(selected);
-                                            return (
-                                                <Box className="react-selectrix rs-toggle">
-                                                    <Flex gap=".4rem">
-                                                        {(
-                                                            <Flex
-                                                                gap=".4rem"
-                                                                noOfLines={1}
-                                                            >
+                                            <>
+                                                {allShift?.data
+                                                    .filter(
+                                                        (x) =>
+                                                            x.userId ==
+                                                            watch('employeeId'),
+                                                    )
+                                                    .map((x) => (
+                                                        <option value={x.id}>
+                                                            <Flex gap=".4rem">
                                                                 {`${moment(
-                                                                    selected?.label,
+                                                                    x.start,
                                                                 ).format(
                                                                     'ddd DD/MM/YYYY',
                                                                 )} - ${
-                                                                    moment(
-                                                                        selected?.label,
-                                                                    ).format(
-                                                                        'A',
-                                                                    ) == 'AM'
-                                                                        ? 'Morning Shift'
-                                                                        : 'Night Shift'
+                                                                    x?.title
                                                                 }`}
                                                             </Flex>
-                                                        ) ||
-                                                            settings.placeholder}
-                                                    </Flex>
-                                                </Box>
-                                            );
-                                        }}
+                                                        </option>
+                                                    ))}
+                                            </>
+                                        }
                                     />
                                 </Grid>
 
@@ -371,7 +299,7 @@ export const SwapRequestModal = ({
                                         align="center"
                                         px="1rem"
                                     >
-                                        {selected && (
+                                        {watch('shiftId') && (
                                             <Flex align="center" gap=".5rem">
                                                 <Icon
                                                     as={IoCheckmarkCircle}
@@ -384,15 +312,23 @@ export const SwapRequestModal = ({
                                                     color="#263238"
                                                 >
                                                     {`${moment(
-                                                        selected?.label,
+                                                        allShift?.data.find(
+                                                            (x) =>
+                                                                x.id ==
+                                                                watch(
+                                                                    'shiftId',
+                                                                ),
+                                                        ).start,
                                                     ).format(
                                                         'ddd DD/MM/YYYY',
                                                     )} - ${
-                                                        moment(
-                                                            selected?.label,
-                                                        ).format('A') == 'AM'
-                                                            ? 'Morning Shift'
-                                                            : 'Night Shift'
+                                                        allShift?.data.find(
+                                                            (x) =>
+                                                                x.id ==
+                                                                watch(
+                                                                    'shiftId',
+                                                                ),
+                                                        )?.title
                                                     }`}
                                                 </Text>
                                             </Flex>

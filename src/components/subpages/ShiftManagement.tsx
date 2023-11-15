@@ -159,7 +159,7 @@ const ShiftManagement = ({ allShift, shiftUser, shiftTypes }: shiftProps) => {
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.replace(router.asPath);
+                router.reload();
                 onClose();
                 return;
             }

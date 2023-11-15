@@ -69,7 +69,7 @@ function Paymentinvoices({
                     ? (calculatePercentage(
                           x?.totalAmount,
                           x?.employeeInformation?.onBoradingFee,
-                      ) as number)
+                      ) as number) / exchangeRate
                     : (x?.employeeInformation?.onBoradingFee as number)),
             0,
         ),

@@ -93,7 +93,7 @@ export const ShiftSwapList = ({ allShift }: swapProps) => {
                 <Box w="20%">
                     <Input
                         type="search"
-                        placeholder="search"
+                        placeholder="search" 
                         onChange={(e) => debounced(e.target.value)}
                         borderRadius="0"
                     />

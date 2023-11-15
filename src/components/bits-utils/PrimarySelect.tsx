@@ -48,14 +48,16 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
             <Select
                 {...register(name, { required, ...validate })}
                 w="full"
-                border="1px solid grey"
-                borderRadius="5px"
+                border="1px solid"
+                borderColor="gray.400"
+                borderRadius="0px"
                 height="2.6rem"
                 fontSize=".9rem"
                 textTransform="capitalize"
                 placeholder={placeholder}
                 defaultValue={defaultValue}
                 id={id}
+                color="gray.500"
                 // isReadOnly
             >
                 {/* <option disabled>{placeholder}</option> */}

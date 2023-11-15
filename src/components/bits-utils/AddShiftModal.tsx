@@ -147,7 +147,7 @@ export const AddShiftModal = ({
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.replace(router.asPath);
+                router.reload();
                 onClose();
                 return;
             }

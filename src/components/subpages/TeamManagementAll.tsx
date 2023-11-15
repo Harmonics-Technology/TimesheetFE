@@ -119,6 +119,8 @@ const TeamManagementAll = ({
     const role = user?.role?.replaceAll(' ', '');
     const url = `${role}/shift-management/schedule`;
 
+    console.log({ shiftUser, myShift, allShift });
+
     return (
         <>
             <Flex justify="flex-end" borderBottom="1px solid #EBEFF2">
@@ -148,6 +150,7 @@ const TeamManagementAll = ({
                 onClose={close}
                 employee={shiftUser}
                 data={myShift}
+                allShift={allShift}
             />
         </>
     );

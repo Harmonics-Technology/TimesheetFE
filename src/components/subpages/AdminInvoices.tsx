@@ -47,7 +47,7 @@ interface adminProps {
     isSuperAdmin?: boolean;
 }
 
-function    AdminInvoices({
+function AdminInvoices({
     invoiceData,
     fileName,
     record,
@@ -141,7 +141,7 @@ function    AdminInvoices({
     const thead =
         hideCheckbox || pays
             ? [
-                  'Client Name',
+                  'Organization Name',
                   'Name',
                   'Created On',
                   'Start Date',

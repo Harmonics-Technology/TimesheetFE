@@ -98,7 +98,7 @@ export const GenerateInvoiceModal = ({
                     ? calculatePercentage(
                           x?.totalAmount,
                           x?.employeeInformation?.onBoradingFee,
-                      )
+                      ) / exchangeRate
                     : x?.employeeInformation?.onBoradingFee),
             0,
         ),
