@@ -32,7 +32,6 @@ import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { PayslipInfoTag } from './PayslipInfoTag';
-import numWords from 'num-words';
 import Tables from './Tables';
 import InvoiceTotalText from './InvoiceTotalText';
 import Naira, { CUR } from '@components/generics/functions/Naira';
