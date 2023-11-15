@@ -268,21 +268,23 @@ export const GenerateInvoiceModal = ({
                                                         }
                                                     />
                                                     <TableData
-                                                        name={
-                                                            x
-                                                                .employeeInformation
-                                                                ?.fixedAmount ==
-                                                            false
-                                                                ? calculatePercentage(
-                                                                      x?.totalAmount,
-                                                                      x
+                                                        name={CUR(
+                                                            Round(
+                                                                x
+                                                                    .employeeInformation
+                                                                    ?.fixedAmount ==
+                                                                    false
+                                                                    ? calculatePercentage(
+                                                                          x?.totalAmount,
+                                                                          x
+                                                                              ?.employeeInformation
+                                                                              ?.onBoradingFee,
+                                                                      )
+                                                                    : x
                                                                           ?.employeeInformation
                                                                           ?.onBoradingFee,
-                                                                  )
-                                                                : x
-                                                                      ?.employeeInformation
-                                                                      ?.onBoradingFee
-                                                        }
+                                                            ),
+                                                        )}
                                                     />
                                                 </Tr>
                                             ))}
@@ -346,9 +348,13 @@ export const GenerateInvoiceModal = ({
                                         />
                                         <InvoiceTotalText
                                             label="Fees"
-                                            value={CUR(Round(allFeesTotal !== Infinity
-                                                ? allFeesTotal
-                                                : 0))}
+                                            value={CUR(
+                                                Round(
+                                                    allFeesTotal !== Infinity
+                                                        ? allFeesTotal
+                                                        : 0,
+                                                ),
+                                            )}
                                             cur={'$'}
                                         />
                                         <Box
