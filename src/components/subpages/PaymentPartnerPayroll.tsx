@@ -92,6 +92,46 @@ function PaymentPartnerPayroll({
         ...(newClient || []),
     ];
 
+    const onSubmit = async (
+        data: PaymentPartnerInvoiceModel,
+        invoicesId: any,
+        allInvoiceTotal: any,
+    ) => {
+        data.invoiceIds = invoicesId;
+        data.totalAmount = Number(allInvoiceTotal);
+
+        try {
+            const result = await FinancialService.createPaymentPartnerInvoice(
+                data,
+            );
+            if (result.status) {
+                toast({
+                    title: `Successful`,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                onClose();
+                router.replace(router.asPath);
+                return;
+            }
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        } catch (error: any) {
+            toast({
+                title: error?.message || error?.body?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
     return (
         <>
             <Box
@@ -221,6 +261,7 @@ function PaymentPartnerPayroll({
                 clicked={selectedId}
                 id={id}
                 client={newData}
+                onSubmit={onSubmit}
             />
         </>
     );
