@@ -391,6 +391,13 @@ function PayrollInvoice({
                                                 )}
                                             />
                                             <InvoiceTotalText
+                                                label="Subtotal(₦)"
+                                                cur={'₦'}
+                                                value={CUR(
+                                                    Round(allInvoiceTotal),
+                                                )}
+                                            />
+                                            <InvoiceTotalText
                                                 label="Hst"
                                                 value={CUR(Round(hst))}
                                                 cur="$"
