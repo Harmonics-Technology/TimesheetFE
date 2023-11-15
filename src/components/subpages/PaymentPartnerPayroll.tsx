@@ -14,8 +14,10 @@ import {
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import {
+    FinancialService,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
+    PaymentPartnerInvoiceModel,
     UserView,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
