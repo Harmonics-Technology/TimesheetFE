@@ -41,6 +41,7 @@ import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import NoAccess from '@components/bits-utils/NoAccess';
+import asyncForEach from '@components/generics/functions/AsyncForEach';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -95,39 +96,53 @@ function PayrollTreatPartnerInvoice({
         }
         setSelectedId([...selectedId, id]);
     };
-    const approveInvoiceItems = async () => {
-        selectedId.forEach(async (x) => {
-            try {
-                setLoading(true);
-                const result = await FinancialService.treatSubmittedInvoice(x);
-                if (result.status) {
-                    toast({
-                        title: result.message,
-                        status: 'success',
-                        isClosable: true,
-                        position: 'top-right',
-                    });
-                    setLoading(false);
-                    router.replace(router.asPath);
-                    return;
-                }
-                setLoading(false);
+    const approveSingleInvoice = async (item: string) => {
+        try {
+            const result = await FinancialService.treatSubmittedInvoice(item);
+            if (result.status) {
                 toast({
-                    title: result.message,
-                    status: 'error',
+                    title: `${result.message}`,
+                    status: 'success',
                     isClosable: true,
                     position: 'top-right',
                 });
-            } catch (error: any) {
-                setLoading(false);
-                toast({
-                    title: error.body.message || error.message,
-                    status: 'error',
-                    isClosable: true,
-                    position: 'top-right',
-                });
+                return;
             }
-        });
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+    const approveInvoiceItems = async () => {
+        try {
+            await asyncForEach(selectedId, async (select: string) => {
+                setLoading(true);
+                await approveSingleInvoice(select);
+            });
+            setSelectedId([]);
+            setLoading(false);
+            router.replace(router.asPath);
+            return;
+        } catch (error: any) {
+            setLoading(false);
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
     };
 
     const { user, subType, accessControls } = useContext(UserContext);

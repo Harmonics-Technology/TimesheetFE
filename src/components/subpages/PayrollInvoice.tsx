@@ -105,6 +105,20 @@ function PayrollInvoice({
             });
         }
     };
+
+    const allFeesTotal = Number(
+        clicked?.children?.reduce(
+            (a, x) =>
+                a +
+                (x?.employeeInformation?.fixedAmount == false
+                    ? (calculatePercentage(
+                          x?.totalAmount,
+                          x?.employeeInformation?.onBoradingFee,
+                      ) as number) / exchangeRate
+                    : (x?.employeeInformation?.onBoradingFee as number)),
+            0,
+        ),
+    );
     const paymentDate =
         moment(clicked?.dateCreated).day() == 5
             ? moment(clicked?.dateCreated).weekday(12)
@@ -207,7 +221,7 @@ function PayrollInvoice({
                                                 'Pay Period',
                                                 'Amount (₦)',
                                                 'Amount ($)',
-                                                // 'Fees',
+                                                'Fees',
                                                 // 'Total',
                                             ]}
                                         >
@@ -279,6 +293,25 @@ function PayrollInvoice({
                                                                         Round(
                                                                             (x?.totalAmount as number) /
                                                                                 exchangeRate,
+                                                                        ),
+                                                                    )}
+                                                                />
+                                                                <TableData
+                                                                    name={CUR(
+                                                                        Round(
+                                                                            x
+                                                                                .employeeInformation
+                                                                                ?.fixedAmount ==
+                                                                                false
+                                                                                ? calculatePercentage(
+                                                                                      x?.totalAmount,
+                                                                                      x
+                                                                                          ?.employeeInformation
+                                                                                          ?.onBoradingFee,
+                                                                                  )
+                                                                                : x
+                                                                                      ?.employeeInformation
+                                                                                      ?.onBoradingFee,
                                                                         ),
                                                                     )}
                                                                 />
@@ -362,6 +395,18 @@ function PayrollInvoice({
                                                 value={CUR(Round(hst))}
                                                 cur="$"
                                                 hst={clicked?.hst}
+                                            />
+                                            <InvoiceTotalText
+                                                label="Fees"
+                                                value={CUR(
+                                                    Round(
+                                                        allFeesTotal !==
+                                                            Infinity
+                                                            ? allFeesTotal
+                                                            : 0,
+                                                    ),
+                                                )}
+                                                cur={'$'}
                                             />
                                             <Box
                                                 border="2px dashed"

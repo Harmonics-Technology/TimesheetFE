@@ -42,6 +42,7 @@ import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
 import { PaymentPrompt } from '@components/bits-utils/ProjectManagement/Modals/PaymentPrompt';
 import NoAccess from '@components/bits-utils/NoAccess';
+import asyncForEach from '@components/generics/functions/AsyncForEach';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -101,39 +102,53 @@ function OnshoreSubmittedInvoice({
         onOpen: onOpened,
         onClose: onClosed,
     } = useDisclosure();
-    const approveInvoiceItems = async () => {
-        selectedId.forEach(async (x) => {
-            try {
-                setLoading(true);
-                const result = await FinancialService.treatSubmittedInvoice(x);
-                if (result.status) {
-                    toast({
-                        title: result.message,
-                        status: 'success',
-                        isClosable: true,
-                        position: 'top-right',
-                    });
-                    setLoading(false);
-                    router.replace(router.asPath);
-                    return;
-                }
-                setLoading(false);
+    const approveSingleInvoice = async (item: string) => {
+        try {
+            const result = await FinancialService.treatSubmittedInvoice(item);
+            if (result.status) {
                 toast({
-                    title: result.message,
-                    status: 'error',
+                    title: `${result.message}`,
+                    status: 'success',
                     isClosable: true,
                     position: 'top-right',
                 });
-            } catch (error: any) {
-                setLoading(false);
-                toast({
-                    title: error?.body?.message || error?.message,
-                    status: 'error',
-                    isClosable: true,
-                    position: 'top-right',
-                });
+                return;
             }
-        });
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+    const approveInvoiceItems = async () => {
+        try {
+            await asyncForEach(selectedId, async (select: string) => {
+                setLoading(true);
+                await approveSingleInvoice(select);
+            });
+            setSelectedId([]);
+            setLoading(false);
+            router.replace(router.asPath);
+            return;
+        } catch (error: any) {
+            setLoading(false);
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
     };
     const { user, subType, accessControls } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
