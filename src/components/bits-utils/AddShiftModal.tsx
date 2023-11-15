@@ -110,7 +110,7 @@ export const AddShiftModal = ({
         reset({
             userId: '',
             note: '',
-    });
+        });
         onClose();
     };
 
@@ -147,7 +147,7 @@ export const AddShiftModal = ({
                     isClosable: true,
                     position: 'top-right',
                 });
-                 router.replace(router.asPath);
+                router.replace(router.asPath);
                 onClose();
                 return;
             }
@@ -251,10 +251,7 @@ export const AddShiftModal = ({
                                         keys="id"
                                         keyLabel="name"
                                         options={shiftTypes?.data}
-                                        placeholder={
-                                            data?.slotName ||
-                                            'Select a shift type'
-                                        }
+                                        placeholder={'Select a shift type'}
                                     />
                                 </HStack>
 

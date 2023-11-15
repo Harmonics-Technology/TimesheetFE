@@ -53,6 +53,7 @@ import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { UserContext } from '@components/context/UserContext';
+import asyncForEach from '@components/generics/functions/AsyncForEach';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -79,23 +80,17 @@ function PayrollExpenseManagement({
     const { accessControls } = useContext(UserContext);
     const userAccess: ControlSettingView = accessControls;
 
-
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
         if (all) {
-            if (
-                selectedId?.length ===
-                expensesList?.filter((x) => x.status == 'REVIEWED').length
-            ) {
+            if (selectedId?.length === expensesList?.length) {
                 setSelectedId([]);
                 return;
             }
             const response: string[] = [];
-            expensesList
-                ?.filter((x) => x.status == 'REVIEWED')
-                .forEach((x) =>
-                    response.push(x.id as string),
-                ) as unknown as string[];
+            expensesList?.forEach((x) =>
+                response.push(x.id as string),
+            ) as unknown as string[];
 
             setSelectedId([...response]);
             return;
@@ -109,39 +104,53 @@ function PayrollExpenseManagement({
         setSelectedId([...selectedId, id]);
     };
 
-    const approveExpenseItems = async () => {
-        selectedId.forEach(async (x) => {
-            try {
-                setLoading(true);
-                const result = await FinancialService.approveExpense(x);
-                if (result.status) {
-                    toast({
-                        title: result.message,
-                        status: 'success',
-                        isClosable: true,
-                        position: 'top-right',
-                    });
-                    setLoading(false);
-                    //  router.replace(router.asPath);
-                    return;
-                }
-                setLoading(false);
+    const approveSingleExpense = async (item: string) => {
+        try {
+            const result = await FinancialService.approveExpense(item);
+            if (result.status) {
                 toast({
-                    title: result.message,
-                    status: 'error',
+                    title: `${result.message}`,
+                    status: 'success',
                     isClosable: true,
                     position: 'top-right',
                 });
-            } catch (error: any) {
-                setLoading(false);
-                toast({
-                    title: error.body.message || error.message,
-                    status: 'error',
-                    isClosable: true,
-                    position: 'top-right',
-                });
+                return;
             }
-        });
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+    const approveExpenseItems = async () => {
+        try {
+            await asyncForEach(selectedId, async (select: string) => {
+                setLoading(true);
+                await approveSingleExpense(select);
+            });
+            setSelectedId([]);
+            setLoading(false);
+            router.replace(router.asPath);
+            return;
+        } catch (error: any) {
+            setLoading(false);
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
     };
 
     const {
@@ -257,12 +266,8 @@ function PayrollExpenseManagement({
                     <HStack ml="auto">
                         <Checkbox
                             checked={
-                                expensesList?.filter(
-                                    (x) => x.status == 'REVIEWED',
-                                ).length !== 0 &&
-                                expensesList?.filter(
-                                    (x) => x.status == 'REVIEWED',
-                                ).length == selectedId?.length
+                                expensesList?.length !== 0 &&
+                                expensesList?.length == selectedId?.length
                             }
                             onChange={() => toggleSelected('', true)}
                             label="Select All"
@@ -295,24 +300,22 @@ function PayrollExpenseManagement({
                                     )}`}
                                 />
                                 <TableState name={x.status as string} />
-                                {x.status === 'PENDING' && (
-                                    <td>
-                                        <Checkbox
-                                            checked={
-                                                selectedId.find(
-                                                    (e) => e === x.id,
-                                                ) || ''
-                                            }
-                                            onChange={(e) =>
-                                                toggleSelected(x.id as string)
-                                            }
-                                            disabled={
-                                                !isSuperAdmin &&
-                                                !userAccess?.adminCanApproveExpense
-                                            }
-                                        />
-                                    </td>
-                                )}
+                                <td>
+                                    <Checkbox
+                                        checked={
+                                            selectedId.find(
+                                                (e) => e === x.id,
+                                            ) || ''
+                                        }
+                                        onChange={(e) =>
+                                            toggleSelected(x.id as string)
+                                        }
+                                        disabled={
+                                            !isSuperAdmin &&
+                                            !userAccess?.adminCanApproveExpense
+                                        }
+                                    />
+                                </td>
                             </Tr>
                         ))}
                     </>

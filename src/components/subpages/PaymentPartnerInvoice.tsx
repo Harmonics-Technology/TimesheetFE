@@ -31,6 +31,7 @@ import Naira, { CAD } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
 import dynamic from 'next/dynamic';
 import { Round } from '@components/generics/functions/Round';
+import asyncForEach from '@components/generics/functions/AsyncForEach';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -56,7 +57,7 @@ function PaymentPartnerInvoice({
     const toast = useToast();
     const router = useRouter();
 
-    console.log({invoice})
+    console.log({ invoice });
     //
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
@@ -86,39 +87,54 @@ function PaymentPartnerInvoice({
         }
         setSelectedId([...selectedId, id]);
     };
-    const approveInvoiceItems = async () => {
-        selectedId.forEach(async (x) => {
-            try {
-                setLoading(true);
-                const result = await FinancialService.treatSubmittedInvoice(x);
-                if (result.status) {
-                    toast({
-                        title: result.message,
-                        status: 'success',
-                        isClosable: true,
-                        position: 'top-right',
-                    });
-                    setLoading(false);
-                    router.replace(router.asPath);
-                    return;
-                }
-                setLoading(false);
+
+    const approveSingleInvoice = async (item: string) => {
+        try {
+            const result = await FinancialService.treatSubmittedInvoice(item);
+            if (result.status) {
                 toast({
-                    title: result.message,
-                    status: 'error',
+                    title: `${result.message}`,
+                    status: 'success',
                     isClosable: true,
                     position: 'top-right',
                 });
-            } catch (error: any) {
-                setLoading(false);
-                toast({
-                    title: error.body.message || error.message,
-                    status: 'error',
-                    isClosable: true,
-                    position: 'top-right',
-                });
+                return;
             }
-        });
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+    const approveInvoiceItems = async () => {
+        try {
+            await asyncForEach(selectedId, async (select: string) => {
+                setLoading(true);
+                await approveSingleInvoice(select);
+            });
+            setSelectedId([]);
+            setLoading(false);
+            router.replace(router.asPath);
+            return;
+        } catch (error: any) {
+            setLoading(false);
+            toast({
+                title: error.body.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
     };
 
     const filterClientsInvoice = (filter: string) => {

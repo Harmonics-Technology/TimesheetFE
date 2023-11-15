@@ -89,7 +89,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                 </Grid> */}
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
-                        title={'Recent Timesheets'}
+                        title={'Timesheet Report'}
                         url={'timesheets/approval'}
                         data={metrics?.data?.recentTimeSheet
                             ?.slice(0, 4)
@@ -102,22 +102,21 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                                         }
                                     />
                                     <TableData
-                                        name={
-                                            x?.employeeInformation?.supervisor
-                                                ?.fullName
-                                        }
+                                        name={x?.employeeInformation?.jobTitle}
                                     />
                                     <TableData
-                                        name={`${Round(x.expectedHours)} hours`}
+                                        name={formatDate(x?.startDate)}
+                                    />
+                                    <TableData name={formatDate(x?.endDate)} />
+                                    <TableData
+                                        name={`${
+                                            x?.totalHours as unknown as string
+                                        } Hours`}
                                     />
                                     <TableData
-                                        name={`${Round(x.totalHours)} hours`}
-                                    />
-                                    <TableData
-                                        name={`${CUR(x.expectedPayout)}`}
-                                    />
-                                    <TableData
-                                        name={CUR(Round(x.actualPayout))}
+                                        name={`${
+                                            x?.approvedNumberOfHours as unknown as string
+                                        }Hours`}
                                     />
                                     {/* <TableState name={x.status} /> */}
                                 </Tr>

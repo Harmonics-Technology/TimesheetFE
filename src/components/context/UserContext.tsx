@@ -21,7 +21,7 @@ export const UserProvider = ({ children }: { children: any }) => {
         ).diff(moment(), 'day');
         activeSub =
             JSON.parse(users)?.subscriptiobDetails?.data?.status == 'ACTIVE' &&
-            daysLeft > 0
+            daysLeft >= 0
                 ? true
                 : false;
     }

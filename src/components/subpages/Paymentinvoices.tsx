@@ -61,6 +61,22 @@ function Paymentinvoices({
         calculatePercentage(allInvoiceTotal, clicked?.hst) / exchangeRate;
     const hstNaira = hst * exchangeRate;
     const status = clicked?.status;
+    const allFeesTotal = Number(
+        clicked?.children?.reduce(
+            (a, x) =>
+                a +
+                (x?.employeeInformation?.fixedAmount == false
+                    ? (calculatePercentage(
+                          x?.totalAmount,
+                          x?.employeeInformation?.onBoradingFee,
+                      ) as number)
+                    : (x?.employeeInformation?.onBoradingFee as number)),
+            0,
+        ),
+    );
+
+    const total =
+        Number(allInvoiceTotal / exchangeRate + allFeesTotal + hst) || 0;
 
     const paymentDate =
         moment(clicked?.dateCreated).day() == 5
@@ -236,18 +252,21 @@ function Paymentinvoices({
                                                             )}
                                                         />
                                                         <TableData
-                                                            name={`${
-                                                                x
-                                                                    ?.employeeInformation
-                                                                    ?.onBoradingFee
-                                                            }${
+                                                            name={
                                                                 x
                                                                     .employeeInformation
                                                                     ?.fixedAmount ==
                                                                 false
-                                                                    ? '%'
-                                                                    : ''
-                                                            }`}
+                                                                    ? calculatePercentage(
+                                                                          x?.totalAmount,
+                                                                          x
+                                                                              ?.employeeInformation
+                                                                              ?.onBoradingFee,
+                                                                      )
+                                                                    : x
+                                                                          ?.employeeInformation
+                                                                          ?.onBoradingFee
+                                                            }
                                                         />
                                                     </Tr>
                                                 </>
@@ -300,13 +319,7 @@ function Paymentinvoices({
                                             <InvoiceTotalText
                                                 cur={'$'}
                                                 label="Total"
-                                                value={CUR(
-                                                    Round(
-                                                        (allInvoiceTotal +
-                                                            hstNaira) /
-                                                            exchangeRate,
-                                                    ),
-                                                )}
+                                                value={CUR(Round(total))}
                                             />
                                         </Box>
                                     </Flex>

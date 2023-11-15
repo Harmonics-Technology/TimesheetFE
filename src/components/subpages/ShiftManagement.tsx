@@ -194,6 +194,8 @@ const ShiftManagement = ({ allShift, shiftUser, shiftTypes }: shiftProps) => {
         router.replace(router.asPath);
     }, [router.isReady]);
 
+    console.log({allShift})
+
     return (
         <>
             <Flex justify="flex-end" borderBottom="1px solid #EBEFF2">

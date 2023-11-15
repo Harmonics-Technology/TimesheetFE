@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const expenseType = await SettingsService.listExpenseTypes(
                 superAdminId,
             );
-            const data = await FinancialService.listExpenses(
+            const data = await FinancialService.listReviewedExpenses(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,

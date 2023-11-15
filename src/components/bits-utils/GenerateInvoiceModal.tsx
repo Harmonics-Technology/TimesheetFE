@@ -90,6 +90,19 @@ export const GenerateInvoiceModal = ({
     const allInvoiceTotal = Number(
         clicked.reduce((a, b) => a + b.totalAmount, 0),
     );
+    const allFeesTotal = Number(
+        clicked.reduce(
+            (a, x) =>
+                a +
+                (x.employeeInformation?.fixedAmount == false
+                    ? calculatePercentage(
+                          x?.totalAmount,
+                          x?.employeeInformation?.onBoradingFee,
+                      )
+                    : x?.employeeInformation?.onBoradingFee),
+            0,
+        ),
+    );
     // const allExpenseTotal = clicked?.children
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
@@ -103,7 +116,7 @@ export const GenerateInvoiceModal = ({
         ) || 0;
     const hstNaira = Number(hst * exchangeRate);
     // const total = Number((allInvoiceTotal + hstNaira) / exchangeRate) || 0;
-    const total = Number(allInvoiceTotal / exchangeRate) || 0;
+    const total = Number(allInvoiceTotal / exchangeRate + allFeesTotal) || 0;
     //
     //     exchangeRate,
     //     total,
@@ -225,6 +238,7 @@ export const GenerateInvoiceModal = ({
                                             'Start Date',
                                             'End Date',
                                             'Amount (₦)',
+                                            'Fee',
                                             // 'Amount ($)',
                                         ]}
                                     >
@@ -283,13 +297,23 @@ export const GenerateInvoiceModal = ({
                                                                 : ''
                                                         }
                                                     />
-                                                    {/* <TableData
+                                                    <TableData
                                                         name={
-                                                            Number(
-                                                                x.totalAmount,
-                                                            ) / exchangeRate
+                                                            x
+                                                                .employeeInformation
+                                                                ?.fixedAmount ==
+                                                            false
+                                                                ? calculatePercentage(
+                                                                      x?.totalAmount,
+                                                                      x
+                                                                          ?.employeeInformation
+                                                                          ?.onBoradingFee,
+                                                                  )
+                                                                : x
+                                                                      ?.employeeInformation
+                                                                      ?.onBoradingFee
                                                         }
-                                                    /> */}
+                                                    />
                                                 </Tr>
                                             ))}
                                         </>
@@ -350,11 +374,11 @@ export const GenerateInvoiceModal = ({
                                             value={0}
                                             cur={''}
                                         />
-                                        {/* <InvoiceTotalText
-                                            label="Total (₦)"
-                                            value={allInvoiceTotal + hst}
-                                            cur={'₦'}
-                                        /> */}
+                                        <InvoiceTotalText
+                                            label="Fees"
+                                            value={allFeesTotal}
+                                            cur={'$'}
+                                        />
                                         <Box
                                             // border="2px dashed"
                                             borderColor="gray.300"

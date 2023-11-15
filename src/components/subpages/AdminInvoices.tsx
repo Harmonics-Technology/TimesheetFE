@@ -47,7 +47,7 @@ interface adminProps {
     isSuperAdmin?: boolean;
 }
 
-function AdminInvoices({
+function    AdminInvoices({
     invoiceData,
     fileName,
     record,
@@ -327,7 +327,7 @@ function AdminInvoices({
                                                         }
                                                         disabled={
                                                             x.status ===
-                                                            'INVOICED'
+                                                            'PROCESSED'
                                                         }
                                                     />
                                                 </td>
