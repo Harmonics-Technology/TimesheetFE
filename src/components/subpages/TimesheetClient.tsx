@@ -311,8 +311,8 @@ const TimesheetSupervisor = ({
         );
     }
 
-    const nextMonth = () => {
-        router.push({
+    const nextMonth = async () => {
+        await router.push({
             query: {
                 ...router.query,
                 date: moment(startOfMonth(addMonths(activeDate, 1))).format(
@@ -323,10 +323,11 @@ const TimesheetSupervisor = ({
                 ),
             },
         });
+        router.reload();
     };
 
-    const prevMonth = () => {
-        router.push({
+    const prevMonth = async () => {
+        await router.push({
             query: {
                 ...router.query,
                 date: moment(startOfMonth(subMonths(activeDate, 1))).format(
@@ -337,6 +338,7 @@ const TimesheetSupervisor = ({
                 ),
             },
         });
+        router.reload();
     };
 
     const getHeader = () => {

@@ -123,11 +123,11 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                             ))}
                         thead={[
                             'Name',
-                            'Supervisor Name',
-                            'Expected Hrs',
-                            'Total Hrs',
-                            'Expected Payout',
-                            'Payout',
+                            'Job Title',
+                            'Begining Period',
+                            'Ending Period',
+                            'Total Hours',
+                            'Approved Hours',
                             // 'Status',
                             // 'Action',
                         ]}

@@ -6598,11 +6598,6 @@ nth-check@^1.0.2:
   dependencies:
     boolbase "~1.0.0"
 
-num-words@^1.2.2:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/num-words/-/num-words-1.2.3.tgz#f6c33b7cdf14f1b0c4198d1ab7bcf9da9a17116d"
-  integrity sha512-tfKqF8sCX1sb2LjrZyrqNF7SDyDzxcyKtpNlRqqaOTImmqTEclGYEs17FtpbXsuuyJijwOWzuTy+DasYf/FvlA==
-
 nwsapi@^2.2.0:
   version "2.2.7"
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.7.tgz#738e0707d3128cb750dddcfe90e4610482df0f30"
@@ -8610,6 +8605,11 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     extend-shallow "^3.0.2"
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
+
+to-words@^3.6.1:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/to-words/-/to-words-3.6.1.tgz#3f895c41b27bf7146595614c3f4af08cd1ae2f16"
+  integrity sha512-X2KDRjBXM0bQ4eTblqNnVfIBGEwhSClR3eWubD6B7gY29vh1k+ntQGSaShwgrsQT3Akt/tbIjKkn8mMOYHihnw==
 
 toggle-selection@^1.0.6:
   version "1.0.6"

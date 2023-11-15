@@ -22,7 +22,7 @@ import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { PayslipInfoTag } from './PayslipInfoTag';
-import numWords from 'num-words';
+import { ToWords } from 'to-words';
 import Naira, { CAD } from '@components/generics/functions/Naira';
 import { useRef } from 'react';
 import { PDFExport } from '@progress/kendo-react-pdf';
@@ -50,6 +50,15 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
             ref.current.save();
         }
     }
+    const toWords = new ToWords({
+        localeCode:
+            paySlip?.payslipView?.invoice?.employeeInformation?.currency ==
+            'CAD'
+                ? 'en-US'
+                : 'en-NG',
+    });
+    const numWords = toWords?.convert(payTotal || 0, { currency: true });
+
     return (
         <Modal
             isOpen={isOpen}
@@ -345,13 +354,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                 >
                                     <Text mb=".5rem">In Words</Text>
                                     <Text mb="0" textTransform="capitalize">
-                                        {numWords(payTotal as number)}{' '}
-                                        {paySlip?.payslipView?.invoice
-                                            ?.employeeInformation?.currency ==
-                                        'CAD'
-                                            ? 'Dollars '
-                                            : 'Naira '}
-                                        only
+                                        {numWords}
                                     </Text>
                                 </Box>
                             </Flex>
