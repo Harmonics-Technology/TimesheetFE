@@ -27,16 +27,17 @@ interface ExportProps {
     isOpen: any;
     onClose: any;
     data: LeaveView;
+    type: any;
 }
 
 export const ShowLeaveDetailsModal = ({
     isOpen,
     onClose,
     data,
+    type
 }: ExportProps) => {
     const status = data?.status;
 
-    console.log({data})
     return (
         <Modal
             isOpen={isOpen}
@@ -123,7 +124,12 @@ export const ShowLeaveDetailsModal = ({
                                 <SingleDetailsInfo
                                     label="Status"
                                     content={''}
-                                    icon={data?.status}
+                                    icon={
+                                        data.status == 'REJECTED' &&
+                                        type == 'history'
+                                            ? 'APPROVED'
+                                            : data.status
+                                    }
                                 />
                                 <SingleDetailsInfo
                                     label="Start Date"
@@ -175,12 +181,9 @@ export const ShowLeaveDetailsModal = ({
                                         0
                                     }
                                 />
-                                 <SingleDetailsInfo
+                                <SingleDetailsInfo
                                     label="Number of Leave Days Earned"
-                                    content={
-                                        data?.leaveDaysEarned ||
-                                        0
-                                    }
+                                    content={data?.leaveDaysEarned || 0}
                                 />
                             </VStack>
 

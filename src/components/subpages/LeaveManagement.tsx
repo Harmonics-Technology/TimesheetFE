@@ -308,6 +308,7 @@ export const LeaveManagement = ({
                     isOpen={open}
                     onClose={close}
                     data={data}
+                    type={type}
                 />
             )}
         </>
