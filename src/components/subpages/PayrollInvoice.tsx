@@ -119,6 +119,10 @@ function PayrollInvoice({
             0,
         ),
     );
+
+    const total =
+        Number(allInvoiceTotal / exchangeRate + allFeesTotal + hst) || 0;
+
     const paymentDate =
         moment(clicked?.dateCreated).day() == 5
             ? moment(clicked?.dateCreated).weekday(12)
@@ -424,13 +428,7 @@ function PayrollInvoice({
                                                 <InvoiceTotalText
                                                     cur={'$'}
                                                     label="Total"
-                                                    value={CUR(
-                                                        Round(
-                                                            (allInvoiceTotal +
-                                                                hstNaira) /
-                                                                exchangeRate,
-                                                        ),
-                                                    )}
+                                                    value={CUR(Round(total))}
                                                 />
                                             </Box>
                                         </Flex>

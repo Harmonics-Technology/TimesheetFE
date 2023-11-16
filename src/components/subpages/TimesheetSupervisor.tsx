@@ -673,7 +673,12 @@ const TimesheetSupervisor = ({
                             </Circle>
                             <Circle
                                 size={['.7rem', '1rem']}
-                                bgColor={!singleReject ? 'gray.400' : 'red.500'}
+                                bgColor={
+                                    singleReject.state &&
+                                    singleReject.id === userDate
+                                        ? 'red.500'
+                                        : 'gray.400'
+                                }
                                 color="white"
                                 onClick={() => {
                                     setSingleReject({
