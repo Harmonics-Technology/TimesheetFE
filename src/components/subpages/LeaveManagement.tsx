@@ -269,7 +269,14 @@ export const LeaveManagement = ({
                                     )}
                                 />
 
-                                <TableState name={x.status} />
+                                <TableState
+                                    name={
+                                        x.status == 'REJECTED' &&
+                                        type == 'history'
+                                            ? 'APPROVED'
+                                            : x.status
+                                    }
+                                />
 
                                 <LeaveActions
                                     id={x.id}
