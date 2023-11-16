@@ -21,6 +21,7 @@ function Invoices({ invoiceData }: invoiceType) {
                 invoiceData={invoiceData}
                 fileName="Team Member Pending Approval Invoice"
                 record={3}
+                teamUrl="/financials/invoices-team"
             />
         </Box>
     );
