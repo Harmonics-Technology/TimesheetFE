@@ -159,15 +159,20 @@ const TimesheetTeam = ({
     >([]);
 
     const fillTimeInDate = (item: TimesheetHoursAdditionModel) => {
-        const mutatedData = timesheetHours.map((obj) => {
-            if (obj.date == item.date)
-                return {
-                    ...obj,
-                    hours: Number(item.hours),
-                };
-            return obj;
-        });
-        setTimesheetHours(mutatedData);
+        const exists = timesheetHours.find((x) => x.date == item.date);
+        if (exists) {
+            const mutatedData = timesheetHours.map((obj) => {
+                if (obj.date == item.date)
+                    return {
+                        ...obj,
+                        hours: item.hours,
+                    };
+                return obj;
+            });
+            setTimesheetHours(mutatedData);
+        } else {
+            setTimesheetHours([...timesheetHours, item]);
+        }
         const existingValue = selectedInput.find((e) => e.date == item.date);
         if (existingValue) {
             const newArray = selectedInput.filter((x) => x.date !== item.date);
@@ -707,7 +712,7 @@ const TimesheetTeam = ({
                             onChange={(e) => {
                                 fillTimeInDate({
                                     date: userDate,
-                                    hours: e.target.value as unknown as number,
+                                    hours: Number(e.target.value),
                                 });
                             }}
                             color={
