@@ -123,7 +123,7 @@ function OnshoreSubmittedInvoice({
             });
         } catch (error: any) {
             toast({
-                title: error.body.message || error.message,
+                title: error?.body?.message || error?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -143,7 +143,7 @@ function OnshoreSubmittedInvoice({
         } catch (error: any) {
             setLoading(false);
             toast({
-                title: error.body.message || error.message,
+                title: error?.body?.message || error?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',

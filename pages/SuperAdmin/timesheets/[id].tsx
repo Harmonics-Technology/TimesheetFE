@@ -55,6 +55,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
 
         date = moment(date).format('YYYY-MM-DD');
 
+
         try {
             const data = await TimeSheetService.getTimeSheet(id, date, end);
             const payPeriod = await FinancialService.getPayScheduleInAMonth(

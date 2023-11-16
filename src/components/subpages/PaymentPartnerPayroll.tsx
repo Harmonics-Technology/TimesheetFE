@@ -201,7 +201,7 @@ function PaymentPartnerPayroll({
                 />
                 <Tables
                     tableHead={[
-                        'Organization',
+                        'Organization Name',
                         'Name',
                         'Start Date',
                         'End Date',

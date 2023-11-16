@@ -77,6 +77,24 @@ const TimesheetTeam = ({
     const enableFinancials = (timeSheets as any)?.timeSheet[0]
         ?.employeeInformation?.enableFinancials;
 
+    const sheet = timeSheets?.timeSheet;
+
+    const [singleReject, setSingleReject] = useState({
+        state: false,
+        id: '',
+    });
+
+    const [timesheetHours, setTimesheetHours] = useState<any>(sheet);
+
+    useEffect(() => {
+        setTimesheetHours(sheet);
+    }, [sheet]);
+
+    const [isVisible, setIsVisible] = useState<any>();
+    const close = useCallback(() => setIsVisible({ id: '' }), []);
+    const popover = useRef(null);
+    useClickOutside(popover, close);
+
     const HighlightDate = (value: any) => {
         router.push({
             query: {
@@ -107,7 +125,6 @@ const TimesheetTeam = ({
     }));
 
     //
-    const sheet = timeSheets?.timeSheet;
     const newDate = new Date(moment(date).format('MM/DD/YYYY'));
     const [selectedDate, setSelectedDate] = useState(new Date());
     const activeDate =
@@ -142,6 +159,15 @@ const TimesheetTeam = ({
     >([]);
 
     const fillTimeInDate = (item: TimesheetHoursAdditionModel) => {
+        const mutatedData = timesheetHours.map((obj) => {
+            if (obj.date == item.date)
+                return {
+                    ...obj,
+                    hours: Number(item.hours),
+                };
+            return obj;
+        });
+        setTimesheetHours(mutatedData);
         const existingValue = selectedInput.find((e) => e.date == item.date);
         if (existingValue) {
             const newArray = selectedInput.filter((x) => x.date !== item.date);
@@ -201,7 +227,7 @@ const TimesheetTeam = ({
         } catch (error: any) {
             toast({
                 status: 'error',
-                title: error.body.message || error.message,
+                title: error?.body?.message || error?.message,
                 position: 'top-right',
             });
         }
@@ -246,7 +272,7 @@ const TimesheetTeam = ({
             } catch (error: any) {
                 toast({
                     status: 'error',
-                    title: error.body.message || error.message,
+                    title: error?.body?.message || error?.message,
                     position: 'top-right',
                 });
             }
@@ -277,8 +303,8 @@ const TimesheetTeam = ({
         );
     }
 
-    const nextMonth = async () => {
-        await router.push({
+    const nextMonth = () => {
+        router.push({
             query: {
                 ...router.query,
                 date: moment(startOfMonth(addMonths(activeDate, 1))).format(
@@ -289,11 +315,10 @@ const TimesheetTeam = ({
                 ),
             },
         });
-        router.reload();
     };
 
-    const prevMonth = async () => {
-        await router.push({
+    const prevMonth = () => {
+        router.push({
             query: {
                 ...router.query,
                 date: moment(startOfMonth(subMonths(activeDate, 1))).format(
@@ -304,7 +329,6 @@ const TimesheetTeam = ({
                 ),
             },
         });
-        router.reload();
     };
     const preventTomorrow = addDays(new Date(), 1).toISOString();
 
@@ -557,32 +581,17 @@ const TimesheetTeam = ({
         let sumOfHours = 0;
         for (let day = 0; day < 7; day++) {
             const cloneDate = currentDate;
-            const timesheets = sheet?.find(
+            const timesheets = timesheetHours?.find(
                 (x) =>
                     new Date(x.date as string).toLocaleDateString() ==
                     currentDate.toLocaleDateString(),
             );
-            const [timesheetHours, setTimesheetHours] = useState(0);
-            useEffect(() => {
-                setTimesheetHours(timesheets?.hours as number);
-            }, [timesheets]);
-            const userId = timesheets?.employeeInformationId as string;
 
-            const userDate = moment(currentDate).format('YYYY-MM-DD');
+            const userId = timesheets?.employeeInformationId as string;
+            const userDate = moment(currentDate).format('YYYY-MM-DDTHH:mm:ss');
+
             const hoursEligible = timesheets?.employeeInformation
                 ?.numberOfHoursEligible as number;
-            const {
-                isOpen: isVisible,
-                onClose,
-                onOpen,
-            } = useDisclosure({ defaultIsOpen: false });
-            const close = useCallback(() => onClose(), []);
-            const popover = useRef(null);
-            useClickOutside(popover, close);
-            const notFilled =
-                moment(timesheets?.date) > moment(timesheets?.dateModified);
-
-            //
 
             week.push(
                 <Flex
@@ -617,7 +626,7 @@ const TimesheetTeam = ({
                 >
                     <Flex pos="relative">
                         <div>{format(currentDate, 'MMM, d')}</div>
-                        {isVisible && (
+                        {isVisible?.id == userDate && (
                             <Box
                                 pos="absolute"
                                 w="300px"
@@ -679,7 +688,7 @@ const TimesheetTeam = ({
                                 //     ? // timesheets?.status == 'PENDING'
                                 //       '---'
                                 //     :
-                                timesheetHours || '---'
+                                timesheets?.hours || '---'
                             }
                             placeholder="---"
                             textAlign="center"
@@ -696,7 +705,6 @@ const TimesheetTeam = ({
                                 //     moment(preventTomorrow).format('DD/MM/YYYY')
                             }
                             onChange={(e) => {
-                                setTimesheetHours(Number(e.target.value));
                                 fillTimeInDate({
                                     date: userDate,
                                     hours: e.target.value as unknown as number,
@@ -718,9 +726,15 @@ const TimesheetTeam = ({
                         />
 
                         {timesheets?.status == 'APPROVED' ? (
-                            <FaCheck color="green" onClick={onOpen} />
+                            <FaCheck
+                                color="green"
+                                onClick={() => setIsVisible({ id: userDate })}
+                            />
                         ) : timesheets?.status == 'REJECTED' ? (
-                            <FaTimes color="red" onClick={onOpen} />
+                            <FaTimes
+                                color="red"
+                                onClick={() => setIsVisible({ id: userDate })}
+                            />
                         ) : null}
                     </InputGroup>
                 </Flex>,

@@ -28,7 +28,7 @@ export const NotificationProvider = ({ children }: { children: any }) => {
         } catch (error: any) {
             setLoading(false);
             toast({
-                title: error.body.message || error.message,
+                title: error?.body?.message || error?.message,
                 position: 'top-right',
                 status: 'error',
             });

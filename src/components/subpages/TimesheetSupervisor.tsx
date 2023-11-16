@@ -87,6 +87,24 @@ const TimesheetSupervisor = ({
     const { date } = router.query;
     const { end } = router.query;
 
+    const sheet = timeSheets?.timeSheet;
+
+    const [singleReject, setSingleReject] = useState({
+        state: false,
+        id: '',
+    });
+
+    const [timesheetHours, setTimesheetHours] = useState<any>(sheet);
+
+    useEffect(() => {
+        setTimesheetHours(sheet);
+    }, [sheet]);
+
+    const [isVisible, setIsVisible] = useState<any>();
+    const close = useCallback(() => setIsVisible({ id: '' }), []);
+    const popover = useRef(null);
+    useClickOutside(popover, close);
+
     const HighlightDate = (value: any) => {
         router.push({
             query: {
@@ -116,8 +134,6 @@ const TimesheetSupervisor = ({
         ).format('MMM DD, YYYY')}`,
     }));
 
-    //
-    const sheet = timeSheets?.timeSheet;
     const newDate = new Date(date as unknown as string);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const activeDate =
@@ -278,7 +294,7 @@ const TimesheetSupervisor = ({
         } catch (error: any) {
             toast({
                 status: 'error',
-                title: error.body.message || error.message,
+                title: error?.body?.message || error?.message,
                 position: 'top-right',
             });
         }
@@ -320,7 +336,7 @@ const TimesheetSupervisor = ({
             } catch (error: any) {
                 toast({
                     status: 'error',
-                    title: error.body.message || error.message,
+                    title: error?.body?.message || error?.message,
                     position: 'top-right',
                 });
             }
@@ -381,8 +397,8 @@ const TimesheetSupervisor = ({
         );
     }
 
-    const nextMonth = async () => {
-        await router.push({
+    const nextMonth = () => {
+        router.push({
             query: {
                 ...router.query,
                 date: moment(startOfMonth(addMonths(activeDate, 1))).format(
@@ -393,11 +409,10 @@ const TimesheetSupervisor = ({
                 ),
             },
         });
-        router.reload();
     };
 
-    const prevMonth = async () => {
-        await router.push({
+    const prevMonth = () => {
+        router.push({
             query: {
                 ...router.query,
                 date: moment(startOfMonth(subMonths(activeDate, 1))).format(
@@ -408,7 +423,6 @@ const TimesheetSupervisor = ({
                 ),
             },
         });
-        router.reload();
     };
 
     const getHeader = () => {
@@ -576,31 +590,17 @@ const TimesheetSupervisor = ({
         let sumOfHours = 0;
         for (let day = 0; day < 7; day++) {
             const cloneDate = currentDate;
-            const timesheets = sheet?.find(
+            const timesheets = timesheetHours?.find(
                 (x) =>
                     new Date(x.date as string).toLocaleDateString() ==
                     currentDate.toLocaleDateString(),
             );
-            const [timesheetHours, setTimesheetHours] = useState(0);
-            useEffect(() => {
-                setTimesheetHours(timesheets?.hours as number);
-            }, [timesheets]);
+
             const userId = timesheets?.employeeInformationId as string;
             const userDate = moment(currentDate).format('YYYY-MM-DDTHH:mm:ss');
-            const [singleReject, setSingleReject] = useState(false);
-            const {
-                isOpen: isVisible,
-                onClose,
-                onOpen,
-            } = useDisclosure({ defaultIsOpen: false });
-            const close = useCallback(() => onClose(), []);
-            const popover = useRef(null);
-            useClickOutside(popover, close);
+
             const hoursEligible = timesheets?.employeeInformation
                 ?.numberOfHoursEligible as number;
-            const notFilled =
-                moment(timesheets?.date) > moment(timesheets?.dateModified);
-            //
 
             week.push(
                 <Flex
@@ -676,7 +676,10 @@ const TimesheetSupervisor = ({
                                 bgColor={!singleReject ? 'gray.400' : 'red.500'}
                                 color="white"
                                 onClick={() => {
-                                    setSingleReject(!singleReject);
+                                    setSingleReject({
+                                        state: !singleReject.state,
+                                        id: userDate,
+                                    });
                                     showReject(userId, userDate);
                                 }}
                                 isDisabled={
@@ -697,58 +700,62 @@ const TimesheetSupervisor = ({
                             >
                                 <BiX />
                             </Circle>
-                            {singleReject && (
-                                <Box
-                                    w="280px"
-                                    h="fit-content"
-                                    bgColor="white"
-                                    pos="absolute"
-                                    p=".5rem 1rem .8rem"
-                                    zIndex="300"
-                                    borderRadius="8px"
-                                    // top="12rem"
-                                    boxShadow="0px 3px 10px 5px rgba(0,0,0,0.2)"
-                                >
-                                    <Flex
-                                        justify="flex-end"
-                                        onClick={() =>
-                                            setSingleReject(!singleReject)
-                                        }
+                            {singleReject.state &&
+                                singleReject.id == userDate && (
+                                    <Box
+                                        w="280px"
+                                        h="fit-content"
+                                        bgColor="white"
+                                        pos="absolute"
+                                        p=".5rem 1rem .8rem"
+                                        zIndex="300"
+                                        borderRadius="8px"
+                                        // top="12rem"
+                                        boxShadow="0px 3px 10px 5px rgba(0,0,0,0.2)"
                                     >
-                                        <FaTimes />
-                                    </Flex>
-                                    <form onSubmit={handleSubmit(onSubmit)}>
-                                        <PrimaryTextarea<RejectTimesheetModel>
-                                            label="Reason"
-                                            name="reason"
-                                            error={errors.reason}
-                                            placeholder=""
-                                            defaultValue=""
-                                            h="3.5rem"
-                                            register={register}
-                                        />
-                                        <Button
-                                            isLoading={isSubmitting}
-                                            spinner={
-                                                <BeatLoader
-                                                    color="white"
-                                                    size="10"
-                                                />
-                                            }
-                                            type="submit"
-                                            w="full"
-                                            bgColor="brand.600"
-                                            color="white"
-                                            h="2rem"
-                                            fontSize=".8rem"
+                                        <Flex
+                                            justify="flex-end"
+                                            onClick={() => {
+                                                setSingleReject({
+                                                    state: !singleReject.state,
+                                                    id: '',
+                                                });
+                                            }}
                                         >
-                                            Reject
-                                        </Button>
-                                    </form>
-                                </Box>
-                            )}
+                                            <FaTimes />
+                                        </Flex>
+                                        <form onSubmit={handleSubmit(onSubmit)}>
+                                            <PrimaryTextarea<RejectTimesheetModel>
+                                                label="Reason"
+                                                name="reason"
+                                                error={errors.reason}
+                                                placeholder=""
+                                                defaultValue=""
+                                                h="3.5rem"
+                                                register={register}
+                                            />
+                                            <Button
+                                                isLoading={isSubmitting}
+                                                spinner={
+                                                    <BeatLoader
+                                                        color="white"
+                                                        size="10"
+                                                    />
+                                                }
+                                                type="submit"
+                                                w="full"
+                                                bgColor="brand.600"
+                                                color="white"
+                                                h="2rem"
+                                                fontSize=".8rem"
+                                            >
+                                                Reject
+                                            </Button>
+                                        </form>
+                                    </Box>
+                                )}
                         </HStack>
-                        {isVisible && (
+                        {isVisible?.id == userDate && (
                             <Box
                                 pos="absolute"
                                 w="300px"
@@ -810,26 +817,23 @@ const TimesheetSupervisor = ({
                                 //     ? // timesheets?.status == 'PENDING'
                                 //       '---'
                                 //     :
-                                timesheetHours || '---'
+                                timesheets?.hours || '---'
                             }
                             placeholder="---"
                             textAlign="center"
                             h="full"
                             border="0"
                             readOnly
-                            isDisabled={
+                            disabled={
                                 // timesheets == undefined ||
-                                // isWeekend(
-                                //     new Date(timesheets?.date as string),
-                                // ) ||
+                                isWeekend(new Date(currentDate))
+                                // ||
                                 // moment(timesheets?.date).format(
                                 //     'DD/MM/YYYY',
                                 // ) ===
                                 //     moment(preventTomorrow).format('DD/MM/YYYY')
-                                false
                             }
                             onChange={(e) => {
-                                setTimesheetHours(Number(e.target.value));
                                 fillTimeInDate({
                                     userId: userId,
                                     chosenDate:
@@ -853,9 +857,15 @@ const TimesheetSupervisor = ({
                         />
 
                         {timesheets?.status == 'APPROVED' ? (
-                            <FaCheck color="green" onClick={onOpen} />
+                            <FaCheck
+                                color="green"
+                                onClick={() => setIsVisible({ id: userDate })}
+                            />
                         ) : timesheets?.status == 'REJECTED' ? (
-                            <FaTimes color="red" onClick={onOpen} />
+                            <FaTimes
+                                color="red"
+                                onClick={() => setIsVisible({ id: userDate })}
+                            />
                         ) : null}
                     </InputGroup>
                 </Flex>,
