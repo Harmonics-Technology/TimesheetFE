@@ -269,6 +269,7 @@ const TimesheetAdmin = ({
                 data,
             );
             if (result.status) {
+                setSingleReject({state: false,id: ''});
                 router.replace(router.asPath);
                 return;
             }

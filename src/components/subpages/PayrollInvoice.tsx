@@ -464,7 +464,7 @@ function PayrollInvoice({
                                 isLoading={loading}
                                 spinner={<BeatLoader color="white" size={10} />}
                                 onClick={approveInvoiceItems}
-                                disabled={clicked?.status !== 'PENDING'}
+                                isDisabled={clicked?.status !== 'PENDING'}
                                 borderRadius="0"
                                 // h="3rem"
                             >
@@ -476,7 +476,7 @@ function PayrollInvoice({
                                 fontSize=".8rem"
                                 onClick={onOpen}
                                 borderRadius="0"
-                                disabled={clicked?.status !== 'PENDING'}
+                                isDisabled={clicked?.status === 'REJECTED'}
                                 // h="3rem"
                             >
                                 Reject This Invoice
