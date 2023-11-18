@@ -162,7 +162,6 @@ export type { ShiftUsersListViewPagedCollection } from './models/ShiftUsersListV
 export type { ShiftUsersListViewPagedCollectionStandardResponse } from './models/ShiftUsersListViewPagedCollectionStandardResponse';
 export type { ShiftView } from './models/ShiftView';
 export type { ShiftViewListStandardResponse } from './models/ShiftViewListStandardResponse';
-export type { ShiftViewStandardResponse } from './models/ShiftViewStandardResponse';
 export type { Status } from './models/Status';
 export type { StrippedUserView } from './models/StrippedUserView';
 export type { Subscription } from './models/Subscription';

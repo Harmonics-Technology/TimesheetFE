@@ -9,4 +9,5 @@ export type ShiftModel = {
     repeatQuery?: string | null;
     note?: string | null;
     repeatStopDate?: string | null;
+    superAdminId?: string;
 };

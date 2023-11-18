@@ -112,7 +112,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                 )}
             />
             <FormErrorMessage fontSize=".7rem" color="red">
-                {(error?.type === 'required' && `${label} is required`) ||
+                {(error?.type === 'required' && `${label || 'This field'} is required`) ||
                     error?.message}
             </FormErrorMessage>
         </FormControl>

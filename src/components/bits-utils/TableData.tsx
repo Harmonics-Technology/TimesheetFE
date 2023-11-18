@@ -507,6 +507,7 @@ export function LeaveActions({
                             <MenuItem
                                 onClick={() => treatLeave(id, 1)}
                                 w="full"
+                                isDisabled={data.status == 'APPROVED'}
                             >
                                 <Icon
                                     as={MdVerified}
@@ -518,6 +519,10 @@ export function LeaveActions({
                             <MenuItem
                                 onClick={() => treatLeave(id, 2)}
                                 w="full"
+                                isDisabled={
+                                    data.status == 'DECLINED' ||
+                                    data.status == 'APPROVED'
+                                }
                             >
                                 <Icon
                                     as={MdCancel}

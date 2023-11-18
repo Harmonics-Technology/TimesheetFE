@@ -6,7 +6,6 @@ import type { ShiftModel } from '../models/ShiftModel';
 import type { ShiftTypeModel } from '../models/ShiftTypeModel';
 import type { ShiftTypeViewStandardResponse } from '../models/ShiftTypeViewStandardResponse';
 import type { ShiftViewListStandardResponse } from '../models/ShiftViewListStandardResponse';
-import type { ShiftViewStandardResponse } from '../models/ShiftViewStandardResponse';
 import type { SwapViewPagedCollectionStandardResponse } from '../models/SwapViewPagedCollectionStandardResponse';
 import type { UsersShiftViewPagedCollectionStandardResponse } from '../models/UsersShiftViewPagedCollectionStandardResponse';
 
@@ -100,12 +99,12 @@ id?: string,
 
     /**
      * @param requestBody 
-     * @returns ShiftViewStandardResponse Success
+     * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static addShift(
 requestBody?: ShiftModel,
-): CancelablePromise<ShiftViewStandardResponse> {
+): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/Shift/add-shift',
@@ -226,12 +225,14 @@ userId?: string,
     /**
      * @param startDate 
      * @param endDate 
+     * @param superAdminId 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static publishShifts(
 startDate?: string,
 endDate?: string,
+superAdminId?: string,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -239,6 +240,7 @@ endDate?: string,
             query: {
                 'startDate': startDate,
                 'endDate': endDate,
+                'superAdminId': superAdminId,
             },
             errors: {
                 400: `Bad Request`,

@@ -1,11 +1,9 @@
 import {
-    Box,
     FormControl,
     FormErrorMessage,
     FormLabel,
 } from '@chakra-ui/react';
 import { Control, Controller, FieldError, Path } from 'react-hook-form';
-import Select from 'react-select';
 interface select {
     options: [];
     customKeys: { key: string | number | boolean; label: string };
@@ -53,7 +51,6 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
     customOnchange,
     searchable = false,
     renderOption,
-    withIcon = false,
 }: FormInputProps<TFormValues>) => {
     //
     return (
@@ -109,7 +106,7 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                 )}
             /> */}
             <FormErrorMessage fontSize=".7rem">
-                {(error?.type === 'required' && `${label} is required`) ||
+                {(error?.type === 'required' && `${label || 'This field'} is required`) ||
                     error?.message}
             </FormErrorMessage>
         </FormControl>
