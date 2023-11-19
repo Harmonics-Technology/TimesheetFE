@@ -17,6 +17,8 @@ import { MsalProvider } from '@azure/msal-react';
 import { PublicClientApplication } from '@azure/msal-browser';
 import { msalConfig } from '@components/authentication/msalConfig';
 import Script from 'next/script';
+import { Online, Offline } from 'react-detect-offline';
+import { NoNetwork } from '@components/bits-utils/NoNetwork';
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -30,15 +32,15 @@ function MyApp({
         'https://timesheetapiprod.azurewebsites.net';
     OpenAPI.TOKEN = Cookies.get('token') as string;
 
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            const loader = document.getElementById('globalLoader');
-            if (loader)
-                setTimeout(() => {
-                    loader.remove();
-                }, 500);
-        }
-    }, []);
+    // useEffect(() => {
+    if (typeof window !== 'undefined') {
+        const loader = document.getElementById('globalLoader');
+        if (loader)
+            setTimeout(() => {
+                loader.remove();
+            }, 500);
+    }
+    // }, []);
     return (
         <ChakraProvider theme={theme}>
             <Head>
@@ -57,16 +59,21 @@ function MyApp({
             {/* <StyledThemeProvider> */}
             <QueryClientProvider client={queryClient}>
                 <Hydrate state={pageProps.dehydratedState}>
-                    <RootStoreProvider>
-                        <MsalProvider instance={msalInstance}>
-                            <UserProvider>
-                                <NextNProgress color="#2EAFA3" />
-                                <Layout>
-                                    <Component {...pageProps} />
-                                </Layout>
-                            </UserProvider>
-                        </MsalProvider>
-                    </RootStoreProvider>
+                    <Online polling={false}>
+                        <RootStoreProvider>
+                            <MsalProvider instance={msalInstance}>
+                                <UserProvider>
+                                    <NextNProgress color="#2EAFA3" />
+                                    <Layout>
+                                        <Component {...pageProps} />
+                                    </Layout>
+                                </UserProvider>
+                            </MsalProvider>
+                        </RootStoreProvider>
+                    </Online>
+                    <Offline polling={false}>
+                        <NoNetwork />
+                    </Offline>
                 </Hydrate>
             </QueryClientProvider>
             {/* </StyledThemeProvider> */}
