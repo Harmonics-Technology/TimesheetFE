@@ -216,13 +216,13 @@ function PaymentPartnerPayroll({
                     <>
                         {payrollsList?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
-                                <TableData name={x.name} />
                                 <TableData
                                     name={
                                         x.payrollGroupName ||
                                         x.createdByUser?.clientName
                                     }
                                 />
+                                <TableData name={x.name} />
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />
                                 <TableData
