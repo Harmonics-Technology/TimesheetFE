@@ -27,12 +27,7 @@ import { AiOutlineDownload } from 'react-icons/ai';
 import { FaRegCalendarAlt } from 'react-icons/fa';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
 import CsvDownloader from 'react-csv-downloader';
-import {
-    InvoiceView,
-    PaySlipView,
-    PayslipUserView,
-    UserView,
-} from 'src/services';
+import { InvoiceView, PaySlipView, UserView } from 'src/services';
 
 export const Reports = ({ metrics, team, paymentPartner, chart, summary }) => {
     const router = useRouter();
@@ -89,13 +84,7 @@ export const Reports = ({ metrics, team, paymentPartner, chart, summary }) => {
                         {/* <TableState name={x.status} /> */}
                     </Tr>
                 ))}
-                thead={[
-                    'Users',
-                    'Hours',
-                    'Billable',
-                    'Non-Billable',
-                    'Amount',
-                ]}
+                thead={['Users', 'Hours', 'Billable', 'Non-Billable', 'Amount']}
                 link={''}
             />
             <ReportCards

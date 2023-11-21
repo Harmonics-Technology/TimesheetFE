@@ -6,8 +6,7 @@ import {
     AdminPaymentScheduleViewListStandardResponse,
     ExpenseView,
     PaymentScheduleListStandardResponse,
-    PayslipUserView,
-    PayslipUserViewPagedCollectionStandardResponse,
+    PaySlipViewPagedCollectionStandardResponse,
     PaySlipView,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
@@ -23,7 +22,7 @@ import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { Round } from '@components/generics/functions/Round';
 
 interface expenseProps {
-    payrolls: PayslipUserViewPagedCollectionStandardResponse;
+    payrolls: PaySlipViewPagedCollectionStandardResponse;
     paymentSchedule: AdminPaymentScheduleViewListStandardResponse;
     record?: number;
     fileName?: string;
@@ -102,7 +101,7 @@ function AdminPayslip({
                 <FilterSearch hides={true} />
                 <Tables tableHead={thead}>
                     <>
-                        {payrollsList?.map((x: PayslipUserView, i) => (
+                        {payrollsList?.map((x: PaySlipView, i) => (
                             <Tr key={i}>
                                 <TableData name={x?.invoice?.name} />
                                 <TableData

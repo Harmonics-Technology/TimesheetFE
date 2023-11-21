@@ -105,9 +105,6 @@ export type { PayrollViewPagedCollection } from './models/PayrollViewPagedCollec
 export type { PayrollViewPagedCollectionStandardResponse } from './models/PayrollViewPagedCollectionStandardResponse';
 export type { PayScheduleGenerationModel } from './models/PayScheduleGenerationModel';
 export { PayslipRecordToDownload } from './models/PayslipRecordToDownload';
-export type { PayslipUserView } from './models/PayslipUserView';
-export type { PayslipUserViewPagedCollection } from './models/PayslipUserViewPagedCollection';
-export type { PayslipUserViewPagedCollectionStandardResponse } from './models/PayslipUserViewPagedCollectionStandardResponse';
 export type { PaySlipView } from './models/PaySlipView';
 export type { PaySlipViewPagedCollection } from './models/PaySlipViewPagedCollection';
 export type { PaySlipViewPagedCollectionStandardResponse } from './models/PaySlipViewPagedCollectionStandardResponse';

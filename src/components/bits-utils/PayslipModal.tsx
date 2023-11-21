@@ -26,7 +26,7 @@ import Naira, { CAD } from '@components/generics/functions/Naira';
 import { useRef } from 'react';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import { formatDate } from '@components/generics/functions/formatDate';
-// import { PayslipUserView } from 'src/services';
+// import { PaySlipView } from 'src/services';
 
 type Props = {
     isOpen?: any;

@@ -32,7 +32,6 @@ import {
     ExpenseView,
     InvoiceView,
     PaySlipView,
-    PayslipUserView,
     RecentTimeSheetView,
 } from 'src/services';
 import PayrollInvoice from './PayrollInvoice';
