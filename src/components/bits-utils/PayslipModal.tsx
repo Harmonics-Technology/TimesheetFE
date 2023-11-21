@@ -26,11 +26,12 @@ import Naira, { CAD } from '@components/generics/functions/Naira';
 import { useRef } from 'react';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import { formatDate } from '@components/generics/functions/formatDate';
+// import { PayslipUserView } from 'src/services';
 
 type Props = {
     isOpen?: any;
     onClose?: any;
-    paySlip?: PayslipUserView;
+    paySlip?: any;
 };
 
 export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
@@ -38,9 +39,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
         (a, b) => a + (b?.amount as number),
         0,
     );
-    const payTotal = Math.ceil(
-        Number(paySlip?.invoice?.totalAmount),
-    );
+    const payTotal = Math.ceil(Number(paySlip?.invoice?.totalAmount));
     const netPay = (payTotal as number) - (allExpenseTotal as number);
 
     const ref = useRef<any>(null);
@@ -51,8 +50,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
     }
     const toWords = new ToWords({
         localeCode:
-            paySlip?.invoice?.employeeInformation?.currency ==
-            'CAD'
+            paySlip?.invoice?.employeeInformation?.currency == 'CAD'
                 ? 'en-US'
                 : 'en-NG',
     });
@@ -115,9 +113,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                             scale={0.7}
                             margin={40}
                             fileName={`Payslip for the month of
-                            ${formatDate(
-                                paySlip?.invoice?.startDate,
-                            )}.pdf`}
+                            ${formatDate(paySlip?.invoice?.startDate)}.pdf`}
                         >
                             <Box>
                                 <Box mb="2rem">
@@ -127,8 +123,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                     <Text fontSize=".9rem">
                                         Payslip for the month of{' '}
                                         {formatDate(
-                                            paySlip?.invoice
-                                                ?.startDate,
+                                            paySlip?.invoice?.startDate,
                                         )}
                                     </Text>
                                 </Box>
@@ -145,10 +140,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                         />
                                         <PayslipInfoTag
                                             title={'Name'}
-                                            value={
-                                                paySlip?.invoice
-                                                    ?.name
-                                            }
+                                            value={paySlip?.invoice?.name}
                                         />{' '}
                                         {/* <PayslipInfoTag
                                             title={'Employee id'}
@@ -188,18 +180,15 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                         <PayslipInfoTag
                                             title={'Pay Period'}
                                             value={`${formatDate(
-                                                paySlip?.invoice
-                                                    ?.startDate,
+                                                paySlip?.invoice?.startDate,
                                             )} - ${formatDate(
-                                                paySlip?.invoice
-                                                    ?.endDate,
+                                                paySlip?.invoice?.endDate,
                                             )} `}
                                         />
                                         <PayslipInfoTag
                                             title={'Processed Date'}
                                             value={formatDate(
-                                                paySlip?.invoice
-                                                    ?.dateCreated,
+                                                paySlip?.invoice?.dateCreated,
                                             )}
                                         />
                                         <PayslipInfoTag
@@ -245,8 +234,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                             />
                                             <TableData
                                                 name={
-                                                    paySlip
-                                                        ?.invoice
+                                                    paySlip?.invoice
                                                         ?.employeeInformation
                                                         ?.currency == 'CAD'
                                                         ? CAD(netPay)
@@ -263,8 +251,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                             />
                                             <TableData
                                                 name={
-                                                    paySlip
-                                                        ?.invoice
+                                                    paySlip?.invoice
                                                         ?.employeeInformation
                                                         ?.currency == 'CAD'
                                                         ? CAD(allExpenseTotal)
@@ -275,14 +262,12 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                         <Tr color="brand.400" fontWeight="600">
                                             <TableData
                                                 name={`Total Earning for ${
-                                                    paySlip
-                                                        ?.invoice
+                                                    paySlip?.invoice
                                                         ?.employeeInformation
                                                         ?.paymentFrequency ==
                                                     'Monthly'
                                                         ? 'the month'
-                                                        : paySlip
-                                                              ?.invoice
+                                                        : paySlip?.invoice
                                                               ?.employeeInformation
                                                               ?.paymentFrequency ==
                                                           'Weekly'
@@ -296,8 +281,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                             />
                                             <TableData
                                                 name={
-                                                    paySlip
-                                                        ?.invoice
+                                                    paySlip?.invoice
                                                         ?.employeeInformation
                                                         ?.currency == 'CAD'
                                                         ? CAD(payTotal)
@@ -317,8 +301,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                             />
                                             <TableData
                                                 name={
-                                                    paySlip
-                                                        ?.invoice
+                                                    paySlip?.invoice
                                                         ?.employeeInformation
                                                         ?.currency == 'CAD'
                                                         ? CAD(
@@ -340,8 +323,8 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                             >
                                 <Text mb="0">
                                     Net Pay:{' '}
-                                    {paySlip?.invoice
-                                        ?.employeeInformation?.currency == 'CAD'
+                                    {paySlip?.invoice?.employeeInformation
+                                        ?.currency == 'CAD'
                                         ? CAD(payTotal)
                                         : Naira(payTotal)}
                                 </Text>
