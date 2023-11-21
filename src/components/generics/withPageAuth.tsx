@@ -2,7 +2,7 @@ import { OpenAPI } from 'src/services';
 
 export function withPageAuth(gssp: any) {
     return async (context: any) => {
-        const { req } = context;
+        const { req, resolvedUrl } = context;
         const token = req.cookies.token;
         //
 
@@ -10,7 +10,9 @@ export function withPageAuth(gssp: any) {
             // Redirect to login page
             return {
                 redirect: {
-                    destination: `/login?from=${encodeURIComponent(req.url)}`,
+                    destination: `/login?from=${encodeURIComponent(
+                        resolvedUrl,
+                    )}`,
                     statusCode: 302,
                 },
             };
