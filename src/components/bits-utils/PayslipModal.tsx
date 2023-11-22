@@ -26,6 +26,7 @@ import Naira, { CAD } from '@components/generics/functions/Naira';
 import { useRef } from 'react';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { Round } from '@components/generics/functions/Round';
 // import { PaySlipView } from 'src/services';
 
 type Props = {
@@ -305,10 +306,10 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                         ?.employeeInformation
                                                         ?.currency == 'CAD'
                                                         ? CAD(
-                                                              paySlip?.totalEarnings,
+                                                              Round(paySlip?.totalEarnings),
                                                           )
                                                         : Naira(
-                                                              paySlip?.totalEarnings,
+                                                              Round(paySlip?.totalEarnings),
                                                           )
                                                 }
                                             />
