@@ -11,6 +11,7 @@ import { CAD } from '@components/generics/functions/Naira';
 import moment from 'moment';
 import { TableCard } from '../../Generics/TableCard';
 import { ProjectMetrics } from 'src/services';
+import { Round } from '@components/generics/functions/Round';
 
 export const Budgets = ({
     id,
@@ -118,7 +119,7 @@ export const Budgets = ({
                                 fontWeight="500"
                             />
                             <TableData
-                                name={CAD(x?.budgetSpent)}
+                                name={CAD(Round(x?.budgetSpent))}
                                 fontWeight="500"
                             />
                         </TableRow>
