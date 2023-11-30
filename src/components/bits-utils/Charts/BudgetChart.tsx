@@ -19,7 +19,7 @@ export default function BudgetChart({
             ctx.save();
             const xCoor = chart.getDatasetMeta(0).data[0].x;
             const yCoor = chart.getDatasetMeta(0).data[0].y;
-            ctx.font = 'bold 16px Rubik';
+            ctx.font = 'bold 12px Rubik';
             ctx.fillStyle = '#000';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';

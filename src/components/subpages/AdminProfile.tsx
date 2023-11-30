@@ -11,6 +11,7 @@ import InputBlank from '@components/bits-utils/InputBlank';
 import { useRouter } from 'next/router';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import BeatLoader from 'react-spinners/BeatLoader';
+import Cookies from 'js-cookie';
 
 const schema = yup.object().shape({
     firstName: yup.string().required(),
@@ -55,6 +56,7 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                     isClosable: true,
                     position: 'top-right',
                 });
+                Cookies.set('user', JSON.stringify(result.data));
                 router.replace(router.asPath);
                 return;
             }

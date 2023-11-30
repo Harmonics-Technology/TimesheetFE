@@ -109,6 +109,7 @@ function MyProfile({
 
     const reloadPage = () => {
         setShowLoading(false);
+        onClose();
         router.replace(router.asPath);
     };
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -145,7 +146,7 @@ function MyProfile({
                     position: 'top-right',
                 });
 
-                // Cookies.set('user', JSON.stringify(result.data));
+                Cookies.set('user', JSON.stringify(result.data));
                 callback();
                 return;
             }
@@ -196,7 +197,8 @@ function MyProfile({
                     isClosable: true,
                     position: 'top-right',
                 });
-                // Cookies.set('user', JSON.stringify(result.data));
+                Cookies.set('user', JSON.stringify(result.data));
+                onClose();
                 router.replace(router.asPath);
                 return;
             }

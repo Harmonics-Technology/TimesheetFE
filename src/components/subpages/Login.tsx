@@ -42,8 +42,7 @@ function Login() {
     // const { setUser } = useContext(UserContext);
     const toast = useToast();
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
-    const [rememberedData, setRememberedData] = useState<any>();
-    const [rememberMe, setRememberMe] = useState(rememberedData?.rememberMe);
+    const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
     const msal = useMsal();
 
@@ -77,6 +76,8 @@ function Login() {
                             rememberMe: rememberMe,
                         }),
                     );
+                } else {
+                    Cookies.remove('details');
                 }
 
                 Cookies.set('user', JSON.stringify(result.data));
@@ -213,7 +214,7 @@ function Login() {
         const isUser = Cookies.get('details');
         if (isUser !== undefined) {
             const userDetails = JSON.parse(isUser as unknown as string);
-            setRememberedData(userDetails);
+            setRememberMe(userDetails.rememberMe);
             reset({
                 email: userDetails.email,
                 password: userDetails.pass,
@@ -290,7 +291,7 @@ function Login() {
                                 size="md"
                                 textTransform="capitalize"
                                 onChange={() => setRememberMe((prev) => !prev)}
-                                defaultChecked={true}
+                                // defaultChecked={rememberMe}
                                 isChecked={rememberMe}
                             >
                                 remember me.

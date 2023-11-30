@@ -271,9 +271,8 @@ export const LeaveManagement = ({
 
                                 <TableState
                                     name={
-                                        (x.status == 'REJECTED' ||
-                                            x.status == 'DECLINED') &&
-                                        type == 'history'
+                                        x.status == 'REJECTED' &&
+                                        (type == 'history' || type == 'teamHistory')
                                             ? 'APPROVED'
                                             : x.status
                                     }
