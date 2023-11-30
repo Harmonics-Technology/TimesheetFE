@@ -507,6 +507,7 @@ export function LeaveActions({
                             <MenuItem
                                 onClick={() => treatLeave(id, 1)}
                                 w="full"
+                                isDisabled={data.status == 'APPROVED'}
                             >
                                 <Icon
                                     as={MdVerified}
@@ -518,6 +519,10 @@ export function LeaveActions({
                             <MenuItem
                                 onClick={() => treatLeave(id, 2)}
                                 w="full"
+                                isDisabled={
+                                    data.status == 'DECLINED' ||
+                                    data.status == 'APPROVED'
+                                }
                             >
                                 <Icon
                                     as={MdCancel}
@@ -929,7 +934,7 @@ export function ExpenseActions({
         } catch (error: any) {
             setLoading(false);
             toast({
-                title: error.body.message || error.message,
+                title: error?.body?.message || error?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -1032,7 +1037,7 @@ export function PayrollActions({ id, userId }: { id: any; userId: any }) {
     //
     //         setLoading(false);
     //         toast({
-    //             title: error.body.message || error.message,
+    //             title: error?.body?.message || error?.message,
     //             status: 'error',
     //             isClosable: true,
     //             position: 'top-right',
@@ -1127,7 +1132,7 @@ export function TableInvoiceActions({ id, x }: { id: any; x: InvoiceView }) {
         } catch (error: any) {
             setLoading(false);
             toast({
-                title: error.body.message || error.message,
+                title: error?.body?.message || error?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',

@@ -9,7 +9,6 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
-    Square,
     Text,
     VStack,
     useToast,
@@ -27,8 +26,7 @@ import {
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import DatePicker, { DateObject } from 'react-multi-date-picker';
-import { FaRegCalendarAlt } from 'react-icons/fa';
+import { DateObject } from 'react-multi-date-picker';
 import dynamic from 'next/dynamic';
 import { PrimaryTextarea } from './PrimaryTextArea';
 import { useRouter } from 'next/router';
@@ -44,9 +42,8 @@ interface ExportProps {
     datas: any;
     user: ShiftUsersListViewPagedCollectionStandardResponse;
     shiftTypes: ShiftTypeViewStandardResponse;
+    superAdminId: string;
 }
-
-const schema = yup.object().shape({});
 
 export const AddShiftModal = ({
     isOpen,
@@ -54,6 +51,7 @@ export const AddShiftModal = ({
     datas,
     user,
     shiftTypes,
+    superAdminId,
 }: ExportProps) => {
     const router = useRouter();
     const toast = useToast();
@@ -61,20 +59,26 @@ export const AddShiftModal = ({
     // const [fromDate, setFromDate] = useState<any>(new DateObject());
     const [userId, setUserId] = useState();
     const [repeat, setRepeat] = useState(false);
+
+    const schema = repeat
+        ? yup.object().shape({
+              start: yup.string().required(),
+              userId: yup.string().required(),
+              shiftTypeId: yup.string().required(),
+              note: yup.string().required(),
+              repeatStopDate: yup.string().required(),
+          })
+        : yup.object().shape({
+              start: yup.string().required(),
+              userId: yup.string().required(),
+              shiftTypeId: yup.string().required(),
+              note: yup.string().required(),
+          });
     // const [repeatEndDate, setRepeatEndDate] = useState<any>(
     //     new DateObject().add(10, 'days'),
     // );
     const [selectedId, setSelectedId] = useState<any>([]);
     const [data, setData] = useState<any>();
-
-    useEffect(() => {
-        setData(datas);
-    }, [datas]);
-
-    useEffect(() => {
-        // setFromDate(new DateObject(data?.start));
-        setUserId(data?.resourceId);
-    }, [data]);
 
     //
 
@@ -94,15 +98,20 @@ export const AddShiftModal = ({
         control,
         reset,
         watch,
+        setValue,
         formState: { errors, isSubmitting },
     } = useForm<ShiftModel>({
         resolver: yupResolver(schema),
         mode: 'all',
         defaultValues: {
-            start: new DateObject(data?.start) as unknown as string,
+            // start: moment(data?.start).format('YYYY-MM-DD'),
+            superAdminId,
+            userId,
         },
     });
 
+    const newStartDate = moment(data?.start).format("DD/MM/YYYY");
+    // console.log({ data: data?.start, newStartDate });
     const closeModal = () => {
         setData({});
         setRepeat(false);
@@ -137,7 +146,11 @@ export const AddShiftModal = ({
         // data.repeatStopDate = repeatEndDate?.format('YYYY-MM-DD HH:mm:ss');
         repeat && (data.repeatQuery = rrule);
         data.userId ? data.userId : (data.userId = userId);
-        //
+        // console.log({ data: data?.start });
+        data.start = `${moment(data?.start).format(
+            'YYYY-MM-DDTHH:mm:ss.SSS',
+        )}Z`;
+
         try {
             const result = await ShiftService.addShift(data);
             if (result.status) {
@@ -167,6 +180,17 @@ export const AddShiftModal = ({
             });
         }
     };
+
+    useEffect(() => {
+        setData(datas);
+    }, [datas]);
+
+    useEffect(() => {
+        // setFromDate(new DateObject(data?.start));
+        setUserId(data?.resourceId);
+        setValue('userId', data?.resourceId);
+    }, [data]);
+
     return (
         <Modal
             isOpen={isOpen}
@@ -237,6 +261,7 @@ export const AddShiftModal = ({
                                         name="start"
                                         label=""
                                         error={errors.start}
+                                        defaultValue={newStartDate}
                                         // max={new Date()}
                                     />
                                 </HStack>
@@ -276,58 +301,67 @@ export const AddShiftModal = ({
                                                     setRepeat(value.key)
                                                 }
                                                 searchable={false}
+                                                placeholder="Does not repeat"
                                                 style={{
                                                     width: '70%',
                                                 }}
                                             />
                                         </Box>
-                                        <HStack
-                                            gap="0rem"
-                                            pointerEvents={
-                                                !repeat ? 'none' : 'unset'
-                                            }
-                                        >
-                                            {repeating.map((x) => (
-                                                <Circle
-                                                    bgColor={
-                                                        selectedId?.find(
-                                                            (e) => e.id == x.id,
-                                                        )
-                                                            ? 'brand.400'
-                                                            : 'gray.200'
-                                                    }
-                                                    color={
-                                                        selectedId?.find(
-                                                            (e) => e.id == x.id,
-                                                        )
-                                                            ? 'white'
-                                                            : 'gray.600'
-                                                    }
-                                                    border={
-                                                        selectedId?.find(
-                                                            (e) => e.id == x.id,
-                                                        )
-                                                            ? '2px solid #ffac00'
-                                                            : 'none'
-                                                    }
-                                                    fontSize=".7rem"
-                                                    size="1.5rem"
-                                                    cursor={
-                                                        !repeat
-                                                            ? 'not-allowed'
-                                                            : 'pointer'
-                                                    }
-                                                    _hover={{
-                                                        border: '2px solid #ffac00',
-                                                    }}
-                                                    onClick={() =>
-                                                        toggleSelected(x)
-                                                    }
-                                                >
-                                                    {x.name.charAt(0)}
-                                                </Circle>
-                                            ))}
-                                        </HStack>
+                                        {repeat && (
+                                            <HStack
+                                                gap="0rem"
+                                                pointerEvents={
+                                                    !repeat ? 'none' : 'unset'
+                                                }
+                                            >
+                                                {repeating.map((x) => (
+                                                    <Circle
+                                                        bgColor={
+                                                            selectedId?.find(
+                                                                (e) =>
+                                                                    e.id ==
+                                                                    x.id,
+                                                            )
+                                                                ? 'brand.400'
+                                                                : 'gray.200'
+                                                        }
+                                                        color={
+                                                            selectedId?.find(
+                                                                (e) =>
+                                                                    e.id ==
+                                                                    x.id,
+                                                            )
+                                                                ? 'white'
+                                                                : 'gray.600'
+                                                        }
+                                                        border={
+                                                            selectedId?.find(
+                                                                (e) =>
+                                                                    e.id ==
+                                                                    x.id,
+                                                            )
+                                                                ? '2px solid #ffac00'
+                                                                : 'none'
+                                                        }
+                                                        fontSize=".7rem"
+                                                        size="1.5rem"
+                                                        cursor={
+                                                            !repeat
+                                                                ? 'not-allowed'
+                                                                : 'pointer'
+                                                        }
+                                                        _hover={{
+                                                            border: '2px solid #ffac00',
+                                                        }}
+                                                        onClick={() =>
+                                                            toggleSelected(x)
+                                                        }
+                                                    >
+                                                        {x.name.charAt(0)}
+                                                    </Circle>
+                                                ))}
+                                            </HStack>
+                                        )}
                                     </HStack>
                                 </HStack>
                                 {repeat && (

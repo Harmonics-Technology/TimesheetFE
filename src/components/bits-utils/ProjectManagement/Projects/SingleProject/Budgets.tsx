@@ -11,6 +11,7 @@ import { CAD } from '@components/generics/functions/Naira';
 import moment from 'moment';
 import { TableCard } from '../../Generics/TableCard';
 import { ProjectMetrics } from 'src/services';
+import { Round } from '@components/generics/functions/Round';
 
 export const Budgets = ({
     id,
@@ -45,28 +46,28 @@ export const Budgets = ({
                 gap="1.06rem"
             >
                 <MiniCards
-                    value={Math.ceil(projectMetrics.totalBudget as number)}
+                    value={projectMetrics.totalBudget}
                     title="Total Budget"
                     icon={PiMoneyBold}
                     color="#2eafa3"
                     isPrice
                 />
                 <MiniCards
-                    value={Math.ceil(projectMetrics.totalBudgetSpent as number)}
+                    value={projectMetrics.totalBudgetSpent}
                     title="Total Budget Spent"
                     icon={PiMoneyBold}
                     color="#FF5B79"
                     isPrice
                 />
                 <MiniCards
-                    value={Math.ceil(projectMetrics.currentBalance as number)}
+                    value={projectMetrics.currentBalance}
                     title="Current Balance"
                     icon={PiMoneyBold}
                     color="#2383BD"
                     isPrice
                 />
                 <MiniCards
-                    value={Math.ceil(projectMetrics.totalHourSpent as number)}
+                    value={projectMetrics.totalHourSpent}
                     title="Total Hours pent"
                     icon={PiMoneyBold}
                     color="#F8C200"
@@ -118,7 +119,7 @@ export const Budgets = ({
                                 fontWeight="500"
                             />
                             <TableData
-                                name={CAD(x?.budgetSpent)}
+                                name={CAD(Round(x?.budgetSpent))}
                                 fontWeight="500"
                             />
                         </TableRow>

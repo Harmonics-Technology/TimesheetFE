@@ -32,7 +32,6 @@ import {
     ExpenseView,
     InvoiceView,
     PaySlipView,
-    PayslipUserView,
     RecentTimeSheetView,
 } from 'src/services';
 import PayrollInvoice from './PayrollInvoice';
@@ -123,11 +122,11 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                             ))}
                         thead={[
                             'Name',
-                            'Supervisor Name',
-                            'Expected Hrs',
-                            'Total Hrs',
-                            'Expected Payout',
-                            'Payout',
+                            'Job Title',
+                            'Begining Period',
+                            'Ending Period',
+                            'Total Hours',
+                            'Approved Hours',
                             // 'Status',
                             // 'Action',
                         ]}

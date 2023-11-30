@@ -23,6 +23,7 @@ function Invoices({ invoiceData }: invoiceType) {
                 fileName="Team Member Pending Approval Invoice"
                 record={3}
                 isSuperAdmin
+                teamUrl="/financials/invoices-team"
             />
         </Box>
     );

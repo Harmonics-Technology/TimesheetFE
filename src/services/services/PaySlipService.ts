@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { PayslipUserViewPagedCollectionStandardResponse } from '../models/PayslipUserViewPagedCollectionStandardResponse';
+import type { PaySlipViewPagedCollectionStandardResponse } from '../models/PaySlipViewPagedCollectionStandardResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -17,7 +17,7 @@ export class PaySlipService {
      * @param startDate 
      * @param endDate 
      * @param payrollTypeFilter 
-     * @returns PayslipUserViewPagedCollectionStandardResponse Success
+     * @returns PaySlipViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getTeamMembersPaySlips(
@@ -28,7 +28,7 @@ search?: string,
 startDate?: string,
 endDate?: string,
 payrollTypeFilter?: number,
-): CancelablePromise<PayslipUserViewPagedCollectionStandardResponse> {
+): CancelablePromise<PaySlipViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/PaySlip/team-members/{employeeInformationId}',
@@ -57,7 +57,7 @@ payrollTypeFilter?: number,
      * @param startDate 
      * @param endDate 
      * @param payrollTypeFilter 
-     * @returns PayslipUserViewPagedCollectionStandardResponse Success
+     * @returns PaySlipViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getAllPaySlips(
@@ -68,7 +68,7 @@ search?: string,
 startDate?: string,
 endDate?: string,
 payrollTypeFilter?: number,
-): CancelablePromise<PayslipUserViewPagedCollectionStandardResponse> {
+): CancelablePromise<PaySlipViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/PaySlip/all',

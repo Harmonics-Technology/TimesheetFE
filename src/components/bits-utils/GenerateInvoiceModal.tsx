@@ -32,7 +32,6 @@ import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { PayslipInfoTag } from './PayslipInfoTag';
-import numWords from 'num-words';
 import Tables from './Tables';
 import InvoiceTotalText from './InvoiceTotalText';
 import Naira, { CUR } from '@components/generics/functions/Naira';
@@ -53,6 +52,7 @@ type Props = {
     clicked: any;
     id: any;
     client: any;
+    onSubmit?: any;
 };
 const schema = yup.object().shape({
     rate: yup.string().required(),
@@ -64,6 +64,7 @@ export const GenerateInvoiceModal = ({
     clicked,
     id,
     client,
+    onSubmit,
 }: Props) => {
     const toast = useToast();
     const router = useRouter();
@@ -127,41 +128,6 @@ export const GenerateInvoiceModal = ({
 
     const clientName = client.find((x) => x.id == id).title;
 
-    const onSubmit = async (data: PaymentPartnerInvoiceModel) => {
-        data.invoiceIds = invoicesId;
-        data.totalAmount = Number(allInvoiceTotal);
-
-        try {
-            const result = await FinancialService.createPaymentPartnerInvoice(
-                data,
-            );
-            if (result.status) {
-                toast({
-                    title: `Successful`,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                router.replace(router.asPath);
-                onClose();
-                return;
-            }
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
-        } catch (error: any) {
-            toast({
-                title: error?.message || error?.body?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
     return (
         <>
             <Modal
@@ -203,7 +169,11 @@ export const GenerateInvoiceModal = ({
                             For {clientName}
                         </Text>
                         <Box overflowY="auto" px={5} maxH="80vh">
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                            <form
+                                onSubmit={handleSubmit((data) =>
+                                    onSubmit(data, invoicesId, allInvoiceTotal),
+                                )}
+                            >
                                 <Box w="30%">
                                     {/* <SelectrixBox<PaymentPartnerInvoiceModel>
                                         control={control}
@@ -298,21 +268,23 @@ export const GenerateInvoiceModal = ({
                                                         }
                                                     />
                                                     <TableData
-                                                        name={
-                                                            x
-                                                                .employeeInformation
-                                                                ?.fixedAmount ==
-                                                            false
-                                                                ? calculatePercentage(
-                                                                      x?.totalAmount,
-                                                                      x
+                                                        name={CUR(
+                                                            Round(
+                                                                x
+                                                                    .employeeInformation
+                                                                    ?.fixedAmount ==
+                                                                    false
+                                                                    ? calculatePercentage(
+                                                                          x?.totalAmount,
+                                                                          x
+                                                                              ?.employeeInformation
+                                                                              ?.onBoradingFee,
+                                                                      )
+                                                                    : x
                                                                           ?.employeeInformation
                                                                           ?.onBoradingFee,
-                                                                  )
-                                                                : x
-                                                                      ?.employeeInformation
-                                                                      ?.onBoradingFee
-                                                        }
+                                                            ),
+                                                        )}
                                                     />
                                                 </Tr>
                                             ))}
@@ -376,7 +348,13 @@ export const GenerateInvoiceModal = ({
                                         />
                                         <InvoiceTotalText
                                             label="Fees"
-                                            value={allFeesTotal}
+                                            value={CUR(
+                                                Round(
+                                                    allFeesTotal !== Infinity
+                                                        ? allFeesTotal
+                                                        : 0,
+                                                ),
+                                            )}
                                             cur={'$'}
                                         />
                                         <Box

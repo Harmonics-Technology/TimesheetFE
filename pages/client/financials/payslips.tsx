@@ -7,11 +7,11 @@ import {
     AdminPaymentScheduleViewListStandardResponse,
     FinancialService,
     PaySlipService,
-    PayslipUserViewPagedCollectionStandardResponse,
+    PaySlipViewPagedCollectionStandardResponse,
 } from 'src/services';
 
 interface PayrollType {
-    payrolls: PayslipUserViewPagedCollectionStandardResponse;
+    payrolls: PaySlipViewPagedCollectionStandardResponse;
     paymentSchedule: AdminPaymentScheduleViewListStandardResponse;
 }
 function expenses({ payrolls, paymentSchedule }: PayrollType) {

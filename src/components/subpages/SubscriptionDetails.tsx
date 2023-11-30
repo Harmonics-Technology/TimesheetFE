@@ -106,7 +106,7 @@ export const SubscriptionDetails = ({ data }) => {
                         text={`${formatDate(
                             userInfo?.subscriptiobDetails?.data?.endDate,
                         )}
-                        (${daysLeft < 0 ? '0' : daysLeft}
+                        (${daysLeft < 0 ? '0' : daysLeft + 1}
                         days)`}
                         sub={daysLeft < 0 ? 'Expired' : 'Active'}
                     />

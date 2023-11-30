@@ -310,7 +310,7 @@ const TimesheetPayrollManager = ({
         } catch (error: any) {
             toast({
                 status: 'error',
-                title: error.body.message || error.message,
+                title: error?.body?.message || error?.message,
                 position: 'top-right',
             });
         }
@@ -351,7 +351,7 @@ const TimesheetPayrollManager = ({
             } catch (error: any) {
                 toast({
                     status: 'error',
-                    title: error.body.message || error.message,
+                    title: error?.body?.message || error?.message,
                     position: 'top-right',
                 });
             }

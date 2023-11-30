@@ -12,7 +12,6 @@ import {
     ShiftService,
     ShiftUsersListViewPagedCollectionStandardResponse,
     ShiftViewListStandardResponse,
-    ShiftViewStandardResponse,
     UserViewListStandardResponse,
 } from 'src/services';
 import { useRouter } from 'next/router';

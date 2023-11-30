@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,
-                Number(pagingOptions.clientId),
+                pagingOptions.clientId as unknown as number,
             );
             return {
                 props: {

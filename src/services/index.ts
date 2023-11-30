@@ -105,9 +105,6 @@ export type { PayrollViewPagedCollection } from './models/PayrollViewPagedCollec
 export type { PayrollViewPagedCollectionStandardResponse } from './models/PayrollViewPagedCollectionStandardResponse';
 export type { PayScheduleGenerationModel } from './models/PayScheduleGenerationModel';
 export { PayslipRecordToDownload } from './models/PayslipRecordToDownload';
-export type { PayslipUserView } from './models/PayslipUserView';
-export type { PayslipUserViewPagedCollection } from './models/PayslipUserViewPagedCollection';
-export type { PayslipUserViewPagedCollectionStandardResponse } from './models/PayslipUserViewPagedCollectionStandardResponse';
 export type { PaySlipView } from './models/PaySlipView';
 export type { PaySlipViewPagedCollection } from './models/PaySlipViewPagedCollection';
 export type { PaySlipViewPagedCollectionStandardResponse } from './models/PaySlipViewPagedCollectionStandardResponse';
@@ -162,7 +159,6 @@ export type { ShiftUsersListViewPagedCollection } from './models/ShiftUsersListV
 export type { ShiftUsersListViewPagedCollectionStandardResponse } from './models/ShiftUsersListViewPagedCollectionStandardResponse';
 export type { ShiftView } from './models/ShiftView';
 export type { ShiftViewListStandardResponse } from './models/ShiftViewListStandardResponse';
-export type { ShiftViewStandardResponse } from './models/ShiftViewStandardResponse';
 export type { Status } from './models/Status';
 export type { StrippedUserView } from './models/StrippedUserView';
 export type { Subscription } from './models/Subscription';

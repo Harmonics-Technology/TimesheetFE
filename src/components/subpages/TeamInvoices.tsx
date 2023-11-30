@@ -92,7 +92,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
             } catch (error: any) {
                 setLoading(false);
                 toast({
-                    title: error.body.message || error.message,
+                    title: error?.body?.message || error?.message,
                     status: 'error',
                     isClosable: true,
                     position: 'top-right',

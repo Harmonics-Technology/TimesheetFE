@@ -252,21 +252,23 @@ function Paymentinvoices({
                                                             )}
                                                         />
                                                         <TableData
-                                                            name={
-                                                                x
-                                                                    .employeeInformation
-                                                                    ?.fixedAmount ==
-                                                                false
-                                                                    ? calculatePercentage(
-                                                                          x?.totalAmount,
-                                                                          x
+                                                            name={CUR(
+                                                                Round(
+                                                                    x
+                                                                        .employeeInformation
+                                                                        ?.fixedAmount ==
+                                                                        false
+                                                                        ? calculatePercentage(
+                                                                              x?.totalAmount,
+                                                                              x
+                                                                                  ?.employeeInformation
+                                                                                  ?.onBoradingFee,
+                                                                          )
+                                                                        : x
                                                                               ?.employeeInformation
                                                                               ?.onBoradingFee,
-                                                                      )
-                                                                    : x
-                                                                          ?.employeeInformation
-                                                                          ?.onBoradingFee
-                                                            }
+                                                                ),
+                                                            )}
                                                         />
                                                     </Tr>
                                                 </>
@@ -309,6 +311,11 @@ function Paymentinvoices({
                                             value={CUR(Round(hst))}
                                             cur="$"
                                             hst={clicked?.hst}
+                                        />
+                                        <InvoiceTotalText
+                                            label="Fees"
+                                            value={CUR(Round(allFeesTotal))}
+                                            cur={'$'}
                                         />
                                         <Box
                                             border="2px dashed"

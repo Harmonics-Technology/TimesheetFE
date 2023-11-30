@@ -53,7 +53,6 @@ export type User = {
     commandCenterClientId?: string | null;
     leaveConfigurationId?: string | null;
     controlSettingId?: string | null;
-    stripeCustomerId?: string | null;
     supervisors?: Array<User> | null;
     usersCreatedByYou?: Array<User> | null;
     supervisees?: Array<EmployeeInformation> | null;

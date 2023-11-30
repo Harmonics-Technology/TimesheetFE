@@ -34,7 +34,6 @@ import {
     ExpenseView,
     InvoiceView,
     PaySlipView,
-    PayslipUserView,
     ProjectProgressCountView,
     UserView,
 } from 'src/services';

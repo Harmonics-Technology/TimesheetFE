@@ -6,8 +6,7 @@ import {
     AdminPaymentScheduleViewListStandardResponse,
     ExpenseView,
     PaymentScheduleListStandardResponse,
-    PayslipUserView,
-    PayslipUserViewPagedCollectionStandardResponse,
+    PaySlipViewPagedCollectionStandardResponse,
     PaySlipView,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
@@ -23,7 +22,7 @@ import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { Round } from '@components/generics/functions/Round';
 
 interface expenseProps {
-    payrolls: PayslipUserViewPagedCollectionStandardResponse;
+    payrolls: PaySlipViewPagedCollectionStandardResponse;
     paymentSchedule: AdminPaymentScheduleViewListStandardResponse;
     record?: number;
     fileName?: string;
@@ -58,6 +57,8 @@ function AdminPayslip({
         'Action',
         // '',
     ];
+
+    console.log({ payrollsList });
 
     return (
         <>
@@ -100,43 +101,34 @@ function AdminPayslip({
                 <FilterSearch hides={true} />
                 <Tables tableHead={thead}>
                     <>
-                        {payrollsList?.map((x: PayslipUserView, i) => (
+                        {payrollsList?.map((x: PaySlipView, i) => (
                             <Tr key={i}>
+                                <TableData name={x?.invoice?.name} />
                                 <TableData
-                                    name={x?.payslipView?.invoice?.name}
+                                    name={formatDate(x?.invoice?.startDate)}
                                 />
                                 <TableData
-                                    name={formatDate(
-                                        x.payslipView?.invoice?.startDate,
-                                    )}
+                                    name={formatDate(x?.invoice?.endDate)}
                                 />
                                 <TableData
-                                    name={formatDate(
-                                        x.payslipView?.invoice?.endDate,
-                                    )}
+                                    name={formatDate(x?.invoice?.dateCreated)}
                                 />
                                 <TableData
-                                    name={formatDate(
-                                        x.payslipView?.invoice?.dateCreated,
-                                    )}
-                                />
-                                <TableData
-                                    name={`${x.payslipView?.invoice?.totalHours} HRS`}
+                                    name={`${x?.invoice?.totalHours} HRS`}
                                 />
                                 <TableData
                                     name={
-                                        x.payslipView?.invoice
-                                            ?.employeeInformation?.currency ==
-                                        'CAD'
+                                        x?.invoice?.employeeInformation
+                                            ?.currency == 'CAD'
                                             ? CAD(
                                                   Round(
-                                                      x?.payslipView?.invoice
+                                                      x?.invoice
                                                           ?.totalAmount as number,
                                                   ),
                                               )
                                             : Naira(
                                                   Round(
-                                                      x?.payslipView?.invoice
+                                                      x?.invoice
                                                           ?.totalAmount as number,
                                                   ),
                                               )

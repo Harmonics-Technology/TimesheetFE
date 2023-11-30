@@ -82,7 +82,7 @@ function Login() {
                 Cookies.set('user', JSON.stringify(result.data));
                 result.data &&
                     Cookies.set('token', result.data.token as string, {
-                        // expires: expiresIn,
+                        expires: expiresIn,
                     });
                 OpenAPI.TOKEN = result?.data?.token as string;
 
@@ -156,7 +156,7 @@ function Login() {
                         OpenAPI.TOKEN = result?.data?.token as string;
                         result.data &&
                             Cookies.set('token', result.data.token as string, {
-                                // expires: expiresIn,
+                                expires: expiresIn,
                             });
                         setLoading(false);
                         if (result.data?.twoFactorEnabled) {

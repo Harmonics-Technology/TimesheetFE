@@ -24,9 +24,15 @@ interface ExportProps {
     isOpen: any;
     onClose: any;
     data: any;
+    superAdminId: string;
 }
 
-export const PublishShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
+export const PublishShiftModal = ({
+    isOpen,
+    onClose,
+    data,
+    superAdminId,
+}: ExportProps) => {
     const router = useRouter();
     const toast = useToast();
 
@@ -41,6 +47,7 @@ export const PublishShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
             const result = await ShiftService.publishShifts(
                 format(new Date(start as any), 'yyyy-MM-dd'),
                 format(new Date(end as any), 'yyyy-MM-dd'),
+                superAdminId,
             );
             if (result.status) {
                 setLoading(false);
@@ -71,6 +78,7 @@ export const PublishShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
             });
         }
     };
+    const totalHours = data?.data.reduce((a, b) => a + b.hours, 0);
     return (
         <Modal
             isOpen={isOpen}
@@ -135,7 +143,9 @@ export const PublishShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                     w="full"
                                 >
                                     <SingleText text={'Total Shifts:'} />
-                                    <SingleText text={'13 Shifts'} />
+                                    <SingleText
+                                        text={`${data?.data.length} Shifts`}
+                                    />
                                 </HStack>
                                 <HStack
                                     justify="space-between"
@@ -143,7 +153,7 @@ export const PublishShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                     w="full"
                                 >
                                     <SingleText text={'Total Hours:'} />
-                                    <SingleText text={'72 Hours'} />
+                                    <SingleText text={`${totalHours} Hours`} />
                                 </HStack>
                                 <HStack
                                     justify="space-between"
@@ -153,7 +163,7 @@ export const PublishShiftModal = ({ isOpen, onClose, data }: ExportProps) => {
                                     <SingleText
                                         text={'Shifts Added/Changed/Deleted::'}
                                     />
-                                    <SingleText text={'0'} />
+                                    <SingleText text={data?.data?.length} />
                                 </HStack>
                             </VStack>
                         </Box>

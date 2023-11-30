@@ -14,8 +14,10 @@ import {
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import {
+    FinancialService,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
+    PaymentPartnerInvoiceModel,
     UserView,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
@@ -92,6 +94,46 @@ function PaymentPartnerPayroll({
         ...(newClient || []),
     ];
 
+    const onSubmit = async (
+        data: PaymentPartnerInvoiceModel,
+        invoicesId: any,
+        allInvoiceTotal: any,
+    ) => {
+        data.invoiceIds = invoicesId;
+        data.totalAmount = Number(allInvoiceTotal);
+
+        try {
+            const result = await FinancialService.createPaymentPartnerInvoice(
+                data,
+            );
+            if (result.status) {
+                toast({
+                    title: `Successful`,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                onClose();
+                router.replace(router.asPath);
+                return;
+            }
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        } catch (error: any) {
+            toast({
+                title: error?.message || error?.body?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
     return (
         <>
             <Box
@@ -159,7 +201,7 @@ function PaymentPartnerPayroll({
                 />
                 <Tables
                     tableHead={[
-                        'Organization',
+                        'Organization Name',
                         'Name',
                         'Start Date',
                         'End Date',
@@ -174,13 +216,13 @@ function PaymentPartnerPayroll({
                     <>
                         {payrollsList?.map((x: InvoiceView) => (
                             <Tr key={x.id}>
-                                <TableData name={x.name} />
                                 <TableData
                                     name={
                                         x.payrollGroupName ||
                                         x.createdByUser?.clientName
                                     }
                                 />
+                                <TableData name={x.name} />
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />
                                 <TableData
@@ -221,6 +263,7 @@ function PaymentPartnerPayroll({
                 clicked={selectedId}
                 id={id}
                 client={newData}
+                onSubmit={onSubmit}
             />
         </>
     );

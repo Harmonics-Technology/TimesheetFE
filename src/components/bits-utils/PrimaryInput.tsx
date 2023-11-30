@@ -104,7 +104,8 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                 )}
             </InputGroup>
             <FormErrorMessage fontSize=".7rem" color="red">
-                {(error?.type === 'required' && `${label} is required`) ||
+                {(error?.type === 'required' &&
+                    `${label || 'This field'} is required`) ||
                     error?.message}
             </FormErrorMessage>
         </FormControl>

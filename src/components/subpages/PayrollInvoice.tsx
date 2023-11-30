@@ -98,13 +98,31 @@ function PayrollInvoice({
         } catch (error: any) {
             setLoading(false);
             toast({
-                title: error.body.message || error.message,
+                title: error?.body?.message || error?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
             });
         }
     };
+
+    const allFeesTotal = Number(
+        clicked?.children?.reduce(
+            (a, x) =>
+                a +
+                (x?.employeeInformation?.fixedAmount == false
+                    ? (calculatePercentage(
+                          x?.totalAmount,
+                          x?.employeeInformation?.onBoradingFee,
+                      ) as number) / exchangeRate
+                    : (x?.employeeInformation?.onBoradingFee as number)),
+            0,
+        ),
+    );
+
+    const total =
+        Number(allInvoiceTotal / exchangeRate + allFeesTotal + hst) || 0;
+
     const paymentDate =
         moment(clicked?.dateCreated).day() == 5
             ? moment(clicked?.dateCreated).weekday(12)
@@ -207,7 +225,7 @@ function PayrollInvoice({
                                                 'Pay Period',
                                                 'Amount (₦)',
                                                 'Amount ($)',
-                                                // 'Fees',
+                                                'Fees',
                                                 // 'Total',
                                             ]}
                                         >
@@ -279,6 +297,25 @@ function PayrollInvoice({
                                                                         Round(
                                                                             (x?.totalAmount as number) /
                                                                                 exchangeRate,
+                                                                        ),
+                                                                    )}
+                                                                />
+                                                                <TableData
+                                                                    name={CUR(
+                                                                        Round(
+                                                                            x
+                                                                                .employeeInformation
+                                                                                ?.fixedAmount ==
+                                                                                false
+                                                                                ? calculatePercentage(
+                                                                                      x?.totalAmount,
+                                                                                      x
+                                                                                          ?.employeeInformation
+                                                                                          ?.onBoradingFee,
+                                                                                  )
+                                                                                : x
+                                                                                      ?.employeeInformation
+                                                                                      ?.onBoradingFee,
                                                                         ),
                                                                     )}
                                                                 />
@@ -358,10 +395,29 @@ function PayrollInvoice({
                                                 )}
                                             />
                                             <InvoiceTotalText
+                                                label="Subtotal(₦)"
+                                                cur={'₦'}
+                                                value={CUR(
+                                                    Round(allInvoiceTotal),
+                                                )}
+                                            />
+                                            <InvoiceTotalText
                                                 label="Hst"
                                                 value={CUR(Round(hst))}
                                                 cur="$"
                                                 hst={clicked?.hst}
+                                            />
+                                            <InvoiceTotalText
+                                                label="Fees"
+                                                value={CUR(
+                                                    Round(
+                                                        allFeesTotal !==
+                                                            Infinity
+                                                            ? allFeesTotal
+                                                            : 0,
+                                                    ),
+                                                )}
+                                                cur={'$'}
                                             />
                                             <Box
                                                 border="2px dashed"
@@ -372,13 +428,7 @@ function PayrollInvoice({
                                                 <InvoiceTotalText
                                                     cur={'$'}
                                                     label="Total"
-                                                    value={CUR(
-                                                        Round(
-                                                            (allInvoiceTotal +
-                                                                hstNaira) /
-                                                                exchangeRate,
-                                                        ),
-                                                    )}
+                                                    value={CUR(Round(total))}
                                                 />
                                             </Box>
                                         </Flex>
@@ -414,7 +464,7 @@ function PayrollInvoice({
                                 isLoading={loading}
                                 spinner={<BeatLoader color="white" size={10} />}
                                 onClick={approveInvoiceItems}
-                                disabled={clicked?.status !== 'PENDING'}
+                                isDisabled={clicked?.status !== 'PENDING'}
                                 borderRadius="0"
                                 // h="3rem"
                             >
@@ -426,7 +476,7 @@ function PayrollInvoice({
                                 fontSize=".8rem"
                                 onClick={onOpen}
                                 borderRadius="0"
-                                disabled={clicked?.status !== 'PENDING'}
+                                isDisabled={clicked?.status === 'REJECTED'}
                                 // h="3rem"
                             >
                                 Reject This Invoice

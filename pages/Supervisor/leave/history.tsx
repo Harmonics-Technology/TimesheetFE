@@ -13,7 +13,7 @@ const index = ({ teamMembers, supervisor, leavelist, leavetypes, id }) => {
             leavelist={leavelist}
             leavetypes={leavetypes}
             id={id}
-            type={'asAdmin'}
+            type={'history'}
         />
     );
 };
@@ -46,7 +46,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
-                id,  
+                id,
                 undefined,
                 pagingOptions.search,
                 pagingOptions.from,
