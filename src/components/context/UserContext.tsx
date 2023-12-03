@@ -11,6 +11,7 @@ export const UserProvider = ({ children }: { children: any }) => {
     let activeSub;
     let accessControls;
     const users = Cookies.get('user') as unknown as string;
+    const isDev = process.env.NEXT_PUBLIC_ENV == 'development';
     if (users !== undefined) {
         user = JSON.parse(users);
         subType = JSON.parse(users)
@@ -22,6 +23,8 @@ export const UserProvider = ({ children }: { children: any }) => {
         activeSub =
             JSON.parse(users)?.subscriptiobDetails?.data?.status == 'ACTIVE' &&
             daysLeft >= 0
+                ? true
+                : isDev
                 ? true
                 : false;
     }

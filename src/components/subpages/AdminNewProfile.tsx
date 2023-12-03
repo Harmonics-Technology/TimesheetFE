@@ -119,7 +119,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                     isClosable: true,
                     position: 'top-right',
                 });
-                // Cookies.set('user', JSON.stringify(result.data));
+                Cookies.set('user', JSON.stringify(result.data));
                 router.replace(router.asPath);
                 return;
             }
