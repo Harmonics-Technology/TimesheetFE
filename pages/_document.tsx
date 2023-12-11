@@ -33,20 +33,23 @@ class CustomDocument extends Document {
         } finally {
             sheet.seal();
         }
-        const initialProps = await Document.getInitialProps(ctx);
-
-        return initialProps;
     }
+
     render() {
+        const { __NEXT_DATA__ } = this.props;
+        const pathname = __NEXT_DATA__
+
         return (
             <Html>
                 <Head />
                 <body>
                     <Main />
                     <NextScript />
-                    <div id="globalLoader">
-                        <img src="/assets/logogif.gif" alt="" />
-                    </div>
+                    {pathname.page!== '/login' && (
+                        <div id="globalLoader">
+                            <img src="/assets/logogif.gif" alt="" />
+                        </div>
+                    )}
                 </body>
             </Html>
         );
