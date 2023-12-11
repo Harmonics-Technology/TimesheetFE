@@ -52,10 +52,13 @@ const ProfileConfirmModal = ({ isOpen, onClose, user }: Props) => {
                     isClosable: true,
                     position: 'top-right',
                 });
+                setLoading(false);
+                onClose();
                 Cookies.set('user', JSON.stringify(result.data));
                 router.replace(router.asPath);
                 return;
             }
+            setLoading(false);
             toast({
                 title: result.message,
                 status: 'error',
@@ -63,6 +66,7 @@ const ProfileConfirmModal = ({ isOpen, onClose, user }: Props) => {
                 position: 'top-right',
             });
         } catch (error) {
+            setLoading(false);
             toast({
                 title: `Check your network connection and try again`,
                 status: 'error',

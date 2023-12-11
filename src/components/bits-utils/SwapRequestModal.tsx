@@ -1,6 +1,5 @@
 import {
     Box,
-    Circle,
     Flex,
     Grid,
     HStack,
@@ -10,31 +9,24 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
-    Select,
-    Square,
     Text,
     VStack,
     useToast,
 } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { ShiftBtn } from './ShiftBtn';
-import { SelectrixBox } from './Selectrix';
 import { ShiftService } from 'src/services';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import dynamic from 'next/dynamic';
 import { IoCheckmarkCircle } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 import moment from 'moment';
-import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
-import { endOfWeek, format, startOfWeek } from 'date-fns';
+import { endOfWeek, startOfWeek } from 'date-fns';
 import { PrimarySelect } from './PrimarySelect';
 import Loading from './Loading';
-const Selectrix = dynamic<any>(() => import('react-selectrix'), {
-    ssr: false,
-});
+
 
 interface ExportProps {
     isOpen: any;
@@ -59,9 +51,7 @@ export const SwapRequestModal = ({
     const {
         register,
         handleSubmit,
-        control,
         watch,
-        setValue,
         formState: { errors, isSubmitting },
     } = useForm<ExportProps>({
         resolver: yupResolver(schema),
