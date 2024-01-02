@@ -12,6 +12,7 @@ import { OnboardingFeeProvider } from '@components/context/OnboardingFeeContext'
 import { Logout } from '@components/bits-utils/LogUserOut';
 import { UserContext } from '@components/context/UserContext';
 import { InactiveUser } from '@components/bits-utils/InactiveUser';
+import { SupportBox } from '@components/bits-utils/Support/SupportBox';
 
 type LayoutProps = {
     children: ReactNode;
@@ -104,6 +105,7 @@ const Layout = ({ children }: LayoutProps) => {
             ) : (
                 <Box>{children}</Box>
             )}
+            <SupportBox />
         </>
     );
 };

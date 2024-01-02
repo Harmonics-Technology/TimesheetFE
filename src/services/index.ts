@@ -23,6 +23,7 @@ export type { ClientSubscriptionResponseViewModel } from './models/ClientSubscri
 export type { ClientSubscriptionResponseViewModelStandardResponse } from './models/ClientSubscriptionResponseViewModelStandardResponse';
 export type { CommandCenterAddCardResponse } from './models/CommandCenterAddCardResponse';
 export type { CommandCenterAddCardResponseStandardResponse } from './models/CommandCenterAddCardResponseStandardResponse';
+export type { ContactMessageModel } from './models/ContactMessageModel';
 export type { Contract } from './models/Contract';
 export type { ContractModel } from './models/ContractModel';
 export type { ContractView } from './models/ContractView';
@@ -221,3 +222,4 @@ export { SettingsService } from './services/SettingsService';
 export { ShiftService } from './services/ShiftService';
 export { TimeSheetService } from './services/TimeSheetService';
 export { UserService } from './services/UserService';
+export { UtilityService } from './services/UtilityService';

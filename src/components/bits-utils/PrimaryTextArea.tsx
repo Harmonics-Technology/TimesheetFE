@@ -20,7 +20,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     label?: string;
     register: UseFormRegister<TFormValues>;
     error: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
-    type?: string;
+    border?: string;
     required?: boolean;
     disableLabel?: boolean;
     validate?: any;
@@ -36,13 +36,13 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     w?: string;
     h?: string;
     padding?: string;
-    fontsize?: string;
+    fontSize?: string;
 }
 
 export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
     name,
     required = false,
-    type = 'text',
+    border ,
     label = '',
     register,
     validate = {},
@@ -60,13 +60,13 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
     color,
     w = '100%',
     h,
-    fontsize = '.8rem',
+    fontSize = '.8rem',
     padding,
 }: FormInputProps<TFormValues>) => {
     return (
         <>
             <FormControl isInvalid={!!error}>
-                <FormLabel color={color || '#33333'} fontSize=".8rem" mt="1rem">
+                <FormLabel color={color || '#33333'}  mt="1rem"  fontSize={fontSize}>
                     {label}
                 </FormLabel>
                 <Textarea
@@ -78,7 +78,6 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
                     size="sm"
                     minH={h}
                     resize="none"
-                    fontSize={fontsize}
                     focusBorderColor="none"
                     _focusVisible={{
                         borderColor: 'gray.300',
@@ -88,6 +87,8 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
                     // bgColor="rgba(25,25,25,.03)"
                     // borderColor="transparent"
                     borderRadius="5px"
+                    border={border}
+                    fontSize={fontSize}
                     // boxShadow="0px 0px 9px rgba(0, 127, 130, 0.37)"
                 />
                 <FormErrorMessage fontSize=".7rem" color="red">
