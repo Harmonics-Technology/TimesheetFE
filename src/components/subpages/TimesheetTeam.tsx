@@ -159,13 +159,21 @@ const TimesheetTeam = ({
     >([]);
 
     const fillTimeInDate = (item: TimesheetHoursAdditionModel) => {
+        if (Number(item.hours) > 24) {
+            toast({
+                status: 'error',
+                title: 'Sorry you cannot enter more than 24 hours in a day',
+                position: 'top-right',
+            });
+            return;
+        }
         const exists = timesheetHours.find((x) => x.date == item.date);
         if (exists) {
             const mutatedData = timesheetHours.map((obj) => {
                 if (obj.date == item.date)
                     return {
                         ...obj,
-                        hours: item.hours,
+                        hours: item.hours as number,
                     };
                 return obj;
             });
@@ -712,7 +720,7 @@ const TimesheetTeam = ({
                             onChange={(e) => {
                                 fillTimeInDate({
                                     date: userDate,
-                                    hours: Number(e.target.value),
+                                    hours: e.target.value as unknown as number,
                                 });
                             }}
                             color={
@@ -746,7 +754,7 @@ const TimesheetTeam = ({
             );
             // week.push(format(currentDate, 'MMM, d'));
             currentDate = addDays(currentDate, 1);
-            const dayHour = timesheets?.hours as number;
+            const dayHour = Number(timesheets?.hours) as number;
             total.push(timesheets?.hours == undefined ? 0 : dayHour);
             sumOfHours = total.reduce((a, b) => a + b, 0);
         }

@@ -9,11 +9,38 @@ import {
 
 export const NotificationContext = createContext<any | null>(null);
 export const NotificationProvider = ({ children }: { children: any }) => {
-    const [messages, setMessages] =
-        useState<NotificationViewPagedCollectionStandardResponse>();
+    const [messages, setMessages] = useState({});
     const toast = useToast();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+
+    const offset = router.query.offset || 0;
+    const limit = router.query.limit || 6;
+
+    //
+    const getNotifications = async () => {
+        try {
+            const data = await NotificationService.listMyNotifications(
+                offset as unknown as number,
+                limit as unknown as number,
+            );
+            if (data.status) {
+                //
+                setMessages(data);
+                // toast({
+                //     position: 'top-right',
+                //     status: 'success',
+                //     title: 'Notification up to date',
+                // });
+            }
+        } catch (error: any) {
+            toast({
+                position: 'top-right',
+                status: 'error',
+                title: error?.body?.message || error.message,
+            });
+        }
+    };
 
     //Mark as read
     const markAsRead = async (id) => {
@@ -22,8 +49,8 @@ export const NotificationProvider = ({ children }: { children: any }) => {
             const data = await NotificationService.markAsRead(id);
             //
             if (data.status) {
+                await getNotifications();
                 setLoading(false);
-                router.replace(router.asPath);
             }
         } catch (error: any) {
             setLoading(false);
@@ -37,37 +64,10 @@ export const NotificationProvider = ({ children }: { children: any }) => {
 
     //Getting Notification on Page load
     useEffect(() => {
-        const offset = router.query.offset || 0;
-        const limit = router.query.limit || 6;
-
-        //
-        const getNotifications = async () => {
-            try {
-                const data = await NotificationService.listMyNotifications(
-                    offset as unknown as number,
-                    limit as unknown as number,
-                );
-                if (data.status) {
-                    //
-                    setMessages(data);
-                    // toast({
-                    //     position: 'top-right',
-                    //     status: 'success',
-                    //     title: 'Notification up to date',
-                    // });
-                }
-            } catch (error: any) {
-                toast({
-                    position: 'top-right',
-                    status: 'error',
-                    title: error?.body?.message || error.message,
-                });
-            }
-        };
         getNotifications();
     }, []);
 
-    const contextValues = { messages, setMessages, markAsRead, loading };
+    const contextValues = { messages, markAsRead, loading };
     return (
         <NotificationContext.Provider value={contextValues}>
             {children}

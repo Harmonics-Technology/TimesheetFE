@@ -39,8 +39,8 @@ export const SupportBox = () => {
     });
 
     const [showForm, setShowForm] = useState(false);
-    const [success, setSuccess] = useState(true);
-    const toast = useToast()
+    const [success, setSuccess] = useState(false);
+    const toast = useToast();
 
     const onSubmit = async (data: ContactMessageModel) => {
         try {
@@ -50,13 +50,21 @@ export const SupportBox = () => {
                 reset({});
                 return;
             }
-            toast({status: 'error', title: res?.message})
+            toast({ status: 'error', title: res?.message });
         } catch (error: any) {
-            toast({status: 'error', title: error?.body?.message || error?.message})
+            toast({
+                status: 'error',
+                title: error?.body?.message || error?.message,
+            });
         }
     };
     return (
-        <Box pos="fixed" right={["1rem","2rem"]} bottom="2rem" w={["90%","28%"]}>
+        <Box
+            pos="fixed"
+            right={['1rem', '2rem']}
+            bottom="2rem"
+            w={['90%', '28%']}
+        >
             {showForm ? (
                 <Box
                     borderRadius="10px"
@@ -84,22 +92,26 @@ export const SupportBox = () => {
                     </HStack>
 
                     {success ? (
-                        <VStack py='3rem' gap='1.5rem'>
-                            <Icon as={BsCheck2Circle} fontSize='3rem' color='green.400' />
+                        <VStack py="3rem" gap="1.5rem">
+                            <Icon
+                                as={BsCheck2Circle}
+                                fontSize="3rem"
+                                color="green.400"
+                            />
                             <Text>Thank you for your message!</Text>
                             <Button
-                                    bgColor="#182C51"
-                                    boxShadow="0px 3.5px 5.5px 0px rgba(0, 0, 0, 0.02)"
-                                    h="2.215rem"
-                                    borderRadius=".125rem"
-                                    fontSize=".75rem"
-                                    color="white"
-                                    w='69%'
-                                    onClick={()=> setShowForm(false)}
-                                    fontWeight={700}
-                                >
-                                    Close
-                                </Button>
+                                bgColor="#182C51"
+                                boxShadow="0px 3.5px 5.5px 0px rgba(0, 0, 0, 0.02)"
+                                h="2.215rem"
+                                borderRadius=".125rem"
+                                fontSize=".75rem"
+                                color="white"
+                                w="69%"
+                                onClick={() => setShowForm(false)}
+                                fontWeight={700}
+                            >
+                                Close
+                            </Button>
                         </VStack>
                     ) : (
                         <Box w="full" px="2.2rem">
@@ -158,7 +170,7 @@ export const SupportBox = () => {
                                     fontSize=".75rem"
                                     color="white"
                                     fontWeight={700}
-                                    type='submit'
+                                    type="submit"
                                     isLoading={isSubmitting}
                                 >
                                     Submit

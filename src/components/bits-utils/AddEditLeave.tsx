@@ -17,10 +17,14 @@ export const AddEditLeave = ({ data }: { data?: any }) => {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<LeaveTypeModel>({
         resolver: yupResolver(schema),
         mode: 'all',
+        defaultValues: {
+            name: data?.name,
+        },
     });
     const router = useRouter();
     const toast = useToast();
@@ -40,6 +44,7 @@ export const AddEditLeave = ({ data }: { data?: any }) => {
                     isClosable: true,
                     position: 'top-right',
                 });
+                reset({ name: '' });
                 router.replace(router.asPath);
                 return;
             }
@@ -71,6 +76,7 @@ export const AddEditLeave = ({ data }: { data?: any }) => {
                     isClosable: true,
                     position: 'top-right',
                 });
+                reset({ name: '' });
                 router.replace(router.asPath);
                 return;
             }

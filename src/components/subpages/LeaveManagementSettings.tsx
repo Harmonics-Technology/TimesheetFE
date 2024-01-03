@@ -46,7 +46,8 @@ export const LeaveManagementSettings = ({
 }: leaveProps) => {
     const [data, setData] = useState<any>();
     const [loading, setLoading] = useState({ state: false, id: '' });
-    const [leave, setLeave] = useState<any>(leaves?.data?.value);
+    // const [leave, setLeave] = useState<any>(leaves?.data?.value);
+    const leave = leaves?.data?.value;
     const toast = useToast();
     const router = useRouter();
     const { user } = useContext(UserContext);
@@ -65,7 +66,8 @@ export const LeaveManagementSettings = ({
                     isClosable: true,
                     position: 'top-right',
                 });
-                setLeave(leaves.data?.value?.filter((x) => x.id !== id));
+                // setLeave(leaves.data?.value?.filter((x) => x.id !== id));
+                router.replace(router.asPath);
                 return;
             }
             setLoading({ state: false, id: '' });
