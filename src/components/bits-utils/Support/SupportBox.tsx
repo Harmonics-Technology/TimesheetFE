@@ -36,6 +36,12 @@ export const SupportBox = () => {
     } = useForm<ContactMessageModel>({
         resolver: yupResolver(schema),
         mode: 'all',
+        defaultValues: {
+            fullName: '',
+            email: '',
+            subject: '',
+            message: '',
+        },
     });
 
     const [showForm, setShowForm] = useState(false);
@@ -64,6 +70,8 @@ export const SupportBox = () => {
             right={['1rem', '2rem']}
             bottom="2rem"
             w={['90%', '28%']}
+            overflowY="auto"
+            maxH="90vh"
         >
             {showForm ? (
                 <Box
@@ -86,7 +94,10 @@ export const SupportBox = () => {
                         <Text fontWeight={600}>Timba Support</Text>
                         <Icon
                             as={IoCloseCircleSharp}
-                            onClick={() => setShowForm((prev) => !prev)}
+                            onClick={() => {
+                                setShowForm((prev) => !prev);
+                                reset();
+                            }}
                             cursor="pointer"
                         />
                     </HStack>
