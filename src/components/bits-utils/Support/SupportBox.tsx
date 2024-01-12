@@ -72,6 +72,7 @@ export const SupportBox = () => {
             w={['90%', '28%']}
             overflowY="auto"
             maxH="90vh"
+            zIndex={999}
         >
             {showForm ? (
                 <Box

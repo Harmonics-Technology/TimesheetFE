@@ -701,7 +701,7 @@ const TimesheetTeam = ({
                                 //     ? // timesheets?.status == 'PENDING'
                                 //       '---'
                                 //     :
-                                timesheets?.hours || '---'
+                                timesheets?.hours
                             }
                             placeholder="---"
                             textAlign="center"
