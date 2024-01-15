@@ -12,7 +12,7 @@ export const NotificationProvider = ({ children }: { children: any }) => {
     const [messages, setMessages] = useState({});
     const toast = useToast();
     const router = useRouter();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState({ id: '' });
 
     const offset = router.query.offset || 0;
     const limit = router.query.limit || 6;
@@ -45,15 +45,15 @@ export const NotificationProvider = ({ children }: { children: any }) => {
     //Mark as read
     const markAsRead = async (id) => {
         try {
-            setLoading(true);
+            setLoading({ id });
             const data = await NotificationService.markAsRead(id);
             //
             if (data.status) {
                 await getNotifications();
-                setLoading(false);
+                setLoading({ id: '' });
             }
         } catch (error: any) {
-            setLoading(false);
+            setLoading({ id: '' });
             toast({
                 title: error?.body?.message || error?.message,
                 position: 'top-right',

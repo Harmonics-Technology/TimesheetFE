@@ -1,4 +1,12 @@
-import { Box, Divider, Flex, Circle, Text, Spinner } from '@chakra-ui/react';
+import {
+    Box,
+    Divider,
+    Flex,
+    Circle,
+    Text,
+    Spinner,
+    HStack,
+} from '@chakra-ui/react';
 import React from 'react';
 import { NotificationView } from 'src/services';
 import Pagination from './Pagination';
@@ -12,7 +20,7 @@ export const NotificationBox = ({
 }: {
     data?: any;
     markAsRead: any;
-    loading: boolean;
+    loading: any;
 }) => {
     const unRead = data?.data?.value?.filter((x) => !x.isRead);
 
@@ -34,7 +42,7 @@ export const NotificationBox = ({
             </Text>
             <Divider my="1rem" borderColor="gray.300" />
 
-            <Loading loading={loading} />
+            {/* <Loading loading={loading} /> */}
 
             <>
                 {data?.data?.value?.length < 1 ? (
@@ -67,22 +75,32 @@ export const NotificationBox = ({
                                     {x.message}
                                 </Text>
                                 <Flex justify="space-between" align="center">
-                                    <Text
-                                        mb="0"
-                                        fontSize=".7rem"
-                                        fontWeight="bold"
-                                        cursor="pointer"
-                                        onClick={
-                                            x.isRead
-                                                ? undefined
-                                                : () => markAsRead(x.id)
-                                        }
-                                        color={
-                                            x.isRead ? 'gray.300' : 'brand.400'
-                                        }
-                                    >
-                                        {x.isRead ? 'Read' : 'Mark as Read'}
-                                    </Text>
+                                    <HStack>
+                                        {loading.id == x?.id ? (
+                                            <Spinner size={'sm'} />
+                                        ) : (
+                                            <Text
+                                                mb="0"
+                                                fontSize=".7rem"
+                                                fontWeight="bold"
+                                                cursor="pointer"
+                                                onClick={
+                                                    x.isRead
+                                                        ? undefined
+                                                        : () => markAsRead(x.id)
+                                                }
+                                                color={
+                                                    x.isRead
+                                                        ? 'gray.300'
+                                                        : 'brand.400'
+                                                }
+                                            >
+                                                {x.isRead
+                                                    ? 'Read'
+                                                    : 'Mark as Read'}
+                                            </Text>
+                                        )}
+                                    </HStack>
                                     <Text
                                         mb="0"
                                         fontSize=".6rem"
