@@ -29,4 +29,6 @@ export type ProjectTimesheet = {
     statusId?: number | null;
     status?: Status;
     reason?: string | null;
+    isApproved?: boolean;
+    isEdited?: boolean;
 };

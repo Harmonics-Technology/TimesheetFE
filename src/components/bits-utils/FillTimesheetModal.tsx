@@ -326,9 +326,19 @@ export const FillTimesheetModal = ({
         (subTask) => subTask?.id === watch('projectSubTaskId'),
     );
 
-    console.log({ selectedTask, selectedSubTask });
+    console.log({ duration });
 
     const onSubmit = async (data: ProjectTimesheetModel) => {
+        const endOfDate = (newProjectTimesheet as any)[0]?.endDate;
+        if (!endOfDate || endOfDate == 'Invalid date') {
+            toast({
+                title: 'Please select a duration or end date',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
         data.projectTaskAsigneeId =
             selectedSubTask?.projectTaskAsigneeId ||
             selectedTask.assignees.find((x) => x.userId == userId)?.id;
@@ -595,7 +605,7 @@ export const FillTimesheetModal = ({
                                     task
                                 </Checkbox>
                             </VStack>
-                            <HStack gap="1rem" justify="flex-end">
+                            <HStack gap="1rem" justify="space-between">
                                 <ShiftBtn
                                     text="Cancel"
                                     bg="#FF5B79"

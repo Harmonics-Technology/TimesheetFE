@@ -43,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 superAdminId,
             );
 
-            // console.log(paymentSchedule);
+            // console.log({ data });
 
             return {
                 props: {

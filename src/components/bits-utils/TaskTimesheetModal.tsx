@@ -1,9 +1,6 @@
 import {
     Box,
-    Checkbox,
-    Circle,
     Flex,
-    FormLabel,
     HStack,
     Icon,
     Modal,
@@ -12,21 +9,17 @@ import {
     ModalHeader,
     ModalOverlay,
     Text,
-    Textarea,
     VStack,
-    useToast,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { ShiftBtn } from './ShiftBtn';
-import { ProjectManagementService } from 'src/services';
 
-import router, { useRouter } from 'next/router';
 import { ProgressSlider } from './ProgressSlider';
 
 import TaskTitleHolder from './TaskTitleHolder';
-import { formatDate } from '@components/generics/functions/formatDate';
 import moment from 'moment';
+import { EditTimesheetTaskModal } from './EditTimesheetTaskModal';
 
 interface ExportProps {
     isOpen: any;
@@ -34,52 +27,7 @@ interface ExportProps {
     data?: any;
 }
 export const TaskTimesheetModal = ({ isOpen, onClose, data }: ExportProps) => {
-    const [cancel, setCancel] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [comment, setComment] = useState<string>();
-    const toast = useToast();
-
-    const approveTimesheet = async (approve) => {
-        const formData = {
-            timesheetId: data.id,
-            approve: approve,
-            reason: comment,
-        };
-        setLoading(true);
-        try {
-            const result = await ProjectManagementService.treatTimesheet(
-                formData,
-            );
-            if (result.status) {
-                toast({
-                    title: result.message,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                router.replace(router.asPath);
-                setLoading(true);
-                onClose();
-                return;
-            }
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            setLoading(true);
-            return;
-        } catch (err: any) {
-            setLoading(true);
-            toast({
-                title: err?.body?.message || err?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    const [edit, setEdit] = useState<boolean>();
 
     return (
         <Modal
@@ -109,8 +57,11 @@ export const TaskTimesheetModal = ({ isOpen, onClose, data }: ExportProps) => {
                             fontSize="1.1rem"
                             textAlign="center"
                             fontWeight="semibold"
+                            noOfLines={1}
                         >
-                            View Timesheet Details
+                            {edit
+                                ? `Edit ${data?.title}`
+                                : `View ${data?.title}`}
                         </Text>
                         <Icon as={GrClose} onClick={onClose} cursor="pointer" />
                     </Flex>
@@ -118,72 +69,91 @@ export const TaskTimesheetModal = ({ isOpen, onClose, data }: ExportProps) => {
 
                 <ModalBody>
                     <Box maxH="77vh" overflowY="auto" px={[2, 5]}>
-                        {/* <Loading loading={loading} /> */}
-                        <form>
-                            <VStack
-                                align="flex-start"
-                                w="full"
-                                spacing="0"
-                                gap="1rem"
-                                mb="2rem"
-                            >
-                                <HStack
-                                    justify="space-between"
-                                    w="full"
+                        {edit ? (
+                            <EditTimesheetTaskModal
+                                onClose={onClose}
+                                data={data}
+                            />
+                        ) : (
+                            <form>
+                                <VStack
                                     align="flex-start"
+                                    w="full"
+                                    spacing="0"
+                                    gap="1rem"
+                                    mb="2rem"
                                 >
-                                    <TaskTitleHolder
-                                        title="Project Task"
-                                        sub={data.title}
-                                    />
-
-                                    <Flex
-                                        justify="center"
-                                        align="center"
-                                        bgColor={
-                                            data.approved == 'PENDING'
-                                                ? 'brand.700'
-                                                : data.approved == 'APPROVED'
-                                                ? 'brand.400'
-                                                : 'red'
-                                        }
-                                        color="white"
-                                        borderRadius="10px"
-                                        fontSize=".8rem"
-                                        p=".2rem 1rem"
+                                    <HStack
+                                        justify="space-between"
+                                        w="full"
+                                        align="flex-start"
                                     >
-                                        {data?.approved}
-                                    </Flex>
-                                </HStack>
-                                <TaskTitleHolder
-                                    title="Start Date & Time"
-                                    sub={moment(data.start).format(
-                                        'dddd DD MMMM, YYYY hh:mm A',
-                                    )}
-                                />
-                                <TaskTitleHolder
-                                    title="End Date & Time"
-                                    sub={moment(data.end).format(
-                                        'dddd DD MMMM, YYYY hh:mm A',
-                                    )}
-                                />
-                                {data.reason && (
-                                    <TaskTitleHolder
-                                        title="Rejection reason"
-                                        sub={data.reason}
-                                    />
-                                )}
-                            </VStack>
-                            <Box>
-                                <TaskTitleHolder title="Percentage Of Completion" />
+                                        <TaskTitleHolder
+                                            title="Project Task"
+                                            sub={data.title}
+                                        />
 
-                                <ProgressSlider
-                                    sliderValue={data?.progress}
-                                    setSliderValue={() => void 0}
-                                    label=""
-                                />
-                            </Box>
-                        </form>
+                                        <Flex
+                                            justify="center"
+                                            align="center"
+                                            bgColor={
+                                                data.approved == 'PENDING'
+                                                    ? 'brand.700'
+                                                    : data.approved ==
+                                                      'APPROVED'
+                                                    ? 'brand.400'
+                                                    : 'red'
+                                            }
+                                            color="white"
+                                            borderRadius="10px"
+                                            fontSize=".8rem"
+                                            p=".2rem 1rem"
+                                        >
+                                            {data?.approved}
+                                        </Flex>
+                                    </HStack>
+                                    <TaskTitleHolder
+                                        title="Start Date & Time"
+                                        sub={moment(data.start).format(
+                                            'dddd DD MMMM, YYYY hh:mm A',
+                                        )}
+                                    />
+                                    <TaskTitleHolder
+                                        title="End Date & Time"
+                                        sub={moment(data.end).format(
+                                            'dddd DD MMMM, YYYY hh:mm A',
+                                        )}
+                                    />
+                                    {data.reason && (
+                                        <TaskTitleHolder
+                                            title="Rejection reason"
+                                            sub={data.reason}
+                                        />
+                                    )}
+                                </VStack>
+                                <Box>
+                                    <TaskTitleHolder title="Percentage Of Completion" />
+
+                                    <ProgressSlider
+                                        sliderValue={data?.progress}
+                                        setSliderValue={() => void 0}
+                                        label=""
+                                    />
+                                </Box>
+                                {data?.approved !== 'APPROVED' && (
+                                    <Box>
+                                        <TaskTitleHolder title="Click here to edit this timesheet" />
+                                        <ShiftBtn
+                                            text="Edit"
+                                            color="brand.400"
+                                            border="1px solid"
+                                            bg="transparent"
+                                            onClick={() => setEdit(true)}
+                                        />
+                                    </Box>
+                                )}
+                            </form>
+                        )}
                     </Box>
                 </ModalBody>
             </ModalContent>

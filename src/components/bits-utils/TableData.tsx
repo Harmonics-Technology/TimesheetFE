@@ -21,6 +21,7 @@ import React, { useContext, useState } from 'react';
 import { AiOutlineDownload } from 'react-icons/ai';
 import { FaAppStore, FaEllipsisH, FaEye } from 'react-icons/fa';
 import {
+    DraftService,
     ExpenseView,
     FinancialService,
     InitiateResetModel,
@@ -349,6 +350,76 @@ export function TableActions({
                                 View Profile
                             </Link>
                         </NextLink>
+                    </MenuItem>
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+export function TableDraftActions({
+    data,
+    setDraftData,
+}: {
+    data: any;
+    setDraftData: any;
+}) {
+    const toast = useToast();
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    const deleteDraft = async () => {
+        //
+        try {
+            setLoading(true);
+            const result = await DraftService.deleteDraft(data?.id);
+            if (result.status) {
+                //
+                toast({
+                    title: 'Action Succesful',
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                setLoading(false);
+                router.replace(router.asPath);
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (err: any) {
+            setLoading(false);
+            toast({
+                title: err?.body?.message || err.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    <MenuItem w="full" onClick={() => setDraftData(data)}>
+                        Continue Onboarding
+                    </MenuItem>
+                    <MenuItem w="full" onClick={() => deleteDraft()}>
+                        Delete
                     </MenuItem>
                 </MenuList>
             </Menu>
