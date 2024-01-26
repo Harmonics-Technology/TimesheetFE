@@ -305,6 +305,7 @@ function TeamManagement({
         if (inc !== '') {
             data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
         }
+
         {
             (data.hstNumber as unknown as string) == ''
                 ? (data.hstNumber = 0)
@@ -362,9 +363,13 @@ function TeamManagement({
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.replace(router.asPath);
                 reset();
+                setContractFile({});
+                setIcd({});
+                setVoidCheck({});
+                setInc({});
                 onClose();
+                router.replace(router.asPath);
                 return;
             }
             toast({
