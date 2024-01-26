@@ -556,7 +556,7 @@ export function LeaveActions({
                                 Cancel Request
                             </MenuItem>
                         )}
-                    {type == 'asTeamHistory' &&
+                    {/* {type == 'asTeamHistory' &&
                         (data.status == 'APPROVED' ||
                             data.status == 'PENDING') && (
                             <MenuItem
@@ -572,7 +572,7 @@ export function LeaveActions({
                                 />
                                 Request Cancellation
                             </MenuItem>
-                        )}
+                        )} */}
                     {type == 'asAdmin' && (
                         <>
                             <MenuItem
