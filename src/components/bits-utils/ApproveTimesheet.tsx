@@ -30,7 +30,6 @@ interface ExportProps {
     data?: any;
 }
 export const ApproveTimesheet = ({ isOpen, onClose, data }: ExportProps) => {
-    // console.log({ data });
     const router = useRouter();
     const [cancel, setCancel] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -249,6 +248,13 @@ export const ApproveTimesheet = ({ isOpen, onClose, data }: ExportProps) => {
                                 </HStack>
                             )}
                         </form>
+
+                        {data.isEdited && (
+                            <TaskTitleHolder
+                                title="This timesheet has been edited"
+                                color="brand.100"
+                            />
+                        )}
                     </Box>
                 </ModalBody>
             </ModalContent>

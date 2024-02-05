@@ -23,4 +23,6 @@ export type ProjectTimesheetView = {
     amountEarned?: number;
     status?: string | null;
     reason?: string | null;
+    isApproved?: boolean;
+    isEdited?: boolean;
 };

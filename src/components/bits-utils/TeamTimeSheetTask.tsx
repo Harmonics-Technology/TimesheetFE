@@ -77,8 +77,11 @@ const TeamTimeSheetTask = ({
             progress: obj?.percentageOfCompletion,
             approved: obj?.status,
             reason: obj?.reason,
+            projectTaskAsigneeId: obj?.projectTaskAsigneeId,
         };
     });
+
+    console.log({ allShift });
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [data, setData] = useState<any>();
@@ -111,7 +114,7 @@ const TeamTimeSheetTask = ({
         view,
         views,
     }) {
-        const firstDay = startOfWeek(date)
+        const firstDay = startOfWeek(date);
         const goPrevious = () => {
             const newDate = moment(firstDay)
                 .subtract(7, 'day')
@@ -255,10 +258,10 @@ const TeamTimeSheetTask = ({
         timeSlotWrapper: timeSlotWrapper,
         toolbar: CustomToolbar,
     };
-    const {from} = router.query
+    const { from } = router.query;
     const { defaultDate, formats, views } = useMemo(
         () => ({
-            defaultDate: new Date(from as unknown as string || new Date()),
+            defaultDate: new Date((from as unknown as string) || new Date()),
             formats: {
                 dayFormat: (date, culture, localizer) =>
                     localizer.format(date, 'ddd', culture),

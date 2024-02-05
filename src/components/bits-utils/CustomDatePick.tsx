@@ -7,10 +7,12 @@ import DatePicker from 'react-multi-date-picker';
 export const CustomDatePick = ({
     date,
     setDate,
+    placeholder,
     format = 'dddd, MMM DD, YYYY',
 }: {
     date: any;
     setDate: any;
+    placeholder?: any;
     format?: string;
 }) => {
     const dateRef = useRef<any>();
@@ -19,6 +21,7 @@ export const CustomDatePick = ({
         [dateRef],
     );
     useOnClickOutside(dateRef, handleDatePickerClose);
+    console.log({ placeholder });
     return (
         <DatePicker
             containerStyle={{
@@ -47,7 +50,7 @@ export const CustomDatePick = ({
                         onClick={(value) => openCalendar(value)}
                     >
                         <Text mb="0" whiteSpace="nowrap">
-                            {value}
+                            {value || placeholder}
                         </Text>
                         <Icon as={FaRegCalendarAlt} />
                     </HStack>

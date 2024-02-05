@@ -21,4 +21,5 @@ export type RegisterModel = {
     clientSubscriptionId?: string | null;
     commandCenterClientId?: string | null;
     superAdminId?: string | null;
+    draftId?: string | null;
 };

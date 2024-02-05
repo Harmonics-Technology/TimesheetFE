@@ -59,7 +59,10 @@ function Login() {
         resolver: yupResolver(schema),
         mode: 'all',
     });
-    const expiresIn = new Date(new Date().getTime() + 30 * 60 * 1000);
+    const expiresIn =
+        process.env.NODE_ENV == 'development'
+            ? 7
+            : new Date(new Date().getTime() + 30 * 60 * 1000);
     //
     const onSubmit = async (data: LoginModel) => {
         try {
@@ -244,7 +247,7 @@ function Login() {
                     Sign in!
                 </Text>
 
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={(e) => e.preventDefault()}>
                     <VStack w="full" spacing=".7rem">
                         <PrimaryInput<LoginModel>
                             register={register}
@@ -278,6 +281,7 @@ function Login() {
                             p="1.5rem 0"
                             color="white"
                             bgColor="brand.400"
+                            onClick={() => handleSubmit(onSubmit)()}
                             // mt={["2rem", "0"]}
                         >
                             Login

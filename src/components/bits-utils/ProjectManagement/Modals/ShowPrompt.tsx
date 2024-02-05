@@ -89,7 +89,6 @@ export const ShowPrompt = ({ isOpen, onClose, onSubmit, loading, text }) => {
                                 spinner={<BeatLoader color="white" size={10} />}
                                 onClick={() => {
                                     onSubmit();
-                                    onClose();
                                 }}
                             >
                                 Yes

@@ -19,6 +19,7 @@ import type { ProjectTimesheetListViewStandardResponse } from '../models/Project
 import type { ProjectTimesheetModel } from '../models/ProjectTimesheetModel';
 import type { ProjectViewPagedCollectionStandardResponse } from '../models/ProjectViewPagedCollectionStandardResponse';
 import type { ProjectViewStandardResponse } from '../models/ProjectViewStandardResponse';
+import type { UpdateProjectTimesheet } from '../models/UpdateProjectTimesheet';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -133,6 +134,22 @@ requestBody?: ProjectTimesheetModel,
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/ProjectManagement/fill-timesheet',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateFilledTimesheet(
+requestBody?: UpdateProjectTimesheet,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-timesheet',
             body: requestBody,
             mediaType: 'application/json-patch+json',
         });

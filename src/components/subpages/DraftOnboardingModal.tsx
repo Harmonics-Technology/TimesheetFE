@@ -1,26 +1,16 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable no-sparse-arrays */
 import {
     Box,
     Button,
     Flex,
     Text,
-    Tr,
-    useDisclosure,
     Grid,
     DrawerFooter,
     useToast,
-    Icon,
     HStack,
     useRadioGroup,
+    useDisclosure,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
-import {
-    TableActions,
-    TableData,
-    TableStatus,
-} from '@components/bits-utils/TableData';
-import Tables from '@components/bits-utils/Tables';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -28,7 +18,9 @@ import * as yup from 'yup';
 import { RiMailSendFill } from 'react-icons/ri';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
-    adminList: UserViewPagedCollectionStandardResponse;
+    isOpen: boolean;
+    onClose: any;
+    data: UserDraftView | undefined;
     clients: UserView[];
     paymentPartner: UserView[];
     leaveSettings: LeaveConfigurationView;
@@ -38,34 +30,28 @@ interface adminProps {
 import {
     LeaveConfigurationView,
     TeamMemberModel,
+    UserDraftView,
+    UserDraftModel,
     UserService,
     UserView,
-    UserViewPagedCollectionStandardResponse,
-    ControlSettingView,
     DraftService,
-    UserDraftModel,
 } from 'src/services';
-import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import { DateObject } from 'react-multi-date-picker';
-import FilterSearch from '@components/bits-utils/FilterSearch';
 import Loading from '@components/bits-utils/Loading';
 import BeatLoader from 'react-spinners/BeatLoader';
 import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
-import { BsDownload } from 'react-icons/bs';
-import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 import { UserContext } from '@components/context/UserContext';
 import RadioBtn from '@components/bits-utils/RadioBtn';
 import { TriggerBox } from '@components/bits-utils/TriggerBox';
 import Cookies from 'js-cookie';
-import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
-
+import moment from 'moment';
 const schema = yup.object().shape({
     lastName: yup.string().required(),
     firstName: yup.string().required(),
@@ -141,31 +127,26 @@ const schema = yup.object().shape({
     }),
 });
 
-function TeamManagement({
-    adminList,
+function DraftOnboardingModal({
+    isOpen,
+    onClose,
+    data,
     clients,
     paymentPartner,
     leaveSettings,
-    isSuperAdmin,
 }: adminProps) {
     const client = clients?.filter((x) => x.isActive);
     //
-
+    const [openDraft, setOpenDraft] = useState<boolean>(false);
+    const draftSchema = yup.object().shape({});
     const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);
 
-    const {
-        isOpen: openDraft,
-        onOpen: onOpenDraft,
-        onClose: closeDraft,
-    } = useDisclosure();
-    const draftSchema = yup.object().shape({});
     const {
         register,
         handleSubmit,
         control,
         watch,
         reset,
-        setValue,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
         resolver: yupResolver(openDraft ? draftSchema : schema),
@@ -176,10 +157,8 @@ function TeamManagement({
     });
     //
     // console.log({ errors });
-    const { isOpen, onOpen, onClose } = useDisclosure();
     // const { isOpen: opened, onOpen: opens, onClose: closed } = useDisclosure();
-    const { user, opens, subType, accessControls } = useContext(UserContext);
-    const userAccess: ControlSettingView = accessControls;
+    const { user, opens, subType } = useContext(UserContext);
     const router = useRouter();
     const toast = useToast();
     const payroll = watch('payRollTypeId');
@@ -287,9 +266,11 @@ function TeamManagement({
 
     //
     const [clientType, setClientType] = useState(false);
+    const draftId = data?.id;
 
     const onSubmit = async (data: TeamMemberModel) => {
         data.superAdminId = user?.superAdminId;
+        data.draftId = draftId;
         if (data.fixedAmount == true) {
             data.onBoradingFee = fixedAmount;
         }
@@ -305,7 +286,6 @@ function TeamManagement({
         if (inc !== '') {
             data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
         }
-
         {
             (data.hstNumber as unknown as string) == ''
                 ? (data.hstNumber = 0)
@@ -363,13 +343,9 @@ function TeamManagement({
                     isClosable: true,
                     position: 'top-right',
                 });
-                reset();
-                setContractFile({});
-                setIcd({});
-                setVoidCheck({});
-                setInc({});
-                onClose();
                 router.replace(router.asPath);
+                reset();
+                onClose();
                 return;
             }
             toast({
@@ -389,25 +365,10 @@ function TeamManagement({
         }
     };
 
-    const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
-    const thead = [
-        'Name',
-        'Job Title',
-        'Client Name',
-        'Payroll Type',
-        'Role',
-        'Status',
-        '',
-    ];
-
-    // subType = 'onshore';
-
-    //
-
     const radios = ['For me', 'For my client'];
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'selection',
-        defaultValue: 'for my client',
+        defaultValue: clientType ? 'For my client' : 'For me',
         onChange: (value) => updateClientField(value),
     });
 
@@ -423,39 +384,107 @@ function TeamManagement({
 
     useEffect(() => {
         const isUser = Cookies.get('user');
+        setClientType(data?.clientId == data?.superAdminId ? false : true);
         if (isUser !== undefined) {
             const userDetails = JSON.parse(isUser as unknown as string);
             reset({
-                clientId: userDetails.superAdminId,
-                role: 'Team Member',
-                onBoradingFee: fixedAmount,
-                employeeType: 'regular',
-                numberOfDaysEligible: leaveSettings?.eligibleLeaveDays,
-                isEligibleForLeave: false,
-                payRollTypeId: subType == 'premium' ? 2 : 1,
-                currency: subType != 'premium' ? 'CAD' : 'NGN',
-                clientRate: 0,
+                clientId: data?.clientId || userDetails.superAdminId,
+                role: data?.role || 'Team Member',
+                employeeType: data?.employeeType || 'regular',
+                numberOfDaysEligible:
+                    data?.numberOfDaysEligible ||
+                    leaveSettings?.eligibleLeaveDays,
+                isEligibleForLeave: (data?.isEligibleForLeave as any) || false,
+                payRollTypeId:
+                    (data?.payRollTypeId as any) ||
+                    (subType == 'premium' ? 2 : 1),
+                clientRate: data?.clientRate || 0,
+                isActive: data?.isActive as any,
+                phoneNumber: data?.phoneNumber,
+                email: data?.email,
+                firstName: data?.firstName,
+                lastName: data?.lastName,
+                address: data?.address,
+                dateOfBirth: data?.dateOfBirth as any,
+                supervisorId: data?.supervisorId,
+                paymentPartnerId: data?.paymentPartnerId,
+                currency:
+                    data?.currency || subType != 'premium' ? 'CAD' : 'NGN',
+                paymentRate: data?.paymentRate,
+                insuranceDocumentUrl: data?.insuranceDocumentUrl,
+                voidCheckUrl: data?.voidCheckUrl,
+                inCorporationDocumentUrl: data?.inCorporationDocumentUrl,
+                paymentFrequency: data?.paymentFrequency,
+                fixedAmount: data?.fixedAmount as any,
+                onBoradingFee: data?.onBoradingFee || fixedAmount,
+                monthlyPayoutRate: data?.monthlyPayoutRate,
+                payrollGroupId: data?.payrollGroupId,
+                numberOfHoursEligible: data?.numberOfHoursEligible,
+                invoiceGenerationType: data?.invoiceGenerationType,
+                enableFinancials: data?.enableFinancials as any,
+                jobTitle: data?.jobTitle,
+                hoursPerDay: data?.hoursPerDay as any,
+                title: data?.title,
+                startDate: data?.startDate as any,
+                endDate: data?.endDate as any,
+                hstNumber: data?.hstNumber as any,
+                document: data?.document,
+                ratePerHour: data?.ratePerHour as any,
                 // fixedAmount: true,
             });
         }
     }, []);
 
-    const userFirstName = watch('firstName');
-    const userLastName = watch('lastName');
-    const userEmail = watch('email');
     const closeModal = () => {
-        if (userFirstName && userLastName && userEmail) {
-            onClose();
-            onOpenDraft();
-        } else {
-            onClose();
-        }
+        setOpenDraft(true);
     };
-    const saveToDraft = async (data: TeamMemberModel) => {
-        data.superAdminId = user?.superAdminId;
+    const saveToDraft = async (value: TeamMemberModel) => {
+        value.superAdminId = data?.superAdminId;
+        value.id = data?.id;
+        if (value.fixedAmount == true) {
+            value.onBoradingFee = fixedAmount;
+        }
+        if (contract !== '') {
+            value.document = `${contract.cdnUrl} ${contract.name}`;
+        }
+        if (icd !== '') {
+            value.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
+        }
+        if (voidCheck !== '') {
+            value.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
+        }
+        if (inc !== '') {
+            value.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
+        }
+        {
+            (value.hstNumber as unknown as string) == ''
+                ? (value.hstNumber = 0)
+                : (value.hstNumber as number);
+        }
+        {
+            (value.ratePerHour as unknown as string) == ''
+                ? (value.ratePerHour = 0)
+                : (value.ratePerHour as number);
+        }
+        {
+            (value.hoursPerDay as unknown as string) == ''
+                ? (value.hoursPerDay = 0)
+                : (value.hoursPerDay as number);
+        }
+        {
+            (value.monthlyPayoutRate as unknown as string) == ''
+                ? (value.monthlyPayoutRate = 0)
+                : (value.monthlyPayoutRate as number);
+        }
+        {
+            (value?.isEligibleForLeave as unknown as string) == 'Yes'
+                ? (value.isEligibleForLeave = true)
+                : (value.isEligibleForLeave = false);
+        }
+        value.clientId = !clientType ? user?.superAdminId : value.clientId;
         try {
-            const result = await DraftService.createDraft(
-                data as UserDraftModel,
+            const result = await DraftService.updateDraft(
+                value as UserDraftModel,
             );
             if (result.status) {
                 toast({
@@ -466,7 +495,8 @@ function TeamManagement({
                 });
                 router.replace(router.asPath);
                 reset();
-                closeDraft();
+                setOpenDraft(false);
+                onClose(false);
                 return;
             }
             toast({
@@ -486,83 +516,17 @@ function TeamManagement({
         }
     };
 
+    console.log({
+        errors,
+        fin: watch('enableFinancials'),
+        py: watch('payRollTypeId'),
+    });
+
     return (
         <>
-            <Box
-                bgColor="white"
-                borderRadius="15px"
-                padding="1.5rem"
-                boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
-            >
-                <LeaveTab
-                    tabValue={[
-                        {
-                            text: 'Team Members',
-                            url: '/profile-management/team-members',
-                        },
-                        {
-                            text: 'Drafts',
-                            url: `/profile-management/team-members/drafts`,
-                        },
-                    ]}
-                />
-                <Flex justify="space-between" my="1rem">
-                    {(userAccess?.adminOBoarding || isSuperAdmin) && (
-                        <Button
-                            bgColor="brand.400"
-                            color="white"
-                            p=".5rem 1.5rem"
-                            height="fit-content"
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            onClick={onOpen}
-                        >
-                            +Team Member
-                        </Button>
-                    )}
-                    <Button
-                        bgColor="brand.600"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
-                        // boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        onClick={onOpens}
-                        borderRadius="25px"
-                    >
-                        Download <Icon as={BsDownload} ml=".5rem" />
-                    </Button>
-                </Flex>
-                <FilterSearch searchOptions="Search by: Full Name, Job Title, Role, Payroll Type or Status" />
-                <Tables tableHead={thead}>
-                    <>
-                        {adminList?.data?.value?.map((x: UserView) => (
-                            <Tr key={x.id}>
-                                <TableData name={x.fullName} />
-                                <TableData
-                                    name={x.employeeInformation?.jobTitle}
-                                />
-
-                                <TableData name={x.clientName} />
-
-                                {/* <TableData name={x.phoneNumber} /> */}
-                                <TableData
-                                    name={x.employeeInformation?.payrollType}
-                                />
-                                <TableData name={x.role} />
-                                <TableStatus name={x.isActive} />
-                                <TableActions
-                                    id={x.id}
-                                    route="team-members"
-                                    email={x.email}
-                                />
-                            </Tr>
-                        ))}
-                    </>
-                </Tables>
-                <Pagination data={adminList} />
-            </Box>
-            {isOpen && (
+            <Box>
                 <DrawerWrapper
-                    onClose={closeModal}
+                    onClose={() => closeModal()}
                     isOpen={isOpen}
                     title={'Add a new Team Member'}
                 >
@@ -609,6 +573,9 @@ function TeamManagement({
                                 label="Date of Birth"
                                 error={errors.dateOfBirth}
                                 max={new DateObject().subtract(1, 'days')}
+                                defaultValue={moment(data?.dateOfBirth).format(
+                                    'DD MM YYYY',
+                                )}
                             />
 
                             <SelectrixBox<TeamMemberModel>
@@ -618,6 +585,11 @@ function TeamManagement({
                                 keys="id"
                                 keyLabel="label"
                                 label="Profile Status"
+                                placeholder={
+                                    data?.isActive === true
+                                        ? 'Active'
+                                        : 'Not Active'
+                                }
                                 options={[
                                     { id: 'true', label: 'Active' },
                                     { id: 'false', label: 'Not Active' },
@@ -702,6 +674,11 @@ function TeamManagement({
                                         keyLabel="organizationName"
                                         label="Current Client"
                                         options={client}
+                                        placeholder={
+                                            client.find(
+                                                (x) => x.id == data?.clientId,
+                                            )?.fullName as string
+                                        }
                                     />
                                 )}
                                 {/* {supervisors !== undefined && ( */}
@@ -713,6 +690,11 @@ function TeamManagement({
                                     keyLabel="fullName"
                                     label="Supervisor"
                                     options={supervisors}
+                                    placeholder={
+                                        supervisors?.find(
+                                            (x) => x.id == data?.supervisorId,
+                                        )?.fullName as string
+                                    }
                                 />
                                 {/*  )} */}
                                 <Box pos="relative">
@@ -782,6 +764,9 @@ function TeamManagement({
                                     keys="id"
                                     keyLabel="label"
                                     label="Timesheet Frequency"
+                                    placeholder={
+                                        data?.paymentFrequency as string
+                                    }
                                     options={[
                                         { id: 'Weekly', label: 'Weekly' },
                                         { id: 'Bi-weekly', label: 'Bi-Weekly' },
@@ -861,7 +846,10 @@ function TeamManagement({
                                             <UploadCareWidget
                                                 refs={widgetApiB}
                                                 label="Incoporation Document"
-                                                filename={icd?.name}
+                                                filename={
+                                                    icd?.name ||
+                                                    data?.inCorporationDocumentUrl
+                                                }
                                                 loading={showLoadingB}
                                                 uploadFunction={
                                                     showLoadingStateB
@@ -870,7 +858,10 @@ function TeamManagement({
                                             <UploadCareWidget
                                                 refs={widgetApiC}
                                                 label="Void Check"
-                                                filename={voidCheck?.name}
+                                                filename={
+                                                    voidCheck?.name ||
+                                                    data?.voidCheckUrl
+                                                }
                                                 loading={showLoadingC}
                                                 uploadFunction={
                                                     showLoadingStateC
@@ -879,7 +870,10 @@ function TeamManagement({
                                             <UploadCareWidget
                                                 refs={widgetApiD}
                                                 label="Issuance Certificate"
-                                                filename={inc?.name}
+                                                filename={
+                                                    inc?.name ||
+                                                    data?.insuranceDocumentUrl
+                                                }
                                                 loading={showLoadingD}
                                                 uploadFunction={
                                                     showLoadingStateD
@@ -915,6 +909,13 @@ function TeamManagement({
                                                 keyLabel="firstName"
                                                 label="Payment Partner"
                                                 options={paymentPartner}
+                                                placeholder={
+                                                    paymentPartner.find(
+                                                        (x) =>
+                                                            x.id ==
+                                                            data?.paymentPartnerId,
+                                                    )?.fullName as string
+                                                }
                                             />
                                         </>
                                     ) : null}
@@ -969,6 +970,9 @@ function TeamManagement({
                                         keys="id"
                                         keyLabel="label"
                                         label="Invoice Type"
+                                        placeholder={
+                                            data?.invoiceGenerationType as string
+                                        }
                                         options={[
                                             { id: 'invoice', label: 'Invoice' },
                                             { id: 'payroll', label: 'Payroll' },
@@ -982,6 +986,11 @@ function TeamManagement({
                                         keys="id"
                                         keyLabel="label"
                                         label="Onboarding fee type"
+                                        placeholder={
+                                            data?.fixedAmount
+                                                ? 'Fixed Amount'
+                                                : 'Percentage'
+                                        }
                                         options={[
                                             {
                                                 id: true,
@@ -1003,6 +1012,9 @@ function TeamManagement({
                                             keyLabel="fee"
                                             label="Onboarding fee"
                                             options={percentageAmount}
+                                            placeholder={
+                                                data?.onBoradingFee as unknown as string
+                                            }
                                         />
                                     ) : (
                                         ''
@@ -1049,6 +1061,9 @@ function TeamManagement({
                                     name="startDate"
                                     label="Start Date"
                                     error={errors.startDate}
+                                    placeholder={moment(
+                                        data?.startDate as any,
+                                    ).format('DD MM YYYY')}
                                     // min={new Date()}
                                 />
                                 <PrimaryDate<TeamMemberModel>
@@ -1057,6 +1072,9 @@ function TeamManagement({
                                     label="End Date"
                                     error={errors.endDate}
                                     min={new DateObject().add(3, 'days')}
+                                    placeholder={moment(
+                                        data?.endDate as any,
+                                    ).format('DD MM YYYY')}
                                 />
                                 {/* <PrimaryDate<TeamMemberModel>
                                     control={control}
@@ -1070,7 +1088,7 @@ function TeamManagement({
                             <UploadCareWidget
                                 refs={widgetApi}
                                 label="Attach Document"
-                                filename={contract?.name}
+                                filename={contract?.name || data?.document}
                                 loading={showLoading}
                                 uploadFunction={showLoadingState}
                             />
@@ -1099,12 +1117,16 @@ function TeamManagement({
                                     label="Are you eligible for Leave"
                                     radios={['No', 'Yes']}
                                     name="isEligibleForLeave"
+                                    defaultValue={
+                                        data?.isEligibleForLeave ? 'Yes' : 'No'
+                                    }
                                     control={control}
                                     error={errors.isEligibleForLeave}
                                 />
                             </Box>
-                            {(isEligibleForLeave as unknown as string) ==
-                                'Yes' && (
+                            {((isEligibleForLeave as unknown as string) ==
+                                'Yes' ||
+                                data?.isEligibleForLeave) && (
                                 <Grid
                                     templateColumns={[
                                         'repeat(1,1fr)',
@@ -1173,28 +1195,22 @@ function TeamManagement({
                         </DrawerFooter>
                     </form>
                 </DrawerWrapper>
-            )}
-            {open && (
-                <ExportReportModal
-                    isOpen={open}
-                    onClose={close}
-                    data={thead}
-                    record={2}
-                    fileName={'Team members'}
-                    model="users"
-                />
-            )}
-            {openDraft && (
-                <ShowPrompt
-                    isOpen={openDraft}
-                    onClose={closeDraft}
-                    onSubmit={handleSubmit(saveToDraft)}
-                    loading={isSubmitting}
-                    text={`Do you want to save as draft?`}
-                />
-            )}
+
+                {openDraft && (
+                    <ShowPrompt
+                        isOpen={openDraft}
+                        onClose={() => {
+                            setOpenDraft(false);
+                            onClose(false);
+                        }}
+                        onSubmit={handleSubmit(saveToDraft)}
+                        loading={isSubmitting}
+                        text={`Do you want to save as draft?`}
+                    />
+                )}
+            </Box>
         </>
     );
 }
 
-export default TeamManagement;
+export default DraftOnboardingModal;

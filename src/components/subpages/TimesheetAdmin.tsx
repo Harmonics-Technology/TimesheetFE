@@ -269,7 +269,7 @@ const TimesheetAdmin = ({
                 data,
             );
             if (result.status) {
-                setSingleReject({state: false,id: ''});
+                setSingleReject({ state: false, id: '' });
                 router.replace(router.asPath);
                 return;
             }
@@ -902,7 +902,7 @@ const TimesheetAdmin = ({
                                 //     ? // timesheets?.status == 'PENDING'
                                 //       '---'
                                 //     :
-                                timesheets?.hours || '---'
+                                timesheets?.hours
                             }
                             placeholder="---"
                             textAlign="center"

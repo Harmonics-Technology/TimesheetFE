@@ -10,24 +10,38 @@ import TimePicker from 'react-time-picker';
 import { CustomDatePick } from './CustomDatePick';
 // import TimePicker from 'react-multi-date-picker/plugins/time_picker';
 
-export const CustomDateTime = ({ onChange, value, label, useEnd }) => {
+export const CustomDateTime = ({
+    onChange,
+    value,
+    label,
+    useEnd,
+    placeholder,
+}: {
+    onChange: any;
+    value: any;
+    label: any;
+    useEnd: any;
+    placeholder?: any;
+}) => {
     const {
         ref: timeRef,
         isComponentVisible: startVisible,
         setIsComponentVisible: startIsVisible,
     } = useComponentVisible(false);
+
+    // console.log({ placeholder });
     const newValue = moment(value).format('YYYY-MM-DD HH:mm');
-    const [date, setDate] = useState<any>();
+    const [date, setDate] = useState<any>(value);
     // new DateObject(newValue.split(' ')[0]) || new DateObject(),
     const [time, setTime] = useState<any>(
         newValue?.split(' ')[1] || moment().format('HH:mm'),
     );
 
-    const newDate = date?.format('YYYY-MM-DD');
+    const newDate = moment(date).format('YYYY-MM-DD');
     //
 
     useEffect(() => {
-        onChange(newDate + 'T' + time);
+        onChange(newDate + ' ' + time);
     }, [date, time]);
     return (
         <Box w="full">
@@ -40,59 +54,59 @@ export const CustomDateTime = ({ onChange, value, label, useEnd }) => {
             </FormLabel>
             <HStack gap="2rem">
                 <Box w={useEnd ? '100%' : '60%'}>
-                    <CustomDatePick date={date} setDate={setDate} />
+                    <CustomDatePick
+                        date={date}
+                        setDate={setDate}
+                        placeholder={placeholder}
+                    />
                 </Box>
 
-                {
-                    !useEnd && (
-                        <Box w="40%">
-                    <Box w="full" ref={timeRef} pos="relative">
-                        <HStack
-                            w="100%"
-                            px="1rem"
-                            h="2.5rem"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            border="1px solid"
-                            borderColor="gray.300"
-                            color="gray.500"
-                            boxShadow="sm"
-                            borderRadius="0"
-                            cursor="pointer"
-                            fontSize=".9rem"
-                            onClick={() => startIsVisible(!startVisible)}
-                        >
-                            <Text mb="0" whiteSpace="nowrap">
-                                {time}
-                            </Text>
-                            <Icon as={BiTimeFive} />
-                        </HStack>
-                        {startVisible && (
-                            <Box
-                                pos="absolute"
-                                top="100%"
-                                zIndex="100"
-                                bgColor="white"
-                                w="full"
-                                p="0rem 0 1rem"
-                                // boxShadow='md'
+                {!useEnd && (
+                    <Box w="40%">
+                        <Box w="full" ref={timeRef} pos="relative">
+                            <HStack
+                                w="100%"
+                                px="1rem"
+                                h="2.5rem"
+                                justifyContent="space-between"
+                                alignItems="center"
+                                border="1px solid"
+                                borderColor="gray.300"
+                                color="gray.500"
+                                boxShadow="sm"
+                                borderRadius="0"
+                                cursor="pointer"
+                                fontSize=".9rem"
+                                onClick={() => startIsVisible(!startVisible)}
                             >
-                                <TimePicker
-                                    onChange={setTime}
-                                    value={time}
-                                    format="hh mm a"
-                                    disableClock
-                                    className="timePicker"
-                                    clearIcon={null}
-                                />
-                            </Box>
-                        )}
+                                <Text mb="0" whiteSpace="nowrap">
+                                    {time}
+                                </Text>
+                                <Icon as={BiTimeFive} />
+                            </HStack>
+                            {startVisible && (
+                                <Box
+                                    pos="absolute"
+                                    top="100%"
+                                    zIndex="100"
+                                    bgColor="white"
+                                    w="full"
+                                    p="0rem 0 1rem"
+                                    // boxShadow='md'
+                                >
+                                    <TimePicker
+                                        onChange={setTime}
+                                        value={time}
+                                        format="hh mm a"
+                                        disableClock
+                                        className="timePicker"
+                                        clearIcon={null}
+                                    />
+                                </Box>
+                            )}
+                        </Box>
                     </Box>
-                </Box>
-                    )
-                }
-
-                
+                )}
             </HStack>
         </Box>
     );

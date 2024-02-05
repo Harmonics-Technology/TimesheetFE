@@ -8,6 +8,7 @@ export type Data = {
     id?: string | null;
     clientId?: string | null;
     freeTrialStartDate?: any;
+    onFreeTrial?: any;
     startDate?: string;
     duration?: number;
     subscriptionId?: string | null;

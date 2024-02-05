@@ -54,6 +54,7 @@ const SupervisorTimesheetTask = ({
             assigneeId: id,
         };
     });
+    console.log({ allShift });
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {

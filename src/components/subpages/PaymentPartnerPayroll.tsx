@@ -31,6 +31,7 @@ import { GenerateInvoiceModal } from '@components/bits-utils/GenerateInvoiceModa
 import { formatDate } from '@components/generics/functions/formatDate';
 import dynamic from 'next/dynamic';
 import { Round } from '@components/generics/functions/Round';
+import { CUR } from '@components/generics/functions/Naira';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -236,7 +237,7 @@ function PaymentPartnerPayroll({
                                 />
                                 <TableData name={`${x.totalHours} HRS`} />
                                 {/* <TableData name={x.rate} /> */}
-                                <TableData name={Round(x.totalAmount)} />
+                                <TableData name={CUR(Round(x.totalAmount))} />
                                 {/* <TableContractAction
                                     id={x.employeeInformationId}
                                     timeSheets={true}

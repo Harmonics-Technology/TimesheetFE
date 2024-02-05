@@ -23,6 +23,7 @@ export type { ClientSubscriptionResponseViewModel } from './models/ClientSubscri
 export type { ClientSubscriptionResponseViewModelStandardResponse } from './models/ClientSubscriptionResponseViewModelStandardResponse';
 export type { CommandCenterAddCardResponse } from './models/CommandCenterAddCardResponse';
 export type { CommandCenterAddCardResponseStandardResponse } from './models/CommandCenterAddCardResponseStandardResponse';
+export type { ContactMessageModel } from './models/ContactMessageModel';
 export type { Contract } from './models/Contract';
 export type { ContractModel } from './models/ContractModel';
 export type { ContractView } from './models/ContractView';
@@ -193,10 +194,15 @@ export type { TimeSheetView } from './models/TimeSheetView';
 export type { UpdateCardDetailsModel } from './models/UpdateCardDetailsModel';
 export type { UpdateClientStripeSubscriptionModel } from './models/UpdateClientStripeSubscriptionModel';
 export type { UpdateClientSubscriptionModel } from './models/UpdateClientSubscriptionModel';
+export type { UpdateProjectTimesheet } from './models/UpdateProjectTimesheet';
 export type { UpdateUserModel } from './models/UpdateUserModel';
 export type { User } from './models/User';
 export type { UserCountByPayrollTypeView } from './models/UserCountByPayrollTypeView';
 export type { UserCountByPayrollTypeViewListStandardResponse } from './models/UserCountByPayrollTypeViewListStandardResponse';
+export type { UserDraftModel } from './models/UserDraftModel';
+export type { UserDraftView } from './models/UserDraftView';
+export type { UserDraftViewPagedCollection } from './models/UserDraftViewPagedCollection';
+export type { UserDraftViewPagedCollectionStandardResponse } from './models/UserDraftViewPagedCollectionStandardResponse';
 export type { UserProfileView } from './models/UserProfileView';
 export type { UserProfileViewStandardResponse } from './models/UserProfileViewStandardResponse';
 export type { UsersShiftView } from './models/UsersShiftView';
@@ -210,6 +216,7 @@ export type { UserViewStandardResponse } from './models/UserViewStandardResponse
 
 export { ContractService } from './services/ContractService';
 export { DashboardService } from './services/DashboardService';
+export { DraftService } from './services/DraftService';
 export { ExportService } from './services/ExportService';
 export { FinancialService } from './services/FinancialService';
 export { LeaveService } from './services/LeaveService';
@@ -221,3 +228,4 @@ export { SettingsService } from './services/SettingsService';
 export { ShiftService } from './services/ShiftService';
 export { TimeSheetService } from './services/TimeSheetService';
 export { UserService } from './services/UserService';
+export { UtilityService } from './services/UtilityService';
