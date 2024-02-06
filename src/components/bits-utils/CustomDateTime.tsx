@@ -16,12 +16,14 @@ export const CustomDateTime = ({
     label,
     useEnd,
     placeholder,
+    yearOnly,
 }: {
     onChange: any;
     value: any;
     label: any;
     useEnd: any;
     placeholder?: any;
+    yearOnly?: boolean;
 }) => {
     const {
         ref: timeRef,
@@ -58,6 +60,7 @@ export const CustomDateTime = ({
                         date={date}
                         setDate={setDate}
                         placeholder={placeholder}
+                        onlyYear={yearOnly}
                     />
                 </Box>
 

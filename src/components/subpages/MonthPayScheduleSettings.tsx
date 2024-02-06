@@ -1,6 +1,7 @@
 import {
     Box,
     Flex,
+    FormLabel,
     Grid,
     HStack,
     Text,
@@ -27,6 +28,8 @@ import InputBlank from '@components/bits-utils/InputBlank';
 import PayscheduleBottomNote from '@components/bits-utils/PayscheduleBottomNote';
 import { PayscheduleSidenote } from '@components/bits-utils/PayscheduleSidenote';
 import moment from 'moment';
+import { CustomDateTime } from '@components/bits-utils/CustomDateTime';
+import { CustomDatePick } from '@components/bits-utils/CustomDatePick';
 
 const schema = yup.object().shape({});
 
@@ -59,6 +62,7 @@ export const MonthPayScheduleSettings = ({
     const { user } = useContext(UserContext);
     const superAdminId = user?.superAdminId;
     const endDate = moment(watch('startDate')).add(27, 'days');
+    const [year, setYear] = useState();
 
     const onSubmit = async (data: PayScheduleGenerationModel) => {
         data.superAdminId = superAdminId;
@@ -68,6 +72,7 @@ export const MonthPayScheduleSettings = ({
                     ? await FinancialService.generateCustomFullMonthPaymentSchedule(
                           data.paymentDateDays,
                           superAdminId,
+                          Number(moment(year).format('YYYY')),
                       )
                     : await FinancialService.generateCustomMonthlyPaymentScheduleWeekPeriod(
                           data,
@@ -143,16 +148,35 @@ export const MonthPayScheduleSettings = ({
                             }
                         />
                         {(payType as any) == 1 && (
-                            <PrimaryInput<PayScheduleGenerationModel>
-                                label="Payment Day"
-                                name="paymentDateDays"
-                                error={errors.paymentDateDays}
-                                placeholder={
-                                    payday || 'Enter the number of days'
-                                }
-                                defaultValue=""
-                                register={register}
-                            />
+                            <HStack w="full" spacing="1rem" align="flex-end">
+                                <PrimaryInput<PayScheduleGenerationModel>
+                                    label="Payment Day"
+                                    name="paymentDateDays"
+                                    error={errors.paymentDateDays}
+                                    placeholder={
+                                        payday || 'Enter the number of days'
+                                    }
+                                    defaultValue=""
+                                    register={register}
+                                />
+                                <Box w="full">
+                                    <FormLabel
+                                        htmlFor={'Select Year'}
+                                        textTransform="capitalize"
+                                        fontSize={'.8rem'}
+                                    >
+                                        {'Select Year'}
+                                    </FormLabel>
+                                    <Box w="100%">
+                                        <CustomDatePick
+                                            date={year}
+                                            setDate={setYear}
+                                            onlyYear={true}
+                                            format="YYYY"
+                                        />
+                                    </Box>
+                                </Box>
+                            </HStack>
                         )}
                         {(payType as any) == 2 && (
                             <>

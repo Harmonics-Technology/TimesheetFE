@@ -9,11 +9,13 @@ export const CustomDatePick = ({
     setDate,
     placeholder,
     format = 'dddd, MMM DD, YYYY',
+    onlyYear = false,
 }: {
     date: any;
     setDate: any;
     placeholder?: any;
     format?: string;
+    onlyYear?: boolean;
 }) => {
     const dateRef = useRef<any>();
     const handleDatePickerClose = useCallback(
@@ -21,7 +23,6 @@ export const CustomDatePick = ({
         [dateRef],
     );
     useOnClickOutside(dateRef, handleDatePickerClose);
-    console.log({ placeholder });
     return (
         <DatePicker
             containerStyle={{
@@ -31,6 +32,7 @@ export const CustomDatePick = ({
             onChange={setDate}
             ref={dateRef}
             format={format}
+            onlyYearPicker={onlyYear}
             // plugins={[<TimePicker position="right" />]}
             render={(value, openCalendar) => {
                 return (
