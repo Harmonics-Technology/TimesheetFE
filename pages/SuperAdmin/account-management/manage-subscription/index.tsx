@@ -1,12 +1,13 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
+import { LicenseHome } from '@components/subpages/ManageSub/LicenseHome';
 import { SubscriptionDetails } from '@components/subpages/SubscriptionDetails';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import { UserService } from 'src/services';
 
 const manageSubscription = ({ data }) => {
-    return <SubscriptionDetails data={data} />;
+    return <LicenseHome data={data} />;
 };
 
 export default manageSubscription;

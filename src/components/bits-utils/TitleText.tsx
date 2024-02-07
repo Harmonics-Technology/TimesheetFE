@@ -26,7 +26,7 @@ const TitleText = ({
                 {title}
             </Text>
             <HStack align="center">
-                {color && <Square size=".875rem" bgColor={text} />}
+                {color && <Square size=".875rem" bgColor={color} />}
                 <Text
                     fontSize=".81rem"
                     color="#8C8C8C"

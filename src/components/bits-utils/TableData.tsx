@@ -282,6 +282,39 @@ export function TableContract({ url }: { url: any }) {
         </td>
     );
 }
+export function TableInvoiceSub({ url }: { url: any }) {
+    //
+    const [loading, setLoading] = useState(false);
+    const downloadFile = (url: string) => {
+        setLoading(true);
+        axios
+            .get(url, {
+                responseType: 'blob',
+            })
+            .then((res) => {
+                fileDownload(res.data, `${url.split(' ').pop()}`);
+                setLoading(false);
+            });
+    };
+    return (
+        <td>
+            <Box
+                fontSize="1.4rem"
+                fontWeight="bold"
+                padding=".2rem 1rem"
+                width="fit-content"
+                cursor="pointer"
+                onClick={() => downloadFile(url)}
+            >
+                {loading ? (
+                    <Spinner size="sm" />
+                ) : (
+                    `Download Invoice${(<AiOutlineDownload />)}`
+                )}
+            </Box>
+        </td>
+    );
+}
 export function TableActions({
     id,
     route,

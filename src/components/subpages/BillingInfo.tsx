@@ -13,6 +13,7 @@ import { UserContext } from '@components/context/UserContext';
 import React, { useContext, useState } from 'react';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { Card, UserService } from 'src/services';
+import { LicenseNav } from './ManageSub/LicenseNav';
 
 export const BillingInfo = ({ data }: { data: Card[] }) => {
     const { user } = useContext(UserContext);
@@ -48,7 +49,7 @@ export const BillingInfo = ({ data }: { data: Card[] }) => {
     };
     return (
         <Box>
-            <LeaveTab
+            {/* <LeaveTab
                 tabValue={[
                     {
                         text: 'Subscription',
@@ -59,7 +60,8 @@ export const BillingInfo = ({ data }: { data: Card[] }) => {
                         url: `/account-management/billing-information`,
                     },
                 ]}
-            />
+            /> */}
+            <LicenseNav />
             <Box my="1rem" borderRadius=".75rem" bgColor="white" p="1rem">
                 <HStack justify="space-between" gap="1rem" mb="1.77rem">
                     <Text fontWeight="500" color="#252f40">

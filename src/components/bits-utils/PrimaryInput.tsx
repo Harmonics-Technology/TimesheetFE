@@ -67,16 +67,18 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
             isInvalid={
                 error?.type === 'required' || error?.message !== undefined
             }
+            w={w}
         >
-            <FormLabel
-                htmlFor={label}
-                textTransform="capitalize"
-                width="fit-content"
-                fontSize={fontSize}
-            >
-                {label}
-            </FormLabel>
-
+            {label && (
+                <FormLabel
+                    htmlFor={label}
+                    textTransform="capitalize"
+                    width="fit-content"
+                    fontSize={fontSize}
+                >
+                    {label}
+                </FormLabel>
+            )}
             <InputGroup>
                 <Input
                     type={type}
@@ -89,11 +91,9 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                     borderColor={borderColor}
                     borderRadius="0"
                     h={h}
-                    w={w}
                     isReadOnly={readonly}
                     step=".01"
                     fontSize={fontSize}
-                    
                 />
                 {icon && (
                     <InputRightElement
