@@ -85,12 +85,14 @@ requestBody?: PayScheduleGenerationModel,
     /**
      * @param paymentDay 
      * @param superAdminId 
+     * @param year 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static generateCustomFullMonthPaymentSchedule(
 paymentDay?: number,
 superAdminId?: string,
+year?: number,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
@@ -98,6 +100,7 @@ superAdminId?: string,
             query: {
                 'paymentDay': paymentDay,
                 'superAdminId': superAdminId,
+                'year': year,
             },
             errors: {
                 400: `Bad Request`,
