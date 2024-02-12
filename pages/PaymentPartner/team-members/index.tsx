@@ -14,15 +14,17 @@ interface TeamProps {
     teamList: UserViewPagedCollectionStandardResponse;
     clients: UserView[];
     id: string;
+    subs: any;
 }
 
-function Team({ teamList, clients, id }: TeamProps) {
+function Team({ teamList, clients, id, subs }: TeamProps) {
     //
     return (
         <PaymentPartnerTeamManagement
             adminList={teamList}
             clients={clients}
             id={id}
+            subs={subs}
         />
     );
 }
@@ -51,12 +53,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 // pagingOptions.from,
                 // pagingOptions.to,
             );
+            const subs = await UserService.getClientSubScriptions(superAdminId);
 
             return {
                 props: {
                     teamList: data,
                     clients: clients?.data?.value,
                     id,
+                    subs: subs.data,
                 },
             };
         } catch (error: any) {

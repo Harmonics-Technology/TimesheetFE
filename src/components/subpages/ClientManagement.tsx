@@ -32,6 +32,7 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     isSuperAdmin?: boolean;
+    subs: any;
 }
 
 import {
@@ -68,7 +69,7 @@ const schema = yup.object().shape({
     term: yup.number().required(),
 });
 
-function ClientManagement({ adminList, isSuperAdmin }: adminProps) {
+function ClientManagement({ adminList, isSuperAdmin, subs }: adminProps) {
     //
     const { user, accessControls } = useContext(UserContext);
     const userAccess: ControlSettingView = accessControls;
@@ -92,6 +93,13 @@ function ClientManagement({ adminList, isSuperAdmin }: adminProps) {
     const [same, setSame] = useState(false);
     //
 
+    const [selectedLicense, setSelectedLicense] = useState<any>();
+    const addLicense = (license) => {
+        setSelectedLicense(license);
+    };
+    const removeLicense = (id) => {
+        setSelectedLicense(undefined);
+    };
     const onSubmit = async (data: RegisterModel) => {
         {
             same
@@ -102,7 +110,7 @@ function ClientManagement({ adminList, isSuperAdmin }: adminProps) {
                 : null;
         }
         data.superAdminId = user?.superAdminId;
-
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         try {
             const result = await UserService.create(data);
             if (result.status) {
@@ -113,7 +121,7 @@ function ClientManagement({ adminList, isSuperAdmin }: adminProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                reset()
+                reset();
                 onClose();
                 return;
             }

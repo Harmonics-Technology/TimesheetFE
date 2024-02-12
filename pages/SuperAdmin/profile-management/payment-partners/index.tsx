@@ -9,11 +9,18 @@ import {
 } from 'src/services';
 interface PaymentPartnerProps {
     PaymentPartnerList: UserViewPagedCollectionStandardResponse;
+    subs: any;
 }
 
-function PaymentPartner({ PaymentPartnerList }: PaymentPartnerProps) {
+function PaymentPartner({ PaymentPartnerList, subs }: PaymentPartnerProps) {
     //
-    return <PaymentPartnerManagement adminList={PaymentPartnerList} isSuperAdmin />;
+    return (
+        <PaymentPartnerManagement
+            adminList={PaymentPartnerList}
+            isSuperAdmin
+            subs={subs}
+        />
+    );
 }
 
 export default PaymentPartner;
@@ -32,9 +39,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
+            const subs = await UserService.getClientSubScriptions(superAdminId);
             return {
                 props: {
                     PaymentPartnerList: data,
+                    subs: subs.data,
                 },
             };
         } catch (error: any) {

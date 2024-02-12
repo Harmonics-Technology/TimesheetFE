@@ -34,6 +34,7 @@ interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     clients: UserView[];
     id: string;
+    subs: any;
 }
 
 import {
@@ -54,6 +55,7 @@ import Loading from '@components/bits-utils/Loading';
 import BeatLoader from 'react-spinners/BeatLoader';
 import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -92,7 +94,12 @@ const schema = yup.object().shape({
     paymentFrequency: yup.string().required(),
 });
 
-function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
+function PaymentPartnerTeamManagement({
+    adminList,
+    clients,
+    id,
+    subs,
+}: adminProps) {
     const client = clients?.filter((x) => x.isActive);
 
     const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);
@@ -214,7 +221,17 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
         getSupervisor(clientId);
     }, [clientId]);
 
+    const [selectedLicense, setSelectedLicense] = useState<any>();
+    const addLicense = (license) => {
+        setSelectedLicense(license);
+    };
+    const removeLicense = (id) => {
+        setSelectedLicense(undefined);
+    };
+
     const onSubmit = async (data: TeamMemberModel) => {
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
+
         if (data.fixedAmount == true) {
             data.onBoradingFee = fixedAmount;
         }
@@ -664,6 +681,42 @@ function PaymentPartnerTeamManagement({ adminList, clients, id }: adminProps) {
                                 ''
                             )}
                         </Grid>
+                    </Box>
+                    <Box
+                        w="full"
+                        borderTop="1px solid"
+                        borderColor="gray.300"
+                        mt="1.5rem"
+                        pt="1rem"
+                    >
+                        <FormLabel
+                            textTransform="capitalize"
+                            width="fit-content"
+                            fontSize=".8rem"
+                        >
+                            Assign License
+                        </FormLabel>
+                        <CustomSelectBox
+                            data={subs}
+                            updateFunction={addLicense}
+                            items={selectedLicense}
+                            customKeys={{
+                                key: 'subscriptionId',
+                                label: 'subscriptionType',
+                                used: 'noOfLicenceUsed',
+                                total: 'noOfLicensePurchased',
+                            }}
+                            removeFn={removeLicense}
+                            id="assignLicense"
+                            extraField={
+                                'users in total assigned to this license'
+                            }
+                            checkbox
+                            single
+                            searchable={false}
+                            placeholder="Select the License you want to assign to this user"
+                            error={errors.clientSubscriptionId}
+                        />
                     </Box>
                     <Box w="full">
                         <Flex

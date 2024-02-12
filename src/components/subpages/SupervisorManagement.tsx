@@ -98,8 +98,6 @@ function SupervisorManagement({
         setSelectedLicense(undefined);
     };
 
-    console.log({ selectedLicense });
-
     const onSubmit = async (data: RegisterModel) => {
         data.superAdminId = user?.superAdminId;
         data.clientId = !data.clientId ? user?.superAdminId : data.clientId;

@@ -8,14 +8,16 @@ interface TeamProps {
     teamList: UserView[];
     id: string;
     paymentPartner: UserView[];
+    subs: any;
 }
 
-function Team({ teamList, id, paymentPartner }: TeamProps) {
+function Team({ teamList, id, paymentPartner, subs }: TeamProps) {
     return (
         <SupervisorTeamMember
             adminList={teamList}
             id={id}
             paymentPartner={paymentPartner}
+            subs={subs}
         />
     );
 }
@@ -40,12 +42,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
+            const subs = await UserService.getClientSubScriptions(superAdminId);
 
             return {
                 props: {
                     teamList: data,
                     id: id,
                     paymentPartner: paymentPartner?.data?.value,
+                    subs: subs.data,
                 },
             };
         } catch (error: any) {
