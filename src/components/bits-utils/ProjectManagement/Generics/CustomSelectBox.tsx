@@ -9,6 +9,7 @@ import {
     Icon,
     Input,
     Text,
+    VStack,
 } from '@chakra-ui/react';
 import useComponentVisible from '@components/generics/useComponentVisible';
 import React, { useEffect, useState } from 'react';
@@ -27,6 +28,8 @@ export const CustomSelectBox = ({
     removeFn,
     error,
     single,
+    searchable,
+    extraField,
 }: {
     h?: string;
     fontSize?: string;
@@ -40,6 +43,8 @@ export const CustomSelectBox = ({
     removeFn?: any;
     error?: any;
     single?: boolean;
+    searchable?: boolean;
+    extraField?: any;
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState<any>();
@@ -52,11 +57,18 @@ export const CustomSelectBox = ({
         ? data
         : data.filter((x) => !items?.some((user) => user.id === x.id));
     const newFormattedData = dataAsFiltered?.map((x: any) => {
-        return { label: eval(`x.${customKeys.label}`), key: x[customKeys.key] };
+        return {
+            label: eval(`x.${customKeys.label}`),
+            key: x[customKeys.key],
+            used: x[customKeys?.used],
+            total: x[customKeys.total],
+        };
     });
     const [newData, setNewData] = useState(newFormattedData);
     const checkBoxFn = (x) => {
-        const exist = items?.some((e) => e?.[customKeys.key] == x.id);
+        const exist = single
+            ? items?.[customKeys.key] == x.id
+            : items?.some((e) => e?.[customKeys.key] == x.id);
         if (exist) {
             removeFn(x.id);
             return;
@@ -130,18 +142,20 @@ export const CustomSelectBox = ({
                     >
                         {newData?.length > 0 ? (
                             <>
-                                <Input
-                                    placeholder="Search"
-                                    fontSize=".7rem"
-                                    border="1px solid #e5e5e5"
-                                    borderRadius="0"
-                                    pos="sticky"
-                                    top="0"
-                                    onChange={(e) => search(e)}
-                                    bgColor="white"
-                                    w="full"
-                                    zIndex="9"
-                                />
+                                {searchable && (
+                                    <Input
+                                        placeholder="Search"
+                                        fontSize=".7rem"
+                                        border="1px solid #e5e5e5"
+                                        borderRadius="0"
+                                        pos="sticky"
+                                        top="0"
+                                        onChange={(e) => search(e)}
+                                        bgColor="white"
+                                        w="full"
+                                        zIndex="9"
+                                    />
+                                )}
                                 {newData?.map((x, i) => (
                                     <HStack
                                         p="11px 20px"
@@ -151,36 +165,54 @@ export const CustomSelectBox = ({
                                             bgColor: '#faf7f7',
                                         }}
                                         onClick={() =>
-                                            selectData({
-                                                id: x.key,
-                                                label: x.label,
-                                            })
+                                            extraField && x.used == x.total
+                                                ? void 0
+                                                : selectData({
+                                                      id: x.key,
+                                                      label: x.label,
+                                                  })
                                         }
                                         align="center"
                                     >
                                         {checkbox && (
                                             <Checkbox
                                                 id={id}
-                                                isChecked={items?.some(
-                                                    (e) =>
-                                                        e?.[customKeys.key] ==
-                                                        x.key,
-                                                )}
+                                                isChecked={
+                                                    single
+                                                        ? items?.[
+                                                              customKeys.key
+                                                          ] == x.key
+                                                        : items?.some(
+                                                              (e) =>
+                                                                  e?.[
+                                                                      customKeys
+                                                                          .key
+                                                                  ] == x.key,
+                                                          )
+                                                }
                                                 colorScheme="brand"
                                                 pointerEvents="none"
                                             />
                                         )}
-                                        <FormLabel
-                                            noOfLines={1}
-                                            color="#6a7f9d"
-                                            fontSize={fontSize || '14px'}
-                                            cursor="pointer"
-                                            htmlFor={id || 'label'}
-                                            mb="0"
-                                            pointerEvents="none"
-                                        >
-                                            {x.label}
-                                        </FormLabel>
+                                        <VStack align="flex-start" gap="0rem">
+                                            <FormLabel
+                                                noOfLines={1}
+                                                color="#6a7f9d"
+                                                fontSize={fontSize || '14px'}
+                                                cursor="pointer"
+                                                htmlFor={id || 'label'}
+                                                mb="0"
+                                                pointerEvents="none"
+                                            >
+                                                {x.label}
+                                            </FormLabel>
+                                            {extraField && (
+                                                <Text
+                                                    color="#696969"
+                                                    fontSize="13px"
+                                                >{`${x.used} of ${x.total} ${extraField}`}</Text>
+                                            )}
+                                        </VStack>
                                     </HStack>
                                 ))}
                             </>

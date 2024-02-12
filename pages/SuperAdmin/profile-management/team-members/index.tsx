@@ -15,9 +15,16 @@ interface TeamProps {
     clients: UserView[];
     paymentPartner: UserView[];
     leaveSettings: LeaveConfigurationView;
+    subs: any;
 }
 
-function Team({ teamList, clients, paymentPartner, leaveSettings }: TeamProps) {
+function Team({
+    teamList,
+    clients,
+    paymentPartner,
+    leaveSettings,
+    subs,
+}: TeamProps) {
     //
     return (
         <TeamManagement
@@ -26,6 +33,7 @@ function Team({ teamList, clients, paymentPartner, leaveSettings }: TeamProps) {
             paymentPartner={paymentPartner}
             leaveSettings={leaveSettings}
             isSuperAdmin
+            subs={subs}
         />
     );
 }
@@ -47,6 +55,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.to,
             );
             const clients = await UserService.listUsers('client', superAdminId);
+            const subs = await UserService.getClientSubScriptions(superAdminId);
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
                 superAdminId,
@@ -60,6 +69,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     clients: clients?.data?.value,
                     paymentPartner: paymentPartner?.data?.value,
                     leaveSettings: leaveSettings.data,
+                    subs: subs.data,
                 },
             };
         } catch (error: any) {

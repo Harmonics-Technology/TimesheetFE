@@ -4,18 +4,24 @@
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { CancelSubscriptionModel } from '../models/CancelSubscriptionModel';
 import type { CardsStandardResponse } from '../models/CardsStandardResponse';
+import type { ClientSubscriptionDetailViewListStandardResponse } from '../models/ClientSubscriptionDetailViewListStandardResponse';
 import type { ClientSubscriptionResponseViewModelStandardResponse } from '../models/ClientSubscriptionResponseViewModelStandardResponse';
 import type { CommandCenterAddCardResponseStandardResponse } from '../models/CommandCenterAddCardResponseStandardResponse';
 import type { ControlSettingModel } from '../models/ControlSettingModel';
 import type { ControlSettingViewStandardResponse } from '../models/ControlSettingViewStandardResponse';
 import type { Enable2FAViewStandardResponse } from '../models/Enable2FAViewStandardResponse';
 import type { InitiateResetModel } from '../models/InitiateResetModel';
+import type { LicenseUpdateModel } from '../models/LicenseUpdateModel';
 import type { LoginModel } from '../models/LoginModel';
 import type { MicrosoftIdTokenDetailsModel } from '../models/MicrosoftIdTokenDetailsModel';
 import type { PasswordReset } from '../models/PasswordReset';
+import type { ProjectManagementSettingModel } from '../models/ProjectManagementSettingModel';
+import type { ProjectManagementSettingViewStandardResponse } from '../models/ProjectManagementSettingViewStandardResponse';
+import type { PurchaseNewLicensePlanModel } from '../models/PurchaseNewLicensePlanModel';
 import type { RegisterModel } from '../models/RegisterModel';
 import type { ShiftUsersListViewPagedCollectionStandardResponse } from '../models/ShiftUsersListViewPagedCollectionStandardResponse';
 import type { SubscriptionHistoryViewModelStandardResponse } from '../models/SubscriptionHistoryViewModelStandardResponse';
+import type { SubscriptionTypesModelCommandCenterResponseModelStandardResponse } from '../models/SubscriptionTypesModelCommandCenterResponseModelStandardResponse';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
 import type { UpdateCardDetailsModel } from '../models/UpdateCardDetailsModel';
 import type { UpdateClientStripeSubscriptionModel } from '../models/UpdateClientStripeSubscriptionModel';
@@ -153,6 +159,39 @@ requestBody?: ControlSettingModel,
     }
 
     /**
+     * @param superAdminId 
+     * @returns ProjectManagementSettingViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getSuperAdminProjectManagementSettings(
+superAdminId?: string,
+): CancelablePromise<ProjectManagementSettingViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/project-management-settings',
+            query: {
+                'superAdminId': superAdminId,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateProjectManagementSettings(
+requestBody?: ProjectManagementSettingModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/update-project-management-settings',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
      * @param requestBody 
      * @returns UserViewStandardResponse Success
      * @throws ApiError
@@ -256,6 +295,8 @@ userId: string,
      * @param search 
      * @param startDate 
      * @param endDate 
+     * @param subscriptionId 
+     * @param productManagers 
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -267,6 +308,8 @@ limit?: number,
 search?: string,
 startDate?: string,
 endDate?: string,
+subscriptionId?: string,
+productManagers?: boolean,
 ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -281,6 +324,8 @@ endDate?: string,
                 'Search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
+                'subscriptionId': subscriptionId,
+                'productManagers': productManagers,
             },
             errors: {
                 401: `Unauthorized`,
@@ -826,6 +871,86 @@ paymentMethod?: string,
             query: {
                 'userId': userId,
                 'paymentMethod': paymentMethod,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns ClientSubscriptionResponseViewModelStandardResponse Success
+     * @throws ApiError
+     */
+    public static purchaseNewLicensePlan(
+requestBody?: PurchaseNewLicensePlanModel,
+): CancelablePromise<ClientSubscriptionResponseViewModelStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/license/purchase-new-license',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns ClientSubscriptionResponseViewModelStandardResponse Success
+     * @throws ApiError
+     */
+    public static addOrRemoveLicense(
+requestBody?: LicenseUpdateModel,
+): CancelablePromise<ClientSubscriptionResponseViewModelStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/license/update-license-count',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @returns SubscriptionTypesModelCommandCenterResponseModelStandardResponse Success
+     * @throws ApiError
+     */
+    public static getSubscriptionTypes(): CancelablePromise<SubscriptionTypesModelCommandCenterResponseModelStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/subscription-types',
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @returns ClientSubscriptionDetailViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static getClientSubScriptions(
+superAdminId?: string,
+): CancelablePromise<ClientSubscriptionDetailViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/subscriptions',
+            query: {
+                'superAdminId': superAdminId,
+            },
+        });
+    }
+
+    /**
+     * @param id 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static toggleOrganizationProjectManager(
+id?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/set-as-pm',
+            query: {
+                'id': id,
+            },
+            errors: {
+                401: `Unauthorized`,
             },
         });
     }

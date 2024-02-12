@@ -17,6 +17,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { ControlSettingModel, UserService } from 'src/services';
+import { NotText } from './NotText';
 
 const schema = yup.object().shape({
     timesheetFillingReminderDay: yup.string().required(),
@@ -93,19 +94,10 @@ export const NotifocationSettingsPage = ({ data }: { data: any }) => {
             px="1rem"
             borderRadius="10px"
         >
-            <VStack align="flex-start" mb="1.5rem">
-                <Text
-                    color="#002861"
-                    fontSize="0.93rem"
-                    fontWeight="500"
-                    mb="0"
-                >
-                    Timesheet Reminder Notification
-                </Text>
-                <Text color="#002861" fontSize="0.93rem" mb="0">
-                    Set notification reminder frequency
-                </Text>
-            </VStack>
+            <NotText
+                title="Timesheet Reminder Notification"
+                sub="Set notification reminder frequency"
+            />
             <Flex my="2rem" gap="2rem">
                 <HStack>
                     <Circle size="1rem" bgColor="brand.400" />

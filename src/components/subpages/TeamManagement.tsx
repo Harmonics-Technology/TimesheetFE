@@ -13,6 +13,7 @@ import {
     Icon,
     HStack,
     useRadioGroup,
+    FormLabel,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -33,6 +34,7 @@ interface adminProps {
     paymentPartner: UserView[];
     leaveSettings: LeaveConfigurationView;
     isSuperAdmin?: boolean;
+    subs: ClientSubscriptionDetailView[];
 }
 
 import {
@@ -44,6 +46,7 @@ import {
     ControlSettingView,
     DraftService,
     UserDraftModel,
+    ClientSubscriptionDetailView,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
@@ -65,6 +68,7 @@ import { TriggerBox } from '@components/bits-utils/TriggerBox';
 import Cookies from 'js-cookie';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
+import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -147,6 +151,7 @@ function TeamManagement({
     paymentPartner,
     leaveSettings,
     isSuperAdmin,
+    subs,
 }: adminProps) {
     const client = clients?.filter((x) => x.isActive);
     //
@@ -288,8 +293,17 @@ function TeamManagement({
     //
     const [clientType, setClientType] = useState(false);
 
+    const [selectedLicense, setSelectedLicense] = useState<any>();
+    const addLicense = (license) => {
+        setSelectedLicense(license);
+    };
+    const removeLicense = (id) => {
+        setSelectedLicense(undefined);
+    };
+
     const onSubmit = async (data: TeamMemberModel) => {
         data.superAdminId = user?.superAdminId;
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         if (data.fixedAmount == true) {
             data.onBoradingFee = fixedAmount;
         }
@@ -789,6 +803,42 @@ function TeamManagement({
                                     ]}
                                 />
                             </Grid>
+                            <Box
+                                w="full"
+                                borderTop="1px solid"
+                                borderColor="gray.300"
+                                mt="1.5rem"
+                                pt="1rem"
+                            >
+                                <FormLabel
+                                    textTransform="capitalize"
+                                    width="fit-content"
+                                    fontSize=".8rem"
+                                >
+                                    Assign License
+                                </FormLabel>
+                                <CustomSelectBox
+                                    data={subs}
+                                    updateFunction={addLicense}
+                                    items={selectedLicense}
+                                    customKeys={{
+                                        key: 'subscriptionId',
+                                        label: 'subscriptionType',
+                                        used: 'noOfLicenceUsed',
+                                        total: 'noOfLicensePurchased',
+                                    }}
+                                    removeFn={removeLicense}
+                                    id="assignLicense"
+                                    extraField={
+                                        'users in total assigned to this license'
+                                    }
+                                    checkbox
+                                    single
+                                    searchable={false}
+                                    placeholder="Select the License you want to assign to this user"
+                                    error={errors.clientSubscriptionId}
+                                />
+                            </Box>
                         </Box>
                         {includePayroll && (
                             <Box w="full">

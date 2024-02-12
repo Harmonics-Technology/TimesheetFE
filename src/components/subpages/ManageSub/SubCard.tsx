@@ -2,7 +2,7 @@ import { Box, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react';
 import { CAD } from '@components/generics/functions/Naira';
 import React from 'react';
 
-export const SubCard = ({ title, amount, desc, onClick, bg }) => {
+export const SubCard = ({ title, amount, desc, onClick, bg, id }) => {
     return (
         <Box borderRadius="8px" overflow="hidden" border="1px solid #C2CFE0">
             <Flex
@@ -36,7 +36,7 @@ export const SubCard = ({ title, amount, desc, onClick, bg }) => {
                 </Box>
                 <Box w="full">
                     <Button
-                        onClick={() => onClick({ title, amount, desc })}
+                        onClick={() => onClick({ title, amount, desc, id })}
                         borderRadius="5px"
                         variant="outline"
                         border="1px solid"

@@ -15,31 +15,83 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { CAD } from '@components/generics/functions/Naira';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { MdRemoveCircle } from 'react-icons/md';
 import { MiniStackText } from './MiniStackText';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
+import {
+    ClientSubscriptionDetailView,
+    LicenseUpdateModel,
+    UserService,
+} from 'src/services';
 
-interface ILicenseModify {
-    totalLicense: number | string | undefined;
-}
-
-export const RemoveSub = ({ isOpen, onClose }: any) => {
+export const RemoveSub = ({
+    isOpen,
+    onClose,
+    sub,
+}: {
+    isOpen: any;
+    onClose: any;
+    sub: ClientSubscriptionDetailView;
+}) => {
+    const removableLicense =
+        (sub?.noOfLicensePurchased as number) -
+        (sub?.noOfLicenceUsed as number);
+    const schema = yup.object().shape({
+        noOfLicense: yup
+            .number()
+            .min(
+                sub?.noOfLicenceUsed as number,
+                `The maximum you can remove is ${removableLicense} because you have assigned licenses`,
+            )
+            .max(
+                sub?.noOfLicensePurchased as number,
+                'The value entered is above the license purchased, use buy license to add more',
+            ),
+    });
     const {
         register,
         handleSubmit,
-        formState: { errors },
-    } = useForm<ILicenseModify>({
+        watch,
+        setValue,
+        formState: { errors, isSubmitting },
+    } = useForm<LicenseUpdateModel>({
+        resolver: yupResolver(schema),
         mode: 'all',
+        defaultValues: {
+            noOfLicense: sub?.noOfLicensePurchased,
+        },
     });
     const toast = useToast();
     const router = useRouter();
 
-    const onSubmit = async (data: ILicenseModify) => {
+    const licenses = (watch('noOfLicense') as number) || 0;
+
+    const updateLicense = () => {
+        if (licenses <= (sub?.noOfLicenceUsed as number)) {
+            setValue('noOfLicense', sub?.noOfLicensePurchased);
+            return;
+        }
+        setValue('noOfLicense', Number(licenses) - 1);
+    };
+
+    const total = licenses * (sub?.subscriptionPrice as number);
+
+    const onSubmit = async (data: LicenseUpdateModel) => {
+        data.superAdminId = sub?.superAdminId;
+        data.subscriptionId = sub?.subscriptionId as string;
+        data.remove = true;
+        data.noOfLicense =
+            (sub?.noOfLicensePurchased as number) -
+            (data.noOfLicense as number);
+        data.totalAmount =
+            data.noOfLicense * (sub?.subscriptionPrice as number);
         try {
-            let result;
+            const result = await UserService.addOrRemoveLicense(data);
             if (result.status) {
                 toast({
-                    title: `Upgrade Requested`,
+                    title: `Successful`,
                     status: 'success',
                     isClosable: true,
                     position: 'top-right',
@@ -131,11 +183,13 @@ export const RemoveSub = ({ isOpen, onClose }: any) => {
                                     <VStack align="flex-start" gap="15px">
                                         <MiniStackText
                                             title="Total Licenses"
-                                            value={10}
+                                            value={sub?.noOfLicensePurchased}
                                         />
                                         <MiniStackText
                                             title="Monthly Cost"
-                                            value={'$50.00 plus applicable TAX'}
+                                            value={`${CAD(
+                                                sub?.totalAmount,
+                                            )}.00 plus applicable TAX`}
                                         />
                                     </VStack>
                                 </Box>
@@ -159,16 +213,23 @@ export const RemoveSub = ({ isOpen, onClose }: any) => {
                                                 </Text>
                                             </Box>
                                             <HStack w="70%">
-                                                <PrimaryInput<ILicenseModify>
+                                                <PrimaryInput<LicenseUpdateModel>
                                                     label=""
-                                                    name="totalLicense"
-                                                    error={errors.totalLicense}
+                                                    name="noOfLicense"
+                                                    error={errors.noOfLicense}
                                                     placeholder="10"
                                                     defaultValue=""
                                                     register={register}
                                                     w="120px"
                                                 />
-                                                <HStack color="#Da586f">
+                                                <HStack
+                                                    color="#Da586f"
+                                                    userSelect="none"
+                                                    cursor="pointer"
+                                                    onClick={() =>
+                                                        updateLicense()
+                                                    }
+                                                >
                                                     <Icon as={MdRemoveCircle} />
                                                     <Text fontSize="14px">
                                                         Reduce
@@ -178,9 +239,9 @@ export const RemoveSub = ({ isOpen, onClose }: any) => {
                                         </HStack>
                                         <MiniStackText
                                             title="Monthly Cost"
-                                            value={
-                                                '$48.00, plus applicable TAX. The price is calculated using tier pricing'
-                                            }
+                                            value={`${CAD(
+                                                total,
+                                            )}.00, plus applicable TAX. The price is calculated using tier pricing`}
                                         />
                                     </VStack>
                                 </Box>
@@ -209,6 +270,10 @@ export const RemoveSub = ({ isOpen, onClose }: any) => {
                                     bg="brand.400"
                                     h="44px"
                                     text="Remove License"
+                                    loading={isSubmitting}
+                                    disabled={
+                                        licenses == sub?.noOfLicensePurchased
+                                    }
                                     onClick={() => handleSubmit(onSubmit)()}
                                     w="full"
                                 />

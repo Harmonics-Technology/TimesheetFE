@@ -10,11 +10,13 @@ const projectsIndex = ({
     users,
     superAdminId,
     counts,
+    access,
 }: {
     projects: any;
     users: any;
     superAdminId: string;
-    counts;
+    counts: any;
+    access: any;
 }) => {
     return (
         <ProjectPage
@@ -22,6 +24,7 @@ const projectsIndex = ({
             users={users}
             superAdminId={superAdminId}
             counts={counts}
+            access={access}
         />
     );
 };
@@ -43,7 +46,18 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 userId,
                 pagingOptions.search,
             );
+            const users = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
+                pagingOptions.offset,
+                80,
+                pagingOptions.search,
+            );
 
+            const access =
+                await UserService.getSuperAdminProjectManagementSettings(
+                    superAdminId,
+                );
             const counts =
                 await ProjectManagementService.getStatusCountForProject(
                     superAdminId,
@@ -55,6 +69,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     projects: data.data,
                     superAdminId,
                     counts: counts.data,
+                    users: users.data,
+                    access: access.data,
                 },
             };
         } catch (error: any) {

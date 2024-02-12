@@ -3,7 +3,10 @@ import React from 'react';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 
 import { useRouter } from 'next/router';
-import { ProjectProgressCountView } from 'src/services';
+import {
+    ProjectManagementSettingView,
+    ProjectProgressCountView,
+} from 'src/services';
 import { TabCounts } from '../../Generics/TabCounts';
 import { CreateProjectDrawer } from '../../Modals/CreateProjectDrawer';
 import { ProjectCard } from '../ProjectCard';
@@ -14,11 +17,13 @@ export const ProjectPage = ({
     users,
     superAdminId,
     counts,
+    access,
 }: {
     projects: any;
     users: any;
     superAdminId: string;
     counts: ProjectProgressCountView;
+    access: ProjectManagementSettingView;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -28,6 +33,10 @@ export const ProjectPage = ({
         (counts.notStarted as number) +
         (counts.inProgress as number) +
         (counts.completed as number);
+
+    const isPm = false;
+    const hasAccess =
+        access?.allProjectCreation || (access.pmProjectCreation && isPm);
     return (
         <Box bgColor="white" p="1rem" borderRadius=".6rem">
             <TeamTaskMenu
@@ -40,6 +49,17 @@ export const ProjectPage = ({
             />
             <Flex justify="flex-end" gap="1rem">
                 <SubSearchComponent />
+                {hasAccess && (
+                    <Button
+                        onClick={onOpen}
+                        bgColor="brand.400"
+                        color="white"
+                        h="2.5rem"
+                        borderRadius=".3rem"
+                    >
+                        Create New Project
+                    </Button>
+                )}
             </Flex>
 
             <Grid
@@ -52,6 +72,15 @@ export const ProjectPage = ({
                     <ProjectCard data={x} key={i} />
                 ))}
             </Grid>
+
+            {isOpen && (
+                <CreateProjectDrawer
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    users={users}
+                    superAdminId={superAdminId}
+                />
+            )}
         </Box>
     );
 };

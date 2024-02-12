@@ -53,7 +53,7 @@ export const ProjectPage = ({
                     onClick={onOpen}
                     bgColor="brand.400"
                     color="white"
-                    h="2.7rem"
+                    h="2.5rem"
                     borderRadius=".3rem"
                 >
                     Create New Project

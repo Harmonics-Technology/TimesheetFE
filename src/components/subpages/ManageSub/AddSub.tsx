@@ -15,31 +15,71 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { CAD } from '@components/generics/functions/Naira';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { MdAddCircle, MdRemoveCircle } from 'react-icons/md';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { MdAddCircle } from 'react-icons/md';
 import { MiniStackText } from './MiniStackText';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
+import {
+    ClientSubscriptionDetailView,
+    LicenseUpdateModel,
+    UserService,
+} from 'src/services';
 
-interface ILicenseModify {
-    totalLicense: number | string | undefined;
-}
-
-export const AddSub = ({ isOpen, onClose }: any) => {
+export const AddSub = ({
+    isOpen,
+    onClose,
+    sub,
+}: {
+    isOpen: any;
+    onClose: any;
+    sub: ClientSubscriptionDetailView;
+}) => {
+    const schema = yup.object().shape({
+        noOfLicense: yup
+            .number()
+            .min(
+                sub?.noOfLicensePurchased as number,
+                `The minimum you can have is ${
+                    (sub?.noOfLicensePurchased as number) + 1
+                }, remove sub instead`,
+            ),
+    });
     const {
         register,
         handleSubmit,
-        formState: { errors },
-    } = useForm<ILicenseModify>({
+        watch,
+        setValue,
+        formState: { errors, isSubmitting },
+    } = useForm<LicenseUpdateModel>({
+        resolver: yupResolver(schema),
         mode: 'all',
+        defaultValues: {
+            noOfLicense: sub?.noOfLicensePurchased,
+        },
     });
+    const licenses = (watch('noOfLicense') as number) || 0;
     const toast = useToast();
     const router = useRouter();
+    const total = licenses * (sub?.subscriptionPrice as number);
+    const updateLicense = () => {
+        setValue('noOfLicense', Number(licenses) + 1);
+    };
 
-    const onSubmit = async (data: ILicenseModify) => {
+    const onSubmit = async (data: LicenseUpdateModel) => {
+        data.superAdminId = sub?.superAdminId;
+        data.subscriptionId = sub?.subscriptionId as string;
+        data.remove = false;
+        data.noOfLicense =
+            (data.noOfLicense as number) -
+            (sub?.noOfLicensePurchased as number);
+        data.totalAmount =
+            data.noOfLicense * (sub?.subscriptionPrice as number);
         try {
-            let result;
+            const result = await UserService.addOrRemoveLicense(data);
             if (result.status) {
                 toast({
-                    title: `Upgrade Requested`,
+                    title: `Successful`,
                     status: 'success',
                     isClosable: true,
                     position: 'top-right',
@@ -135,11 +175,13 @@ export const AddSub = ({ isOpen, onClose }: any) => {
                                     >
                                         <MiniStackText
                                             title="Total Licenses"
-                                            value={10}
+                                            value={sub?.noOfLicensePurchased}
                                         />
                                         <MiniStackText
                                             title="Monthly Cost"
-                                            value={'$50.00 plus applicable TAX'}
+                                            value={`${CAD(
+                                                sub?.totalAmount,
+                                            )}.00 plus applicable TAX`}
                                         />
                                     </VStack>
                                 </Box>
@@ -167,16 +209,23 @@ export const AddSub = ({ isOpen, onClose }: any) => {
                                                 </Text>
                                             </Box>
                                             <HStack w="70%">
-                                                <PrimaryInput<ILicenseModify>
+                                                <PrimaryInput<LicenseUpdateModel>
                                                     label=""
-                                                    name="totalLicense"
-                                                    error={errors.totalLicense}
+                                                    name="noOfLicense"
+                                                    error={errors.noOfLicense}
                                                     placeholder="10"
                                                     defaultValue=""
                                                     register={register}
                                                     w="120px"
                                                 />
-                                                <HStack color="brand.400">
+                                                <HStack
+                                                    color="brand.400"
+                                                    userSelect="none"
+                                                    cursor="pointer"
+                                                    onClick={() =>
+                                                        updateLicense()
+                                                    }
+                                                >
                                                     <Icon as={MdAddCircle} />
                                                     <Text fontSize="14px">
                                                         Add
@@ -186,9 +235,9 @@ export const AddSub = ({ isOpen, onClose }: any) => {
                                         </HStack>
                                         <MiniStackText
                                             title="Monthly Cost"
-                                            value={
-                                                '$48.00, plus applicable TAX. The price is calculated using tier pricing'
-                                            }
+                                            value={`${CAD(
+                                                total,
+                                            )}.00, plus applicable TAX. The price is calculated using tier pricing`}
                                         />
                                     </VStack>
                                 </Box>
@@ -217,6 +266,10 @@ export const AddSub = ({ isOpen, onClose }: any) => {
                                     bg="brand.400"
                                     h="44px"
                                     text="Buy License"
+                                    loading={isSubmitting}
+                                    disabled={
+                                        licenses == sub?.noOfLicensePurchased
+                                    }
                                     onClick={() => handleSubmit(onSubmit)()}
                                     w="full"
                                 />

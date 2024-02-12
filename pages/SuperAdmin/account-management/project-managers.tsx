@@ -1,57 +1,52 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import SupervisorManagement from '@components/subpages/SupervisorManagement';
+import { ProjectManagementSettings } from '@components/subpages/ProjectManagementSettings';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import {
-    UserService,
-    UserView,
-    UserViewPagedCollectionStandardResponse,
-} from 'src/services';
-interface adminProps {
-    adminList: UserViewPagedCollectionStandardResponse;
-    client: UserView[];
-    subs: any;
-}
+import { UserService } from 'src/services';
 
-function admin({ adminList, client, subs }: adminProps) {
-    //
-    return (
-        <SupervisorManagement
-            adminList={adminList}
-            client={client}
-            isSuperAdmin
-            subs={subs}
-        />
-    );
-}
+const project = ({ data, pm }: { data: any; pm: any }) => {
+    return <ProjectManagementSettings data={data} pm={pm} />;
+};
 
-export default admin;
+export default project;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        // const subId = JSON.parse(ctx.req.cookies.user).subscriptiobDetails.data.id;
+        // console.log({subId})
         try {
-            const client = await UserService.listUsers('client', superAdminId);
             const data = await UserService.listUsers(
-                'supervisor',
+                'Team Member',
                 superAdminId,
                 pagingOptions.offset,
-                pagingOptions.limit,
+                pagingOptions.limit || 50,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,
             );
-            const subs = await UserService.getClientSubScriptions(superAdminId);
+            const pm = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
+                pagingOptions.offset,
+                pagingOptions.limit || 50,
+                pagingOptions.search,
+                pagingOptions.from,
+                pagingOptions.to,
+                undefined,
+                true,
+            );
+
             return {
                 props: {
-                    adminList: data,
-                    client: client?.data?.value,
-                    subs: subs.data,
+                    data: data.data,
+                    pm,
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     data: [],

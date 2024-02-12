@@ -43,6 +43,7 @@ interface shiftProps {
     id: string;
     allProjects: any;
     superAdminId: any;
+    access: any;
 }
 
 const TeamTimeSheetTask = ({
@@ -50,6 +51,7 @@ const TeamTimeSheetTask = ({
     id,
     allProjects,
     superAdminId,
+    access,
 }: shiftProps) => {
     const router = useRouter();
     const [loading, setLoading] = useState<any>(false);
@@ -389,6 +391,7 @@ const TeamTimeSheetTask = ({
                     superAdminId={superAdminId}
                     userId={id}
                     allProjects={allProjects?.data?.value}
+                    access={access}
                 />
             )}
             {opened && (

@@ -22,6 +22,7 @@ import { ShiftBtn } from './ShiftBtn';
 import { SelectrixBox } from './Selectrix';
 import {
     ProjectManagementService,
+    ProjectManagementSettingView,
     ProjectTimesheetModel,
     ProjectTimesheetRange,
     ProjectView,
@@ -50,6 +51,7 @@ interface ExportProps {
     userId?: any;
     projectId?: any;
     allProjects?: ProjectView;
+    access: ProjectManagementSettingView;
 }
 
 const schema = yup.object().shape({});
@@ -61,6 +63,7 @@ export const FillTimesheetModal = ({
     superAdminId,
     userId,
     allProjects,
+    access,
 }: ExportProps) => {
     const {
         handleSubmit,
@@ -210,6 +213,8 @@ export const FillTimesheetModal = ({
     const [subTasks, setSubTasks] = useState<any>([]);
     const [err, setErr] = useState<any>([]);
     const [operationalTasks, setOperationalTasks] = useState<any>([]);
+
+    const hasAccess = access?.projectMembersTimesheetVisibility;
     useNonInitialEffect(() => {
         async function getTasks() {
             setErr('');
@@ -277,7 +282,7 @@ export const FillTimesheetModal = ({
                     superAdminId,
                     (projectId as string) || undefined,
                     undefined,
-                    userId,
+                    hasAccess ? undefined : userId,
                 );
                 if (res?.status) {
                     setLoading(false);

@@ -7,7 +7,7 @@ import {
     VStack,
     useDisclosure,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { LicenseTopBtmText } from './LicenseTopBtmText';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import { LicenseProgressUsage } from './LicenseProgressUsage';
@@ -19,23 +19,64 @@ import moment from 'moment';
 import { RemoveSub } from './RemoveSub';
 import { CAD } from '@components/generics/functions/Naira';
 import { AddSub } from './AddSub';
-import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { LicenseNav } from './LicenseNav';
 import { SingleSubView } from './SingleSubView';
+import { ClientSubscriptionDetailView } from 'src/services';
+import { formatDate } from '@components/generics/functions/formatDate';
+import { useRouter } from 'next/router';
+import { UserContext } from '@components/context/UserContext';
 
-export const LicenseHome = ({ data }: { data: any }) => {
+export const LicenseHome = ({
+    data,
+    subs,
+    users,
+}: {
+    data: any;
+    subs: ClientSubscriptionDetailView[];
+    users: any;
+}) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { user } = useContext(UserContext);
+    const role = user?.role.replaceAll(' ', '');
+    const router = useRouter();
     const {
         isOpen: isOpens,
         onOpen: onOpens,
         onClose: onCloses,
     } = useDisclosure();
-    const [selected, setSelected] = useState<any>();
+    const subId = router.query?.subId || subs[0].subscriptionId;
+    const [showDetails, setShowDetails] = useState<any>();
+    const selected: ClientSubscriptionDetailView = subs.find(
+        (x) => x.subscriptionId == subId,
+    ) as ClientSubscriptionDetailView;
+
+    const percentUsed =
+        ((selected?.noOfLicenceUsed as number) /
+            (selected?.noOfLicensePurchased as number)) *
+        100;
+    const daysLeft = moment(selected?.endDate).diff(moment(), 'day');
+
+    const otherSubs = subs.filter((x) => x?.subscriptionId !== subId);
+
+    const triggerNewSub = (id: string) => {
+        router.push({
+            query: {
+                ...router.query,
+                subId: id,
+            },
+        });
+    };
+
     return (
         <>
             <LicenseNav />
-            {selected ? (
-                <SingleSubView setSelected={setSelected} />
+            {showDetails ? (
+                <SingleSubView
+                    setShowDetails={setShowDetails}
+                    data={selected}
+                    percentUsed={percentUsed}
+                    users={users}
+                />
             ) : (
                 <Box>
                     <Box
@@ -48,15 +89,25 @@ export const LicenseHome = ({ data }: { data: any }) => {
                             <Text fontSize="14px" color="#696969">
                                 My Other License
                             </Text>
-                            <HStack gap="8px">
-                                <Text
-                                    fontSize="14px"
-                                    color="#2383BD"
-                                    cursor="pointer"
+                            {otherSubs?.map((x) => (
+                                <HStack
+                                    gap="8px"
+                                    key={x.subscriptionId}
+                                    onClick={() =>
+                                        triggerNewSub(
+                                            x?.subscriptionId as string,
+                                        )
+                                    }
                                 >
-                                    Timba Premium Plan
-                                </Text>
-                            </HStack>
+                                    <Text
+                                        fontSize="14px"
+                                        color="#2383BD"
+                                        cursor="pointer"
+                                    >
+                                        {x.subscriptionType}
+                                    </Text>
+                                </HStack>
+                            ))}
                         </Box>
                         <HStack
                             gap="3rem"
@@ -69,12 +120,12 @@ export const LicenseHome = ({ data }: { data: any }) => {
                                     fontSizea="14px"
                                     top="Current license Plan"
                                     fontSizeb="16px"
-                                    title="Timba Standard Plan"
+                                    title={selected?.subscriptionType}
                                 />
                                 <LicenseProgressUsage
-                                    progress={80}
-                                    title="5/10 license assigned"
-                                    sub={`5 of 10 users in total assigned to this license`}
+                                    progress={percentUsed}
+                                    title={`${selected?.noOfLicenceUsed}/${selected?.noOfLicensePurchased} license assigned`}
+                                    sub={`${selected?.noOfLicenceUsed} of ${selected?.noOfLicensePurchased} users in total assigned to this license`}
                                 />
                                 <HStack gap="1rem" my="21px">
                                     <ShiftBtn
@@ -98,31 +149,44 @@ export const LicenseHome = ({ data }: { data: any }) => {
                             <VStack w="full" align="flex-start" gap="32px">
                                 <LicenseTopBtmText
                                     top="Payment Method"
-                                    title="Master *****7689"
+                                    title={`${selected?.brand} ***** ${selected?.paymentMethod}`}
                                     sub="Edit/manage payment method"
+                                    url={`/${role}/account-management/billing-information`}
                                 />
                                 <LicenseTopBtmText
                                     top="Subscription status"
-                                    title="Active"
+                                    title={
+                                        selected?.subscriptionStatus
+                                            ? 'Active'
+                                            : 'Inactive'
+                                    }
                                     sub="Cancel subscription"
                                     icon={MdCheckCircle}
+                                    url={`/${role}/account-management/cancel-subscription`}
                                 />
                             </VStack>
                             <VStack w="full" align="flex-start" gap="32px">
                                 <LicenseTopBtmText
                                     top="Billing Frequency"
-                                    title="Monthly  $50.00"
+                                    title={`${
+                                        selected?.annualBilling
+                                            ? `Yearly `
+                                            : 'Monthly'
+                                    } ${CAD(selected?.totalAmount)}`}
                                     sub="Edit billing frequency"
+                                    url={`/${role}/account-management/billing-information`}
                                 />
                                 <LicenseTopBtmText
                                     top="Subscription Renewal Date"
-                                    title="June 31st, 2023 (15days)"
+                                    title={`${formatDate(selected?.endDate)}
+                                    (${daysLeft < 0 ? '0' : daysLeft + 1}
+                                    days)`}
                                 />
                             </VStack>
                             <VStack w="full" align="flex-start" gap="32px">
                                 <LicenseTopBtmText
                                     top="Subscription Date"
-                                    title="June 31st, 2023 "
+                                    title={formatDate(selected?.startDate)}
                                 />
                             </VStack>
                         </HStack>
@@ -132,7 +196,7 @@ export const LicenseHome = ({ data }: { data: any }) => {
                                 bg="brand.400"
                                 h="28px"
                                 text="View More"
-                                onClick={() => setSelected({ data })}
+                                onClick={() => setShowDetails({ selected })}
                                 px="1rem"
                             />
                         </Box>
@@ -200,10 +264,18 @@ export const LicenseHome = ({ data }: { data: any }) => {
                         </Tables>
 
                         {isOpen && (
-                            <RemoveSub isOpen={isOpen} onClose={onClose} />
+                            <RemoveSub
+                                isOpen={isOpen}
+                                onClose={onClose}
+                                sub={selected}
+                            />
                         )}
                         {isOpens && (
-                            <AddSub isOpen={isOpens} onClose={onCloses} />
+                            <AddSub
+                                isOpen={isOpens}
+                                onClose={onCloses}
+                                sub={selected}
+                            />
                         )}
                     </Box>
                 </Box>

@@ -254,6 +254,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             },
                             'access control settings',
                             'payment schedule settings',
+                            'project managers',
                             'personal info',
                             'notification settings',
                         ]}

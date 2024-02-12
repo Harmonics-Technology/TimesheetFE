@@ -20,13 +20,14 @@ import {
     UserService,
 } from 'src/services';
 
-const task = ({ allShift, allProjects, id, superAdminId }) => {
+const task = ({ allShift, allProjects, id, superAdminId, access }) => {
     return (
         <TeamTimeSheetTask
             allShift={allShift}
             allProjects={allProjects}
             id={id}
             superAdminId={superAdminId}
+            access={access}
         />
     );
 };
@@ -60,12 +61,17 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 id,
                 pagingOptions.search,
             );
+            const access =
+                await UserService.getSuperAdminProjectManagementSettings(
+                    superAdminId,
+                );
             return {
                 props: {
                     allShift,
                     allProjects,
                     id,
                     superAdminId,
+                    access: access.data,
                 },
             };
         } catch (error: any) {

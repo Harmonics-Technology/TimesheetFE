@@ -1,4 +1,5 @@
 import { VStack, Text, HStack, Icon } from '@chakra-ui/react';
+import Link from 'next/link';
 import React from 'react';
 
 export const LicenseTopBtmText = ({
@@ -9,6 +10,7 @@ export const LicenseTopBtmText = ({
     title,
     sub,
     icon,
+    url,
     iconColor = 'brand.400',
 }: {
     fontSizea?: any;
@@ -18,6 +20,7 @@ export const LicenseTopBtmText = ({
     title?: any;
     sub?: any;
     icon?: any;
+    url?: any;
     iconColor?: any;
 }) => {
     return (
@@ -44,16 +47,18 @@ export const LicenseTopBtmText = ({
                 </Text>
             </HStack>
             {sub && (
-                <Text
-                    fontSize={fontSizec || '12px'}
-                    fontWeight={400}
-                    mb="0"
-                    color="#23e3bd"
-                    textTransform="capitalize"
-                    cursor="pointer"
-                >
-                    {sub}
-                </Text>
+                <Link href={url} passHref>
+                    <Text
+                        fontSize={fontSizec || '12px'}
+                        fontWeight={400}
+                        mb="0"
+                        color="#23e3bd"
+                        textTransform="capitalize"
+                        cursor="pointer"
+                    >
+                        {sub}
+                    </Text>
+                </Link>
             )}
         </VStack>
     );

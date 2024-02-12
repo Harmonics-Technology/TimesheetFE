@@ -5,7 +5,9 @@ import { TableData } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 
-export const SingleSubView = ({ setSelected }) => {
+export const SingleSubView = ({ setShowDetails, data, percentUsed, users }) => {
+    const available =
+        Number(data?.noOfLicensePurchased) - Number(data?.noOfLicenceUsed);
     return (
         <Box borderRadius="8px" bgColor="white" p="1rem">
             <Text
@@ -13,7 +15,7 @@ export const SingleSubView = ({ setSelected }) => {
                 fontWeight={500}
                 fontSize="14px"
                 cursor="pointer"
-                onClick={() => setSelected(undefined)}
+                onClick={() => setShowDetails(undefined)}
             >
                 Back
             </Text>
@@ -25,7 +27,7 @@ export const SingleSubView = ({ setSelected }) => {
                     color="#252f40"
                     my="14px"
                 >
-                    Timba Premium Plan
+                    {data?.subscriptionType}
                 </Text>
                 <Box
                     borderRadius="8px"
@@ -34,12 +36,12 @@ export const SingleSubView = ({ setSelected }) => {
                     w="30%"
                 >
                     <LicenseProgressUsage
-                        progress={80}
-                        title="5"
+                        progress={percentUsed}
+                        title={available}
                         cont="available"
                         fontSize="32px"
                         fontSizeb="14px"
-                        sub={`5 of 10 users in total assigned to this license`}
+                        sub={`${data?.noOfLicenceUsed} of ${data?.noOfLicensePurchased} users in total assigned to this license`}
                     />
                 </Box>
                 <Text
@@ -48,8 +50,12 @@ export const SingleSubView = ({ setSelected }) => {
                     color="#252f40"
                     my="14px"
                 >
-                    You own at least 5 subscription for this product.{' '}
-                    <Link color="brand.400" fontWeight={600}>
+                    You own at least {available} subscription for this product.{' '}
+                    <Link
+                        color="brand.400"
+                        fontWeight={600}
+                        onClick={() => setShowDetails(undefined)}
+                    >
                         Manage subscription
                     </Link>
                 </Text>
@@ -69,14 +75,12 @@ export const SingleSubView = ({ setSelected }) => {
                     color="white"
                 >
                     <>
-                        {Array(4)
-                            .fill(4)
-                            ?.map((x: any) => (
-                                <Tr key={x.id}>
-                                    <TableData name={x.subscription?.name} />
-                                    <TableData name={x?.email} />
-                                </Tr>
-                            ))}
+                        {users?.value?.map((x: any) => (
+                            <Tr key={x.id}>
+                                <TableData name={x?.fullName} />
+                                <TableData name={x?.email} />
+                            </Tr>
+                        ))}
                     </>
                 </Tables>
             </Box>

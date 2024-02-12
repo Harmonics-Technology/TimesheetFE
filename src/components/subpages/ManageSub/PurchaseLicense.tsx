@@ -20,57 +20,85 @@ import { SingleConfirmationText } from './SingleConfirmationText';
 import { UserContext } from '@components/context/UserContext';
 import moment from 'moment';
 import { LicenseNav } from './LicenseNav';
+import InputBlank from '@components/bits-utils/InputBlank';
+import { CAD } from '@components/generics/functions/Naira';
+import { PurchaseNewLicensePlanModel, UserService } from 'src/services';
 
-interface ILicenseSub {
-    noOfLicensePurchase: number | string | undefined;
-    totalValue: number | string | undefined;
-}
 const schema = yup.object().shape({
-    noOfLicensePurchase: yup.string().required(),
-    totalValue: yup.string().required(),
+    noOfLicense: yup.string().required(),
 });
-export const PurchaseLicense = () => {
+export const PurchaseLicense = ({
+    base,
+    superAdminId,
+}: {
+    base: any;
+    superAdminId: string;
+}) => {
     const [selected, setSelected] = useState<any>();
     const { user } = useContext(UserContext);
-    const [confirmation, setConfirmation] = useState<boolean>(true);
+    const [confirmation, setConfirmation] = useState<boolean>(false);
     const toast = useToast();
     const router = useRouter();
     const {
         register,
         handleSubmit,
         watch,
+        trigger,
         formState: { errors, isSubmitting, isValid },
-    } = useForm<ILicenseSub>({
+    } = useForm<PurchaseNewLicensePlanModel>({
         resolver: yupResolver(schema),
         mode: 'all',
     });
 
     const startDate = moment().format('DD/MM/YYYY');
     const endDate = moment(startDate).add(1, 'month').format('DD/MM/YYYY');
-    const license = watch('noOfLicensePurchase');
-    const value = watch('totalValue');
+    const license = watch('noOfLicense');
+    const value = Number((license as number) * selected?.amount) || 0;
 
-    const onSubmit = async (data: ILicenseSub) => {
+    const showConfirmation = () => {
+        if (!isValid) {
+            trigger();
+            return;
+        }
+        setConfirmation(true);
+    };
+
+    const onSubmit = async (data: PurchaseNewLicensePlanModel) => {
+        data.totalAmount = value;
+        data.subscriptionId = selected?.id;
+        data.superAdminId = superAdminId;
         try {
-            let result;
+            const result = await UserService.purchaseNewLicensePlan(data);
             if (result.status) {
+                if (result?.data?.data?.clientSecret) {
+                    router.push(
+                        `${process.env.NEXT_PUBLIC_TTS}/summary/${result.data?.data?.id}?client_secret=${result?.data?.data?.clientSecret}&clientId=${result?.data?.data?.clientId}`,
+                    );
+                    return;
+                }
                 toast({
                     title: result.message,
                     status: 'success',
+                    position: 'top-right',
                 });
+                router.push('/');
                 return;
             }
+
             toast({
                 title: result.message,
                 status: 'error',
+                position: 'top-right',
             });
         } catch (error: any) {
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
+                position: 'top-right',
             });
         }
     };
+
     return (
         <>
             <LicenseNav />
@@ -117,7 +145,7 @@ export const PurchaseLicense = () => {
                                 <SingleConfirmationText
                                     title="Value of License"
                                     sub={selected?.amount}
-                                    color="brand.100"
+                                    color="brand.400"
                                     fw={700}
                                     price
                                 />
@@ -128,7 +156,7 @@ export const PurchaseLicense = () => {
                                 <SingleConfirmationText
                                     title="Total Value of License Purchased"
                                     sub={value}
-                                    color="brand.100"
+                                    color="brand.400"
                                     fw={700}
                                     price
                                 />
@@ -147,12 +175,19 @@ export const PurchaseLicense = () => {
                                 bg="brand.400"
                                 h="44px"
                                 text="Proceed To Checkout"
+                                loading={isSubmitting}
                                 onClick={() => handleSubmit(onSubmit)()}
                             />
                         </HStack>
                     </Box>
                 ) : (
-                    <Box mt="18px" bgColor="white" p="1rem" borderRadius="8px">
+                    <Box
+                        mt="18px"
+                        bgColor="white"
+                        p="1rem"
+                        borderRadius="8px"
+                        minH="60vh"
+                    >
                         <Text mb="1rem" fontWeight={500}>
                             Select License Plan
                         </Text>
@@ -161,27 +196,23 @@ export const PurchaseLicense = () => {
                             templateColumns={['1fr', 'repeat(4, 1fr)']}
                             gap="2rem"
                         >
-                            <SubCard
-                                amount="5"
-                                desc="The best way to start organizing your company"
-                                title="Timba Basic Plan"
-                                bg="brand.400"
-                                onClick={setSelected}
-                            />
-                            <SubCard
-                                amount="10"
-                                desc="The best way to start organizing your company"
-                                title="Timba Standard Plan"
-                                onClick={setSelected}
-                                bg="#2383bd"
-                            />
-                            <SubCard
-                                amount="20"
-                                desc="The best way to start organizing your company"
-                                title="Timba Premium Plan"
-                                onClick={setSelected}
-                                bg="#e8b44f"
-                            />
+                            {base?.map((x, i) => (
+                                <SubCard
+                                    amount={x?.totalMonthlyAmount}
+                                    desc={x?.description}
+                                    title={x?.name}
+                                    bg={
+                                        i == 0
+                                            ? 'brand.400'
+                                            : i == 1
+                                            ? '#2383bd'
+                                            : '#e8b44f'
+                                    }
+                                    onClick={setSelected}
+                                    key={i}
+                                    id={x.id}
+                                />
+                            ))}
                         </Grid>
 
                         {selected && (
@@ -204,21 +235,20 @@ export const PurchaseLicense = () => {
                                         align="flex-start"
                                         mt="2rem"
                                     >
-                                        <PrimaryInput<ILicenseSub>
+                                        <PrimaryInput<PurchaseNewLicensePlanModel>
                                             label="Number Of License Purchased"
-                                            name="noOfLicensePurchase"
-                                            error={errors.noOfLicensePurchase}
+                                            name="noOfLicense"
+                                            error={errors.noOfLicense}
                                             placeholder="10"
                                             defaultValue=""
                                             register={register}
                                         />
-                                        <PrimaryInput<ILicenseSub>
+                                        <InputBlank
                                             label="Total Value Of License Purchased"
-                                            name="totalValue"
-                                            error={errors.totalValue}
                                             placeholder="$50.00"
                                             defaultValue=""
-                                            register={register}
+                                            value={`${CAD(value)}.00`}
+                                            readonly
                                         />
                                     </VStack>
                                     <Box w="full" mt="49px">
@@ -228,9 +258,7 @@ export const PurchaseLicense = () => {
                                             bgColor="brand.400"
                                             color="white"
                                             borderRadius="5px"
-                                            onClick={() =>
-                                                setConfirmation(true)
-                                            }
+                                            onClick={() => showConfirmation()}
                                         >
                                             Buy License
                                         </Button>

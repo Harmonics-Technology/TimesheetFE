@@ -19,7 +19,7 @@ import {
 } from '@components/bits-utils/TableData';
 import colorSwatch from '@components/generics/colorSwatch';
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { BiSolidPencil } from 'react-icons/bi';
 import { FaEye } from 'react-icons/fa';
 import { ProgressBar } from '../../Generics/ProgressBar';
@@ -33,15 +33,18 @@ import {
     ProjectTaskView,
 } from 'src/services';
 import { Round } from '@components/generics/functions/Round';
+import { TeamTopBar } from './TeamTopBar';
 
 export const TeamSingleTask = ({
     id,
     project,
     tasks,
+    task,
 }: {
     id: any;
     project: any;
     tasks: any;
+    task: any;
 }) => {
     const tableHead = [
         'Task/Subtak Name',
@@ -52,11 +55,12 @@ export const TeamSingleTask = ({
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const status = project?.status?.toLowerCase();
-    const pastDate = moment().diff(moment(project?.endDate), 'days') > 0;
+    const status = task?.status?.toLowerCase();
+    const pastDate = moment().diff(moment(task?.endDate), 'days') > 0;
 
     return (
         <Box>
+            <TeamTopBar data={project} />
             <Flex gap=".5rem">
                 <VStack w="25%">
                     <Box
@@ -67,7 +71,7 @@ export const TeamSingleTask = ({
                         w="full"
                     >
                         <Text color="#2d3748" fontSize=".8rem" fontWeight={600}>
-                            {project?.name}
+                            {task?.name}
                         </Text>
                         <Text
                             color="#8c8c8c"
@@ -75,11 +79,11 @@ export const TeamSingleTask = ({
                             fontWeight={400}
                             my="1rem"
                         >
-                            {project?.note}
+                            {task?.note}
                         </Text>
                         <Box w="full" mt="0.5rem">
                             <ProgressBar
-                                barWidth={project?.progress}
+                                barWidth={task?.percentageOfCompletion}
                                 showProgress={true}
                                 barColor={
                                     status == 'completed'
@@ -92,8 +96,10 @@ export const TeamSingleTask = ({
                                         ? 'gray.100'
                                         : 'red'
                                 }
-                                leftText="Project Status"
-                                rightText={`${Round(project?.progress)}%`}
+                                leftText="Task Status"
+                                rightText={`${Round(
+                                    task?.percentageOfCompletion,
+                                )}%`}
                             />
                         </Box>
                     </Box>
@@ -108,21 +114,17 @@ export const TeamSingleTask = ({
                         <StatusBadge
                             bg="#afb6e5"
                             title="Created:"
-                            text={moment(project?.startDate).format(
-                                'DD MMM YYYY',
-                            )}
+                            text={moment(task?.startDate).format('DD MMM YYYY')}
                         />
                         <StatusBadge
                             bg="#FFA681"
                             title="Deadline:"
-                            text={moment(project?.endDate).format(
-                                'DD MMM YYYY',
-                            )}
+                            text={moment(task?.endDate).format('DD MMM YYYY')}
                         />
                         <StatusBadge
                             bg="#4BAEEA"
                             title="Status:"
-                            text={project?.status}
+                            text={task?.status}
                         />
                     </VStack>
                     <Box
@@ -136,9 +138,8 @@ export const TeamSingleTask = ({
                             Assigned Team
                         </Text>
 
-                        {project?.assignees
-                            ?.filter((b) => b.projectTaskId == null)
-                            ?.map((x: ProjectTaskAsigneeView, i) => (
+                        {task?.assignees?.map(
+                            (x: ProjectTaskAsigneeView, i) => (
                                 <HStack mt=".5rem" gap="1rem">
                                     <Avatar
                                         size={'sm'}
@@ -163,7 +164,8 @@ export const TeamSingleTask = ({
                                         </Text>
                                     </Box>
                                 </HStack>
-                            ))}
+                            ),
+                        )}
                     </Box>
                 </VStack>
                 <Box
@@ -214,7 +216,7 @@ export const TeamSingleTask = ({
                             <SubSearchComponent />
                         </HStack>
                     </HStack>
-                    <TableCard tableHead={tableHead}>
+                    {/* <TableCard tableHead={tableHead}>
                         {tasks?.value?.map((x: ProjectTaskView) => {
                             const priority = x?.taskPriority?.toLowerCase();
                             return (
@@ -260,6 +262,63 @@ export const TeamSingleTask = ({
                                         color={colorSwatch(x?.status)}
                                     />
                                 </TableRow>
+                            );
+                        })}
+                    </TableCard> */}
+                    <TableCard tableHead={tableHead}>
+                        {tasks?.value?.map((x: ProjectSubTaskView) => {
+                            return (
+                                <>
+                                    <TableRow key={x.id}>
+                                        <TableData
+                                            name={x?.name}
+                                            fontWeight="500"
+                                        />
+                                        <td style={{ maxWidth: '300px' }}>
+                                            <HStack
+                                                color="#c2cfe0"
+                                                gap=".2rem"
+                                                flexWrap="wrap"
+                                            >
+                                                <Flex
+                                                    border="1px solid"
+                                                    borderColor="#4FD1C5"
+                                                    borderRadius="25px"
+                                                    justify="center"
+                                                    align="center"
+                                                    color="#4FD1C5"
+                                                    h="1.6rem"
+                                                    px="0.5rem"
+                                                >
+                                                    {
+                                                        x?.projectTaskAsignee
+                                                            ?.user?.fullName
+                                                    }
+                                                </Flex>
+                                            </HStack>
+                                        </td>
+                                        <TableData
+                                            name={`${Round(x?.hoursSpent)} Hrs`}
+                                            fontWeight="500"
+                                        />
+                                        <TableData
+                                            name={moment(x?.startDate).format(
+                                                'DD/MM/YYYY',
+                                            )}
+                                            fontWeight="500"
+                                        />
+                                        <TableData
+                                            name={moment(x?.endDate).format(
+                                                'DD/MM/YYYY',
+                                            )}
+                                            fontWeight="500"
+                                        />
+                                        <NewTableState
+                                            name={x?.status}
+                                            color={colorSwatch(x?.status)}
+                                        />
+                                    </TableRow>
+                                </>
                             );
                         })}
                     </TableCard>

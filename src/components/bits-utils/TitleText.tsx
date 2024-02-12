@@ -1,5 +1,6 @@
 import { VStack, Text, HStack, Square } from '@chakra-ui/react';
 import React from 'react';
+import parser from 'react-html-parser'
 
 const TitleText = ({
     title,
@@ -34,7 +35,7 @@ const TitleText = ({
                     mb="0"
                     textTransform="capitalize"
                 >
-                    {text}
+                    {parser(text)}
                 </Text>
             </HStack>
         </VStack>

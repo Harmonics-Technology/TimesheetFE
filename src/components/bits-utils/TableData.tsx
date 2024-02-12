@@ -389,6 +389,42 @@ export function TableActions({
         </td>
     );
 }
+export function TablePmActions({
+    func,
+    loading,
+    id,
+}: {
+    func: any;
+    loading: any;
+    id: any;
+}) {
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        {loading.id === id ? (
+                            <Spinner size="sm" />
+                        ) : (
+                            <FaEllipsisH />
+                        )}
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    <MenuItem onClick={() => func({ data: { id } })} w="full">
+                        Remove
+                    </MenuItem>
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
 export function TableDraftActions({
     data,
     setDraftData,

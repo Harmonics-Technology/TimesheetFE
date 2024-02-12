@@ -17,13 +17,16 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { useRouter } from 'next/router';
 import { EditSavedCard } from './EditSavedCard';
 import { GrSecure } from 'react-icons/gr';
+import { CardField } from '@components/subpages/ManageSub/CardField';
 
 export const SavedCard = ({
     isDefault,
     data,
+    setIsEditing,
 }: {
     isDefault?: boolean;
     data: Card;
+    setIsEditing?: any;
 }) => {
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState({ status: false, type: '' });
@@ -95,70 +98,7 @@ export const SavedCard = ({
     return (
         <Box>
             <HStack align="flex-end" gap="1rem">
-                <Box
-                    borderRadius="0.75rem"
-                    border="5px solid #F5F5F5"
-                    p="1.7rem"
-                    bgColor="white"
-                >
-                    <HStack spacing=".9rem">
-                        {/* "/assets/mastercard.png" */}
-                        <Box h="1.5rem" overflow="hidden">
-                            <Image
-                                src={
-                                    data?.brand == 'mastercard'
-                                        ? '/assets/mastercard.png'
-                                        : data?.brand == 'visa'
-                                        ? '/assets/visa.png'
-                                        : data?.brand == 'verve'
-                                        ? '/assets/verve.png'
-                                        : '/assets/card.png'
-                                }
-                                h="full"
-                                w="auto"
-                            />
-                        </Box>
-                        <Text
-                            fontWeight="600"
-                            color="#252f40"
-                            fontSize="1rem"
-                            fontFamily="Open Sans"
-                        >
-                            ****
-                        </Text>
-                        <Text
-                            fontWeight="600"
-                            color="#252f40"
-                            fontSize="1rem"
-                            fontFamily="Open Sans"
-                        >
-                            ****
-                        </Text>
-                        <Text
-                            fontWeight="600"
-                            color="#252f40"
-                            fontSize="1rem"
-                            fontFamily="Open Sans"
-                        >
-                            ****
-                        </Text>
-                        <Text
-                            fontWeight="600"
-                            color="#252f40"
-                            fontSize="1rem"
-                            fontFamily="Open Sans"
-                        >
-                            {data?.lastFourDigit}
-                        </Text>
-                        <Icon
-                            fontWeight="700"
-                            fontSize="1rem"
-                            as={GrSecure}
-                            ml="3rem !important"
-                            cursor="pointer"
-                        />
-                    </HStack>
-                </Box>
+                <CardField data={data} icon />
                 {isDefault ? (
                     <Button
                         bgColor="transparent"
@@ -203,7 +143,7 @@ export const SavedCard = ({
                             icon={BsPencilFill}
                             color="#252F40"
                             text="Edit"
-                            onClick={() => showEditCard()}
+                            onClick={() => setIsEditing(data)}
                         />
                     </HStack>
                 </HStack>
@@ -228,7 +168,7 @@ export const SavedCard = ({
                         </HStack>
                         <HStack>
                             <Text fontSize=".8125rem" color="#67748E" mb="0">
-                                Company Name:
+                                Company Email:
                             </Text>
                             <Text fontSize=".8125rem" color="#252f40" mb="0">
                                 {data?.customerEmail}
