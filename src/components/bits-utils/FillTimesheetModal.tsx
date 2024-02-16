@@ -168,6 +168,18 @@ export const FillTimesheetModal = ({
     }, [startDate]);
 
     useEffect(() => {
+        if (duration !== 0) {
+            setendDate(
+                moment(
+                    moment(startDate)
+                        .add(duration, 'hour')
+                        .format(`YYYY-MM-DD ${selectedStartTime}`),
+                ),
+            );
+        }
+    }, [duration]);
+
+    useEffect(() => {
         setProjectTimesheets({
             ...projectTimesheets,
             endDate,

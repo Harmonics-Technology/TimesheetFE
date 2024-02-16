@@ -58,9 +58,11 @@ export const ProjectPage = ({
     return (
         <Box>
             <Box mb="2.5rem">
-                <ProjectTabs
-                    name={['dashboard', 'projects', 'operational-task']}
-                />
+                {!isPm && (
+                    <ProjectTabs
+                        name={['dashboard', 'projects', 'operational-task']}
+                    />
+                )}
             </Box>
             <Flex justify="flex-end" gap="1rem">
                 <SubSearchComponent />
