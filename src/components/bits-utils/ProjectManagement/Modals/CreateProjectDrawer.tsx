@@ -54,7 +54,7 @@ export const CreateProjectDrawer = ({
             .min(1, 'Select atleast one assignee')
             .required(),
         note: yup.string().required(),
-        projectManagerId: yup.string().required().nullable(),
+        projectManagerId: yup.string().required(),
         // documentURL: yup.string().required(),
     });
 
@@ -120,7 +120,7 @@ export const CreateProjectDrawer = ({
     };
 
     const onSubmit = async (data: ProjectModel) => {
-        data.projectManagerId == 'null' ? null : data.projectManagerId;
+        // data.projectManagerId == 'null' ? null : data.projectManagerId;
         try {
             const result = await ProjectManagementService.createProject(data);
             if (result.status) {
@@ -333,9 +333,9 @@ export const CreateProjectDrawer = ({
                                 label="Not Applicable"
                                 dir="rtl"
                                 color="black"
-                                onChange={() =>
-                                    changeClick(watch('projectManagerId'))
-                                }
+                                // onChange={() =>
+                                //     changeClick(watch('projectManagerId'))
+                                // }
                             />
                         </Box>
                     </Box>

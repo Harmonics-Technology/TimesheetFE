@@ -51,7 +51,7 @@ export const PurchaseLicense = ({
     });
 
     const startDate = moment().format('DD/MM/YYYY');
-    const endDate = moment(startDate).add(1, 'month').format('DD/MM/YYYY');
+    const endDate = moment().add(1, 'month').format('DD/MM/YYYY');
     const license = watch('noOfLicense');
     const value = Number((license as number) * selected?.amount) || 0;
 
