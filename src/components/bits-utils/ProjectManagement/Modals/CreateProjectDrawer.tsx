@@ -54,7 +54,7 @@ export const CreateProjectDrawer = ({
             .min(1, 'Select atleast one assignee')
             .required(),
         note: yup.string().required(),
-        projectManagerId: yup.string().required(),
+        // projectManagerId: yup.string().required(),
         // documentURL: yup.string().required(),
     });
 
