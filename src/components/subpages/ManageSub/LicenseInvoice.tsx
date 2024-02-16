@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Tr } from '@chakra-ui/react';
+import { Box, Flex, HStack, Link, Text, Tr } from '@chakra-ui/react';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import {
@@ -11,6 +11,7 @@ import { CAD } from '@components/generics/functions/Naira';
 import moment from 'moment';
 import { LicenseNav } from './LicenseNav';
 import { ClientSubscriptionInvoiceViewValue } from 'src/services';
+import { AiOutlineDownload } from 'react-icons/ai';
 
 export const LicenseInvoices = ({ data }) => {
     return (
@@ -50,16 +51,29 @@ export const LicenseInvoices = ({ data }) => {
 
                                     <TableData
                                         name={CAD(
-                                            (x.amountInCent as number) * 100,
+                                            (x.amountInCent as number) / 100,
                                         )}
                                     />
                                     <TableStatus
                                         name={
-                                            x.status == 'ACTIVE' ? true : false
+                                            x.status == 'active' ? true : false
                                         }
                                     />
                                     <TableData name={`${x.billingAccount} `} />
-                                    <TableInvoiceSub url={x.invoicePDFURL} />
+                                    <td>
+                                        <Link
+                                            href={x.invoicePDFURL as string}
+                                            fontSize=".8rem"
+                                            color="brand.400"
+                                            fontWeight={700}
+                                            target="_blank"
+                                        >
+                                            <HStack>
+                                                <Text>Download Invoice</Text>
+                                                <AiOutlineDownload />
+                                            </HStack>
+                                        </Link>
+                                    </td>
                                 </Tr>
                             ),
                         )}

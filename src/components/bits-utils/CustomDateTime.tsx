@@ -31,19 +31,19 @@ export const CustomDateTime = ({
         setIsComponentVisible: startIsVisible,
     } = useComponentVisible(false);
 
-    // console.log({ placeholder });
     const newValue = moment(value).format('YYYY-MM-DD HH:mm');
     const [date, setDate] = useState<any>(value);
+    // console.log({ value, date });
     // new DateObject(newValue.split(' ')[0]) || new DateObject(),
     const [time, setTime] = useState<any>(
         newValue?.split(' ')[1] || moment().format('HH:mm'),
     );
 
-    const newDate = moment(date).format('YYYY-MM-DD');
+    const newDate = date ? moment(date).format('YYYY-MM-DD') : undefined;
     //
 
     useEffect(() => {
-        onChange(newDate + ' ' + time);
+        onChange(newDate ? newDate + ' ' + time : undefined);
     }, [date, time]);
     return (
         <Box w="full">

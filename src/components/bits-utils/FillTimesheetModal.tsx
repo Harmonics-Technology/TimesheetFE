@@ -83,9 +83,9 @@ export const FillTimesheetModal = ({
     }
     const initialStartDate = isValidDateTime(data?.startDate)
         ? moment(data.startDate)
-        : moment().format('YYYY-MM-DD 09:00');
+        : undefined;
     const [startDate, setstartDate] = useState<any>(initialStartDate);
-    const [endDate, setendDate] = useState<any>(moment(data.endDate));
+    const [endDate, setendDate] = useState<any>();
     const [isBillable, setisBillable] = useState<any>();
     const [loading, setLoading] = useState<any>();
 
@@ -106,7 +106,7 @@ export const FillTimesheetModal = ({
     const [selectedId, setSelectedId] = useState<any>([]);
 
     const formattedStartDate = moment(startDate).day();
-    console.log({ startDate, selectedId, formattedStartDate, endDate });
+    // console.log({ startDate, selectedId, formattedStartDate, endDate });
     const toggleSelected = (value: any) => {
         const existingValue = selectedId?.find((e) => e?.id === value?.id);
         if (existingValue) {
@@ -126,34 +126,38 @@ export const FillTimesheetModal = ({
 
     const firstDateOfWeek = startOfWeek(parseISO(startDate));
     const selectedStartTime = moment(startDate).format('HH:mm');
+    // console.log({ endDate });
     const selectedEndTime = moment(endDate).format('HH:mm');
-    useEffect(() => {
+    useNonInitialEffect(() => {
         const updatedProjectTimesheets = selectedId.map((x, i) => ({
             ...projectTimesheets,
             startDate: moment(firstDateOfWeek)
                 .add(x?.id, 'day')
                 .format(`YYYY-MM-DD ${selectedStartTime}`),
-            endDate: useEnd
-                ? moment(
-                      moment(firstDateOfWeek)
-                          .add(x?.id, 'day')
-                          .format(`YYYY-MM-DD ${selectedStartTime}`),
-                  )
-                      .add(hoursPerDay, 'hour')
-                      .format('YYYY-MM-DD HH:mm')
-                : moment(
-                      moment(firstDateOfWeek)
-                          .add(x?.id, 'day')
-                          .format(`YYYY-MM-DD ${selectedStartTime}`),
-                  )
-                      .add(duration, 'hour')
-                      .format('YYYY-MM-DD HH:mm'),
+            endDate:
+                endDate !== undefined
+                    ? useEnd
+                        ? moment(
+                              moment(firstDateOfWeek)
+                                  .add(x?.id, 'day')
+                                  .format(`YYYY-MM-DD ${selectedStartTime}`),
+                          )
+                              .add(hoursPerDay, 'hour')
+                              .format('YYYY-MM-DD HH:mm')
+                        : moment(
+                              moment(firstDateOfWeek)
+                                  .add(x?.id, 'day')
+                                  .format(`YYYY-MM-DD ${selectedStartTime}`),
+                          )
+                              .add(duration, 'hour')
+                              .format('YYYY-MM-DD HH:mm')
+                    : undefined,
         }));
 
         setNewProjectTimesheet(updatedProjectTimesheets);
     }, [selectedId, projectTimesheets]);
 
-    console.log({ newProjectTimesheet });
+    // console.log({ newProjectTimesheet });
 
     useEffect(() => {
         setProjectTimesheets({
@@ -333,10 +337,19 @@ export const FillTimesheetModal = ({
         (subTask) => subTask?.id === watch('projectSubTaskId'),
     );
 
-    console.log({ duration });
+    // console.log({ duration });
 
     const onSubmit = async (data: ProjectTimesheetModel) => {
         const endOfDate = (newProjectTimesheet as any)[0]?.endDate;
+        if (data.projectId === undefined) {
+            toast({
+                title: 'Please select a project first',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
         if (!endOfDate || endOfDate == 'Invalid date') {
             toast({
                 title: 'Please select a duration or end date',
@@ -350,6 +363,7 @@ export const FillTimesheetModal = ({
             selectedSubTask?.projectTaskAsigneeId ||
             selectedTask.assignees.find((x) => x.userId == userId)?.id;
         data.projectTimesheets = newProjectTimesheet;
+
         try {
             const result =
                 await ProjectManagementService.fillTimesheetForProject(data);

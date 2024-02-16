@@ -2,6 +2,7 @@ import {
     Box,
     Flex,
     HStack,
+    Link,
     Text,
     Tr,
     VStack,
@@ -28,6 +29,7 @@ import {
 import { formatDate } from '@components/generics/functions/formatDate';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
+import { AiOutlineDownload } from 'react-icons/ai';
 
 export const LicenseHome = ({
     data,
@@ -69,6 +71,8 @@ export const LicenseHome = ({
             },
         });
     };
+
+    console.log({ data });
 
     return (
         <>
@@ -246,22 +250,28 @@ export const LicenseHome = ({
                                             />
                                             <TableData
                                                 name={CAD(
-                                                    (x.amountInCent as number) *
+                                                    (x.amountInCent as number) /
                                                         100,
                                                 )}
                                             />
                                             <TableStatus
                                                 name={
-                                                    x.status == 'ACTIVE'
+                                                    x.status == 'active'
                                                         ? true
                                                         : false
                                                 }
                                             />
-                                            {/* <TableSubscriptionActions
-                                    openRenew={onOpen}
-                                    setData={setSubData}
-                                    x={x}
-                                /> */}
+                                            <td>
+                                                <Link
+                                                    href={
+                                                        x.invoicePDFURL as string
+                                                    }
+                                                    fontSize="1.2rem"
+                                                    target="_blank"
+                                                >
+                                                    <AiOutlineDownload />
+                                                </Link>
+                                            </td>
                                         </Tr>
                                     ),
                                 )}
