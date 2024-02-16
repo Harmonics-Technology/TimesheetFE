@@ -68,10 +68,14 @@ export const TeamProjectTask = ({
         onOpen();
     };
 
-    const isPm = false;
+    const isPm = project?.projectManagerId == user?.id;
     const hasAccess =
         access?.projectMembersTaskCreation ||
         (access.assignedPMTaskCreation && isPm);
+    const editAccess =
+        (access?.pmTaskEditing && isPm) ||
+        access.projectMembersTaskEditing ||
+        access.taskMembersTaskEditing;
 
     return (
         <Box>
@@ -175,10 +179,12 @@ export const TeamProjectTask = ({
                             <td>
                                 <HStack color="#c2cfe0">
                                     <Icon as={FaEye} onClick={viewTask} />
-                                    <Icon
-                                        as={BiSolidPencil}
-                                        onClick={() => openModal(x)}
-                                    />
+                                    {editAccess && (
+                                        <Icon
+                                            as={BiSolidPencil}
+                                            onClick={() => openModal(x)}
+                                        />
+                                    )}
                                 </HStack>
                             </td>
                         </TableRow>

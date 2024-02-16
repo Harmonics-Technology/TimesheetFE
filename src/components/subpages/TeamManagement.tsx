@@ -131,14 +131,20 @@ const schema = yup.object().shape({
     // timeSheetGenerationStartDate: yup.string().required(),
     isEligibleForLeave: yup.string().required(),
     employeeType: yup.string().required(),
-    numberOfDaysEligible: yup.string().when('isEligibleForLeave', {
-        is: 'Yes',
-        then: yup.string().required(),
-    }),
-    numberOfHoursEligible: yup.string().when('isEligibleForLeave', {
-        is: 'Yes',
-        then: yup.string().required(),
-    }),
+    numberOfDaysEligible: yup
+        .string()
+        .nullable()
+        .when('isEligibleForLeave', {
+            is: 'Yes' || true,
+            then: yup.string().required(),
+        }),
+    numberOfHoursEligible: yup
+        .string()
+        .nullable()
+        .when('isEligibleForLeave', {
+            is: 'Yes' || true,
+            then: yup.string().required(),
+        }),
     onBoradingFee: yup.string().when('fixedAmount', {
         is: false,
         then: yup.string().required(),
@@ -467,6 +473,49 @@ function TeamManagement({
     };
     const saveToDraft = async (data: TeamMemberModel) => {
         data.superAdminId = user?.superAdminId;
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
+        if (data.fixedAmount == true) {
+            data.onBoradingFee = fixedAmount;
+        }
+        if (contract !== '') {
+            data.document = `${contract.cdnUrl} ${contract.name}`;
+        }
+        if (icd !== '') {
+            data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
+        }
+        if (voidCheck !== '') {
+            data.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
+        }
+        if (inc !== '') {
+            data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
+        }
+
+        {
+            (data.hstNumber as unknown as string) == ''
+                ? (data.hstNumber = 0)
+                : (data.hstNumber as number);
+        }
+        {
+            (data.ratePerHour as unknown as string) == ''
+                ? (data.ratePerHour = 0)
+                : (data.ratePerHour as number);
+        }
+        {
+            (data.hoursPerDay as unknown as string) == ''
+                ? (data.hoursPerDay = 0)
+                : (data.hoursPerDay as number);
+        }
+        {
+            (data.monthlyPayoutRate as unknown as string) == ''
+                ? (data.monthlyPayoutRate = 0)
+                : (data.monthlyPayoutRate as number);
+        }
+        {
+            (data?.isEligibleForLeave as unknown as string) == 'Yes'
+                ? (data.isEligibleForLeave = true)
+                : (data.isEligibleForLeave = false);
+        }
+        data.clientId = !clientType ? user?.superAdminId : data.clientId;
         try {
             const result = await DraftService.createDraft(
                 data as UserDraftModel,

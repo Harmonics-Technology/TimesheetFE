@@ -16,15 +16,18 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            // const data = await UserService.getClientSubscriptionHistory(
-            //     superAdminId,
-            //     pagingOptions.search,
-            // );
+            const data = await UserService.getClientInvoices(
+                superAdminId,
+                pagingOptions.offset,
+                pagingOptions.limit,
+                pagingOptions.search,
+            );
             const subs = await UserService.getClientSubScriptions(superAdminId);
             const subId =
                 pagingOptions.subId || (subs as any)?.data[0].subscriptionId;
             const users = await UserService.listUsers(
-                'Team Member',
+                //@ts-ignore
+                undefined,
                 superAdminId,
                 pagingOptions.offset,
                 pagingOptions.limit || 50,
@@ -35,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             return {
                 props: {
-                    // data: data.data?.data,
+                    data: data.data?.data,
                     subs: subs.data,
                     users: users.data,
                     // data: [],

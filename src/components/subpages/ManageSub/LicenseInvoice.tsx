@@ -10,6 +10,7 @@ import Tables from '@components/bits-utils/Tables';
 import { CAD } from '@components/generics/functions/Naira';
 import moment from 'moment';
 import { LicenseNav } from './LicenseNav';
+import { ClientSubscriptionInvoiceViewValue } from 'src/services';
 
 export const LicenseInvoices = ({ data }) => {
     return (
@@ -37,23 +38,31 @@ export const LicenseInvoices = ({ data }) => {
                     color="white"
                 >
                     <>
-                        {data?.value?.map((x: any) => (
-                            <Tr key={x.id}>
-                                <TableData name={x.subscription?.name} />
-                                <TableData
-                                    name={moment(x.startDate).format(
-                                        'DD/MM/YYYY',
-                                    )}
-                                />
+                        {data?.value?.map(
+                            (x: ClientSubscriptionInvoiceViewValue) => (
+                                <Tr key={x.id}>
+                                    <TableData name={x.invoiceReference} />
+                                    <TableData
+                                        name={moment(x.startDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                    />
 
-                                <TableData name={CAD(x.totalAmount)} />
-                                <TableStatus
-                                    name={x.status == 'ACTIVE' ? true : false}
-                                />
-                                <TableData name={`${x.duration} `} />
-                                <TableInvoiceSub url={x} />
-                            </Tr>
-                        ))}
+                                    <TableData
+                                        name={CAD(
+                                            (x.amountInCent as number) * 100,
+                                        )}
+                                    />
+                                    <TableStatus
+                                        name={
+                                            x.status == 'ACTIVE' ? true : false
+                                        }
+                                    />
+                                    <TableData name={`${x.billingAccount} `} />
+                                    <TableInvoiceSub url={x.invoicePDFURL} />
+                                </Tr>
+                            ),
+                        )}
                     </>
                 </Tables>
             </Box>

@@ -120,7 +120,7 @@ export const FillTimesheetModal = ({
     const [projectTimesheets, setProjectTimesheets] =
         useState<ProjectTimesheetRange>({});
 
-    console.log({ projectTimesheets });
+    // console.log({ projectTimesheets });
     const [newProjectTimesheet, setNewProjectTimesheet] = useState([]);
     const [duration, setDuration] = useState(0);
 
@@ -214,7 +214,9 @@ export const FillTimesheetModal = ({
     const [err, setErr] = useState<any>([]);
     const [operationalTasks, setOperationalTasks] = useState<any>([]);
 
-    const hasAccess = access?.projectMembersTimesheetVisibility;
+    const hasAccess =
+        access?.projectMembersTimesheetVisibility ||
+        access?.taskMembersTimesheetVisibility;
     useNonInitialEffect(() => {
         async function getTasks() {
             setErr('');

@@ -12,18 +12,20 @@ import { CreateProjectDrawer } from '../../Modals/CreateProjectDrawer';
 import { ProjectCard } from '../ProjectCard';
 import { TeamTaskMenu } from '../../Generics/TeamTaskMenu';
 
-export const ProjectPage = ({
+export const TeamProjectPage = ({
     projects,
     users,
     superAdminId,
     counts,
     access,
+    projectMangers,
 }: {
     projects: any;
     users: any;
     superAdminId: string;
     counts: ProjectProgressCountView;
     access: ProjectManagementSettingView;
+    projectMangers: any;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -34,9 +36,7 @@ export const ProjectPage = ({
         (counts.inProgress as number) +
         (counts.completed as number);
 
-    const isPm = false;
-    const hasAccess =
-        access?.allProjectCreation || (access.pmProjectCreation && isPm);
+    const hasAccess = access?.allProjectCreation;
     return (
         <Box bgColor="white" p="1rem" borderRadius=".6rem">
             <TeamTaskMenu
@@ -79,6 +79,7 @@ export const ProjectPage = ({
                     onClose={onClose}
                     users={users}
                     superAdminId={superAdminId}
+                    projectMangers={projectMangers}
                 />
             )}
         </Box>

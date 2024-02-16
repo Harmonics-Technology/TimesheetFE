@@ -21,19 +21,28 @@ export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const user = JSON.parse(ctx.req.cookies.user);
+        const superAdminId = user.superAdminId;
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const userId = JSON.parse(ctx.req.cookies.user).id;
+        const userId = user.id;
         const { id } = ctx.query;
         try {
             const data = await ProjectManagementService.getProject(id);
+            const access =
+                await UserService.getSuperAdminProjectManagementSettings(
+                    superAdminId,
+                );
+            const isAssignedPm = data.data?.projectManagerId == userId;
+            const hasAccess =
+                (access.data?.assignedPMTaskViewing && isAssignedPm) ||
+                access.data?.projectMembersTaskViewing;
             const tasks = await ProjectManagementService.listTasks(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
                 id,
                 pagingOptions.status,
-                userId,
+                hasAccess ? undefined : userId,
                 pagingOptions.search,
             );
             const users = await UserService.listUsers(
@@ -43,10 +52,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 80,
                 pagingOptions.search,
             );
-            const access =
-                await UserService.getSuperAdminProjectManagementSettings(
-                    superAdminId,
-                );
 
             return {
                 props: {

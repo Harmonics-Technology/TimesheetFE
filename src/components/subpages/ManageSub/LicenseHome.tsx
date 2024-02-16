@@ -21,7 +21,10 @@ import { CAD } from '@components/generics/functions/Naira';
 import { AddSub } from './AddSub';
 import { LicenseNav } from './LicenseNav';
 import { SingleSubView } from './SingleSubView';
-import { ClientSubscriptionDetailView } from 'src/services';
+import {
+    ClientSubscriptionDetailView,
+    ClientSubscriptionInvoiceViewValue,
+} from 'src/services';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
@@ -89,25 +92,23 @@ export const LicenseHome = ({
                             <Text fontSize="14px" color="#696969">
                                 My Other License
                             </Text>
-                            {otherSubs?.map((x) => (
-                                <HStack
-                                    gap="8px"
-                                    key={x.subscriptionId}
-                                    onClick={() =>
-                                        triggerNewSub(
-                                            x?.subscriptionId as string,
-                                        )
-                                    }
-                                >
+                            <HStack gap="8px" w="full">
+                                {otherSubs?.map((x) => (
                                     <Text
                                         fontSize="14px"
                                         color="#2383BD"
                                         cursor="pointer"
+                                        key={x.subscriptionId}
+                                        onClick={() =>
+                                            triggerNewSub(
+                                                x?.subscriptionId as string,
+                                            )
+                                        }
                                     >
                                         {x.subscriptionType}
                                     </Text>
-                                </HStack>
-                            ))}
+                                ))}
+                            </HStack>
                         </Box>
                         <HStack
                             gap="3rem"
@@ -217,19 +218,16 @@ export const LicenseHome = ({
                                 'Duration',
                                 'Amount',
                                 'Status',
-                                // 'Actions',
+                                'Actions',
                             ]}
                             bg="brand.400"
                             color="white"
                         >
                             <>
-                                {Array(4)
-                                    .fill(4)
-                                    ?.map((x: any) => (
+                                {data?.value?.map(
+                                    (x: ClientSubscriptionInvoiceViewValue) => (
                                         <Tr key={x.id}>
-                                            <TableData
-                                                name={x.subscription?.name}
-                                            />
+                                            <TableData name={x.licenceType} />
                                             <TableData
                                                 name={moment(
                                                     x.startDate,
@@ -241,10 +239,16 @@ export const LicenseHome = ({
                                                 )}
                                             />
                                             <TableData
-                                                name={`${x.duration} Months`}
+                                                name={`${moment(x.endDate).diff(
+                                                    x.startDate,
+                                                    'month',
+                                                )} Months`}
                                             />
                                             <TableData
-                                                name={CAD(x.totalAmount)}
+                                                name={CAD(
+                                                    (x.amountInCent as number) *
+                                                        100,
+                                                )}
                                             />
                                             <TableStatus
                                                 name={
@@ -259,7 +263,8 @@ export const LicenseHome = ({
                                     x={x}
                                 /> */}
                                         </Tr>
-                                    ))}
+                                    ),
+                                )}
                             </>
                         </Tables>
 

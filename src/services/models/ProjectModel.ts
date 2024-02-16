@@ -15,4 +15,5 @@ export type ProjectModel = {
     documentURL?: string | null;
     statusId?: number;
     budgetThreshold?: number | null;
+    projectManagerId?: string | null;
 };
