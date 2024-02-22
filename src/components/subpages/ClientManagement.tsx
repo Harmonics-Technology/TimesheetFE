@@ -54,6 +54,7 @@ import { BsDownload } from 'react-icons/bs';
 import Cookies from 'js-cookie';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { UserContext } from '@components/context/UserContext';
+import { LicenseSelection } from './ManageSub/LicenseSelection';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -354,6 +355,13 @@ function ClientManagement({ adminList, isSuperAdmin, subs }: adminProps) {
                             />
                         </Grid>
                     </Box>
+                    <LicenseSelection
+                        addLicense={addLicense}
+                        removeLicense={removeLicense}
+                        errors={errors}
+                        selectedLicense={selectedLicense}
+                        subs={subs}
+                    />
 
                     <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">
                         <Grid

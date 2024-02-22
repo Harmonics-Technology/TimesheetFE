@@ -52,6 +52,7 @@ import Cookies from 'js-cookie';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { UserContext } from '@components/context/UserContext';
+import { LicenseSelection } from './ManageSub/LicenseSelection';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -236,6 +237,13 @@ function PaymentPartnerManagement({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                    />
+                    <LicenseSelection
+                        addLicense={addLicense}
+                        removeLicense={removeLicense}
+                        errors={errors}
+                        selectedLicense={selectedLicense}
+                        subs={subs}
                     />
                     <Box w="full">
                         <Flex

@@ -15,6 +15,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { Card, UserService } from 'src/services';
 import { LicenseNav } from './ManageSub/LicenseNav';
 import { EditBilling } from './ManageSub/EditBilling';
+import { useRouter } from 'next/router';
 
 export const BillingInfo = ({
     data,
@@ -28,6 +29,7 @@ export const BillingInfo = ({
     const toast = useToast();
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setIsEditData] = useState();
+    const router = useRouter();
 
     const getEditData = (data: any) => {
         setIsEditing((prev) => !prev);
@@ -45,7 +47,7 @@ export const BillingInfo = ({
                     process.env.NEXT_PUBLIC_TTS as string
                 }/addcard/${res.data?.subscriptionId}?client_secret=${
                     res?.data?.clientSecret
-                }&clientId=${res.data?.clientId}`;
+                }&clientId=${res.data?.clientId}&from=${router.asPath}`;
                 return;
             }
             setLoading(false);

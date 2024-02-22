@@ -92,28 +92,30 @@ export const LicenseHome = ({
                         pos="relative"
                         p="1rem"
                     >
-                        <Box h="58px" borderBottom=" 1px solid #c2cfe0">
-                            <Text fontSize="14px" color="#696969">
-                                My Other License
-                            </Text>
-                            <HStack gap="8px" w="full">
-                                {otherSubs?.map((x) => (
-                                    <Text
-                                        fontSize="14px"
-                                        color="#2383BD"
-                                        cursor="pointer"
-                                        key={x.subscriptionId}
-                                        onClick={() =>
-                                            triggerNewSub(
-                                                x?.subscriptionId as string,
-                                            )
-                                        }
-                                    >
-                                        {x.subscriptionType}
-                                    </Text>
-                                ))}
-                            </HStack>
-                        </Box>
+                        {otherSubs?.length > 0 && (
+                            <Box h="58px" borderBottom=" 1px solid #c2cfe0">
+                                <Text fontSize="14px" color="#696969">
+                                    My Other License
+                                </Text>
+                                <HStack gap="8px" w="full">
+                                    {otherSubs?.map((x) => (
+                                        <Text
+                                            fontSize="14px"
+                                            color="#2383BD"
+                                            cursor="pointer"
+                                            key={x.subscriptionId}
+                                            onClick={() =>
+                                                triggerNewSub(
+                                                    x?.subscriptionId as string,
+                                                )
+                                            }
+                                        >
+                                            {x.subscriptionType}
+                                        </Text>
+                                    ))}
+                                </HStack>
+                            </Box>
+                        )}
                         <HStack
                             gap="3rem"
                             justify="space-between"

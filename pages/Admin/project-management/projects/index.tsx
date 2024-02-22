@@ -86,7 +86,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
                 undefined,
-                true,
             );
             const access =
                 await UserService.getSuperAdminProjectManagementSettings(

@@ -56,6 +56,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
+import { LicenseSelection } from './ManageSub/LicenseSelection';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -682,42 +683,13 @@ function PaymentPartnerTeamManagement({
                             )}
                         </Grid>
                     </Box>
-                    <Box
-                        w="full"
-                        borderTop="1px solid"
-                        borderColor="gray.300"
-                        mt="1.5rem"
-                        pt="1rem"
-                    >
-                        <FormLabel
-                            textTransform="capitalize"
-                            width="fit-content"
-                            fontSize=".8rem"
-                        >
-                            Assign License
-                        </FormLabel>
-                        <CustomSelectBox
-                            data={subs}
-                            updateFunction={addLicense}
-                            items={selectedLicense}
-                            customKeys={{
-                                key: 'subscriptionId',
-                                label: 'subscriptionType',
-                                used: 'noOfLicenceUsed',
-                                total: 'noOfLicensePurchased',
-                            }}
-                            removeFn={removeLicense}
-                            id="assignLicense"
-                            extraField={
-                                'users in total assigned to this license'
-                            }
-                            checkbox
-                            single
-                            searchable={false}
-                            placeholder="Select the License you want to assign to this user"
-                            error={errors.clientSubscriptionId}
-                        />
-                    </Box>
+                    <LicenseSelection
+                        addLicense={addLicense}
+                        removeLicense={removeLicense}
+                        errors={errors}
+                        selectedLicense={selectedLicense}
+                        subs={subs}
+                    />
                     <Box w="full">
                         <Flex
                             justify="space-between"

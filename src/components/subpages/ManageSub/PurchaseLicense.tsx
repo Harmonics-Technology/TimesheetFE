@@ -72,7 +72,7 @@ export const PurchaseLicense = ({
             if (result.status) {
                 if (result?.data?.data?.clientSecret) {
                     router.push(
-                        `${process.env.NEXT_PUBLIC_TTS}/summary/${result.data?.data?.id}?client_secret=${result?.data?.data?.clientSecret}&clientId=${result?.data?.data?.clientId}`,
+                        `${process.env.NEXT_PUBLIC_TTS}/summary/${result.data?.data?.id}?client_secret=${result?.data?.data?.clientSecret}&clientId=${result?.data?.data?.clientId}&from=${router.asPath}`,
                     );
                     return;
                 }
