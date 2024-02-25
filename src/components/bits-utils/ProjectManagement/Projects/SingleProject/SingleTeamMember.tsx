@@ -16,7 +16,15 @@ import { TableCard } from '../../Generics/TableCard';
 import { ProgressBar } from '../../Generics/ProgressBar';
 import { ProjectTaskAsigneeView } from 'src/services';
 
-export const SingleTeamMember = ({ id, teams }: { id: string; teams: any }) => {
+export const SingleTeamMember = ({
+    id,
+    teams,
+    users,
+}: {
+    id: string;
+    teams: any;
+    users: any;
+}) => {
     const tableHead = [
         'Task Assigned',
         'Hours spent',
@@ -33,7 +41,7 @@ export const SingleTeamMember = ({ id, teams }: { id: string; teams: any }) => {
 
     return (
         <Box>
-            <TopBar noTitle={true} id={id} users={[]} />
+            <TopBar noTitle={true} id={id} users={users} />
             <HStack
                 justify="space-between"
                 pb="1rem"

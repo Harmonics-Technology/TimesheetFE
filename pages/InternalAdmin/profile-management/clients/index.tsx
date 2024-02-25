@@ -9,11 +9,12 @@ import {
 } from 'src/services';
 interface clientProps {
     adminList: UserViewPagedCollectionStandardResponse;
+    subs: any;
 }
 
-function client({ adminList }: clientProps) {
+function client({ adminList, subs }: clientProps) {
     //
-    return <ClientManagement adminList={adminList} />;
+    return <ClientManagement adminList={adminList} subs={subs} />;
 }
 
 export default client;
@@ -32,9 +33,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
+            const subs = await UserService.getClientSubScriptions(superAdminId);
+
             return {
                 props: {
                     adminList: data,
+                    subs: subs.data,
                 },
             };
         } catch (error: any) {

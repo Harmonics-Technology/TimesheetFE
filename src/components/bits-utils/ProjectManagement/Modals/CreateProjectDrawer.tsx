@@ -30,14 +30,19 @@ import { MdCancel } from 'react-icons/md';
 import { CustomSelectBox } from '../Generics/CustomSelectBox';
 import moment from 'moment';
 import { useRouter } from 'next/router';
+import Checkbox from '@components/bits-utils/Checkbox';
+import Link from 'next/link';
+import { UserContext } from '@components/context/UserContext';
 
 export const CreateProjectDrawer = ({
     onClose,
     isOpen,
     users,
     superAdminId,
+    projectMangers,
 }) => {
     const [currentBudget, setCurrenntBudget] = useState(0);
+    const [nonApplicable, setNonApplicable] = useState(false);
     const schema = yup.object().shape({
         name: yup.string().required(),
         startDate: yup.string().required(),
@@ -50,8 +55,14 @@ export const CreateProjectDrawer = ({
             .min(1, 'Select atleast one assignee')
             .required(),
         note: yup.string().required(),
-        documentURL: yup.string().required(),
+        projectManagerId: nonApplicable
+            ? yup.string()
+            : yup.string().required(),
+        // documentURL: yup.string().required(),
     });
+
+    const { user } = useContext(UserContext);
+    const role = user?.role.replaceAll(' ', '');
     const {
         register,
         handleSubmit,
@@ -89,9 +100,25 @@ export const CreateProjectDrawer = ({
         const filtered = selectedUser?.filter((x) => x.id !== id);
         setSelecedUser(filtered);
     };
+    const [selectedManager, setSelectedManager] = useState<any>();
+    const addManager = (user) => {
+        setSelectedManager(user);
+    };
+    const removeManager = (id) => {
+        const filtered = selectedManager?.filter((x) => x.id !== id);
+        setSelectedManager(filtered);
+    };
 
     const toast = useToast();
     const router = useRouter();
+
+    const setIfNonApplicable = (value: any) => {
+        setNonApplicable(value);
+        if (value == true) {
+            setSelectedManager(undefined);
+            return;
+        }
+    };
 
     //
 
@@ -147,6 +174,9 @@ export const CreateProjectDrawer = ({
     useEffect(() => {
         setValue('documentURL', fileDoc?.url?.cdnUrl);
     }, [fileDoc]);
+    useEffect(() => {
+        setValue('projectManagerId', selectedManager?.id);
+    }, [selectedManager]);
 
     //
     return (
@@ -229,6 +259,22 @@ export const CreateProjectDrawer = ({
                             id="Assign user"
                             error={errors.assignedUsers}
                         />
+                        <HStack justify="flex-end" mt=".5rem">
+                            <Link
+                                passHref
+                                href={`${role}/profile-management/team-members`}
+                            >
+                                <Button
+                                    bgColor="#2383BD"
+                                    px="1rem"
+                                    h="24px"
+                                    color="white"
+                                    fontSize="10px"
+                                >
+                                    Add Team Member
+                                </Button>
+                            </Link>
+                        </HStack>
                         <Box
                             mt="1rem"
                             borderY="1px solid #e5e5e5"
@@ -266,6 +312,36 @@ export const CreateProjectDrawer = ({
                             <Text fontSize=".6rem" color="#707683" mb="0">
                                 These team members were added to this project
                             </Text>
+                        </Box>
+                    </Box>
+                    <Box w="full">
+                        <FormLabel
+                            textTransform="capitalize"
+                            width="fit-content"
+                            fontSize=".8rem"
+                        >
+                            Assign Project Manager
+                        </FormLabel>
+
+                        <CustomSelectBox
+                            data={projectMangers?.value}
+                            updateFunction={addManager}
+                            items={selectedManager}
+                            customKeys={{ key: 'id', label: 'fullName' }}
+                            removeFn={removeManager}
+                            id="AssignProjectManager"
+                            single
+                            error={errors.projectManagerId}
+                        />
+                        <Box mt="1rem">
+                            <Checkbox
+                                label="Not Applicable"
+                                dir="rtl"
+                                color="black"
+                                onChange={(e: any) =>
+                                    setIfNonApplicable(e.target.checked)
+                                }
+                            />
                         </Box>
                     </Box>
                     <PrimaryInput<ProjectModel>

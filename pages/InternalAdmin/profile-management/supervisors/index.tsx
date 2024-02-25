@@ -11,11 +11,18 @@ import {
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     client: UserView[];
+    subs: any;
 }
 
-function admin({ adminList, client }: adminProps) {
+function admin({ adminList, client, subs }: adminProps) {
     //
-    return <SupervisorManagement adminList={adminList} client={client} />;
+    return (
+        <SupervisorManagement
+            adminList={adminList}
+            client={client}
+            subs={subs}
+        />
+    );
 }
 
 export default admin;
@@ -35,10 +42,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
+            const subs = await UserService.getClientSubScriptions(superAdminId);
+
             return {
                 props: {
                     adminList: data,
                     client: client?.data?.value,
+                    subs: subs.data,
                 },
             };
         } catch (error: any) {

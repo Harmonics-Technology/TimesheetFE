@@ -1,4 +1,6 @@
-import { ProjectPage } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/ProjectPage';
+import { TeamProjectPage } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/ProjectPage';
+import { ProjectPage } from '@components/bits-utils/ProjectManagement/Projects';
+
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
@@ -6,23 +8,53 @@ import React from 'react';
 import { ProjectManagementService, UserService } from 'src/services';
 
 const projectsIndex = ({
+    iProjects,
+    nProjects,
+    cProjects,
     projects,
     users,
     superAdminId,
     counts,
+    access,
+    isPm,
+    projectMangers,
 }: {
+    iProjects: any;
+    nProjects: any;
+    cProjects: any;
     projects: any;
     users: any;
     superAdminId: string;
-    counts;
+    counts: any;
+    access: any;
+    isPm: boolean;
+    projectMangers: any;
 }) => {
     return (
-        <ProjectPage
-            projects={projects}
-            users={users}
-            superAdminId={superAdminId}
-            counts={counts}
-        />
+        <>
+            {isPm ? (
+                <ProjectPage
+                    iProjects={iProjects}
+                    nProjects={nProjects}
+                    cProjects={cProjects}
+                    users={users}
+                    superAdminId={superAdminId}
+                    counts={counts}
+                    projectMangers={projectMangers}
+                    access={access}
+                    isPm
+                />
+            ) : (
+                <TeamProjectPage
+                    projects={projects}
+                    users={users}
+                    superAdminId={superAdminId}
+                    counts={counts}
+                    access={access}
+                    projectMangers={projectMangers}
+                />
+            )}
+        </>
     );
 };
 
@@ -30,11 +62,27 @@ export default projectsIndex;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
-        const userId = JSON.parse(ctx.req.cookies.user).id;
+        const user = JSON.parse(ctx.req.cookies.user);
+        const superAdminId = user.superAdminId;
+        const userId = user.id;
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const isPm = user.isOrganizationProjectManager;
+        const fetchProjectByStatus = (status) => {
+            const data = ProjectManagementService.listProject(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                superAdminId,
+                status,
+                undefined,
+                pagingOptions.search,
+            );
+            return data;
+        };
         //
         try {
+            const nProgress = await fetchProjectByStatus(1);
+            const iProgress = await fetchProjectByStatus(2);
+            const cProgress = await fetchProjectByStatus(3);
             const data = await ProjectManagementService.listProject(
                 pagingOptions.offset,
                 pagingOptions.limit,
@@ -43,18 +91,48 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 userId,
                 pagingOptions.search,
             );
+            const users = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
+                pagingOptions.offset,
+                80,
+                pagingOptions.search,
+            );
 
+            const access =
+                await UserService.getSuperAdminProjectManagementSettings(
+                    superAdminId,
+                );
             const counts =
                 await ProjectManagementService.getStatusCountForProject(
                     superAdminId,
                     userId,
                 );
+            // const projectMangers = await UserService.listUsers(
+            //     //@ts-ignore
+            //     undefined,
+            //     superAdminId,
+            //     pagingOptions.offset,
+            //     pagingOptions.limit || 50,
+            //     pagingOptions.search,
+            //     pagingOptions.from,
+            //     pagingOptions.to,
+            //     undefined,
+            //     true,
+            // );
 
             return {
                 props: {
                     projects: data.data,
                     superAdminId,
                     counts: counts.data,
+                    users: users.data,
+                    access: access.data,
+                    // projectMangers: projectMangers.data,
+                    isPm,
+                    iProjects: iProgress.data,
+                    nProjects: nProgress.data,
+                    cProjects: cProgress.data,
                 },
             };
         } catch (error: any) {

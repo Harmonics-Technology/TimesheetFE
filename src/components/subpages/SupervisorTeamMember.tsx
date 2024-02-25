@@ -34,6 +34,7 @@ interface adminProps {
     adminList: any;
     id: string;
     paymentPartner: UserView[];
+    subs: any;
 }
 
 import {
@@ -92,7 +93,12 @@ const schema = yup.object().shape({
     paymentFrequency: yup.string().required(),
 });
 
-function SupervisorTeamMember({ adminList, id, paymentPartner }: adminProps) {
+function SupervisorTeamMember({
+    adminList,
+    id,
+    paymentPartner,
+    subs,
+}: adminProps) {
     //
 
     const { fixedAmount, percentageAmount } = useContext(OnboardingFeeContext);

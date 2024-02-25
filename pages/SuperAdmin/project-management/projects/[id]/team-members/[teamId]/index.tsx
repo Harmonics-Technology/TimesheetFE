@@ -3,10 +3,10 @@ import { filterPagingSearchOptions } from '@components/generics/filterPagingSear
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { ProjectManagementService } from 'src/services';
+import { ProjectManagementService, UserService } from 'src/services';
 
-const index = ({ id, teams }) => {
-    return <SingleTeamMember id={id} teams={teams} />;
+const index = ({ id, teams, users }) => {
+    return <SingleTeamMember id={id} teams={teams} users={users} />;
 };
 
 export default index;
@@ -24,9 +24,17 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 teamId,
                 id,
             );
+            const users = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
+                pagingOptions.offset,
+                80,
+                pagingOptions.search,
+            );
             return {
                 props: {
                     teams: data.data,
+                    users: users.data,
                     id,
                 },
             };

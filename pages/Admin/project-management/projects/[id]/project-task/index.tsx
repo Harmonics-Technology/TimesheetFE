@@ -26,6 +26,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 superAdminId,
                 id,
                 pagingOptions.status,
+                undefined,
                 pagingOptions.search,
             );
             const users = await UserService.listUsers(

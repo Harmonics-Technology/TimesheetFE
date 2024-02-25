@@ -5,6 +5,7 @@ import Pagination from '@components/bits-utils/Pagination';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import {
+    ClientSubscriptionDetailView,
     LeaveConfigurationView,
     UserDraftView,
     UserDraftViewPagedCollectionStandardResponse,
@@ -18,6 +19,7 @@ interface adminProps {
     clients: UserView[];
     paymentPartner: UserView[];
     leaveSettings: LeaveConfigurationView;
+    subs: ClientSubscriptionDetailView[];
 }
 
 function TeamDraft({
@@ -25,6 +27,7 @@ function TeamDraft({
     clients,
     paymentPartner,
     leaveSettings,
+    subs,
 }: adminProps) {
     const thead = ['First Name', 'Last Name', 'Email', 'Action'];
     const [data, setData] = useState<UserDraftView>();
@@ -85,6 +88,7 @@ function TeamDraft({
                         clients={clients}
                         paymentPartner={paymentPartner}
                         leaveSettings={leaveSettings}
+                        subs={subs}
                     />
                 )}
             </Box>

@@ -88,6 +88,9 @@ export function TableData({
     breakWord?: any;
     onClick?: any;
 }) {
+    const validRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const isEmail = name.match(validRegex) ? true : false;
     return (
         <Td
             borderColor={borderColor}
@@ -97,7 +100,7 @@ export function TableData({
             className={classes}
             fontWeight={fontWeight}
             maxW={breakWord ? '150px' : 'unset'}
-            textTransform="capitalize"
+            textTransform={isEmail ? 'lowercase' : 'capitalize'}
             onClick={onClick}
             cursor="pointer"
             // textOverflow=""
@@ -282,6 +285,39 @@ export function TableContract({ url }: { url: any }) {
         </td>
     );
 }
+export function TableInvoiceSub({ url }: { url: any }) {
+    //
+    const [loading, setLoading] = useState(false);
+    const downloadFile = (url: string) => {
+        setLoading(true);
+        axios
+            .get(url, {
+                responseType: 'blob',
+            })
+            .then((res) => {
+                fileDownload(res.data, `${url.split(' ').pop()}`);
+                setLoading(false);
+            });
+    };
+    return (
+        <td>
+            <Box
+                fontSize="1.4rem"
+                fontWeight="bold"
+                padding=".2rem 1rem"
+                width="fit-content"
+                cursor="pointer"
+                onClick={() => downloadFile(url)}
+            >
+                {loading ? (
+                    <Spinner size="sm" />
+                ) : (
+                    `Download Invoice${(<AiOutlineDownload />)}`
+                )}
+            </Box>
+        </td>
+    );
+}
 export function TableActions({
     id,
     route,
@@ -350,6 +386,42 @@ export function TableActions({
                                 View Profile
                             </Link>
                         </NextLink>
+                    </MenuItem>
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+export function TablePmActions({
+    func,
+    loading,
+    id,
+}: {
+    func: any;
+    loading: any;
+    id: any;
+}) {
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        {loading.id === id ? (
+                            <Spinner size="sm" />
+                        ) : (
+                            <FaEllipsisH />
+                        )}
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    <MenuItem onClick={() => func({ id })} w="full">
+                        Remove
                     </MenuItem>
                 </MenuList>
             </Menu>

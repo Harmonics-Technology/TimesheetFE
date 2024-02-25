@@ -9,6 +9,11 @@ interface shiftBtnProps {
     text: any;
     onClick?: any;
     loading?: any;
+    h?: any;
+    fontSize?: any;
+    w?: any;
+    px?: any;
+    disabled?: any;
 }
 
 export const ShiftBtn = ({
@@ -18,17 +23,26 @@ export const ShiftBtn = ({
     text,
     onClick,
     loading,
+    h,
+    fontSize = '.9rem',
+    w,
+    px = '2rem',
+    disabled,
 }: shiftBtnProps) => {
     return (
         <Button
             color={color}
             bgColor={bg}
             borderRadius="5px"
-            fontSize=".9rem"
+            fontSize={fontSize}
             onClick={onClick}
             isLoading={loading}
             border={border}
-            px="2rem"
+            fontWeight={500}
+            px={px}
+            w={w}
+            h={h}
+            isDisabled={disabled}
             spinner={<BeatLoader color="white" size={10} />}
         >
             {text}

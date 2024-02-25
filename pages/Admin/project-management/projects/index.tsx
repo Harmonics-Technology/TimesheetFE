@@ -16,6 +16,8 @@ const projectsIndex = ({
     users,
     superAdminId,
     counts,
+    projectMangers,
+    access,
 }: {
     iProjects: any;
     nProjects: any;
@@ -23,6 +25,8 @@ const projectsIndex = ({
     users: any;
     superAdminId: string;
     counts: ProjectProgressCountView;
+    projectMangers: any;
+    access: any;
 }) => {
     return (
         <ProjectPage
@@ -32,6 +36,9 @@ const projectsIndex = ({
             users={users}
             superAdminId={superAdminId}
             counts={counts}
+            projectMangers={projectMangers}
+            access={access}
+            isPm={false}
         />
     );
 };
@@ -40,7 +47,7 @@ export default projectsIndex;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         //
         const fetchProjectByStatus = (status) => {
@@ -69,6 +76,22 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 await ProjectManagementService.getStatusCountForProject(
                     superAdminId,
                 );
+            // const projectMangers = await UserService.listUsers(
+            //     //@ts-ignore
+            //     undefined,
+            //     superAdminId,
+            //     pagingOptions.offset,
+            //     pagingOptions.limit || 50,
+            //     pagingOptions.search,
+            //     pagingOptions.from,
+            //     pagingOptions.to,
+            //     undefined,
+            //     true,
+            // );
+            const access =
+                await UserService.getSuperAdminProjectManagementSettings(
+                    superAdminId,
+                );
             //
             return {
                 props: {
@@ -78,6 +101,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     users: users.data,
                     superAdminId,
                     counts: counts.data,
+                    // projectMangers: projectMangers.data,
+                    access: access.data,
                 },
             };
         } catch (error: any) {

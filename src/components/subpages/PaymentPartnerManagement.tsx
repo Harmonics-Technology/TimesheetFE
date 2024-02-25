@@ -32,6 +32,7 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     isSuperAdmin?: boolean;
+    subs: any;
 }
 
 import {
@@ -51,6 +52,7 @@ import Cookies from 'js-cookie';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { UserContext } from '@components/context/UserContext';
+import { LicenseSelection } from './ManageSub/LicenseSelection';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -63,7 +65,11 @@ const schema = yup.object().shape({
     organizationPhone: yup.number().required(),
 });
 
-function PaymentPartnerManagement({ adminList, isSuperAdmin }: adminProps) {
+function PaymentPartnerManagement({
+    adminList,
+    isSuperAdmin,
+    subs,
+}: adminProps) {
     //
     const { user, accessControls } = useContext(UserContext);
     const userAccess: ControlSettingView = accessControls;
@@ -87,6 +93,13 @@ function PaymentPartnerManagement({ adminList, isSuperAdmin }: adminProps) {
     const [same, setSame] = useState(false);
     //
 
+    const [selectedLicense, setSelectedLicense] = useState<any>();
+    const addLicense = (license) => {
+        setSelectedLicense(license);
+    };
+    const removeLicense = (id) => {
+        setSelectedLicense(undefined);
+    };
     const onSubmit = async (data: RegisterModel) => {
         {
             same
@@ -96,7 +109,7 @@ function PaymentPartnerManagement({ adminList, isSuperAdmin }: adminProps) {
                 : null;
         }
         data.superAdminId = user?.superAdminId;
-
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         try {
             const result = await UserService.create(data);
             if (result.status) {
@@ -108,7 +121,7 @@ function PaymentPartnerManagement({ adminList, isSuperAdmin }: adminProps) {
                 });
                 router.replace(router.asPath);
                 onClose();
-                reset()
+                reset();
                 return;
             }
             toast({
@@ -224,6 +237,13 @@ function PaymentPartnerManagement({ adminList, isSuperAdmin }: adminProps) {
                         placeholder=""
                         defaultValue=""
                         register={register}
+                    />
+                    <LicenseSelection
+                        addLicense={addLicense}
+                        removeLicense={removeLicense}
+                        errors={errors}
+                        selectedLicense={selectedLicense}
+                        subs={subs}
                     />
                     <Box w="full">
                         <Flex

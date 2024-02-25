@@ -377,6 +377,7 @@ export const SingleTask = ({
                                                     toast,
                                                     setTaskStatus,
                                                     router,
+                                                    onClose,
                                                 )
                                             }
                                             loading={loading}
@@ -408,6 +409,7 @@ export const SingleTask = ({
                             toast,
                             setStatus,
                             router,
+                            onClosed
                         )
                     }
                     loading={loading}

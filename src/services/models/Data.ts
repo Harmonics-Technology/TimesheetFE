@@ -17,4 +17,6 @@ export type Data = {
     status?: string | null;
     endDate?: string;
     totalAmount?: number;
+    numberOfLicense?: number;
+    clientSecret?: string | null;
 };

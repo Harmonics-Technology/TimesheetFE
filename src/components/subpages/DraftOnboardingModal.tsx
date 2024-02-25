@@ -9,6 +9,7 @@ import {
     HStack,
     useRadioGroup,
     useDisclosure,
+    FormLabel,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -25,6 +26,7 @@ interface adminProps {
     paymentPartner: UserView[];
     leaveSettings: LeaveConfigurationView;
     isSuperAdmin?: boolean;
+    subs: ClientSubscriptionDetailView[];
 }
 
 import {
@@ -35,6 +37,7 @@ import {
     UserService,
     UserView,
     DraftService,
+    ClientSubscriptionDetailView,
 } from 'src/services';
 import { useRouter } from 'next/router';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
@@ -52,6 +55,7 @@ import { TriggerBox } from '@components/bits-utils/TriggerBox';
 import Cookies from 'js-cookie';
 import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
 import moment from 'moment';
+import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
 const schema = yup.object().shape({
     lastName: yup.string().required(),
     firstName: yup.string().required(),
@@ -113,14 +117,20 @@ const schema = yup.object().shape({
     // timeSheetGenerationStartDate: yup.string().required(),
     isEligibleForLeave: yup.string().required(),
     employeeType: yup.string().required(),
-    numberOfDaysEligible: yup.string().when('isEligibleForLeave', {
-        is: 'Yes',
-        then: yup.string().required(),
-    }),
-    numberOfHoursEligible: yup.string().when('isEligibleForLeave', {
-        is: 'Yes',
-        then: yup.string().required(),
-    }),
+    numberOfDaysEligible: yup
+        .string()
+        .nullable()
+        .when('isEligibleForLeave', {
+            is: 'Yes' || true,
+            then: yup.string().required(),
+        }),
+    numberOfHoursEligible: yup
+        .string()
+        .nullable()
+        .when('isEligibleForLeave', {
+            is: 'Yes' || true,
+            then: yup.string().required(),
+        }),
     onBoradingFee: yup.string().when('fixedAmount', {
         is: false,
         then: yup.string().required(),
@@ -134,6 +144,7 @@ function DraftOnboardingModal({
     clients,
     paymentPartner,
     leaveSettings,
+    subs,
 }: adminProps) {
     const client = clients?.filter((x) => x.isActive);
     //
@@ -156,7 +167,7 @@ function DraftOnboardingModal({
         // },
     });
     //
-    // console.log({ errors });
+    // console.log({ data });
     // const { isOpen: opened, onOpen: opens, onClose: closed } = useDisclosure();
     const { user, opens, subType } = useContext(UserContext);
     const router = useRouter();
@@ -268,8 +279,22 @@ function DraftOnboardingModal({
     const [clientType, setClientType] = useState(false);
     const draftId = data?.id;
 
+    const foundLicense = subs?.find(
+        (x) => x.subscriptionId == data?.clientSubscriptionId,
+    );
+    const [selectedLicense, setSelectedLicense] = useState<any>(foundLicense);
+    const addLicense = (license) => {
+        setSelectedLicense(license);
+    };
+    const removeLicense = (id) => {
+        setSelectedLicense(undefined);
+    };
+
+    // console.log({ selectedLicense, subs });
+
     const onSubmit = async (data: TeamMemberModel) => {
         data.superAdminId = user?.superAdminId;
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         data.draftId = draftId;
         if (data.fixedAmount == true) {
             data.onBoradingFee = fixedAmount;
@@ -409,7 +434,9 @@ function DraftOnboardingModal({
                 supervisorId: data?.supervisorId,
                 paymentPartnerId: data?.paymentPartnerId,
                 currency:
-                    data?.currency || subType != 'premium' ? 'CAD' : 'NGN',
+                    data?.currency || subType != 'premium'
+                        ? 'CAD'
+                        : data?.currency,
                 paymentRate: data?.paymentRate,
                 insuranceDocumentUrl: data?.insuranceDocumentUrl,
                 voidCheckUrl: data?.voidCheckUrl,
@@ -440,6 +467,7 @@ function DraftOnboardingModal({
     };
     const saveToDraft = async (value: TeamMemberModel) => {
         value.superAdminId = data?.superAdminId;
+        value.clientSubscriptionId = selectedLicense?.subscriptionId;
         value.id = data?.id;
         if (value.fixedAmount == true) {
             value.onBoradingFee = fixedAmount;
@@ -516,11 +544,14 @@ function DraftOnboardingModal({
         }
     };
 
-    console.log({
-        errors,
-        fin: watch('enableFinancials'),
-        py: watch('payRollTypeId'),
-    });
+    const getFileName = (fileName: any) =>
+        fileName?.split(' ').slice(1).join(' ');
+
+    // console.log({
+    //     errors,
+    //     fin: watch('enableFinancials'),
+    //     py: watch('payRollTypeId'),
+    // });
 
     return (
         <>
@@ -774,6 +805,42 @@ function DraftOnboardingModal({
                                     ]}
                                 />
                             </Grid>
+                            <Box
+                                w="full"
+                                borderTop="1px solid"
+                                borderColor="gray.300"
+                                mt="1.5rem"
+                                pt="1rem"
+                            >
+                                <FormLabel
+                                    textTransform="capitalize"
+                                    width="fit-content"
+                                    fontSize=".8rem"
+                                >
+                                    Assign License
+                                </FormLabel>
+                                <CustomSelectBox
+                                    data={subs}
+                                    updateFunction={addLicense}
+                                    items={selectedLicense}
+                                    customKeys={{
+                                        key: 'subscriptionId',
+                                        label: 'subscriptionType',
+                                        used: 'noOfLicenceUsed',
+                                        total: 'noOfLicensePurchased',
+                                    }}
+                                    removeFn={removeLicense}
+                                    id="assignLicense"
+                                    extraField={
+                                        'users in total assigned to this license'
+                                    }
+                                    checkbox
+                                    single
+                                    searchable={false}
+                                    placeholder="Select the License you want to assign to this user"
+                                    error={errors.clientSubscriptionId}
+                                />
+                            </Box>
                         </Box>
                         {includePayroll && (
                             <Box w="full">
@@ -848,7 +915,9 @@ function DraftOnboardingModal({
                                                 label="Incoporation Document"
                                                 filename={
                                                     icd?.name ||
-                                                    data?.inCorporationDocumentUrl
+                                                    getFileName(
+                                                        data?.inCorporationDocumentUrl,
+                                                    )
                                                 }
                                                 loading={showLoadingB}
                                                 uploadFunction={
@@ -860,7 +929,9 @@ function DraftOnboardingModal({
                                                 label="Void Check"
                                                 filename={
                                                     voidCheck?.name ||
-                                                    data?.voidCheckUrl
+                                                    getFileName(
+                                                        data?.voidCheckUrl,
+                                                    )
                                                 }
                                                 loading={showLoadingC}
                                                 uploadFunction={
@@ -872,7 +943,9 @@ function DraftOnboardingModal({
                                                 label="Issuance Certificate"
                                                 filename={
                                                     inc?.name ||
-                                                    data?.insuranceDocumentUrl
+                                                    getFileName(
+                                                        data?.insuranceDocumentUrl,
+                                                    )
                                                 }
                                                 loading={showLoadingD}
                                                 uploadFunction={
@@ -937,7 +1010,10 @@ function DraftOnboardingModal({
                                             keys="id"
                                             keyLabel="label"
                                             label="Currency"
-                                            placeholder={currency as string}
+                                            placeholder={
+                                                data?.currency ||
+                                                (currency as string)
+                                            }
                                             options={[
                                                 { id: 'CAD', label: 'CAD' },
                                                 { id: 'NGN', label: 'NGN' },
@@ -1088,7 +1164,10 @@ function DraftOnboardingModal({
                             <UploadCareWidget
                                 refs={widgetApi}
                                 label="Attach Document"
-                                filename={contract?.name || data?.document}
+                                filename={
+                                    contract?.name ||
+                                    getFileName(data?.document)
+                                }
                                 loading={showLoading}
                                 uploadFunction={showLoadingState}
                             />

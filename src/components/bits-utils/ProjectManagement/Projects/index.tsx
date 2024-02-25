@@ -6,14 +6,18 @@ import {
     VStack,
     useDisclosure,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { ProjectTabs } from '../Dashboard/ProjectTabs';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import { TabCounts } from '../Generics/TabCounts';
 import { ProjectCard } from './ProjectCard';
 import { CreateProjectDrawer } from '../Modals/CreateProjectDrawer';
 import { useRouter } from 'next/router';
-import { ProjectProgressCountView } from 'src/services';
+import {
+    ProjectManagementSettingView,
+    ProjectProgressCountView,
+} from 'src/services';
+import { UserContext } from '@components/context/UserContext';
 
 export const ProjectPage = ({
     iProjects,
@@ -22,6 +26,9 @@ export const ProjectPage = ({
     users,
     superAdminId,
     counts,
+    projectMangers,
+    access,
+    isPm,
 }: {
     iProjects: any;
     nProjects: any;
@@ -29,8 +36,12 @@ export const ProjectPage = ({
     users: any;
     superAdminId: string;
     counts: ProjectProgressCountView;
+    projectMangers: any;
+    access: ProjectManagementSettingView;
+    isPm: boolean;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { user } = useContext(UserContext);
     const router = useRouter();
     function filterProjects(val: number) {
         router.push({
@@ -40,24 +51,32 @@ export const ProjectPage = ({
             },
         });
     }
+    const hasAccess =
+        (access?.adminProjectCreation && user?.role !== 'Team Member') ||
+        (access?.pmProjectCreation && isPm);
+
     return (
         <Box>
             <Box mb="2.5rem">
-                <ProjectTabs
-                    name={['dashboard', 'projects', 'operational-task']}
-                />
+                {!isPm && (
+                    <ProjectTabs
+                        name={['dashboard', 'projects', 'operational-task']}
+                    />
+                )}
             </Box>
             <Flex justify="flex-end" gap="1rem">
                 <SubSearchComponent />
-                <Button
-                    onClick={onOpen}
-                    bgColor="brand.400"
-                    color="white"
-                    h="2.7rem"
-                    borderRadius=".3rem"
-                >
-                    Create New Project
-                </Button>
+                {hasAccess && (
+                    <Button
+                        onClick={onOpen}
+                        bgColor="brand.400"
+                        color="white"
+                        h="2.5rem"
+                        borderRadius=".3rem"
+                    >
+                        Create New Project
+                    </Button>
+                )}
             </Flex>
             <Box my="2rem">
                 <Grid templateColumns={['repeat(3,1fr)']} w="full" gap=".5rem">
@@ -119,6 +138,7 @@ export const ProjectPage = ({
                     onClose={onClose}
                     users={users}
                     superAdminId={superAdminId}
+                    projectMangers={users}
                 />
             )}
         </Box>

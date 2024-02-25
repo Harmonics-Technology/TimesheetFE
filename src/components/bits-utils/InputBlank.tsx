@@ -20,6 +20,8 @@ interface InputProps {
     onChange?: any;
     defaultValue?: string;
     fontSize?: string;
+    value?: any;
+    readonly?: any;
 }
 function InputBlank({
     type,
@@ -32,6 +34,8 @@ function InputBlank({
     onChange,
     defaultValue,
     fontSize = '.8rem',
+    value,
+    readonly,
 }: InputProps) {
     return (
         <FormControl>
@@ -50,9 +54,12 @@ function InputBlank({
                     disabled={disableLabel}
                     onChange={onChange}
                     defaultValue={defaultValue}
+                    value={value}
                     borderColor="gray.400"
                     borderRadius="0"
                     h="2.6rem"
+                    readOnly={readonly}
+                    userSelect={readonly ? 'none' : 'all'}
                 />
                 {icon && (
                     <InputRightElement

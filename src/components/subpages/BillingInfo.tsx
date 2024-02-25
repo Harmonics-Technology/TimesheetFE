@@ -13,11 +13,28 @@ import { UserContext } from '@components/context/UserContext';
 import React, { useContext, useState } from 'react';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { Card, UserService } from 'src/services';
+import { LicenseNav } from './ManageSub/LicenseNav';
+import { EditBilling } from './ManageSub/EditBilling';
+import { useRouter } from 'next/router';
 
-export const BillingInfo = ({ data }: { data: Card[] }) => {
+export const BillingInfo = ({
+    data,
+    countries,
+}: {
+    data: Card[];
+    countries: any;
+}) => {
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState(false);
     const toast = useToast();
+    const [isEditing, setIsEditing] = useState(false);
+    const [editData, setIsEditData] = useState();
+    const router = useRouter();
+
+    const getEditData = (data: any) => {
+        setIsEditing((prev) => !prev);
+        setIsEditData(data);
+    };
 
     const getClientSecret = async () => {
         setLoading(true);
@@ -30,7 +47,7 @@ export const BillingInfo = ({ data }: { data: Card[] }) => {
                     process.env.NEXT_PUBLIC_TTS as string
                 }/addcard/${res.data?.subscriptionId}?client_secret=${
                     res?.data?.clientSecret
-                }&clientId=${res.data?.clientId}`;
+                }&clientId=${res.data?.clientId}&from=${router.asPath}`;
                 return;
             }
             setLoading(false);
@@ -48,7 +65,7 @@ export const BillingInfo = ({ data }: { data: Card[] }) => {
     };
     return (
         <Box>
-            <LeaveTab
+            {/* <LeaveTab
                 tabValue={[
                     {
                         text: 'Subscription',
@@ -59,54 +76,83 @@ export const BillingInfo = ({ data }: { data: Card[] }) => {
                         url: `/account-management/billing-information`,
                     },
                 ]}
-            />
-            <Box my="1rem" borderRadius=".75rem" bgColor="white" p="1rem">
-                <HStack justify="space-between" gap="1rem" mb="1.77rem">
-                    <Text fontWeight="500" color="#252f40">
-                        Default Payment Method
-                    </Text>
-                </HStack>
-
-                <Box w="60%">
-                    {data.length > 0 ? (
-                        <SavedCard
-                            data={data?.filter((x) => x.isDefaultCard)[0]}
-                        />
-                    ) : (
-                        <Text textAlign="right" my="3rem">
-                            No Default Payment method has been added!
-                        </Text>
-                    )}
-                </Box>
-            </Box>
-            <Box my="1rem" borderRadius=".75rem" bgColor="white" p="1rem">
-                <HStack justify="space-between" gap="1rem" mb="1.77rem">
-                    <Text fontWeight="500" color="#252f40">
-                        Other Payment Method
-                    </Text>
-
-                    <Button
-                        px="2rem"
-                        color="white"
-                        textTransform="uppercase"
-                        borderRadius="0.375rem"
-                        bgColor="brand.400"
-                        h="2.5rem"
-                        onClick={() => getClientSecret()}
-                        isLoading={loading}
-                        spinner={<BeatLoader size={8} color="white" />}
+            /> */}
+            <LicenseNav />
+            {isEditing ? (
+                <EditBilling
+                    data={editData}
+                    setEditCard={setIsEditing}
+                    countries={countries}
+                />
+            ) : (
+                <>
+                    <Box
+                        my="1rem"
+                        borderRadius=".75rem"
+                        bgColor="white"
+                        p="1rem"
                     >
-                        Add new card
-                    </Button>
-                </HStack>
-                <VStack w="60%" align="flex-start" spacing="2rem">
-                    {data
-                        ?.filter((x) => !x.isDefaultCard)
-                        .map((x) => (
-                            <SavedCard data={x} isDefault key={x.id} />
-                        ))}
-                </VStack>
-            </Box>
+                        <HStack justify="space-between" gap="1rem" mb="1.77rem">
+                            <Text fontWeight="500" color="#252f40">
+                                Default Payment Method
+                            </Text>
+                        </HStack>
+
+                        <Box w="60%">
+                            {data.length > 0 ? (
+                                <SavedCard
+                                    data={
+                                        data?.filter((x) => x.isDefaultCard)[0]
+                                    }
+                                    setIsEditing={getEditData}
+                                />
+                            ) : (
+                                <Text textAlign="right" my="3rem">
+                                    No Default Payment method has been added!
+                                </Text>
+                            )}
+                        </Box>
+                    </Box>
+                    <Box
+                        my="1rem"
+                        borderRadius=".75rem"
+                        bgColor="white"
+                        p="1rem"
+                    >
+                        <HStack justify="space-between" gap="1rem" mb="1.77rem">
+                            <Text fontWeight="500" color="#252f40">
+                                Other Payment Method
+                            </Text>
+
+                            <Button
+                                px="2rem"
+                                color="white"
+                                textTransform="uppercase"
+                                borderRadius="0.375rem"
+                                bgColor="brand.400"
+                                h="2.5rem"
+                                onClick={() => getClientSecret()}
+                                isLoading={loading}
+                                spinner={<BeatLoader size={8} color="white" />}
+                            >
+                                Add new card
+                            </Button>
+                        </HStack>
+                        <VStack w="60%" align="flex-start" spacing="2rem">
+                            {data
+                                ?.filter((x) => !x.isDefaultCard)
+                                .map((x) => (
+                                    <SavedCard
+                                        data={x}
+                                        isDefault
+                                        key={x.id}
+                                        setIsEditing={getEditData}
+                                    />
+                                ))}
+                        </VStack>
+                    </Box>
+                </>
+            )}
         </Box>
     );
 };

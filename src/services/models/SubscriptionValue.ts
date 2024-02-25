@@ -20,4 +20,5 @@ export type SubscriptionValue = {
     totalAmount?: number;
     isCanceled?: boolean;
     cancelationReason?: string | null;
+    numberOfLicense?: number;
 };

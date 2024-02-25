@@ -49,10 +49,11 @@ export type User = {
     createdBy?: User;
     twoFactorCode?: string | null;
     clientSubscriptionId?: string | null;
-    clientSubscriptionStatus?: boolean | null;
     commandCenterClientId?: string | null;
     leaveConfigurationId?: string | null;
     controlSettingId?: string | null;
+    projectManagementSettingId?: string | null;
+    isOrganizationProjectManager?: boolean | null;
     supervisors?: Array<User> | null;
     usersCreatedByYou?: Array<User> | null;
     supervisees?: Array<EmployeeInformation> | null;

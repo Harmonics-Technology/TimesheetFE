@@ -33,6 +33,7 @@ interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     team: UserView[];
     isSuperAdmin?: boolean;
+    subs: any;
 }
 interface select {
     options: UserView[];
@@ -64,6 +65,8 @@ import Cookies from 'js-cookie';
 import moment from 'moment';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { UserContext } from '@components/context/UserContext';
+import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
+import { LicenseSelection } from './ManageSub/LicenseSelection';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -72,7 +75,12 @@ const schema = yup.object().shape({
     email: yup.string().email().required(),
 });
 
-function ProfileManagementAdmin({ adminList, team, isSuperAdmin }: adminProps) {
+function ProfileManagementAdmin({
+    adminList,
+    team,
+    isSuperAdmin,
+    subs,
+}: adminProps) {
     const { user, subType, accessControls } = useContext(UserContext);
     const userAccess: ControlSettingView = accessControls;
     const {
@@ -93,8 +101,17 @@ function ProfileManagementAdmin({ adminList, team, isSuperAdmin }: adminProps) {
     //
     //
 
+    const [selectedLicense, setSelectedLicense] = useState<any>();
+    const addLicense = (license) => {
+        setSelectedLicense(license);
+    };
+    const removeLicense = (id) => {
+        setSelectedLicense(undefined);
+    };
+
     const onSubmit = async (data: RegisterModel) => {
         data.superAdminId = user?.superAdminId;
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         try {
             const result = await UserService.create(data);
             if (result.status) {
@@ -318,6 +335,13 @@ function ProfileManagementAdmin({ adminList, team, isSuperAdmin }: adminProps) {
                             />
                         </Grid>
                     ) : null}
+                    <LicenseSelection
+                        addLicense={addLicense}
+                        removeLicense={removeLicense}
+                        errors={errors}
+                        selectedLicense={selectedLicense}
+                        subs={subs}
+                    />
 
                     {newUser !== '' && newUser !== undefined ? (
                         <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">

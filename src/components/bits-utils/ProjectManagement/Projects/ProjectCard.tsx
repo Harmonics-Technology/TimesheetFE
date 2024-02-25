@@ -46,6 +46,7 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                         color="#b6b6b6"
                         mb="0"
                         fontSize=".8rem"
+                        noOfLines={1}
                     >
                         {data?.note}
                     </Text>

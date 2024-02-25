@@ -9,6 +9,7 @@ import {
     Flex,
     Icon,
     VStack,
+    FormLabel,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -27,6 +28,7 @@ interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     client: UserView[];
     isSuperAdmin?: boolean;
+    subs: any;
 }
 import {
     ControlSettingView,
@@ -46,6 +48,8 @@ import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '@components/context/UserContext';
+import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
+import { LicenseSelection } from './ManageSub/LicenseSelection';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -54,7 +58,12 @@ const schema = yup.object().shape({
     email: yup.string().email().required(),
 });
 
-function SupervisorManagement({ adminList, client, isSuperAdmin }: adminProps) {
+function SupervisorManagement({
+    adminList,
+    client,
+    isSuperAdmin,
+    subs,
+}: adminProps) {
     //
     const clients = client?.filter((x) => x.isActive);
     const {
@@ -82,10 +91,18 @@ function SupervisorManagement({ adminList, client, isSuperAdmin }: adminProps) {
     useEffect(() => {
         subType == 'premium' ? setClientType(true) : setClientType(false);
     }, []);
+    const [selectedLicense, setSelectedLicense] = useState<any>();
+    const addLicense = (license) => {
+        setSelectedLicense(license);
+    };
+    const removeLicense = (id) => {
+        setSelectedLicense(undefined);
+    };
 
     const onSubmit = async (data: RegisterModel) => {
         data.superAdminId = user?.superAdminId;
         data.clientId = !data.clientId ? user?.superAdminId : data.clientId;
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         try {
             const result = await UserService.create(data);
             if (result.status) {
@@ -97,7 +114,7 @@ function SupervisorManagement({ adminList, client, isSuperAdmin }: adminProps) {
                 });
                 router.replace(router.asPath);
                 onClose();
-                reset()
+                reset();
                 return;
             }
             toast({
@@ -183,7 +200,7 @@ function SupervisorManagement({ adminList, client, isSuperAdmin }: adminProps) {
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <VStack spacing="1.5rem">
-                        {clientType && (
+                        {clientType && clients?.length > 0 && (
                             <SelectrixBox<RegisterModel>
                                 control={control}
                                 name="clientId"
@@ -223,7 +240,19 @@ function SupervisorManagement({ adminList, client, isSuperAdmin }: adminProps) {
                                 defaultValue=""
                                 register={register}
                             />
-
+                        </Grid>
+                        <LicenseSelection
+                            addLicense={addLicense}
+                            removeLicense={removeLicense}
+                            errors={errors}
+                            selectedLicense={selectedLicense}
+                            subs={subs}
+                        />
+                        <Grid
+                            templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
+                            gap="1.5rem 2rem"
+                            w="full"
+                        >
                             <Button
                                 bgColor="gray.500"
                                 color="white"

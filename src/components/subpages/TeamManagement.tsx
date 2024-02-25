@@ -13,6 +13,7 @@ import {
     Icon,
     HStack,
     useRadioGroup,
+    FormLabel,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -33,6 +34,7 @@ interface adminProps {
     paymentPartner: UserView[];
     leaveSettings: LeaveConfigurationView;
     isSuperAdmin?: boolean;
+    subs: ClientSubscriptionDetailView[];
 }
 
 import {
@@ -44,6 +46,7 @@ import {
     ControlSettingView,
     DraftService,
     UserDraftModel,
+    ClientSubscriptionDetailView,
 } from 'src/services';
 import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
@@ -65,6 +68,8 @@ import { TriggerBox } from '@components/bits-utils/TriggerBox';
 import Cookies from 'js-cookie';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
+import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
+import { LicenseSelection } from './ManageSub/LicenseSelection';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -127,14 +132,20 @@ const schema = yup.object().shape({
     // timeSheetGenerationStartDate: yup.string().required(),
     isEligibleForLeave: yup.string().required(),
     employeeType: yup.string().required(),
-    numberOfDaysEligible: yup.string().when('isEligibleForLeave', {
-        is: 'Yes',
-        then: yup.string().required(),
-    }),
-    numberOfHoursEligible: yup.string().when('isEligibleForLeave', {
-        is: 'Yes',
-        then: yup.string().required(),
-    }),
+    numberOfDaysEligible: yup
+        .string()
+        .nullable()
+        .when('isEligibleForLeave', {
+            is: 'Yes' || true,
+            then: yup.string().required(),
+        }),
+    numberOfHoursEligible: yup
+        .string()
+        .nullable()
+        .when('isEligibleForLeave', {
+            is: 'Yes' || true,
+            then: yup.string().required(),
+        }),
     onBoradingFee: yup.string().when('fixedAmount', {
         is: false,
         then: yup.string().required(),
@@ -147,6 +158,7 @@ function TeamManagement({
     paymentPartner,
     leaveSettings,
     isSuperAdmin,
+    subs,
 }: adminProps) {
     const client = clients?.filter((x) => x.isActive);
     //
@@ -288,8 +300,17 @@ function TeamManagement({
     //
     const [clientType, setClientType] = useState(false);
 
+    const [selectedLicense, setSelectedLicense] = useState<any>();
+    const addLicense = (license) => {
+        setSelectedLicense(license);
+    };
+    const removeLicense = (id) => {
+        setSelectedLicense(undefined);
+    };
+
     const onSubmit = async (data: TeamMemberModel) => {
         data.superAdminId = user?.superAdminId;
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         if (data.fixedAmount == true) {
             data.onBoradingFee = fixedAmount;
         }
@@ -453,6 +474,49 @@ function TeamManagement({
     };
     const saveToDraft = async (data: TeamMemberModel) => {
         data.superAdminId = user?.superAdminId;
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
+        if (data.fixedAmount == true) {
+            data.onBoradingFee = fixedAmount;
+        }
+        if (contract !== '') {
+            data.document = `${contract.cdnUrl} ${contract.name}`;
+        }
+        if (icd !== '') {
+            data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
+        }
+        if (voidCheck !== '') {
+            data.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
+        }
+        if (inc !== '') {
+            data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
+        }
+
+        {
+            (data.hstNumber as unknown as string) == ''
+                ? (data.hstNumber = 0)
+                : (data.hstNumber as number);
+        }
+        {
+            (data.ratePerHour as unknown as string) == ''
+                ? (data.ratePerHour = 0)
+                : (data.ratePerHour as number);
+        }
+        {
+            (data.hoursPerDay as unknown as string) == ''
+                ? (data.hoursPerDay = 0)
+                : (data.hoursPerDay as number);
+        }
+        {
+            (data.monthlyPayoutRate as unknown as string) == ''
+                ? (data.monthlyPayoutRate = 0)
+                : (data.monthlyPayoutRate as number);
+        }
+        {
+            (data?.isEligibleForLeave as unknown as string) == 'Yes'
+                ? (data.isEligibleForLeave = true)
+                : (data.isEligibleForLeave = false);
+        }
+        data.clientId = !clientType ? user?.superAdminId : data.clientId;
         try {
             const result = await DraftService.createDraft(
                 data as UserDraftModel,
@@ -789,6 +853,13 @@ function TeamManagement({
                                     ]}
                                 />
                             </Grid>
+                            <LicenseSelection
+                                addLicense={addLicense}
+                                removeLicense={removeLicense}
+                                errors={errors}
+                                selectedLicense={selectedLicense}
+                                subs={subs}
+                            />
                         </Box>
                         {includePayroll && (
                             <Box w="full">

@@ -20,5 +20,6 @@ export type Project = {
     budgetSpent?: number;
     hoursSpent?: number;
     budgetThreshold?: number | null;
+    projectManagerId?: string | null;
     assignees?: Array<ProjectTaskAsignee> | null;
 };
