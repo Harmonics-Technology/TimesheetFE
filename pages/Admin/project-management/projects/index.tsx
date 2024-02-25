@@ -47,7 +47,7 @@ export default projectsIndex;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         //
         const fetchProjectByStatus = (status) => {
@@ -76,17 +76,18 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 await ProjectManagementService.getStatusCountForProject(
                     superAdminId,
                 );
-            const projectMangers = await UserService.listUsers(
-                //@ts-ignore
-                undefined,
-                superAdminId,
-                pagingOptions.offset,
-                pagingOptions.limit || 50,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-                undefined,
-            );
+            // const projectMangers = await UserService.listUsers(
+            //     //@ts-ignore
+            //     undefined,
+            //     superAdminId,
+            //     pagingOptions.offset,
+            //     pagingOptions.limit || 50,
+            //     pagingOptions.search,
+            //     pagingOptions.from,
+            //     pagingOptions.to,
+            //     undefined,
+            //     true,
+            // );
             const access =
                 await UserService.getSuperAdminProjectManagementSettings(
                     superAdminId,
@@ -100,7 +101,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     users: users.data,
                     superAdminId,
                     counts: counts.data,
-                    projectMangers: projectMangers.data,
+                    // projectMangers: projectMangers.data,
                     access: access.data,
                 },
             };

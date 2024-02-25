@@ -6,16 +6,14 @@ import React from 'react';
 import { ProjectManagementService, UserService } from 'src/services';
 
 const budget = ({ id, project, budgets, users }) => {
-    return (
-        <Budgets id={id} project={project} budgets={budgets} users={users} />
-    );
+    return <Budgets id={id} project={project} budgets={budgets} users={users} />;
 };
 
 export default budget;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const { id } = ctx.query;
         try {
