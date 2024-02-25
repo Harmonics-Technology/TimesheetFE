@@ -29,20 +29,20 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 undefined,
                 pagingOptions.search,
             );
-            // const users = await UserService.listUsers(
-            //     'Team Member',
-            //     superAdminId,
-            //     pagingOptions.offset,
-            //     80,
-            //     pagingOptions.search,
-            // );
+            const users = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
+                pagingOptions.offset,
+                80,
+                pagingOptions.search,
+            );
 
             return {
                 props: {
                     project: data.data,
                     id,
                     tasks: tasks.data,
-                    // users: users.data,
+                    users: users.data,
                 },
             };
         } catch (error: any) {

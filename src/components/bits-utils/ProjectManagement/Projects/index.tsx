@@ -53,7 +53,7 @@ export const ProjectPage = ({
     }
     const hasAccess =
         (access?.adminProjectCreation && user?.role !== 'Team Member') ||
-        (access.pmProjectCreation && isPm);
+        (access?.pmProjectCreation && isPm);
 
     return (
         <Box>
@@ -138,7 +138,7 @@ export const ProjectPage = ({
                     onClose={onClose}
                     users={users}
                     superAdminId={superAdminId}
-                    projectMangers={projectMangers}
+                    projectMangers={users}
                 />
             )}
         </Box>

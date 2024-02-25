@@ -8,6 +8,7 @@ export default async function markAsCompleted(
     toast,
     setStatus,
     router,
+    onClosed,
 ) {
     // const { showToastSuccess, showToastError } = useToastMessages();
     data.isCompleted = true;
@@ -24,6 +25,7 @@ export default async function markAsCompleted(
             });
             router.replace(router.asPath);
             setStatus('completed');
+            onClosed();
             setLoading(false);
             return;
         }

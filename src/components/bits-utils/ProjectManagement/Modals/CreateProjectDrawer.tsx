@@ -42,6 +42,7 @@ export const CreateProjectDrawer = ({
     projectMangers,
 }) => {
     const [currentBudget, setCurrenntBudget] = useState(0);
+    const [nonApplicable, setNonApplicable] = useState(false);
     const schema = yup.object().shape({
         name: yup.string().required(),
         startDate: yup.string().required(),
@@ -54,7 +55,9 @@ export const CreateProjectDrawer = ({
             .min(1, 'Select atleast one assignee')
             .required(),
         note: yup.string().required(),
-        // projectManagerId: yup.string().required(),
+        projectManagerId: nonApplicable
+            ? yup.string()
+            : yup.string().required(),
         // documentURL: yup.string().required(),
     });
 
@@ -97,7 +100,7 @@ export const CreateProjectDrawer = ({
         const filtered = selectedUser?.filter((x) => x.id !== id);
         setSelecedUser(filtered);
     };
-    const [selectedManager, setSelectedManager] = useState<any>([]);
+    const [selectedManager, setSelectedManager] = useState<any>();
     const addManager = (user) => {
         setSelectedManager(user);
     };
@@ -109,18 +112,17 @@ export const CreateProjectDrawer = ({
     const toast = useToast();
     const router = useRouter();
 
-    //
-
-    const changeClick = (id: any) => {
-        if (id == 'null') {
-            setValue('projectManagerId', null);
+    const setIfNonApplicable = (value: any) => {
+        setNonApplicable(value);
+        if (value == true) {
+            setSelectedManager(undefined);
             return;
         }
-        setValue('projectManagerId', 'null');
     };
 
+    //
+
     const onSubmit = async (data: ProjectModel) => {
-        // data.projectManagerId == 'null' ? null : data.projectManagerId;
         try {
             const result = await ProjectManagementService.createProject(data);
             if (result.status) {
@@ -172,6 +174,9 @@ export const CreateProjectDrawer = ({
     useEffect(() => {
         setValue('documentURL', fileDoc?.url?.cdnUrl);
     }, [fileDoc]);
+    useEffect(() => {
+        setValue('projectManagerId', selectedManager?.id);
+    }, [selectedManager]);
 
     //
     return (
@@ -333,9 +338,9 @@ export const CreateProjectDrawer = ({
                                 label="Not Applicable"
                                 dir="rtl"
                                 color="black"
-                                // onChange={() =>
-                                //     changeClick(watch('projectManagerId'))
-                                // }
+                                onChange={(e: any) =>
+                                    setIfNonApplicable(e.target.checked)
+                                }
                             />
                         </Box>
                     </Box>

@@ -108,18 +108,18 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     superAdminId,
                     userId,
                 );
-            const projectMangers = await UserService.listUsers(
-                //@ts-ignore
-                undefined,
-                superAdminId,
-                pagingOptions.offset,
-                pagingOptions.limit || 50,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-                undefined,
-                true,
-            );
+            // const projectMangers = await UserService.listUsers(
+            //     //@ts-ignore
+            //     undefined,
+            //     superAdminId,
+            //     pagingOptions.offset,
+            //     pagingOptions.limit || 50,
+            //     pagingOptions.search,
+            //     pagingOptions.from,
+            //     pagingOptions.to,
+            //     undefined,
+            //     true,
+            // );
 
             return {
                 props: {
@@ -128,7 +128,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     counts: counts.data,
                     users: users.data,
                     access: access.data,
-                    projectMangers: projectMangers.data,
+                    // projectMangers: projectMangers.data,
                     isPm,
                     iProjects: iProgress.data,
                     nProjects: nProgress.data,

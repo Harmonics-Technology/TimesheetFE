@@ -1,10 +1,8 @@
 import { Box, Tr, VStack, useToast } from '@chakra-ui/react';
 import { NotText } from '@components/bits-utils/NotText';
-import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import { useRouter } from 'next/router';
 import * as yup from 'yup';
-import { UserContext } from '@components/context/UserContext';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
@@ -13,6 +11,7 @@ import Tables from '@components/bits-utils/Tables';
 import { TableData, TablePmActions } from '@components/bits-utils/TableData';
 import moment from 'moment';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
+import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 
 const schema = yup.object().shape({
     id: yup.string().required(),
@@ -31,7 +30,7 @@ export const ProjectManagementSettings = ({
     const options = data?.value;
     const {
         handleSubmit,
-        control,
+        register,
         formState: { errors, isSubmitting },
     } = useForm<setAsPM>({
         resolver: yupResolver(schema),
@@ -42,9 +41,10 @@ export const ProjectManagementSettings = ({
     const [loading, setLoading] = useState<any>({ id: '' });
     function removeItemsFromArray(array1, array2) {
         const array2Ids = array2.map((item) => item.id);
-        return array1.filter((item) => !array2Ids.includes(item.id));
+        return array1?.filter((item) => !array2Ids?.includes(item.id));
     }
     const newOptions = removeItemsFromArray(options, pm?.data.value);
+
     const onSubmit = async (data: setAsPM) => {
         setLoading({ id: data.id });
         try {
@@ -107,7 +107,7 @@ export const ProjectManagementSettings = ({
             </Box>
             <form>
                 <VStack align="flex-start" gap="2rem" w="30%">
-                    <SelectrixBox<setAsPM>
+                    {/* <SelectrixBox<setAsPM>
                         control={control}
                         name="id"
                         label="Project Manager"
@@ -116,6 +116,20 @@ export const ProjectManagementSettings = ({
                         keys="id"
                         keyLabel="fullName"
                         placeholder="Select Team members"
+                    /> */}
+                    <PrimarySelect<setAsPM>
+                        register={register}
+                        error={errors.id}
+                        name="id"
+                        label="Project Manager"
+                        placeholder="Select Team member"
+                        options={
+                            <>
+                                {newOptions.map((x) => (
+                                    <option value={x.id}>{x.fullName}</option>
+                                ))}
+                            </>
+                        }
                     />
                     <Box my="1rem">
                         <ShiftBtn

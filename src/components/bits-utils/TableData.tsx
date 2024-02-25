@@ -88,6 +88,9 @@ export function TableData({
     breakWord?: any;
     onClick?: any;
 }) {
+    const validRegex =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const isEmail = name.match(validRegex) ? true : false;
     return (
         <Td
             borderColor={borderColor}
@@ -97,7 +100,7 @@ export function TableData({
             className={classes}
             fontWeight={fontWeight}
             maxW={breakWord ? '150px' : 'unset'}
-            textTransform="capitalize"
+            textTransform={isEmail ? 'lowercase' : 'capitalize'}
             onClick={onClick}
             cursor="pointer"
             // textOverflow=""
@@ -417,7 +420,7 @@ export function TablePmActions({
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
-                    <MenuItem onClick={() => func({ data: { id } })} w="full">
+                    <MenuItem onClick={() => func({ id })} w="full">
                         Remove
                     </MenuItem>
                 </MenuList>

@@ -7,13 +7,15 @@ import { ProjectView } from 'src/services';
 export const TeamMembersView = ({
     id,
     teams,
+    users,
 }: {
     teams: ProjectView;
     id: string;
+    users: any;
 }) => {
     return (
         <Box>
-            <TopBar id={id} data={teams} users={[]} />
+            <TopBar id={id} data={teams} users={users} />
             <Grid
                 my="1.25rem"
                 templateColumns={['repeat(1,1fr)', 'repeat(4,1fr)']}
