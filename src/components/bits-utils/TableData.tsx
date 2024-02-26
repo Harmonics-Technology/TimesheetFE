@@ -90,7 +90,7 @@ export function TableData({
 }) {
     const validRegex =
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const isEmail = name.match(validRegex) ? true : false;
+    const isEmail = name?.toString().match(validRegex) ? true : false;
     return (
         <Td
             borderColor={borderColor}
