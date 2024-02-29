@@ -1,11 +1,9 @@
 import { Box, FormLabel, HStack, Icon, Text } from '@chakra-ui/react';
-import useOnClickOutside from '@components/generics/useClickOutside';
 import useComponentVisible from '@components/generics/useComponentVisible';
 import moment from 'moment';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BiTimeFive } from 'react-icons/bi';
-import { FaRegCalendarAlt } from 'react-icons/fa';
-import DatePicker, { DateObject } from 'react-multi-date-picker';
+
 import TimePicker from 'react-time-picker';
 import { CustomDatePick } from './CustomDatePick';
 // import TimePicker from 'react-multi-date-picker/plugins/time_picker';
@@ -39,7 +37,7 @@ export const CustomDateTime = ({
         newValue?.split(' ')[1] || moment().format('HH:mm'),
     );
 
-    const newDate = date ? moment(date).format('YYYY-MM-DD') : undefined;
+    const newDate = date ? date.format('YYYY-MM-DD') : undefined;
     //
 
     useEffect(() => {

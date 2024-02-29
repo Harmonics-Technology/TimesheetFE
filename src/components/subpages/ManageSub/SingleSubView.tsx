@@ -1,13 +1,67 @@
-import { Box, Flex, Link, Text, Tr } from '@chakra-ui/react';
-import React from 'react';
+import { Box, Flex, Link, Text, Tr, useToast } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { LicenseProgressUsage } from './LicenseProgressUsage';
 import { TableData } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
+import Pagination from '@components/bits-utils/Pagination';
+import { UserService } from 'src/services';
+import Skeleton from 'react-loading-skeleton';
 
-export const SingleSubView = ({ setShowDetails, data, percentUsed, users }) => {
+export const SingleSubView = ({
+    setShowDetails,
+    data,
+    percentUsed,
+    users,
+    superAdminId,
+    subId,
+}) => {
     const available =
         Number(data?.noOfLicensePurchased) - Number(data?.noOfLicenceUsed);
+
+    const [pageData, setPageData] = useState<any>(users);
+    const [loading, setLoading] = useState<any>(false);
+    // const [offset, setOffset] = useState(0);
+    const limit = users.data.limit;
+    const toast = useToast();
+
+    const fetchPageDataPaginated = async (offset) => {
+        setLoading(true);
+        try {
+            const getUsers = await UserService.listUsers(
+                //@ts-ignore
+                undefined,
+                superAdminId,
+                offset,
+                limit,
+                '',
+                undefined,
+                undefined,
+                subId,
+            );
+            if (getUsers.status) {
+                setLoading(false);
+                setPageData(getUsers);
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: getUsers?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (err: any) {
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            setLoading(false);
+        }
+    };
+
     return (
         <Box borderRadius="8px" bgColor="white" p="1rem">
             <Text
@@ -69,20 +123,35 @@ export const SingleSubView = ({ setShowDetails, data, percentUsed, users }) => {
                     <SubSearchComponent />
                 </Flex>
 
-                <Tables
-                    tableHead={['Name', 'Email']}
-                    bg="brand.400"
-                    color="white"
-                >
+                {loading ? (
+                    <Skeleton
+                        count={pageData?.data?.value?.length}
+                        className="skeleton"
+                        containerClassName="sk-wrapper"
+                    />
+                ) : (
                     <>
-                        {users?.value?.map((x: any) => (
-                            <Tr key={x.id}>
-                                <TableData name={x?.fullName} />
-                                <TableData name={x?.email} />
-                            </Tr>
-                        ))}
+                        <Tables
+                            tableHead={['Name', 'Email']}
+                            bg="brand.400"
+                            color="white"
+                        >
+                            <>
+                                {pageData?.data?.value?.map((x: any) => (
+                                    <Tr key={x.id}>
+                                        <TableData name={x?.fullName} />
+                                        <TableData name={x?.email} />
+                                    </Tr>
+                                ))}
+                            </>
+                        </Tables>
                     </>
-                </Tables>
+                )}
+                <Pagination
+                    data={pageData}
+                    client={true}
+                    func={fetchPageDataPaginated}
+                />
             </Box>
         </Box>
     );

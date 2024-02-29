@@ -6,9 +6,11 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 interface pageOptions {
     data: any;
     shift?: boolean;
+    client?: boolean;
+    func?: any;
 }
 
-function Pagination({ data, shift }: pageOptions) {
+function Pagination({ data, shift, client, func }: pageOptions) {
     data = data?.data;
 
     const totalPages =
@@ -32,7 +34,9 @@ function Pagination({ data, shift }: pageOptions) {
         let link = '';
         if (direction == 'previous' && previous != null) {
             link = previous?.split('?')[1] ?? false;
-            shift
+            client
+                ? func(data.previousOffset)
+                : shift
                 ? (window.location.href = `?limit=${data.limit}&offset=${
                       data.previousOffset || 0
                   }`)
@@ -46,7 +50,10 @@ function Pagination({ data, shift }: pageOptions) {
         }
         if (direction == 'next' && next != null) {
             link = next?.split('?')[1] ?? false;
-            shift
+
+            client
+                ? func(data.nextOffset)
+                : shift
                 ? (window.location.href = `?limit=${data.limit}&offset=${data.nextOffset}`)
                 : router.push({
                       query: {

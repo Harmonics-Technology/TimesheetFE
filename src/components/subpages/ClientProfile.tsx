@@ -37,7 +37,6 @@ import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 import { UserContext } from '@components/context/UserContext';
 import ClientPaginate from '@components/bits-utils/ClientPaginate';
 import Skeleton from 'react-loading-skeleton';
-import 'react-loading-skeleton/dist/skeleton.css';
 
 const schema = yup.object().shape({});
 interface ClientProfileProps {

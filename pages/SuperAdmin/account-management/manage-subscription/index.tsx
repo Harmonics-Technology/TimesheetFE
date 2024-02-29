@@ -5,8 +5,15 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import { UserService } from 'src/services';
 
-const manageSubscription = ({ data, subs, users }) => {
-    return <LicenseHome data={data} subs={subs} users={users} />;
+const manageSubscription = ({ data, subs, users, superAdminId }) => {
+    return (
+        <LicenseHome
+            data={data}
+            subs={subs}
+            users={users}
+            superAdminId={superAdminId}
+        />
+    );
 };
 
 export default manageSubscription;
@@ -40,7 +47,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 props: {
                     data: data.data?.data,
                     subs: subs.data,
-                    users: users.data,
+                    users: users,
+                    superAdminId,
                     // data: [],
                 },
             };
