@@ -50,6 +50,7 @@ function Pagination({ data, shift, client, func }: pageOptions) {
         }
         if (direction == 'next' && next != null) {
             link = next?.split('?')[1] ?? false;
+
             client
                 ? func(data.nextOffset)
                 : shift

@@ -86,6 +86,7 @@ export const LicenseHome = ({
                     percentUsed={percentUsed}
                     users={users}
                     superAdminId={superAdminId}
+                    subId={subId}
                 />
             ) : (
                 <Box>

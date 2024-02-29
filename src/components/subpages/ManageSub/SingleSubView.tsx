@@ -14,12 +14,13 @@ export const SingleSubView = ({
     percentUsed,
     users,
     superAdminId,
+    subId,
 }) => {
     const available =
         Number(data?.noOfLicensePurchased) - Number(data?.noOfLicenceUsed);
 
     const [pageData, setPageData] = useState<any>(users);
-    const [loading, setLoading] = useState<any>(true);
+    const [loading, setLoading] = useState<any>(false);
     // const [offset, setOffset] = useState(0);
     const limit = users.data.limit;
     const toast = useToast();
@@ -33,6 +34,10 @@ export const SingleSubView = ({
                 superAdminId,
                 offset,
                 limit,
+                '',
+                undefined,
+                undefined,
+                subId,
             );
             if (getUsers.status) {
                 setLoading(false);
@@ -56,8 +61,6 @@ export const SingleSubView = ({
             setLoading(false);
         }
     };
-
-    console.log({ pageData });
 
     return (
         <Box borderRadius="8px" bgColor="white" p="1rem">
@@ -120,19 +123,19 @@ export const SingleSubView = ({
                     <SubSearchComponent />
                 </Flex>
 
-                <Tables
-                    tableHead={['Name', 'Email']}
-                    bg="brand.400"
-                    color="white"
-                >
+                {loading ? (
+                    <Skeleton
+                        count={pageData?.data?.value?.length}
+                        className="skeleton"
+                        containerClassName="sk-wrapper"
+                    />
+                ) : (
                     <>
-                        {loading ? (
-                            <Skeleton
-                                count={10}
-                                className="skeleton"
-                                containerClassName="sk-wrapper"
-                            />
-                        ) : (
+                        <Tables
+                            tableHead={['Name', 'Email']}
+                            bg="brand.400"
+                            color="white"
+                        >
                             <>
                                 {pageData?.data?.value?.map((x: any) => (
                                     <Tr key={x.id}>
@@ -141,12 +144,12 @@ export const SingleSubView = ({
                                     </Tr>
                                 ))}
                             </>
-                        )}
+                        </Tables>
                     </>
-                </Tables>
+                )}
                 <Pagination
                     data={pageData}
-                    client
+                    client={true}
                     func={fetchPageDataPaginated}
                 />
             </Box>
