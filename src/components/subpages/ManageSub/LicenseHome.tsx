@@ -35,10 +35,12 @@ export const LicenseHome = ({
     data,
     subs,
     users,
+    superAdminId,
 }: {
     data: any;
     subs: ClientSubscriptionDetailView[];
     users: any;
+    superAdminId: any;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { user } = useContext(UserContext);
@@ -83,6 +85,7 @@ export const LicenseHome = ({
                     data={selected}
                     percentUsed={percentUsed}
                     users={users}
+                    superAdminId={superAdminId}
                 />
             ) : (
                 <Box>

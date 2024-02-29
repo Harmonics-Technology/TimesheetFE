@@ -6,6 +6,7 @@
 @import url('./scheduler.css');
 @import url('./toggleswitch.css');
 @import url('./circularcheckbox.css');
+@import url('react-loading-skeleton/dist/skeleton.css');
 
 .phone-input {
     /* border: 1px solid #e5e5e5; */
