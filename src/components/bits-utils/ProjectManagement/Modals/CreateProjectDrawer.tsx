@@ -241,6 +241,14 @@ export const CreateProjectDrawer = ({
                         defaultValue=""
                         register={register}
                     />
+                    {/* <PrimaryInput<ProjectModel>
+                        label="Currency"
+                        name="currency"
+                        error={errors.currency}
+                        placeholder=""
+                        defaultValue=""
+                        register={register}
+                    /> */}
                     <Box w="full">
                         <FormLabel
                             textTransform="capitalize"

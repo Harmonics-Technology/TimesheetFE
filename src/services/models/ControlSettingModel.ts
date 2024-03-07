@@ -31,4 +31,5 @@ export type ControlSettingModel = {
     adminCanViewTeamMemberInvoice?: boolean | null;
     adminCanViewPaymentPartnerInvoice?: boolean | null;
     adminCanViewClientInvoice?: boolean | null;
+    organizationDefaultCurrency?: string | null;
 };

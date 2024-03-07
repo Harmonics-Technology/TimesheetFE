@@ -12,6 +12,7 @@ export type { BillableAndNonBillable } from './models/BillableAndNonBillable';
 export type { BooleanStandardResponse } from './models/BooleanStandardResponse';
 export type { BudgetBurnOutRate } from './models/BudgetBurnOutRate';
 export { BudgetRecordToDownload } from './models/BudgetRecordToDownload';
+export type { BudgetSpentPerCurrency } from './models/BudgetSpentPerCurrency';
 export type { BudgetSpentVsBudgetRemain } from './models/BudgetSpentVsBudgetRemain';
 export type { BudgetSummaryReportView } from './models/BudgetSummaryReportView';
 export type { BudgetSummaryReportViewStandardResponse } from './models/BudgetSummaryReportViewStandardResponse';
@@ -52,6 +53,8 @@ export type { DashboardTeamMemberViewStandardResponse } from './models/Dashboard
 export type { DashboardView } from './models/DashboardView';
 export type { DashboardViewStandardResponse } from './models/DashboardViewStandardResponse';
 export type { Data } from './models/Data';
+export type { DepartmentView } from './models/DepartmentView';
+export type { DepartmentViewIEnumerableStandardResponse } from './models/DepartmentViewIEnumerableStandardResponse';
 export type { EmployeeInformation } from './models/EmployeeInformation';
 export type { EmployeeInformationView } from './models/EmployeeInformationView';
 export type { Enable2FAView } from './models/Enable2FAView';
@@ -232,6 +235,7 @@ export type { UserViewStandardResponse } from './models/UserViewStandardResponse
 
 export { ContractService } from './services/ContractService';
 export { DashboardService } from './services/DashboardService';
+export { DepartmentService } from './services/DepartmentService';
 export { DraftService } from './services/DraftService';
 export { ExportService } from './services/ExportService';
 export { FinancialService } from './services/FinancialService';

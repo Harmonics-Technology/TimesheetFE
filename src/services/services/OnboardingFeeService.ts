@@ -82,17 +82,23 @@ superAdminId?: string,
     }
 
     /**
+     * @param offset 
+     * @param limit 
      * @param superAdminId 
-     * @returns OnboardingFeeViewStandardResponse Success
+     * @returns OnboardingFeeViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
-    public static getFixedAmount(
+    public static listFixedAmountFee(
+offset?: number,
+limit?: number,
 superAdminId?: string,
-): CancelablePromise<OnboardingFeeViewStandardResponse> {
+): CancelablePromise<OnboardingFeeViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/OnboardingFee/fixed-fee',
+            url: '/api/OnboardingFee/fixed-fees',
             query: {
+                'Offset': offset,
+                'Limit': limit,
                 'superAdminId': superAdminId,
             },
             errors: {

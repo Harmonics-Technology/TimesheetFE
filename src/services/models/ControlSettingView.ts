@@ -30,4 +30,5 @@ export type ControlSettingView = {
     adminCanViewTeamMemberInvoice?: boolean;
     adminCanViewPaymentPartnerInvoice?: boolean;
     adminCanViewClientInvoice?: boolean;
+    organizationDefaultCurrency?: string | null;
 };

@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { User } from './User';
+import type { UserView } from './UserView';
 
 export type NotificationView = {
     id?: string;
@@ -12,7 +12,7 @@ export type NotificationView = {
     icon?: string | null;
     url?: string | null;
     userId?: string;
-    user?: User;
+    user?: UserView;
     isRead?: boolean;
     dateCreated?: string;
 };
