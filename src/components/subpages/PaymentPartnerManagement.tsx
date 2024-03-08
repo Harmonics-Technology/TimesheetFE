@@ -65,6 +65,7 @@ import { BiPlus } from 'react-icons/bi';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import { LiaTimesSolid } from 'react-icons/lia';
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -149,6 +150,9 @@ function PaymentPartnerManagement({
     const removeLicense = (id) => {
         setSelectedLicense(undefined);
     };
+
+    const uniqueItems = getUniqueListBy(currencies, 'currency');
+
     const onSubmit = async (data: RegisterModel) => {
         {
             same
@@ -311,14 +315,20 @@ function PaymentPartnerManagement({
                             placeholder="Select Currency"
                             options={
                                 <>
-                                    {currencies?.map((x) => (
-                                        <option value={x.currency}>
-                                            {x.currency} (
-                                            {getCurrencyName(x.currency) ||
-                                                x.name}
-                                            )
-                                        </option>
-                                    ))}
+                                    {uniqueItems
+                                        ?.sort((a, b) =>
+                                            a?.currency?.localeCompare(
+                                                b?.currency,
+                                            ),
+                                        )
+                                        .map((x) => (
+                                            <option value={x.currency}>
+                                                {x.currency} (
+                                                {getCurrencyName(x.currency) ||
+                                                    x.name}
+                                                )
+                                            </option>
+                                        ))}
                                 </>
                             }
                         />

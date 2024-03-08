@@ -35,6 +35,7 @@ import Link from 'next/link';
 import { UserContext } from '@components/context/UserContext';
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 
 export const CreateProjectDrawer = ({
     onClose,
@@ -46,9 +47,7 @@ export const CreateProjectDrawer = ({
 }) => {
     const [currentBudget, setCurrenntBudget] = useState(0);
     const [nonApplicable, setNonApplicable] = useState(false);
-    function getUniqueListBy(arr: any[], key: string) {
-        return [...new Map(arr.map((item: any) => [item[key], item])).values()];
-    }
+
     const uniqueItems = getUniqueListBy(currencies, 'currency');
 
     const schema = yup.object().shape({

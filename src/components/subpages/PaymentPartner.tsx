@@ -32,6 +32,7 @@ import { BsPencil, BsTrash3 } from 'react-icons/bs';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import { BiPlus } from 'react-icons/bi';
 import { LiaTimesSolid } from 'react-icons/lia';
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 
 const schema = yup.object().shape({});
 interface PaymentPartnerProps {
@@ -131,6 +132,8 @@ function PaymentPartner({
     const percentageUserFees = payFees?.filter(
         (x) => x.onboardingFeeType == 'percentage',
     );
+
+    const uniqueItems = getUniqueListBy(currencies, 'currency');
 
     const onSubmit = async (data: UpdateUserModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
@@ -257,14 +260,21 @@ function PaymentPartner({
                                 }
                                 options={
                                     <>
-                                        {currencies?.map((x) => (
-                                            <option value={x.currency}>
-                                                {x.currency} (
-                                                {getCurrencyName(x.currency) ||
-                                                    x.name}
-                                                )
-                                            </option>
-                                        ))}
+                                        {uniqueItems
+                                            ?.sort((a, b) =>
+                                                a?.currency?.localeCompare(
+                                                    b?.currency,
+                                                ),
+                                            )
+                                            .map((x) => (
+                                                <option value={x.currency}>
+                                                    {x.currency} (
+                                                    {getCurrencyName(
+                                                        x.currency,
+                                                    ) || x.name}
+                                                    )
+                                                </option>
+                                            ))}
                                     </>
                                 }
                             />
