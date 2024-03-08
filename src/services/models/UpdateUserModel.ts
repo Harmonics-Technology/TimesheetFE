@@ -21,5 +21,6 @@ export type UpdateUserModel = {
     invoiceGenerationFrequency?: string | null;
     term?: number | null;
     currency?: string | null;
+    clientSubscriptionId?: string | null;
     onboardingFees?: Array<OnboardingFeeRegisterModel> | null;
 };

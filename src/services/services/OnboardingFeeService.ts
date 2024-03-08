@@ -109,6 +109,33 @@ paymentPartnerId?: string,
     }
 
     /**
+     * @param offset 
+     * @param limit 
+     * @param paymentPartnerId 
+     * @returns OnboardingFeeViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listOnboardingFee(
+offset?: number,
+limit?: number,
+paymentPartnerId?: string,
+): CancelablePromise<OnboardingFeeViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/OnboardingFee/onboarding-fees',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'paymentPartnerId': paymentPartnerId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
      * @param superAdminId 
      * @returns OnboardingFeeViewStandardResponse Success
      * @throws ApiError

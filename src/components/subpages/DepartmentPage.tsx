@@ -30,15 +30,19 @@ export const DepartmentPage = ({
     const {
         handleSubmit,
         register,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<DepartmentModel>({
         resolver: yupResolver(schema),
         mode: 'all',
+        defaultValues: {
+            name: '',
+        },
     });
     const toast = useToast();
     const router = useRouter();
     const [loading, setLoading] = useState<any>({ id: '' });
-    
+
     const onSubmit = async (data: DepartmentModel) => {
         try {
             const result = await DepartmentService.createDepartment(
@@ -53,6 +57,7 @@ export const DepartmentPage = ({
                     position: 'top-right',
                 });
                 setLoading({ id: '' });
+                reset({ name: '' });
                 router.replace(router.asPath);
                 return;
             }

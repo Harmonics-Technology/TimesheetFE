@@ -50,7 +50,6 @@ import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import BeatLoader from 'react-spinners/BeatLoader';
-import Cookies from 'js-cookie';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { UserContext } from '@components/context/UserContext';
@@ -59,9 +58,10 @@ import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import {
     getCurrencyName,
     getCurrencySymbol,
+    getPrefix,
+    onBoardingFees,
 } from '@components/generics/functions/getCurrencyName';
 import { BiPlus } from 'react-icons/bi';
-import { MdCancel } from 'react-icons/md';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import { LiaTimesSolid } from 'react-icons/lia';
@@ -100,22 +100,7 @@ function PaymentPartnerManagement({
             role: 'Payment Partner',
         },
     });
-    const onBoardingFees = [
-        {
-            name: 'Flat Fee',
-            id: 'fixedamount',
-            prefix: getCurrencySymbol(watch('currency')),
-        },
-        {
-            name: 'Percentage',
-            id: 'percentage',
-            prefix: '%',
-        },
-    ];
-    const getPrefix = (value: string) => {
-        const pre = onBoardingFees.find((x) => x.id == value)?.prefix;
-        return pre;
-    };
+
     const [payFees, setPayFees] = useState<any>([]);
     const [feeSetUp, setFeeSetUp] = useState<any>({
         onboardingFeeType: '',
@@ -154,7 +139,7 @@ function PaymentPartnerManagement({
     const router = useRouter();
     const toast = useToast();
     //
-    const [same, setSame] = useState(false);
+    const [same, setSame] = useState(true);
     //
 
     const [selectedLicense, setSelectedLicense] = useState<any>();
@@ -355,12 +340,12 @@ function PaymentPartnerManagement({
                             borderColor="gray.300"
                         >
                             <Text
-                                textTransform="uppercase"
+                                textTransform="capitalize"
                                 mb="0"
                                 fontSize="1.3rem"
                                 fontWeight="500"
                             >
-                                Onboarding Fee
+                                Processing Fee
                             </Text>
                         </Flex>
                         <Text mb="0" fontSize="13px" fontWeight="400">
@@ -378,7 +363,7 @@ function PaymentPartnerManagement({
                                 value={feeSetUp.onboardingFeeType}
                                 options={
                                     <>
-                                        {onBoardingFees?.map((x) => (
+                                        {onBoardingFees(watch)?.map((x) => (
                                             <option value={x.id}>
                                                 {x.name}
                                             </option>
@@ -451,8 +436,11 @@ function PaymentPartnerManagement({
                                                 color="#6a7f9d"
                                                 fontSize="12px"
                                             >
-                                                {getPrefix(x.onboardingFeeType)}{' '}
-                                                {x.fee}
+                                                {getPrefix(
+                                                    x.onboardingFeeType,
+                                                    watch,
+                                                )}{' '}
+                                                {x.fee} {x.onboardingFeeType}
                                             </Text>
                                         </Flex>
                                     </HStack>
@@ -460,7 +448,7 @@ function PaymentPartnerManagement({
                             </HStack>
                         )}
                     </Box>
-                    <Box w="full">
+                    <Box w="full" display="none">
                         <Flex
                             justify="space-between"
                             align="center"

@@ -103,7 +103,7 @@ export const OrganizationCurrency = ({
                 </VStack>
             </form>
 
-            {foundCountry && (
+            {data?.organizationDefaultCurrency && foundCountry && (
                 <Box mt="1rem">
                     <HStack align="center" color="#263238">
                         <Text>

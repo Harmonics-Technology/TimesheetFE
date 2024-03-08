@@ -1,6 +1,7 @@
 import { Box, Circle, Flex, Text, Icon, HStack } from '@chakra-ui/react';
 import { CAD, CUR } from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 import shadeColor from '@components/generics/functions/shadeColor';
 import React, { useState } from 'react';
 import { LiaAngleDownSolid } from 'react-icons/lia';
@@ -40,11 +41,11 @@ export const MiniCards = ({
                 <Box>
                     <Box pos="relative">
                         <HStack
-                            onClick={
-                                hasBudget
-                                    ? () => setIsOpen((prev) => !prev)
-                                    : () => void 0
-                            }
+                        // onClick={
+                        //     hasBudget
+                        //         ? () => setIsOpen((prev) => !prev)
+                        //         : () => void 0
+                        // }
                         >
                             <Text
                                 fontSize="1.5rem"
@@ -54,14 +55,15 @@ export const MiniCards = ({
                                 cursor={hasBudget ? 'pointer' : 'default'}
                             >
                                 {hasBudget
-                                    ? `${budget?.currency ?? '$'} ${Round(
-                                          value,
-                                      )}`
+                                    ? `${
+                                          getCurrencySymbol(budget?.currency) ??
+                                          '$'
+                                      } ${Round(value)}`
                                     : isPrice
                                     ? CAD(Round(value))
                                     : CUR(Round(value))}
                             </Text>
-                            <Icon as={LiaAngleDownSolid} />
+                            {/* {hasBudget && <Icon as={LiaAngleDownSolid} />} */}
                         </HStack>
                         {isOpen && (
                             <Box

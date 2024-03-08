@@ -12,7 +12,7 @@ export default async function markAsCompleted(
 ) {
     // const { showToastSuccess, showToastError } = useToastMessages();
     data.isCompleted = true;
-    setLoading(true);
+    setLoading({ id: data.taskId });
     try {
         const result =
             await ProjectManagementService.markProjectOrTaskAsCompleted(data);
@@ -26,7 +26,7 @@ export default async function markAsCompleted(
             router.replace(router.asPath);
             setStatus('completed');
             onClosed();
-            setLoading(false);
+            setLoading({ id: '' });
             return;
         }
         toast({
@@ -35,7 +35,7 @@ export default async function markAsCompleted(
             isClosable: true,
             position: 'top-right',
         });
-        setLoading(false);
+        setLoading({ id: '' });
     } catch (error) {
         toast({
             title: `Check your network connection and try again`,

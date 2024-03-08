@@ -46,6 +46,11 @@ export const CreateProjectDrawer = ({
 }) => {
     const [currentBudget, setCurrenntBudget] = useState(0);
     const [nonApplicable, setNonApplicable] = useState(false);
+    function getUniqueListBy(arr: any[], key: string) {
+        return [...new Map(arr.map((item: any) => [item[key], item])).values()];
+    }
+    const uniqueItems = getUniqueListBy(currencies, 'currency');
+
     const schema = yup.object().shape({
         name: yup.string().required(),
         startDate: yup.string().required(),
@@ -227,41 +232,49 @@ export const CreateProjectDrawer = ({
                             register={register}
                             readonly={true}
                         />
+                        <PrimarySelect<ProjectModel>
+                            register={register}
+                            error={errors.currency}
+                            name="currency"
+                            label="Currency"
+                            placeholder="Select Currency"
+                            options={
+                                <>
+                                    {uniqueItems
+                                        ?.sort((a, b) =>
+                                            a?.currency?.localeCompare(
+                                                b?.currency,
+                                            ),
+                                        )
+                                        .map((x) => (
+                                            <option value={x?.currency}>
+                                                {x?.currency} (
+                                                {getCurrencyName(x?.currency) ||
+                                                    x?.name}
+                                                )
+                                            </option>
+                                        ))}
+                                </>
+                            }
+                        />
+                        <PrimaryInput<ProjectModel>
+                            label="Budget"
+                            name="budget"
+                            error={errors.budget}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
+                        <PrimaryInput<ProjectModel>
+                            label="Budget Threshold"
+                            name="budgetThreshold"
+                            error={errors.budgetThreshold}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
                     </Grid>
-                    <PrimaryInput<ProjectModel>
-                        label="Budget"
-                        name="budget"
-                        error={errors.budget}
-                        placeholder=""
-                        defaultValue=""
-                        register={register}
-                    />
-                    <PrimaryInput<ProjectModel>
-                        label="Budget Threshold"
-                        name="budgetThreshold"
-                        error={errors.budgetThreshold}
-                        placeholder=""
-                        defaultValue=""
-                        register={register}
-                    />
 
-                    <PrimarySelect<ProjectModel>
-                        register={register}
-                        error={errors.currency}
-                        name="currency"
-                        label="Currency"
-                        placeholder="Select Currency"
-                        options={
-                            <>
-                                {currencies?.map((x) => (
-                                    <option value={x.currency}>
-                                        {x.currency} (
-                                        {getCurrencyName(x.currency) || x.name})
-                                    </option>
-                                ))}
-                            </>
-                        }
-                    />
                     <Box w="full">
                         <FormLabel
                             textTransform="capitalize"

@@ -63,36 +63,40 @@ export const CurrencySelector = ({
                     overflow="auto"
                 >
                     <VStack align="flex-start" gap="0">
-                        {currency.map((x: any) => (
-                            <HStack
-                                gap="1rem"
-                                onClick={() => {
-                                    setSelectedCountry(x);
-                                    setIsOpen((prev) => !prev);
-                                }}
-                                py=".5rem"
-                                w="full"
-                                px="1rem"
-                                cursor="pointer"
-                                _hover={{
-                                    bgColor: 'gray.300',
-                                }}
-                            >
-                                <Box w="24px" h="24px">
-                                    <Image
-                                        src={x?.flag}
-                                        w="100%"
-                                        h="100%"
-                                        objectFit="cover"
-                                    />
-                                </Box>
-                                <Text fontSize="13px" color="#263238">{`${
-                                    x?.currency
-                                } (${
-                                    getCurrencyName(x.currency) || x.name
-                                })`}</Text>
-                            </HStack>
-                        ))}
+                        {currency
+                            .sort((a, b) =>
+                                a?.currency?.localeCompare(b?.currency),
+                            )
+                            .map((x: any) => (
+                                <HStack
+                                    gap="1rem"
+                                    onClick={() => {
+                                        setSelectedCountry(x);
+                                        setIsOpen((prev) => !prev);
+                                    }}
+                                    py=".5rem"
+                                    w="full"
+                                    px="1rem"
+                                    cursor="pointer"
+                                    _hover={{
+                                        bgColor: 'gray.300',
+                                    }}
+                                >
+                                    <Box w="24px" h="24px">
+                                        <Image
+                                            src={x?.flag}
+                                            w="100%"
+                                            h="100%"
+                                            objectFit="cover"
+                                        />
+                                    </Box>
+                                    <Text fontSize="13px" color="#263238">{`${
+                                        x?.currency
+                                    } (${
+                                        getCurrencyName(x.currency) || x.name
+                                    })`}</Text>
+                                </HStack>
+                            ))}
                     </VStack>
                 </Box>
             )}

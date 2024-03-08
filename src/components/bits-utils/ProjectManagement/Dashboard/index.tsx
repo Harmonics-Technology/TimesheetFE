@@ -1,4 +1,4 @@
-import { Box, Grid } from '@chakra-ui/react';
+import { Box, Grid, HStack, Image, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { MiniCards } from './MiniCards';
 import { ProjectTabs } from './ProjectTabs';
@@ -25,6 +25,8 @@ import LineChart from '@components/bits-utils/Charts/LineChart';
 import BurnOutChart from '@components/bits-utils/Charts/BurnOutChart';
 import DoughnutChart from '@components/bits-utils/Charts/DoughnutChart';
 import { Round } from '@components/generics/functions/Round';
+import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
+import { SelectBlank } from '@components/bits-utils/SelectBlank';
 
 export const Dashboard = ({
     metrics,
@@ -42,6 +44,52 @@ export const Dashboard = ({
                     name={['dashboard', 'projects', 'operational-task']}
                 />
             </Box>
+            <HStack
+                ml="auto"
+                bgColor="white"
+                my="1rem"
+                p=".5rem 1rem"
+                w="fit-content"
+                borderRadius="5px"
+            >
+                <HStack>
+                    <HStack w="fit-content">
+                        <Image
+                            src="/assets/filter.png"
+                            alt="filter"
+                            w="1.1rem"
+                            h="1.1rem"
+                        />
+                        <Text fontSize=".8rem" color="#2d3748" fontWeight={500}>
+                            Filter Budget By
+                        </Text>
+                    </HStack>
+                    <SelectBlank
+                        label=""
+                        placeholder="Select Currency"
+                        value={budget?.currency}
+                        options={
+                            <>
+                                {metrics?.totalBudgetSpent
+                                    ?.filter((x) => x.currency !== null)
+                                    .map((x) => (
+                                        <option value={x.currency as string}>
+                                            {x.currency} (
+                                            {getCurrencyName(x.currency) || ''})
+                                        </option>
+                                    ))}
+                            </>
+                        }
+                        onChange={(e) =>
+                            setBudget(
+                                metrics?.totalBudgetSpent?.find(
+                                    (x) => x.currency === e.target.value,
+                                ),
+                            )
+                        }
+                    />
+                </HStack>
+            </HStack>
             <Grid
                 mb="1.25rem"
                 templateColumns={['repeat(1,1fr)', 'repeat(4,1fr)']}
@@ -66,7 +114,7 @@ export const Dashboard = ({
                     color="#2383BD"
                 />
                 <MiniCards
-                    value={budget.budgetSpent}
+                    value={budget?.budgetSpent}
                     title="Total Budget Spent"
                     icon={PiMoneyBold}
                     color="#F8C200"
