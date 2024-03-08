@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { OnboardingFeeRegisterModel } from './OnboardingFeeRegisterModel';
+
 export type UpdateUserModel = {
     id?: string;
     firstName?: string | null;
@@ -18,4 +20,6 @@ export type UpdateUserModel = {
     profilePicture?: string | null;
     invoiceGenerationFrequency?: string | null;
     term?: number | null;
+    currency?: string | null;
+    onboardingFees?: Array<OnboardingFeeRegisterModel> | null;
 };

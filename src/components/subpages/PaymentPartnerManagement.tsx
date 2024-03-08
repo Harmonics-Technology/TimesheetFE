@@ -14,6 +14,7 @@ import {
     useToast,
     Checkbox,
     Icon,
+    Circle,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import {
@@ -33,6 +34,7 @@ interface adminProps {
     adminList: UserViewPagedCollectionStandardResponse;
     isSuperAdmin?: boolean;
     subs: any;
+    currencies: any;
 }
 
 import {
@@ -53,6 +55,16 @@ import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { UserContext } from '@components/context/UserContext';
 import { LicenseSelection } from './ManageSub/LicenseSelection';
+import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
+import {
+    getCurrencyName,
+    getCurrencySymbol,
+} from '@components/generics/functions/getCurrencyName';
+import { BiPlus } from 'react-icons/bi';
+import { MdCancel } from 'react-icons/md';
+import InputBlank from '@components/bits-utils/InputBlank';
+import { SelectBlank } from '@components/bits-utils/SelectBlank';
+import { LiaTimesSolid } from 'react-icons/lia';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -69,6 +81,7 @@ function PaymentPartnerManagement({
     adminList,
     isSuperAdmin,
     subs,
+    currencies,
 }: adminProps) {
     //
     const { user, accessControls } = useContext(UserContext);
@@ -78,6 +91,7 @@ function PaymentPartnerManagement({
         handleSubmit,
         control,
         reset,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm<RegisterModel>({
         resolver: yupResolver(schema),
@@ -86,6 +100,56 @@ function PaymentPartnerManagement({
             role: 'Payment Partner',
         },
     });
+    const onBoardingFees = [
+        {
+            name: 'Flat Fee',
+            id: 'fixedamount',
+            prefix: getCurrencySymbol(watch('currency')),
+        },
+        {
+            name: 'Percentage',
+            id: 'percentage',
+            prefix: '%',
+        },
+    ];
+    const getPrefix = (value: string) => {
+        const pre = onBoardingFees.find((x) => x.id == value)?.prefix;
+        return pre;
+    };
+    const [payFees, setPayFees] = useState<any>([]);
+    const [feeSetUp, setFeeSetUp] = useState<any>({
+        onboardingFeeType: '',
+        fee: '',
+    });
+
+    const noFeeSetUpYet = !feeSetUp.onboardingFeeType || !feeSetUp.fee;
+
+    const addToList = () => {
+        if (noFeeSetUpYet) {
+            return;
+        }
+        const exists = payFees.find(
+            (x: any) =>
+                x.onboardingFeeType == feeSetUp.onboardingFeeType &&
+                x.fee == feeSetUp.fee,
+        );
+        setFeeSetUp({ onboardingFeeType: '', fee: '' });
+        if (!exists) {
+            setPayFees([...payFees, feeSetUp]);
+            return;
+        }
+    };
+    const removeFromList = (data: any) => {
+        const foundItems = payFees.filter(
+            (x) =>
+                !(
+                    x.onboardingFeeType === data.onboardingFeeType &&
+                    x.fee === data.fee
+                ),
+        );
+        setPayFees(foundItems);
+    };
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
@@ -110,6 +174,16 @@ function PaymentPartnerManagement({
         }
         data.superAdminId = user?.superAdminId;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
+        data.onboardingFees = payFees;
+        if (data.onboardingFees?.length == 0 || !data.onboardingFees) {
+            toast({
+                title: 'Kindly set up onboarding fees to continue',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
         try {
             const result = await UserService.create(data);
             if (result.status) {
@@ -213,6 +287,7 @@ function PaymentPartnerManagement({
                     <Grid
                         templateColumns={['1fr', 'repeat(2,1fr)']}
                         gap="1rem 2rem"
+                        mt="1rem"
                     >
                         <PrimaryInput<RegisterModel>
                             label="Organization Email"
@@ -238,13 +313,153 @@ function PaymentPartnerManagement({
                         defaultValue=""
                         register={register}
                     />
-                    <LicenseSelection
-                        addLicense={addLicense}
-                        removeLicense={removeLicense}
-                        errors={errors}
-                        selectedLicense={selectedLicense}
-                        subs={subs}
-                    />
+                    <Grid
+                        templateColumns={['1fr', 'repeat(2,1fr)']}
+                        gap="1rem 2rem"
+                        mt="1rem"
+                    >
+                        <PrimarySelect<RegisterModel>
+                            register={register}
+                            error={errors.currency}
+                            name="currency"
+                            label="Currency"
+                            placeholder="Select Currency"
+                            options={
+                                <>
+                                    {currencies?.map((x) => (
+                                        <option value={x.currency}>
+                                            {x.currency} (
+                                            {getCurrencyName(x.currency) ||
+                                                x.name}
+                                            )
+                                        </option>
+                                    ))}
+                                </>
+                            }
+                        />
+                        <LicenseSelection
+                            addLicense={addLicense}
+                            removeLicense={removeLicense}
+                            errors={errors}
+                            selectedLicense={selectedLicense}
+                            subs={subs}
+                        />
+                    </Grid>
+                    <Box w="full">
+                        <Flex
+                            justify="space-between"
+                            align="center"
+                            my="1rem"
+                            py="1rem"
+                            borderY="1px solid"
+                            borderColor="gray.300"
+                        >
+                            <Text
+                                textTransform="uppercase"
+                                mb="0"
+                                fontSize="1.3rem"
+                                fontWeight="500"
+                            >
+                                Onboarding Fee
+                            </Text>
+                        </Flex>
+                        <Text mb="0" fontSize="13px" fontWeight="400">
+                            You can add multiple onboarding fee for a payment
+                            partner
+                        </Text>
+                        <Grid
+                            templateColumns={['1fr', 'repeat(2,1fr)']}
+                            gap="1rem 2rem"
+                            mt="1rem"
+                        >
+                            <SelectBlank
+                                label="Processing Fee Type"
+                                placeholder="Select Fee Type"
+                                value={feeSetUp.onboardingFeeType}
+                                options={
+                                    <>
+                                        {onBoardingFees?.map((x) => (
+                                            <option value={x.id}>
+                                                {x.name}
+                                            </option>
+                                        ))}
+                                    </>
+                                }
+                                onChange={(e) =>
+                                    setFeeSetUp({
+                                        ...feeSetUp,
+                                        onboardingFeeType: e.target.value,
+                                    })
+                                }
+                            />
+                            <InputBlank
+                                label="Processing  Fee"
+                                placeholder=""
+                                defaultValue=""
+                                value={feeSetUp.fee}
+                                onChange={(e) =>
+                                    setFeeSetUp({
+                                        ...feeSetUp,
+                                        fee: e.target.value,
+                                    })
+                                }
+                            />
+                        </Grid>
+                        <Flex justify="flex-end" mt="1rem">
+                            <Button
+                                bgColor="brand.400"
+                                color="white"
+                                w="24px"
+                                h="24px"
+                                minW="0"
+                                p="0"
+                                borderRadius="50%"
+                                onClick={() => addToList()}
+                                isDisabled={noFeeSetUpYet}
+                            >
+                                <Icon as={BiPlus} />
+                            </Button>
+                        </Flex>
+                        {payFees?.length > 0 && (
+                            <HStack
+                                my="1rem"
+                                py="1rem"
+                                borderY="1px solid"
+                                borderColor="gray.300"
+                                gap="1rem"
+                            >
+                                {payFees?.map((x) => (
+                                    <HStack gap=".3rem">
+                                        <Circle
+                                            bgColor="#829ab5"
+                                            color="white"
+                                            size="18px"
+                                            fontSize={'12px'}
+                                            onClick={() => removeFromList(x)}
+                                        >
+                                            <Icon as={LiaTimesSolid} />
+                                        </Circle>
+                                        <Flex
+                                            align="center"
+                                            px="17px"
+                                            border="1px solid #c4c4c4"
+                                            bgColor="#ebeff2"
+                                            borderRadius="10px"
+                                            h="33px"
+                                        >
+                                            <Text
+                                                color="#6a7f9d"
+                                                fontSize="12px"
+                                            >
+                                                {getPrefix(x.onboardingFeeType)}{' '}
+                                                {x.fee}
+                                            </Text>
+                                        </Flex>
+                                    </HStack>
+                                ))}
+                            </HStack>
+                        )}
+                    </Box>
                     <Box w="full">
                         <Flex
                             justify="space-between"

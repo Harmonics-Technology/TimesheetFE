@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { CurrencySelector } from '@components/bits-utils/CurrencySelector';
 import { ControlSettingModel, UserService } from 'src/services';
+import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
 
 export const OrganizationCurrency = ({
     data,
@@ -17,12 +18,12 @@ export const OrganizationCurrency = ({
 }) => {
     const toast = useToast();
     const router = useRouter();
-    const [selectedCountry, setSelectedCountry] = useState<any>({});
+    const [selectedCountry, setSelectedCountry] = useState<any>();
     const [loading, setLoading] = useState(false);
 
     const onSubmit = async (data: ControlSettingModel) => {
         data.superAdminId = superAdminId;
-        data.organizationDefaultCurrency = selectedCountry.name;
+        data.organizationDefaultCurrency = selectedCountry.currency;
         setLoading(true);
         try {
             const result = await UserService.updateControlSettings(data);
@@ -34,6 +35,7 @@ export const OrganizationCurrency = ({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setSelectedCountry(null);
                 router.replace(router.asPath);
                 return;
             }
@@ -55,7 +57,7 @@ export const OrganizationCurrency = ({
         }
     };
 
-    const foundCountry = countries.find(
+    const foundCountry = countries?.find(
         (x) => x.currency === data?.organizationDefaultCurrency,
     );
 
@@ -83,17 +85,17 @@ export const OrganizationCurrency = ({
                 <NotText title="Please choose your primary currency for your organization" />
             </Box>
             <form>
-                <VStack align="flex-start" gap="2rem" w="30%">
+                <VStack align="flex-start" gap="2rem" w="40%">
                     <CurrencySelector
                         currency={countries}
                         selectedCountry={selectedCountry}
                         setSelectedCountry={setSelectedCountry}
                     />
-                    <Box my="1rem">
+                    <Box my="1rem" w="full">
                         <ShiftBtn
                             text="Save Currency"
                             bg="brand.400"
-                            onClick={onSubmit(data)}
+                            onClick={() => onSubmit(data)}
                             loading={loading}
                             w="full"
                         />
@@ -101,17 +103,23 @@ export const OrganizationCurrency = ({
                 </VStack>
             </form>
 
-            <Box mt="1rem">
-                <HStack align="center" color="#263238">
-                    <Text>Your Primary currency for your organization is </Text>
-                    <HStack>
-                        <Image src={foundCountry?.flag} w="24px" h="24px" />
-                        <Text
-                            fontWeight={600}
-                        >{`${foundCountry?.currency} (${foundCountry?.name})`}</Text>
+            {foundCountry && (
+                <Box mt="1rem">
+                    <HStack align="center" color="#263238">
+                        <Text>
+                            Your Primary currency for your organization is{' '}
+                        </Text>
+                        <HStack>
+                            <Image src={foundCountry?.flag} w="24px" h="24px" />
+                            <Text fontWeight={600}>{`${
+                                foundCountry?.currency
+                            } (${getCurrencyName(
+                                foundCountry.currency,
+                            )})`}</Text>
+                        </HStack>
                     </HStack>
-                </HStack>
-            </Box>
+                </Box>
+            )}
         </Box>
     );
 };

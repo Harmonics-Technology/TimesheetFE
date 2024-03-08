@@ -44,6 +44,8 @@
         "colord": "^2.9.3",
         "cookies-next": "^4.0.0",
         "cross-env": "^7.0.3",
+        "currency-codes": "^2.1.0",
+        "currency-symbol-map": "^5.1.0",
         "date-arithmetic": "^4.1.0",
         "date-fn": "^0.0.2",
         "date-fns": "^2.29.3",

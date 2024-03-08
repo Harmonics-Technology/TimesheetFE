@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { OnboardingFeeRegisterModel } from './OnboardingFeeRegisterModel';
+
 export type TeamMemberModel = {
     firstName?: string | null;
     lastName?: string | null;
@@ -19,6 +21,7 @@ export type TeamMemberModel = {
     clientSubscriptionId?: string | null;
     commandCenterClientId?: string | null;
     draftId?: string | null;
+    onboardingFees?: Array<OnboardingFeeRegisterModel> | null;
     id?: string;
     payRollTypeId?: number;
     payrollGroupId?: number | null;

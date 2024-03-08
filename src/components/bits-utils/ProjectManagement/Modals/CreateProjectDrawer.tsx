@@ -33,6 +33,8 @@ import { useRouter } from 'next/router';
 import Checkbox from '@components/bits-utils/Checkbox';
 import Link from 'next/link';
 import { UserContext } from '@components/context/UserContext';
+import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
+import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
 
 export const CreateProjectDrawer = ({
     onClose,
@@ -40,6 +42,7 @@ export const CreateProjectDrawer = ({
     users,
     superAdminId,
     projectMangers,
+    currencies,
 }) => {
     const [currentBudget, setCurrenntBudget] = useState(0);
     const [nonApplicable, setNonApplicable] = useState(false);
@@ -241,14 +244,24 @@ export const CreateProjectDrawer = ({
                         defaultValue=""
                         register={register}
                     />
-                    {/* <PrimaryInput<ProjectModel>
-                        label="Currency"
-                        name="currency"
-                        error={errors.currency}
-                        placeholder=""
-                        defaultValue=""
+
+                    <PrimarySelect<ProjectModel>
                         register={register}
-                    /> */}
+                        error={errors.currency}
+                        name="currency"
+                        label="Currency"
+                        placeholder="Select Currency"
+                        options={
+                            <>
+                                {currencies?.map((x) => (
+                                    <option value={x.currency}>
+                                        {x.currency} (
+                                        {getCurrencyName(x.currency) || x.name})
+                                    </option>
+                                ))}
+                            </>
+                        }
+                    />
                     <Box w="full">
                         <FormLabel
                             textTransform="capitalize"

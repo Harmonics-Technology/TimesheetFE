@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import { UserContext } from '@components/context/UserContext';
 import { useRouter } from 'next/router';
 
-export const OnboardingFee = ({ data }: { data: OnboardingFeeView }) => {
+export const OnboardingFee = ({ data }: { data: OnboardingFeeView[] }) => {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const router = useRouter();
@@ -110,7 +110,7 @@ export const OnboardingFee = ({ data }: { data: OnboardingFeeView }) => {
                         name="fee"
                         error={errors.fee}
                         placeholder=""
-                        defaultValue={data?.fee}
+                        defaultValue={''}
                         register={register}
                     />
                 </Box>

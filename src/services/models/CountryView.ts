@@ -2,9 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type DepartmentView = {
+export type CountryView = {
     id?: string;
-    superAdminId?: string;
     name?: string | null;
-    dateCreated?: string;
+    currency?: string | null;
+    flag?: string | null;
 };

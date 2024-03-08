@@ -2,8 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type OnboardingFeeView = {
-    id?: string;
+export type OnboardingFeeRegisterModel = {
     fee?: number;
-    onbordingFeeType?: string | null;
+    onboardingFeeType?: string | null;
 };

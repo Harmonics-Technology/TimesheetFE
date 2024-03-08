@@ -12,10 +12,10 @@ export const LicenseSelection = ({
     return (
         <Box
             w="full"
-            borderTop="1px solid"
-            borderColor="gray.300"
-            mt="1.5rem"
-            pt="1rem"
+            // borderTop="1px solid"
+            // borderColor="gray.300"
+            // mt="1.5rem"
+            // pt="1rem"
         >
             <FormLabel
                 textTransform="capitalize"

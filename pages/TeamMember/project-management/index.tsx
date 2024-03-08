@@ -5,7 +5,12 @@ import { filterPagingSearchOptions } from '@components/generics/filterPagingSear
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { ProjectManagementService, UserService } from 'src/services';
+import {
+    ProjectManagementService,
+    UserService,
+    UtilityService,
+} from 'src/services';
+import axios from 'axios';
 
 const projectsIndex = ({
     iProjects,
@@ -18,6 +23,7 @@ const projectsIndex = ({
     access,
     isPm,
     projectMangers,
+    currencies,
 }: {
     iProjects: any;
     nProjects: any;
@@ -29,6 +35,7 @@ const projectsIndex = ({
     access: any;
     isPm: boolean;
     projectMangers: any;
+    currencies: any;
 }) => {
     return (
         <>
@@ -43,6 +50,7 @@ const projectsIndex = ({
                     projectMangers={projectMangers}
                     access={access}
                     isPm
+                    currencies={currencies}
                 />
             ) : (
                 <TeamProjectPage
@@ -52,6 +60,7 @@ const projectsIndex = ({
                     counts={counts}
                     access={access}
                     projectMangers={projectMangers}
+                    currencies={currencies}
                 />
             )}
         </>
@@ -108,6 +117,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     superAdminId,
                     userId,
                 );
+            const currencies = await UtilityService.listCountries();
             // const projectMangers = await UserService.listUsers(
             //     //@ts-ignore
             //     undefined,
@@ -133,6 +143,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     iProjects: iProgress.data,
                     nProjects: nProgress.data,
                     cProjects: cProgress.data,
+                    currencies: currencies.data,
                 },
             };
         } catch (error: any) {

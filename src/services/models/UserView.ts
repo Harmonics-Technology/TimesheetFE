@@ -46,4 +46,5 @@ export type UserView = {
     isOrganizationProjectManager?: boolean | null;
     controlSettingView?: ControlSettingView;
     subscriptiobDetails?: ClientSubscriptionResponseViewModel;
+    currency?: string | null;
 };

@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
-import type { DepartmentViewIEnumerableStandardResponse } from '../models/DepartmentViewIEnumerableStandardResponse';
+import type { DepartmentViewListStandardResponse } from '../models/DepartmentViewListStandardResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -32,12 +32,12 @@ name?: string,
 
     /**
      * @param superAdminId 
-     * @returns DepartmentViewIEnumerableStandardResponse Success
+     * @returns DepartmentViewListStandardResponse Success
      * @throws ApiError
      */
     public static listDepartments(
 superAdminId?: string,
-): CancelablePromise<DepartmentViewIEnumerableStandardResponse> {
+): CancelablePromise<DepartmentViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Department/departments',

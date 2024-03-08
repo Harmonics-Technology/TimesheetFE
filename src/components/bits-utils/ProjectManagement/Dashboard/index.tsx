@@ -1,5 +1,5 @@
 import { Box, Grid } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { MiniCards } from './MiniCards';
 import { ProjectTabs } from './ProjectTabs';
 import { RiBriefcase2Line, RiTimeLine } from 'react-icons/ri';
@@ -31,6 +31,8 @@ export const Dashboard = ({
 }: {
     metrics: DashboardProjectManagementView;
 }) => {
+    console.log({ metrics });
+    const [budget, setBudget] = useState<any>(metrics?.totalBudgetSpent?.at(0));
     const projectSummary = ['Project Name', 'Due Date', 'Status', 'Progress'];
     const overdue = ['Project Name', 'Deadline', 'Overdue'];
     return (
@@ -64,11 +66,14 @@ export const Dashboard = ({
                     color="#2383BD"
                 />
                 <MiniCards
-                    value={metrics.totalBudgetSpent}
+                    value={budget.budgetSpent}
                     title="Total Budget Spent"
                     icon={PiMoneyBold}
                     color="#F8C200"
                     isPrice
+                    setBudget={setBudget}
+                    budget={budget}
+                    allBudget={metrics?.totalBudgetSpent}
                 />
             </Grid>
             <Grid

@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { OnboardingFeeRegisterModel } from './OnboardingFeeRegisterModel';
+
 export type RegisterModel = {
     firstName?: string | null;
     lastName?: string | null;
@@ -22,4 +24,6 @@ export type RegisterModel = {
     commandCenterClientId?: string | null;
     superAdminId?: string | null;
     draftId?: string | null;
+    currency?: string | null;
+    onboardingFees?: Array<OnboardingFeeRegisterModel> | null;
 };

@@ -12,11 +12,11 @@ export const OnboardingFeeProvider = ({ children }: { children: any }) => {
     useEffect(() => {
         const getFixedAmount = async () => {
             try {
-                const data = await OnboardingFeeService.getFixedAmount(
+                const data = await OnboardingFeeService.listFixedAmountFee(
                     superAdminId,
                 );
                 if (data.status) {
-                    setFixedAmount(data.data?.fee);
+                    setFixedAmount(data.data);
                 }
             } catch (error: any) {
                 //

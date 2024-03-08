@@ -5,7 +5,7 @@
 import type { DepartmentView } from './DepartmentView';
 import type { HttpStatusCode } from './HttpStatusCode';
 
-export type DepartmentViewIEnumerableStandardResponse = {
+export type DepartmentViewListStandardResponse = {
     href?: string | null;
     relations?: Array<string> | null;
     method?: string | null;

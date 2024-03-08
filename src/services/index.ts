@@ -42,6 +42,8 @@ export type { ContractViewStandardResponse } from './models/ContractViewStandard
 export type { ControlSettingModel } from './models/ControlSettingModel';
 export type { ControlSettingView } from './models/ControlSettingView';
 export type { ControlSettingViewStandardResponse } from './models/ControlSettingViewStandardResponse';
+export type { CountryView } from './models/CountryView';
+export type { CountryViewListStandardResponse } from './models/CountryViewListStandardResponse';
 export type { DashboardPaymentPartnerView } from './models/DashboardPaymentPartnerView';
 export type { DashboardPaymentPartnerViewStandardResponse } from './models/DashboardPaymentPartnerViewStandardResponse';
 export type { DashboardProjectManagementView } from './models/DashboardProjectManagementView';
@@ -54,7 +56,7 @@ export type { DashboardView } from './models/DashboardView';
 export type { DashboardViewStandardResponse } from './models/DashboardViewStandardResponse';
 export type { Data } from './models/Data';
 export type { DepartmentView } from './models/DepartmentView';
-export type { DepartmentViewIEnumerableStandardResponse } from './models/DepartmentViewIEnumerableStandardResponse';
+export type { DepartmentViewListStandardResponse } from './models/DepartmentViewListStandardResponse';
 export type { EmployeeInformation } from './models/EmployeeInformation';
 export type { EmployeeInformationView } from './models/EmployeeInformationView';
 export type { Enable2FAView } from './models/Enable2FAView';
@@ -102,6 +104,7 @@ export type { NotificationViewStandardResponse } from './models/NotificationView
 export type { ObjectStandardResponse } from './models/ObjectStandardResponse';
 export type { OnboardingFeeModel } from './models/OnboardingFeeModel';
 export type { OnboardingFeeModelStandardResponse } from './models/OnboardingFeeModelStandardResponse';
+export type { OnboardingFeeRegisterModel } from './models/OnboardingFeeRegisterModel';
 export type { OnboardingFeeView } from './models/OnboardingFeeView';
 export type { OnboardingFeeViewPagedCollection } from './models/OnboardingFeeViewPagedCollection';
 export type { OnboardingFeeViewPagedCollectionStandardResponse } from './models/OnboardingFeeViewPagedCollectionStandardResponse';

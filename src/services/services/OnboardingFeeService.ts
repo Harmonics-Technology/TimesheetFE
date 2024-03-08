@@ -57,14 +57,14 @@ feeId: string,
     /**
      * @param offset 
      * @param limit 
-     * @param superAdminId 
+     * @param paymentPartnerId 
      * @returns OnboardingFeeViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static listPercentageOnboardingFees(
 offset?: number,
 limit?: number,
-superAdminId?: string,
+paymentPartnerId?: string,
 ): CancelablePromise<OnboardingFeeViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -72,7 +72,7 @@ superAdminId?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
-                'superAdminId': superAdminId,
+                'paymentPartnerId': paymentPartnerId,
             },
             errors: {
                 400: `Bad Request`,
@@ -84,14 +84,14 @@ superAdminId?: string,
     /**
      * @param offset 
      * @param limit 
-     * @param superAdminId 
+     * @param paymentPartnerId 
      * @returns OnboardingFeeViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static listFixedAmountFee(
 offset?: number,
 limit?: number,
-superAdminId?: string,
+paymentPartnerId?: string,
 ): CancelablePromise<OnboardingFeeViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -99,7 +99,7 @@ superAdminId?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
-                'superAdminId': superAdminId,
+                'paymentPartnerId': paymentPartnerId,
             },
             errors: {
                 400: `Bad Request`,
