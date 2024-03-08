@@ -3,10 +3,22 @@ import { filterPagingSearchOptions } from '@components/generics/filterPagingSear
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { ProjectManagementService, UserService } from 'src/services';
+import {
+    ProjectManagementService,
+    UserService,
+    UtilityService,
+} from 'src/services';
 
-const budget = ({ id, project, budgets, users }) => {
-    return <Budgets id={id} project={project} budgets={budgets} users={users} />;
+const budget = ({ id, project, budgets, users, currencies }) => {
+    return (
+        <Budgets
+            id={id}
+            project={project}
+            budgets={budgets}
+            users={users}
+            currencies={currencies}
+        />
+    );
 };
 
 export default budget;
@@ -31,12 +43,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 80,
                 pagingOptions.search,
             );
+            const currencies = await UtilityService.listCountries();
             return {
                 props: {
                     project: data.data,
                     budgets: budgets.data,
                     users: users.data,
                     id,
+                    currencies: currencies.data,
                 },
             };
         } catch (error: any) {

@@ -3,11 +3,21 @@ import { filterPagingSearchOptions } from '@components/generics/filterPagingSear
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { ProjectManagementService, UserService } from 'src/services';
+import {
+    ProjectManagementService,
+    UserService,
+    UtilityService,
+} from 'src/services';
 
-const index = ({ id, project, tasks, users }) => {
+const index = ({ id, project, tasks, users, currencies }) => {
     return (
-        <ProjectTask id={id} project={project} tasks={tasks} users={users} />
+        <ProjectTask
+            id={id}
+            project={project}
+            tasks={tasks}
+            users={users}
+            currencies={currencies}
+        />
     );
 };
 
@@ -36,6 +46,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 80,
                 pagingOptions.search,
             );
+            const currencies = await UtilityService.listCountries();
 
             return {
                 props: {
@@ -43,6 +54,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     id,
                     tasks: tasks.data,
                     users: users.data,
+                    currencies: currencies.data,
                 },
             };
         } catch (error: any) {

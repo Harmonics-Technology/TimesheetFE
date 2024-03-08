@@ -81,6 +81,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 await ProjectManagementService.getStatusCountForProject(
                     superAdminId,
                 );
+            const currencies = await UtilityService.listCountries();
             // const projectMangers = await UserService.listUsers(
             //     //@ts-ignore
             //     undefined,
@@ -97,7 +98,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 await UserService.getSuperAdminProjectManagementSettings(
                     superAdminId,
                 );
-            const currencies = await UtilityService.listCountries();
             //
             return {
                 props: {

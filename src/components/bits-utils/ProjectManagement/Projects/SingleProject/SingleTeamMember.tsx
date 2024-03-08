@@ -20,10 +20,12 @@ export const SingleTeamMember = ({
     id,
     teams,
     users,
+    currencies,
 }: {
     id: string;
     teams: any;
     users: any;
+    currencies: any;
 }) => {
     const tableHead = [
         'Task Assigned',
@@ -41,7 +43,12 @@ export const SingleTeamMember = ({
 
     return (
         <Box>
-            <TopBar noTitle={true} id={id} users={users} />
+            <TopBar
+                currencies={currencies}
+                noTitle={true}
+                id={id}
+                users={users}
+            />
             <HStack
                 justify="space-between"
                 pb="1rem"

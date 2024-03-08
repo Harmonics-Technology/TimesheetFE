@@ -28,11 +28,13 @@ export const TopBar = ({
     id,
     data,
     users,
+    currencies,
 }: {
     noTitle?: boolean;
     id?: any;
     data?: ProjectView;
     users: any;
+    currencies: any;
 }) => {
     const router = useRouter();
     const toast = useToast();
@@ -140,6 +142,7 @@ export const TopBar = ({
                     onClose={onClose}
                     users={users}
                     data={data}
+                    currencies={currencies}
                 />
             )}
             {isOpened && (
@@ -153,7 +156,7 @@ export const TopBar = ({
                             toast,
                             setStatus,
                             router,
-                            onClosed
+                            onClosed,
                         )
                     }
                     loading={loading}

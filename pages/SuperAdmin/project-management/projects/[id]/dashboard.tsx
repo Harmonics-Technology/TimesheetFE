@@ -7,10 +7,19 @@ import {
     DashboardService,
     ProjectManagementService,
     UserService,
+    UtilityService,
 } from 'src/services';
 
-const projectDashboard = ({ id, projects, metrics, users }) => {
-    return <SingleProjectPage id={id} projects={projects} metrics={metrics} users={users} />;
+const projectDashboard = ({ id, projects, metrics, users, currencies }) => {
+    return (
+        <SingleProjectPage
+            id={id}
+            projects={projects}
+            metrics={metrics}
+            users={users}
+            currencies={currencies}
+        />
+    );
 };
 
 export default projectDashboard;
@@ -30,6 +39,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 80,
                 pagingOptions.search,
             );
+            const currencies = await UtilityService.listCountries();
             return {
                 props: {
                     projects: data.data,
@@ -37,6 +47,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     metrics: metrics.data,
                     id,
                     users: users.data,
+                    currencies: currencies.data,
                 },
             };
         } catch (error: any) {

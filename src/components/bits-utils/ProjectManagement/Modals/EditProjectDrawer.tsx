@@ -34,6 +34,9 @@ import { MdCancel } from 'react-icons/md';
 import { CustomSelectBox } from '../Generics/CustomSelectBox';
 import moment from 'moment';
 import { useRouter } from 'next/router';
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
+import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -51,11 +54,13 @@ export const EditProjectDrawer = ({
     isOpen,
     users,
     data,
+    currencies,
 }: {
     onClose: any;
     isOpen: boolean;
     users: any;
     data?: ProjectView;
+    currencies: any;
 }) => {
     const {
         register,
@@ -82,6 +87,7 @@ export const EditProjectDrawer = ({
         },
     });
     const widgetApi = useRef<any>();
+    const uniqueItems = getUniqueListBy(currencies, 'currency');
     const [fileDoc, setFileDoc] = useState<any>({
         loading: false,
         url: data?.documentURL ? { name: 'Uploaded File' } : '',
@@ -219,23 +225,53 @@ export const EditProjectDrawer = ({
                             register={register}
                             readonly={true}
                         />
+                        <PrimarySelect<ProjectModel>
+                            register={register}
+                            error={errors.currency}
+                            name="currency"
+                            label="Currency"
+                            placeholder={
+                                `${data?.currency} (${
+                                    getCurrencyName(data?.currency) ||
+                                    data?.currency
+                                })}` || 'Select Currency'
+                            }
+                            options={
+                                <>
+                                    {uniqueItems
+                                        ?.sort((a, b) =>
+                                            a?.currency?.localeCompare(
+                                                b?.currency,
+                                            ),
+                                        )
+                                        .map((x) => (
+                                            <option value={x?.currency}>
+                                                {x?.currency} (
+                                                {getCurrencyName(x?.currency) ||
+                                                    x?.name}
+                                                )
+                                            </option>
+                                        ))}
+                                </>
+                            }
+                        />
+                        <PrimaryInput<ProjectModel>
+                            label="Budget"
+                            name="budget"
+                            error={errors.budget}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
+                        <PrimaryInput<ProjectModel>
+                            label="Budget Threshold"
+                            name="budgetThreshold"
+                            error={errors.budgetThreshold}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
                     </Grid>
-                    <PrimaryInput<ProjectModel>
-                        label="Budget"
-                        name="budget"
-                        error={errors.budget}
-                        placeholder=""
-                        defaultValue=""
-                        register={register}
-                    />
-                    <PrimaryInput<ProjectModel>
-                        label="Budget Threshold"
-                        name="budgetThreshold"
-                        error={errors.budgetThreshold}
-                        placeholder=""
-                        defaultValue=""
-                        register={register}
-                    />
                     <Box w="full">
                         <FormLabel
                             textTransform="capitalize"

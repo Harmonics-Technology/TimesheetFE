@@ -34,7 +34,9 @@ export const Dashboard = ({
     metrics: DashboardProjectManagementView;
 }) => {
     console.log({ metrics });
-    const [budget, setBudget] = useState<any>(metrics?.totalBudgetSpent?.at(0));
+    const [budget, setBudget] = useState<any>(
+        metrics?.totalBudgetSpent?.filter((x) => x.currency !== null).at(0),
+    );
     const projectSummary = ['Project Name', 'Due Date', 'Status', 'Progress'];
     const overdue = ['Project Name', 'Deadline', 'Overdue'];
     return (

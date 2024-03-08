@@ -8,14 +8,21 @@ export const TeamMembersView = ({
     id,
     teams,
     users,
+    currencies,
 }: {
     teams: ProjectView;
     id: string;
     users: any;
+    currencies: any;
 }) => {
     return (
         <Box>
-            <TopBar id={id} data={teams} users={users} />
+            <TopBar
+                currencies={currencies}
+                id={id}
+                data={teams}
+                users={users}
+            />
             <Grid
                 my="1.25rem"
                 templateColumns={['repeat(1,1fr)', 'repeat(4,1fr)']}

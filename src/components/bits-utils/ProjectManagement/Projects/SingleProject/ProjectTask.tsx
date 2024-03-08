@@ -37,11 +37,13 @@ export const ProjectTask = ({
     project,
     tasks,
     users,
+    currencies,
 }: {
     id: any;
     project: ProjectView;
     tasks: any;
     users: any;
+    currencies: any;
 }) => {
     const tableHead = [
         'Task Name',
@@ -66,7 +68,12 @@ export const ProjectTask = ({
 
     return (
         <Box>
-            <TopBar id={id} data={project} users={users} />
+            <TopBar
+                currencies={currencies}
+                id={id}
+                data={project}
+                users={users}
+            />
             <HStack py="1rem" justify="space-between">
                 <HStack w="17%">
                     <HStack w="full">
