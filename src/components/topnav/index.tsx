@@ -56,10 +56,9 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     useClickOutside(popover, close);
     const todaysDate = moment().format('MM-DD');
     const isUserBirthDay =
-        moment(user?.dateOfBirth).add(1, 'day').format('MM-DD') == todaysDate;
+        moment(user?.dateOfBirth).format('MM-DD') == todaysDate;
     const isUserAnniversary =
-        moment(user?.contractStartDate).add(1, 'day').format('MM-DD') ==
-        todaysDate;
+        moment(user?.contractStartDate).format('MM-DD') == todaysDate;
     const pageIsDashboard =
         router.pathname === `/${role?.replaceAll(' ', '')}/dashboard`;
 
