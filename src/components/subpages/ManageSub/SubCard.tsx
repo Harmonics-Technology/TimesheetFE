@@ -4,7 +4,12 @@ import React from 'react';
 
 export const SubCard = ({ title, amount, desc, onClick, bg, id }) => {
     return (
-        <Box borderRadius="8px" overflow="hidden" border="1px solid #C2CFE0">
+        <Box
+            borderRadius="8px"
+            overflow="hidden"
+            border="1px solid #C2CFE0"
+            h="full"
+        >
             <Flex
                 height="40px"
                 w="full"
@@ -18,8 +23,8 @@ export const SubCard = ({ title, amount, desc, onClick, bg, id }) => {
             <VStack
                 p="1.5rem 1.5rem"
                 justify="space-between"
-                h="190px"
-                align="flex-start"
+                h="85%"
+                align="space-between"
             >
                 <Box>
                     <HStack mb=".5rem">

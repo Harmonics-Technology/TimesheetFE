@@ -75,7 +75,7 @@ function ExpenseType({ expenses }: expenseProps) {
                     position: 'top-right',
                 });
                 onClose();
-                reset()
+                reset();
                 router.replace(router.asPath);
                 return;
             }
@@ -130,7 +130,7 @@ function ExpenseType({ expenses }: expenseProps) {
                     +Expense Type
                 </Button>
                 <FilterSearch />
-                <Tables tableHead={['Expense Type', 'Status', '']}>
+                <Tables tableHead={['Expense Type', 'Status', 'Action']}>
                     <>
                         {expenses?.map((x: ExpenseTypeView) => (
                             <Tr key={x.id}>

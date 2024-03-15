@@ -67,6 +67,7 @@ export const PurchaseLicense = ({
         data.totalAmount = value;
         data.subscriptionId = selected?.id;
         data.superAdminId = superAdminId;
+        data.noOfLicense = Number(data.noOfLicense);
         try {
             const result = await UserService.purchaseNewLicensePlan(data);
             if (result.status) {
