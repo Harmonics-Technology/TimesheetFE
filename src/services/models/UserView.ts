@@ -47,4 +47,6 @@ export type UserView = {
     controlSettingView?: ControlSettingView;
     subscriptiobDetails?: ClientSubscriptionResponseViewModel;
     currency?: string | null;
+    isBirthDayToday?: boolean;
+    isAnniversaryToday?: boolean;
 };

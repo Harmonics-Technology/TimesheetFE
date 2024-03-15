@@ -57,7 +57,7 @@ function PaymentPartnerInvoice({
     const toast = useToast();
     const router = useRouter();
 
-    console.log({ invoice });
+    // console.log({ invoice });
     //
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
@@ -269,7 +269,7 @@ function PaymentPartnerInvoice({
                         ))}
                     </>
                 </Tables>
-                <Pagination data={invoiceData} />
+                <Pagination data={invoiceData} loadMore />
             </Box>
             <Paymentinvoices
                 isOpen={isOpen}

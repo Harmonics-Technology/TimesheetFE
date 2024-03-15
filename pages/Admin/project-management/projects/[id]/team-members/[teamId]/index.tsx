@@ -9,13 +9,14 @@ import {
     UtilityService,
 } from 'src/services';
 
-const index = ({ id, teams, users, currencies }) => {
+const index = ({ id, teams, users, currencies, teamId }) => {
     return (
         <SingleTeamMember
             id={id}
             teams={teams}
             users={users}
             currencies={currencies}
+            teamId={teamId}
         />
     );
 };
@@ -48,6 +49,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     teams: data.data,
                     users: users.data,
                     id,
+                    teamId,
                     currencies: currencies.data,
                 },
             };

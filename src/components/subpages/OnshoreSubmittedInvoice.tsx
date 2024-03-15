@@ -344,7 +344,7 @@ function OnshoreSubmittedInvoice({
                                 )}
                             </>
                         </Tables>
-                        <Pagination data={invoiceData} />
+                        <Pagination data={invoiceData} loadMore />
                     </>
                 ) : (
                     <NoAccess />

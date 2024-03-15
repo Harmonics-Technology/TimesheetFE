@@ -256,7 +256,7 @@ function PaymentPartnerPayroll({
                         ))}
                     </>
                 </Tables>
-                <Pagination data={payrolls} />
+                <Pagination data={payrolls} loadMore />
             </Box>
             <GenerateInvoiceModal
                 isOpen={isOpen}

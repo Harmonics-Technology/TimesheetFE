@@ -18,6 +18,7 @@
 .scheduler td {
     height: 70px !important;
     border-bottom: 0 !important;
+    vertical-align: middle !important;
 }
 .scheduler-bg-table thead tr {
     border-bottom: none !important;
@@ -90,7 +91,7 @@ table.resource-table tbody tr td {
     font-family: 'Rubik';
     font-size: 15px;
 }
-.ant-col{
+.ant-col {
     position: unset !important;
 }
 .header3-text {

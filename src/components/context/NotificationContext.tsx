@@ -2,14 +2,12 @@ import { useToast } from '@chakra-ui/react';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { useRouter } from 'next/router';
 import { createContext, useEffect, useState } from 'react';
-import {
-    NotificationService,
-    NotificationViewPagedCollectionStandardResponse,
-} from 'src/services';
+import { NotificationService } from 'src/services';
 
 export const NotificationContext = createContext<any | null>(null);
 export const NotificationProvider = ({ children }: { children: any }) => {
     const [messages, setMessages] = useState({});
+
     const toast = useToast();
     const router = useRouter();
     const [loading, setLoading] = useState({ id: '' });

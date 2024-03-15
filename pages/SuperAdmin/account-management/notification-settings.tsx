@@ -5,7 +5,7 @@ import React from 'react';
 import { UserService } from 'src/services';
 
 const NotificationSettings = ({ data }: { data: any }) => {
-    return <NotifocationSettingsPage data={data} />;
+    return <NotifocationSettingsPage controls={data} />;
 };
 
 export default NotificationSettings;

@@ -38,6 +38,7 @@ import { MdVerified, MdCancel } from 'react-icons/md';
 import { BsEye, BsPencil } from 'react-icons/bs';
 import { RiInboxArchiveFill } from 'react-icons/ri';
 import shadeColor from '@components/generics/functions/shadeColor';
+import validateEmail from '@components/generics/functions/validateEmail';
 
 export function TableHead({
     name,
@@ -88,9 +89,6 @@ export function TableData({
     breakWord?: any;
     onClick?: any;
 }) {
-    const validRegex =
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const isEmail = name?.toString().match(validRegex) ? true : false;
     return (
         <Td
             borderColor={borderColor}
@@ -100,7 +98,7 @@ export function TableData({
             className={classes}
             fontWeight={fontWeight}
             maxW={breakWord ? '150px' : 'unset'}
-            textTransform={isEmail ? 'lowercase' : 'capitalize'}
+            textTransform={validateEmail(name) ? 'lowercase' : 'capitalize'}
             onClick={onClick}
             cursor="pointer"
             // textOverflow=""

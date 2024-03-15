@@ -31,4 +31,8 @@ export type ControlSettingView = {
     adminCanViewPaymentPartnerInvoice?: boolean;
     adminCanViewClientInvoice?: boolean;
     organizationDefaultCurrency?: string | null;
+    allowBirthdayNotification?: boolean;
+    allowWorkAnniversaryNotification?: boolean;
+    notifyCelebrant?: boolean;
+    notifyEveryoneAboutCelebrant?: boolean;
 };

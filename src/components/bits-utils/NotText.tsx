@@ -3,7 +3,7 @@ import React from 'react';
 
 export const NotText = ({ title, sub }: { title?: any; sub?: any }) => {
     return (
-        <VStack align="flex-start" mb="1.5rem">
+        <VStack align="flex-start" mb="1rem">
             {title && (
                 <Text
                     color="#002861"
