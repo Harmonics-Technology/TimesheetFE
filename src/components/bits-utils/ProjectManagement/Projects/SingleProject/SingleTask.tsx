@@ -85,7 +85,7 @@ export const SingleTask = ({
     const [status, setStatus] = useState(task?.status?.toLowerCase());
 
     const openModal = (item: any) => {
-        setSubTask(item);
+        setSubTask({ ...item, isEdit: true });
         onOpen();
     };
     const pastDate = moment().diff(moment(task?.endDate), 'days') > 0;

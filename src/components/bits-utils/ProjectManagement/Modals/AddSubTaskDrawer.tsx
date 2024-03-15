@@ -56,7 +56,7 @@ export const AddSubTaskDrawer = ({
     onClose: any;
     isOpen: boolean;
     data: ProjectTaskView;
-    subTask: ProjectSubTaskView;
+    subTask: ProjectSubTaskView | any;
 }) => {
     const formattedPriority =
         subTask.taskPriority == 'High'
@@ -125,7 +125,9 @@ export const AddSubTaskDrawer = ({
         //
         data.trackedByHours = isHours;
         try {
-            const result = await ProjectManagementService.createSubTask(data);
+            const result = subTask?.isEdit
+                ? await ProjectManagementService.updateSubTask(data)
+                : await ProjectManagementService.createSubTask(data);
             if (result.status) {
                 toast({
                     title: result.message,
