@@ -12,6 +12,7 @@ export const filterPagingSearchOptions = (ctx: any) => {
         clientId,
         status,
         subId,
+        convert,
     } = ctx.query;
     const options = {
         limit: limit ? limit : 10,
@@ -25,6 +26,7 @@ export const filterPagingSearchOptions = (ctx: any) => {
         paySlipFilter: paySlipFilter ? paySlipFilter : '',
         chartYear: chartYear ? chartYear : moment(new Date()).format('YYYY'),
         subId: subId,
+        convert: convert,
     };
 
     return options;

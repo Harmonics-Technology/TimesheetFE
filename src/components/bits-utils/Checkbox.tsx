@@ -26,7 +26,7 @@ function Checkbox({
         <FormControl w="auto">
             <Flex gap=".9rem" fontWeight="500" mb={mb} color={color}>
                 {dir == 'ltr' && (
-                    <FormLabel fontSize=".9rem" m="0" htmlFor={label}>
+                    <FormLabel fontSize=".8rem" m="0" htmlFor={label}>
                         {label}
                     </FormLabel>
                 )}
@@ -40,7 +40,7 @@ function Checkbox({
                     id={label}
                 />
                 {dir == 'rtl' && (
-                    <FormLabel fontSize=".9rem" m="0" htmlFor={label}>
+                    <FormLabel fontSize=".8rem" m="0" htmlFor={label}>
                         {label}
                     </FormLabel>
                 )}

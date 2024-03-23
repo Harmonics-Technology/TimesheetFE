@@ -49,4 +49,5 @@ export type UserView = {
     currency?: string | null;
     isBirthDayToday?: boolean;
     isAnniversaryToday?: boolean;
+    contractStartDate?: string | null;
 };

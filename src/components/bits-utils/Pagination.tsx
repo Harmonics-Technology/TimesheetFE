@@ -109,13 +109,14 @@ function Pagination({ data, shift, client, func, loadMore }: pageOptions) {
                         <Button
                             bgColor="brand.400"
                             color="white"
-                            borderRadius="25px"
+                            borderRadius="6px"
                             onClick={() => paginate('more')}
+                            fontSize=".8rem"
                         >
                             Load More
                         </Button>
                     ) : (
-                        <HStack cursor="pointer">
+                        <HStack cursor="pointer" fontSize=".9rem">
                             <Button
                                 bgColor="white"
                                 color="brand.200"

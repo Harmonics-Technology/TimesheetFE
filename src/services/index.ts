@@ -8,6 +8,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { AdminPaymentScheduleView } from './models/AdminPaymentScheduleView';
 export type { AdminPaymentScheduleViewListStandardResponse } from './models/AdminPaymentScheduleViewListStandardResponse';
+export type { ApprovedPayrollInvoices } from './models/ApprovedPayrollInvoices';
 export type { BillableAndNonBillable } from './models/BillableAndNonBillable';
 export type { BooleanStandardResponse } from './models/BooleanStandardResponse';
 export type { BudgetBurnOutRate } from './models/BudgetBurnOutRate';

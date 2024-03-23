@@ -172,7 +172,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                         isUserBirthDay
                                             ? 'Birthday'
                                             : 'Work Anniversary'
-                                    } ${user?.fullName}`}
+                                    }, ${user?.fullName}`}
                                 </Text>
                                 <ConfettiIcon />
                             </HStack>

@@ -55,4 +55,16 @@ export type TeamMemberModel = {
     superAdminId?: string | null;
     invoiceGenerationType?: string | null;
     enableFinancials?: boolean;
+    department?: string | null;
+    employmentContractType?: string | null;
+    timesheetFrequency?: string | null;
+    payrollStructure?: string | null;
+    rate?: number;
+    rateType?: string | null;
+    taxType?: string | null;
+    standardCanadianSystem?: string | null;
+    tax?: number;
+    payrollProcessingType?: string | null;
+    paymentProcessingFeeType?: string | null;
+    paymentProcessingFee?: number;
 };

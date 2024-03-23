@@ -22,6 +22,7 @@ interface InputProps {
     fontSize?: string;
     value?: any;
     readonly?: any;
+    w?: any;
 }
 function InputBlank({
     type,
@@ -36,9 +37,10 @@ function InputBlank({
     fontSize = '.8rem',
     value,
     readonly,
+    w = 'full',
 }: InputProps) {
     return (
-        <FormControl>
+        <FormControl w={w}>
             <FormLabel
                 textTransform="capitalize"
                 width="fit-content"
@@ -60,6 +62,7 @@ function InputBlank({
                     h="2.6rem"
                     readOnly={readonly}
                     userSelect={readonly ? 'none' : 'all'}
+                    fontSize={fontSize}
                 />
                 {icon && (
                     <InputRightElement

@@ -1,4 +1,3 @@
-
 import {
     Box,
     Button,
@@ -21,6 +20,7 @@ import * as yup from 'yup';
 import { VscSaveAs } from 'react-icons/vsc';
 import {
     ContractViewPagedCollectionStandardResponse,
+    OnboardingFeeService,
     TeamMemberModel,
     UserService,
     UserView,
@@ -50,18 +50,11 @@ import error from 'next/error';
 import { UserContext } from '@components/context/UserContext';
 import { ActivateUserAlert } from '@components/bits-utils/ActivateUserAlert';
 import { TriggerBox } from '@components/bits-utils/TriggerBox';
+import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
+import { LicenseEditBox } from '@components/bits-utils/LicenseEditBox';
 
-interface select {
-    options: any;
-    customKeys: { key: string | number | boolean; label: string };
-    onChange: (value: any) => void;
-    placeholder?: string;
-    disabled?: boolean;
-    searchable?: boolean;
-}
-const Selectrix = dynamic<select>(() => import('react-selectrix'), {
-    ssr: false,
-});
 const schema = yup.object().shape({});
 interface TeamProfileProps {
     userProfile?: UserView;
@@ -70,6 +63,9 @@ interface TeamProfileProps {
     paymentPartner: UserView[];
     id: string;
     isSuperAdmin?: boolean;
+    currencies: any;
+    department: any;
+    subs: any;
 }
 
 function TeamProfile({
@@ -79,6 +75,9 @@ function TeamProfile({
     paymentPartner,
     id,
     isSuperAdmin,
+    currencies,
+    department,
+    subs,
 }: TeamProfileProps) {
     const { user, opens, subType } = useContext(UserContext);
     //
@@ -105,18 +104,9 @@ function TeamProfile({
             paymentPartnerId:
                 userProfile?.employeeInformation?.paymentPartnerId,
             currency: userProfile?.employeeInformation?.currency,
-            paymentRate: userProfile?.employeeInformation?.paymentRate,
-            insuranceDocumentUrl:
-                userProfile?.employeeInformation?.insuranceDocumentUrl,
-            voidCheckUrl: userProfile?.employeeInformation?.voidCheckUrl,
-            inCorporationDocumentUrl:
-                userProfile?.employeeInformation?.inCorporationDocumentUrl,
+
             paymentFrequency:
                 userProfile?.employeeInformation?.paymentFrequency,
-            fixedAmount: userProfile?.employeeInformation?.fixedAmount,
-            onBoradingFee: userProfile?.employeeInformation?.onBoradingFee,
-            monthlyPayoutRate:
-                userProfile?.employeeInformation?.monthlyPayoutRate,
             payrollGroupId: userProfile?.employeeInformation?.payrollGroupId,
             isEligibleForLeave:
                 userProfile?.employeeInformation?.isEligibleForLeave,
@@ -129,16 +119,93 @@ function TeamProfile({
                 userProfile?.employeeInformation?.invoiceGenerationType,
             enableFinancials:
                 userProfile?.employeeInformation?.enableFinancials,
+            department: userProfile?.employeeInformation?.department,
+            address: userProfile?.address,
+            clientSubscriptionId: userProfile?.clientSubscriptionId,
+            employmentContractType:
+                userProfile?.employeeInformation?.employmentContractType,
+            jobTitle: userProfile?.employeeInformation?.jobTitle,
+            paymentProcessingFee:
+                userProfile?.employeeInformation?.paymentProcessingFee,
+            paymentProcessingFeeType:
+                userProfile?.employeeInformation?.paymentProcessingFeeType,
+            payrollProcessingType:
+                userProfile?.employeeInformation?.payrollProcessingType,
+            rate: userProfile?.employeeInformation?.rate,
+            rateType: userProfile?.employeeInformation?.rateType,
+            ratePerHour: userProfile?.employeeInformation?.ratePerHour,
+            tax: userProfile?.employeeInformation?.tax,
+            taxType: userProfile?.employeeInformation?.taxType,
+            timesheetFrequency:
+                userProfile?.employeeInformation?.timesheetFrequency,
         },
     });
     const router = useRouter();
     const toast = useToast();
+    const includePayroll = watch('enableFinancials');
+
+    // console.log({ userProfile, includePayroll });
     //
+    const isFlatFeeSelected = watch('payrollStructure') == 'flat fee';
+    const isIncSelected = watch('payrollStructure') == 'incoporation payroll';
+    const isPaymentPartnerSelected =
+        watch('payrollProcessingType') == 'payment partner';
+    const paymentPartnerId = watch('paymentPartnerId');
+    const taxType = watch('taxType');
+    const uniqueItems = getUniqueListBy(currencies, 'currency');
+    const [payFees, setPayFees] = useState<any>();
+
+    const getPaymentPartnerFees = async (id) => {
+        if (id === undefined) {
+            return;
+        }
+        setLoading(true);
+        try {
+            const data = await OnboardingFeeService.listOnboardingFee(
+                0,
+                10,
+                id,
+            );
+            if (data.status) {
+                setLoading(false);
+                setPayFees(data?.data?.value);
+                return;
+            }
+            setLoading(false);
+        } catch (err: any) {
+            setLoading(false);
+            toast({
+                title: err?.body?.message || err.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+    useEffect(() => {
+        getPaymentPartnerFees(paymentPartnerId);
+    }, [paymentPartnerId]);
+
     const payroll = userProfile?.employeeInformation?.payrollType;
     const payrolls = watch('payRollTypeId');
     const onboarding = watch('fixedAmount');
+
     const isEligibleForLeave = watch('isEligibleForLeave');
-    const includePayroll = watch('enableFinancials');
+
+    const [contract, setContractFile] = useState<any>('');
+    const [showLoading, setShowLoading] = useState(false);
+    const widgetApi = useRef<any>();
+
+    const showLoadingState = (file) => {
+        if (file) {
+            file.progress((info) => {
+                setShowLoading(true);
+            });
+            file.done((info) => {
+                setShowLoading(false), setContractFile(info);
+            });
+        }
+    };
     //
 
     const [icd, setIcd] = useState<any>('');
@@ -202,27 +269,23 @@ function TeamProfile({
         setSelected(val);
         onOpen();
     };
+
+    const curentLicense = subs?.find(
+        (x) => x.subscriptionId === userProfile?.clientSubscriptionId,
+    );
+    const [selectedLicense, setSelectedLicense] = useState<any>(curentLicense);
+    const addLicense = (license) => {
+        setSelectedLicense(license);
+    };
+    const removeLicense = (id) => {
+        setSelectedLicense(undefined);
+    };
+
     const onSubmit = async (data: TeamMemberModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
 
-        data.payrollGroupId == 0
-            ? (data.payrollGroupId = null)
-            : data.payrollGroupId;
-
-        if (data.fixedAmount == true) {
-            data.onBoradingFee = fixedAmount;
-        }
-        if (icd !== '') {
-            data.inCorporationDocumentUrl = `${icd.cdnUrl} ${icd.name}`;
-        }
-        if (voidCheck !== '') {
-            data.voidCheckUrl = `${voidCheck.cdnUrl} ${voidCheck.name}`;
-        }
-        if (inc !== '') {
-            data.insuranceDocumentUrl = `${inc.cdnUrl} ${inc.name}`;
-        }
         // data.clientId = userProfile?.employeeInformation?.client?.id;
-
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         try {
             const result = await UserService.updateTeamMember(data);
             //
@@ -499,7 +562,7 @@ function TeamProfile({
                                     error={errors.employeeType}
                                     keys="id"
                                     keyLabel="label"
-                                    label="Employee Type"
+                                    label="Employee Category"
                                     placeholder={
                                         (userProfile?.employeeInformation
                                             ?.employeeType as string) ||
@@ -530,27 +593,111 @@ function TeamProfile({
                                 register={register}
                             />
 
-                            <SelectrixBox<TeamMemberModel>
-                                control={control}
-                                name="paymentFrequency"
-                                error={errors.paymentFrequency}
-                                keys="id"
-                                keyLabel="label"
+                            <PrimarySelect<TeamMemberModel>
+                                register={register}
+                                error={errors.timesheetFrequency}
+                                name="timesheetFrequency"
                                 label="Timesheet Frequency"
-                                options={[
-                                    { id: 'Weekly', label: 'Weekly' },
-                                    { id: 'Bi-weekly', label: 'Bi-Weekly' },
-                                    { id: 'Monthly', label: 'Monthly' },
-                                ]}
-                                placeholder={
-                                    (userProfile?.employeeInformation
-                                        ?.paymentFrequency as string) ||
-                                    'Please select'
+                                placeholder={'Please select'}
+                                options={
+                                    <>
+                                        {['Weekly', 'Bi-weekly', 'Monthly'].map(
+                                            (x) => (
+                                                <option value={x}>{x}</option>
+                                            ),
+                                        )}
+                                    </>
                                 }
                             />
+                            <PrimarySelect<TeamMemberModel>
+                                register={register}
+                                error={errors.department}
+                                name="department"
+                                label="Department"
+                                placeholder="Department"
+                                options={
+                                    <>
+                                        {department.map((x) => (
+                                            <option value={x?.id}>
+                                                {x.name}
+                                            </option>
+                                        ))}
+                                    </>
+                                }
+                            />
+                            <PrimarySelect<TeamMemberModel>
+                                register={register}
+                                error={errors.enableFinancials}
+                                name="enableFinancials"
+                                label="Is Payroll Required"
+                                placeholder={'Please select'}
+                                options={
+                                    <>
+                                        {['Yes', 'No'].map((x) => (
+                                            <option value={x}>{x}</option>
+                                        ))}
+                                    </>
+                                }
+                            />
+                            <PrimarySelect<TeamMemberModel>
+                                register={register}
+                                error={errors.employmentContractType}
+                                name="employmentContractType"
+                                label="Employment Type"
+                                placeholder={'Please select'}
+                                options={
+                                    <>
+                                        {[
+                                            'Contract',
+                                            'Full time',
+                                            'Half time',
+                                        ].map((x) => (
+                                            <option value={x}>{x}</option>
+                                        ))}
+                                    </>
+                                }
+                            />
+                            <Box>
+                                <UploadCareWidget
+                                    refs={widgetApi}
+                                    label="Attach Document"
+                                    filename={contract?.name}
+                                    loading={showLoading}
+                                    uploadFunction={showLoadingState}
+                                />
+                            </Box>
                         </Grid>
                     </Box>
-                    {includePayroll && (
+                    <Box borderY="1px solid #d9d9d9" py="1rem" my="2rem">
+                        <Text
+                            fontWeight="600"
+                            fontSize="1.1rem"
+                            mb="1rem"
+                            textTransform="capitalize"
+                            color="brand.200"
+                        >
+                            License Plan Assigned
+                        </Text>
+                        <LicenseEditBox
+                            data={subs}
+                            updateFunction={addLicense}
+                            items={selectedLicense}
+                            customKeys={{
+                                key: 'subscriptionId',
+                                label: 'subscriptionType',
+                                used: 'noOfLicenceUsed',
+                                total: 'noOfLicensePurchased',
+                            }}
+                            removeFn={removeLicense}
+                            id="assignLicense"
+                            extraField={
+                                'users in total assigned to this license'
+                            }
+                            checkbox
+                        />
+                    </Box>
+                    {(includePayroll ||
+                        (includePayroll as unknown as string) == 'Yes') && (
                         <Box w="full">
                             <Flex
                                 justify="space-between"
@@ -570,6 +717,248 @@ function TeamProfile({
                                 </Text>
                             </Flex>
                             <Grid
+                                templateColumns={[
+                                    'repeat(1,1fr)',
+                                    'repeat(3,1fr)',
+                                ]}
+                                gap="1rem 2rem"
+                                minW="0"
+                            >
+                                {isFlatFeeSelected && (
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Salary"
+                                        name="rate"
+                                        error={errors.rate}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                    />
+                                )}
+                                {isIncSelected && (
+                                    <>
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="Rate"
+                                            name="rate"
+                                            error={errors.rate}
+                                            placeholder=""
+                                            defaultValue=""
+                                            register={register}
+                                        />
+                                        <PrimarySelect<TeamMemberModel>
+                                            register={register}
+                                            error={errors.rateType}
+                                            name="rateType"
+                                            label="Rate Type"
+                                            placeholder="Please Select"
+                                            options={
+                                                <>
+                                                    {[
+                                                        'hourly',
+                                                        'daily',
+                                                        'weekly',
+                                                    ].map((x) => (
+                                                        <option value={x}>
+                                                            {x}
+                                                        </option>
+                                                    ))}
+                                                </>
+                                            }
+                                        />
+                                    </>
+                                )}
+                                <PrimarySelect<TeamMemberModel>
+                                    register={register}
+                                    error={errors.paymentFrequency}
+                                    name="paymentFrequency"
+                                    label="Payroll Frequency "
+                                    placeholder="Please Select"
+                                    options={
+                                        <>
+                                            {[
+                                                'Weekly',
+                                                'Bi-weekly',
+                                                'Monthly',
+                                            ].map((x) => (
+                                                <option value={x}>{x}</option>
+                                            ))}
+                                        </>
+                                    }
+                                />
+                                <PrimarySelect<TeamMemberModel>
+                                    register={register}
+                                    error={errors.currency}
+                                    name="currency"
+                                    label="Currency"
+                                    placeholder="Currency"
+                                    options={
+                                        <>
+                                            {uniqueItems
+                                                ?.sort((a, b) =>
+                                                    a?.currency?.localeCompare(
+                                                        b?.currency,
+                                                    ),
+                                                )
+                                                .map((x) => (
+                                                    <option value={x?.currency}>
+                                                        {x?.currency} (
+                                                        {getCurrencyName(
+                                                            x?.currency,
+                                                        ) || x?.name}
+                                                        )
+                                                    </option>
+                                                ))}
+                                        </>
+                                    }
+                                />
+                                <PrimarySelect<TeamMemberModel>
+                                    register={register}
+                                    error={errors.taxType}
+                                    name="taxType"
+                                    label="Tax %"
+                                    placeholder="Please Select"
+                                    options={
+                                        <>
+                                            {[
+                                                'standard canadian system',
+                                                'custom',
+                                                'exempt',
+                                            ].map((x) => (
+                                                <option value={x}>{x}</option>
+                                            ))}
+                                        </>
+                                    }
+                                />
+                                {taxType == 'custom' && (
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Custom Tax"
+                                        name="tax"
+                                        error={errors.tax}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                    />
+                                )}
+
+                                <PrimarySelect<TeamMemberModel>
+                                    register={register}
+                                    error={errors.payrollProcessingType}
+                                    name="payrollProcessingType"
+                                    label="Payroll Processing"
+                                    placeholder="Please Select"
+                                    options={
+                                        <>
+                                            {[
+                                                'internal',
+                                                'payment partner',
+                                            ].map((x) => (
+                                                <option value={x}>{x}</option>
+                                            ))}
+                                        </>
+                                    }
+                                />
+                                {isPaymentPartnerSelected && (
+                                    <>
+                                        <PrimarySelect<TeamMemberModel>
+                                            register={register}
+                                            error={errors.paymentPartnerId}
+                                            name="paymentPartnerId"
+                                            label="Choose payment partner"
+                                            placeholder="Please Select"
+                                            options={
+                                                <>
+                                                    {paymentPartner.map((x) => (
+                                                        <option value={x.id}>
+                                                            {x.fullName}
+                                                        </option>
+                                                    ))}
+                                                </>
+                                            }
+                                        />
+                                        <PrimarySelect<TeamMemberModel>
+                                            register={register}
+                                            error={
+                                                errors.paymentProcessingFeeType
+                                            }
+                                            name="paymentProcessingFeeType"
+                                            label="Processing fee Type"
+                                            placeholder={
+                                                // ((userProfile
+                                                //     ?.employeeInformation
+                                                //     ?.paymentProcessingFeeType as unknown as string) ==
+                                                // 'percentage'
+                                                //     ? 'Percentage'
+                                                //     : 'Flat Fee') ||
+                                                'Please Select'
+                                            }
+                                            options={
+                                                <>
+                                                    {getUniqueListBy(
+                                                        payFees || [],
+                                                        'onboardingFeeType',
+                                                    )?.map((x) => (
+                                                        <option
+                                                            value={
+                                                                x.onboardingFeeType
+                                                            }
+                                                        >
+                                                            {x.onboardingFeeType ==
+                                                            'percentage'
+                                                                ? 'Percentage'
+                                                                : 'Flat fee '}
+                                                        </option>
+                                                    ))}
+                                                </>
+                                            }
+                                        />
+                                        <PrimarySelect<TeamMemberModel>
+                                            register={register}
+                                            error={errors.paymentProcessingFee}
+                                            name="paymentProcessingFee"
+                                            label="Processing fee"
+                                            placeholder={
+                                                // (userProfile
+                                                //     ?.employeeInformation
+                                                //     ?.paymentProcessingFee as unknown as string) ||
+                                                'Please Select'
+                                            }
+                                            options={
+                                                <>
+                                                    {payFees
+                                                        ?.filter(
+                                                            (x) =>
+                                                                x.onboardingFeeType ==
+                                                                watch(
+                                                                    'paymentProcessingFeeType',
+                                                                ),
+                                                        )
+                                                        .map((x) => (
+                                                            <option
+                                                                value={x.fee}
+                                                            >
+                                                                {x.fee}
+                                                            </option>
+                                                        ))}
+                                                </>
+                                            }
+                                        />
+                                    </>
+                                )}
+                                <PrimarySelect<TeamMemberModel>
+                                    register={register}
+                                    error={errors.invoiceGenerationType}
+                                    name="invoiceGenerationType"
+                                    label="Payment Type"
+                                    placeholder={''}
+                                    options={
+                                        <>
+                                            {['invoice', 'payroll'].map((x) => (
+                                                <option value={x}>{x}</option>
+                                            ))}
+                                        </>
+                                    }
+                                />
+                            </Grid>
+                            {/* <Grid
                                 templateColumns={[
                                     'repeat(1,1fr)',
                                     'repeat(3,1fr)',
@@ -845,7 +1234,7 @@ function TeamProfile({
                                 ) : (
                                     ''
                                 )}
-                            </Grid>
+                            </Grid> */}
                         </Box>
                     )}
                     <Box w="full">
@@ -914,10 +1303,10 @@ function TeamProfile({
                             ) : null}
                         </Grid>
                     </Box>
-                    <ContractTable
+                    {/* <ContractTable
                         userProfile={userProfile}
                         isSuperAdmin={isSuperAdmin}
-                    />
+                    /> */}
                 </form>
                 <HStack
                     flexDir={['column', 'row']}

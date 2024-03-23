@@ -748,6 +748,7 @@ endDate?: string,
      * @param startDate 
      * @param endDate 
      * @param payrollTypeFilter 
+     * @param convertedInvoices 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -759,6 +760,7 @@ search?: string,
 startDate?: string,
 endDate?: string,
 payrollTypeFilter?: number,
+convertedInvoices?: boolean,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -771,6 +773,7 @@ payrollTypeFilter?: number,
                 'StartDate': startDate,
                 'EndDate': endDate,
                 'payrollTypeFilter': payrollTypeFilter,
+                'convertedInvoices': convertedInvoices,
             },
             errors: {
                 400: `Bad Request`,
@@ -975,17 +978,20 @@ invoiceId?: string,
 
     /**
      * @param invoiceId 
+     * @param rate 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static treatSubmittedInvoice(
 invoiceId?: string,
+rate?: number,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/Financial/invoice/treat',
             query: {
                 'invoiceId': invoiceId,
+                'rate': rate,
             },
         });
     }
