@@ -4,11 +4,13 @@ import TeamManagement from '@components/subpages/TeamManagement';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
+    DepartmentService,
     LeaveConfigurationView,
     LeaveService,
     UserService,
     UserView,
     UserViewPagedCollectionStandardResponse,
+    UtilityService,
 } from 'src/services';
 interface TeamProps {
     teamList: UserViewPagedCollectionStandardResponse;
@@ -16,6 +18,8 @@ interface TeamProps {
     paymentPartner: UserView[];
     leaveSettings: LeaveConfigurationView;
     subs: any;
+    currencies: any;
+    department: any;
 }
 
 function Team({
@@ -24,6 +28,8 @@ function Team({
     paymentPartner,
     leaveSettings,
     subs,
+    currencies,
+    department,
 }: TeamProps) {
     //
     return (
@@ -33,6 +39,8 @@ function Team({
             paymentPartner={paymentPartner}
             leaveSettings={leaveSettings}
             subs={subs}
+            currencies={currencies}
+            department={department}
         />
     );
 }
@@ -54,6 +62,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.to,
             );
             const clients = await UserService.listUsers('client', superAdminId);
+            const subs = await UserService.getClientSubScriptions(superAdminId);
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
                 superAdminId,
@@ -61,8 +70,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const leaveSettings = await LeaveService.getLeaveConfiguration(
                 superAdminId,
             );
-            const subs = await UserService.getClientSubScriptions(superAdminId);
-
+            const department = await DepartmentService.listDepartments(
+                superAdminId,
+            );
+            const currencies = await UtilityService.listCountries();
             return {
                 props: {
                     teamList: data,
@@ -70,6 +81,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     paymentPartner: paymentPartner?.data?.value,
                     leaveSettings: leaveSettings.data,
                     subs: subs.data,
+                    currencies: currencies.data,
+                    department: department.data,
                 },
             };
         } catch (error: any) {

@@ -9,27 +9,24 @@ import React, { useContext } from 'react';
 import {
     FinancialService,
     InvoiceViewPagedCollectionStandardResponse,
+    UserService,
 } from 'src/services';
 
 interface InvoiceType {
+    organizationCurrency: any;
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
 }
-function expenses({ invoiceData }: InvoiceType) {
+function expenses({ invoiceData, organizationCurrency }: InvoiceType) {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     return (
         <Box>
-            <Flex>
-                <PageTabs
-                    url={`/${role}/financials/payrolls`}
-                    tabName="Onshore"
-                />
-                <PageTabs
-                    url={`/${role}/financials/offshore`}
-                    tabName="Offshore"
-                />
-            </Flex>
-            <AdminInvoices invoiceData={invoiceData} />
+            <AdminInvoices
+                invoiceData={invoiceData}
+                record={1}
+                fileName="Pending Payrolls"
+                organizationCurrency={organizationCurrency}
+            />
         </Box>
     );
 }
@@ -39,18 +36,24 @@ export default expenses;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const data = await FinancialService.listSubmittedOnshoreInvoices(
+            const data = await FinancialService.listSubmittedOffshoreInvoices(
                 pagingOptions.offset,
                 pagingOptions.limit,
+                superAdminId,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,
             );
+            const organizationCurrency =
+                await UserService.getControlSettingById(superAdminId);
 
             return {
                 props: {
                     invoiceData: data,
+                    organizationCurrency:
+                        organizationCurrency.data?.organizationDefaultCurrency,
                 },
             };
         } catch (error: any) {

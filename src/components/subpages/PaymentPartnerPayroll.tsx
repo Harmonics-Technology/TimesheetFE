@@ -100,7 +100,7 @@ function PaymentPartnerPayroll({
         invoicesId: any,
         allInvoiceTotal: any,
     ) => {
-        data.invoiceIds = invoicesId;
+        data.invoices = invoicesId;
         data.totalAmount = Number(allInvoiceTotal);
 
         try {

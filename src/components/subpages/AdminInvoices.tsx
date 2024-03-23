@@ -53,7 +53,7 @@ interface adminProps {
     fileName?: string;
     record?: number;
     isSuperAdmin?: boolean;
-    organizationCurrency: any;
+    organizationCurrency?: any;
     converted?: any;
 }
 
