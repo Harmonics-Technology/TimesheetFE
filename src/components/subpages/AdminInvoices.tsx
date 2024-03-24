@@ -18,12 +18,12 @@ import {
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
-import moment from 'moment';
 import {
     ControlSettingView,
     FinancialService,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
+    TreatInvoiceModel,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import { useContext, useState } from 'react';
@@ -35,18 +35,15 @@ import { UserContext } from '@components/context/UserContext';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { BsDownload } from 'react-icons/bs';
-import Naira, { CAD } from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import NoAccess from '@components/bits-utils/NoAccess';
 import { PaymentPrompt } from '@components/bits-utils/ProjectManagement/Modals/PaymentPrompt';
 import asyncForEach from '@components/generics/functions/AsyncForEach';
-import {
-    getCurrencyName,
-    getCurrencySymbol,
-} from '@components/generics/functions/getCurrencyName';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/CurrencyConversionModal';
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -96,6 +93,9 @@ function AdminInvoices({
                     response.push({
                         id: x.id,
                         currency: x.employeeInformation?.currency,
+                        payrollProcessingType:
+                            data.employeeInformation.payrollProcessingType,
+                        rate: 0,
                     }),
                 );
 
@@ -110,14 +110,24 @@ function AdminInvoices({
         }
         setSelectedId([
             ...selectedId,
-            { id: data.id, currency: data.employeeInformation.currency },
+            {
+                id: data.id,
+                currency: data.employeeInformation.currency,
+                payrollProcessingType:
+                    data.employeeInformation.payrollProcessingType,
+                rate: 0,
+            },
         ]);
     };
-    const approveSingleInvoice = async (item: any) => {
+    const approveInvoiceItems = async (item: any[]) => {
+        setLoading(true);
+        const newItem: TreatInvoiceModel[] = item.map((x) => ({
+            invoiceId: x.id,
+            rate: x.rate,
+        }));
         try {
             const result = await FinancialService.treatSubmittedInvoice(
-                item.id,
-                item.rate || 0,
+                newItem,
             );
             if (result.status) {
                 toast({
@@ -126,6 +136,9 @@ function AdminInvoices({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setLoading(false);
+                setSelectedId([]);
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -136,6 +149,7 @@ function AdminInvoices({
                 position: 'top-right',
             });
         } catch (error: any) {
+            setLoading(false);
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -145,26 +159,26 @@ function AdminInvoices({
         }
     };
 
-    const approveInvoiceItems = async (arrays: any) => {
-        try {
-            await asyncForEach(arrays, async (select: any) => {
-                setLoading(true);
-                await approveSingleInvoice(select);
-            });
-            setSelectedId([]);
-            setLoading(false);
-            router.replace(router.asPath);
-            return;
-        } catch (error: any) {
-            setLoading(false);
-            toast({
-                title: error?.body?.message || error?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    // const approveInvoiceItems = async (arrays: any) => {
+    //     try {
+    //         await asyncForEach(arrays, async (select: any) => {
+    //             setLoading(true);
+    //             await approveSingleInvoice(select);
+    //         });
+    //         setSelectedId([]);
+    //         setLoading(false);
+    //         router.replace(router.asPath);
+    //         return;
+    //     } catch (error: any) {
+    //         setLoading(false);
+    //         toast({
+    //             title: error?.body?.message || error?.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
     const { user, accessControls } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const userAccess: ControlSettingView = accessControls;
@@ -216,7 +230,9 @@ function AdminInvoices({
     const [updateCurrency, setUpdateCurrency] = useState();
 
     const differentItems = selectedId.filter(
-        (x) => x.currency !== organizationCurrency,
+        (x) =>
+            x.payrollProcessingType == 'internal' &&
+            x.currency !== organizationCurrency,
     );
     const items = getUniqueListBy(differentItems, 'currency');
     const checkInvoicesBeforeProcess = () => {
@@ -233,7 +249,10 @@ function AdminInvoices({
                 id: x.id,
                 currency: x.currency,
                 rate: Number(
-                    (updateCurrency && updateCurrency[x.currency]) || 0,
+                    (updateCurrency &&
+                        x.payrollProcessingType == 'internal' &&
+                        updateCurrency[x.currency]) ||
+                        0,
                 ),
             };
         });
@@ -274,23 +293,10 @@ function AdminInvoices({
                 {userAccess?.adminCanViewPayrolls || isSuperAdmin ? (
                     <>
                         <Box mt="1rem">
-                            <HStack
-                                align="center"
-                                color="#263238"
-                                fontSize=".8rem"
-                            >
-                                <Text>
-                                    Your Primary currency for your organization
-                                    is{' '}
-                                </Text>
-                                <HStack>
-                                    <Text
-                                        fontWeight={600}
-                                    >{`${organizationCurrency} (${getCurrencyName(
-                                        organizationCurrency,
-                                    )})`}</Text>
-                                </HStack>
-                            </HStack>
+                            <CurrencyTag
+                                label="Your Primary currency for your organization is"
+                                currency={organizationCurrency}
+                            />
                         </Box>
                         <Flex
                             justify="space-between"

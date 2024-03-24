@@ -77,7 +77,11 @@ export const CurrencyConversionModal = ({
                                     currency
                                 </Text>
                             </Box>
-                            <Icon as={AiOutlineClose} onClick={onClose} />
+                            <Icon
+                                as={AiOutlineClose}
+                                onClick={onClose}
+                                cursor={'pointer'}
+                            />
                         </Flex>
                     </>
                 </ModalHeader>

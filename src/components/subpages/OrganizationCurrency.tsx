@@ -1,11 +1,11 @@
-import { Box, HStack, Image, Text, VStack, useToast } from '@chakra-ui/react';
+import { Box, VStack, useToast } from '@chakra-ui/react';
 import { NotText } from '@components/bits-utils/NotText';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { CurrencySelector } from '@components/bits-utils/CurrencySelector';
 import { ControlSettingModel, UserService } from 'src/services';
-import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
+import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
 
 export const OrganizationCurrency = ({
     data,
@@ -105,19 +105,11 @@ export const OrganizationCurrency = ({
 
             {data?.organizationDefaultCurrency && foundCountry && (
                 <Box mt="1rem">
-                    <HStack align="center" color="#263238">
-                        <Text>
-                            Your Primary currency for your organization is{' '}
-                        </Text>
-                        <HStack>
-                            <Image src={foundCountry?.flag} w="24px" h="24px" />
-                            <Text fontWeight={600}>{`${
-                                foundCountry?.currency
-                            } (${getCurrencyName(
-                                foundCountry.currency,
-                            )})`}</Text>
-                        </HStack>
-                    </HStack>
+                    <CurrencyTag
+                        label="Your Primary currency for your organization is"
+                        currency={foundCountry?.currency}
+                        flag={foundCountry?.flag}
+                    />
                 </Box>
             )}
         </Box>

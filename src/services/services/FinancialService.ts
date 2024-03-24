@@ -15,6 +15,7 @@ import type { PayrollViewPagedCollectionStandardResponse } from '../models/Payro
 import type { PayScheduleGenerationModel } from '../models/PayScheduleGenerationModel';
 import type { PaySlipViewPagedCollectionStandardResponse } from '../models/PaySlipViewPagedCollectionStandardResponse';
 import type { RejectPaymentPartnerInvoiceModel } from '../models/RejectPaymentPartnerInvoiceModel';
+import type { TreatInvoiceModel } from '../models/TreatInvoiceModel';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -977,22 +978,18 @@ invoiceId?: string,
     }
 
     /**
-     * @param invoiceId 
-     * @param rate 
+     * @param requestBody 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static treatSubmittedInvoice(
-invoiceId?: string,
-rate?: number,
+requestBody?: Array<TreatInvoiceModel>,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/Financial/invoice/treat',
-            query: {
-                'invoiceId': invoiceId,
-                'rate': rate,
-            },
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
         });
     }
 

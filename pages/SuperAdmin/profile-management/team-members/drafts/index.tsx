@@ -4,12 +4,14 @@ import TeamDrafts from '@components/subpages/TeamDrafts';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
+    DepartmentService,
     DraftService,
     LeaveConfigurationView,
     LeaveService,
     UserDraftViewPagedCollectionStandardResponse,
     UserService,
     UserView,
+    UtilityService,
 } from 'src/services';
 interface TeamProps {
     drafts: UserDraftViewPagedCollectionStandardResponse;
@@ -17,6 +19,8 @@ interface TeamProps {
     paymentPartner: UserView[];
     leaveSettings: LeaveConfigurationView;
     subs: any;
+    currencies: any;
+    department: any;
 }
 
 function TeamDraft({
@@ -25,6 +29,8 @@ function TeamDraft({
     paymentPartner,
     leaveSettings,
     subs,
+    currencies,
+    department,
 }: TeamProps) {
     //
     return (
@@ -34,6 +40,8 @@ function TeamDraft({
             paymentPartner={paymentPartner}
             leaveSettings={leaveSettings}
             subs={subs}
+            currencies={currencies}
+            department={department}
         />
     );
 }
@@ -60,6 +68,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const leaveSettings = await LeaveService.getLeaveConfiguration(
                 superAdminId,
             );
+            const department = await DepartmentService.listDepartments(
+                superAdminId,
+            );
+            const currencies = await UtilityService.listCountries();
 
             return {
                 props: {
@@ -68,6 +80,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     paymentPartner: paymentPartner?.data?.value,
                     leaveSettings: leaveSettings.data,
                     subs: subs.data,
+                    currencies: currencies.data,
+                    department: department.data,
                 },
             };
         } catch (error: any) {

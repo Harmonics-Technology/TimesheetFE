@@ -28,3 +28,5 @@ export const getPrefix = (value: string, watch: any) => {
     const pre = onBoardingFees(watch)?.find((x) => x.id == value)?.prefix;
     return pre;
 };
+export const getFileName = (fileName: any) =>
+    fileName?.split(' ').slice(1).join(' ');

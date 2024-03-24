@@ -18,6 +18,8 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     options: any;
     defaultValue?: any;
     id?: any;
+    disabled?: any;
+    onChange?: any;
 }
 export const PrimarySelect = <TFormValues extends Record<string, any>>({
     name,
@@ -31,6 +33,8 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
     options,
     defaultValue,
     id,
+    disabled,
+    onChange,
 }: FormInputProps<TFormValues>) => {
     return (
         <FormControl
@@ -57,6 +61,8 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
                 placeholder={placeholder}
                 defaultValue={defaultValue}
                 id={id}
+                isDisabled={disabled}
+                // onChange={onChange}
                 color="gray.500"
                 // isReadOnly
             >

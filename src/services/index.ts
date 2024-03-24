@@ -214,6 +214,7 @@ export type { TimeSheetMonthlyViewIEnumerableStandardResponse } from './models/T
 export type { TimeSheetMonthlyViewStandardResponse } from './models/TimeSheetMonthlyViewStandardResponse';
 export { TimesheetRecordToDownload } from './models/TimesheetRecordToDownload';
 export type { TimeSheetView } from './models/TimeSheetView';
+export type { TreatInvoiceModel } from './models/TreatInvoiceModel';
 export type { UpdateCardDetailsModel } from './models/UpdateCardDetailsModel';
 export type { UpdateClientStripeSubscriptionModel } from './models/UpdateClientStripeSubscriptionModel';
 export type { UpdateClientSubscriptionModel } from './models/UpdateClientSubscriptionModel';

@@ -284,7 +284,7 @@ export const NewTeamMemerOnboardingForm = ({
         data.role = 'Team member';
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
         if (contract !== '') {
-            data.document = `${contract.cdnUrl} ${contract.name}`;
+            data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
         {
             (data?.isEligibleForLeave as unknown as string) == 'Yes'
@@ -343,12 +343,17 @@ export const NewTeamMemerOnboardingForm = ({
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
 
         if (contract !== '') {
-            data.document = `${contract.cdnUrl} ${contract.name}`;
+            data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
         {
             (data?.isEligibleForLeave as unknown as string) == 'Yes'
                 ? (data.isEligibleForLeave = true)
                 : (data.isEligibleForLeave = false);
+        }
+        {
+            (data?.enableFinancials as unknown as string) == 'Yes'
+                ? (data.enableFinancials = true)
+                : (data.enableFinancials = false);
         }
         data.clientId = !clientType ? user?.superAdminId : data.clientId;
         try {
@@ -365,6 +370,7 @@ export const NewTeamMemerOnboardingForm = ({
                 router.replace(router.asPath);
                 reset();
                 closeDraft();
+                onClose();
                 return;
             }
             toast({
@@ -984,6 +990,7 @@ export const NewTeamMemerOnboardingForm = ({
                     onSubmit={handleSubmit(saveToDraft)}
                     loading={isSubmitting}
                     text={`Do you want to save as draft?`}
+                    closeDrawer={onClose}
                 />
             )}
         </DrawerWrapper>

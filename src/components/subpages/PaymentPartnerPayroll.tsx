@@ -14,6 +14,7 @@ import {
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import {
+    ApprovedPayrollInvoices,
     FinancialService,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
@@ -31,16 +32,20 @@ import { GenerateInvoiceModal } from '@components/bits-utils/GenerateInvoiceModa
 import { formatDate } from '@components/generics/functions/formatDate';
 import dynamic from 'next/dynamic';
 import { Round } from '@components/generics/functions/Round';
-import { CUR } from '@components/generics/functions/Naira';
+import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/CurrencyConversionModal';
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
 
 interface expenseProps {
     payrolls: InvoiceViewPagedCollectionStandardResponse;
-    id: number;
+    id: any;
     clients: UserView[];
     superAdminId: string;
+    paymentPartnerCurrency: any;
 }
 
 function PaymentPartnerPayroll({
@@ -48,6 +53,7 @@ function PaymentPartnerPayroll({
     id,
     clients,
     superAdminId,
+    paymentPartnerCurrency,
 }: expenseProps) {
     const payrollsList = payrolls?.data?.value;
     const router = useRouter();
@@ -62,8 +68,15 @@ function PaymentPartnerPayroll({
                 setSelectedId([]);
                 return;
             }
-            const response: InvoiceView[] = [];
-            payrollsList?.forEach((x) => response.push(x));
+            const response: unknown[] = [];
+            payrollsList?.forEach((x) =>
+                response.push({
+                    id: x.id,
+                    totalAmount: x.totalAmount,
+                    currency: x?.employeeInformation?.currency,
+                    rate: 0,
+                }),
+            );
 
             setSelectedId([...response]);
             return;
@@ -74,7 +87,15 @@ function PaymentPartnerPayroll({
             setSelectedId(newArray);
             return;
         }
-        setSelectedId([...selectedId, x]);
+        setSelectedId([
+            ...selectedId,
+            {
+                id: x.id,
+                totalAmount: x.totalAmount,
+                currency: x.employeeInformation.currency,
+                rate: 0,
+            },
+        ]);
     };
 
     const filterClientsInvoice = (filter: string) => {
@@ -95,14 +116,24 @@ function PaymentPartnerPayroll({
         ...(newClient || []),
     ];
 
-    const onSubmit = async (
-        data: PaymentPartnerInvoiceModel,
-        invoicesId: any,
-        allInvoiceTotal: any,
-    ) => {
-        data.invoices = invoicesId;
-        data.totalAmount = Number(allInvoiceTotal);
+    const [updateCurrency, setUpdateCurrency] = useState();
 
+    const differentItems = selectedId.filter(
+        (x) => x?.currency !== paymentPartnerCurrency,
+    );
+    const items = getUniqueListBy(differentItems, 'currency');
+    const totalAmount = Number(
+        selectedId.reduce((a, b) => a + b.totalAmount, 0),
+    );
+
+    // console.log({ items, differentItems });
+
+    const onSubmit = async (data: PaymentPartnerInvoiceModel) => {
+        setLoading(true);
+        data.invoices = data.invoices?.map((x: any) => ({
+            invoiceId: x.id,
+            exchangeRate: x.rate || 0,
+        }));
         try {
             const result = await FinancialService.createPaymentPartnerInvoice(
                 data,
@@ -114,10 +145,13 @@ function PaymentPartnerPayroll({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setLoading(false);
+                setSelectedId([]);
                 onClose();
                 router.replace(router.asPath);
                 return;
             }
+            setLoading(false);
             toast({
                 title: result.message,
                 status: 'error',
@@ -126,6 +160,7 @@ function PaymentPartnerPayroll({
             });
             return;
         } catch (error: any) {
+            setLoading(false);
             toast({
                 title: error?.message || error?.body?.message,
                 status: 'error',
@@ -133,6 +168,37 @@ function PaymentPartnerPayroll({
                 position: 'top-right',
             });
         }
+    };
+    const rebuildInvoiceProcess = async () => {
+        const rebuildItems = selectedId.map((x) => {
+            return {
+                id: x.id,
+                currency: x.currency,
+                rate: Number(
+                    (updateCurrency && updateCurrency[x.currency]) || 0,
+                ),
+            };
+        });
+        const data = {
+            invoices: rebuildItems as any,
+            totalAmount,
+            rate: '0',
+            clientId: id,
+        };
+        onSubmit(data);
+        onClose();
+    };
+    const checkInvoicesBeforeProcess = () => {
+        if (differentItems.length > 0) {
+            onOpen();
+            return;
+        }
+        onSubmit({
+            invoices: selectedId as any,
+            totalAmount,
+            rate: '0',
+            clientId: id,
+        });
     };
 
     return (
@@ -143,7 +209,7 @@ function PaymentPartnerPayroll({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Box mb="1rem" w="20%">
+                <Box mb="1rem" w="full">
                     {/* <Selectrix
                         options={clients}
                         searchable
@@ -155,34 +221,40 @@ function PaymentPartnerPayroll({
                             filterClientsInvoice(value.key)
                         }
                     /> */}
+                    <CurrencyTag
+                        label="Payment partner currency for your organization is  "
+                        currency={paymentPartnerCurrency}
+                    />
                 </Box>
-                {selectedId.length !== 0 && (
-                    <Flex gap="1rem" justify="space-between" mb="1rem">
-                        <Box>
-                            <Button
-                                bgColor="brand.600"
-                                color="white"
-                                p=".5rem 1.5rem"
-                                height="fit-content"
-                                onClick={onOpen}
-                                isLoading={loading}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                Create Invoice
-                            </Button>
-                        </Box>
+                {/* {selectedId.length !== 0 && ( */}
+                <Flex gap="1rem" justify="space-between" mb="1rem">
+                    <Box>
+                        <Button
+                            bgColor="brand.600"
+                            color="white"
+                            p=".5rem 1.5rem"
+                            height="fit-content"
+                            onClick={checkInvoicesBeforeProcess}
+                            isLoading={loading}
+                            borderRadius="6px"
+                            isDisabled={selectedId.length <= 0}
+                            spinner={<BeatLoader color="white" size={10} />}
+                            // boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                        >
+                            Create Invoice
+                        </Button>
+                    </Box>
 
-                        <Checkbox
-                            checked={
-                                payrollsList?.length !== 0 &&
-                                payrollsList?.length == selectedId?.length
-                            }
-                            onChange={() => toggleSelected('', true)}
-                            label="Select All"
-                        />
-                    </Flex>
-                )}
+                    <Checkbox
+                        checked={
+                            payrollsList?.length !== 0 &&
+                            payrollsList?.length == selectedId?.length
+                        }
+                        onChange={() => toggleSelected('', true)}
+                        label="Select All"
+                    />
+                </Flex>
+                {/* )} */}
                 <FilterSearch
                     hides
                     options={newData}
@@ -209,7 +281,7 @@ function PaymentPartnerPayroll({
                         'Payment Date',
                         'Total Hrs',
                         // 'Rate',
-                        'Total Amount',
+                        'Amount',
                         // '...',
                         '',
                     ]}
@@ -237,7 +309,11 @@ function PaymentPartnerPayroll({
                                 />
                                 <TableData name={`${x.totalHours} HRS`} />
                                 {/* <TableData name={x.rate} /> */}
-                                <TableData name={CUR(Round(x.totalAmount))} />
+                                <TableData
+                                    name={`${getCurrencySymbol(
+                                        x.employeeInformation?.currency,
+                                    )}${Round(x.totalAmount)}`}
+                                />
                                 {/* <TableContractAction
                                     id={x.employeeInformationId}
                                     timeSheets={true}
@@ -258,14 +334,23 @@ function PaymentPartnerPayroll({
                 </Tables>
                 <Pagination data={payrolls} loadMore />
             </Box>
-            <GenerateInvoiceModal
+            {/* <GenerateInvoiceModal
                 isOpen={isOpen}
                 onClose={onClose}
                 clicked={selectedId}
                 id={id}
                 client={newData}
                 onSubmit={onSubmit}
-            />
+            /> */}
+            {isOpen && (
+                <CurrencyConversionModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    items={items}
+                    setUpdateCurrency={setUpdateCurrency}
+                    rebuildInvoiceProcess={rebuildInvoiceProcess}
+                />
+            )}
         </>
     );
 }
