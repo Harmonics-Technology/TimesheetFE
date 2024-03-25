@@ -37,15 +37,16 @@ class CustomDocument extends Document {
 
     render() {
         const { __NEXT_DATA__ } = this.props;
-        const pathname = __NEXT_DATA__
+        const pathname = __NEXT_DATA__;
 
         return (
             <Html>
-                <Head />
+                <Head>{/* Google tag (gtag.js)  */}</Head>
+
                 <body>
                     <Main />
                     <NextScript />
-                    {pathname.page!== '/login' && (
+                    {pathname.page !== '/login' && (
                         <div id="globalLoader">
                             <img src="/assets/logogif.gif" alt="" />
                         </div>

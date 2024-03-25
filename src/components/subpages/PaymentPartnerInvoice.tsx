@@ -22,7 +22,7 @@ import {
     TreatInvoiceModel,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import InvoiceTemplate from './InvoiceTemplate';
 import BeatLoader from 'react-spinners/BeatLoader';
 import Checkbox from '@components/bits-utils/Checkbox';
@@ -33,6 +33,8 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import dynamic from 'next/dynamic';
 import { Round } from '@components/generics/functions/Round';
 import asyncForEach from '@components/generics/functions/AsyncForEach';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import { UserContext } from '@components/context/UserContext';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -57,6 +59,7 @@ function PaymentPartnerInvoice({
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
+    const { user } = useContext(UserContext);
 
     // console.log({ invoice });
     //
@@ -160,7 +163,7 @@ function PaymentPartnerInvoice({
         ...(newClient || []),
     ];
 
-    console.log({ invoiceData });
+    // console.log({ invoiceData });
     return (
         <>
             <Box
@@ -222,7 +225,7 @@ function PaymentPartnerInvoice({
                         'Invoice No',
                         'Created On',
                         // 'Amount($)',
-                        'Amount(₦)',
+                        'Amount',
                         'Status',
                         'Action',
                     ]}
@@ -248,11 +251,11 @@ function PaymentPartnerInvoice({
                                     )}
                                 /> */}
                                 <TableData
-                                    name={Naira(
-                                        Round(x.totalAmount as number),
+                                    name={`${getCurrencySymbol(user?.currency)}
+                                        ${Round(x.totalAmount as number)},
                                         // *
                                         //     (x.rate as unknown as number),
-                                    )}
+                                    `}
                                 />
                                 <TableState name={x.status as string} />
                                 <InvoiceAction

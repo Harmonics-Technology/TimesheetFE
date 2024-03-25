@@ -387,15 +387,18 @@ function AdminInvoices({
                                 {invoiceData?.data?.value?.map(
                                     (x: InvoiceView) => (
                                         <Tr key={x.id}>
-                                            <TableData
-                                                name={
-                                                    hideCheckbox || pays
-                                                        ? x.employeeInformation
-                                                              ?.client
-                                                              ?.organizationName
-                                                        : x.invoiceReference
-                                                }
-                                            />
+                                            {!converted && (
+                                                <TableData
+                                                    name={
+                                                        hideCheckbox || pays
+                                                            ? x
+                                                                  .employeeInformation
+                                                                  ?.client
+                                                                  ?.organizationName
+                                                            : x.invoiceReference
+                                                    }
+                                                />
+                                            )}
                                             <TableData
                                                 name={
                                                     x.payrollGroupName ||

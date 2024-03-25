@@ -28,6 +28,8 @@ import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { Round } from '@components/generics/functions/Round';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import { UserContext } from '@components/context/UserContext';
 
 function Paymentinvoices({
     isOpen,
@@ -45,6 +47,7 @@ function Paymentinvoices({
             ref.current.save();
         }
     }
+    const { user } = useContext(UserContext);
     // console.log({ clicked });
     const exchangeRate = clicked?.rate as unknown as number;
     const allInvoiceTotal = (
@@ -65,18 +68,18 @@ function Paymentinvoices({
         clicked?.children?.reduce(
             (a, x) =>
                 a +
-                (x?.employeeInformation?.fixedAmount == false
-                    ? (calculatePercentage(
+                (x.employeeInformation?.paymentProcessingFeeType == 'percentage'
+                    ? calculatePercentage(
                           x?.totalAmount,
-                          x?.employeeInformation?.onBoradingFee,
-                      ) as number) / exchangeRate
-                    : (x?.employeeInformation?.onBoradingFee as number)),
+                          x?.employeeInformation
+                              ?.paymentProcessingFee as number,
+                      )
+                    : (x?.employeeInformation?.paymentProcessingFee as number)),
             0,
         ),
     );
 
-    const total =
-        Number(allInvoiceTotal / exchangeRate + allFeesTotal + hst) || 0;
+    const total = Number(allInvoiceTotal + allFeesTotal) || 0;
 
     const paymentDate =
         moment(clicked?.dateCreated).day() == 5
@@ -178,8 +181,7 @@ function Paymentinvoices({
                                             'Name',
                                             'Start Date',
                                             'End Date',
-                                            'Amount (₦)',
-                                            'Amount ($)',
+                                            'Amount',
                                             'Fee',
                                         ]}
                                     >
@@ -201,36 +203,34 @@ function Paymentinvoices({
                                                             )}
                                                         />
                                                         <TableData
-                                                            name={`${Naira(
-                                                                Round(
-                                                                    (x?.totalAmount as number) -
+                                                            name={`${getCurrencySymbol(
+                                                                user?.currency,
+                                                            )}${Round(
+                                                                (x?.totalAmount as number) -
+                                                                    (
+                                                                        x?.expenses as unknown as ExpenseView[]
+                                                                    )?.reduce(
                                                                         (
-                                                                            x?.expenses as unknown as ExpenseView[]
-                                                                        )?.reduce(
-                                                                            (
-                                                                                a,
-                                                                                b,
-                                                                            ) =>
-                                                                                a +
-                                                                                (b?.amount as number),
-                                                                            0,
-                                                                        ),
-                                                                ),
+                                                                            a,
+                                                                            b,
+                                                                        ) =>
+                                                                            a +
+                                                                            (b?.amount as number),
+                                                                        0,
+                                                                    ),
                                                             )} ${
                                                                 x?.expenses
                                                                     ?.length !==
                                                                 0
-                                                                    ? `+ ${Naira(
-                                                                          Round(
-                                                                              x.expenses?.reduce(
-                                                                                  (
-                                                                                      a,
-                                                                                      b,
-                                                                                  ) =>
-                                                                                      a +
-                                                                                      (b?.amount as number),
-                                                                                  0,
-                                                                              ),
+                                                                    ? `+ ${Round(
+                                                                          x.expenses?.reduce(
+                                                                              (
+                                                                                  a,
+                                                                                  b,
+                                                                              ) =>
+                                                                                  a +
+                                                                                  (b?.amount as number),
+                                                                              0,
                                                                           ),
                                                                       )}`
                                                                     : ''
@@ -243,30 +243,30 @@ function Paymentinvoices({
                                                                     : ''
                                                             }
                                                         />
-                                                        <TableData
+                                                        {/* <TableData
                                                             name={CAD(
                                                                 Round(
                                                                     (x?.totalAmount as number) /
                                                                         exchangeRate,
                                                                 ),
                                                             )}
-                                                        />
+                                                        /> */}
                                                         <TableData
                                                             name={CUR(
                                                                 Round(
                                                                     x
                                                                         .employeeInformation
-                                                                        ?.fixedAmount ==
-                                                                        false
+                                                                        ?.paymentProcessingFeeType ==
+                                                                        'percentage'
                                                                         ? calculatePercentage(
                                                                               x?.totalAmount,
                                                                               x
                                                                                   ?.employeeInformation
-                                                                                  ?.onBoradingFee,
+                                                                                  ?.paymentProcessingFee,
                                                                           )
                                                                         : x
                                                                               ?.employeeInformation
-                                                                              ?.onBoradingFee,
+                                                                              ?.paymentProcessingFee,
                                                                 ),
                                                             )}
                                                         />
@@ -293,15 +293,12 @@ function Paymentinvoices({
                                     >
                                         <InvoiceTotalText
                                             label="Subtotal($)"
-                                            cur={'$'}
-                                            value={CUR(
-                                                Round(
-                                                    allInvoiceTotal /
-                                                        exchangeRate,
-                                                ),
+                                            cur={getCurrencySymbol(
+                                                user?.currency,
                                             )}
+                                            value={CUR(Round(allInvoiceTotal))}
                                         />
-                                        <InvoiceTotalText
+                                        {/* <InvoiceTotalText
                                             label="Subtotal(₦)"
                                             cur={'₦'}
                                             value={CUR(Round(allInvoiceTotal))}
@@ -311,20 +308,25 @@ function Paymentinvoices({
                                             value={CUR(Round(hst))}
                                             cur="$"
                                             hst={clicked?.hst}
-                                        />
+                                        /> */}
                                         <InvoiceTotalText
                                             label="Fees"
                                             value={CUR(Round(allFeesTotal))}
-                                            cur={'$'}
+                                            cur={getCurrencySymbol(
+                                                user?.currency,
+                                            )}
                                         />
                                         <Box
-                                            border="2px dashed"
+                                            border="2px solid   "
                                             borderColor="gray.300"
                                             borderX="none"
                                             pt="1em"
+                                            mt="1.5rem"
                                         >
                                             <InvoiceTotalText
-                                                cur={'$'}
+                                                cur={getCurrencySymbol(
+                                                    user?.currency,
+                                                )}
                                                 label="Total"
                                                 value={CUR(Round(total))}
                                             />

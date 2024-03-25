@@ -20,9 +20,11 @@ import {
     TableStatus,
 } from '@components/bits-utils/TableData';
 import { NotificationContext } from '@components/context/NotificationContext';
+import { UserContext } from '@components/context/UserContext';
 import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 import axios from 'axios';
 import moment from 'moment';
 import { useRouter } from 'next/router';
@@ -49,6 +51,7 @@ function PaymentPartnerDashboard({
     // const adminMetrics = metrics?.data as DashboardPaymentPartnerView;
     const { messages, markAsRead, loading } = useContext(NotificationContext);
     const router = useRouter();
+    const { user } = useContext(UserContext);
     //
     const toast = useToast();
     const [exchange, setExchange] = useState<any>();
@@ -134,16 +137,18 @@ function PaymentPartnerDashboard({
                                         name={formatDate(x.dateCreated)}
                                     />
                                     <TableData
-                                        name={CAD(Round(x.totalAmount))}
+                                        name={`${getCurrencySymbol(
+                                            user?.currency,
+                                        )}${CUR(Round(x.totalAmount))}`}
                                     />
-                                    <TableData
+                                    {/* <TableData
                                         name={Naira(
                                             Round(
                                                 (x.totalAmount as number) *
                                                     (x.rate as unknown as number),
                                             ),
                                         )}
-                                    />
+                                    /> */}
                                     <TableState name={x.status as string} />
                                 </Tr>
                             ))}
@@ -151,8 +156,7 @@ function PaymentPartnerDashboard({
                             'Name on Invoice',
                             'Invoice No',
                             'Created On',
-                            'Amount($)',
-                            'Amount(₦)',
+                            'Amount',
                             'Status',
                         ]}
                         link={'/'}
