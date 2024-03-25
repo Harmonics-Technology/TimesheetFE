@@ -686,7 +686,7 @@ function TeamProfile({
                                         {[
                                             'Contract',
                                             'Full time',
-                                            'Half time',
+                                            'Part time',
                                         ].map((x) => (
                                             <option value={x}>{x}</option>
                                         ))}

@@ -616,7 +616,7 @@ export const DraftOnboardingModal = ({
                             placeholder="Please select"
                             options={
                                 <>
-                                    {['Contract', 'Full time', 'Half time'].map(
+                                    {['Contract', 'Full time', 'Part time'].map(
                                         (x) => (
                                             <option value={x}>{x}</option>
                                         ),

@@ -562,7 +562,7 @@ export const NewTeamMemerOnboardingForm = ({
                             placeholder="Please select"
                             options={
                                 <>
-                                    {['Contract', 'Full time', 'Half time'].map(
+                                    {['Contract', 'Full time', 'Part time'].map(
                                         (x) => (
                                             <option value={x}>{x}</option>
                                         ),
@@ -767,15 +767,19 @@ export const NewTeamMemerOnboardingForm = ({
                                         placeholder="Please Select"
                                         options={
                                             <>
-                                                {[
-                                                    'standard canadian system',
-                                                    'custom',
-                                                    'exempt',
-                                                ].map((x) => (
-                                                    <option value={x}>
-                                                        {x}
-                                                    </option>
-                                                ))}
+                                                {isIncSelected
+                                                    ? [
+                                                          'standard canadian system',
+                                                      ]
+                                                    : [
+                                                          'standard canadian system',
+                                                          'custom',
+                                                          'exempt',
+                                                      ].map((x) => (
+                                                          <option value={x}>
+                                                              {x}
+                                                          </option>
+                                                      ))}
                                             </>
                                         }
                                     />
