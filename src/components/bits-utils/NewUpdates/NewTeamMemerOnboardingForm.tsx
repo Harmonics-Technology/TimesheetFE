@@ -270,6 +270,10 @@ export const NewTeamMemerOnboardingForm = ({
             onClose();
         }
     };
+    const doClose = () => {
+        onClose();
+        closeDraft();
+    };
 
     useEffect(() => {
         getSupervisor(clientId);
@@ -986,11 +990,10 @@ export const NewTeamMemerOnboardingForm = ({
             {openDraft && (
                 <ShowPrompt
                     isOpen={openDraft}
-                    onClose={closeDraft}
+                    onClose={doClose}
                     onSubmit={handleSubmit(saveToDraft)}
                     loading={isSubmitting}
                     text={`Do you want to save as draft?`}
-                    closeDrawer={onClose}
                 />
             )}
         </DrawerWrapper>

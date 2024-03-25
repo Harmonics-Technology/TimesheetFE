@@ -14,14 +14,7 @@ import React from 'react';
 import { FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
 import BeatLoader from 'react-spinners/BeatLoader';
 
-export const ShowPrompt = ({
-    isOpen,
-    onClose,
-    onSubmit,
-    loading,
-    text,
-    closeDrawer,
-}) => {
+export const ShowPrompt = ({ isOpen, onClose, onSubmit, loading, text }) => {
     return (
         <Modal
             isOpen={isOpen}
@@ -78,7 +71,6 @@ export const ShowPrompt = ({
                                 // }}
                                 onClick={() => {
                                     onClose();
-                                    closeDrawer();
                                 }}
                             >
                                 No

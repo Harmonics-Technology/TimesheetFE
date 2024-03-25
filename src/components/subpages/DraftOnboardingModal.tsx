@@ -443,6 +443,10 @@ export const DraftOnboardingModal = ({
             });
         }
     };
+    const doClose = () => {
+        onClose();
+        closeDraft();
+    };
 
     return (
         <DrawerWrapper
@@ -1040,8 +1044,7 @@ export const DraftOnboardingModal = ({
             {openDraft && (
                 <ShowPrompt
                     isOpen={openDraft}
-                    onClose={closeDraft}
-                    closeDrawer={onClose}
+                    onClose={doClose}
                     onSubmit={handleSubmit(saveToDraft)}
                     loading={isSubmitting}
                     text={`Do you want to save as draft?`}

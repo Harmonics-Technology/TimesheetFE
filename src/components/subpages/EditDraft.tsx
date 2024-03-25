@@ -960,6 +960,7 @@ function EditDraft({
                     onClose={onClose}
                     selected={selected}
                     setValue={setValue}
+                    prev={watch('role')}
                 />
             </Box>
         </>

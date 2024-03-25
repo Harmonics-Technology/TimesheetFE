@@ -25,6 +25,7 @@ import {
     FinancialService,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
+    TreatInvoiceModel,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import { useContext, useState } from 'react';
@@ -43,6 +44,9 @@ import { Round } from '@components/generics/functions/Round';
 import { PaymentPrompt } from '@components/bits-utils/ProjectManagement/Modals/PaymentPrompt';
 import NoAccess from '@components/bits-utils/NoAccess';
 import asyncForEach from '@components/generics/functions/AsyncForEach';
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/CurrencyConversionModal';
+import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -50,6 +54,8 @@ interface adminProps {
     record?: number;
     isSuperAdmin?: boolean;
     teamUrl?: string;
+    organizationCurrency?: any;
+    converted?: any;
 }
 
 function OnshoreSubmittedInvoice({
@@ -58,6 +64,8 @@ function OnshoreSubmittedInvoice({
     record,
     isSuperAdmin,
     teamUrl,
+    organizationCurrency,
+    converted,
 }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
@@ -68,8 +76,8 @@ function OnshoreSubmittedInvoice({
     const router = useRouter();
     // console.log({ invoice });
     //
-    const [selectedId, setSelectedId] = useState<string[]>([]);
-    const toggleSelected = (id: string, all?: boolean) => {
+    const [selectedId, setSelectedId] = useState<any[]>([]);
+    const toggleSelected = (data: any, all?: boolean) => {
         if (all) {
             if (
                 selectedId?.length ===
@@ -78,23 +86,38 @@ function OnshoreSubmittedInvoice({
                 setSelectedId([]);
                 return;
             }
-            const response: string[] = [];
+            const response: unknown[] = [];
             invoice
                 ?.filter((x) => x.status !== 'INVOICED')
                 .forEach((x) =>
-                    response.push(x.id as string),
-                ) as unknown as string[];
+                    response.push({
+                        id: x.id,
+                        currency: x.employeeInformation?.currency,
+                        payrollProcessingType:
+                            data.employeeInformation.payrollProcessingType,
+                        rate: 0,
+                    }),
+                );
 
             setSelectedId([...response]);
             return;
         }
-        const existingValue = selectedId.find((e) => e === id);
+        const existingValue = selectedId.find((e) => e.id === data.id);
         if (existingValue) {
-            const newArray = selectedId.filter((x) => x !== id);
+            const newArray = selectedId.filter((x) => x.id !== data.id);
             setSelectedId(newArray);
             return;
         }
-        setSelectedId([...selectedId, id]);
+        setSelectedId([
+            ...selectedId,
+            {
+                id: data.id,
+                currency: data.employeeInformation.currency,
+                payrollProcessingType:
+                    data.employeeInformation.payrollProcessingType,
+                rate: 0,
+            },
+        ]);
     };
 
     const {
@@ -102,9 +125,16 @@ function OnshoreSubmittedInvoice({
         onOpen: onOpened,
         onClose: onClosed,
     } = useDisclosure();
-    const approveSingleInvoice = async (item: string) => {
+    const approveInvoiceItems = async (item: any[]) => {
+        setLoading(true);
+        const newItem: TreatInvoiceModel[] = item.map((x) => ({
+            invoiceId: x.id,
+            rate: x.rate,
+        }));
         try {
-            const result = await FinancialService.treatSubmittedInvoice(item);
+            const result = await FinancialService.treatSubmittedInvoice(
+                newItem,
+            );
             if (result.status) {
                 toast({
                     title: `${result.message}`,
@@ -130,26 +160,26 @@ function OnshoreSubmittedInvoice({
             });
         }
     };
-    const approveInvoiceItems = async () => {
-        try {
-            await asyncForEach(selectedId, async (select: string) => {
-                setLoading(true);
-                await approveSingleInvoice(select);
-            });
-            setSelectedId([]);
-            setLoading(false);
-            router.replace(router.asPath);
-            return;
-        } catch (error: any) {
-            setLoading(false);
-            toast({
-                title: error?.body?.message || error?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    // const approveInvoiceItems = async () => {
+    //     try {
+    //         await asyncForEach(selectedId, async (select: string) => {
+    //             setLoading(true);
+    //             await approveSingleInvoice(select);
+    //         });
+    //         setSelectedId([]);
+    //         setLoading(false);
+    //         router.replace(router.asPath);
+    //         return;
+    //     } catch (error: any) {
+    //         setLoading(false);
+    //         toast({
+    //             title: error?.body?.message || error?.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
     const { user, subType, accessControls } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const userAccess: ControlSettingView = accessControls;
@@ -172,6 +202,53 @@ function OnshoreSubmittedInvoice({
         'Status',
         // 'Action',
     ];
+    const {
+        isOpen: isCurrencyOpened,
+        onOpen: onCurrencyOpen,
+        onClose: onCurrencyClosed,
+    } = useDisclosure();
+
+    const [updateCurrency, setUpdateCurrency] = useState();
+
+    const differentItems = selectedId.filter(
+        (x) =>
+            x.payrollProcessingType == 'internal' &&
+            x.currency !== organizationCurrency,
+    );
+    const items = getUniqueListBy(differentItems, 'currency');
+    const checkInvoicesBeforeProcess = () => {
+        if (differentItems.length > 0) {
+            onCurrencyOpen();
+            return;
+        }
+        approveInvoiceItems(selectedId);
+    };
+
+    const rebuildInvoiceProcess = async () => {
+        const rebuildItems = selectedId.map((x) => {
+            return {
+                id: x.id,
+                currency: x.currency,
+                rate: Number(
+                    (updateCurrency &&
+                        x.payrollProcessingType == 'internal' &&
+                        updateCurrency[x.currency]) ||
+                        0,
+                ),
+            };
+        });
+        approveInvoiceItems(rebuildItems);
+        onCurrencyClosed();
+    };
+
+    const toggleConverted = () => {
+        router.push({
+            query: {
+                ...router.query,
+                convert: !converted,
+            },
+        });
+    };
 
     return (
         <>
@@ -202,6 +279,12 @@ function OnshoreSubmittedInvoice({
 
                 {userAccess?.adminCanViewTeamMemberInvoice || isSuperAdmin ? (
                     <>
+                        <Box mt="1rem">
+                            <CurrencyTag
+                                label="Your Primary currency for your organization is"
+                                currency={organizationCurrency}
+                            />
+                        </Box>
                         <HStack
                             my="1rem"
                             w="100%"
@@ -373,6 +456,15 @@ function OnshoreSubmittedInvoice({
                     record={record}
                     fileName={fileName}
                     model="invoice"
+                />
+            )}
+            {isCurrencyOpened && (
+                <CurrencyConversionModal
+                    isOpen={isCurrencyOpened}
+                    onClose={onCurrencyClosed}
+                    items={items}
+                    setUpdateCurrency={setUpdateCurrency}
+                    rebuildInvoiceProcess={rebuildInvoiceProcess}
                 />
             )}
         </>

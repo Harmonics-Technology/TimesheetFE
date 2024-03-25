@@ -73,9 +73,9 @@ function PayrollInvoice({
     const approveInvoiceItems = async () => {
         try {
             setLoading(true);
-            const result = await FinancialService.treatSubmittedInvoice(
-                clicked?.id,
-            );
+            const result = await FinancialService.treatSubmittedInvoice([
+                { invoiceId: clicked?.id, rate: 0 },
+            ]);
             if (result.status) {
                 toast({
                     title: result.message,

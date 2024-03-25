@@ -62,7 +62,7 @@ function AdminInvoices({
     organizationCurrency,
     converted,
 }: adminProps) {
-    console.log({ invoiceData });
+    // console.log({ invoiceData });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
         isOpen: isOpened,

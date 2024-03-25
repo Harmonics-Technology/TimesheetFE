@@ -9,12 +9,14 @@ import React, { useContext } from 'react';
 import {
     FinancialService,
     InvoiceViewPagedCollectionStandardResponse,
+    UserService,
 } from 'src/services';
 
 interface invoiceType {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
+    organizationCurrency: any;
 }
-function Invoices({ invoiceData }: invoiceType) {
+function Invoices({ invoiceData, organizationCurrency }: invoiceType) {
     return (
         <Box>
             <OnshoreSubmittedInvoice
@@ -23,6 +25,7 @@ function Invoices({ invoiceData }: invoiceType) {
                 record={3}
                 isSuperAdmin
                 teamUrl="/financials/invoices-team"
+                organizationCurrency={organizationCurrency}
             />
         </Box>
     );
@@ -43,10 +46,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
+            const organizationCurrency =
+                await UserService.getControlSettingById(superAdminId);
 
             return {
                 props: {
                     invoiceData: data,
+                    organizationCurrency:
+                        organizationCurrency.data?.organizationDefaultCurrency,
                 },
             };
         } catch (error: any) {
