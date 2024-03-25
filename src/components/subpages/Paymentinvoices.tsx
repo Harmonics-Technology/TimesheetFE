@@ -276,7 +276,7 @@ function Paymentinvoices({
                                         </>
                                     </Tables>
                                 </Box>
-                                <Box w={['full', '30%']}>
+                                {/* <Box w={['full', '30%']}>
                                     <InputBlank
                                         defaultValue={
                                             exchangeRate as unknown as string
@@ -285,7 +285,7 @@ function Paymentinvoices({
                                         label="Exchange Rate"
                                         fontSize=".8rem"
                                     />
-                                </Box>
+                                </Box> */}
                                 <Box w={['full', 'fit-content']} ml="auto">
                                     <Flex
                                         flexDirection="column"
@@ -320,7 +320,7 @@ function Paymentinvoices({
                                             border="2px solid   "
                                             borderColor="gray.300"
                                             borderX="none"
-                                            pt="1em"
+                                            py=".5em"
                                             mt="1.5rem"
                                         >
                                             <InvoiceTotalText
