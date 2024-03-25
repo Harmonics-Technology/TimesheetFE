@@ -96,7 +96,12 @@ function PayrollTreatPartnerInvoice({
         }
         setSelectedId([...selectedId, id]);
     };
-    const approveSingleInvoice = async (item: string) => {
+    const approveInvoiceItems = async () => {
+        const item = selectedId.map((x) => ({
+            invoiceId: x,
+            rate: 0,
+        }));
+        setLoading(true);
         try {
             const result = await FinancialService.treatSubmittedInvoice(item);
             if (result.status) {
@@ -106,6 +111,8 @@ function PayrollTreatPartnerInvoice({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setSelectedId([]);
+                setLoading(false);
                 return;
             }
             setLoading(false);
@@ -124,26 +131,26 @@ function PayrollTreatPartnerInvoice({
             });
         }
     };
-    const approveInvoiceItems = async () => {
-        try {
-            await asyncForEach(selectedId, async (select: string) => {
-                setLoading(true);
-                await approveSingleInvoice(select);
-            });
-            setSelectedId([]);
-            setLoading(false);
-            router.replace(router.asPath);
-            return;
-        } catch (error: any) {
-            setLoading(false);
-            toast({
-                title: error?.body?.message || error?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    // const approveInvoiceItems = async () => {
+    //     try {
+    //         await asyncForEach(selectedId, async (select: string) => {
+    //             setLoading(true);
+    //             await approveSingleInvoice(select);
+    //         });
+    //         setSelectedId([]);
+    //         setLoading(false);
+    //         router.replace(router.asPath);
+    //         return;
+    //     } catch (error: any) {
+    //         setLoading(false);
+    //         toast({
+    //             title: error?.body?.message || error?.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
 
     const { user, subType, accessControls } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
