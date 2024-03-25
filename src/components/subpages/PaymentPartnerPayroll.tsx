@@ -107,7 +107,7 @@ function PaymentPartnerPayroll({
         });
     };
 
-    const newClient = clients.map((obj) => {
+    const newClient = clients?.map((obj) => {
         return { id: obj.id, title: obj.fullName };
     });
     const newData = [

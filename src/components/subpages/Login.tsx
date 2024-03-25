@@ -54,7 +54,7 @@ function Login() {
         handleSubmit,
         register,
         reset,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isValid },
     } = useForm<LoginModel>({
         resolver: yupResolver(schema),
         mode: 'all',
@@ -282,6 +282,7 @@ function Login() {
                             color="white"
                             bgColor="brand.400"
                             onClick={() => handleSubmit(onSubmit)()}
+                            isDisabled={!isValid}
                             // mt={["2rem", "0"]}
                         >
                             Login

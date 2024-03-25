@@ -19,6 +19,7 @@ import {
     FinancialService,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
+    TreatInvoiceModel,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import { useState } from 'react';
@@ -88,7 +89,11 @@ function PaymentPartnerInvoice({
         setSelectedId([...selectedId, id]);
     };
 
-    const approveSingleInvoice = async (item: string) => {
+    const approveInvoiceItems = async () => {
+        const item = selectedId.map((x) => ({
+            invoiceId: x,
+            rate: 0,
+        }));
         try {
             const result = await FinancialService.treatSubmittedInvoice(item);
             if (result.status) {
@@ -98,6 +103,9 @@ function PaymentPartnerInvoice({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setSelectedId([]);
+                setLoading(false);
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -116,26 +124,26 @@ function PaymentPartnerInvoice({
             });
         }
     };
-    const approveInvoiceItems = async () => {
-        try {
-            await asyncForEach(selectedId, async (select: string) => {
-                setLoading(true);
-                await approveSingleInvoice(select);
-            });
-            setSelectedId([]);
-            setLoading(false);
-            router.replace(router.asPath);
-            return;
-        } catch (error: any) {
-            setLoading(false);
-            toast({
-                title: error?.body?.message || error?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    // const approveInvoiceItems = async () => {
+    //     try {
+    //         await asyncForEach(selectedId, async (select: string) => {
+    //             setLoading(true);
+    //             await approveSingleInvoice(select);
+    //         });
+    //         setSelectedId([]);
+    //         setLoading(false);
+    //         router.replace(router.asPath);
+    //         return;
+    //     } catch (error: any) {
+    //         setLoading(false);
+    //         toast({
+    //             title: error?.body?.message || error?.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
 
     const filterClientsInvoice = (filter: string) => {
         router.push({
@@ -152,6 +160,7 @@ function PaymentPartnerInvoice({
         ...(newClient || []),
     ];
 
+    console.log({ invoiceData });
     return (
         <>
             <Box
@@ -212,7 +221,7 @@ function PaymentPartnerInvoice({
                         'Name on Invoice',
                         'Invoice No',
                         'Created On',
-                        'Amount($)',
+                        // 'Amount($)',
                         'Amount(₦)',
                         'Status',
                         'Action',
@@ -230,14 +239,14 @@ function PaymentPartnerInvoice({
                                 />
                                 <TableData name={x.invoiceReference} />
                                 <TableData name={formatDate(x.dateCreated)} />
-                                <TableData
+                                {/* <TableData
                                     name={CAD(
                                         Round(
                                             (x.totalAmount as number) /
                                                 (x.rate as unknown as number),
                                         ),
                                     )}
-                                />
+                                /> */}
                                 <TableData
                                     name={Naira(
                                         Round(x.totalAmount as number),
