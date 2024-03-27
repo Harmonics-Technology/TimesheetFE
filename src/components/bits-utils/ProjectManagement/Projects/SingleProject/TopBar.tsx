@@ -13,7 +13,7 @@ import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { ProjectTabs } from '../../Dashboard/ProjectTabs';
 import { TaskMenu } from '../../Generics/TaskMenu';
 import { ColoredTag } from '../../Generics/ColoredTag';
-import { CAD } from '@components/generics/functions/Naira';
+import { CAD, CUR } from '@components/generics/functions/Naira';
 import shadeColor from '@components/generics/functions/shadeColor';
 import moment from 'moment';
 import { useRouter } from 'next/router';
@@ -22,6 +22,7 @@ import markAsCompleted from '@components/generics/functions/markAsCompleted';
 import { ProjectView } from 'src/services';
 import { EditProjectDrawer } from '../../Modals/EditProjectDrawer';
 import { ShowPrompt } from '../../Modals/ShowPrompt';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 
 export const TopBar = ({
     noTitle = false,
@@ -129,7 +130,9 @@ export const TopBar = ({
                         <HStack mt=".5rem">
                             <ColoredTag
                                 bg={shadeColor('#2eafa3', 0.5)}
-                                text={CAD(data?.budget)}
+                                text={`${getCurrencySymbol(
+                                    data?.currency,
+                                )}${CUR(data?.budget)}`}
                                 h={1.5}
                             />
                         </HStack>

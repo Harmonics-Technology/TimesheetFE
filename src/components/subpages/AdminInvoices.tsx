@@ -44,6 +44,7 @@ import { getCurrencySymbol } from '@components/generics/functions/getCurrencyNam
 import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/CurrencyConversionModal';
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
+import { CUR } from '@components/generics/functions/Naira';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -420,16 +421,22 @@ function AdminInvoices({
                                                     <TableData
                                                         name={`${getCurrencySymbol(
                                                             organizationCurrency,
-                                                        )}${Round(
-                                                            x.convertedAmount,
+                                                        )}${CUR(
+                                                            Round(
+                                                                x.convertedAmount,
+                                                            ),
                                                         )}`}
+                                                        full
                                                     />
                                                     <TableData
                                                         name={`${getCurrencySymbol(
                                                             organizationCurrency,
-                                                        )}${Round(
-                                                            x.rateForConvertedIvoice,
+                                                        )}${CUR(
+                                                            Round(
+                                                                x.rateForConvertedIvoice,
+                                                            ),
                                                         )}`}
+                                                        full
                                                     />
                                                 </>
                                             ) : (
@@ -439,9 +446,12 @@ function AdminInvoices({
                                                             x
                                                                 ?.employeeInformation
                                                                 ?.currency,
-                                                        )}${Round(
-                                                            x.totalAmount,
+                                                        )}${CUR(
+                                                            Round(
+                                                                x.totalAmount,
+                                                            ),
                                                         )}`}
+                                                        full
                                                     />
                                                     <TableState
                                                         name={

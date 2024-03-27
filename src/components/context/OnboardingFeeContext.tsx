@@ -28,33 +28,33 @@ export const OnboardingFeeProvider = ({ children }: { children: any }) => {
         }
     };
     useEffect(() => {
-        const getFixedAmount = async () => {
-            try {
-                const data = await OnboardingFeeService.listFixedAmountFee(
-                    superAdminId,
-                );
-                if (data.status) {
-                    setFixedAmount(data.data);
-                }
-            } catch (error: any) {
-                //
-            }
-        };
-        const getPercentageAmount = async () => {
-            try {
-                const data =
-                    await OnboardingFeeService.listPercentageOnboardingFees(
-                        0,
-                        17,
-                        superAdminId,
-                    );
-                if (data.status) {
-                    setPercentageAmount(data.data?.value);
-                }
-            } catch (error: any) {
-                //
-            }
-        };
+        // const getFixedAmount = async () => {
+        //     try {
+        //         const data = await OnboardingFeeService.listFixedAmountFee(
+        //             superAdminId,
+        //         );
+        //         if (data.status) {
+        //             setFixedAmount(data.data);
+        //         }
+        //     } catch (error: any) {
+        //         //
+        //     }
+        // };
+        // const getPercentageAmount = async () => {
+        //     try {
+        //         const data =
+        //             await OnboardingFeeService.listPercentageOnboardingFees(
+        //                 0,
+        //                 17,
+        //                 superAdminId,
+        //             );
+        //         if (data.status) {
+        //             setPercentageAmount(data.data?.value);
+        //         }
+        //     } catch (error: any) {
+        //         //
+        //     }
+        // };
         const getHstAmount = async () => {
             try {
                 const data = await OnboardingFeeService.getHst(superAdminId);
@@ -67,8 +67,8 @@ export const OnboardingFeeProvider = ({ children }: { children: any }) => {
         };
 
         const fetchData = async () => {
-            await getFixedAmount();
-            await getPercentageAmount();
+            // await getFixedAmount();
+            // await getPercentageAmount();
             await getHstAmount();
             await getControls();
         };
@@ -76,8 +76,8 @@ export const OnboardingFeeProvider = ({ children }: { children: any }) => {
     }, []);
 
     const contextValues = {
-        fixedAmount,
-        percentageAmount,
+        // fixedAmount,
+        // percentageAmount,
         hstAmount,
         controls,
     };

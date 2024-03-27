@@ -550,7 +550,9 @@ export const DraftOnboardingModal = ({
                             options={
                                 <>
                                     {department.map((x) => (
-                                        <option value={x?.id}>{x.name}</option>
+                                        <option value={x?.name}>
+                                            {x.name}
+                                        </option>
                                     ))}
                                 </>
                             }

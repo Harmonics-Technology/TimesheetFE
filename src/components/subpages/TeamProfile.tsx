@@ -652,7 +652,7 @@ function TeamProfile({
                                 options={
                                     <>
                                         {department.map((x) => (
-                                            <option value={x?.id}>
+                                            <option value={x?.name}>
                                                 {x.name}
                                             </option>
                                         ))}

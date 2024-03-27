@@ -42,6 +42,7 @@ export const SingleTeamMember = ({
         (a, b) => a + (b?.hoursLogged as number),
         0,
     );
+    console.log({ users });
 
     // console.log({ users, teamId });
 
@@ -105,7 +106,7 @@ export const SingleTeamMember = ({
                     </HStack>
                 </HStack>
                 <TableCard tableHead={tableHead}>
-                {teams?.value?.map((team: ProjectTaskAsigneeView) => {
+                    {teams?.value?.map((team: ProjectTaskAsigneeView) => {
                         const status = team?.projectTask?.status?.toLowerCase();
                         const pastDate =
                             moment().diff(

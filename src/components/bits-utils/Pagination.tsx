@@ -12,7 +12,7 @@ interface pageOptions {
 }
 
 function Pagination({ data, shift, client, func, loadMore }: pageOptions) {
-    data = data?.data;
+    data = data?.data || data;
 
     const totalPages =
         (data?.size as number) / (data?.limit as unknown as number);
