@@ -237,6 +237,7 @@ export const CreateProjectDrawer = ({
                             name="currency"
                             label="Currency"
                             placeholder="Select Currency"
+                            defaultValue={'CAD'}
                             options={
                                 <>
                                     {uniqueItems

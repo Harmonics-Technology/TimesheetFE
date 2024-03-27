@@ -186,7 +186,7 @@ function TeamManagement({
                         ))}
                     </>
                 </Tables>
-                <Pagination data={adminList} />
+                <Pagination data={adminList} loadMore />
             </Box>
             {isOpen && (
                 <NewTeamMemerOnboardingForm

@@ -127,9 +127,8 @@ const CompleteReset = ({ code }: { code: string }) => {
                             mb="1rem"
                         >
                             <Text fontSize=".9rem" color="red">
-                                Error: Password reset link can be used only once
-                                and it seems like this code has been used
-                                before. If not so, please contact admin.
+                                The password reset link you used has expired.
+                                Please contact your Admin for assistance
                             </Text>
                         </Flex>
                     )}

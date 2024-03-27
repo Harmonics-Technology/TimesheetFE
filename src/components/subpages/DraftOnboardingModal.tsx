@@ -173,7 +173,8 @@ export const DraftOnboardingModal = ({
             isEligibleForLeave:
                 userProfile?.employeeInformation?.isEligibleForLeave,
             numberOfDaysEligible:
-                userProfile?.employeeInformation?.numberOfDaysEligible,
+                userProfile?.employeeInformation?.numberOfDaysEligible ||
+                leaveSettings?.eligibleLeaveDays,
             numberOfHoursEligible:
                 userProfile?.employeeInformation?.numberOfHoursEligible,
             employeeType: userProfile?.employeeInformation?.employeeType,
@@ -270,7 +271,7 @@ export const DraftOnboardingModal = ({
     //
 
     const isFlatFeeSelected = watch('payrollStructure') == 'flat fee';
-    const isIncSelected = watch('payrollStructure') == 'incoporation payroll';
+    const isIncSelected = watch('payrollStructure') == 'incoporation';
     const isPaymentPartnerSelected =
         watch('payrollProcessingType') == 'payment partner';
     const payData = watch('enableFinancials');
@@ -704,12 +705,13 @@ export const DraftOnboardingModal = ({
                                     placeholder="Please Select"
                                     options={
                                         <>
-                                            {[
-                                                'flat fee',
-                                                'incoporation payroll',
-                                            ].map((x) => (
-                                                <option value={x}>{x}</option>
-                                            ))}
+                                            {['flat fee', 'incoporation'].map(
+                                                (x) => (
+                                                    <option value={x}>
+                                                        {x}
+                                                    </option>
+                                                ),
+                                            )}
                                         </>
                                     }
                                 />
@@ -822,7 +824,7 @@ export const DraftOnboardingModal = ({
                                         options={
                                             <>
                                                 {[
-                                                    'standard canadian system',
+                                                    'hst',
                                                     'custom',
                                                     'exempt',
                                                 ].map((x) => (

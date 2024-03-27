@@ -71,6 +71,7 @@
         "react-big-calendar": "^1.8.2",
         "react-big-scheduler-stch": "^1.2.3",
         "react-chartjs-2": "^5.2.0",
+        "react-confetti": "^6.1.0",
         "react-csv-downloader": "^2.9.1",
         "react-detect-offline": "^2.4.5",
         "react-dom": "^18.2.0",

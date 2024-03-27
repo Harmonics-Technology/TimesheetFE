@@ -313,6 +313,7 @@ function PaymentPartnerManagement({
                             name="currency"
                             label="Currency"
                             placeholder="Select Currency"
+                            defaultValue={'CAD'}
                             options={
                                 <>
                                     {uniqueItems

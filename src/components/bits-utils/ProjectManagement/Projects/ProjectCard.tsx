@@ -18,6 +18,9 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
     const role = user?.role.replaceAll(' ', '');
     const status = data?.status?.toLowerCase();
     const pastDate = moment().diff(moment(data.endDate), 'days') > 0;
+    const assignees: ProjectTaskAsigneeView[] = data?.assignees?.filter(
+        (x) => x.projectTaskId == null,
+    ) as any;
     //
     return (
         <Box
@@ -71,8 +74,8 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                         Budget: {CAD(data?.budget)}
                     </Text>
                     <HStack gap="0">
-                        {data?.assignees
-                            ?.filter((x) => x.projectTaskId == null)
+                        {assignees
+                            ?.slice(0, 3)
                             .map((x: ProjectTaskAsigneeView, i: any) => (
                                 <Avatar
                                     key={x.id}
@@ -83,6 +86,11 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                                     transform={`translateX(${-i * 10}px)`}
                                 />
                             ))}
+                        {assignees?.length > 3 && (
+                            <Text fontSize="0.75rem" color="#455A64">
+                                + {assignees?.length - 3}
+                            </Text>
+                        )}
                     </HStack>
                 </HStack>
                 <Box w="full" mt="0.5rem">

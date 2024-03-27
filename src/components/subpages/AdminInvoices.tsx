@@ -294,7 +294,7 @@ function AdminInvoices({
                     <>
                         <Box mt="1rem">
                             <CurrencyTag
-                                label="Your Primary currency for your organization is"
+                                label="The Primary currency for your organization is"
                                 currency={organizationCurrency}
                             />
                         </Box>

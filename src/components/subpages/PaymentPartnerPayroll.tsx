@@ -222,7 +222,7 @@ function PaymentPartnerPayroll({
                         }
                     /> */}
                     <CurrencyTag
-                        label="Payment partner currency for your organization is  "
+                        label="Your primary currency for invoicing is  "
                         currency={paymentPartnerCurrency}
                     />
                 </Box>

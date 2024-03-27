@@ -139,7 +139,7 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                         )}
                     </>
                 </Tables>
-                <Pagination data={timeSheets} />
+                <Pagination data={timeSheets} loadMore />
             </Box>
             {isOpen && (
                 <ExportReportModal

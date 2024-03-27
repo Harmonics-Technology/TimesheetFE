@@ -7,6 +7,7 @@ import {
 } from '@chakra-ui/react';
 import useOnClickOutside from '@components/generics/useClickOutside';
 import useWindowSize from '@components/generics/useWindowSize';
+import moment from 'moment';
 import { useRef, useCallback } from 'react';
 import { Controller, Path, FieldError, Control } from 'react-hook-form';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
@@ -78,11 +79,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                             value={defaultValue || value}
                             ref={dateRef}
                             onChange={(date: any) => {
-                                onChange(
-                                    JSON.stringify(
-                                        date?.toDate?.(),
-                                    )?.replaceAll('"', ''),
-                                );
+                                onChange(date.format('YYYY-MM-DD'));
                             }}
                             format={'DD/MM/YYYY'}
                             inputClass={
@@ -112,7 +109,8 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                 )}
             />
             <FormErrorMessage fontSize=".7rem" color="red">
-                {(error?.type === 'required' && `${label || 'This field'} is required`) ||
+                {(error?.type === 'required' &&
+                    `${label || 'This field'} is required`) ||
                     error?.message}
             </FormErrorMessage>
         </FormControl>

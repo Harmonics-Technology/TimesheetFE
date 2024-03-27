@@ -72,7 +72,7 @@ export const SingleTeamMember = ({
                 />
                 <TitleText
                     title={userDetails?.employeeInformation?.jobTitle}
-                    text={'IT Department'}
+                    text={userDetails?.employeeInformation?.department}
                     fontSize="1rem"
                     gap=".1rem"
                 />
@@ -105,7 +105,7 @@ export const SingleTeamMember = ({
                     </HStack>
                 </HStack>
                 <TableCard tableHead={tableHead}>
-                    {teams?.value?.map((team: ProjectTaskAsigneeView) => {
+                {teams?.value?.map((team: ProjectTaskAsigneeView) => {
                         const status = team?.projectTask?.status?.toLowerCase();
                         const pastDate =
                             moment().diff(

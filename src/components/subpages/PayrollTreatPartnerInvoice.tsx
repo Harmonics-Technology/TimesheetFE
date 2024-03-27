@@ -113,6 +113,7 @@ function PayrollTreatPartnerInvoice({
                 });
                 setSelectedId([]);
                 setLoading(false);
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);

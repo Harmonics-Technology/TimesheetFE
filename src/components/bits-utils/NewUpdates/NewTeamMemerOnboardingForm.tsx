@@ -149,6 +149,9 @@ export const NewTeamMemerOnboardingForm = ({
     } = useForm<TeamMemberModel>({
         // resolver: yupResolver(openDraft ? draftSchema : schema),
         mode: 'all',
+        defaultValues: {
+            numberOfDaysEligible: leaveSettings?.eligibleLeaveDays || '',
+        },
     });
 
     const [selectedLicense, setSelectedLicense] = useState<any>();
@@ -216,7 +219,7 @@ export const NewTeamMemerOnboardingForm = ({
     //
 
     const isFlatFeeSelected = watch('payrollStructure') == 'flat fee';
-    const isIncSelected = watch('payrollStructure') == 'incoporation payroll';
+    const isIncSelected = watch('payrollStructure') == 'incoporation';
     const isPaymentPartnerSelected =
         watch('payrollProcessingType') == 'payment partner';
     const payData = watch('enableFinancials');
@@ -393,6 +396,8 @@ export const NewTeamMemerOnboardingForm = ({
             });
         }
     };
+
+    const taxes = isIncSelected ? ['hst'] : ['hst', 'custom', 'exempt'];
 
     return (
         <DrawerWrapper
@@ -650,12 +655,13 @@ export const NewTeamMemerOnboardingForm = ({
                                     placeholder="Please Select"
                                     options={
                                         <>
-                                            {[
-                                                'flat fee',
-                                                'incoporation payroll',
-                                            ].map((x) => (
-                                                <option value={x}>{x}</option>
-                                            ))}
+                                            {['flat fee', 'incoporation'].map(
+                                                (x) => (
+                                                    <option value={x}>
+                                                        {x}
+                                                    </option>
+                                                ),
+                                            )}
                                         </>
                                     }
                                 />
@@ -737,6 +743,7 @@ export const NewTeamMemerOnboardingForm = ({
                                         name="currency"
                                         label="Currency"
                                         placeholder="Currency"
+                                        defaultValue={'CAD'}
                                         options={
                                             <>
                                                 {uniqueItems
@@ -767,19 +774,11 @@ export const NewTeamMemerOnboardingForm = ({
                                         placeholder="Please Select"
                                         options={
                                             <>
-                                                {isIncSelected
-                                                    ? [
-                                                          'standard canadian system',
-                                                      ]
-                                                    : [
-                                                          'standard canadian system',
-                                                          'custom',
-                                                          'exempt',
-                                                      ].map((x) => (
-                                                          <option value={x}>
-                                                              {x}
-                                                          </option>
-                                                      ))}
+                                                {taxes.map((x) => (
+                                                    <option value={x}>
+                                                        {x}
+                                                    </option>
+                                                ))}
                                             </>
                                         }
                                     />

@@ -47,6 +47,7 @@ import asyncForEach from '@components/generics/functions/AsyncForEach';
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/CurrencyConversionModal';
 import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -94,7 +95,7 @@ function OnshoreSubmittedInvoice({
                         id: x.id,
                         currency: x.employeeInformation?.currency,
                         payrollProcessingType:
-                            data.employeeInformation.payrollProcessingType,
+                            x?.employeeInformation?.payrollProcessingType,
                         rate: 0,
                     }),
                 );
@@ -281,7 +282,7 @@ function OnshoreSubmittedInvoice({
                     <>
                         <Box mt="1rem">
                             <CurrencyTag
-                                label="Your Primary currency for your organization is"
+                                label="The Primary currency for your organization is"
                                 currency={organizationCurrency}
                             />
                         </Box>
@@ -297,32 +298,30 @@ function OnshoreSubmittedInvoice({
                             justify={
                                 selectedId.length > 0
                                     ? 'space-between'
-                                    : 'flex-end'
+                                    : 'space-between'
                             }
                             mb="1rem"
                         >
-                            {selectedId.length > 0 && (
-                                <HStack gap="1rem">
-                                    <Button
-                                        bgColor="brand.600"
-                                        color="white"
-                                        p=".5rem 1.5rem"
-                                        height="fit-content"
-                                        onClick={onOpened}
-                                        isLoading={loading}
-                                        spinner={
-                                            <BeatLoader
-                                                color="white"
-                                                size={10}
-                                            />
-                                        }
-                                        borderRadius="0"
-                                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                    >
-                                        Process
-                                    </Button>
-                                </HStack>
-                            )}
+                            {/* {selectedId.length > 0 && ( */}
+                            <HStack gap="1rem">
+                                <Button
+                                    bgColor="brand.600"
+                                    color="white"
+                                    p=".5rem 1.5rem"
+                                    height="fit-content"
+                                    borderRadius="6px"
+                                    onClick={checkInvoicesBeforeProcess}
+                                    isLoading={loading}
+                                    spinner={
+                                        <BeatLoader color="white" size={10} />
+                                    }
+                                    isDisabled={selectedId.length <= 0}
+                                    // boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                >
+                                    Process
+                                </Button>
+                            </HStack>
+                            {/* )} */}
                             <HStack>
                                 {!hideCheckbox && (
                                     <Checkbox
@@ -344,7 +343,7 @@ function OnshoreSubmittedInvoice({
                                     p=".5rem 1.5rem"
                                     height="fit-content"
                                     onClick={onOpens}
-                                    borderRadius="25px"
+                                    borderRadius="6px"
                                 >
                                     Download <Icon as={BsDownload} ml=".5rem" />
                                 </Button>
@@ -378,20 +377,16 @@ function OnshoreSubmittedInvoice({
                                                 name={formatDate(x.endDate)}
                                             />
                                             <TableData
-                                                name={
+                                                name={` ${getCurrencySymbol(
                                                     x?.employeeInformation
-                                                        ?.currency == 'NGN'
-                                                        ? Naira(
-                                                              Round(
-                                                                  x.totalAmount,
-                                                              ),
-                                                          )
-                                                        : CAD(
-                                                              Round(
-                                                                  x.totalAmount,
-                                                              ),
-                                                          )
-                                                }
+                                                        ?.currency,
+                                                )}
+                                                              ${CUR(
+                                                                  Round(
+                                                                      x.totalAmount,
+                                                                  ),
+                                                              )}`}
+                                                full
                                             />
                                             <TableState
                                                 name={x.status as string}
@@ -407,13 +402,12 @@ function OnshoreSubmittedInvoice({
                                                         checked={
                                                             selectedId.find(
                                                                 (e) =>
-                                                                    e === x.id,
+                                                                    e.id ===
+                                                                    x.id,
                                                             ) || ''
                                                         }
                                                         onChange={(e) =>
-                                                            toggleSelected(
-                                                                x.id as string,
-                                                            )
+                                                            toggleSelected(x)
                                                         }
                                                         disabled={
                                                             x.status ===

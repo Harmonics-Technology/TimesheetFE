@@ -33,6 +33,7 @@ import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import { BiPlus } from 'react-icons/bi';
 import { LiaTimesSolid } from 'react-icons/lia';
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import generateRandomUUID from '@components/generics/generateRandomUUID';
 
 const schema = yup.object().shape({});
 interface PaymentPartnerProps {
@@ -111,7 +112,7 @@ function PaymentPartner({
             return;
         }
         if (!exists) {
-            setPayFees([...payFees, feeSetUp]);
+            setPayFees([...payFees, { ...feeSetUp, id: generateRandomUUID() }]);
             return;
         }
     };

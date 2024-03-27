@@ -40,7 +40,7 @@ export const TeamMemberCard = ({
                 <TextSub name={data?.user?.fullName} sub={data?.user?.email} />
                 <TextSub
                     name={data?.user?.employeeInformation?.jobTitle}
-                    sub="IT Department"
+                    sub={data?.user?.employeeInformation?.department}
                 />
                 <TextSub
                     name={`${data?.hoursLogged} Hrs Logged`}

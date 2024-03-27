@@ -146,10 +146,10 @@ function TeamProfile({
     const toast = useToast();
     const includePayroll = watch('enableFinancials');
 
-    console.log({ userProfile, includePayroll });
+    // console.log({ userProfile, includePayroll });
     //
     const isFlatFeeSelected = watch('payrollStructure') == 'flat fee';
-    const isIncSelected = watch('payrollStructure') == 'incoporation payroll';
+    const isIncSelected = watch('payrollStructure') == 'incoporation';
     const isPaymentPartnerSelected =
         watch('payrollProcessingType') == 'payment partner';
     const paymentPartnerId = watch('paymentPartnerId');
@@ -292,12 +292,14 @@ function TeamProfile({
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
         {
-            (data?.isEligibleForLeave as unknown as string) == 'Yes'
+            (data?.isEligibleForLeave as unknown as string) == 'Yes' ||
+            data.isEligibleForLeave == true
                 ? (data.isEligibleForLeave = true)
                 : (data.isEligibleForLeave = false);
         }
         {
-            (data?.enableFinancials as unknown as string) == 'Yes'
+            (data?.enableFinancials as unknown as string) == 'Yes' ||
+            data.enableFinancials == true
                 ? (data.enableFinancials = true)
                 : (data.enableFinancials = false);
         }
@@ -312,7 +314,8 @@ function TeamProfile({
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.replace(router.asPath);
+                // router.replace(router.asPath);
+                router.reload();
                 return;
             }
             toast({
@@ -369,7 +372,7 @@ function TeamProfile({
         }
     };
 
-    // console.log({ taxType, fee: watch('paymentProcessingFee') });
+    // console.log({ fee: watch('dateOfBirth'), fin: watch('enableFinancials') });
     return (
         <>
             {/* {!userProfile?.isActive && role?.includes('Admin') && (
@@ -775,12 +778,13 @@ function TeamProfile({
                                     placeholder="Please Select"
                                     options={
                                         <>
-                                            {[
-                                                'flat fee',
-                                                'incoporation payroll',
-                                            ].map((x) => (
-                                                <option value={x}>{x}</option>
-                                            ))}
+                                            {['flat fee', 'incoporation'].map(
+                                                (x) => (
+                                                    <option value={x}>
+                                                        {x}
+                                                    </option>
+                                                ),
+                                            )}
                                         </>
                                     }
                                 />
@@ -878,13 +882,13 @@ function TeamProfile({
                                     placeholder="Please Select"
                                     options={
                                         <>
-                                            {[
-                                                'standard canadian system',
-                                                'custom',
-                                                'exempt',
-                                            ].map((x) => (
-                                                <option value={x}>{x}</option>
-                                            ))}
+                                            {['hst', 'custom', 'exempt'].map(
+                                                (x) => (
+                                                    <option value={x}>
+                                                        {x}
+                                                    </option>
+                                                ),
+                                            )}
                                         </>
                                     }
                                 />
