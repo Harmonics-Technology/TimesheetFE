@@ -46,7 +46,7 @@ function MyApp({
     return (
         <ChakraProvider theme={theme}>
             <Analytics />
-            <GTM />
+            {/* <GTM /> */}
             <Head>
                 <meta
                     name="viewport"
