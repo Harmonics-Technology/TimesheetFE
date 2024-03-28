@@ -52,7 +52,7 @@ function Paymentinvoices({
     const exchangeRate = clicked?.rate as unknown as number;
     const allInvoiceTotal = (
         clicked?.children as unknown as InvoiceView[]
-    )?.reduce((a, b) => a + (b?.totalAmount as number), 0);
+    )?.reduce((a, b) => a + (b?.convertedAmount as number), 0);
     // const allExpenseTotal = clicked?.children
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
@@ -70,7 +70,7 @@ function Paymentinvoices({
                 a +
                 (x.employeeInformation?.paymentProcessingFeeType == 'percentage'
                     ? calculatePercentage(
-                          x?.totalAmount,
+                          x?.convertedAmount,
                           x?.employeeInformation
                               ?.paymentProcessingFee as number,
                       )
@@ -85,6 +85,8 @@ function Paymentinvoices({
         moment(clicked?.dateCreated).day() == 5
             ? moment(clicked?.dateCreated).weekday(12)
             : moment(clicked?.dateCreated).weekday(5);
+
+    // console.log({ clicked });
 
     return (
         <>
@@ -182,6 +184,7 @@ function Paymentinvoices({
                                             'Start Date',
                                             'End Date',
                                             'Amount',
+                                            'Converted Amount',
                                             'Fee',
                                         ]}
                                     >
@@ -204,33 +207,39 @@ function Paymentinvoices({
                                                         />
                                                         <TableData
                                                             name={`${getCurrencySymbol(
-                                                                user?.currency,
-                                                            )}${Round(
-                                                                (x?.totalAmount as number) -
-                                                                    (
-                                                                        x?.expenses as unknown as ExpenseView[]
-                                                                    )?.reduce(
+                                                                x
+                                                                    ?.employeeInformation
+                                                                    ?.currency,
+                                                            )}${CUR(
+                                                                Round(
+                                                                    (x?.totalAmount as number) -
                                                                         (
-                                                                            a,
-                                                                            b,
-                                                                        ) =>
-                                                                            a +
-                                                                            (b?.amount as number),
-                                                                        0,
-                                                                    ),
+                                                                            x?.expenses as unknown as ExpenseView[]
+                                                                        )?.reduce(
+                                                                            (
+                                                                                a,
+                                                                                b,
+                                                                            ) =>
+                                                                                a +
+                                                                                (b?.amount as number),
+                                                                            0,
+                                                                        ),
+                                                                ),
                                                             )} ${
                                                                 x?.expenses
                                                                     ?.length !==
                                                                 0
-                                                                    ? `+ ${Round(
-                                                                          x.expenses?.reduce(
-                                                                              (
-                                                                                  a,
-                                                                                  b,
-                                                                              ) =>
-                                                                                  a +
-                                                                                  (b?.amount as number),
-                                                                              0,
+                                                                    ? `+ ${CUR(
+                                                                          Round(
+                                                                              x.expenses?.reduce(
+                                                                                  (
+                                                                                      a,
+                                                                                      b,
+                                                                                  ) =>
+                                                                                      a +
+                                                                                      (b?.amount as number),
+                                                                                  0,
+                                                                              ),
                                                                           ),
                                                                       )}`
                                                                     : ''
@@ -243,6 +252,53 @@ function Paymentinvoices({
                                                                     : ''
                                                             }
                                                         />
+                                                        <TableData
+                                                            name={`${getCurrencySymbol(
+                                                                user?.currency,
+                                                            )}${CUR(
+                                                                Round(
+                                                                    (x?.convertedAmount as number) -
+                                                                        (
+                                                                            x?.expenses as unknown as ExpenseView[]
+                                                                        )?.reduce(
+                                                                            (
+                                                                                a,
+                                                                                b,
+                                                                            ) =>
+                                                                                a +
+                                                                                (b?.amount as number),
+                                                                            0,
+                                                                        ),
+                                                                ),
+                                                            )} ${
+                                                                x?.expenses
+                                                                    ?.length !==
+                                                                0
+                                                                    ? `+ ${CUR(
+                                                                          Round(
+                                                                              (x?.expenses?.reduce(
+                                                                                  (
+                                                                                      a,
+                                                                                      b,
+                                                                                  ) =>
+                                                                                      a +
+                                                                                      (b?.amount as number),
+                                                                                  0,
+                                                                              ) as any) *
+                                                                                 ( x?.rateForConvertedIvoice as any),
+                                                                          ),
+                                                                      )}`
+                                                                    : ''
+                                                            }`}
+                                                            classes={
+                                                                x?.expenses
+                                                                    ?.length !==
+                                                                0
+                                                                    ? 'green'
+                                                                    : ''
+                                                            }
+                                                        />
+
                                                         {/* <TableData
                                                             name={CAD(
                                                                 Round(
@@ -259,7 +315,7 @@ function Paymentinvoices({
                                                                         ?.paymentProcessingFeeType ==
                                                                         'percentage'
                                                                         ? calculatePercentage(
-                                                                              x?.totalAmount,
+                                                                              x?.convertedAmount,
                                                                               x
                                                                                   ?.employeeInformation
                                                                                   ?.paymentProcessingFee,

@@ -43,6 +43,7 @@ import {
 } from '@components/generics/functions/getCurrencyName';
 import { LicenseEditBox } from '@components/bits-utils/LicenseEditBox';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
+import ContractTable from '@components/bits-utils/ContractTable';
 
 const schema = yup.object().shape({});
 interface TeamProfileProps {
@@ -1084,10 +1085,10 @@ function TeamProfile({
                             ) : null}
                         </Grid>
                     </Box>
-                    {/* <ContractTable
+                    <ContractTable
                         userProfile={userProfile}
                         isSuperAdmin={isSuperAdmin}
-                    /> */}
+                    />
                 </form>
                 <HStack
                     flexDir={['column', 'row']}

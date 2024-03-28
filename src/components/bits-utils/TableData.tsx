@@ -254,7 +254,7 @@ export function NewTableState({
         </td>
     );
 }
-export function TableContract({ url }: { url: any }) {
+export function TableContract({ url, label }: { url: any; label?: any }) {
     //
     const [loading, setLoading] = useState(false);
     const downloadFile = (url: string) => {
@@ -271,14 +271,19 @@ export function TableContract({ url }: { url: any }) {
     return (
         <td>
             <Box
-                fontSize="1.4rem"
-                fontWeight="bold"
-                padding=".2rem 1rem"
+                fontSize=".9rem"
+                fontWeight="500"
+                padding=".2rem 0rem"
                 width="fit-content"
                 cursor="pointer"
+                color=" #2383BD"
                 onClick={() => downloadFile(url)}
             >
-                {loading ? <Spinner size="sm" /> : <AiOutlineDownload />}
+                {loading ? (
+                    <Spinner size="sm" />
+                ) : (
+                    label || <AiOutlineDownload />
+                )}
             </Box>
         </td>
     );

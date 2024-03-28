@@ -252,7 +252,7 @@ function PaymentPartnerInvoice({
                                 /> */}
                                 <TableData
                                     name={`${getCurrencySymbol(user?.currency)}
-                                        ${Round(x.totalAmount as number)}`}
+                                        ${Round(x.convertedAmount as number)}`}
                                     full
                                 />
                                 <TableState name={x.status as string} />
