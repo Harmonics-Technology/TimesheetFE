@@ -210,6 +210,7 @@ export const PurchaseLicense = ({
                                             : '#e8b44f'
                                     }
                                     onClick={setSelected}
+                                    selected={selected}
                                     key={i}
                                     id={x.id}
                                 />

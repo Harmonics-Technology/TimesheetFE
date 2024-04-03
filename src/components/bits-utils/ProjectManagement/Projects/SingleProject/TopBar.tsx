@@ -146,6 +146,7 @@ export const TopBar = ({
                     users={users}
                     data={data}
                     currencies={currencies}
+                    projectMangers={users}
                 />
             )}
             {isOpened && (

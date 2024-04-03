@@ -18,7 +18,10 @@ export const OrganizationCurrency = ({
 }) => {
     const toast = useToast();
     const router = useRouter();
-    const [selectedCountry, setSelectedCountry] = useState<any>();
+    const foundCountry = countries?.find(
+        (x) => x.currency === data?.organizationDefaultCurrency,
+    );
+    const [selectedCountry, setSelectedCountry] = useState<any>(foundCountry);
     const [loading, setLoading] = useState(false);
 
     const onSubmit = async (data: ControlSettingModel) => {
@@ -57,10 +60,6 @@ export const OrganizationCurrency = ({
         }
     };
 
-    const foundCountry = countries?.find(
-        (x) => x.currency === data?.organizationDefaultCurrency,
-    );
-
     return (
         <Box
             py="1.5rem"
@@ -90,6 +89,7 @@ export const OrganizationCurrency = ({
                         currency={countries}
                         selectedCountry={selectedCountry}
                         setSelectedCountry={setSelectedCountry}
+                        searchable={true}
                     />
                     <Box my="1rem" w="full">
                         <ShiftBtn

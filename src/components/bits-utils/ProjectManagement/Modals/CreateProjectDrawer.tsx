@@ -36,6 +36,7 @@ import { UserContext } from '@components/context/UserContext';
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import getBusinessDateCount from '@components/bits-utils/GetBusinessDays';
 
 export const CreateProjectDrawer = ({
     onClose,
@@ -161,10 +162,15 @@ export const CreateProjectDrawer = ({
         }
     };
 
-    const dateDiff = moment(watch('endDate')).diff(watch('startDate'), 'day');
+    // const dateDiff = moment(watch('endDate')).diff(watch('startDate'), 'day');
+    const businessDays = getBusinessDateCount(
+        new Date(watch('startDate') as any),
+        new Date(watch('endDate') as any),
+    );
+    // console.log({ businessDays, st: watch('startDate'), en: watch('endDate') });
 
     useEffect(() => {
-        setValue('duration', dateDiff + 1 || 0);
+        setValue('duration', businessDays || 0);
     }, [watch('startDate'), watch('endDate')]);
 
     const budget = watch('budget');

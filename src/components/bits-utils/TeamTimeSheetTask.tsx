@@ -172,7 +172,7 @@ const TeamTimeSheetTask = ({
                         <LiaAngleLeftSolid />
                     </Button>
                     <Text fontWeight={500} fontSize=".8rem">
-                        {label}
+                        {label ?? ''}
                     </Text>
                     <Button
                         onClick={() => goNext()}

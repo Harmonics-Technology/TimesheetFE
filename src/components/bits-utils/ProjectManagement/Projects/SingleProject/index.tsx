@@ -77,6 +77,8 @@ export const SingleProjectPage = ({
                     icon={PiMoneyBold}
                     color="#F8C200"
                     isPrice
+                    allBudget={[{ currency: projects.currency }]}
+                    budget={{ currency: projects.currency }}
                 />
             </Grid>
             <Grid

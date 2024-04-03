@@ -27,6 +27,7 @@ import DoughnutChart from '@components/bits-utils/Charts/DoughnutChart';
 import { Round } from '@components/generics/functions/Round';
 import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 
 export const Dashboard = ({
     metrics,
@@ -39,6 +40,10 @@ export const Dashboard = ({
     );
     const projectSummary = ['Project Name', 'Due Date', 'Status', 'Progress'];
     const overdue = ['Project Name', 'Deadline', 'Overdue'];
+    const uniqueItems = getUniqueListBy(
+        (metrics?.totalBudgetSpent as any)?.filter((x) => x.currency !== null),
+        'currency',
+    );
     return (
         <Box>
             <Box mb="2.5rem">
@@ -72,14 +77,12 @@ export const Dashboard = ({
                         value={budget?.currency}
                         options={
                             <>
-                                {metrics?.totalBudgetSpent
-                                    ?.filter((x) => x.currency !== null)
-                                    .map((x) => (
-                                        <option value={x.currency as string}>
-                                            {x.currency} (
-                                            {getCurrencyName(x.currency) || ''})
-                                        </option>
-                                    ))}
+                                {uniqueItems?.map((x) => (
+                                    <option value={x.currency as string}>
+                                        {x.currency} (
+                                        {getCurrencyName(x.currency) || ''})
+                                    </option>
+                                ))}
                             </>
                         }
                         onChange={(e) =>

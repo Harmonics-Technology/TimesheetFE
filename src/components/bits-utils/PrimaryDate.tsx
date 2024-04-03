@@ -44,6 +44,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
     disabled,
     defaultValue,
     disableWeekend,
+    required,
 }: FormInputProps<TFormValues>) => {
     //
     const size: Size = useWindowSize();
@@ -54,6 +55,8 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
         [dateRef],
     );
     useOnClickOutside(dateRef, handleDatePickerClose);
+
+    const format = 'YYYY/MM/DD';
 
     return (
         <FormControl
@@ -72,16 +75,16 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
             <Controller
                 control={control}
                 name={name}
-                rules={{ required: true }} //optional
+                rules={{ required: required }} //optional
                 render={({ field: { onChange, value } }) => (
                     <>
                         <DatePicker
                             value={defaultValue || value}
                             ref={dateRef}
                             onChange={(date: any) => {
-                                onChange(date.format('YYYY-MM-DD'));
+                                onChange(date.format(format));
                             }}
-                            format={'DD/MM/YYYY'}
+                            format={format}
                             inputClass={
                                 error?.type === 'required'
                                     ? 'dateError'

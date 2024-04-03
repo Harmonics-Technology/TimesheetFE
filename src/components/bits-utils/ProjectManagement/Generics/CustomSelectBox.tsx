@@ -75,6 +75,9 @@ export const CustomSelectBox = ({
         }
     };
     const selectData = (x: any) => {
+        if (single) {
+            setIsComponentVisible(!isComponentVisible);
+        }
         if (checkbox == true) {
             checkBoxFn(x);
         }

@@ -26,7 +26,7 @@ export const MiniCards = ({
     allBudget?: any;
 }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const hasBudget = allBudget && allBudget?.length > 1;
+    const hasBudget = allBudget && allBudget?.length > 0;
     return (
         <Box pos="relative">
             <Flex
@@ -58,7 +58,7 @@ export const MiniCards = ({
                                     ? `${
                                           getCurrencySymbol(budget?.currency) ??
                                           '$'
-                                      } ${Round(value)}`
+                                      } ${CUR(Round(value))}`
                                     : isPrice
                                     ? CAD(Round(value))
                                     : CUR(Round(value))}

@@ -151,6 +151,7 @@ export const NewTeamMemerOnboardingForm = ({
         mode: 'all',
         defaultValues: {
             numberOfDaysEligible: leaveSettings?.eligibleLeaveDays || '',
+            role: 'Team Member',
         },
     });
 
@@ -267,7 +268,7 @@ export const NewTeamMemerOnboardingForm = ({
     const userEmail = watch('email');
     const closeModal = () => {
         if (userFirstName && userLastName && userEmail) {
-            onClose();
+            // onClose();
             onOpenDraft();
         } else {
             onClose();
@@ -284,6 +285,8 @@ export const NewTeamMemerOnboardingForm = ({
     useEffect(() => {
         getPaymentPartnerFees(paymentPartnerId);
     }, [paymentPartnerId]);
+
+    console.log({ errors });
 
     const onSubmit = async (data: TeamMemberModel) => {
         data.superAdminId = user?.superAdminId;
@@ -448,6 +451,7 @@ export const NewTeamMemerOnboardingForm = ({
                         label="Date of Birth"
                         error={errors.dateOfBirth}
                         max={new DateObject().subtract(1, 'days')}
+                        required={false}
                     />
                     <PrimaryInput<TeamMemberModel>
                         label="Address"
@@ -552,6 +556,7 @@ export const NewTeamMemerOnboardingForm = ({
                             name="startDate"
                             label="Start Date"
                             error={errors.startDate}
+                            required={false}
                             // min={new Date()}
                         />
                         <PrimaryDate<TeamMemberModel>
@@ -560,6 +565,7 @@ export const NewTeamMemerOnboardingForm = ({
                             label="End Date"
                             error={errors.endDate}
                             min={new DateObject().add(3, 'days')}
+                            required={false}
                         />
                         <PrimarySelect<TeamMemberModel>
                             register={register}
