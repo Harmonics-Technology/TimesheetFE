@@ -19,7 +19,7 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { ShiftBtn } from './ShiftBtn';
-import { SelectrixBox } from './Selectrix';
+// import { SelectrixBox } from './Selectrix';
 import {
     ProjectManagementService,
     ProjectManagementSettingView,
@@ -42,6 +42,7 @@ import moment from 'moment';
 import RadioBtn from './RadioBtn';
 import { UserContext } from '@components/context/UserContext';
 import { eachDayOfInterval, parseISO, startOfWeek } from 'date-fns';
+import { PrimarySelect } from './PrimarySelect';
 
 interface ExportProps {
     isOpen: any;
@@ -50,7 +51,7 @@ interface ExportProps {
     superAdminId?: any;
     userId?: any;
     projectId?: any;
-    allProjects?: ProjectView;
+    allProjects?: ProjectView[];
     access: ProjectManagementSettingView;
 }
 
@@ -67,9 +68,8 @@ export const FillTimesheetModal = ({
 }: ExportProps) => {
     const {
         handleSubmit,
-        control,
+        register,
         watch,
-        setValue,
         formState: { errors, isSubmitting },
     } = useForm<ProjectTimesheetModel>({
         resolver: yupResolver(schema),
@@ -259,7 +259,9 @@ export const FillTimesheetModal = ({
                 setLoading(false);
             }
         }
-        getTasks();
+        if (taskId) {
+            getTasks();
+        }
     }, [taskId]);
 
     useNonInitialEffect(() => {
@@ -270,6 +272,7 @@ export const FillTimesheetModal = ({
             setOperationalTasks([]);
             setErr('');
             setSubTasks([]);
+            setTasks([]);
             if (taskId == 'operational') {
                 try {
                     const res =
@@ -311,7 +314,9 @@ export const FillTimesheetModal = ({
                 setLoading(false);
             }
         }
-        getTasks();
+        if (projectId) {
+            getTasks();
+        }
     }, [projectId]);
 
     const radios = ['Use Duration', 'Use End Date'];
@@ -373,7 +378,10 @@ export const FillTimesheetModal = ({
         }
         data.projectTaskAsigneeId =
             selectedSubTask?.projectTaskAsigneeId ||
-            selectedTask.assignees.find((x) => x.userId == userId)?.id;
+            selectedTask?.assignees?.find((x) => x.userId == userId)?.id ||
+            (allProjects as any)
+                ?.find((x) => x.id == projectId)
+                .assignees.find((x) => x.userId == userId)?.id;
         data.projectTimesheets = newProjectTimesheet;
 
         try {
@@ -470,7 +478,41 @@ export const FillTimesheetModal = ({
                                 mb="1rem"
                                 borderBottom="1px solid #e6e7e7"
                             >
-                                <SelectrixBox<ProjectTimesheetModel>
+                                <PrimarySelect<ProjectTimesheetModel>
+                                    register={register}
+                                    error={errors.projectId}
+                                    name="projectId"
+                                    label="Project"
+                                    placeholder="Select a project"
+                                    options={
+                                        <>
+                                            {newData?.map((x) => (
+                                                <option value={x?.id}>
+                                                    {x.name}
+                                                </option>
+                                            ))}
+                                        </>
+                                    }
+                                />
+                                {tasks?.length > 0 && (
+                                    <PrimarySelect<ProjectTimesheetModel>
+                                        register={register}
+                                        error={errors.projectTaskId}
+                                        name="projectTaskId"
+                                        label="Project Task"
+                                        placeholder="Select a task"
+                                        options={
+                                            <>
+                                                {tasks?.map((x) => (
+                                                    <option value={x?.id}>
+                                                        {x.name}
+                                                    </option>
+                                                ))}
+                                            </>
+                                        }
+                                    />
+                                )}
+                                {/* <SelectrixBox<ProjectTimesheetModel>
                                     control={control}
                                     name="projectId"
                                     label="Project"
@@ -487,31 +529,63 @@ export const FillTimesheetModal = ({
                                     error={errors.projectTaskId}
                                     keys="id"
                                     keyLabel="name"
-                                    options={tasks}
+                                    options={tasks || []}
                                     placeholder={'Select a task'}
-                                />
+                                /> */}
                                 {subTasks.length > 0 && (
-                                    <SelectrixBox<ProjectTimesheetModel>
-                                        control={control}
+                                    // <SelectrixBox<ProjectTimesheetModel>
+                                    //     control={control}
+                                    //     name="projectSubTaskId"
+                                    //     label="Sub Task"
+                                    //     error={errors.projectSubTaskId}
+                                    //     keys="id"
+                                    //     keyLabel="name"
+                                    //     options={subTasks}
+                                    //     placeholder={'Select a subTask'}
+                                    // />
+                                    <PrimarySelect<ProjectTimesheetModel>
+                                        register={register}
+                                        error={errors.projectSubTaskId}
                                         name="projectSubTaskId"
                                         label="Sub Task"
-                                        error={errors.projectSubTaskId}
-                                        keys="id"
-                                        keyLabel="name"
-                                        options={subTasks}
-                                        placeholder={'Select a subTask'}
+                                        placeholder="Select a sub-task"
+                                        options={
+                                            <>
+                                                {subTasks?.map((x) => (
+                                                    <option value={x?.id}>
+                                                        {x.name}
+                                                    </option>
+                                                ))}
+                                            </>
+                                        }
                                     />
                                 )}
                                 {operationalTasks.length > 0 && (
-                                    <SelectrixBox<ProjectTimesheetModel>
-                                        control={control}
+                                    // <SelectrixBox<ProjectTimesheetModel>
+                                    //     control={control}
+                                    //     name="projectTaskId"
+                                    //     label="Operational Task"
+                                    //     error={errors.projectTaskId}
+                                    //     keys="id"
+                                    //     keyLabel="name"
+                                    //     options={operationalTasks}
+                                    //     placeholder={'Select operational task'}
+                                    // />
+                                    <PrimarySelect<ProjectTimesheetModel>
+                                        register={register}
+                                        error={errors.projectTaskId}
                                         name="projectTaskId"
                                         label="Operational Task"
-                                        error={errors.projectTaskId}
-                                        keys="id"
-                                        keyLabel="name"
-                                        options={operationalTasks}
-                                        placeholder={'Select operational task'}
+                                        placeholder="Select operational task"
+                                        options={
+                                            <>
+                                                {operationalTasks?.map((x) => (
+                                                    <option value={x?.id}>
+                                                        {x.name}
+                                                    </option>
+                                                ))}
+                                            </>
+                                        }
                                     />
                                 )}
                                 <CustomDateTime

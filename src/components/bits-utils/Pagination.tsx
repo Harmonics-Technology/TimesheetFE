@@ -8,10 +8,11 @@ interface pageOptions {
     shift?: boolean;
     client?: boolean;
     func?: any;
+    loadMore?: boolean;
 }
 
-function Pagination({ data, shift, client, func }: pageOptions) {
-    data = data?.data;
+function Pagination({ data, shift, client, func, loadMore }: pageOptions) {
+    data = data?.data || data;
 
     const totalPages =
         (data?.size as number) / (data?.limit as unknown as number);
@@ -30,7 +31,9 @@ function Pagination({ data, shift, client, func }: pageOptions) {
     const previous = data?.previous?.href;
     const last = data?.last?.href;
 
-    const paginate = async (direction: 'next' | 'previous' | 'last') => {
+    const paginate = async (
+        direction: 'next' | 'previous' | 'last' | 'more',
+    ) => {
         let link = '';
         if (direction == 'previous' && previous != null) {
             link = previous?.split('?')[1] ?? false;
@@ -74,6 +77,14 @@ function Pagination({ data, shift, client, func }: pageOptions) {
                 },
             });
         }
+        if (direction == 'more' && next != null) {
+            router.push({
+                query: {
+                    ...router.query,
+                    limit: data.limit + data.nextOffset,
+                },
+            });
+        }
     };
     return (
         <Flex
@@ -91,58 +102,77 @@ function Pagination({ data, shift, client, func }: pageOptions) {
             >
                 Showing {current} to {pageSize} of {total} entries
             </Text>
-            {totalPages > 1 && (
-                <HStack cursor="pointer">
-                    <Button
-                        bgColor="white"
-                        color="brand.200"
-                        border="1px solid #767676"
-                        width="2rem"
-                        height="2rem"
-                        minW="unset"
-                        padding="0"
-                        borderRadius="50%"
-                        disabled={!previous}
-                        onClick={() => paginate('previous')}
-                    >
-                        <FaAngleLeft fontSize=".6rem" />
-                    </Button>
-                    <Circle bgColor="brand.400" color="white" size="2rem">
-                        {currentPage}
-                    </Circle>
-                    <Text mx=".5rem">of</Text>
-                    <Button
-                        bgColor="white"
-                        color="brand.200"
-                        border="1px solid #767676"
-                        width="2rem"
-                        height="2rem"
-                        minW="unset"
-                        padding="0"
-                        borderRadius="50%"
-                        disabled={!previous}
-                        onClick={() => paginate('last')}
-                    >
-                        {Math.floor(totalPages) < 2
-                            ? '2'
-                            : Math.floor(totalPages)}
-                    </Button>
 
-                    <Button
-                        bgColor="white"
-                        color="brand.200"
-                        border="1px solid #767676"
-                        width="2rem"
-                        height="2rem"
-                        minW="unset"
-                        padding="0"
-                        borderRadius="50%"
-                        disabled={!next}
-                        onClick={() => paginate('next')}
-                    >
-                        <FaAngleRight fontSize=".6rem" />
-                    </Button>
-                </HStack>
+            {totalPages > 1 && (
+                <>
+                    {loadMore ? (
+                        <Button
+                            bgColor="brand.400"
+                            color="white"
+                            borderRadius="6px"
+                            onClick={() => paginate('more')}
+                            fontSize=".8rem"
+                        >
+                            Load More
+                        </Button>
+                    ) : (
+                        <HStack cursor="pointer" fontSize=".9rem">
+                            <Button
+                                bgColor="white"
+                                color="brand.200"
+                                border="1px solid #767676"
+                                width="2rem"
+                                height="2rem"
+                                minW="unset"
+                                padding="0"
+                                borderRadius="50%"
+                                disabled={!previous}
+                                onClick={() => paginate('previous')}
+                            >
+                                <FaAngleLeft fontSize=".6rem" />
+                            </Button>
+                            <Circle
+                                bgColor="brand.400"
+                                color="white"
+                                size="2rem"
+                            >
+                                {currentPage}
+                            </Circle>
+                            <Text mx=".5rem">of</Text>
+                            <Button
+                                bgColor="white"
+                                color="brand.200"
+                                border="1px solid #767676"
+                                width="2rem"
+                                height="2rem"
+                                minW="unset"
+                                padding="0"
+                                borderRadius="50%"
+                                disabled={!previous}
+                                onClick={() => paginate('last')}
+                            >
+                                {Math.floor(totalPages) < 2
+                                    ? '2'
+                                    : Math.floor(totalPages)}
+                            </Button>
+
+                            <Button
+                                bgColor="white"
+                                color="brand.200"
+                                border="1px solid #767676"
+                                width="2rem"
+                                height="2rem"
+                                minW="unset"
+                                padding="0"
+                                borderRadius="50%"
+                                disabled={!next}
+                                onClick={() => paginate('next')}
+                            >
+                                <FaAngleRight fontSize=".6rem" />
+                            </Button>
+                        </HStack>
+                    )}
+                </>
             )}
         </Flex>
     );

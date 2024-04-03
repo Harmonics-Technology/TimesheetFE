@@ -4,6 +4,7 @@
 
 import type { BillableAndNonBillable } from './BillableAndNonBillable';
 import type { BudgetBurnOutRate } from './BudgetBurnOutRate';
+import type { BudgetSpentPerCurrency } from './BudgetSpentPerCurrency';
 import type { OprationTasksVsProjectTask } from './OprationTasksVsProjectTask';
 import type { ProjectStatusesCount } from './ProjectStatusesCount';
 import type { ProjectView } from './ProjectView';
@@ -12,7 +13,7 @@ export type DashboardProjectManagementView = {
     noOfProject?: number;
     noOfTask?: number;
     totalHours?: number;
-    totalBudgetSpent?: number;
+    totalBudgetSpent?: Array<BudgetSpentPerCurrency> | null;
     projectSummary?: Array<ProjectView> | null;
     overdueProjects?: Array<ProjectView> | null;
     oprationalAndProjectTasksStats?: Array<OprationTasksVsProjectTask> | null;

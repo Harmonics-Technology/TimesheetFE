@@ -1,11 +1,12 @@
 import { Box, VStack, Text, HStack, Avatar } from '@chakra-ui/react';
-import { CAD } from '@components/generics/functions/Naira';
+import { CUR } from '@components/generics/functions/Naira';
 import moment from 'moment';
 import React, { useContext } from 'react';
 import { ProgressBar } from '../Generics/ProgressBar';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
 import { ProjectTaskAsigneeView, ProjectView } from 'src/services';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 
 export const ProjectCard = ({ data }: { data: ProjectView }) => {
     const dateDiff = moment(data?.endDate).diff(data?.startDate, 'day');
@@ -18,7 +19,11 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
     const role = user?.role.replaceAll(' ', '');
     const status = data?.status?.toLowerCase();
     const pastDate = moment().diff(moment(data.endDate), 'days') > 0;
+    const assignees: ProjectTaskAsigneeView[] = data?.assignees?.filter(
+        (x) => x.projectTaskId == null,
+    ) as any;
     //
+
     return (
         <Box
             borderRadius=".6rem"
@@ -68,11 +73,14 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                         color="#455A64"
                         fontWeight={600}
                     >
-                        Budget: {CAD(data?.budget)}
+                        Budget:{' '}
+                        {`${getCurrencySymbol(data?.currency)}${CUR(
+                            data?.budget,
+                        )}`}
                     </Text>
                     <HStack gap="0">
-                        {data?.assignees
-                            ?.filter((x) => x.projectTaskId == null)
+                        {assignees
+                            ?.slice(0, 3)
                             .map((x: ProjectTaskAsigneeView, i: any) => (
                                 <Avatar
                                     key={x.id}
@@ -83,6 +91,11 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                                     transform={`translateX(${-i * 10}px)`}
                                 />
                             ))}
+                        {assignees?.length > 3 && (
+                            <Text fontSize="0.75rem" color="#455A64">
+                                + {assignees?.length - 3}
+                            </Text>
+                        )}
                     </HStack>
                 </HStack>
                 <Box w="full" mt="0.5rem">

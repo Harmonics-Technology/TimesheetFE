@@ -2,8 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ApprovedPayrollInvoices } from './ApprovedPayrollInvoices';
+
 export type PaymentPartnerInvoiceModel = {
-    invoiceIds?: Array<string> | null;
+    invoices?: Array<ApprovedPayrollInvoices> | null;
     totalAmount?: number;
     rate?: string | null;
     clientId?: string;

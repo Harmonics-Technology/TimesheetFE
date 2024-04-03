@@ -4,9 +4,21 @@ import { withPageAuth } from '@components/generics/withPageAuth';
 import { id } from 'date-fns/locale';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { ProjectManagementService, UserService } from 'src/services';
+import {
+    ProjectManagementService,
+    UserService,
+    UtilityService,
+} from 'src/services';
 
-const ProjectSingleTask = ({ projectId, task, tasks, project, users, id }) => {
+const ProjectSingleTask = ({
+    projectId,
+    task,
+    tasks,
+    project,
+    users,
+    id,
+    currencies,
+}) => {
     return (
         <SingleTask
             id={id}
@@ -14,6 +26,7 @@ const ProjectSingleTask = ({ projectId, task, tasks, project, users, id }) => {
             tasks={tasks}
             task={task}
             users={users}
+            currencies={currencies}
         />
     );
 };
@@ -43,6 +56,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 80,
                 pagingOptions.search,
             );
+            const currencies = await UtilityService.listCountries();
 
             return {
                 props: {
@@ -52,6 +66,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     id,
                     tasks: tasks.data,
                     users: users.data,
+                    currencies: currencies.data,
                 },
             };
         } catch (error: any) {

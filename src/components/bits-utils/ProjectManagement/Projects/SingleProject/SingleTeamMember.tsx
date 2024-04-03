@@ -20,10 +20,14 @@ export const SingleTeamMember = ({
     id,
     teams,
     users,
+    currencies,
+    teamId,
 }: {
     id: string;
     teams: any;
     users: any;
+    currencies: any;
+    teamId: any;
 }) => {
     const tableHead = [
         'Task Assigned',
@@ -33,23 +37,31 @@ export const SingleTeamMember = ({
         'Progress Status',
     ];
 
-    const userDetails = teams?.value[0];
+    const userDetails = users?.value?.find((x) => x.id == teamId);
     const totalHours = teams?.value?.reduce(
         (a, b) => a + (b?.hoursLogged as number),
         0,
     );
+    console.log({ users });
+
+    // console.log({ users, teamId });
 
     return (
         <Box>
-            <TopBar noTitle={true} id={id} users={users} />
+            <TopBar
+                currencies={currencies}
+                noTitle={true}
+                id={id}
+                users={users}
+            />
             <HStack
                 justify="space-between"
                 pb="1rem"
                 borderBottom="1px solid #e5e5e5"
             >
                 <TitleText
-                    title={userDetails?.user?.fullName}
-                    text={userDetails?.user?.email}
+                    title={userDetails?.fullName}
+                    text={userDetails?.email}
                     fontSize="1rem"
                     gap=".1rem"
                 />
@@ -60,8 +72,8 @@ export const SingleTeamMember = ({
                     gap=".1rem"
                 />
                 <TitleText
-                    title={userDetails?.user?.employeeInformation?.jobTitle}
-                    text={'IT Department'}
+                    title={userDetails?.employeeInformation?.jobTitle}
+                    text={userDetails?.employeeInformation?.department}
                     fontSize="1rem"
                     gap=".1rem"
                 />
@@ -69,7 +81,7 @@ export const SingleTeamMember = ({
             <Box>
                 <HStack py="1rem" justify="space-between">
                     <HStack w="40%">
-                        <HStack w="fit-content">
+                        <HStack w="25%">
                             <Image
                                 src="/assets/filter.png"
                                 alt="filter"

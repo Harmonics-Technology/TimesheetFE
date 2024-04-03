@@ -53,12 +53,14 @@ export const SingleTask = ({
     tasks,
     task,
     users,
+    currencies,
 }: {
     id: any;
     project: any;
     tasks: any;
     task: ProjectTaskView;
     users: any;
+    currencies: any;
 }) => {
     const tableHead = [
         'Task Name',
@@ -83,14 +85,29 @@ export const SingleTask = ({
     const [status, setStatus] = useState(task?.status?.toLowerCase());
 
     const openModal = (item: any) => {
-        setSubTask(item);
+        setSubTask({ ...item, isEdit: true });
         onOpen();
     };
     const pastDate = moment().diff(moment(task?.endDate), 'days') > 0;
 
+    const [taskStatus, setTaskStatus] = useState();
+    const {
+        isOpen: isOpens,
+        onOpen: onOpens,
+        onClose: onCloses,
+    } = useDisclosure();
+    const [loadings, setLoadings] = useState({ id: '' });
+    const taskStat = (x: any) => {
+        setTaskStatus(x);
+    };
     return (
         <Box>
-            <TopBar id={id} data={project} users={users} />
+            <TopBar
+                currencies={currencies}
+                id={id}
+                data={project}
+                users={users}
+            />
             <Flex gap=".5rem">
                 <VStack w="25%">
                     <Box
@@ -258,11 +275,6 @@ export const SingleTask = ({
                     </HStack>
                     <TableCard tableHead={tableHead}>
                         {tasks?.value?.map((x: ProjectSubTaskView) => {
-                            const [taskStatus, setTaskStatus] = useState(
-                                x?.status?.toLowerCase(),
-                            );
-                            const { isOpen, onOpen, onClose } = useDisclosure();
-                            const [loading, setLoading] = useState();
                             return (
                                 <>
                                     <TableRow key={x.id}>
@@ -323,7 +335,7 @@ export const SingleTask = ({
                                                         cursor="pointer"
                                                         color="brand.300"
                                                     >
-                                                        {loading ? (
+                                                        {loadings.id == x.id ? (
                                                             <Spinner size="sm" />
                                                         ) : (
                                                             <FaEllipsisH />
@@ -332,11 +344,12 @@ export const SingleTask = ({
                                                 </MenuButton>
                                                 <MenuList>
                                                     <MenuItem
-                                                        onClick={onOpen}
+                                                        onClick={onOpens}
                                                         w="full"
                                                         isDisabled={
-                                                            taskStatus ==
-                                                            'completed'
+                                                            taskStatus ||
+                                                            x?.status?.toLowerCase() ==
+                                                                'completed'
                                                         }
                                                     >
                                                         <Icon
@@ -363,19 +376,19 @@ export const SingleTask = ({
                                             </Menu>
                                         </td>
                                     </TableRow>
-                                    {isOpen && (
+                                    {isOpens && (
                                         <ShowPrompt
-                                            isOpen={isOpen}
-                                            onClose={onClose}
+                                            isOpen={isOpens}
+                                            onClose={onCloses}
                                             onSubmit={() =>
                                                 markAsCompleted(
                                                     {
                                                         type: 3,
                                                         taskId: x?.id,
                                                     },
-                                                    setLoading,
+                                                    setLoadings,
                                                     toast,
-                                                    setTaskStatus,
+                                                    taskStat,
                                                     router,
                                                     onClose,
                                                 )
@@ -409,7 +422,7 @@ export const SingleTask = ({
                             toast,
                             setStatus,
                             router,
-                            onClosed
+                            onClosed,
                         )
                     }
                     loading={loading}

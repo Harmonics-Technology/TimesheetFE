@@ -1,12 +1,14 @@
 import { ProjectPage } from '@components/bits-utils/ProjectManagement/Projects';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
+import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
     ProjectManagementService,
     ProjectProgressCountView,
     UserService,
+    UtilityService,
 } from 'src/services';
 
 const projectsIndex = ({
@@ -18,6 +20,7 @@ const projectsIndex = ({
     counts,
     projectMangers,
     access,
+    currencies,
 }: {
     iProjects: any;
     nProjects: any;
@@ -27,6 +30,7 @@ const projectsIndex = ({
     counts: ProjectProgressCountView;
     projectMangers: any;
     access: any;
+    currencies: any;
 }) => {
     return (
         <ProjectPage
@@ -39,6 +43,7 @@ const projectsIndex = ({
             projectMangers={projectMangers}
             access={access}
             isPm={false}
+            currencies={currencies}
         />
     );
 };
@@ -76,6 +81,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 await ProjectManagementService.getStatusCountForProject(
                     superAdminId,
                 );
+            const currencies = await UtilityService.listCountries();
             // const projectMangers = await UserService.listUsers(
             //     //@ts-ignore
             //     undefined,
@@ -103,6 +109,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     counts: counts.data,
                     // projectMangers: projectMangers.data,
                     access: access.data,
+                    currencies: currencies.data,
                 },
             };
         } catch (error: any) {

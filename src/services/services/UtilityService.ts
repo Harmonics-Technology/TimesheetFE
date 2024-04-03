@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { ContactMessageModel } from '../models/ContactMessageModel';
+import type { CountryViewListStandardResponse } from '../models/CountryViewListStandardResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -23,6 +24,17 @@ requestBody?: ContactMessageModel,
             url: '/api/Utility/contact-us',
             body: requestBody,
             mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @returns CountryViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static listCountries(): CancelablePromise<CountryViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Utility/countries',
         });
     }
 

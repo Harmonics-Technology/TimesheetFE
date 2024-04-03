@@ -69,7 +69,9 @@ export const ShowPrompt = ({ isOpen, onClose, onSubmit, loading, text }) => {
                                 //   border: '1px solid',
                                 //   borderColor: 'black',
                                 // }}
-                                onClick={onClose}
+                                onClick={() => {
+                                    onClose();
+                                }}
                             >
                                 No
                             </Button>

@@ -22,11 +22,22 @@ type Props = {
     onClose?: any;
     selected: any;
     setValue: any;
+    prev: any;
 };
 
-const ConfirmChangeModal = ({ isOpen, onClose, selected, setValue }: Props) => {
+const ConfirmChangeModal = ({
+    isOpen,
+    onClose,
+    selected,
+    setValue,
+    prev,
+}: Props) => {
     const setTeamValue = () => {
         setValue('role', selected);
+        onClose();
+    };
+    const setPrevTeamValue = () => {
+        setValue('role', prev);
         onClose();
     };
     return (
@@ -77,7 +88,7 @@ const ConfirmChangeModal = ({ isOpen, onClose, selected, setValue }: Props) => {
                                 height="3rem"
                                 width="full"
                                 onClick={() => {
-                                    onClose();
+                                    setPrevTeamValue();
                                 }}
                             >
                                 No

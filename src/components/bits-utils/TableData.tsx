@@ -38,6 +38,7 @@ import { MdVerified, MdCancel } from 'react-icons/md';
 import { BsEye, BsPencil } from 'react-icons/bs';
 import { RiInboxArchiveFill } from 'react-icons/ri';
 import shadeColor from '@components/generics/functions/shadeColor';
+import validateEmail from '@components/generics/functions/validateEmail';
 
 export function TableHead({
     name,
@@ -88,9 +89,6 @@ export function TableData({
     breakWord?: any;
     onClick?: any;
 }) {
-    const validRegex =
-        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const isEmail = name?.toString().match(validRegex) ? true : false;
     return (
         <Td
             borderColor={borderColor}
@@ -100,7 +98,7 @@ export function TableData({
             className={classes}
             fontWeight={fontWeight}
             maxW={breakWord ? '150px' : 'unset'}
-            textTransform={isEmail ? 'lowercase' : 'capitalize'}
+            textTransform={validateEmail(name) ? 'lowercase' : 'capitalize'}
             onClick={onClick}
             cursor="pointer"
             // textOverflow=""
@@ -256,7 +254,7 @@ export function NewTableState({
         </td>
     );
 }
-export function TableContract({ url }: { url: any }) {
+export function TableContract({ url, label }: { url: any; label?: any }) {
     //
     const [loading, setLoading] = useState(false);
     const downloadFile = (url: string) => {
@@ -273,14 +271,19 @@ export function TableContract({ url }: { url: any }) {
     return (
         <td>
             <Box
-                fontSize="1.4rem"
-                fontWeight="bold"
-                padding=".2rem 1rem"
+                fontSize=".9rem"
+                fontWeight="500"
+                padding=".2rem 0rem"
                 width="fit-content"
                 cursor="pointer"
+                color=" #2383BD"
                 onClick={() => downloadFile(url)}
             >
-                {loading ? <Spinner size="sm" /> : <AiOutlineDownload />}
+                {loading ? (
+                    <Spinner size="sm" />
+                ) : (
+                    label || <AiOutlineDownload />
+                )}
             </Box>
         </td>
     );

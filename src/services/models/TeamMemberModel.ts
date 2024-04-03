@@ -2,6 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import { OnboardingFeeRegisterModel } from "./OnboardingFeeRegisterModel";
+
+
 export type TeamMemberModel = {
     firstName?: string | null;
     lastName?: string | null;
@@ -19,6 +22,7 @@ export type TeamMemberModel = {
     clientSubscriptionId?: string | null;
     commandCenterClientId?: string | null;
     draftId?: string | null;
+    onboardingFees?: Array<OnboardingFeeRegisterModel> | null;
     id?: string;
     payRollTypeId?: number;
     payrollGroupId?: number | null;
@@ -52,4 +56,16 @@ export type TeamMemberModel = {
     superAdminId?: string | null;
     invoiceGenerationType?: string | null;
     enableFinancials?: boolean;
+    department?: string | null;
+    employmentContractType?: string | null;
+    timesheetFrequency?: string | null;
+    payrollStructure?: string | null;
+    rate?: number;
+    rateType?: string | null;
+    taxType?: string | null;
+    standardCanadianSystem?: string | null;
+    tax?: number;
+    payrollProcessingType?: string | null;
+    paymentProcessingFeeType?: string | null;
+    paymentProcessingFee?: number;
 };

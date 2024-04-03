@@ -6,16 +6,26 @@ import React from 'react';
 import {
     UserService,
     UserViewPagedCollectionStandardResponse,
+    UtilityService,
 } from 'src/services';
 interface PaymentPartnerProps {
     PaymentPartnerList: UserViewPagedCollectionStandardResponse;
     subs: any;
+    currencies: any;
 }
 
-function PaymentPartner({ PaymentPartnerList, subs }: PaymentPartnerProps) {
+function PaymentPartner({
+    PaymentPartnerList,
+    subs,
+    currencies,
+}: PaymentPartnerProps) {
     //
     return (
-        <PaymentPartnerManagement adminList={PaymentPartnerList} subs={subs} />
+        <PaymentPartnerManagement
+            adminList={PaymentPartnerList}
+            subs={subs}
+            currencies={currencies}
+        />
     );
 }
 
@@ -36,11 +46,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.to,
             );
             const subs = await UserService.getClientSubScriptions(superAdminId);
+            const currencies = await UtilityService.listCountries();
 
             return {
                 props: {
                     PaymentPartnerList: data,
                     subs: subs.data,
+                    currencies: currencies.data,
                 },
             };
         } catch (error: any) {

@@ -7,6 +7,7 @@ import {
 } from '@chakra-ui/react';
 import useOnClickOutside from '@components/generics/useClickOutside';
 import useWindowSize from '@components/generics/useWindowSize';
+import moment from 'moment';
 import { useRef, useCallback } from 'react';
 import { Controller, Path, FieldError, Control } from 'react-hook-form';
 import DatePicker, { DateObject } from 'react-multi-date-picker';
@@ -43,6 +44,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
     disabled,
     defaultValue,
     disableWeekend,
+    required,
 }: FormInputProps<TFormValues>) => {
     //
     const size: Size = useWindowSize();
@@ -53,6 +55,8 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
         [dateRef],
     );
     useOnClickOutside(dateRef, handleDatePickerClose);
+
+    const format = 'YYYY/MM/DD';
 
     return (
         <FormControl
@@ -71,20 +75,16 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
             <Controller
                 control={control}
                 name={name}
-                rules={{ required: true }} //optional
+                rules={{ required: required }} //optional
                 render={({ field: { onChange, value } }) => (
                     <>
                         <DatePicker
                             value={defaultValue || value}
                             ref={dateRef}
                             onChange={(date: any) => {
-                                onChange(
-                                    JSON.stringify(
-                                        date?.toDate?.(),
-                                    )?.replaceAll('"', ''),
-                                );
+                                onChange(date.format(format));
                             }}
-                            format={'DD/MM/YYYY'}
+                            format={format}
                             inputClass={
                                 error?.type === 'required'
                                     ? 'dateError'
@@ -112,7 +112,8 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                 )}
             />
             <FormErrorMessage fontSize=".7rem" color="red">
-                {(error?.type === 'required' && `${label || 'This field'} is required`) ||
+                {(error?.type === 'required' &&
+                    `${label || 'This field'} is required`) ||
                     error?.message}
             </FormErrorMessage>
         </FormControl>

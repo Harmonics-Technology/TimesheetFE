@@ -25,6 +25,7 @@ import {
     FinancialService,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
+    TreatInvoiceModel,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import { useContext, useState } from 'react';
@@ -43,6 +44,10 @@ import { Round } from '@components/generics/functions/Round';
 import { PaymentPrompt } from '@components/bits-utils/ProjectManagement/Modals/PaymentPrompt';
 import NoAccess from '@components/bits-utils/NoAccess';
 import asyncForEach from '@components/generics/functions/AsyncForEach';
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/CurrencyConversionModal';
+import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -50,6 +55,8 @@ interface adminProps {
     record?: number;
     isSuperAdmin?: boolean;
     teamUrl?: string;
+    organizationCurrency?: any;
+    converted?: any;
 }
 
 function OnshoreSubmittedInvoice({
@@ -58,6 +65,8 @@ function OnshoreSubmittedInvoice({
     record,
     isSuperAdmin,
     teamUrl,
+    organizationCurrency,
+    converted,
 }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
@@ -68,8 +77,8 @@ function OnshoreSubmittedInvoice({
     const router = useRouter();
     // console.log({ invoice });
     //
-    const [selectedId, setSelectedId] = useState<string[]>([]);
-    const toggleSelected = (id: string, all?: boolean) => {
+    const [selectedId, setSelectedId] = useState<any[]>([]);
+    const toggleSelected = (data: any, all?: boolean) => {
         if (all) {
             if (
                 selectedId?.length ===
@@ -78,23 +87,38 @@ function OnshoreSubmittedInvoice({
                 setSelectedId([]);
                 return;
             }
-            const response: string[] = [];
+            const response: unknown[] = [];
             invoice
                 ?.filter((x) => x.status !== 'INVOICED')
                 .forEach((x) =>
-                    response.push(x.id as string),
-                ) as unknown as string[];
+                    response.push({
+                        id: x.id,
+                        currency: x.employeeInformation?.currency,
+                        payrollProcessingType:
+                            x?.employeeInformation?.payrollProcessingType,
+                        rate: 0,
+                    }),
+                );
 
             setSelectedId([...response]);
             return;
         }
-        const existingValue = selectedId.find((e) => e === id);
+        const existingValue = selectedId.find((e) => e.id === data.id);
         if (existingValue) {
-            const newArray = selectedId.filter((x) => x !== id);
+            const newArray = selectedId.filter((x) => x.id !== data.id);
             setSelectedId(newArray);
             return;
         }
-        setSelectedId([...selectedId, id]);
+        setSelectedId([
+            ...selectedId,
+            {
+                id: data.id,
+                currency: data.employeeInformation.currency,
+                payrollProcessingType:
+                    data.employeeInformation.payrollProcessingType,
+                rate: 0,
+            },
+        ]);
     };
 
     const {
@@ -102,9 +126,16 @@ function OnshoreSubmittedInvoice({
         onOpen: onOpened,
         onClose: onClosed,
     } = useDisclosure();
-    const approveSingleInvoice = async (item: string) => {
+    const approveInvoiceItems = async (item: any[]) => {
+        setLoading(true);
+        const newItem: TreatInvoiceModel[] = item.map((x) => ({
+            invoiceId: x.id,
+            rate: x.rate,
+        }));
         try {
-            const result = await FinancialService.treatSubmittedInvoice(item);
+            const result = await FinancialService.treatSubmittedInvoice(
+                newItem,
+            );
             if (result.status) {
                 toast({
                     title: `${result.message}`,
@@ -130,26 +161,26 @@ function OnshoreSubmittedInvoice({
             });
         }
     };
-    const approveInvoiceItems = async () => {
-        try {
-            await asyncForEach(selectedId, async (select: string) => {
-                setLoading(true);
-                await approveSingleInvoice(select);
-            });
-            setSelectedId([]);
-            setLoading(false);
-            router.replace(router.asPath);
-            return;
-        } catch (error: any) {
-            setLoading(false);
-            toast({
-                title: error?.body?.message || error?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    // const approveInvoiceItems = async () => {
+    //     try {
+    //         await asyncForEach(selectedId, async (select: string) => {
+    //             setLoading(true);
+    //             await approveSingleInvoice(select);
+    //         });
+    //         setSelectedId([]);
+    //         setLoading(false);
+    //         router.replace(router.asPath);
+    //         return;
+    //     } catch (error: any) {
+    //         setLoading(false);
+    //         toast({
+    //             title: error?.body?.message || error?.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
     const { user, subType, accessControls } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const userAccess: ControlSettingView = accessControls;
@@ -172,6 +203,53 @@ function OnshoreSubmittedInvoice({
         'Status',
         // 'Action',
     ];
+    const {
+        isOpen: isCurrencyOpened,
+        onOpen: onCurrencyOpen,
+        onClose: onCurrencyClosed,
+    } = useDisclosure();
+
+    const [updateCurrency, setUpdateCurrency] = useState();
+
+    const differentItems = selectedId.filter(
+        (x) =>
+            x.payrollProcessingType == 'internal' &&
+            x.currency !== organizationCurrency,
+    );
+    const items = getUniqueListBy(differentItems, 'currency');
+    const checkInvoicesBeforeProcess = () => {
+        if (differentItems.length > 0) {
+            onCurrencyOpen();
+            return;
+        }
+        approveInvoiceItems(selectedId);
+    };
+
+    const rebuildInvoiceProcess = async () => {
+        const rebuildItems = selectedId.map((x) => {
+            return {
+                id: x.id,
+                currency: x.currency,
+                rate: Number(
+                    (updateCurrency &&
+                        x.payrollProcessingType == 'internal' &&
+                        updateCurrency[x.currency]) ||
+                        0,
+                ),
+            };
+        });
+        approveInvoiceItems(rebuildItems);
+        onCurrencyClosed();
+    };
+
+    const toggleConverted = () => {
+        router.push({
+            query: {
+                ...router.query,
+                convert: !converted,
+            },
+        });
+    };
 
     return (
         <>
@@ -202,6 +280,12 @@ function OnshoreSubmittedInvoice({
 
                 {userAccess?.adminCanViewTeamMemberInvoice || isSuperAdmin ? (
                     <>
+                        <Box mt="1rem">
+                            <CurrencyTag
+                                label="The Primary currency for your organization is"
+                                currency={organizationCurrency}
+                            />
+                        </Box>
                         <HStack
                             my="1rem"
                             w="100%"
@@ -214,32 +298,30 @@ function OnshoreSubmittedInvoice({
                             justify={
                                 selectedId.length > 0
                                     ? 'space-between'
-                                    : 'flex-end'
+                                    : 'space-between'
                             }
                             mb="1rem"
                         >
-                            {selectedId.length > 0 && (
-                                <HStack gap="1rem">
-                                    <Button
-                                        bgColor="brand.600"
-                                        color="white"
-                                        p=".5rem 1.5rem"
-                                        height="fit-content"
-                                        onClick={onOpened}
-                                        isLoading={loading}
-                                        spinner={
-                                            <BeatLoader
-                                                color="white"
-                                                size={10}
-                                            />
-                                        }
-                                        borderRadius="0"
-                                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                    >
-                                        Process
-                                    </Button>
-                                </HStack>
-                            )}
+                            {/* {selectedId.length > 0 && ( */}
+                            <HStack gap="1rem">
+                                <Button
+                                    bgColor="brand.600"
+                                    color="white"
+                                    p=".5rem 1.5rem"
+                                    height="fit-content"
+                                    borderRadius="6px"
+                                    onClick={checkInvoicesBeforeProcess}
+                                    isLoading={loading}
+                                    spinner={
+                                        <BeatLoader color="white" size={10} />
+                                    }
+                                    isDisabled={selectedId.length <= 0}
+                                    // boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                >
+                                    Process
+                                </Button>
+                            </HStack>
+                            {/* )} */}
                             <HStack>
                                 {!hideCheckbox && (
                                     <Checkbox
@@ -261,7 +343,7 @@ function OnshoreSubmittedInvoice({
                                     p=".5rem 1.5rem"
                                     height="fit-content"
                                     onClick={onOpens}
-                                    borderRadius="25px"
+                                    borderRadius="6px"
                                 >
                                     Download <Icon as={BsDownload} ml=".5rem" />
                                 </Button>
@@ -295,20 +377,16 @@ function OnshoreSubmittedInvoice({
                                                 name={formatDate(x.endDate)}
                                             />
                                             <TableData
-                                                name={
+                                                name={` ${getCurrencySymbol(
                                                     x?.employeeInformation
-                                                        ?.currency == 'NGN'
-                                                        ? Naira(
-                                                              Round(
-                                                                  x.totalAmount,
-                                                              ),
-                                                          )
-                                                        : CAD(
-                                                              Round(
-                                                                  x.totalAmount,
-                                                              ),
-                                                          )
-                                                }
+                                                        ?.currency,
+                                                )}
+                                                              ${CUR(
+                                                                  Round(
+                                                                      x.totalAmount,
+                                                                  ),
+                                                              )}`}
+                                                full
                                             />
                                             <TableState
                                                 name={x.status as string}
@@ -324,13 +402,12 @@ function OnshoreSubmittedInvoice({
                                                         checked={
                                                             selectedId.find(
                                                                 (e) =>
-                                                                    e === x.id,
+                                                                    e.id ===
+                                                                    x.id,
                                                             ) || ''
                                                         }
                                                         onChange={(e) =>
-                                                            toggleSelected(
-                                                                x.id as string,
-                                                            )
+                                                            toggleSelected(x)
                                                         }
                                                         disabled={
                                                             x.status ===
@@ -344,7 +421,7 @@ function OnshoreSubmittedInvoice({
                                 )}
                             </>
                         </Tables>
-                        <Pagination data={invoiceData} />
+                        <Pagination data={invoiceData} loadMore />
                     </>
                 ) : (
                     <NoAccess />
@@ -373,6 +450,15 @@ function OnshoreSubmittedInvoice({
                     record={record}
                     fileName={fileName}
                     model="invoice"
+                />
+            )}
+            {isCurrencyOpened && (
+                <CurrencyConversionModal
+                    isOpen={isCurrencyOpened}
+                    onClose={onCurrencyClosed}
+                    items={items}
+                    setUpdateCurrency={setUpdateCurrency}
+                    rebuildInvoiceProcess={rebuildInvoiceProcess}
                 />
             )}
         </>

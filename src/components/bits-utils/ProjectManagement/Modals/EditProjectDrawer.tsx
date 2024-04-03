@@ -34,29 +34,44 @@ import { MdCancel } from 'react-icons/md';
 import { CustomSelectBox } from '../Generics/CustomSelectBox';
 import moment from 'moment';
 import { useRouter } from 'next/router';
-
-const schema = yup.object().shape({
-    name: yup.string().required(),
-    startDate: yup.string().required(),
-    endDate: yup.string().required(),
-    duration: yup.string().required(),
-    budget: yup.string().required(),
-    assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
-    note: yup.string().required(),
-    // documentURL: yup.string().required(),
-});
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
+import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
+import getBusinessDateCount from '@components/bits-utils/GetBusinessDays';
+import Checkbox from '@components/bits-utils/Checkbox';
 
 export const EditProjectDrawer = ({
     onClose,
     isOpen,
     users,
     data,
+    currencies,
+    projectMangers,
 }: {
     onClose: any;
     isOpen: boolean;
     users: any;
     data?: ProjectView;
+    currencies: any;
+    projectMangers: any;
 }) => {
+    const [nonApplicable, setNonApplicable] = useState(false);
+    const schema = yup.object().shape({
+        name: yup.string().required(),
+        startDate: yup.string().required(),
+        endDate: yup.string().required(),
+        duration: yup.string().required(),
+        budget: yup.string().required(),
+        assignedUsers: yup
+            .array()
+            .min(1, 'Select atleast one assignee')
+            .required(),
+        note: yup.string().required(),
+        projectManagerId: nonApplicable
+            ? yup.string()
+            : yup.string().required(),
+        // documentURL: yup.string().required(),
+    });
     const {
         register,
         handleSubmit,
@@ -79,9 +94,11 @@ export const EditProjectDrawer = ({
             name: data?.name,
             note: data?.note,
             startDate: data?.startDate,
+            projectManagerId: data?.projectManagerId,
         },
     });
     const widgetApi = useRef<any>();
+    const uniqueItems = getUniqueListBy(currencies, 'currency');
     const [fileDoc, setFileDoc] = useState<any>({
         loading: false,
         url: data?.documentURL ? { name: 'Uploaded File' } : '',
@@ -116,12 +133,29 @@ export const EditProjectDrawer = ({
         const filtered = selectedUser?.filter((x) => x.id !== id);
         setSelecedUser(filtered);
     };
+    const [selectedManager, setSelectedManager] = useState<any>(
+        data?.projectManagerId,
+    );
+    const addManager = (user) => {
+        setSelectedManager(user);
+    };
+    const removeManager = (id) => {
+        const filtered = selectedManager?.filter((x) => x.id !== id);
+        setSelectedManager(filtered);
+    };
 
     const toast = useToast();
     const router = useRouter();
     // console.log({ selectedUser, data, users, assigneeWithTaskId });
 
     //
+    const setIfNonApplicable = (value: any) => {
+        setNonApplicable(value);
+        if (value == true) {
+            setSelectedManager(undefined);
+            return;
+        }
+    };
 
     const onSubmit = async (data: ProjectModel) => {
         try {
@@ -155,10 +189,14 @@ export const EditProjectDrawer = ({
         }
     };
 
-    const dateDiff = moment(watch('endDate')).diff(watch('startDate'), 'day');
+    // const dateDiff = moment(watch('endDate')).diff(watch('startDate'), 'day');
+    const businessDays = getBusinessDateCount(
+        new Date(watch('startDate') as any),
+        new Date(watch('endDate') as any),
+    );
 
     useEffect(() => {
-        setValue('duration', dateDiff + 1 || 0);
+        setValue('duration', businessDays || 0);
     }, [watch('startDate'), watch('endDate')]);
 
     useEffect(() => {
@@ -170,6 +208,9 @@ export const EditProjectDrawer = ({
     useEffect(() => {
         setValue('documentURL', fileDoc?.url?.cdnUrl);
     }, [fileDoc]);
+    useEffect(() => {
+        setValue('projectManagerId', selectedManager?.id);
+    }, [selectedManager]);
 
     //
     return (
@@ -219,23 +260,53 @@ export const EditProjectDrawer = ({
                             register={register}
                             readonly={true}
                         />
+                        <PrimarySelect<ProjectModel>
+                            register={register}
+                            error={errors.currency}
+                            name="currency"
+                            label="Currency"
+                            placeholder={
+                                `${data?.currency} (${
+                                    getCurrencyName(data?.currency) ||
+                                    data?.currency
+                                })}` || 'Select Currency'
+                            }
+                            options={
+                                <>
+                                    {uniqueItems
+                                        ?.sort((a, b) =>
+                                            a?.currency?.localeCompare(
+                                                b?.currency,
+                                            ),
+                                        )
+                                        .map((x) => (
+                                            <option value={x?.currency}>
+                                                {x?.currency} (
+                                                {getCurrencyName(x?.currency) ||
+                                                    x?.name}
+                                                )
+                                            </option>
+                                        ))}
+                                </>
+                            }
+                        />
+                        <PrimaryInput<ProjectModel>
+                            label="Budget"
+                            name="budget"
+                            error={errors.budget}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
+                        <PrimaryInput<ProjectModel>
+                            label="Budget Threshold"
+                            name="budgetThreshold"
+                            error={errors.budgetThreshold}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
                     </Grid>
-                    <PrimaryInput<ProjectModel>
-                        label="Budget"
-                        name="budget"
-                        error={errors.budget}
-                        placeholder=""
-                        defaultValue=""
-                        register={register}
-                    />
-                    <PrimaryInput<ProjectModel>
-                        label="Budget Threshold"
-                        name="budgetThreshold"
-                        error={errors.budgetThreshold}
-                        placeholder=""
-                        defaultValue=""
-                        register={register}
-                    />
                     <Box w="full">
                         <FormLabel
                             textTransform="capitalize"
@@ -291,6 +362,36 @@ export const EditProjectDrawer = ({
                             <Text fontSize=".6rem" color="#707683" mb="0">
                                 These team members were added to this project
                             </Text>
+                        </Box>
+                    </Box>
+                    <Box w="full">
+                        <FormLabel
+                            textTransform="capitalize"
+                            width="fit-content"
+                            fontSize=".8rem"
+                        >
+                            Assign Project Manager
+                        </FormLabel>
+
+                        <CustomSelectBox
+                            data={projectMangers?.value}
+                            updateFunction={addManager}
+                            items={selectedManager}
+                            customKeys={{ key: 'id', label: 'fullName' }}
+                            removeFn={removeManager}
+                            id="AssignProjectManager"
+                            single
+                            error={errors.projectManagerId}
+                        />
+                        <Box mt="1rem">
+                            <Checkbox
+                                label="Not Applicable"
+                                dir="rtl"
+                                color="black"
+                                onChange={(e: any) =>
+                                    setIfNonApplicable(e.target.checked)
+                                }
+                            />
                         </Box>
                     </Box>
                     <PrimaryInput<ProjectModel>

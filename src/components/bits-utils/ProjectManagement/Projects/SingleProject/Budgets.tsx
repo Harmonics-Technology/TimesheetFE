@@ -18,11 +18,13 @@ export const Budgets = ({
     project,
     budgets,
     users,
+    currencies,
 }: {
     id: string;
     project: any;
     budgets: any;
     users: any;
+    currencies: any;
 }) => {
     const tableHead = [
         'Team Members',
@@ -39,7 +41,12 @@ export const Budgets = ({
 
     return (
         <Box>
-            <TopBar id={id} data={project} users={users} />
+            <TopBar
+                currencies={currencies}
+                id={id}
+                data={project}
+                users={users}
+            />
             <Grid
                 mb="1.25rem"
                 templateColumns={['repeat(1,1fr)', 'repeat(4,1fr)']}

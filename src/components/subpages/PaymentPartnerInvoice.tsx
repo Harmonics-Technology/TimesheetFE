@@ -19,9 +19,10 @@ import {
     FinancialService,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
+    TreatInvoiceModel,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import InvoiceTemplate from './InvoiceTemplate';
 import BeatLoader from 'react-spinners/BeatLoader';
 import Checkbox from '@components/bits-utils/Checkbox';
@@ -32,6 +33,8 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import dynamic from 'next/dynamic';
 import { Round } from '@components/generics/functions/Round';
 import asyncForEach from '@components/generics/functions/AsyncForEach';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import { UserContext } from '@components/context/UserContext';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -56,8 +59,9 @@ function PaymentPartnerInvoice({
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
+    const { user } = useContext(UserContext);
 
-    console.log({ invoice });
+    // console.log({ invoice });
     //
     const [selectedId, setSelectedId] = useState<string[]>([]);
     const toggleSelected = (id: string, all?: boolean) => {
@@ -88,7 +92,11 @@ function PaymentPartnerInvoice({
         setSelectedId([...selectedId, id]);
     };
 
-    const approveSingleInvoice = async (item: string) => {
+    const approveInvoiceItems = async () => {
+        const item = selectedId.map((x) => ({
+            invoiceId: x,
+            rate: 0,
+        }));
         try {
             const result = await FinancialService.treatSubmittedInvoice(item);
             if (result.status) {
@@ -98,6 +106,9 @@ function PaymentPartnerInvoice({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setSelectedId([]);
+                setLoading(false);
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -116,26 +127,26 @@ function PaymentPartnerInvoice({
             });
         }
     };
-    const approveInvoiceItems = async () => {
-        try {
-            await asyncForEach(selectedId, async (select: string) => {
-                setLoading(true);
-                await approveSingleInvoice(select);
-            });
-            setSelectedId([]);
-            setLoading(false);
-            router.replace(router.asPath);
-            return;
-        } catch (error: any) {
-            setLoading(false);
-            toast({
-                title: error?.body?.message || error?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    // const approveInvoiceItems = async () => {
+    //     try {
+    //         await asyncForEach(selectedId, async (select: string) => {
+    //             setLoading(true);
+    //             await approveSingleInvoice(select);
+    //         });
+    //         setSelectedId([]);
+    //         setLoading(false);
+    //         router.replace(router.asPath);
+    //         return;
+    //     } catch (error: any) {
+    //         setLoading(false);
+    //         toast({
+    //             title: error?.body?.message || error?.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
 
     const filterClientsInvoice = (filter: string) => {
         router.push({
@@ -152,6 +163,7 @@ function PaymentPartnerInvoice({
         ...(newClient || []),
     ];
 
+    // console.log({ invoiceData });
     return (
         <>
             <Box
@@ -212,8 +224,8 @@ function PaymentPartnerInvoice({
                         'Name on Invoice',
                         'Invoice No',
                         'Created On',
-                        'Amount($)',
-                        'Amount(₦)',
+                        // 'Amount($)',
+                        'Amount',
                         'Status',
                         'Action',
                     ]}
@@ -230,20 +242,18 @@ function PaymentPartnerInvoice({
                                 />
                                 <TableData name={x.invoiceReference} />
                                 <TableData name={formatDate(x.dateCreated)} />
-                                <TableData
+                                {/* <TableData
                                     name={CAD(
                                         Round(
                                             (x.totalAmount as number) /
                                                 (x.rate as unknown as number),
                                         ),
                                     )}
-                                />
+                                /> */}
                                 <TableData
-                                    name={Naira(
-                                        Round(x.totalAmount as number),
-                                        // *
-                                        //     (x.rate as unknown as number),
-                                    )}
+                                    name={`${getCurrencySymbol(user?.currency)}
+                                        ${Round(x.convertedAmount as number)}`}
+                                    full
                                 />
                                 <TableState name={x.status as string} />
                                 <InvoiceAction
@@ -269,7 +279,7 @@ function PaymentPartnerInvoice({
                         ))}
                     </>
                 </Tables>
-                <Pagination data={invoiceData} />
+                <Pagination data={invoiceData} loadMore />
             </Box>
             <Paymentinvoices
                 isOpen={isOpen}

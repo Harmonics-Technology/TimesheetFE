@@ -19,6 +19,7 @@ export const TeamProjectPage = ({
     counts,
     access,
     projectMangers,
+    currencies,
 }: {
     projects: any;
     users: any;
@@ -26,6 +27,7 @@ export const TeamProjectPage = ({
     counts: ProjectProgressCountView;
     access: ProjectManagementSettingView;
     projectMangers: any;
+    currencies: any;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -80,6 +82,7 @@ export const TeamProjectPage = ({
                     users={users}
                     superAdminId={superAdminId}
                     projectMangers={projectMangers}
+                    currencies={currencies}
                 />
             )}
         </Box>

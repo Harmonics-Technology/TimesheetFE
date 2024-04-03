@@ -94,38 +94,40 @@ function ClientInvoices({
         setSelectedId([...selectedId, id]);
     };
     const approveInvoiceItems = async () => {
-        selectedId.forEach(async (x) => {
-            try {
-                setLoading(true);
-                const result = await FinancialService.treatSubmittedInvoice(x);
-                if (result.status) {
-                    toast({
-                        title: result.message,
-                        status: 'success',
-                        isClosable: true,
-                        position: 'top-right',
-                    });
-                    setLoading(false);
-                    router.replace(router.asPath);
-                    return;
-                }
-                setLoading(false);
+        const items = selectedId.map((x) => ({
+            invoiceId: x,
+            rate: 0,
+        }));
+        try {
+            setLoading(true);
+            const result = await FinancialService.treatSubmittedInvoice(items);
+            if (result.status) {
                 toast({
                     title: result.message,
-                    status: 'error',
+                    status: 'success',
                     isClosable: true,
                     position: 'top-right',
                 });
-            } catch (error: any) {
                 setLoading(false);
-                toast({
-                    title: error?.body?.message || error?.message,
-                    status: 'error',
-                    isClosable: true,
-                    position: 'top-right',
-                });
+                router.replace(router.asPath);
+                return;
             }
-        });
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            setLoading(false);
+            toast({
+                title: error?.body?.message || error?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
     };
 
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
@@ -270,7 +272,7 @@ function ClientInvoices({
                                 )}
                             </>
                         </Tables>
-                        <Pagination data={invoiceData} />
+                        <Pagination data={invoiceData} loadMore />
                     </>
                 ) : (
                     <NoAccess />

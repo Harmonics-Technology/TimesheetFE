@@ -161,7 +161,7 @@ function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
                                 )}
                             </>
                         </Tables>
-                        <Pagination data={timeSheets} />
+                        <Pagination data={timeSheets} loadMore />
                     </Box>
                 )}
             </Box>

@@ -29,6 +29,7 @@ export const ProjectPage = ({
     projectMangers,
     access,
     isPm,
+    currencies,
 }: {
     iProjects: any;
     nProjects: any;
@@ -39,6 +40,7 @@ export const ProjectPage = ({
     projectMangers: any;
     access: ProjectManagementSettingView;
     isPm: boolean;
+    currencies: any;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { user } = useContext(UserContext);
@@ -139,6 +141,7 @@ export const ProjectPage = ({
                     users={users}
                     superAdminId={superAdminId}
                     projectMangers={users}
+                    currencies={currencies}
                 />
             )}
         </Box>

@@ -42,4 +42,17 @@ export type EmployeeInformationView = {
     enableFinancials?: boolean;
     contracts?: Array<ContractView> | null;
     dateCreated?: string;
+    department?: string | null;
+    employmentContractType?: string | null;
+    timesheetFrequency?: string | null;
+    payrollStructure?: string | null;
+    rate?: number;
+    rateType?: string | null;
+    taxType?: string | null;
+    standardCanadianSystem?: string | null;
+    tax?: number;
+    payrollProcessingType?: string | null;
+    paymentProcessingFeeType?: string | null;
+    paymentProcessingFee?: number;
+    newPayrollStructureEnabled?: boolean;
 };

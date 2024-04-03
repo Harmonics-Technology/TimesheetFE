@@ -244,6 +244,8 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         option={true}
                         dropDown={[
                             'manage subscription',
+                            'department settings',
+                            'currency settings',
                             'expense type',
                             'onboarding fee',
                             'hst settings',

@@ -778,7 +778,7 @@ const TimesheetTeam = ({
                     fontSize={['.6rem', '.9rem']}
                     border={['0', '1px solid #e5e5e5']}
                 >
-                    {sumOfHours}
+                    {Round(sumOfHours)}
                 </Flex>
             </>
         );

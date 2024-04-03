@@ -2,9 +2,15 @@ import { Box, Button, Flex, HStack, Text, VStack } from '@chakra-ui/react';
 import { CAD } from '@components/generics/functions/Naira';
 import React from 'react';
 
-export const SubCard = ({ title, amount, desc, onClick, bg, id }) => {
+export const SubCard = ({ title, amount, desc, onClick, bg, id, selected }) => {
+    const isActive = selected?.id == id;
     return (
-        <Box borderRadius="8px" overflow="hidden" border="1px solid #C2CFE0">
+        <Box
+            borderRadius="8px"
+            overflow="hidden"
+            border="1px solid #C2CFE0"
+            h="full"
+        >
             <Flex
                 height="40px"
                 w="full"
@@ -18,8 +24,8 @@ export const SubCard = ({ title, amount, desc, onClick, bg, id }) => {
             <VStack
                 p="1.5rem 1.5rem"
                 justify="space-between"
-                h="190px"
-                align="flex-start"
+                h="85%"
+                align="space-between"
             >
                 <Box>
                     <HStack mb=".5rem">
@@ -42,11 +48,12 @@ export const SubCard = ({ title, amount, desc, onClick, bg, id }) => {
                         border="1px solid"
                         borderColor="brand.400"
                         fontSize="12px"
-                        color="brand.400"
+                        color={isActive ? 'white' : 'brand.400'}
                         h="30px"
                         w="full"
+                        bgColor={isActive ? 'brand.400' : 'transparent'}
                     >
-                        Select Plan
+                        {isActive ? 'Selected' : 'Select Plan'}
                     </Button>
                 </Box>
             </VStack>

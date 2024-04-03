@@ -11,8 +11,10 @@ import {
     UserDraftViewPagedCollectionStandardResponse,
     UserView,
 } from 'src/services';
-import DraftOnboardingModal from './DraftOnboardingModal';
-import { useState } from 'react';
+import { DraftOnboardingModal } from './DraftOnboardingModal';
+import { useContext, useState } from 'react';
+import { useRouter } from 'next/router';
+import { UserContext } from '@components/context/UserContext';
 
 interface adminProps {
     drafts: UserDraftViewPagedCollectionStandardResponse;
@@ -20,6 +22,8 @@ interface adminProps {
     paymentPartner: UserView[];
     leaveSettings: LeaveConfigurationView;
     subs: ClientSubscriptionDetailView[];
+    currencies: any;
+    department: any;
 }
 
 function TeamDraft({
@@ -28,16 +32,28 @@ function TeamDraft({
     paymentPartner,
     leaveSettings,
     subs,
+    currencies,
+    department,
 }: adminProps) {
+    const client = clients?.filter((x) => x.isActive);
+
     const thead = ['First Name', 'Last Name', 'Email', 'Action'];
+    const { user, opens, subType, accessControls } = useContext(UserContext);
     const [data, setData] = useState<UserDraftView>();
-    // const { isOpen, onOpen, onClose } = useDisclosure();
-    const [openModal, setOpenModal] = useState<any>(false);
+    const router = useRouter();
+    const {
+        isOpen: openDraft,
+        onOpen: onOpenDraft,
+        onClose: closeDraft,
+    } = useDisclosure();
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const setDraftData = (item: UserDraftView) => {
         setData(item);
-        setOpenModal(true);
+        onOpen();
         // onOpen();
     };
+
     return (
         <>
             <Box
@@ -80,15 +96,22 @@ function TeamDraft({
                 </Tables>
                 <Pagination data={drafts} />
 
-                {openModal && (
+                {isOpen && (
                     <DraftOnboardingModal
-                        isOpen={openModal}
-                        onClose={setOpenModal}
-                        data={data}
-                        clients={clients}
-                        paymentPartner={paymentPartner}
+                        userProfile={data}
+                        client={client}
+                        closeDraft={closeDraft}
+                        onClose={onClose}
+                        currencies={currencies}
+                        department={department}
+                        isOpen={isOpen}
                         leaveSettings={leaveSettings}
+                        paymentPartner={paymentPartner}
                         subs={subs}
+                        user={user}
+                        router={router}
+                        openDraft={openDraft}
+                        onOpenDraft={onOpenDraft}
                     />
                 )}
             </Box>

@@ -57,14 +57,14 @@ feeId: string,
     /**
      * @param offset 
      * @param limit 
-     * @param superAdminId 
+     * @param paymentPartnerId 
      * @returns OnboardingFeeViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static listPercentageOnboardingFees(
 offset?: number,
 limit?: number,
-superAdminId?: string,
+paymentPartnerId?: string,
 ): CancelablePromise<OnboardingFeeViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -72,7 +72,7 @@ superAdminId?: string,
             query: {
                 'Offset': offset,
                 'Limit': limit,
-                'superAdminId': superAdminId,
+                'paymentPartnerId': paymentPartnerId,
             },
             errors: {
                 400: `Bad Request`,
@@ -82,18 +82,51 @@ superAdminId?: string,
     }
 
     /**
-     * @param superAdminId 
-     * @returns OnboardingFeeViewStandardResponse Success
+     * @param offset 
+     * @param limit 
+     * @param paymentPartnerId 
+     * @returns OnboardingFeeViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
-    public static getFixedAmount(
-superAdminId?: string,
-): CancelablePromise<OnboardingFeeViewStandardResponse> {
+    public static listFixedAmountFee(
+offset?: number,
+limit?: number,
+paymentPartnerId?: string,
+): CancelablePromise<OnboardingFeeViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/api/OnboardingFee/fixed-fee',
+            url: '/api/OnboardingFee/fixed-fees',
             query: {
-                'superAdminId': superAdminId,
+                'Offset': offset,
+                'Limit': limit,
+                'paymentPartnerId': paymentPartnerId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param paymentPartnerId 
+     * @returns OnboardingFeeViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listOnboardingFee(
+offset?: number,
+limit?: number,
+paymentPartnerId?: string,
+): CancelablePromise<OnboardingFeeViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/OnboardingFee/onboarding-fees',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'paymentPartnerId': paymentPartnerId,
             },
             errors: {
                 400: `Bad Request`,

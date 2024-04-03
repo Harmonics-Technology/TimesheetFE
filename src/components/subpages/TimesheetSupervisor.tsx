@@ -238,7 +238,7 @@ const TimesheetSupervisor = ({
                 data,
             );
             if (result.status) {
-                setSingleReject({state: false,id: ''});
+                setSingleReject({ state: false, id: '' });
                 router.replace(router.asPath);
                 return;
             }
@@ -902,7 +902,7 @@ const TimesheetSupervisor = ({
                     fontSize={['.6rem', '.9rem']}
                     border={['0', '1px solid #e5e5e5']}
                 >
-                    {sumOfHours}
+                    {Round(sumOfHours)}
                 </Flex>
             </>
         );

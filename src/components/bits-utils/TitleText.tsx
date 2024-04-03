@@ -1,6 +1,7 @@
 import { VStack, Text, HStack, Square } from '@chakra-ui/react';
+import validateEmail from '@components/generics/functions/validateEmail';
 import React from 'react';
-import parser from 'react-html-parser'
+import parser from 'react-html-parser';
 
 const TitleText = ({
     title,
@@ -33,7 +34,9 @@ const TitleText = ({
                     color="#8C8C8C"
                     fontWeight="500"
                     mb="0"
-                    textTransform="capitalize"
+                    textTransform={
+                        validateEmail(text) ? 'lowercase' : 'capitalize'
+                    }
                 >
                     {parser(text)}
                 </Text>

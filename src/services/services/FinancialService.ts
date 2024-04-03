@@ -15,6 +15,7 @@ import type { PayrollViewPagedCollectionStandardResponse } from '../models/Payro
 import type { PayScheduleGenerationModel } from '../models/PayScheduleGenerationModel';
 import type { PaySlipViewPagedCollectionStandardResponse } from '../models/PaySlipViewPagedCollectionStandardResponse';
 import type { RejectPaymentPartnerInvoiceModel } from '../models/RejectPaymentPartnerInvoiceModel';
+import type { TreatInvoiceModel } from '../models/TreatInvoiceModel';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -748,6 +749,7 @@ endDate?: string,
      * @param startDate 
      * @param endDate 
      * @param payrollTypeFilter 
+     * @param convertedInvoices 
      * @returns InvoiceViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -759,6 +761,7 @@ search?: string,
 startDate?: string,
 endDate?: string,
 payrollTypeFilter?: number,
+convertedInvoices?: boolean,
 ): CancelablePromise<InvoiceViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -771,6 +774,7 @@ payrollTypeFilter?: number,
                 'StartDate': startDate,
                 'EndDate': endDate,
                 'payrollTypeFilter': payrollTypeFilter,
+                'convertedInvoices': convertedInvoices,
             },
             errors: {
                 400: `Bad Request`,
@@ -974,19 +978,18 @@ invoiceId?: string,
     }
 
     /**
-     * @param invoiceId 
+     * @param requestBody 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static treatSubmittedInvoice(
-invoiceId?: string,
+requestBody?: Array<TreatInvoiceModel>,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/Financial/invoice/treat',
-            query: {
-                'invoiceId': invoiceId,
-            },
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
         });
     }
 

@@ -29,6 +29,7 @@ limit?: number,
             },
             errors: {
                 400: `Bad Request`,
+                500: `Server Error`,
             },
         });
     }

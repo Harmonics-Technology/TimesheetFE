@@ -8,8 +8,8 @@ export default function getBusinessDateCount(startDate, endDate) {
     elapsed = endDate - startDate;
     elapsed /= 86400000;
 
-    const daysBeforeFirstSunday = (7 - startDate.getDay()) % 7;
-    const daysAfterLastSunday = endDate.getDay();
+    const daysBeforeFirstSunday = (7 - startDate?.getDay()) % 7;
+    const daysAfterLastSunday = endDate?.getDay();
 
     elapsed -= daysBeforeFirstSunday + daysAfterLastSunday;
     elapsed = (elapsed / 7) * 5;

@@ -9,6 +9,7 @@ import {
     Tr,
     useDisclosure,
     useToast,
+    Text,
 } from '@chakra-ui/react';
 import {
     InvoiceAction,
@@ -17,12 +18,12 @@ import {
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
-import moment from 'moment';
 import {
     ControlSettingView,
     FinancialService,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
+    TreatInvoiceModel,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import { useContext, useState } from 'react';
@@ -34,18 +35,24 @@ import { UserContext } from '@components/context/UserContext';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { BsDownload } from 'react-icons/bs';
-import Naira, { CAD } from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import NoAccess from '@components/bits-utils/NoAccess';
 import { PaymentPrompt } from '@components/bits-utils/ProjectManagement/Modals/PaymentPrompt';
 import asyncForEach from '@components/generics/functions/AsyncForEach';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/CurrencyConversionModal';
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
+import { CUR } from '@components/generics/functions/Naira';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
     fileName?: string;
     record?: number;
     isSuperAdmin?: boolean;
+    organizationCurrency?: any;
+    converted?: any;
 }
 
 function AdminInvoices({
@@ -53,8 +60,10 @@ function AdminInvoices({
     fileName,
     record,
     isSuperAdmin,
+    organizationCurrency,
+    converted,
 }: adminProps) {
-    console.log({ invoiceData });
+    // console.log({ invoiceData });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
         isOpen: isOpened,
@@ -68,8 +77,8 @@ function AdminInvoices({
     const toast = useToast();
     const router = useRouter();
     //
-    const [selectedId, setSelectedId] = useState<string[]>([]);
-    const toggleSelected = (id: string, all?: boolean) => {
+    const [selectedId, setSelectedId] = useState<any[]>([]);
+    const toggleSelected = (data: any, all?: boolean) => {
         if (all) {
             if (
                 selectedId?.length ===
@@ -78,27 +87,49 @@ function AdminInvoices({
                 setSelectedId([]);
                 return;
             }
-            const response: string[] = [];
+            const response: unknown[] = [];
             invoice
                 ?.filter((x) => x.status !== 'INVOICED')
                 .forEach((x) =>
-                    response.push(x.id as string),
-                ) as unknown as string[];
+                    response.push({
+                        id: x.id,
+                        currency: x.employeeInformation?.currency,
+                        payrollProcessingType:
+                            data.employeeInformation.payrollProcessingType,
+                        rate: 0,
+                    }),
+                );
 
             setSelectedId([...response]);
             return;
         }
-        const existingValue = selectedId.find((e) => e === id);
+        const existingValue = selectedId.find((e) => e.id === data.id);
         if (existingValue) {
-            const newArray = selectedId.filter((x) => x !== id);
+            const newArray = selectedId.filter((x) => x.id !== data.id);
             setSelectedId(newArray);
             return;
         }
-        setSelectedId([...selectedId, id]);
+        setSelectedId([
+            ...selectedId,
+            {
+                id: data.id,
+                currency: data.employeeInformation.currency,
+                payrollProcessingType:
+                    data.employeeInformation.payrollProcessingType,
+                rate: 0,
+            },
+        ]);
     };
-    const approveSingleInvoice = async (item: string) => {
+    const approveInvoiceItems = async (item: any[]) => {
+        setLoading(true);
+        const newItem: TreatInvoiceModel[] = item.map((x) => ({
+            invoiceId: x.id,
+            rate: x.rate,
+        }));
         try {
-            const result = await FinancialService.treatSubmittedInvoice(item);
+            const result = await FinancialService.treatSubmittedInvoice(
+                newItem,
+            );
             if (result.status) {
                 toast({
                     title: `${result.message}`,
@@ -106,6 +137,9 @@ function AdminInvoices({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setLoading(false);
+                setSelectedId([]);
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -116,25 +150,6 @@ function AdminInvoices({
                 position: 'top-right',
             });
         } catch (error: any) {
-            toast({
-                title: error?.body?.message || error?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
-    const approveInvoiceItems = async () => {
-        try {
-            await asyncForEach(selectedId, async (select: string) => {
-                setLoading(true);
-                await approveSingleInvoice(select);
-            });
-            setSelectedId([]);
-            setLoading(false);
-            router.replace(router.asPath);
-            return;
-        } catch (error: any) {
             setLoading(false);
             toast({
                 title: error?.body?.message || error?.message,
@@ -144,37 +159,117 @@ function AdminInvoices({
             });
         }
     };
+
+    // const approveInvoiceItems = async (arrays: any) => {
+    //     try {
+    //         await asyncForEach(arrays, async (select: any) => {
+    //             setLoading(true);
+    //             await approveSingleInvoice(select);
+    //         });
+    //         setSelectedId([]);
+    //         setLoading(false);
+    //         router.replace(router.asPath);
+    //         return;
+    //     } catch (error: any) {
+    //         setLoading(false);
+    //         toast({
+    //             title: error?.body?.message || error?.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
     const { user, accessControls } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const userAccess: ControlSettingView = accessControls;
     const hideCheckbox = router.asPath.startsWith(
         `/${role}/financials/submitted-payrolls`,
     );
+
     const pays = router.asPath.startsWith(`/${role}/financials/payrolls`);
 
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
-    const thead =
-        hideCheckbox || pays
-            ? [
-                  'Organization Name',
-                  'Name',
-                  'Created On',
-                  'Start Date',
-                  'End Date',
-                  'Amount',
-                  'Status',
-                  // 'Action',
-              ]
-            : [
-                  'Invoice No',
-                  'Name',
-                  'Created On',
-                  'Start Date',
-                  'End Date',
-                  'Amount',
-                  'Status',
-                  // 'Action',
-              ];
+    const {
+        isOpen: isCurrencyOpened,
+        onOpen: onCurrencyOpen,
+        onClose: onCurrencyClosed,
+    } = useDisclosure();
+    const thead = converted
+        ? [
+              //   'Organization Name',
+              'Name',
+              'Created On',
+              'Start Date',
+              'End Date',
+              'Converted Amount',
+              'Exchange Rate',
+              '',
+          ]
+        : hideCheckbox || pays
+        ? [
+              'Organization Name',
+              'Name',
+              'Created On',
+              'Start Date',
+              'End Date',
+              'Amount',
+              'Status',
+              // 'Action',
+          ]
+        : [
+              'Invoice No',
+              'Name',
+              'Created On',
+              'Start Date',
+              'End Date',
+              'Amount',
+              'Status',
+              // 'Action',
+          ];
+
+    const [updateCurrency, setUpdateCurrency] = useState();
+
+    const differentItems = selectedId.filter(
+        (x) =>
+            x.payrollProcessingType == 'internal' &&
+            x.currency !== organizationCurrency,
+    );
+    const items = getUniqueListBy(differentItems, 'currency');
+    const checkInvoicesBeforeProcess = () => {
+        if (differentItems.length > 0) {
+            onCurrencyOpen();
+            return;
+        }
+        approveInvoiceItems(selectedId);
+    };
+
+    const rebuildInvoiceProcess = async () => {
+        const rebuildItems = selectedId.map((x) => {
+            return {
+                id: x.id,
+                currency: x.currency,
+                rate: Number(
+                    (updateCurrency &&
+                        x.payrollProcessingType == 'internal' &&
+                        updateCurrency[x.currency]) ||
+                        0,
+                ),
+            };
+        });
+        approveInvoiceItems(rebuildItems);
+        onCurrencyClosed();
+    };
+
+    const toggleConverted = () => {
+        router.push({
+            query: {
+                ...router.query,
+                convert: !converted,
+            },
+        });
+    };
+    // console.log({ differentItems, updateCurrency, items });
 
     return (
         <>
@@ -198,41 +293,63 @@ function AdminInvoices({
                 />
                 {userAccess?.adminCanViewPayrolls || isSuperAdmin ? (
                     <>
+                        <Box mt="1rem">
+                            <CurrencyTag
+                                label="The Primary currency for your organization is"
+                                currency={organizationCurrency}
+                            />
+                        </Box>
                         <Flex
                             justify="space-between"
                             my="1rem"
                             flexWrap="wrap"
                             gap=".5rem"
                         >
-                            <HStack gap="1rem">
-                                {(userAccess?.adminCanApprovePayrolls ||
-                                    isSuperAdmin) && (
-                                    <Button
-                                        bgColor="brand.600"
-                                        color="white"
-                                        p=".5rem 1.5rem"
-                                        height="fit-content"
-                                        onClick={() =>
-                                            //    selectedId?.employeeInformation
-                                            //         ?.payrollType == 'ONSHORE'
-                                            //         ? onOpened()
-                                            //         :
-                                            approveInvoiceItems()
-                                        }
-                                        isLoading={loading}
-                                        spinner={
-                                            <BeatLoader
-                                                color="white"
-                                                size={10}
-                                            />
-                                        }
-                                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                        isDisabled={selectedId.length < 1}
-                                    >
-                                        Approve
-                                    </Button>
-                                )}
-                            </HStack>
+                            {!hideCheckbox ? (
+                                <HStack gap="1rem">
+                                    {(userAccess?.adminCanApprovePayrolls ||
+                                        isSuperAdmin) && (
+                                        <Button
+                                            bgColor="brand.400"
+                                            color="white"
+                                            p=".5rem 1.5rem"
+                                            height="fit-content"
+                                            borderRadius="6px"
+                                            fontSize=".8rem"
+                                            onClick={() =>
+                                                //    selectedId?.employeeInformation
+                                                //         ?.payrollType == 'ONSHORE'
+                                                //         ? onOpened()
+                                                //         :
+                                                checkInvoicesBeforeProcess()
+                                            }
+                                            isLoading={loading}
+                                            spinner={
+                                                <BeatLoader
+                                                    color="white"
+                                                    size={10}
+                                                />
+                                            }
+                                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                                            isDisabled={selectedId.length < 1}
+                                        >
+                                            Process
+                                        </Button>
+                                    )}
+                                </HStack>
+                            ) : (
+                                <Text
+                                    color="brand.600"
+                                    fontSize=".8rem"
+                                    cursor="pointer"
+                                    onClick={toggleConverted}
+                                    userSelect="none"
+                                >
+                                    {converted
+                                        ? 'View processed payroll'
+                                        : 'View converted payroll in your primary currency'}
+                                </Text>
+                            )}
 
                             <HStack ml="auto">
                                 {!hideCheckbox && (
@@ -256,7 +373,8 @@ function AdminInvoices({
                                         p=".5rem 1.5rem"
                                         height="fit-content"
                                         onClick={onOpens}
-                                        borderRadius="25px"
+                                        borderRadius="6px"
+                                        fontSize=".8rem"
                                     >
                                         Download{' '}
                                         <Icon as={BsDownload} ml=".5rem" />
@@ -270,15 +388,18 @@ function AdminInvoices({
                                 {invoiceData?.data?.value?.map(
                                     (x: InvoiceView) => (
                                         <Tr key={x.id}>
-                                            <TableData
-                                                name={
-                                                    hideCheckbox || pays
-                                                        ? x.employeeInformation
-                                                              ?.client
-                                                              ?.organizationName
-                                                        : x.invoiceReference
-                                                }
-                                            />
+                                            {!converted && (
+                                                <TableData
+                                                    name={
+                                                        hideCheckbox || pays
+                                                            ? x
+                                                                  .employeeInformation
+                                                                  ?.client
+                                                                  ?.organizationName
+                                                            : x.invoiceReference
+                                                    }
+                                                />
+                                            )}
                                             <TableData
                                                 name={
                                                     x.payrollGroupName ||
@@ -295,30 +416,55 @@ function AdminInvoices({
                                             <TableData
                                                 name={formatDate(x.endDate)}
                                             />
-                                            <TableData
-                                                name={
-                                                    x?.employeeInformation
-                                                        ?.currency == 'NGN'
-                                                        ? Naira(
-                                                              Round(
-                                                                  x.totalAmount,
-                                                              ),
-                                                          )
-                                                        : CAD(
-                                                              Round(
-                                                                  x.totalAmount,
-                                                              ),
-                                                          )
-                                                }
-                                            />
-                                            <TableState
-                                                name={
-                                                    x.status == 'REVIEWING' ||
-                                                    x.status == 'REVIEWED'
-                                                        ? 'APPROVED'
-                                                        : (x.status as string)
-                                                }
-                                            />
+                                            {converted ? (
+                                                <>
+                                                    <TableData
+                                                        name={`${getCurrencySymbol(
+                                                            organizationCurrency,
+                                                        )}${CUR(
+                                                            Round(
+                                                                x.convertedAmount,
+                                                            ),
+                                                        )}`}
+                                                        full
+                                                    />
+                                                    <TableData
+                                                        name={`${getCurrencySymbol(
+                                                            organizationCurrency,
+                                                        )}${CUR(
+                                                            Round(
+                                                                x.rateForConvertedIvoice,
+                                                            ),
+                                                        )}`}
+                                                        full
+                                                    />
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <TableData
+                                                        name={`${getCurrencySymbol(
+                                                            x
+                                                                ?.employeeInformation
+                                                                ?.currency,
+                                                        )}${CUR(
+                                                            Round(
+                                                                x.totalAmount,
+                                                            ),
+                                                        )}`}
+                                                        full
+                                                    />
+                                                    <TableState
+                                                        name={
+                                                            x.status ==
+                                                                'REVIEWING' ||
+                                                            x.status ==
+                                                                'REVIEWED'
+                                                                ? 'APPROVED'
+                                                                : (x.status as string)
+                                                        }
+                                                    />
+                                                </>
+                                            )}
 
                                             <InvoiceAction
                                                 data={x}
@@ -332,13 +478,12 @@ function AdminInvoices({
                                                         checked={
                                                             selectedId.find(
                                                                 (e) =>
-                                                                    e === x.id,
+                                                                    e.id ===
+                                                                    x.id,
                                                             ) || ''
                                                         }
                                                         onChange={(e) =>
-                                                            toggleSelected(
-                                                                x.id as string,
-                                                            )
+                                                            toggleSelected(x)
                                                         }
                                                         disabled={
                                                             x.status ===
@@ -352,7 +497,7 @@ function AdminInvoices({
                                 )}
                             </>
                         </Tables>
-                        <Pagination data={invoiceData} />
+                        <Pagination data={invoiceData} loadMore />
                     </>
                 ) : (
                     <NoAccess />
@@ -379,6 +524,15 @@ function AdminInvoices({
                     onClose={onClosed}
                     onSubmit={approveInvoiceItems}
                     loading={loading}
+                />
+            )}
+            {isCurrencyOpened && (
+                <CurrencyConversionModal
+                    isOpen={isCurrencyOpened}
+                    onClose={onCurrencyClosed}
+                    items={items}
+                    setUpdateCurrency={setUpdateCurrency}
+                    rebuildInvoiceProcess={rebuildInvoiceProcess}
                 />
             )}
         </>

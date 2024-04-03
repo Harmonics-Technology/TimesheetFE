@@ -5,13 +5,14 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import { FinancialService, UserService } from 'src/services';
 
-function index({ payrolls, clients, clientId, superAdminId }) {
+function index({ payrolls, clients, clientId, superAdminId,paymentPartnerCurrency }) {
     return (
         <PaymentPartnerPayroll
             payrolls={payrolls}
             id={clientId}
             clients={clients}
             superAdminId={superAdminId}
+            paymentPartnerCurrency={paymentPartnerCurrency}
         />
     );
 }
@@ -23,6 +24,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const clientId = pagingOptions?.clientId;
+        const paymentPartnerCurrency = JSON.parse(ctx.req.cookies.user).currency
         // console.log({ clientId });
         try {
             const data = await FinancialService.listPayrollGroupInvoices(
@@ -41,6 +43,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 40,
                 pagingOptions.search,
             );
+            
 
             return {
                 props: {
@@ -48,6 +51,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     clientId: clientId || superAdminId,
                     clients: clients?.data?.value,
                     superAdminId,
+                    paymentPartnerCurrency
                 },
             };
         } catch (error: any) {

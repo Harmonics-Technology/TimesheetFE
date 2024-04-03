@@ -18,6 +18,8 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     options: any;
     defaultValue?: any;
     id?: any;
+    disabled?: any;
+    onChange?: any;
 }
 export const PrimarySelect = <TFormValues extends Record<string, any>>({
     name,
@@ -31,7 +33,10 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
     options,
     defaultValue,
     id,
+    disabled,
+    onChange,
 }: FormInputProps<TFormValues>) => {
+    // console.log({ options });
     return (
         <FormControl
             isInvalid={
@@ -54,13 +59,17 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
                 height="2.6rem"
                 fontSize=".9rem"
                 textTransform="capitalize"
-                placeholder={placeholder}
+                // placeholder={placeholder}
                 defaultValue={defaultValue}
                 id={id}
+                isDisabled={disabled}
+                // onChange={onChange}
                 color="gray.500"
                 // isReadOnly
             >
-                {/* <option disabled>{placeholder}</option> */}
+                <option value="" hidden>
+                    {placeholder}
+                </option>
                 {options}
             </Select>
             <FormErrorMessage fontSize=".7rem">

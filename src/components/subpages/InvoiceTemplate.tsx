@@ -15,13 +15,14 @@ import InvoiceTotalText from '@components/bits-utils/InvoiceTotalText';
 import { TableData } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import moment from 'moment';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import { ExpenseView, InvoiceView, PayrollView } from 'src/services';
 import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import { formatDate } from '@components/generics/functions/formatDate';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
 import { Round } from '@components/generics/functions/Round';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 function InvoiceTemplate({
     isOpen,
@@ -33,6 +34,7 @@ function InvoiceTemplate({
     clicked: InvoiceView | undefined;
 }) {
     const ref = useRef<any>(null);
+    const { hstAmount } = useContext(OnboardingFeeContext);
     function downloadInvoice() {
         if (ref.current) {
             ref.current.save();
@@ -43,6 +45,16 @@ function InvoiceTemplate({
         0,
     );
     const exchangeRate = clicked?.rate as unknown as number;
+
+    const amountMinusExpense =
+        (clicked?.totalAmount as number) - (allExpenseTotal as number);
+
+    const taxCalculated =
+        clicked?.employeeInformation?.taxType == 'hst'
+            ? hstAmount?.fee
+            : clicked?.employeeInformation?.tax;
+
+    const finalTotal = Number(amountMinusExpense) + Number(taxCalculated);
 
     return (
         <>
@@ -149,25 +161,27 @@ function InvoiceTemplate({
                                     </Text> */}
                                     <Tables
                                         tableHead={
-                                            clicked?.employeeInformation
-                                                ?.payrollType == 'ONSHORE'
-                                                ? [
-                                                      'Name',
-                                                      'Pay Period',
-                                                      'Type',
-                                                      'Hours',
-                                                      'Rate/Hr',
-                                                      `Pay (${clicked?.employeeInformation?.currency})`,
-                                                  ]
-                                                : [
-                                                      'Name',
-                                                      'Pay Period',
-                                                      'Type',
-                                                      'Hours',
-                                                      `Pay (${clicked?.employeeInformation?.currency})`,
-                                                      // 'Fee',
-                                                      // 'Total',
-                                                  ]
+                                            // clicked?.employeeInformation
+                                            //     ?.payrollType == 'ONSHORE'
+                                            //     ? [
+                                            //           'Name',
+                                            //           'Pay Period',
+                                            //           'Type',
+                                            //           'Hours',
+                                            //           'Rate/Hr',
+                                            //           `Pay (${clicked?.employeeInformation?.currency})`,
+                                            //       ]
+                                            //     :
+                                            [
+                                                'Name',
+                                                'Pay Period',
+                                                'Type',
+                                                'Hours',
+                                                `Pay (${clicked?.employeeInformation?.currency})`,
+                                                `Tax(%)`,
+                                                // 'Fee',
+                                                // 'Total',
+                                            ]
                                         }
                                     >
                                         <Tr key={clicked?.id}>
@@ -209,12 +223,21 @@ function InvoiceTemplate({
                                                     clicked?.employeeInformation
                                                         ?.currency
                                                 } ${CUR(
-                                                    Round(
-                                                        (clicked?.totalAmount as number) -
-                                                            (allExpenseTotal as number),
-                                                    ),
+                                                    Round(amountMinusExpense),
                                                 )}`}
                                             />
+                                            <TableData
+                                                name={`${taxCalculated}%
+                                                `}
+                                            />
+                                            {/* (${CUR(
+                                                    Round(
+                                                        calculatePercentage(
+                                                            amountMinusExpense,
+                                                            taxCalculated,
+                                                        ),
+                                                    ),
+                                                )}) */}
                                             {/* <TableData
                                                     name={CAD(
                                                         clicked
@@ -306,7 +329,7 @@ function InvoiceTemplate({
                                         flexDirection="column"
                                         w="fit-content"
                                     >
-                                        {/* <InvoiceTotalText
+                                        <InvoiceTotalText
                                             label="Subtotal"
                                             cur={
                                                 clicked?.employeeInformation
@@ -315,17 +338,28 @@ function InvoiceTemplate({
                                             value={CUR(
                                                 clicked?.totalAmount as number,
                                             )}
-                                        /> */}
-                                        {/* <InvoiceTotalText
-                                            label="Hst"
-                                            value={200}
-                                            cur="$"
-                                        /> */}
+                                        />
+                                        <InvoiceTotalText
+                                            label="Tax"
+                                            value={CUR(
+                                                Round(
+                                                    calculatePercentage(
+                                                        amountMinusExpense,
+                                                        taxCalculated,
+                                                    ),
+                                                ),
+                                            )}
+                                            cur={
+                                                clicked?.employeeInformation
+                                                    ?.currency
+                                            }
+                                        />
                                         <Box
-                                            border="2px dashed"
+                                            border="2px solid"
                                             borderColor="gray.300"
                                             borderX="none"
-                                            pt="1em"
+                                            py=".5em"
+                                            mt="1rem"
                                         >
                                             <InvoiceTotalText
                                                 label="Total"
@@ -333,11 +367,7 @@ function InvoiceTemplate({
                                                     clicked?.employeeInformation
                                                         ?.currency
                                                 }
-                                                value={CUR(
-                                                    Round(
-                                                        clicked?.totalAmount as number,
-                                                    ),
-                                                )}
+                                                value={CUR(Round(finalTotal))}
                                             />
                                         </Box>
                                     </Flex>

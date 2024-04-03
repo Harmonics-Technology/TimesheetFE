@@ -55,6 +55,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { UserContext } from '@components/context/UserContext';
 import { FaEllipsisH } from 'react-icons/fa';
+import { getFileName } from '@components/generics/functions/getCurrencyName';
 
 const schema = yup.object().shape({
     title: yup.string().required(),
@@ -126,7 +127,7 @@ function ContractTable({ userProfile, isSuperAdmin }: adminProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                reset()
+                reset();
                 onClose();
                 return;
             }
@@ -146,6 +147,8 @@ function ContractTable({ userProfile, isSuperAdmin }: adminProps) {
             });
         }
     };
+
+    console.log({ userProfile });
 
     return (
         <>
@@ -185,13 +188,13 @@ function ContractTable({ userProfile, isSuperAdmin }: adminProps) {
                 {/* <FilterSearch /> */}
                 <Tables
                     tableHead={[
-                        'Name',
-                        'Contract Title',
+                        'Job Title',
+                        'Employmet Type',
                         'Start Date',
                         'End Date',
                         'Duration',
                         'Contract',
-                        'Status',
+                        // 'Status',
                         'Action',
                     ]}
                 >
@@ -199,15 +202,36 @@ function ContractTable({ userProfile, isSuperAdmin }: adminProps) {
                         {userProfile?.employeeInformation?.contracts?.map(
                             (x: ContractView) => (
                                 <Tr key={x.title}>
-                                    <TableData name={userProfile?.fullName} />
-                                    <TableData name={x.title} />
+                                    <TableData
+                                        name={
+                                            userProfile?.employeeInformation
+                                                ?.jobTitle
+                                        }
+                                    />
+                                    <TableData
+                                        name={
+                                            userProfile?.employeeInformation
+                                                ?.employmentContractType
+                                        }
+                                    />
                                     <TableData name={formatDate(x.startDate)} />
                                     <TableData name={formatDate(x.endDate)} />
                                     <TableData
                                         name={x.tenor as unknown as string}
                                     />
-                                    <TableContract url={x.document} />
-                                    <TableState name={x.status as string} />
+                                    <TableContract
+                                        url={
+                                            x.document ||
+                                            userProfile?.employeeInformation
+                                                ?.inCorporationDocumentUrl
+                                        }
+                                        label={getFileName(
+                                            x.document ||
+                                                userProfile?.employeeInformation
+                                                    ?.inCorporationDocumentUrl,
+                                        )}
+                                    />
+                                    {/* <TableState name={x.status as string} /> */}
                                     {userAccess?.adminContractManagement ||
                                     isSuperAdmin ? (
                                         <TableContractOptions

@@ -34,4 +34,6 @@ export type InvoiceView = {
     clientInvoiceChildren?: Array<InvoiceView> | null;
     dateCreated?: string;
     totalPay?: number;
+    rateForConvertedIvoice?: number | null;
+    convertedAmount?: number | null;
 };

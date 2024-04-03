@@ -31,17 +31,20 @@ import {
     ProjectTaskView,
 } from 'src/services';
 import { Round } from '@components/generics/functions/Round';
+import Pagination from '@components/bits-utils/Pagination';
 
 export const ProjectTask = ({
     id,
     project,
     tasks,
     users,
+    currencies,
 }: {
     id: any;
     project: ProjectView;
     tasks: any;
     users: any;
+    currencies: any;
 }) => {
     const tableHead = [
         'Task Name',
@@ -66,7 +69,12 @@ export const ProjectTask = ({
 
     return (
         <Box>
-            <TopBar id={id} data={project} users={users} />
+            <TopBar
+                currencies={currencies}
+                id={id}
+                data={project}
+                users={users}
+            />
             <HStack py="1rem" justify="space-between">
                 <HStack w="17%">
                     <HStack w="full">
@@ -99,81 +107,86 @@ export const ProjectTask = ({
                     <SubSearchComponent />
                 </HStack>
             </HStack>
-            <TableCard tableHead={tableHead}>
-                {tasks?.value?.map((x: ProjectTaskView, i) => {
-                    const viewTask = () =>
-                        router.push(
-                            `/${role}/project-management/projects/${id}/project-task/${x?.id}`,
-                        );
-                    return (
-                        <TableRow key={i}>
-                            <TableData
-                                name={x?.name}
-                                fontWeight="500"
-                                full
-                                breakWord
-                                onClick={viewTask}
-                            />
-                            <td
-                                style={{ maxWidth: '300px' }}
-                                onClick={viewTask}
-                            >
-                                <HStack
-                                    color="#c2cfe0"
-                                    gap=".2rem"
-                                    flexWrap="wrap"
+            <Box>
+                <TableCard tableHead={tableHead}>
+                    {tasks?.value?.map((x: ProjectTaskView, i) => {
+                        const viewTask = () =>
+                            router.push(
+                                `/${role}/project-management/projects/${id}/project-task/${x?.id}`,
+                            );
+                        return (
+                            <TableRow key={i}>
+                                <TableData
+                                    name={x?.name}
+                                    fontWeight="500"
+                                    full
+                                    breakWord
+                                    onClick={viewTask}
+                                />
+                                <td
+                                    style={{ maxWidth: '300px' }}
+                                    onClick={viewTask}
                                 >
-                                    {x?.assignees?.map(
-                                        (x: ProjectTaskAsigneeView, i) => (
-                                            <Flex
-                                                key={i}
-                                                border="1px solid"
-                                                borderColor="#4FD1C5"
-                                                borderRadius="25px"
-                                                justify="center"
-                                                align="center"
-                                                color="#4FD1C5"
-                                                h="1.6rem"
-                                                px="0.5rem"
-                                            >
-                                                {x.user?.fullName}
-                                            </Flex>
-                                        ),
+                                    <HStack
+                                        color="#c2cfe0"
+                                        gap=".2rem"
+                                        flexWrap="wrap"
+                                    >
+                                        {x?.assignees?.map(
+                                            (x: ProjectTaskAsigneeView, i) => (
+                                                <Flex
+                                                    key={i}
+                                                    border="1px solid"
+                                                    borderColor="#4FD1C5"
+                                                    borderRadius="25px"
+                                                    justify="center"
+                                                    align="center"
+                                                    color="#4FD1C5"
+                                                    h="1.6rem"
+                                                    px="0.5rem"
+                                                >
+                                                    {x.user?.fullName}
+                                                </Flex>
+                                            ),
+                                        )}
+                                    </HStack>
+                                </td>
+                                <TableData
+                                    name={`${Round(x?.hoursSpent)} Hrs`}
+                                    fontWeight="500"
+                                    onClick={viewTask}
+                                />
+                                <TableData
+                                    name={moment(x?.startDate).format(
+                                        'DD/MM/YYYY',
                                     )}
-                                </HStack>
-                            </td>
-                            <TableData
-                                name={`${Round(x?.hoursSpent)} Hrs`}
-                                fontWeight="500"
-                                onClick={viewTask}
-                            />
-                            <TableData
-                                name={moment(x?.startDate).format('DD/MM/YYYY')}
-                                fontWeight="500"
-                                onClick={viewTask}
-                            />
-                            <TableData
-                                name={x?.subTaskCount}
-                                fontWeight="500"
-                                onClick={viewTask}
-                            />
-                            <NewTableState
-                                name={x?.status}
-                                color={colorSwatch(x?.status)}
-                            />
-                            <td>
-                                <HStack color="#c2cfe0">
-                                    <Icon as={FaEye} onClick={viewTask} />
-                                    <Icon
-                                        as={BiSolidPencil}
-                                        onClick={() => openModal(x)}
-                                    />
-                                </HStack>
-                            </td>
-                        </TableRow>
-                    );
-                })}
-            </TableCard>
+                                    fontWeight="500"
+                                    onClick={viewTask}
+                                />
+                                <TableData
+                                    name={x?.subTaskCount}
+                                    fontWeight="500"
+                                    onClick={viewTask}
+                                />
+                                <NewTableState
+                                    name={x?.status}
+                                    color={colorSwatch(x?.status)}
+                                />
+                                <td>
+                                    <HStack color="#c2cfe0">
+                                        <Icon as={FaEye} onClick={viewTask} />
+                                        <Icon
+                                            as={BiSolidPencil}
+                                            onClick={() => openModal(x)}
+                                        />
+                                    </HStack>
+                                </td>
+                            </TableRow>
+                        );
+                    })}
+                </TableCard>
+                <Pagination data={tasks} loadMore />
+            </Box>
             {isOpen && (
                 <AddNewTaskDrawer
                     isOpen={isOpen}

@@ -13,6 +13,7 @@ import {
     Image,
     Button,
     Icon,
+    useDisclosure,
 } from '@chakra-ui/react';
 import { FaUser } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
@@ -21,14 +22,18 @@ import { BsBellFill } from 'react-icons/bs';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { UserContext } from '@components/context/UserContext';
-import { useCallback, useContext, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { MdOutlineArrowBackIos } from 'react-icons/md';
 import { UserView } from 'src/services';
-import { NotificationContext } from '@components/context/NotificationContext';
 import { Logout } from '@components/bits-utils/LogUserOut';
 import { GrShieldSecurity } from 'react-icons/gr';
 import Link from 'next/link';
 import useClickOutside from '@components/generics/useClickOutside';
+import { ConfettiIcon } from './ConfettiIcon';
+import moment from 'moment';
+import { BirthDayModal } from '@components/bits-utils/ProjectManagement/Modals/BirthDayModal';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import { NotificationContext } from '@components/context/NotificationContext';
 interface topnavProps {
     setOpenSidenav: any;
     openSidenav: boolean;
@@ -37,6 +42,7 @@ interface topnavProps {
 function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     const router = useRouter();
     const { user } = useContext(UserContext);
+    const { controls } = useContext(OnboardingFeeContext);
     const role = user?.role;
 
     const curPage = router.pathname.split('/').at(-1);
@@ -48,6 +54,37 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     const close = useCallback(() => setOpenSidenav(false), []);
     const popover = useRef(null);
     useClickOutside(popover, close);
+    const todaysDate = moment().format('MM-DD');
+    const isUserBirthDay = user?.isBirthDayToday;
+    // moment(user?.dateOfBirth).format('MM-DD') == todaysDate;
+    const isUserAnniversary = user?.isAnniversaryToday;
+    // moment(user?.contractStartDate).format('MM-DD') == todaysDate;
+    const pageIsDashboard =
+        router.pathname === `/${role?.replaceAll(' ', '')}/dashboard`;
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const closeModal = () => {
+        Cookies.set('isBdChecked', 'true');
+        onClose();
+    };
+
+    const birthdayCheck =
+        controls.allowBirthdayNotification && controls.notifyCelebrant;
+    const workdayCheck =
+        controls.allowWorkAnniversaryNotification && controls.notifyCelebrant;
+
+    const massiveCheck = birthdayCheck
+        ? isUserBirthDay && pageIsDashboard && birthdayCheck
+        : isUserAnniversary && pageIsDashboard && workdayCheck;
+
+    useEffect(() => {
+        const hasCheckedOnThisDevice = Cookies.get('isBdChecked');
+        if (massiveCheck && hasCheckedOnThisDevice !== 'true') {
+            onOpen();
+        }
+    }, [massiveCheck]);
+
     return (
         <Box pos="sticky" top="0" zIndex="800" bgColor="#f6f7f8">
             {/* <Button
@@ -123,24 +160,44 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                 </Box>
                 <Flex justify="space-between" align="center">
                     <Box color="brand.200">
-                        <Text
-                            fontSize=".875rem"
-                            opacity=".5"
-                            mb="0"
-                            textTransform="capitalize"
-                        >
-                            {` ${role} Profile`}
-                        </Text>
-                        <Text
-                            fontWeight="bold"
-                            fontSize="1rem"
-                            textTransform="capitalize"
-                            mb="0"
-                        >
-                            {curPage?.startsWith('[')
-                                ? idPage?.replace('-', ' ')
-                                : curPage?.replace('-', ' ')}
-                        </Text>
+                        {massiveCheck ? (
+                            <HStack align="center">
+                                <Text
+                                    fontWeight="bold"
+                                    fontSize="1rem"
+                                    textTransform="capitalize"
+                                    mt=".3rem"
+                                >
+                                    {`Happy ${
+                                        isUserBirthDay
+                                            ? 'Birthday'
+                                            : 'Work Anniversary'
+                                    }, ${user?.fullName}`}
+                                </Text>
+                                <ConfettiIcon />
+                            </HStack>
+                        ) : (
+                            <>
+                                <Text
+                                    fontSize=".875rem"
+                                    opacity=".5"
+                                    mb="0"
+                                    textTransform="capitalize"
+                                >
+                                    {` ${role} Profile`}
+                                </Text>
+                                <Text
+                                    fontWeight="bold"
+                                    fontSize="1rem"
+                                    textTransform="capitalize"
+                                    mb="0"
+                                >
+                                    {curPage?.startsWith('[')
+                                        ? idPage?.replace('-', ' ')
+                                        : curPage?.replace('-', ' ')}
+                                </Text>
+                            </>
+                        )}
                     </Box>
                     <VStack alignItems="flex-end">
                         <Stack
@@ -242,6 +299,14 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                     </VStack>
                 </Flex>
             </Box>
+            {isOpen && (
+                <BirthDayModal
+                    isOpen={isOpen}
+                    onClose={closeModal}
+                    user={user}
+                    type={isUserBirthDay ? 'Birthday' : 'Work Anniversary'}
+                />
+            )}
         </Box>
     );
 }

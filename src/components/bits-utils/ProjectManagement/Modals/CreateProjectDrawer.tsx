@@ -33,6 +33,10 @@ import { useRouter } from 'next/router';
 import Checkbox from '@components/bits-utils/Checkbox';
 import Link from 'next/link';
 import { UserContext } from '@components/context/UserContext';
+import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
+import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
+import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import getBusinessDateCount from '@components/bits-utils/GetBusinessDays';
 
 export const CreateProjectDrawer = ({
     onClose,
@@ -40,9 +44,13 @@ export const CreateProjectDrawer = ({
     users,
     superAdminId,
     projectMangers,
+    currencies,
 }) => {
     const [currentBudget, setCurrenntBudget] = useState(0);
     const [nonApplicable, setNonApplicable] = useState(false);
+
+    const uniqueItems = getUniqueListBy(currencies, 'currency');
+
     const schema = yup.object().shape({
         name: yup.string().required(),
         startDate: yup.string().required(),
@@ -154,10 +162,15 @@ export const CreateProjectDrawer = ({
         }
     };
 
-    const dateDiff = moment(watch('endDate')).diff(watch('startDate'), 'day');
+    // const dateDiff = moment(watch('endDate')).diff(watch('startDate'), 'day');
+    const businessDays = getBusinessDateCount(
+        new Date(watch('startDate') as any),
+        new Date(watch('endDate') as any),
+    );
+    // console.log({ businessDays, st: watch('startDate'), en: watch('endDate') });
 
     useEffect(() => {
-        setValue('duration', dateDiff + 1 || 0);
+        setValue('duration', businessDays || 0);
     }, [watch('startDate'), watch('endDate')]);
 
     const budget = watch('budget');
@@ -224,23 +237,50 @@ export const CreateProjectDrawer = ({
                             register={register}
                             readonly={true}
                         />
+                        <PrimarySelect<ProjectModel>
+                            register={register}
+                            error={errors.currency}
+                            name="currency"
+                            label="Currency"
+                            placeholder="Select Currency"
+                            defaultValue={'CAD'}
+                            options={
+                                <>
+                                    {uniqueItems
+                                        ?.sort((a, b) =>
+                                            a?.currency?.localeCompare(
+                                                b?.currency,
+                                            ),
+                                        )
+                                        .map((x) => (
+                                            <option value={x?.currency}>
+                                                {x?.currency} (
+                                                {getCurrencyName(x?.currency) ||
+                                                    x?.name}
+                                                )
+                                            </option>
+                                        ))}
+                                </>
+                            }
+                        />
+                        <PrimaryInput<ProjectModel>
+                            label="Budget"
+                            name="budget"
+                            error={errors.budget}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
+                        <PrimaryInput<ProjectModel>
+                            label="Budget Threshold"
+                            name="budgetThreshold"
+                            error={errors.budgetThreshold}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                        />
                     </Grid>
-                    <PrimaryInput<ProjectModel>
-                        label="Budget"
-                        name="budget"
-                        error={errors.budget}
-                        placeholder=""
-                        defaultValue=""
-                        register={register}
-                    />
-                    <PrimaryInput<ProjectModel>
-                        label="Budget Threshold"
-                        name="budgetThreshold"
-                        error={errors.budgetThreshold}
-                        placeholder=""
-                        defaultValue=""
-                        register={register}
-                    />
+
                     <Box w="full">
                         <FormLabel
                             textTransform="capitalize"

@@ -54,6 +54,7 @@ export type User = {
     controlSettingId?: string | null;
     projectManagementSettingId?: string | null;
     isOrganizationProjectManager?: boolean | null;
+    currency?: string | null;
     supervisors?: Array<User> | null;
     usersCreatedByYou?: Array<User> | null;
     supervisees?: Array<EmployeeInformation> | null;

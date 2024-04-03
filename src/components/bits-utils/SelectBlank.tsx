@@ -8,6 +8,8 @@ export const SelectBlank = ({
     defaultValue,
     id,
     options,
+    onChange,
+    value,
 }: {
     label?: any;
     fontSize?: any;
@@ -15,6 +17,8 @@ export const SelectBlank = ({
     defaultValue?: any;
     id?: any;
     options: any;
+    onChange?: any;
+    value?: any;
 }) => {
     return (
         <Box>
@@ -35,6 +39,8 @@ export const SelectBlank = ({
                 textTransform="capitalize"
                 placeholder={placeholder}
                 defaultValue={defaultValue}
+                onChange={onChange}
+                value={value}
                 id={id}
                 color="gray.500"
                 // isReadOnly

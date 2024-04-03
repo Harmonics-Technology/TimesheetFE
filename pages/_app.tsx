@@ -20,6 +20,7 @@ import Script from 'next/script';
 import { Online, Offline } from 'react-detect-offline';
 import { NoNetwork } from '@components/bits-utils/NoNetwork';
 import { Analytics } from '@vercel/analytics/react';
+import GTM from './gtm';
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -45,6 +46,7 @@ function MyApp({
     return (
         <ChakraProvider theme={theme}>
             <Analytics />
+            {/* <GTM /> */}
             <Head>
                 <meta
                     name="viewport"
