@@ -119,7 +119,7 @@ export const Dashboard = ({
                     color="#2383BD"
                 />
                 <MiniCards
-                    value={budget?.budgetSpent}
+                    value={isNaN(budget?.budgetSpent) ? 0 : budget?.budgetSpent}
                     title="Total Budget Spent"
                     icon={PiMoneyBold}
                     color="#F8C200"

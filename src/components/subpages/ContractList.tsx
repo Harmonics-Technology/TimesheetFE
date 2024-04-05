@@ -25,6 +25,8 @@ interface adminProps {
 function ContractList({ adminList }: adminProps) {
     const router = useRouter();
 
+    // console.log({ adminList });
+
     return (
         <>
             <Box
@@ -51,7 +53,7 @@ function ContractList({ adminList }: adminProps) {
                         {adminList?.data?.value?.map((x: ContractView) => (
                             <Tr key={x.id}>
                                 <TableData name={x.name} />
-                                <TableData name={x.title} />
+                                <TableData name={x.jobTitle} />
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />
                                 <TableData

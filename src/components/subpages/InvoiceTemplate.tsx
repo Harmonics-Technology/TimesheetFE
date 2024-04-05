@@ -53,8 +53,11 @@ function InvoiceTemplate({
         clicked?.employeeInformation?.taxType == 'hst'
             ? hstAmount?.fee
             : clicked?.employeeInformation?.tax;
+    const convertedTax = Round(
+        calculatePercentage(amountMinusExpense, taxCalculated),
+    );
 
-    const finalTotal = Number(amountMinusExpense) + Number(taxCalculated);
+    const finalTotal = Number(amountMinusExpense) + Number(convertedTax);
 
     return (
         <>
@@ -341,14 +344,7 @@ function InvoiceTemplate({
                                         />
                                         <InvoiceTotalText
                                             label="Tax"
-                                            value={CUR(
-                                                Round(
-                                                    calculatePercentage(
-                                                        amountMinusExpense,
-                                                        taxCalculated,
-                                                    ),
-                                                ),
-                                            )}
+                                            value={CUR(convertedTax)}
                                             cur={
                                                 clicked?.employeeInformation
                                                     ?.currency

@@ -48,6 +48,8 @@ import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/CurrencyConversionModal';
 import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
 import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -70,6 +72,7 @@ function OnshoreSubmittedInvoice({
 }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
+    const { hstAmount } = useContext(OnboardingFeeContext);
 
     const invoice = invoiceData?.data?.value;
     const [loading, setLoading] = useState(false);
@@ -383,7 +386,18 @@ function OnshoreSubmittedInvoice({
                                                 )}
                                                               ${CUR(
                                                                   Round(
-                                                                      x.totalAmount,
+                                                                      (x?.totalAmount as number) +
+                                                                          calculatePercentage(
+                                                                              x?.totalAmount,
+                                                                              x
+                                                                                  ?.employeeInformation
+                                                                                  ?.taxType ==
+                                                                                  'hst'
+                                                                                  ? hstAmount?.fee
+                                                                                  : x
+                                                                                        ?.employeeInformation
+                                                                                        ?.tax,
+                                                                          ),
                                                                   ),
                                                               )}`}
                                                 full

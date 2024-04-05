@@ -285,7 +285,7 @@ function Paymentinvoices({
                                                                                       (b?.amount as number),
                                                                                   0,
                                                                               ) as any) *
-                                                                                 ( x?.rateForConvertedIvoice as any),
+                                                                                  (x?.rateForConvertedIvoice as any),
                                                                           ),
                                                                       )}`
                                                                     : ''
@@ -348,7 +348,7 @@ function Paymentinvoices({
                                         w="fit-content"
                                     >
                                         <InvoiceTotalText
-                                            label="Subtotal($)"
+                                            label="Subtotal"
                                             cur={getCurrencySymbol(
                                                 user?.currency,
                                             )}

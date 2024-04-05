@@ -45,6 +45,8 @@ import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/Curre
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
 import { CUR } from '@components/generics/functions/Naira';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -181,6 +183,7 @@ function AdminInvoices({
     //     }
     // };
     const { user, accessControls } = useContext(UserContext);
+    const { hstAmount } = useContext(OnboardingFeeContext);
     const role = user?.role.replaceAll(' ', '');
     const userAccess: ControlSettingView = accessControls;
     const hideCheckbox = router.asPath.startsWith(
@@ -423,7 +426,19 @@ function AdminInvoices({
                                                             organizationCurrency,
                                                         )}${CUR(
                                                             Round(
-                                                                x.convertedAmount,
+                                                                (x?.convertedAmount as number) +
+                                                                    calculatePercentage(
+                                                                        x.totalAmount,
+                                                                        x
+                                                                            ?.employeeInformation
+                                                                            ?.taxType ==
+                                                                            'hst'
+                                                                            ? hstAmount?.fee
+                                                                            : x
+                                                                                  ?.employeeInformation
+                                                                                  ?.tax,
+                                                                    ) *
+                                                                       ( x?.rateForConvertedIvoice as number),
                                                             ),
                                                         )}`}
                                                         full
@@ -448,7 +463,18 @@ function AdminInvoices({
                                                                 ?.currency,
                                                         )}${CUR(
                                                             Round(
-                                                                x.totalAmount,
+                                                                (x?.totalAmount as number) +
+                                                                    calculatePercentage(
+                                                                        x?.totalAmount,
+                                                                        x
+                                                                            ?.employeeInformation
+                                                                            ?.taxType ==
+                                                                            'hst'
+                                                                            ? hstAmount?.fee
+                                                                            : x
+                                                                                  ?.employeeInformation
+                                                                                  ?.tax,
+                                                                    ),
                                                             ),
                                                         )}`}
                                                         full

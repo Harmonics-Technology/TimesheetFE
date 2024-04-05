@@ -161,7 +161,7 @@ export const DepartmentPage = ({
                     <>
                         {data?.map((x: DepartmentView) => (
                             <Tr key={x.id}>
-                                <TableData name={x.name} />
+                                <TableData name={x.name} full />
                                 <TableData
                                     name={moment(x.dateCreated).format(
                                         'DD/MM/YYYY',

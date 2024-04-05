@@ -74,7 +74,7 @@ function TeamProfile({
     const { user, opens, subType } = useContext(UserContext);
 
     clients =
-        clients.length <= 0
+        clients?.length <= 0
             ? [{ id: user?.superAdminId, fullName: user?.fullName }]
             : clients;
     //
@@ -150,7 +150,7 @@ function TeamProfile({
     // console.log({ userProfile, includePayroll });
     //
     const isFlatFeeSelected = watch('payrollStructure') == 'flat fee';
-    const isIncSelected = watch('payrollStructure') == 'incoporation';
+    const isIncSelected = watch('payrollStructure') == 'inc';
     const isPaymentPartnerSelected =
         watch('payrollProcessingType') == 'payment partner';
     const paymentPartnerId = watch('paymentPartnerId');
@@ -454,8 +454,9 @@ function TeamProfile({
                             error={errors.dateOfBirth}
                             defaultValue={moment(
                                 userProfile?.dateOfBirth,
-                            ).format('DD MM YYYY')}
+                            ).format('YYYY/MM/DD')}
                             max={new DateObject().subtract(1, 'days')}
+                            required={false}
                         />
                         <PrimarySelect<TeamMemberModel>
                             register={register}
@@ -779,13 +780,20 @@ function TeamProfile({
                                     placeholder="Please Select"
                                     options={
                                         <>
-                                            {['flat fee', 'incoporation'].map(
-                                                (x) => (
-                                                    <option value={x}>
-                                                        {x}
-                                                    </option>
-                                                ),
-                                            )}
+                                            {[
+                                                {
+                                                    id: 'flat',
+                                                    name: 'flat fee',
+                                                },
+                                                {
+                                                    id: 'inc',
+                                                    name: 'incoporation',
+                                                },
+                                            ].map((x) => (
+                                                <option value={x.id}>
+                                                    {x.name}
+                                                </option>
+                                            ))}
                                         </>
                                     }
                                 />

@@ -31,7 +31,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
 import Paymentinvoices from './Paymentinvoices';
-import Naira, { CAD } from '@components/generics/functions/Naira';
+import { CUR } from '@components/generics/functions/Naira';
 import PayrollInvoice from './PayrollInvoice';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { MiniTabs } from '@components/bits-utils/MiniTabs';
@@ -42,6 +42,7 @@ import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import NoAccess from '@components/bits-utils/NoAccess';
 import asyncForEach from '@components/generics/functions/AsyncForEach';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -164,11 +165,12 @@ function PayrollTreatPartnerInvoice({
         'Invoice No',
         'Name',
         'Created On',
-        'Amount($)',
-        'Amount(₦)',
+        'Amount',
         'Status',
         'Action',
     ];
+
+    console.log({ invoiceData });
 
     return (
         <>
@@ -301,66 +303,92 @@ function PayrollTreatPartnerInvoice({
                         <Tables tableHead={thead}>
                             <>
                                 {invoiceData?.data?.value?.map(
-                                    (x: InvoiceView) => (
-                                        <Tr key={x.id}>
-                                            <TableData
-                                                name={x.invoiceReference}
-                                            />
-                                            <TableData
-                                                name={
-                                                    x.payrollGroupName ||
-                                                    x.paymentPartnerName ||
-                                                    x.name
-                                                }
-                                            />
-                                            <TableData
-                                                name={formatDate(x.dateCreated)}
-                                            />
-                                            <TableData
-                                                name={CAD(
+                                    (x: InvoiceView) => {
+                                        const allFeesTotal = Number(
+                                            x?.children?.reduce(
+                                                (a, x) =>
+                                                    a +
+                                                    (x.employeeInformation
+                                                        ?.paymentProcessingFeeType ==
+                                                    'percentage'
+                                                        ? calculatePercentage(
+                                                              x?.convertedAmount,
+                                                              x
+                                                                  ?.employeeInformation
+                                                                  ?.paymentProcessingFee as number,
+                                                          )
+                                                        : (x
+                                                              ?.employeeInformation
+                                                              ?.paymentProcessingFee as number)),
+                                                0,
+                                            ),
+                                        );
+                                        return (
+                                            <Tr key={x.id}>
+                                                <TableData
+                                                    name={x.invoiceReference}
+                                                />
+                                                <TableData
+                                                    name={
+                                                        x.payrollGroupName ||
+                                                        x.paymentPartnerName ||
+                                                        x.name
+                                                    }
+                                                />
+                                                <TableData
+                                                    name={formatDate(
+                                                        x.dateCreated,
+                                                    )}
+                                                />
+                                                {/* <TableData
+                                                name={CUR(
                                                     Round(
                                                         (x.totalAmount as number) /
                                                             (x.rate as unknown as number),
                                                     ),
                                                 )}
-                                            />
-                                            <TableData
-                                                name={Naira(
-                                                    Round(
-                                                        x.totalAmount as number,
-                                                        // *
-                                                        //     (x.rate as unknown as number),
-                                                    ),
-                                                )}
-                                            />
-                                            <TableState
-                                                name={x.status as string}
-                                            />
-                                            <InvoiceAction
-                                                data={x}
-                                                onOpen={onOpen}
-                                                clicked={setClicked}
-                                            />
-
-                                            <td>
-                                                <Checkbox
-                                                    checked={
-                                                        selectedId.find(
-                                                            (e) => e === x.id,
-                                                        ) || ''
-                                                    }
-                                                    onChange={(e) =>
-                                                        toggleSelected(
-                                                            x.id as string,
-                                                        )
-                                                    }
-                                                    disabled={
-                                                        x.status !== 'PENDING'
-                                                    }
+                                            /> */}
+                                                <TableData
+                                                    name={CUR(
+                                                        Round(
+                                                            (x.convertedAmount as number) +
+                                                                allFeesTotal,
+                                                            // *
+                                                            //     (x.rate as unknown as number),
+                                                        ),
+                                                    )}
                                                 />
-                                            </td>
-                                        </Tr>
-                                    ),
+                                                <TableState
+                                                    name={x.status as string}
+                                                />
+                                                <InvoiceAction
+                                                    data={x}
+                                                    onOpen={onOpen}
+                                                    clicked={setClicked}
+                                                />
+
+                                                <td>
+                                                    <Checkbox
+                                                        checked={
+                                                            selectedId.find(
+                                                                (e) =>
+                                                                    e === x.id,
+                                                            ) || ''
+                                                        }
+                                                        onChange={(e) =>
+                                                            toggleSelected(
+                                                                x.id as string,
+                                                            )
+                                                        }
+                                                        disabled={
+                                                            x.status !==
+                                                            'PENDING'
+                                                        }
+                                                    />
+                                                </td>
+                                            </Tr>
+                                        );
+                                    },
                                 )}
                             </>
                         </Tables>

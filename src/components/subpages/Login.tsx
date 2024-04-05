@@ -62,7 +62,7 @@ function Login() {
     const expiresIn =
         process.env.NODE_ENV == 'development'
             ? 7
-            : new Date(new Date().getTime() + 30 * 60 * 1000);
+            : new Date(new Date().getTime() + 2 * 60 * 60 * 1000);
     //
     const onSubmit = async (data: LoginModel) => {
         try {
