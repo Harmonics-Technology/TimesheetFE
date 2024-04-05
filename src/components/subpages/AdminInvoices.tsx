@@ -84,20 +84,20 @@ function AdminInvoices({
         if (all) {
             if (
                 selectedId?.length ===
-                invoice?.filter((x) => x.status !== 'INVOICED').length
+                invoice?.filter((x) => x.status !== 'PROCESSED').length
             ) {
                 setSelectedId([]);
                 return;
             }
             const response: unknown[] = [];
             invoice
-                ?.filter((x) => x.status !== 'INVOICED')
+                ?.filter((x) => x.status !== 'PROCESSED')
                 .forEach((x) =>
                     response.push({
                         id: x.id,
                         currency: x.employeeInformation?.currency,
                         payrollProcessingType:
-                            data.employeeInformation.payrollProcessingType,
+                            x.employeeInformation?.payrollProcessingType,
                         rate: 0,
                     }),
                 );
@@ -438,7 +438,7 @@ function AdminInvoices({
                                                                                   ?.employeeInformation
                                                                                   ?.tax,
                                                                     ) *
-                                                                       ( x?.rateForConvertedIvoice as number),
+                                                                        (x?.rateForConvertedIvoice as number),
                                                             ),
                                                         )}`}
                                                         full
