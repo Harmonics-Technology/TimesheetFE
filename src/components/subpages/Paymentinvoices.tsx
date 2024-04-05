@@ -28,7 +28,9 @@ import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { Round } from '@components/generics/functions/Round';
-import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import {
+    getCurrencyName,
+} from '@components/generics/functions/getCurrencyName';
 import { UserContext } from '@components/context/UserContext';
 
 function Paymentinvoices({
@@ -206,7 +208,7 @@ function Paymentinvoices({
                                                             )}
                                                         />
                                                         <TableData
-                                                            name={`${getCurrencySymbol(
+                                                            name={`${getCurrencyName(
                                                                 x
                                                                     ?.employeeInformation
                                                                     ?.currency,
@@ -253,7 +255,7 @@ function Paymentinvoices({
                                                             }
                                                         />
                                                         <TableData
-                                                            name={`${getCurrencySymbol(
+                                                            name={`${getCurrencyName(
                                                                 user?.currency,
                                                             )}${CUR(
                                                                 Round(
@@ -349,7 +351,7 @@ function Paymentinvoices({
                                     >
                                         <InvoiceTotalText
                                             label="Subtotal"
-                                            cur={getCurrencySymbol(
+                                            cur={getCurrencyName(
                                                 user?.currency,
                                             )}
                                             value={CUR(Round(allInvoiceTotal))}
@@ -368,7 +370,7 @@ function Paymentinvoices({
                                         <InvoiceTotalText
                                             label="Fees"
                                             value={CUR(Round(allFeesTotal))}
-                                            cur={getCurrencySymbol(
+                                            cur={getCurrencyName(
                                                 user?.currency,
                                             )}
                                         />
@@ -380,7 +382,7 @@ function Paymentinvoices({
                                             mt="1.5rem"
                                         >
                                             <InvoiceTotalText
-                                                cur={getCurrencySymbol(
+                                                cur={getCurrencyName(
                                                     user?.currency,
                                                 )}
                                                 label="Total"

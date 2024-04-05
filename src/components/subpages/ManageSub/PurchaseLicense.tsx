@@ -72,7 +72,10 @@ export const PurchaseLicense = ({
             const result = await UserService.purchaseNewLicensePlan(data);
             if (result.status) {
                 if (result?.data?.data?.clientSecret) {
-                    router.push(
+                    // router.push(
+                    //     `${process.env.NEXT_PUBLIC_TTS}/summary/${result.data?.data?.id}?client_secret=${result?.data?.data?.clientSecret}&clientId=${result?.data?.data?.clientId}&from=${router.asPath}`,
+                    // );
+                    window.open(
                         `${process.env.NEXT_PUBLIC_TTS}/summary/${result.data?.data?.id}?client_secret=${result?.data?.data?.clientSecret}&clientId=${result?.data?.data?.clientId}&from=${router.asPath}`,
                     );
                     return;

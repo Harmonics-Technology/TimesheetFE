@@ -104,7 +104,7 @@ export const EditTimesheetTaskModal = ({ onClose, data }: ExportProps) => {
     const [selectedId, setSelectedId] = useState<any>([]);
 
     const formattedStartDate = moment(startDate).day();
-    console.log({ startDate, selectedId, formattedStartDate, endDate });
+    // console.log({ startDate, selectedId, formattedStartDate, endDate });
     const toggleSelected = (value: any) => {
         const existingValue = selectedId?.find((e) => e?.id === value?.id);
         if (existingValue) {
@@ -118,7 +118,7 @@ export const EditTimesheetTaskModal = ({ onClose, data }: ExportProps) => {
     const [projectTimesheets, setProjectTimesheets] =
         useState<ProjectTimesheetRange>({});
 
-    console.log({ projectTimesheets });
+    // console.log({ projectTimesheets });
     const [newProjectTimesheet, setNewProjectTimesheet] = useState([]);
     const [duration, setDuration] = useState(
         moment(data?.end).diff(data?.start, 'hour'),
@@ -153,7 +153,7 @@ export const EditTimesheetTaskModal = ({ onClose, data }: ExportProps) => {
         setNewProjectTimesheet(updatedProjectTimesheets);
     }, [selectedId, projectTimesheets]);
 
-    console.log({ duration });
+    // console.log({ duration });
 
     useEffect(() => {
         setProjectTimesheets({
@@ -205,12 +205,12 @@ export const EditTimesheetTaskModal = ({ onClose, data }: ExportProps) => {
         });
     }, [isBillable]);
 
-    const [useEnd, setUseEnd] = useState<boolean>(true);
+    const [useEnd, setUseEnd] = useState<boolean>(duration === hoursPerDay);
 
     const radios = ['Use Duration', 'Use End Date'];
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'selection',
-        defaultValue: 'Use End Date',
+        defaultValue: useEnd ? 'Use End Date' : 'Use Duration',
         onChange: (value) => updateClientField(value),
     });
 

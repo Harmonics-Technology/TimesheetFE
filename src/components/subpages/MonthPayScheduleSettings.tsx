@@ -203,6 +203,7 @@ export const MonthPayScheduleSettings = ({
                                         placeholder={endDate?.format(
                                             'DD/MM/YYYY',
                                         )}
+                                        readonly={true}
                                     />
                                 </HStack>
                                 <HStack w="90%" spacing="1rem" align="flex-end">
@@ -225,6 +226,7 @@ export const MonthPayScheduleSettings = ({
                                                 'days',
                                             )
                                             .format('dddd')}
+                                        readonly={true}
                                     />
                                 </HStack>
                                 <Box mt="32px">

@@ -162,6 +162,8 @@ function AdminInvoices({
         }
     };
 
+    // console.log({ loading });
+
     // const approveInvoiceItems = async (arrays: any) => {
     //     try {
     //         await asyncForEach(arrays, async (select: any) => {
@@ -447,9 +449,7 @@ function AdminInvoices({
                                                         name={`${getCurrencySymbol(
                                                             organizationCurrency,
                                                         )}${CUR(
-                                                            Round(
-                                                                x.rateForConvertedIvoice,
-                                                            ),
+                                                            x.rateForConvertedIvoice,
                                                         )}`}
                                                         full
                                                     />

@@ -55,7 +55,9 @@ export const EditProjectDrawer = ({
     currencies: any;
     projectMangers: any;
 }) => {
-    const [nonApplicable, setNonApplicable] = useState(false);
+    const [nonApplicable, setNonApplicable] = useState(
+        data?.projectManagerId ? false : true,
+    );
     const schema = yup.object().shape({
         name: yup.string().required(),
         startDate: yup.string().required(),
@@ -134,7 +136,7 @@ export const EditProjectDrawer = ({
         setSelecedUser(filtered);
     };
     const [selectedManager, setSelectedManager] = useState<any>(
-        data?.projectManagerId,
+        users?.value.find((x) => x.id == data?.projectManagerId),
     );
     const addManager = (user) => {
         setSelectedManager(user);
@@ -211,6 +213,8 @@ export const EditProjectDrawer = ({
     useEffect(() => {
         setValue('projectManagerId', selectedManager?.id);
     }, [selectedManager]);
+
+    // console.log({ nonApplicable, users });
 
     //
     return (
@@ -388,6 +392,7 @@ export const EditProjectDrawer = ({
                                 label="Not Applicable"
                                 dir="rtl"
                                 color="black"
+                                checked={nonApplicable}
                                 onChange={(e: any) =>
                                     setIfNonApplicable(e.target.checked)
                                 }

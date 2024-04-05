@@ -243,7 +243,7 @@ export const AddNewTaskDrawer = ({
                         width="fit-content"
                         fontSize=".8rem"
                     >
-                        Assign this Project to
+                        Assign this Task to
                     </FormLabel>
 
                     <CustomSelectBox

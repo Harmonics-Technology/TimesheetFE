@@ -146,6 +146,10 @@ function OnshoreSubmittedInvoice({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setLoading(false);
+                setSelectedId([]);
+                onClose();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -156,6 +160,7 @@ function OnshoreSubmittedInvoice({
                 position: 'top-right',
             });
         } catch (error: any) {
+            setLoading(false);
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',

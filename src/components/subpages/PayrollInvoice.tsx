@@ -35,7 +35,7 @@ import InputBlank from '@components/bits-utils/InputBlank';
 import { formatDate } from '@components/generics/functions/formatDate';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
 import { Round } from '@components/generics/functions/Round';
-import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
 import { UserContext } from '@components/context/UserContext';
 
 function PayrollInvoice({
@@ -250,7 +250,7 @@ function PayrollInvoice({
                                                                     full
                                                                 />
                                                                 <TableData
-                                                                    name={`${getCurrencySymbol(
+                                                                    name={`${getCurrencyName(
                                                                         user?.currency,
                                                                     )}${CUR(
                                                                         Round(
@@ -391,7 +391,7 @@ function PayrollInvoice({
                                         >
                                             <InvoiceTotalText
                                                 label="Subtotal"
-                                                cur={getCurrencySymbol(
+                                                cur={getCurrencyName(
                                                     user?.currency,
                                                 )}
                                                 value={CUR(
@@ -414,7 +414,7 @@ function PayrollInvoice({
                                             <InvoiceTotalText
                                                 label="Fees"
                                                 value={CUR(Round(allFeesTotal))}
-                                                cur={getCurrencySymbol(
+                                                cur={getCurrencyName(
                                                     user?.currency,
                                                 )}
                                             />
@@ -426,7 +426,7 @@ function PayrollInvoice({
                                                 mt="1rem"
                                             >
                                                 <InvoiceTotalText
-                                                    cur={getCurrencySymbol(
+                                                    cur={getCurrencyName(
                                                         user?.currency,
                                                     )}
                                                     label="Total"

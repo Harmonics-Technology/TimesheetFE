@@ -286,7 +286,7 @@ export const NewTeamMemerOnboardingForm = ({
         getPaymentPartnerFees(paymentPartnerId);
     }, [paymentPartnerId]);
 
-    console.log({ errors });
+    // console.log({ errors });
 
     const onSubmit = async (data: TeamMemberModel) => {
         data.superAdminId = user?.superAdminId;
@@ -328,7 +328,7 @@ export const NewTeamMemerOnboardingForm = ({
                 });
                 reset();
                 setContractFile({});
-                closeModal();
+                onClose();
                 router.replace(router.asPath);
                 return;
             }

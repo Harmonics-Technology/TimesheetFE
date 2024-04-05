@@ -223,7 +223,8 @@ export const FillTimesheetModal = ({
     const [useEnd, setUseEnd] = useState<boolean>(true);
     const [tasks, setTasks] = useState<any>([]);
     const newData = [
-        ...((allProjects as ProjectView[]) || []),
+        ...((allProjects?.filter((x) => !x.isCompleted) as ProjectView[]) ||
+            []),
         { id: 'operational', name: 'Operational Task' },
     ];
     const [subTasks, setSubTasks] = useState<any>([]);
@@ -307,7 +308,7 @@ export const FillTimesheetModal = ({
                 );
                 if (res?.status) {
                     setLoading(false);
-                    setTasks(res?.data?.value);
+                    setTasks(res?.data?.value?.filter((x) => !x.isCompleted));
                     return;
                 }
             } catch (error) {

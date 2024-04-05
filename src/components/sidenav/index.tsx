@@ -247,7 +247,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'department settings',
                             'currency settings',
                             'expense type',
-                            'onboarding fee',
+                            // 'onboarding fee',
                             'hst settings',
                             'leave management settings',
                             {

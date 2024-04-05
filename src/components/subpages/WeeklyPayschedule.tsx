@@ -131,6 +131,7 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
                                 label="End Date"
                                 defaultValue=""
                                 placeholder={endDate?.format('DD/MM/YYYY')}
+                                readonly={true}
                             />
                         </Box>
                         {/* <Box w="full">

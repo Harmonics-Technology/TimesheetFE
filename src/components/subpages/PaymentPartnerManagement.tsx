@@ -57,7 +57,6 @@ import { LicenseSelection } from './ManageSub/LicenseSelection';
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import {
     getCurrencyName,
-    getCurrencySymbol,
     getPrefix,
     onBoardingFees,
 } from '@components/generics/functions/getCurrencyName';

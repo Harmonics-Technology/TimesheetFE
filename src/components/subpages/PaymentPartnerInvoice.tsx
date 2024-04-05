@@ -35,6 +35,7 @@ import { Round } from '@components/generics/functions/Round';
 import asyncForEach from '@components/generics/functions/AsyncForEach';
 import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 import { UserContext } from '@components/context/UserContext';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -231,18 +232,38 @@ function PaymentPartnerInvoice({
                     ]}
                 >
                     <>
-                        {invoiceData?.data?.value?.map((x: InvoiceView) => (
-                            <Tr key={x.id}>
-                                <TableData
-                                    name={
-                                        x.payrollGroupName ||
-                                        x.paymentPartnerName ||
-                                        x.name
-                                    }
-                                />
-                                <TableData name={x.invoiceReference} />
-                                <TableData name={formatDate(x.dateCreated)} />
-                                {/* <TableData
+                        {invoiceData?.data?.value?.map((x: InvoiceView) => {
+                            const allFeesTotal = Number(
+                                x?.children?.reduce(
+                                    (a, x) =>
+                                        a +
+                                        (x.employeeInformation
+                                            ?.paymentProcessingFeeType ==
+                                        'percentage'
+                                            ? calculatePercentage(
+                                                  x?.convertedAmount,
+                                                  x?.employeeInformation
+                                                      ?.paymentProcessingFee as number,
+                                              )
+                                            : (x?.employeeInformation
+                                                  ?.paymentProcessingFee as number)),
+                                    0,
+                                ),
+                            );
+                            return (
+                                <Tr key={x.id}>
+                                    <TableData
+                                        name={
+                                            x.payrollGroupName ||
+                                            x.paymentPartnerName ||
+                                            x.name
+                                        }
+                                    />
+                                    <TableData name={x.invoiceReference} />
+                                    <TableData
+                                        name={formatDate(x.dateCreated)}
+                                    />
+                                    {/* <TableData
                                     name={CAD(
                                         Round(
                                             (x.totalAmount as number) /
@@ -250,33 +271,39 @@ function PaymentPartnerInvoice({
                                         ),
                                     )}
                                 /> */}
-                                <TableData
-                                    name={`${getCurrencySymbol(user?.currency)}
-                                        ${Round(x.convertedAmount as number)}`}
-                                    full
-                                />
-                                <TableState name={x.status as string} />
-                                <InvoiceAction
-                                    data={x}
-                                    onOpen={onOpen}
-                                    clicked={setClicked}
-                                />
-
-                                <td>
-                                    <Checkbox
-                                        checked={
-                                            selectedId.find(
-                                                (e) => e === x.id,
-                                            ) || ''
-                                        }
-                                        onChange={(e) =>
-                                            toggleSelected(x.id as string)
-                                        }
-                                        disabled={x.status !== 'APPROVED'}
+                                    <TableData
+                                        name={`${getCurrencySymbol(
+                                            user?.currency,
+                                        )}
+                                        ${Round(
+                                            (x.convertedAmount as number) +
+                                                allFeesTotal,
+                                        )}`}
+                                        full
                                     />
-                                </td>
-                            </Tr>
-                        ))}
+                                    <TableState name={x.status as string} />
+                                    <InvoiceAction
+                                        data={x}
+                                        onOpen={onOpen}
+                                        clicked={setClicked}
+                                    />
+
+                                    <td>
+                                        <Checkbox
+                                            checked={
+                                                selectedId.find(
+                                                    (e) => e === x.id,
+                                                ) || ''
+                                            }
+                                            onChange={(e) =>
+                                                toggleSelected(x.id as string)
+                                            }
+                                            disabled={x.status !== 'APPROVED'}
+                                        />
+                                    </td>
+                                </Tr>
+                            );
+                        })}
                     </>
                 </Tables>
                 <Pagination data={invoiceData} loadMore />

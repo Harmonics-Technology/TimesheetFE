@@ -302,7 +302,7 @@ export const CreateProjectDrawer = ({
                         <HStack justify="flex-end" mt=".5rem">
                             <Link
                                 passHref
-                                href={`${role}/profile-management/team-members`}
+                                href={`/${role}/profile-management/team-members`}
                             >
                                 <Button
                                     bgColor="#2383BD"

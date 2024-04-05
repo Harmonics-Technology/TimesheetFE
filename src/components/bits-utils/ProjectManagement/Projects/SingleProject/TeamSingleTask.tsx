@@ -301,55 +301,55 @@ export const TeamSingleTask = ({
                     <TableCard tableHead={tableHead}>
                         {tasks?.value?.map((x: ProjectSubTaskView) => {
                             return (
-                                <>
-                                    <TableRow key={x.id}>
-                                        <TableData
-                                            name={x?.name}
-                                            fontWeight="500"
-                                        />
-                                        <td style={{ maxWidth: '300px' }}>
-                                            <HStack
-                                                color="#c2cfe0"
-                                                gap=".2rem"
-                                                flexWrap="wrap"
+                                <TableRow key={x.id}>
+                                    <TableData
+                                        name={x?.name}
+                                        fontWeight="500"
+                                    />
+                                    <td style={{ maxWidth: '300px' }}>
+                                        <HStack
+                                            color="#c2cfe0"
+                                            gap=".2rem"
+                                            flexWrap="wrap"
+                                        >
+                                            <Flex
+                                                border="1px solid"
+                                                borderColor="#4FD1C5"
+                                                borderRadius="25px"
+                                                justify="center"
+                                                align="center"
+                                                color="#4FD1C5"
+                                                h="1.6rem"
+                                                px="0.5rem"
                                             >
-                                                <Flex
-                                                    border="1px solid"
-                                                    borderColor="#4FD1C5"
-                                                    borderRadius="25px"
-                                                    justify="center"
-                                                    align="center"
-                                                    color="#4FD1C5"
-                                                    h="1.6rem"
-                                                    px="0.5rem"
-                                                >
-                                                    {
-                                                        x?.projectTaskAsignee
-                                                            ?.user?.fullName
-                                                    }
-                                                </Flex>
-                                            </HStack>
-                                        </td>
-                                        <TableData
-                                            name={`${Round(x?.hoursSpent)} Hrs`}
-                                            fontWeight="500"
-                                        />
-                                        <TableData
-                                            name={moment(x?.startDate).format(
-                                                'DD/MM/YYYY',
-                                            )}
-                                            fontWeight="500"
-                                        />
-                                        <TableData
-                                            name={moment(x?.endDate).format(
-                                                'DD/MM/YYYY',
-                                            )}
-                                            fontWeight="500"
-                                        />
-                                        <NewTableState
-                                            name={x?.status}
-                                            color={colorSwatch(x?.status)}
-                                        />
+                                                {
+                                                    x?.projectTaskAsignee?.user
+                                                        ?.fullName
+                                                }
+                                            </Flex>
+                                        </HStack>
+                                    </td>
+                                    <TableData
+                                        name={`${Round(x?.hoursSpent)} Hrs`}
+                                        fontWeight="500"
+                                    />
+                                    <TableData
+                                        name={moment(x?.startDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                        fontWeight="500"
+                                    />
+                                    <TableData
+                                        name={moment(x?.endDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                        fontWeight="500"
+                                    />
+                                    <NewTableState
+                                        name={x?.status}
+                                        color={colorSwatch(x?.status)}
+                                    />
+                                    {hasAccess && (
                                         <td>
                                             <Menu>
                                                 <MenuButton>
@@ -400,8 +400,8 @@ export const TeamSingleTask = ({
                                                 </MenuList>
                                             </Menu>
                                         </td>
-                                    </TableRow>
-                                </>
+                                    )}
+                                </TableRow>
                             );
                         })}
                     </TableCard>
@@ -412,7 +412,7 @@ export const TeamSingleTask = ({
                     isOpen={isOpen}
                     onClose={onClose}
                     data={task}
-                    subTask={tasks}
+                    subTask={subTask}
                 />
             )}
         </Box>
