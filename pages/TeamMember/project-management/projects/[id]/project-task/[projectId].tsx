@@ -7,7 +7,7 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import { ProjectManagementService, UserService } from 'src/services';
 
-const ProjectSingleTask = ({ id, project, tasks, task, access }) => {
+const ProjectSingleTask = ({ id, project, tasks, task, access, pm }) => {
     return (
         <TeamSingleTask
             id={id}
@@ -15,6 +15,7 @@ const ProjectSingleTask = ({ id, project, tasks, task, access }) => {
             tasks={tasks}
             task={task}
             access={access}
+            pm={pm}
         />
     );
 };
@@ -51,6 +52,18 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 await UserService.getSuperAdminProjectManagementSettings(
                     superAdminId,
                 );
+            const pm = await UserService.listUsers(
+                //@ts-ignore
+                undefined,
+                superAdminId,
+                pagingOptions.offset,
+                50,
+                pagingOptions.search,
+                pagingOptions.from,
+                pagingOptions.to,
+                undefined,
+                true,
+            );
 
             return {
                 props: {
@@ -59,6 +72,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     tasks: tasks.data,
                     task: task.data,
                     access: access.data,
+                    pm: pm.data,
                 },
             };
         } catch (error: any) {

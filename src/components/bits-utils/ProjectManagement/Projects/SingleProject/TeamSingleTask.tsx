@@ -15,6 +15,7 @@ import {
     MenuList,
     MenuItem,
     Menu,
+    useToast,
 } from '@chakra-ui/react';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import {
@@ -42,6 +43,10 @@ import { TeamTopBar } from './TeamTopBar';
 import { MdVerified } from 'react-icons/md';
 import { BsPenFill } from 'react-icons/bs';
 import { UserContext } from '@components/context/UserContext';
+import { ManageBtn } from '@components/bits-utils/ManageBtn';
+import markAsCompleted from '@components/generics/functions/markAsCompleted';
+import { ShowPrompt } from '../../Modals/ShowPrompt';
+import { useRouter } from 'next/router';
 
 export const TeamSingleTask = ({
     id,
@@ -49,12 +54,14 @@ export const TeamSingleTask = ({
     tasks,
     task,
     access,
+    pm,
 }: {
     id: any;
     project: any;
     tasks: any;
     task: any;
     access: any;
+    pm: any;
 }) => {
     const tableHead = [
         'Task/Subtak Name',
@@ -64,6 +71,11 @@ export const TeamSingleTask = ({
         'Status',
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isOpened,
+        onOpen: onOpened,
+        onClose: onClosed,
+    } = useDisclosure();
     const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
 
     const openModal = (item: any) => {
@@ -71,15 +83,18 @@ export const TeamSingleTask = ({
         onOpen();
     };
 
-    const status = task?.status?.toLowerCase();
     const pastDate = moment().diff(moment(task?.endDate), 'days') > 0;
     const [taskStatus, setTaskStatus] = useState();
+    const [status, setStatus] = useState(task?.status?.toLowerCase());
+    const toast = useToast();
+    const router = useRouter();
     const {
         isOpen: isOpens,
         onOpen: onOpens,
         onClose: onCloses,
     } = useDisclosure();
     const [loadings, setLoadings] = useState({ id: '' });
+    const [loading, setLoading] = useState({ id: '' });
 
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
@@ -87,7 +102,8 @@ export const TeamSingleTask = ({
     const isPm = project?.projectManagerId == user?.id;
     const hasAccess =
         access?.projectMembersTaskCreation ||
-        (access.assignedPMTaskCreation && isPm);
+        (access?.assignedPMTaskCreation && isPm);
+    const isOrgPm = pm.value.find((x) => x.id == user?.id);
 
     return (
         <Box>
@@ -133,6 +149,18 @@ export const TeamSingleTask = ({
                                 )}%`}
                             />
                         </Box>
+                        {(isPm || isOrgPm) && (
+                            <Flex mt="1rem" justify="flex-end">
+                                <ManageBtn
+                                    onClick={onOpened}
+                                    isLoading={loading.id == task?.id}
+                                    btn="Mark Task as Complete"
+                                    bg="brand.400"
+                                    w="fit-content"
+                                    disabled={status == 'completed'}
+                                />
+                            </Flex>
+                        )}
                     </Box>
                     <VStack
                         borderRadius=".2rem"
@@ -413,6 +441,24 @@ export const TeamSingleTask = ({
                     onClose={onClose}
                     data={task}
                     subTask={subTask}
+                />
+            )}
+            {isOpened && (
+                <ShowPrompt
+                    isOpen={isOpened}
+                    onClose={onClosed}
+                    onSubmit={() =>
+                        markAsCompleted(
+                            { type: 2, taskId: task.id },
+                            setLoading,
+                            toast,
+                            setStatus,
+                            router,
+                            onClosed,
+                        )
+                    }
+                    loading={loading}
+                    text={`Marking this task as complete will prevent any further timesheet submissions for this task.<br/> Are you sure you want to proceed?`}
                 />
             )}
         </Box>

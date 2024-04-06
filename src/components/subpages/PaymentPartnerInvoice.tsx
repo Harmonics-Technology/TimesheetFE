@@ -36,6 +36,7 @@ import asyncForEach from '@components/generics/functions/AsyncForEach';
 import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 import { UserContext } from '@components/context/UserContext';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -163,6 +164,7 @@ function PaymentPartnerInvoice({
         { id: superAdminId, title: 'Main Organization' },
         ...(newClient || []),
     ];
+    const { hstAmount } = useContext(OnboardingFeeContext);
 
     // console.log({ invoiceData });
     return (
@@ -250,6 +252,23 @@ function PaymentPartnerInvoice({
                                     0,
                                 ),
                             );
+                            const allTaxTotal = Number(
+                                x?.children?.reduce(
+                                    (a, x) =>
+                                        a +
+                                        (x?.employeeInformation?.taxType ==
+                                        'hst'
+                                            ? calculatePercentage(
+                                                  x.convertedAmount,
+                                                  hstAmount?.fee,
+                                              )
+                                            : calculatePercentage(
+                                                  x.convertedAmount,
+                                                  x?.employeeInformation?.tax,
+                                              )),
+                                    0,
+                                ),
+                            );
                             return (
                                 <Tr key={x.id}>
                                     <TableData
@@ -277,6 +296,7 @@ function PaymentPartnerInvoice({
                                         )}
                                         ${Round(
                                             (x.convertedAmount as number) +
+                                                allTaxTotal +
                                                 allFeesTotal,
                                         )}`}
                                         full

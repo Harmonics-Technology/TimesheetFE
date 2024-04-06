@@ -28,9 +28,6 @@ import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { Round } from '@components/generics/functions/Round';
-import {
-    getCurrencyName,
-} from '@components/generics/functions/getCurrencyName';
 import { UserContext } from '@components/context/UserContext';
 
 function Paymentinvoices({
@@ -66,6 +63,8 @@ function Paymentinvoices({
         calculatePercentage(allInvoiceTotal, clicked?.hst) / exchangeRate;
     const hstNaira = hst * exchangeRate;
     const status = clicked?.status;
+
+    const { hstAmount } = useContext(OnboardingFeeContext);
     const allFeesTotal = Number(
         clicked?.children?.reduce(
             (a, x) =>
@@ -80,8 +79,22 @@ function Paymentinvoices({
             0,
         ),
     );
+    const allCalculatedTax = Number(
+        clicked?.children?.reduce(
+            (a, x) =>
+                a +
+                calculatePercentage(
+                    x?.convertedAmount,
+                    x?.employeeInformation?.taxType == 'hst'
+                        ? hstAmount?.fee
+                        : x?.employeeInformation?.tax,
+                ),
+            0,
+        ),
+    );
 
-    const total = Number(allInvoiceTotal + allFeesTotal) || 0;
+    const total =
+        Number(allInvoiceTotal + allCalculatedTax + allFeesTotal) || 0;
 
     const paymentDate =
         moment(clicked?.dateCreated).day() == 5
@@ -208,13 +221,24 @@ function Paymentinvoices({
                                                             )}
                                                         />
                                                         <TableData
-                                                            name={`${getCurrencyName(
+                                                            name={`${
                                                                 x
                                                                     ?.employeeInformation
-                                                                    ?.currency,
-                                                            )}${CUR(
+                                                                    ?.currency
+                                                            }${CUR(
                                                                 Round(
-                                                                    (x?.totalAmount as number) -
+                                                                    (x?.totalAmount as number) +
+                                                                        calculatePercentage(
+                                                                            x?.convertedAmount,
+                                                                            x
+                                                                                ?.employeeInformation
+                                                                                ?.taxType ==
+                                                                                'hst'
+                                                                                ? hstAmount?.fee
+                                                                                : x
+                                                                                      ?.employeeInformation
+                                                                                      ?.tax,
+                                                                        ) -
                                                                         (
                                                                             x?.expenses as unknown as ExpenseView[]
                                                                         )?.reduce(
@@ -255,9 +279,9 @@ function Paymentinvoices({
                                                             }
                                                         />
                                                         <TableData
-                                                            name={`${getCurrencyName(
-                                                                user?.currency,
-                                                            )}${CUR(
+                                                            name={`${
+                                                                user?.currency
+                                                            }${CUR(
                                                                 Round(
                                                                     (x?.convertedAmount as number) -
                                                                         (
@@ -351,9 +375,7 @@ function Paymentinvoices({
                                     >
                                         <InvoiceTotalText
                                             label="Subtotal"
-                                            cur={getCurrencyName(
-                                                user?.currency,
-                                            )}
+                                            cur={user?.currency}
                                             value={CUR(Round(allInvoiceTotal))}
                                         />
                                         {/* <InvoiceTotalText
@@ -370,9 +392,7 @@ function Paymentinvoices({
                                         <InvoiceTotalText
                                             label="Fees"
                                             value={CUR(Round(allFeesTotal))}
-                                            cur={getCurrencyName(
-                                                user?.currency,
-                                            )}
+                                            cur={user?.currency}
                                         />
                                         <Box
                                             border="2px solid   "
@@ -382,9 +402,7 @@ function Paymentinvoices({
                                             mt="1.5rem"
                                         >
                                             <InvoiceTotalText
-                                                cur={getCurrencyName(
-                                                    user?.currency,
-                                                )}
+                                                cur={user?.currency}
                                                 label="Total"
                                                 value={CUR(Round(total))}
                                             />

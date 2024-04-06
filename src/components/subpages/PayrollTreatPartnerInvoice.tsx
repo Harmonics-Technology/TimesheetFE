@@ -43,6 +43,7 @@ import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import NoAccess from '@components/bits-utils/NoAccess';
 import asyncForEach from '@components/generics/functions/AsyncForEach';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -170,7 +171,8 @@ function PayrollTreatPartnerInvoice({
         'Action',
     ];
 
-    console.log({ invoiceData });
+    // console.log({ invoiceData });
+    const { hstAmount } = useContext(OnboardingFeeContext);
 
     return (
         <>
@@ -323,6 +325,26 @@ function PayrollTreatPartnerInvoice({
                                                 0,
                                             ),
                                         );
+                                        const allTaxTotal = Number(
+                                            x?.children?.reduce(
+                                                (a, x) =>
+                                                    a +
+                                                    (x?.employeeInformation
+                                                        ?.taxType == 'hst'
+                                                        ? calculatePercentage(
+                                                              x.convertedAmount,
+                                                              hstAmount?.fee,
+                                                          )
+                                                        : calculatePercentage(
+                                                              x.convertedAmount,
+                                                              x
+                                                                  ?.employeeInformation
+                                                                  ?.tax,
+                                                          )),
+                                                0,
+                                            ),
+                                        );
+
                                         return (
                                             <Tr key={x.id}>
                                                 <TableData
@@ -352,6 +374,7 @@ function PayrollTreatPartnerInvoice({
                                                     name={CUR(
                                                         Round(
                                                             (x.convertedAmount as number) +
+                                                                allTaxTotal +
                                                                 allFeesTotal,
                                                             // *
                                                             //     (x.rate as unknown as number),

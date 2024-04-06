@@ -261,7 +261,7 @@ function PaymentPartnerManagement({
             <DrawerWrapper
                 onClose={onClose}
                 isOpen={isOpen}
-                title={'Add new PaymentPartner'}
+                title={'Add new Payment Partner'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <PrimaryInput<RegisterModel>

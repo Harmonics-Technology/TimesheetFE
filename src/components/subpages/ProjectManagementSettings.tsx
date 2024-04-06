@@ -12,6 +12,7 @@ import { TableData, TablePmActions } from '@components/bits-utils/TableData';
 import moment from 'moment';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
+import Pagination from '@components/bits-utils/Pagination';
 
 const schema = yup.object().shape({
     id: yup.string().required(),
@@ -170,6 +171,7 @@ export const ProjectManagementSettings = ({
                         ))}
                     </>
                 </Tables>
+                <Pagination data={pm} />
             </Box>
         </Box>
     );

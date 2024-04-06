@@ -13,13 +13,16 @@ import Pagination from '@components/bits-utils/Pagination';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import moment from 'moment';
 import { PayslipModal } from '@components/bits-utils/PayslipModal';
-import { useState } from 'react';
-import Naira, { CAD } from '@components/generics/functions/Naira';
+import { useContext, useState } from 'react';
+import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
 import AdminPaymentScheduleModal from '@components/bits-utils/AdminPaymentScheduleModal';
 import { BsDownload } from 'react-icons/bs';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { Round } from '@components/generics/functions/Round';
+import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 interface expenseProps {
     payrolls: PaySlipViewPagedCollectionStandardResponse;
@@ -47,6 +50,7 @@ function AdminPayslip({
     } = useDisclosure();
 
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
+    const { hstAmount } = useContext(OnboardingFeeContext);
     const thead = [
         'Name',
         'Start Date',
@@ -117,22 +121,25 @@ function AdminPayslip({
                                     name={`${x?.invoice?.totalHours} HRS`}
                                 />
                                 <TableData
-                                    name={
+                                    name={`${
                                         x?.invoice?.employeeInformation
-                                            ?.currency == 'CAD'
-                                            ? CAD(
-                                                  Round(
-                                                      x?.invoice
-                                                          ?.totalAmount as number,
-                                                  ),
-                                              )
-                                            : Naira(
-                                                  Round(
-                                                      x?.invoice
-                                                          ?.totalAmount as number,
-                                                  ),
-                                              )
-                                    }
+                                            ?.currency
+                                    }${CUR(
+                                        Round(
+                                            (x?.invoice
+                                                ?.totalAmount as number) +
+                                                calculatePercentage(
+                                                    x?.invoice?.totalAmount,
+                                                    x?.invoice
+                                                        ?.employeeInformation
+                                                        ?.taxType == 'hst'
+                                                        ? hstAmount?.fee
+                                                        : x?.invoice
+                                                              ?.employeeInformation
+                                                              ?.tax,
+                                                ),
+                                        ),
+                                    )}`}
                                 />
                                 <InvoiceAction
                                     data={x}
@@ -143,24 +150,34 @@ function AdminPayslip({
                         ))}
                     </>
                 </Tables>
-                <Pagination data={payrolls} />
+                <Pagination data={payrolls} loadMore />
             </Box>
-            <PayslipModal isOpen={isOpen} onClose={onClose} paySlip={clicked} />
-            <AdminPaymentScheduleModal
-                isOpen={isOpened}
-                onClose={onClosed}
-                paymentSchedule={
-                    paymentSchedule as AdminPaymentScheduleViewListStandardResponse
-                }
-            />
-            <ExportReportModal
-                isOpen={open}
-                onClose={close}
-                data={thead}
-                record={record}
-                fileName={fileName}
-                model="payslip"
-            />
+            {isOpen && (
+                <PayslipModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    paySlip={clicked}
+                />
+            )}
+            {isOpened && (
+                <AdminPaymentScheduleModal
+                    isOpen={isOpened}
+                    onClose={onClosed}
+                    paymentSchedule={
+                        paymentSchedule as AdminPaymentScheduleViewListStandardResponse
+                    }
+                />
+            )}
+            {open && (
+                <ExportReportModal
+                    isOpen={open}
+                    onClose={close}
+                    data={thead}
+                    record={record}
+                    fileName={fileName}
+                    model="payslip"
+                />
+            )}
         </>
     );
 }

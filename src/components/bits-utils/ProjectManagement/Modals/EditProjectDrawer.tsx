@@ -154,12 +154,14 @@ export const EditProjectDrawer = ({
     const setIfNonApplicable = (value: any) => {
         setNonApplicable(value);
         if (value == true) {
-            setSelectedManager(undefined);
+            setSelectedManager(null);
             return;
         }
     };
 
     const onSubmit = async (data: ProjectModel) => {
+        const newPm = data?.projectManagerId ? data?.projectManagerId : null;
+        data.projectManagerId = newPm;
         try {
             const result = await ProjectManagementService.updateProject(data);
             if (result.status) {
@@ -214,7 +216,7 @@ export const EditProjectDrawer = ({
         setValue('projectManagerId', selectedManager?.id);
     }, [selectedManager]);
 
-    // console.log({ nonApplicable, users });
+    console.log({ selectedManager, pm: watch('projectManagerId'), data });
 
     //
     return (
