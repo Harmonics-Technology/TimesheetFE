@@ -69,7 +69,11 @@ function Paymentinvoices({
                 a +
                 (x.employeeInformation?.paymentProcessingFeeType == 'percentage'
                     ? calculatePercentage(
-                          x?.convertedAmount,
+                          (x?.convertedAmount as number) +
+                              calculatePercentage(
+                                  x.convertedAmount,
+                                  x?.employeeInformation?.tax,
+                              ),
                           x?.employeeInformation
                               ?.paymentProcessingFee as number,
                       )
@@ -339,7 +343,13 @@ function Paymentinvoices({
                                                                         ?.paymentProcessingFeeType ==
                                                                         'percentage'
                                                                         ? calculatePercentage(
-                                                                              x?.convertedAmount,
+                                                                              (x?.convertedAmount as number) +
+                                                                                  calculatePercentage(
+                                                                                      x.convertedAmount as number,
+                                                                                      x
+                                                                                          ?.employeeInformation
+                                                                                          ?.tax as number,
+                                                                                  ),
                                                                               x
                                                                                   ?.employeeInformation
                                                                                   ?.paymentProcessingFee,
