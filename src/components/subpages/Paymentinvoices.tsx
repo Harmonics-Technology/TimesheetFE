@@ -91,6 +91,7 @@ function Paymentinvoices({
 
     const total =
         Number(allInvoiceTotal + allCalculatedTax + allFeesTotal) || 0;
+    const subTotal = Number(allInvoiceTotal + allCalculatedTax) || 0;
 
     const paymentDate =
         moment(clicked?.dateCreated).day() == 5
@@ -225,7 +226,7 @@ function Paymentinvoices({
                                                                 Round(
                                                                     (x?.totalAmount as number) +
                                                                         calculatePercentage(
-                                                                            x?.convertedAmount,
+                                                                            x?.totalAmount,
                                                                             x
                                                                                 ?.employeeInformation
                                                                                 ?.tax,
@@ -274,7 +275,13 @@ function Paymentinvoices({
                                                                 user?.currency
                                                             }${CUR(
                                                                 Round(
-                                                                    (x?.convertedAmount as number) -
+                                                                    (x?.convertedAmount as number) +
+                                                                        calculatePercentage(
+                                                                            x?.convertedAmount,
+                                                                            x
+                                                                                ?.employeeInformation
+                                                                                ?.tax,
+                                                                        ) -
                                                                         (
                                                                             x?.expenses as unknown as ExpenseView[]
                                                                         )?.reduce(
@@ -367,7 +374,7 @@ function Paymentinvoices({
                                         <InvoiceTotalText
                                             label="Subtotal"
                                             cur={user?.currency}
-                                            value={CUR(Round(allInvoiceTotal))}
+                                            value={CUR(Round(subTotal))}
                                         />
                                         {/* <InvoiceTotalText
                                             label="Subtotal(₦)"
