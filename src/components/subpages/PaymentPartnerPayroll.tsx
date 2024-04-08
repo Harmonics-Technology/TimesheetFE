@@ -64,8 +64,6 @@ function PaymentPartnerPayroll({
     const [loading, setLoading] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const { hstAmount } = useContext(OnboardingFeeContext);
-
     const [selectedId, setSelectedId] = useState<any[]>([]);
     const toggleSelected = (x: any, all?: boolean) => {
         if (all) {
@@ -322,11 +320,7 @@ function PaymentPartnerPayroll({
                                             (x?.totalAmount as number) +
                                                 calculatePercentage(
                                                     x?.totalAmount,
-                                                    x?.employeeInformation
-                                                        ?.taxType == 'hst'
-                                                        ? hstAmount?.fee
-                                                        : x?.employeeInformation
-                                                              ?.tax,
+                                                    x?.employeeInformation?.tax,
                                                 ),
                                         ),
                                     )}`}

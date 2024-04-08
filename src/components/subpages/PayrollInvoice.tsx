@@ -61,7 +61,6 @@ function PayrollInvoice({
     // const allExpenseTotal = clicked?.children
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
-    // const { hstAmount } = useContext(OnboardingFeeContext);
 
     const hst =
         calculatePercentage(allInvoiceTotal, clicked?.hst) / exchangeRate;
@@ -108,8 +107,6 @@ function PayrollInvoice({
         }
     };
 
-    const { hstAmount } = useContext(OnboardingFeeContext);
-
     const allFeesTotal = Number(
         clicked?.children?.reduce(
             (a, x) =>
@@ -130,9 +127,7 @@ function PayrollInvoice({
                 a +
                 calculatePercentage(
                     x?.convertedAmount,
-                    x?.employeeInformation?.taxType == 'hst'
-                        ? hstAmount?.fee
-                        : x?.employeeInformation?.tax,
+                    x?.employeeInformation?.tax,
                 ),
             0,
         ),
@@ -274,12 +269,7 @@ function PayrollInvoice({
                                                                                     x?.convertedAmount,
                                                                                     x
                                                                                         ?.employeeInformation
-                                                                                        ?.taxType ==
-                                                                                        'hst'
-                                                                                        ? hstAmount?.fee
-                                                                                        : x
-                                                                                              ?.employeeInformation
-                                                                                              ?.tax,
+                                                                                        ?.tax,
                                                                                 ) -
                                                                                 (
                                                                                     x?.expenses as unknown as ExpenseView[]

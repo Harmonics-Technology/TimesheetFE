@@ -22,12 +22,11 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { PayslipInfoTag } from './PayslipInfoTag';
 import Naira, { CUR } from '@components/generics/functions/Naira';
-import { useContext, useRef } from 'react';
+import {  useRef } from 'react';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { Round } from '@components/generics/functions/Round';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
-import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import { numberToWordsWithCurrency } from '@components/generics/functions/NumberToWords';
 // import { PaySlipView } from 'src/services';
 
@@ -38,7 +37,6 @@ type Props = {
 };
 
 export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
-    const { hstAmount } = useContext(OnboardingFeeContext);
 
     const allExpenseTotal = paySlip?.invoice?.expenses?.reduce(
         (a, b) => a + (b?.amount as number),
@@ -49,9 +47,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
 
     const hstCalculated = calculatePercentage(
         netPay,
-        paySlip?.invoice.employeeInformation.taxType == 'hst'
-            ? hstAmount?.fee
-            : paySlip?.invoice?.employeeInformation?.tax,
+        paySlip?.invoice?.employeeInformation?.tax,
     );
 
     const finalTotal = payTotal + hstCalculated;

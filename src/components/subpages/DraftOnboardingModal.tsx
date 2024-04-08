@@ -8,7 +8,7 @@ import {
     Button,
     DrawerFooter,
 } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DateObject } from 'react-multi-date-picker';
 import {
     DraftService,
@@ -36,6 +36,7 @@ import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/Show
 import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import { SectionTitle } from '@components/bits-utils/NewUpdates/SectionTitle';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 export const DraftOnboardingModal = ({
     userProfile,
@@ -284,6 +285,7 @@ export const DraftOnboardingModal = ({
     const [contract, setContractFile] = useState<any>('');
     const [showLoading, setShowLoading] = useState(false);
     const widgetApi = useRef<any>();
+    const { hstAmount } = useContext(OnboardingFeeContext);
 
     const radious = ['For me', 'For my client'];
     const { getRootProps: rootProps, getRadioProps: radioProps } =
@@ -334,6 +336,7 @@ export const DraftOnboardingModal = ({
     }, [paymentPartnerId]);
 
     const onSubmit = async (data: TeamMemberModel) => {
+        data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax;
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
         data.role = 'Team member';

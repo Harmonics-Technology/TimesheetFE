@@ -8,7 +8,7 @@ import {
     Button,
     DrawerFooter,
 } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DateObject } from 'react-multi-date-picker';
 import {
     DraftService,
@@ -36,6 +36,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { RiMailSendFill } from 'react-icons/ri';
 import { ShowPrompt } from '../ProjectManagement/Modals/ShowPrompt';
 import UploadCareWidget from '../UploadCareWidget';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 export const NewTeamMemerOnboardingForm = ({
     isOpen,
@@ -56,6 +57,7 @@ export const NewTeamMemerOnboardingForm = ({
     const [payFees, setPayFees] = useState<any>();
     const [loading, setLoading] = useState<any>();
     const toast = useToast();
+    const { hstAmount } = useContext(OnboardingFeeContext);
 
     const schema = yup.object().shape({
         lastName: yup.string().required(),
@@ -144,6 +146,7 @@ export const NewTeamMemerOnboardingForm = ({
         handleSubmit,
         control,
         watch,
+        setValue,
         reset,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
@@ -289,6 +292,7 @@ export const NewTeamMemerOnboardingForm = ({
     // console.log({ errors });
 
     const onSubmit = async (data: TeamMemberModel) => {
+        data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax;
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
         data.role = 'Team member';
@@ -349,6 +353,7 @@ export const NewTeamMemerOnboardingForm = ({
         }
     };
     const saveToDraft = async (data: TeamMemberModel) => {
+        // data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax;
         data.superAdminId = user?.superAdminId;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
 

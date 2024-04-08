@@ -72,7 +72,6 @@ function OnshoreSubmittedInvoice({
 }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    const { hstAmount } = useContext(OnboardingFeeContext);
 
     const invoice = invoiceData?.data?.value;
     const [loading, setLoading] = useState(false);
@@ -396,12 +395,7 @@ function OnshoreSubmittedInvoice({
                                                                               x?.totalAmount,
                                                                               x
                                                                                   ?.employeeInformation
-                                                                                  ?.taxType ==
-                                                                                  'hst'
-                                                                                  ? hstAmount?.fee
-                                                                                  : x
-                                                                                        ?.employeeInformation
-                                                                                        ?.tax,
+                                                                                  ?.tax,
                                                                           ),
                                                                   ),
                                                               )}`}

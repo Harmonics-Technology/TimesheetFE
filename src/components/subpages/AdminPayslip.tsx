@@ -50,7 +50,6 @@ function AdminPayslip({
     } = useDisclosure();
 
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
-    const { hstAmount } = useContext(OnboardingFeeContext);
     const thead = [
         'Name',
         'Start Date',
@@ -132,11 +131,7 @@ function AdminPayslip({
                                                     x?.invoice?.totalAmount,
                                                     x?.invoice
                                                         ?.employeeInformation
-                                                        ?.taxType == 'hst'
-                                                        ? hstAmount?.fee
-                                                        : x?.invoice
-                                                              ?.employeeInformation
-                                                              ?.tax,
+                                                        ?.tax,
                                                 ),
                                         ),
                                     )}`}

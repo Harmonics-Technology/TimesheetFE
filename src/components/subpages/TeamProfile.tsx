@@ -267,6 +267,7 @@ function TeamProfile({
     );
     //
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { hstAmount } = useContext(OnboardingFeeContext);
     const [selected, setSelected] = useState(userProfile?.role as string);
     const changeUserRole = async (val) => {
         setSelected(val);
@@ -289,6 +290,7 @@ function TeamProfile({
 
         // data.clientId = userProfile?.employeeInformation?.client?.id;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
+        data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax;
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }

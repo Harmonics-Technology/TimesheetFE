@@ -148,7 +148,6 @@ function ContractTable({ userProfile, isSuperAdmin }: adminProps) {
         }
     };
 
-    console.log({ userProfile });
 
     return (
         <>

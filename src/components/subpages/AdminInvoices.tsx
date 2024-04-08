@@ -185,7 +185,6 @@ function AdminInvoices({
     //     }
     // };
     const { user, accessControls } = useContext(UserContext);
-    const { hstAmount } = useContext(OnboardingFeeContext);
     const role = user?.role.replaceAll(' ', '');
     const userAccess: ControlSettingView = accessControls;
     const hideCheckbox = router.asPath.startsWith(
@@ -433,12 +432,7 @@ function AdminInvoices({
                                                                         x.totalAmount,
                                                                         x
                                                                             ?.employeeInformation
-                                                                            ?.taxType ==
-                                                                            'hst'
-                                                                            ? hstAmount?.fee
-                                                                            : x
-                                                                                  ?.employeeInformation
-                                                                                  ?.tax,
+                                                                            ?.tax,
                                                                     ) *
                                                                         (x?.rateForConvertedIvoice as number),
                                                             ),
@@ -468,12 +462,7 @@ function AdminInvoices({
                                                                         x?.totalAmount,
                                                                         x
                                                                             ?.employeeInformation
-                                                                            ?.taxType ==
-                                                                            'hst'
-                                                                            ? hstAmount?.fee
-                                                                            : x
-                                                                                  ?.employeeInformation
-                                                                                  ?.tax,
+                                                                            ?.tax,
                                                                     ),
                                                             ),
                                                         )}`}

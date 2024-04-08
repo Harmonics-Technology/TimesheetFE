@@ -164,7 +164,6 @@ function PaymentPartnerInvoice({
         { id: superAdminId, title: 'Main Organization' },
         ...(newClient || []),
     ];
-    const { hstAmount } = useContext(OnboardingFeeContext);
 
     // console.log({ invoiceData });
     return (
@@ -256,16 +255,10 @@ function PaymentPartnerInvoice({
                                 x?.children?.reduce(
                                     (a, x) =>
                                         a +
-                                        (x?.employeeInformation?.taxType ==
-                                        'hst'
-                                            ? calculatePercentage(
-                                                  x.convertedAmount,
-                                                  hstAmount?.fee,
-                                              )
-                                            : calculatePercentage(
-                                                  x.convertedAmount,
-                                                  x?.employeeInformation?.tax,
-                                              )),
+                                        calculatePercentage(
+                                            x.convertedAmount,
+                                            x?.employeeInformation?.tax,
+                                        ),
                                     0,
                                 ),
                             );

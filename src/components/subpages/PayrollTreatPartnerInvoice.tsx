@@ -172,7 +172,6 @@ function PayrollTreatPartnerInvoice({
     ];
 
     // console.log({ invoiceData });
-    const { hstAmount } = useContext(OnboardingFeeContext);
 
     return (
         <>
@@ -329,18 +328,11 @@ function PayrollTreatPartnerInvoice({
                                             x?.children?.reduce(
                                                 (a, x) =>
                                                     a +
-                                                    (x?.employeeInformation
-                                                        ?.taxType == 'hst'
-                                                        ? calculatePercentage(
-                                                              x.convertedAmount,
-                                                              hstAmount?.fee,
-                                                          )
-                                                        : calculatePercentage(
-                                                              x.convertedAmount,
-                                                              x
-                                                                  ?.employeeInformation
-                                                                  ?.tax,
-                                                          )),
+                                                    calculatePercentage(
+                                                        x.convertedAmount,
+                                                        x?.employeeInformation
+                                                            ?.tax,
+                                                    ),
                                                 0,
                                             ),
                                         );
