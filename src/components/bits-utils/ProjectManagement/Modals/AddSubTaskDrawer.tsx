@@ -32,6 +32,7 @@ import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 import moment from 'moment';
 import { useRouter } from 'next/router';
+import getBusinessDateCount from '@components/bits-utils/GetBusinessDays';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -160,9 +161,13 @@ export const AddSubTaskDrawer = ({
     useEffect(() => {
         setValue('projectTaskAsigneeId', selectedUser?.id);
     }, [selectedUser]);
-    const dateDiff = moment(watch('endDate')).diff(watch('startDate'), 'day');
+    // const dateDiff = moment(watch('endDate')).diff(watch('startDate'), 'day');
+    const businessDays = getBusinessDateCount(
+        new Date(watch('startDate') as any),
+        new Date(watch('endDate') as any),
+    );
     useEffect(() => {
-        setValue('duration', dateDiff + 1 || 0);
+        setValue('duration', businessDays || 0);
     }, [watch('startDate'), watch('endDate')]);
     useEffect(() => {
         setValue('taskPriority', selectedPriority?.id);

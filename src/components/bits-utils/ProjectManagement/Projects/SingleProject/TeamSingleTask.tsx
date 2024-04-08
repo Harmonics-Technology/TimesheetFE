@@ -10,6 +10,12 @@ import {
     Select,
     useDisclosure,
     Image,
+    MenuButton,
+    Spinner,
+    MenuList,
+    MenuItem,
+    Menu,
+    useToast,
 } from '@chakra-ui/react';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import {
@@ -19,9 +25,9 @@ import {
 } from '@components/bits-utils/TableData';
 import colorSwatch from '@components/generics/colorSwatch';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { BiSolidPencil } from 'react-icons/bi';
-import { FaEye } from 'react-icons/fa';
+import { FaEllipsisH, FaEye } from 'react-icons/fa';
 import { ProgressBar } from '../../Generics/ProgressBar';
 import { TableCard } from '../../Generics/TableCard';
 import { StatusBadge } from '../../Generics/StatusBadge';
@@ -34,17 +40,28 @@ import {
 } from 'src/services';
 import { Round } from '@components/generics/functions/Round';
 import { TeamTopBar } from './TeamTopBar';
+import { MdVerified } from 'react-icons/md';
+import { BsPenFill } from 'react-icons/bs';
+import { UserContext } from '@components/context/UserContext';
+import { ManageBtn } from '@components/bits-utils/ManageBtn';
+import markAsCompleted from '@components/generics/functions/markAsCompleted';
+import { ShowPrompt } from '../../Modals/ShowPrompt';
+import { useRouter } from 'next/router';
 
 export const TeamSingleTask = ({
     id,
     project,
     tasks,
     task,
+    access,
+    pm,
 }: {
     id: any;
     project: any;
     tasks: any;
     task: any;
+    access: any;
+    pm: any;
 }) => {
     const tableHead = [
         'Task/Subtak Name',
@@ -54,9 +71,39 @@ export const TeamSingleTask = ({
         'Status',
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isOpened,
+        onOpen: onOpened,
+        onClose: onClosed,
+    } = useDisclosure();
+    const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
 
-    const status = task?.status?.toLowerCase();
+    const openModal = (item: any) => {
+        setSubTask({ ...item, isEdit: true });
+        onOpen();
+    };
+
     const pastDate = moment().diff(moment(task?.endDate), 'days') > 0;
+    const [taskStatus, setTaskStatus] = useState();
+    const [status, setStatus] = useState(task?.status?.toLowerCase());
+    const toast = useToast();
+    const router = useRouter();
+    const {
+        isOpen: isOpens,
+        onOpen: onOpens,
+        onClose: onCloses,
+    } = useDisclosure();
+    const [loadings, setLoadings] = useState({ id: '' });
+    const [loading, setLoading] = useState({ id: '' });
+
+    const { user } = useContext(UserContext);
+    const role = user?.role?.replaceAll(' ', '');
+
+    const isPm = project?.projectManagerId == user?.id;
+    const hasAccess =
+        access?.projectMembersTaskCreation ||
+        (access?.assignedPMTaskCreation && isPm);
+    const isOrgPm = pm.value.find((x) => x.id == user?.id);
 
     return (
         <Box>
@@ -102,6 +149,18 @@ export const TeamSingleTask = ({
                                 )}%`}
                             />
                         </Box>
+                        {(isPm || isOrgPm) && (
+                            <Flex mt="1rem" justify="flex-end">
+                                <ManageBtn
+                                    onClick={onOpened}
+                                    isLoading={loading.id == task?.id}
+                                    btn="Mark Task as Complete"
+                                    bg="brand.400"
+                                    w="fit-content"
+                                    disabled={status == 'completed'}
+                                />
+                            </Flex>
+                        )}
                     </Box>
                     <VStack
                         borderRadius=".2rem"
@@ -178,18 +237,20 @@ export const TeamSingleTask = ({
                     <Text color="#2d3748" fontSize=".8rem" fontWeight={600}>
                         My Task
                     </Text>
-                    {/* <HStack justify="flex-end">
-                        <Button
-                            onClick={onOpen}
-                            bgColor="brand.400"
-                            color="white"
-                            h="2rem"
-                            borderRadius=".3rem"
-                            fontSize=".8rem"
-                        >
-                            Add sub-task
-                        </Button>
-                    </HStack> */}
+                    <HStack justify="flex-end">
+                        {hasAccess && (
+                            <Button
+                                onClick={onOpen}
+                                bgColor="brand.400"
+                                color="white"
+                                h="2rem"
+                                borderRadius=".3rem"
+                                fontSize=".8rem"
+                            >
+                                Add sub-task
+                            </Button>
+                        )}
+                    </HStack>
                     <HStack py="1rem" justify="space-between">
                         <HStack>
                             <HStack w="full">
@@ -268,62 +329,138 @@ export const TeamSingleTask = ({
                     <TableCard tableHead={tableHead}>
                         {tasks?.value?.map((x: ProjectSubTaskView) => {
                             return (
-                                <>
-                                    <TableRow key={x.id}>
-                                        <TableData
-                                            name={x?.name}
-                                            fontWeight="500"
-                                        />
-                                        <td style={{ maxWidth: '300px' }}>
-                                            <HStack
-                                                color="#c2cfe0"
-                                                gap=".2rem"
-                                                flexWrap="wrap"
+                                <TableRow key={x.id}>
+                                    <TableData
+                                        name={x?.name}
+                                        fontWeight="500"
+                                    />
+                                    <td style={{ maxWidth: '300px' }}>
+                                        <HStack
+                                            color="#c2cfe0"
+                                            gap=".2rem"
+                                            flexWrap="wrap"
+                                        >
+                                            <Flex
+                                                border="1px solid"
+                                                borderColor="#4FD1C5"
+                                                borderRadius="25px"
+                                                justify="center"
+                                                align="center"
+                                                color="#4FD1C5"
+                                                h="1.6rem"
+                                                px="0.5rem"
                                             >
-                                                <Flex
-                                                    border="1px solid"
-                                                    borderColor="#4FD1C5"
-                                                    borderRadius="25px"
-                                                    justify="center"
-                                                    align="center"
-                                                    color="#4FD1C5"
-                                                    h="1.6rem"
-                                                    px="0.5rem"
-                                                >
-                                                    {
-                                                        x?.projectTaskAsignee
-                                                            ?.user?.fullName
-                                                    }
-                                                </Flex>
-                                            </HStack>
+                                                {
+                                                    x?.projectTaskAsignee?.user
+                                                        ?.fullName
+                                                }
+                                            </Flex>
+                                        </HStack>
+                                    </td>
+                                    <TableData
+                                        name={`${Round(x?.hoursSpent)} Hrs`}
+                                        fontWeight="500"
+                                    />
+                                    <TableData
+                                        name={moment(x?.startDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                        fontWeight="500"
+                                    />
+                                    <TableData
+                                        name={moment(x?.endDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                        fontWeight="500"
+                                    />
+                                    <NewTableState
+                                        name={x?.status}
+                                        color={colorSwatch(x?.status)}
+                                    />
+                                    {hasAccess && (
+                                        <td>
+                                            <Menu>
+                                                <MenuButton>
+                                                    <Box
+                                                        fontSize="1rem"
+                                                        pl="1rem"
+                                                        fontWeight="bold"
+                                                        cursor="pointer"
+                                                        color="brand.300"
+                                                    >
+                                                        {loadings.id == x.id ? (
+                                                            <Spinner size="sm" />
+                                                        ) : (
+                                                            <FaEllipsisH />
+                                                        )}
+                                                    </Box>
+                                                </MenuButton>
+                                                <MenuList>
+                                                    <MenuItem
+                                                        onClick={onOpens}
+                                                        w="full"
+                                                        isDisabled={
+                                                            taskStatus ||
+                                                            x?.status?.toLowerCase() ==
+                                                                'completed'
+                                                        }
+                                                    >
+                                                        <Icon
+                                                            as={MdVerified}
+                                                            mr=".5rem"
+                                                            color="brand.400"
+                                                        />
+                                                        Mark as complete
+                                                    </MenuItem>
+                                                    <MenuItem
+                                                        onClick={() =>
+                                                            openModal(x)
+                                                        }
+                                                        w="full"
+                                                    >
+                                                        <Icon
+                                                            as={BsPenFill}
+                                                            mr=".5rem"
+                                                            color="brand.400"
+                                                        />
+                                                        Edit Sub-task
+                                                    </MenuItem>
+                                                </MenuList>
+                                            </Menu>
                                         </td>
-                                        <TableData
-                                            name={`${Round(x?.hoursSpent)} Hrs`}
-                                            fontWeight="500"
-                                        />
-                                        <TableData
-                                            name={moment(x?.startDate).format(
-                                                'DD/MM/YYYY',
-                                            )}
-                                            fontWeight="500"
-                                        />
-                                        <TableData
-                                            name={moment(x?.endDate).format(
-                                                'DD/MM/YYYY',
-                                            )}
-                                            fontWeight="500"
-                                        />
-                                        <NewTableState
-                                            name={x?.status}
-                                            color={colorSwatch(x?.status)}
-                                        />
-                                    </TableRow>
-                                </>
+                                    )}
+                                </TableRow>
                             );
                         })}
                     </TableCard>
                 </Box>
             </Flex>
+            {isOpen && (
+                <AddSubTaskDrawer
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    data={task}
+                    subTask={subTask}
+                />
+            )}
+            {isOpened && (
+                <ShowPrompt
+                    isOpen={isOpened}
+                    onClose={onClosed}
+                    onSubmit={() =>
+                        markAsCompleted(
+                            { type: 2, taskId: task.id },
+                            setLoading,
+                            toast,
+                            setStatus,
+                            router,
+                            onClosed,
+                        )
+                    }
+                    loading={loading}
+                    text={`Marking this task as complete will prevent any further timesheet submissions for this task.<br/> Are you sure you want to proceed?`}
+                />
+            )}
         </Box>
     );
 };

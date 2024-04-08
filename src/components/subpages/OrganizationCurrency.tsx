@@ -106,7 +106,7 @@ export const OrganizationCurrency = ({
             {data?.organizationDefaultCurrency && foundCountry && (
                 <Box mt="1rem">
                     <CurrencyTag
-                        label="Your Primary currency for your organization is"
+                        label="The Primary currency for your organization is"
                         currency={foundCountry?.currency}
                         flag={foundCountry?.flag}
                     />

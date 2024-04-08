@@ -129,6 +129,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                             label="End Date"
                             defaultValue=""
                             placeholder={endDate?.format('DD/MM/YYYY')}
+                            readonly={true}
                         />
                         {/* <Box w="full">
                         <Text fontSize="12px" color="#8C8C8C" w="full" mb="0">

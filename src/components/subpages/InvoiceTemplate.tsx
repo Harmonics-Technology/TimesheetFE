@@ -34,7 +34,6 @@ function InvoiceTemplate({
     clicked: InvoiceView | undefined;
 }) {
     const ref = useRef<any>(null);
-    const { hstAmount } = useContext(OnboardingFeeContext);
     function downloadInvoice() {
         if (ref.current) {
             ref.current.save();
@@ -49,12 +48,12 @@ function InvoiceTemplate({
     const amountMinusExpense =
         (clicked?.totalAmount as number) - (allExpenseTotal as number);
 
-    const taxCalculated =
-        clicked?.employeeInformation?.taxType == 'hst'
-            ? hstAmount?.fee
-            : clicked?.employeeInformation?.tax;
+    const taxCalculated = clicked?.employeeInformation?.tax;
+    const convertedTax = Round(
+        calculatePercentage(amountMinusExpense, taxCalculated),
+    );
 
-    const finalTotal = Number(amountMinusExpense) + Number(taxCalculated);
+    const finalTotal = Number(amountMinusExpense) + Number(convertedTax);
 
     return (
         <>
@@ -341,14 +340,7 @@ function InvoiceTemplate({
                                         />
                                         <InvoiceTotalText
                                             label="Tax"
-                                            value={CUR(
-                                                Round(
-                                                    calculatePercentage(
-                                                        amountMinusExpense,
-                                                        taxCalculated,
-                                                    ),
-                                                ),
-                                            )}
+                                            value={CUR(convertedTax)}
                                             cur={
                                                 clicked?.employeeInformation
                                                     ?.currency

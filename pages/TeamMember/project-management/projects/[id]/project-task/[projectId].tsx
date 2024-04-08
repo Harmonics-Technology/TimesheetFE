@@ -5,11 +5,18 @@ import { withPageAuth } from '@components/generics/withPageAuth';
 import { id } from 'date-fns/locale';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { ProjectManagementService } from 'src/services';
+import { ProjectManagementService, UserService } from 'src/services';
 
-const ProjectSingleTask = ({ id, project, tasks, task }) => {
+const ProjectSingleTask = ({ id, project, tasks, task, access, pm }) => {
     return (
-        <TeamSingleTask id={id} project={project} tasks={tasks} task={task} />
+        <TeamSingleTask
+            id={id}
+            project={project}
+            tasks={tasks}
+            task={task}
+            access={access}
+            pm={pm}
+        />
     );
 };
 
@@ -41,6 +48,22 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.status,
                 pagingOptions.search,
             );
+            const access =
+                await UserService.getSuperAdminProjectManagementSettings(
+                    superAdminId,
+                );
+            const pm = await UserService.listUsers(
+                //@ts-ignore
+                undefined,
+                superAdminId,
+                pagingOptions.offset,
+                50,
+                pagingOptions.search,
+                pagingOptions.from,
+                pagingOptions.to,
+                undefined,
+                true,
+            );
 
             return {
                 props: {
@@ -48,6 +71,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     id,
                     tasks: tasks.data,
                     task: task.data,
+                    access: access.data,
+                    pm: pm.data,
                 },
             };
         } catch (error: any) {

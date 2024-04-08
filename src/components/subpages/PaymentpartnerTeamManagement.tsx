@@ -346,7 +346,7 @@ function PaymentPartnerTeamManagement({
                         'Job Title',
                         'Client',
                         // 'Phone No',
-                        'Payroll Type',
+                        // 'Payroll Type',
                         'Role',
                         'Status',
                         'Action',
@@ -361,9 +361,9 @@ function PaymentPartnerTeamManagement({
                                 />
                                 <TableData name={x.clientName} />
                                 {/* <TableData name={x.phoneNumber} /> */}
-                                <TableData
+                                {/* <TableData
                                     name={x.employeeInformation?.payrollType}
-                                />
+                                /> */}
                                 <TableData name={x.role} />
                                 <TableStatus name={x.isActive} />
                                 <TableActions

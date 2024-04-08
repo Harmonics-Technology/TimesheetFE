@@ -35,6 +35,7 @@ import InputBlank from '@components/bits-utils/InputBlank';
 import { formatDate } from '@components/generics/functions/formatDate';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
 import { Round } from '@components/generics/functions/Round';
+import { UserContext } from '@components/context/UserContext';
 
 function PayrollInvoice({
     isOpen,
@@ -46,6 +47,7 @@ function PayrollInvoice({
     clicked: InvoiceView | undefined;
 }) {
     const { isOpen: isOpened, onClose: onClosed, onOpen } = useDisclosure();
+    const user = clicked?.createdByUser;
     const ref = useRef<any>(null);
     function downloadInvoice() {
         if (ref.current) {
@@ -55,11 +57,10 @@ function PayrollInvoice({
     const exchangeRate = clicked?.rate as unknown as number;
     const allInvoiceTotal = (
         clicked?.children as unknown as InvoiceView[]
-    )?.reduce((a, b) => a + (b?.totalPay as number), 0);
+    )?.reduce((a, b) => a + (b?.convertedAmount as number), 0);
     // const allExpenseTotal = clicked?.children
     //     ?.map((x) => x.expenses?.reduce((a, b) => a + (b?.amount as number), 0))
     //     ?.reduce((a: any, b: any) => a + b, 0);
-    // const { hstAmount } = useContext(OnboardingFeeContext);
 
     const hst =
         calculatePercentage(allInvoiceTotal, clicked?.hst) / exchangeRate;
@@ -110,18 +111,30 @@ function PayrollInvoice({
         clicked?.children?.reduce(
             (a, x) =>
                 a +
-                (x?.employeeInformation?.fixedAmount == false
-                    ? (calculatePercentage(
-                          x?.totalAmount,
-                          x?.employeeInformation?.onBoradingFee,
-                      ) as number) / exchangeRate
-                    : (x?.employeeInformation?.onBoradingFee as number)),
+                (x.employeeInformation?.paymentProcessingFeeType == 'percentage'
+                    ? calculatePercentage(
+                          x?.convertedAmount,
+                          x?.employeeInformation
+                              ?.paymentProcessingFee as number,
+                      )
+                    : (x?.employeeInformation?.paymentProcessingFee as number)),
+            0,
+        ),
+    );
+    const allCalculatedTax = Number(
+        clicked?.children?.reduce(
+            (a, x) =>
+                a +
+                calculatePercentage(
+                    x?.convertedAmount,
+                    x?.employeeInformation?.tax,
+                ),
             0,
         ),
     );
 
     const total =
-        Number(allInvoiceTotal / exchangeRate + allFeesTotal + hst) || 0;
+        Number(allInvoiceTotal + allCalculatedTax + allFeesTotal) || 0;
 
     const paymentDate =
         moment(clicked?.dateCreated).day() == 5
@@ -223,8 +236,7 @@ function PayrollInvoice({
                                             tableHead={[
                                                 'Name',
                                                 'Pay Period',
-                                                'Amount (₦)',
-                                                'Amount ($)',
+                                                'Amount',
                                                 'Fees',
                                                 // 'Total',
                                             ]}
@@ -245,11 +257,20 @@ function PayrollInvoice({
                                                                     )} - ${formatDate(
                                                                         x?.endDate,
                                                                     )}`}
+                                                                    full
                                                                 />
                                                                 <TableData
-                                                                    name={`${Naira(
+                                                                    name={`${
+                                                                        user?.currency
+                                                                    }${CUR(
                                                                         Round(
-                                                                            (x?.totalAmount as number) -
+                                                                            (x?.convertedAmount as number) +
+                                                                                calculatePercentage(
+                                                                                    x?.convertedAmount,
+                                                                                    x
+                                                                                        ?.employeeInformation
+                                                                                        ?.tax,
+                                                                                ) -
                                                                                 (
                                                                                     x?.expenses as unknown as ExpenseView[]
                                                                                 )?.reduce(
@@ -267,7 +288,7 @@ function PayrollInvoice({
                                                                             ?.expenses
                                                                             ?.length !==
                                                                         0
-                                                                            ? `+ ${Naira(
+                                                                            ? `+ ${CUR(
                                                                                   Round(
                                                                                       x.expenses?.reduce(
                                                                                           (
@@ -292,32 +313,32 @@ function PayrollInvoice({
                                                                     }
                                                                 />
 
-                                                                <TableData
-                                                                    name={CAD(
+                                                                {/* <TableData
+                                                                    name={CUR(
                                                                         Round(
                                                                             (x?.totalAmount as number) /
                                                                                 exchangeRate,
                                                                         ),
                                                                     )}
-                                                                />
+                                                                /> */}
                                                                 <TableData
-                                                                    name={CUR(
+                                                                    name={`${CUR(
                                                                         Round(
                                                                             x
                                                                                 .employeeInformation
-                                                                                ?.fixedAmount ==
-                                                                                false
+                                                                                ?.paymentProcessingFeeType ==
+                                                                                'percentage'
                                                                                 ? calculatePercentage(
-                                                                                      x?.totalAmount,
+                                                                                      x?.convertedAmount,
                                                                                       x
                                                                                           ?.employeeInformation
-                                                                                          ?.onBoradingFee,
+                                                                                          ?.paymentProcessingFee,
                                                                                   )
                                                                                 : x
                                                                                       ?.employeeInformation
-                                                                                      ?.onBoradingFee,
+                                                                                      ?.paymentProcessingFee,
                                                                         ),
-                                                                    )}
+                                                                    )}`}
                                                                 />
                                                                 {/* <TableData
                                                             name={CAD(
@@ -369,7 +390,7 @@ function PayrollInvoice({
                                             </>
                                         </Tables>
                                     </Box>
-                                    <Box w="30%">
+                                    {/* <Box w="30%">
                                         <InputBlank
                                             defaultValue={
                                                 exchangeRate as unknown as string
@@ -378,7 +399,7 @@ function PayrollInvoice({
                                             label="Exchange Rate"
                                             fontSize=".8rem"
                                         />
-                                    </Box>
+                                    </Box> */}
                                     <Box w="fit-content" ml="auto">
                                         <Flex
                                             flexDirection="column"
@@ -386,15 +407,15 @@ function PayrollInvoice({
                                         >
                                             <InvoiceTotalText
                                                 label="Subtotal"
-                                                cur={'$'}
+                                                cur={user?.currency}
                                                 value={CUR(
                                                     Round(
-                                                        allInvoiceTotal /
-                                                            exchangeRate,
+                                                        allInvoiceTotal +
+                                                            allCalculatedTax,
                                                     ),
                                                 )}
                                             />
-                                            <InvoiceTotalText
+                                            {/* <InvoiceTotalText
                                                 label="Subtotal(₦)"
                                                 cur={'₦'}
                                                 value={CUR(
@@ -406,27 +427,21 @@ function PayrollInvoice({
                                                 value={CUR(Round(hst))}
                                                 cur="$"
                                                 hst={clicked?.hst}
-                                            />
+                                            /> */}
                                             <InvoiceTotalText
                                                 label="Fees"
-                                                value={CUR(
-                                                    Round(
-                                                        allFeesTotal !==
-                                                            Infinity
-                                                            ? allFeesTotal
-                                                            : 0,
-                                                    ),
-                                                )}
-                                                cur={'$'}
+                                                value={CUR(Round(allFeesTotal))}
+                                                cur={user?.currency}
                                             />
                                             <Box
                                                 border="2px dashed"
                                                 borderColor="gray.300"
                                                 borderX="none"
-                                                pt="1em"
+                                                py=".5em"
+                                                mt="1rem"
                                             >
                                                 <InvoiceTotalText
-                                                    cur={'$'}
+                                                    cur={user?.currency}
                                                     label="Total"
                                                     value={CUR(Round(total))}
                                                 />

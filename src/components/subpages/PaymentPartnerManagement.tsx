@@ -57,7 +57,6 @@ import { LicenseSelection } from './ManageSub/LicenseSelection';
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import {
     getCurrencyName,
-    getCurrencySymbol,
     getPrefix,
     onBoardingFees,
 } from '@components/generics/functions/getCurrencyName';
@@ -262,7 +261,7 @@ function PaymentPartnerManagement({
             <DrawerWrapper
                 onClose={onClose}
                 isOpen={isOpen}
-                title={'Add new PaymentPartner'}
+                title={'Add new Payment Partner'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <PrimaryInput<RegisterModel>

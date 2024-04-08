@@ -25,7 +25,7 @@ import Pagination from '@components/bits-utils/Pagination';
 import { useRouter } from 'next/router';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import moment from 'moment';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Checkbox from '@components/bits-utils/Checkbox';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { GenerateInvoiceModal } from '@components/bits-utils/GenerateInvoiceModal';
@@ -36,6 +36,9 @@ import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/Curre
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
 import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import { CUR } from '@components/generics/functions/Naira';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -311,8 +314,17 @@ function PaymentPartnerPayroll({
                                 {/* <TableData name={x.rate} /> */}
                                 <TableData
                                     name={`${getCurrencySymbol(
-                                        x.employeeInformation?.currency,
-                                    )}${Round(x.totalAmount)}`}
+                                        x?.employeeInformation?.currency,
+                                    )}${CUR(
+                                        Round(
+                                            (x?.totalAmount as number) +
+                                                calculatePercentage(
+                                                    x?.totalAmount,
+                                                    x?.employeeInformation?.tax,
+                                                ),
+                                        ),
+                                    )}`}
+                                    full
                                 />
                                 {/* <TableContractAction
                                     id={x.employeeInformationId}

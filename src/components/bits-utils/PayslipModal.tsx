@@ -21,12 +21,13 @@ import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { PayslipInfoTag } from './PayslipInfoTag';
-import { ToWords } from 'to-words';
-import Naira, { CAD } from '@components/generics/functions/Naira';
-import { useRef } from 'react';
+import Naira, { CUR } from '@components/generics/functions/Naira';
+import {  useRef } from 'react';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { Round } from '@components/generics/functions/Round';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
+import { numberToWordsWithCurrency } from '@components/generics/functions/NumberToWords';
 // import { PaySlipView } from 'src/services';
 
 type Props = {
@@ -36,6 +37,7 @@ type Props = {
 };
 
 export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
+
     const allExpenseTotal = paySlip?.invoice?.expenses?.reduce(
         (a, b) => a + (b?.amount as number),
         0,
@@ -43,19 +45,23 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
     const payTotal = Math.ceil(Number(paySlip?.invoice?.totalAmount));
     const netPay = (payTotal as number) - (allExpenseTotal as number);
 
+    const hstCalculated = calculatePercentage(
+        netPay,
+        paySlip?.invoice?.employeeInformation?.tax,
+    );
+
+    const finalTotal = payTotal + hstCalculated;
+
     const ref = useRef<any>(null);
     function downloadInvoice() {
         if (ref.current) {
             ref.current.save();
         }
     }
-    const toWords = new ToWords({
-        localeCode:
-            paySlip?.invoice?.employeeInformation?.currency == 'CAD'
-                ? 'en-US'
-                : 'en-NG',
-    });
-    const numWords = toWords?.convert(payTotal || 0, { currency: true });
+    const currency = paySlip?.invoice?.employeeInformation?.currency;
+    // const numWords = toWords?.convert(finalTotal || 0, { currency: true });
+
+    const numWords = numberToWordsWithCurrency(finalTotal, currency);
 
     return (
         <Modal
@@ -234,13 +240,9 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                 borderColor="gray.200"
                                             />
                                             <TableData
-                                                name={
-                                                    paySlip?.invoice
-                                                        ?.employeeInformation
-                                                        ?.currency == 'CAD'
-                                                        ? CAD(netPay)
-                                                        : Naira(netPay)
-                                                }
+                                                name={`${currency}
+                                                    ${CUR(netPay)}`}
+                                                full
                                             />
                                         </Tr>
                                         <Tr>
@@ -251,13 +253,22 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                 borderColor="gray.200"
                                             />
                                             <TableData
-                                                name={
-                                                    paySlip?.invoice
-                                                        ?.employeeInformation
-                                                        ?.currency == 'CAD'
-                                                        ? CAD(allExpenseTotal)
-                                                        : Naira(allExpenseTotal)
-                                                }
+                                                name={`${currency}
+                                                    ${CUR(allExpenseTotal)}`}
+                                                full
+                                            />
+                                        </Tr>
+                                        <Tr>
+                                            <TableData
+                                                name={'HST'}
+                                                border
+                                                value="1px solid"
+                                                borderColor="gray.200"
+                                            />
+                                            <TableData
+                                                name={`${currency}
+                                                    ${CUR(hstCalculated)}`}
+                                                full
                                             />
                                         </Tr>
                                         <Tr color="brand.400" fontWeight="600">
@@ -281,13 +292,9 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                 full
                                             />
                                             <TableData
-                                                name={
-                                                    paySlip?.invoice
-                                                        ?.employeeInformation
-                                                        ?.currency == 'CAD'
-                                                        ? CAD(payTotal)
-                                                        : Naira(payTotal)
-                                                }
+                                                name={`${currency}
+                                                    ${CUR(payTotal)}`}
+                                                full
                                             />
                                         </Tr>
                                         <Tr fontWeight="600">
@@ -301,17 +308,13 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                                 full
                                             />
                                             <TableData
-                                                name={
-                                                    paySlip?.invoice
-                                                        ?.employeeInformation
-                                                        ?.currency == 'CAD'
-                                                        ? CAD(
-                                                              Round(paySlip?.totalEarnings),
-                                                          )
-                                                        : Naira(
-                                                              Round(paySlip?.totalEarnings),
-                                                          )
-                                                }
+                                                name={` ${currency}
+                                                        ${CUR(
+                                                            Round(
+                                                                paySlip?.totalEarnings,
+                                                            ),
+                                                        )}`}
+                                                full
                                             />
                                         </Tr>
                                     </Tbody>
@@ -323,11 +326,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                 mt="2rem"
                             >
                                 <Text mb="0">
-                                    Net Pay:{' '}
-                                    {paySlip?.invoice?.employeeInformation
-                                        ?.currency == 'CAD'
-                                        ? CAD(payTotal)
-                                        : Naira(payTotal)}
+                                    Net Pay: {`${currency} ${CUR(finalTotal)}`}
                                 </Text>
                                 <Box
                                     border="1px solid"

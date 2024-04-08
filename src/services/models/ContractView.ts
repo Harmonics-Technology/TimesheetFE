@@ -12,4 +12,5 @@ export type ContractView = {
     tenor?: number;
     name?: string | null;
     userId?: string;
+    jobTitle?: string | null;
 };

@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import { OnboardingFeeView, OnboardingFeeService } from 'src/services';
 
 function onboardingfee({ data }: { data: OnboardingFeeView[] }) {
-    return <OnboardingFee data={data} />;
+    return <>{/* <OnboardingFee data={data} /> */}</>;
 }
 
 export default onboardingfee;

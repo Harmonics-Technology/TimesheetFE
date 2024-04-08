@@ -77,7 +77,7 @@ export const SingleTask = ({
         onOpen: onOpened,
         onClose: onClosed,
     } = useDisclosure();
-    const [loading, setLoading] = useState();
+    const [loading, setLoading] = useState({ id: '' });
     const toast = useToast();
     const router = useRouter();
 
@@ -152,7 +152,7 @@ export const SingleTask = ({
                         <Flex mt="1rem" justify="flex-end">
                             <ManageBtn
                                 onClick={onOpened}
-                                isLoading={loading}
+                                isLoading={loading.id == task?.id}
                                 btn="Mark Task as Complete"
                                 bg="brand.400"
                                 w="fit-content"

@@ -48,6 +48,8 @@ import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/CurrencyConversionModal';
 import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
 import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -143,6 +145,10 @@ function OnshoreSubmittedInvoice({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setLoading(false);
+                setSelectedId([]);
+                onClose();
+                router.replace(router.asPath);
                 return;
             }
             setLoading(false);
@@ -153,6 +159,7 @@ function OnshoreSubmittedInvoice({
                 position: 'top-right',
             });
         } catch (error: any) {
+            setLoading(false);
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
@@ -383,7 +390,13 @@ function OnshoreSubmittedInvoice({
                                                 )}
                                                               ${CUR(
                                                                   Round(
-                                                                      x.totalAmount,
+                                                                      (x?.totalAmount as number) +
+                                                                          calculatePercentage(
+                                                                              x?.totalAmount,
+                                                                              x
+                                                                                  ?.employeeInformation
+                                                                                  ?.tax,
+                                                                          ),
                                                                   ),
                                                               )}`}
                                                 full

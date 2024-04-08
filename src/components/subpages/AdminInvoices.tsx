@@ -45,6 +45,8 @@ import { CurrencyConversionModal } from '@components/bits-utils/NewUpdates/Curre
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
 import { CUR } from '@components/generics/functions/Naira';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -82,20 +84,20 @@ function AdminInvoices({
         if (all) {
             if (
                 selectedId?.length ===
-                invoice?.filter((x) => x.status !== 'INVOICED').length
+                invoice?.filter((x) => x.status !== 'PROCESSED').length
             ) {
                 setSelectedId([]);
                 return;
             }
             const response: unknown[] = [];
             invoice
-                ?.filter((x) => x.status !== 'INVOICED')
+                ?.filter((x) => x.status !== 'PROCESSED')
                 .forEach((x) =>
                     response.push({
                         id: x.id,
                         currency: x.employeeInformation?.currency,
                         payrollProcessingType:
-                            data.employeeInformation.payrollProcessingType,
+                            x.employeeInformation?.payrollProcessingType,
                         rate: 0,
                     }),
                 );
@@ -159,6 +161,8 @@ function AdminInvoices({
             });
         }
     };
+
+    // console.log({ loading });
 
     // const approveInvoiceItems = async (arrays: any) => {
     //     try {
@@ -423,7 +427,14 @@ function AdminInvoices({
                                                             organizationCurrency,
                                                         )}${CUR(
                                                             Round(
-                                                                x.convertedAmount,
+                                                                (x?.convertedAmount as number) +
+                                                                    calculatePercentage(
+                                                                        x.totalAmount,
+                                                                        x
+                                                                            ?.employeeInformation
+                                                                            ?.tax,
+                                                                    ) *
+                                                                        (x?.rateForConvertedIvoice as number),
                                                             ),
                                                         )}`}
                                                         full
@@ -432,9 +443,7 @@ function AdminInvoices({
                                                         name={`${getCurrencySymbol(
                                                             organizationCurrency,
                                                         )}${CUR(
-                                                            Round(
-                                                                x.rateForConvertedIvoice,
-                                                            ),
+                                                            x.rateForConvertedIvoice,
                                                         )}`}
                                                         full
                                                     />
@@ -448,7 +457,13 @@ function AdminInvoices({
                                                                 ?.currency,
                                                         )}${CUR(
                                                             Round(
-                                                                x.totalAmount,
+                                                                (x?.totalAmount as number) +
+                                                                    calculatePercentage(
+                                                                        x?.totalAmount,
+                                                                        x
+                                                                            ?.employeeInformation
+                                                                            ?.tax,
+                                                                    ),
                                                             ),
                                                         )}`}
                                                         full

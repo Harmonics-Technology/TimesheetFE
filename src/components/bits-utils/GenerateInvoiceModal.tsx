@@ -310,7 +310,7 @@ export const GenerateInvoiceModal = ({
                                         w="fit-content"
                                     >
                                         <InvoiceTotalText
-                                            label="Subtotal (₦)"
+                                            label="Subtotal"
                                             value={
                                                 allInvoiceTotal == Infinity
                                                     ? 0

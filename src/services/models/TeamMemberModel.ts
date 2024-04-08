@@ -2,8 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { OnboardingFeeRegisterModel } from "./OnboardingFeeRegisterModel";
-
+import type { OnboardingFeeRegisterModel } from './OnboardingFeeRegisterModel';
 
 export type TeamMemberModel = {
     firstName?: string | null;

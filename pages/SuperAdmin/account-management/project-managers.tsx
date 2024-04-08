@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 'Team Member',
                 superAdminId,
                 pagingOptions.offset,
-                pagingOptions.limit || 50,
+                50,
                 pagingOptions.search,
                 pagingOptions.from,
                 pagingOptions.to,

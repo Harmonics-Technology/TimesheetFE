@@ -39,7 +39,7 @@ export const TopBar = ({
 }) => {
     const router = useRouter();
     const toast = useToast();
-    const [loading, setLoading] = useState();
+    const [loading, setLoading] = useState({ id: '' });
     const [status, setStatus] = useState(data?.status?.toLowerCase());
     const { onOpen, isOpen, onClose } = useDisclosure();
     const {
@@ -72,7 +72,7 @@ export const TopBar = ({
                 <HStack gap="1rem">
                     <ManageBtn
                         onClick={onOpened}
-                        isLoading={loading}
+                        isLoading={loading.id == data?.id}
                         btn="Mark Project as Complete"
                         bg="brand.400"
                         w="fit-content"

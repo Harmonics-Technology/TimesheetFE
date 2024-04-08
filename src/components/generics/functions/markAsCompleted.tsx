@@ -23,10 +23,10 @@ export default async function markAsCompleted(
                 isClosable: true,
                 position: 'top-right',
             });
+            setLoading({ id: '' });
             router.replace(router.asPath);
             setStatus('completed');
             onClosed();
-            setLoading({ id: '' });
             return;
         }
         toast({
@@ -43,7 +43,7 @@ export default async function markAsCompleted(
             isClosable: true,
             position: 'top-right',
         });
-        setLoading(false);
+        setLoading({ id: '' });
     }
     return;
 }
