@@ -425,7 +425,7 @@ export const SingleTask = ({
                             onClosed,
                         )
                     }
-                    loading={loading}
+                    loading={loading?.id == task.id}
                     text={`Marking this task as complete will prevent any further timesheet submissions for this task.<br/> Are you sure you want to proceed?`}
                 />
             )}

@@ -149,7 +149,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         } catch (error: any) {
             return {
                 props: {
-                    data: [],
+                    projects: [],
+                    users: [],
                 },
             };
         }

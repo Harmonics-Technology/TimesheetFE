@@ -222,7 +222,7 @@ export const NewTeamMemerOnboardingForm = ({
     };
     //
 
-    const isFlatFeeSelected = watch('payrollStructure') == 'flat fee';
+    const isFlatFeeSelected = watch('payrollStructure') == 'flat';
     const isIncSelected = watch('payrollStructure') == 'inc';
     const isPaymentPartnerSelected =
         watch('payrollProcessingType') == 'payment partner';
@@ -241,7 +241,7 @@ export const NewTeamMemerOnboardingForm = ({
     const { getRootProps: rootProps, getRadioProps: radioProps } =
         useRadioGroup({
             name: 'selection',
-            defaultValue: 'for my client',
+            defaultValue: 'For me',
             onChange: (value) => updateClientFields(value),
         });
 
@@ -295,7 +295,6 @@ export const NewTeamMemerOnboardingForm = ({
         data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax;
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
-        data.role = 'Team member';
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
@@ -355,6 +354,7 @@ export const NewTeamMemerOnboardingForm = ({
     const saveToDraft = async (data: TeamMemberModel) => {
         // data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax;
         data.superAdminId = user?.superAdminId;
+        data.payRollTypeId = 2;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
 
         if (contract !== '') {
@@ -452,7 +452,7 @@ export const NewTeamMemerOnboardingForm = ({
                     <PrimaryDate<TeamMemberModel>
                         control={control}
                         name="dateOfBirth"
-                        label="Date of Birth"
+                        label="Date of Birth (Not compulsory)"
                         error={errors.dateOfBirth}
                         max={new DateObject().subtract(1, 'days')}
                         required={false}

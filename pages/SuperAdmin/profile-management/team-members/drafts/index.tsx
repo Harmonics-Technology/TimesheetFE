@@ -72,6 +72,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 superAdminId,
             );
             const currencies = await UtilityService.listCountries();
+           
 
             return {
                 props: {

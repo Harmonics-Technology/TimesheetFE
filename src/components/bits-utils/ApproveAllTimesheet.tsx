@@ -36,11 +36,13 @@ interface ExportProps {
     onClose: any;
     data?: any;
     id?: any;
+    setData?: any;
 }
 export const ApproveAllTimesheet = ({
     isOpen,
     onClose,
     data,
+    setData,
     id,
 }: ExportProps) => {
     const [cancel, setCancel] = useState<boolean>(false);
@@ -48,7 +50,7 @@ export const ApproveAllTimesheet = ({
     const [comment, setComment] = useState<string>();
     const toast = useToast();
 
-    console.log({ data });
+    // console.log({ data });
     const approveTimesheet = async (approve) => {
         const formData = {
             employeeInformationId: id,
@@ -68,6 +70,7 @@ export const ApproveAllTimesheet = ({
                     isClosable: true,
                     position: 'top-right',
                 });
+                setData([]);
                 router.replace(router.asPath);
                 setLoading(true);
                 onClose();

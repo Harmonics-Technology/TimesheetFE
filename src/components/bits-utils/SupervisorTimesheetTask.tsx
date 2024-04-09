@@ -381,6 +381,7 @@ const SupervisorTimesheetTask = ({
                     onClose={closed}
                     id={id}
                     data={checked}
+                    setData={setChecked}
                 />
             )}
         </>

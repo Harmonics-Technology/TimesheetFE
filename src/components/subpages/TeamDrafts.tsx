@@ -7,12 +7,14 @@ import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import {
     ClientSubscriptionDetailView,
     LeaveConfigurationView,
+    OnboardingFeeService,
     UserDraftView,
     UserDraftViewPagedCollectionStandardResponse,
+    UserService,
     UserView,
 } from 'src/services';
 import { DraftOnboardingModal } from './DraftOnboardingModal';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
 
@@ -48,9 +50,37 @@ function TeamDraft({
     } = useDisclosure();
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [supervisor, setSupervisor] = useState<any>();
+    const [fees, setFees] = useState<any>();
+    const [loading, setLoading] = useState({ id: '' });
+
+    const getSupervisor = async (id, payId, loadId) => {
+        if (id === undefined) {
+            return;
+        }
+        setLoading({ id: loadId });
+        try {
+            const data = await UserService.getSupervisors(id);
+            const payFees = await OnboardingFeeService.listOnboardingFee(
+                0,
+                10,
+                payId,
+            );
+            setLoading({ id: '' });
+            if (data.status) {
+                setSupervisor(data.data?.filter((x) => x.isActive));
+                setFees(payFees?.data?.value);
+                onOpen();
+                return;
+            }
+        } catch (err: any) {
+            setLoading({ id: '' });
+            console.log({ err });
+        }
+    };
     const setDraftData = (item: UserDraftView) => {
         setData(item);
-        onOpen();
+        getSupervisor(item?.clientId, item?.paymentPartnerId, item?.id);
         // onOpen();
     };
 
@@ -89,6 +119,8 @@ function TeamDraft({
                                 <TableDraftActions
                                     data={x}
                                     setDraftData={setDraftData}
+                                    loading={loading.id == x?.id}
+                                    setLoading={setLoading}
                                 />
                             </Tr>
                         ))}
@@ -112,6 +144,8 @@ function TeamDraft({
                         router={router}
                         openDraft={openDraft}
                         onOpenDraft={onOpenDraft}
+                        fees={fees}
+                        supervisor={supervisor}
                     />
                 )}
             </Box>

@@ -28,7 +28,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import Checkbox from '@components/bits-utils/Checkbox';
 import { useRouter } from 'next/router';
 import Paymentinvoices from './Paymentinvoices';
-import Naira, { CAD } from '@components/generics/functions/Naira';
+import Naira, { CUR } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
 import dynamic from 'next/dynamic';
 import { Round } from '@components/generics/functions/Round';
@@ -242,7 +242,12 @@ function PaymentPartnerInvoice({
                                             ?.paymentProcessingFeeType ==
                                         'percentage'
                                             ? calculatePercentage(
-                                                  x?.convertedAmount,
+                                                  (x?.convertedAmount as number) +
+                                                      calculatePercentage(
+                                                          x.convertedAmount,
+                                                          x?.employeeInformation
+                                                              ?.tax,
+                                                      ),
                                                   x?.employeeInformation
                                                       ?.paymentProcessingFee as number,
                                               )
@@ -287,10 +292,12 @@ function PaymentPartnerInvoice({
                                         name={`${getCurrencySymbol(
                                             user?.currency,
                                         )}
-                                        ${Round(
-                                            (x.convertedAmount as number) +
-                                                allTaxTotal +
-                                                allFeesTotal,
+                                        ${CUR(
+                                            Round(
+                                                (x.convertedAmount as number) +
+                                                    allTaxTotal +
+                                                    allFeesTotal,
+                                            ),
                                         )}`}
                                         full
                                     />

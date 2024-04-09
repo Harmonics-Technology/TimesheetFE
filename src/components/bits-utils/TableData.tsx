@@ -434,13 +434,17 @@ export function TablePmActions({
 export function TableDraftActions({
     data,
     setDraftData,
+    loading,
+    setLoading,
 }: {
     data: any;
     setDraftData: any;
+    loading: boolean;
+    setLoading: any;
 }) {
     const toast = useToast();
     const router = useRouter();
-    const [loading, setLoading] = useState(false);
+
     const deleteDraft = async () => {
         //
         try {
