@@ -8,7 +8,7 @@ import {
     Button,
     DrawerFooter,
 } from '@chakra-ui/react';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { DateObject } from 'react-multi-date-picker';
 import {
     DraftService,
@@ -29,7 +29,10 @@ import { LicenseSelection } from '@components/subpages/ManageSub/LicenseSelectio
 import RadioBtn from '@components/bits-utils/RadioBtn';
 import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
-import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
+import {
+    getCurrencyName,
+    getFileName,
+} from '@components/generics/functions/getCurrencyName';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { RiMailSendFill } from 'react-icons/ri';
 import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
@@ -37,6 +40,8 @@ import UploadCareWidget from '@components/bits-utils/UploadCareWidget';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import { SectionTitle } from '@components/bits-utils/NewUpdates/SectionTitle';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import moment from 'moment';
+import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
 
 export const DraftOnboardingModal = ({
     userProfile,
@@ -53,9 +58,11 @@ export const DraftOnboardingModal = ({
     openDraft,
     closeDraft,
     onOpenDraft,
+    supervisor,
+    fees,
 }) => {
-    const [supervisors, setSupervisors] = useState<any>();
-    const [payFees, setPayFees] = useState<any>();
+    const [supervisors, setSupervisors] = useState<any>(supervisor);
+    const [payFees, setPayFees] = useState<any>(fees);
     const [loading, setLoading] = useState<any>();
     const toast = useToast();
 
@@ -141,6 +148,8 @@ export const DraftOnboardingModal = ({
     });
     const draftSchema = yup.object().shape({});
 
+    console.log({ userProfile });
+
     const {
         register,
         handleSubmit,
@@ -156,58 +165,49 @@ export const DraftOnboardingModal = ({
             id: userProfile?.id,
             firstName: userProfile?.firstName,
             lastName: userProfile?.lastName,
-            hoursPerDay: userProfile?.employeeInformation?.hoursPerDay,
+            hoursPerDay: userProfile?.hoursPerDay,
             role: userProfile?.role as unknown as string,
             isActive: userProfile?.isActive,
             phoneNumber: userProfile?.phoneNumber,
             email: userProfile?.email,
             dateOfBirth: userProfile?.dateOfBirth,
-            clientId: userProfile?.employeeInformation?.clientId,
-            supervisorId: userProfile?.employeeInformation?.supervisorId,
-            paymentPartnerId:
-                userProfile?.employeeInformation?.paymentPartnerId,
-            currency: userProfile?.employeeInformation?.currency,
+            clientId: userProfile?.clientId,
+            supervisorId: userProfile?.supervisorId,
+            paymentPartnerId: userProfile?.paymentPartnerId,
+            currency: userProfile?.currency,
 
-            paymentFrequency:
-                userProfile?.employeeInformation?.paymentFrequency,
-            payrollGroupId: userProfile?.employeeInformation?.payrollGroupId,
-            isEligibleForLeave:
-                userProfile?.employeeInformation?.isEligibleForLeave,
+            paymentFrequency: userProfile?.paymentFrequency,
+            payrollGroupId: userProfile?.payrollGroupId,
+            isEligibleForLeave: userProfile?.isEligibleForLeave,
             numberOfDaysEligible:
-                userProfile?.employeeInformation?.numberOfDaysEligible ||
+                userProfile?.numberOfDaysEligible ||
                 leaveSettings?.eligibleLeaveDays,
-            numberOfHoursEligible:
-                userProfile?.employeeInformation?.numberOfHoursEligible,
-            employeeType: userProfile?.employeeInformation?.employeeType,
-            invoiceGenerationType:
-                userProfile?.employeeInformation?.invoiceGenerationType,
-            enableFinancials:
-                userProfile?.employeeInformation?.enableFinancials,
-            department: userProfile?.employeeInformation?.department,
+            numberOfHoursEligible: userProfile?.numberOfHoursEligible,
+            employeeType: userProfile?.employeeType,
+            invoiceGenerationType: userProfile?.invoiceGenerationType,
+            enableFinancials: userProfile?.enableFinancials,
+            department: userProfile?.department,
             address: userProfile?.address,
             clientSubscriptionId: userProfile?.clientSubscriptionId,
-            employmentContractType:
-                userProfile?.employeeInformation?.employmentContractType,
-            jobTitle: userProfile?.employeeInformation?.jobTitle,
-            paymentProcessingFee:
-                userProfile?.employeeInformation?.paymentProcessingFee,
-            paymentProcessingFeeType:
-                userProfile?.employeeInformation?.paymentProcessingFeeType,
-            payrollProcessingType:
-                userProfile?.employeeInformation?.payrollProcessingType,
-            rate: userProfile?.employeeInformation?.rate,
-            rateType: userProfile?.employeeInformation?.rateType,
-            ratePerHour: userProfile?.employeeInformation?.ratePerHour,
-            tax: userProfile?.employeeInformation?.tax,
-            taxType: userProfile?.employeeInformation?.taxType,
-            timesheetFrequency:
-                userProfile?.employeeInformation?.timesheetFrequency,
-            payrollStructure:
-                userProfile?.employeeInformation?.payrollStructure,
+            employmentContractType: userProfile?.employmentContractType,
+            jobTitle: userProfile?.jobTitle,
+            paymentProcessingFee: userProfile?.paymentProcessingFee,
+            paymentProcessingFeeType: userProfile?.paymentProcessingFeeType,
+            payrollProcessingType: userProfile?.payrollProcessingType,
+            rate: userProfile?.rate,
+            rateType: userProfile?.rateType,
+            ratePerHour: userProfile?.ratePerHour,
+            tax: userProfile?.tax,
+            taxType: userProfile?.taxType,
+            timesheetFrequency: userProfile?.timesheetFrequency,
+            payrollStructure: userProfile?.payrollStructure,
         },
     });
 
-    const [selectedLicense, setSelectedLicense] = useState<any>();
+    const curentLicense = subs?.find(
+        (x) => x.subscriptionId === userProfile?.clientSubscriptionId,
+    );
+    const [selectedLicense, setSelectedLicense] = useState<any>(curentLicense);
     const addLicense = (license) => {
         setSelectedLicense(license);
     };
@@ -243,9 +243,6 @@ export const DraftOnboardingModal = ({
         }
     };
     const getPaymentPartnerFees = async (id) => {
-        if (id === undefined) {
-            return;
-        }
         setLoading(true);
         try {
             const data = await OnboardingFeeService.listOnboardingFee(
@@ -271,17 +268,26 @@ export const DraftOnboardingModal = ({
     };
     //
 
-    const isFlatFeeSelected = watch('payrollStructure') == 'flat fee';
+    const isFlatFeeSelected = watch('payrollStructure') == 'flat';
     const isIncSelected = watch('payrollStructure') == 'inc';
     const isPaymentPartnerSelected =
         watch('payrollProcessingType') == 'payment partner';
-    const payData = watch('enableFinancials');
+    const payData =
+        watch('enableFinancials') == true ||
+        (watch('enableFinancials') as any) == 'Yes'
+            ? true
+            : false;
 
     const taxType = watch('taxType');
     const uniqueItems = getUniqueListBy(currencies, 'currency');
-    const isEligibleForLeave = watch('isEligibleForLeave');
+    const isEligibleForLeave =
+        watch('isEligibleForLeave') == true ||
+        (watch('isEligibleForLeave') as any) == 'Yes'
+            ? true
+            : false;
 
-    const [clientType, setClientType] = useState(false);
+    const forMe = userProfile?.clientId == user?.superAdminId;
+    const [clientType, setClientType] = useState(!forMe);
     const [contract, setContractFile] = useState<any>('');
     const [showLoading, setShowLoading] = useState(false);
     const widgetApi = useRef<any>();
@@ -291,7 +297,7 @@ export const DraftOnboardingModal = ({
     const { getRootProps: rootProps, getRadioProps: radioProps } =
         useRadioGroup({
             name: 'selection',
-            defaultValue: 'for my client',
+            defaultValue: forMe ? 'For me' : 'For my client',
             onChange: (value) => updateClientFields(value),
         });
 
@@ -304,6 +310,8 @@ export const DraftOnboardingModal = ({
     };
 
     const groups = rootProps();
+
+    // console.log({ payData, fin: watch('enableFinancials'), supervisors });
 
     const showLoadingState = (file) => {
         if (file) {
@@ -327,12 +335,13 @@ export const DraftOnboardingModal = ({
             onClose();
         }
     };
-
-    useEffect(() => {
-        getSupervisor(clientId);
+    useNonInitialEffect(() => {
+        clientId && getSupervisor(clientId);
     }, [clientId]);
-    useEffect(() => {
-        getPaymentPartnerFees(paymentPartnerId);
+    useNonInitialEffect(() => {
+        if (paymentPartnerId) {
+            getPaymentPartnerFees(paymentPartnerId);
+        }
     }, [paymentPartnerId]);
 
     const onSubmit = async (data: TeamMemberModel) => {
@@ -399,6 +408,7 @@ export const DraftOnboardingModal = ({
     const saveToDraft = async (data: TeamMemberModel) => {
         data.superAdminId = user?.superAdminId;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
+        data.payRollTypeId = 2;
 
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
@@ -500,6 +510,9 @@ export const DraftOnboardingModal = ({
                         name="dateOfBirth"
                         label="Date of Birth"
                         error={errors.dateOfBirth}
+                        defaultValue={moment(userProfile?.dateOfBirth).format(
+                            'YYYY/MM/DD',
+                        )}
                         max={new DateObject().subtract(1, 'days')}
                     />
                     <PrimaryInput<TeamMemberModel>
@@ -521,7 +534,7 @@ export const DraftOnboardingModal = ({
                         <HStack
                             w="full"
                             {...groups}
-                            defaultValue={'For my client'}
+                            defaultValue={forMe ? 'For me' : 'For my client'}
                         >
                             {radious.map((value) => {
                                 const radio = radioProps({
@@ -571,7 +584,7 @@ export const DraftOnboardingModal = ({
                                     <>
                                         {client.map((x) => (
                                             <option value={x?.id}>
-                                                {x.organizationName}
+                                                {x.fullName}
                                             </option>
                                         ))}
                                     </>
@@ -605,6 +618,9 @@ export const DraftOnboardingModal = ({
                             name="startDate"
                             label="Start Date"
                             error={errors.startDate}
+                            defaultValue={moment(userProfile?.startDate).format(
+                                'YYYY/MM/DD',
+                            )}
                             // min={new Date()}
                         />
                         <PrimaryDate<TeamMemberModel>
@@ -612,6 +628,9 @@ export const DraftOnboardingModal = ({
                             name="endDate"
                             label="End Date"
                             error={errors.endDate}
+                            defaultValue={moment(userProfile?.endDate).format(
+                                'YYYY/MM/DD',
+                            )}
                             min={new DateObject().add(3, 'days')}
                         />
                         <PrimarySelect<TeamMemberModel>
@@ -681,7 +700,12 @@ export const DraftOnboardingModal = ({
                         <UploadCareWidget
                             refs={widgetApi}
                             label="Attach Document"
-                            filename={contract?.name}
+                            filename={
+                                contract?.name ||
+                                getFileName(
+                                    userProfile?.inCorporationDocumentUrl,
+                                )
+                            }
                             loading={showLoading}
                             uploadFunction={showLoadingState}
                         />
@@ -696,10 +720,10 @@ export const DraftOnboardingModal = ({
                             name="enableFinancials"
                             control={control}
                             error={errors.enableFinancials}
-                            defaultValue={'No'}
+                            defaultValue={payData ? 'Yes' : 'No'}
                         />
                     </Box>
-                    {payData && (payData as unknown as string) == 'Yes' && (
+                    {payData && (
                         <Box>
                             <Box mb="1rem">
                                 <PrimarySelect<TeamMemberModel>
@@ -991,10 +1015,10 @@ export const DraftOnboardingModal = ({
                             name="isEligibleForLeave"
                             control={control}
                             error={errors.isEligibleForLeave}
-                            defaultValue={'No'}
+                            defaultValue={isEligibleForLeave ? 'Yes' : 'No'}
                         />
                     </Box>
-                    {(isEligibleForLeave as unknown as string) == 'Yes' && (
+                    {isEligibleForLeave && (
                         <Grid
                             templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"

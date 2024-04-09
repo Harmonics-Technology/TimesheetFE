@@ -163,7 +163,7 @@ export const TopBar = ({
                             onClosed,
                         )
                     }
-                    loading={loading}
+                    loading={loading.id == data?.id}
                     text={`Marking this project as complete will prevent any further timesheet submissions for this project.<br/> Are you sure you want to proceed?`}
                 />
             )}

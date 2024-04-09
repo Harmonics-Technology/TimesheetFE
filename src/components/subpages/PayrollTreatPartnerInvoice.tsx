@@ -313,7 +313,13 @@ function PayrollTreatPartnerInvoice({
                                                         ?.paymentProcessingFeeType ==
                                                     'percentage'
                                                         ? calculatePercentage(
-                                                              x?.convertedAmount,
+                                                              (x?.convertedAmount as number) +
+                                                                  calculatePercentage(
+                                                                      x.convertedAmount,
+                                                                      x
+                                                                          ?.employeeInformation
+                                                                          ?.tax,
+                                                                  ),
                                                               x
                                                                   ?.employeeInformation
                                                                   ?.paymentProcessingFee as number,

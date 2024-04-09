@@ -113,7 +113,11 @@ function PayrollInvoice({
                 a +
                 (x.employeeInformation?.paymentProcessingFeeType == 'percentage'
                     ? calculatePercentage(
-                          x?.convertedAmount,
+                          (x?.convertedAmount as number) +
+                              calculatePercentage(
+                                  x.convertedAmount,
+                                  x?.employeeInformation?.tax,
+                              ),
                           x?.employeeInformation
                               ?.paymentProcessingFee as number,
                       )
@@ -135,6 +139,7 @@ function PayrollInvoice({
 
     const total =
         Number(allInvoiceTotal + allCalculatedTax + allFeesTotal) || 0;
+    const subTotal = Number(allInvoiceTotal + allCalculatedTax) || 0;
 
     const paymentDate =
         moment(clicked?.dateCreated).day() == 5
@@ -329,7 +334,13 @@ function PayrollInvoice({
                                                                                 ?.paymentProcessingFeeType ==
                                                                                 'percentage'
                                                                                 ? calculatePercentage(
-                                                                                      x?.convertedAmount,
+                                                                                      (x?.convertedAmount as number) +
+                                                                                          calculatePercentage(
+                                                                                              x.convertedAmount as number,
+                                                                                              x
+                                                                                                  ?.employeeInformation
+                                                                                                  ?.tax as number,
+                                                                                          ),
                                                                                       x
                                                                                           ?.employeeInformation
                                                                                           ?.paymentProcessingFee,
@@ -408,12 +419,7 @@ function PayrollInvoice({
                                             <InvoiceTotalText
                                                 label="Subtotal"
                                                 cur={user?.currency}
-                                                value={CUR(
-                                                    Round(
-                                                        allInvoiceTotal +
-                                                            allCalculatedTax,
-                                                    ),
-                                                )}
+                                                value={CUR(Round(subTotal))}
                                             />
                                             {/* <InvoiceTotalText
                                                 label="Subtotal(₦)"

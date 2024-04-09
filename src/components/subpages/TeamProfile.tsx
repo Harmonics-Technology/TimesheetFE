@@ -147,9 +147,9 @@ function TeamProfile({
     const toast = useToast();
     const includePayroll = watch('enableFinancials');
 
-    // console.log({ userProfile, includePayroll });
+    // console.log({ userProfile, rle: watch('role') });
     //
-    const isFlatFeeSelected = watch('payrollStructure') == 'flat fee';
+    const isFlatFeeSelected = watch('payrollStructure') == 'flat';
     const isIncSelected = watch('payrollStructure') == 'inc';
     const isPaymentPartnerSelected =
         watch('payrollProcessingType') == 'payment partner';
@@ -564,25 +564,13 @@ function TeamProfile({
                                 options={
                                     <>
                                         {[
-                                            {
-                                                id: 'Team Member',
-                                                label: 'Team Member',
-                                            },
-                                            {
-                                                id: 'Internal Supervisor',
-                                                label: 'Internal Supervisor',
-                                            },
-                                            {
-                                                id: 'Internal Admin',
-                                                label: 'Internal Admin',
-                                            },
-                                            {
-                                                id: 'Internal Payroll Manager',
-                                                label: 'Internal Payroll Manager',
-                                            },
+                                            'Team member',
+                                            'Internal Supervisor',
+                                            'Internal Admin',
+                                            'Internal Payroll Manager',
                                         ].map((x) => (
-                                            <option value={x.id}>
-                                                {x.label}
+                                            <option value={x} key={x}>
+                                                {x}
                                             </option>
                                         ))}
                                     </>
