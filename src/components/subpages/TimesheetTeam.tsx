@@ -47,7 +47,7 @@ import {
 import moment from 'moment';
 import { FaCheck, FaTimes } from 'react-icons/fa';
 import { useRouter } from 'next/router';
-import Naira, { CAD } from '@components/generics/functions/Naira';
+import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import useClickOutside from '@components/generics/useClickOutside';
 import { Round } from '@components/generics/functions/Round';
 import Cookies from 'js-cookie';
@@ -55,6 +55,7 @@ import { UserContext } from '@components/context/UserContext';
 import { TimeSheetHighlight } from '@components/bits-utils/TimeSheetHighlight';
 import dynamic from 'next/dynamic';
 import { TabMenuTimesheet } from '@components/bits-utils/ProjectManagement/Generics/TabMenuTimesheet';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -954,20 +955,16 @@ const TimesheetTeam = ({
                             />
                             <TimeSheetEstimation
                                 label="Expected Payout"
-                                data={
-                                    currency === 'NGN'
-                                        ? Naira(expectedPay)
-                                        : CAD(expectedPay)
-                                }
+                                data={` ${getCurrencySymbol(currency)} ${CUR(
+                                    Round(expectedPay),
+                                )}`}
                                 tip="Total amount you are expected to be paid this pay period if you work your full hours"
                             />
                             <TimeSheetEstimation
                                 label="Actual Payout"
-                                data={
-                                    currency === 'NGN'
-                                        ? Naira(actualPayout)
-                                        : CAD(actualPayout)
-                                }
+                                data={` ${getCurrencySymbol(currency)} ${CUR(
+                                    Round(actualPayout),
+                                )}`}
                                 tip="Number of hours you worked this month x Rate per hour"
                             />
                         </>

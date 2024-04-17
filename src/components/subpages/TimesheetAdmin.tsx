@@ -57,7 +57,7 @@ import {
 import moment from 'moment';
 import { FaCheck, FaCheckCircle, FaTimes } from 'react-icons/fa';
 import { useRouter } from 'next/router';
-import Naira, { CAD } from '@components/generics/functions/Naira';
+import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -70,6 +70,7 @@ import { Round } from '@components/generics/functions/Round';
 import { TimeSheetHighlight } from '@components/bits-utils/TimeSheetHighlight';
 import { TabMenuTimesheet } from '@components/bits-utils/ProjectManagement/Generics/TabMenuTimesheet';
 import { UserContext } from '@components/context/UserContext';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 
 const schema = yup.object().shape({
     reason: yup.string().required(),
@@ -979,7 +980,7 @@ const TimesheetAdmin = ({
                     fontSize={['.6rem', '.9rem']}
                     border={['0', '1px solid #e5e5e5']}
                 >
-                      {Round(sumOfHours)}
+                    {Round(sumOfHours)}
                 </Flex>
             </>
         );
@@ -1110,20 +1111,16 @@ const TimesheetAdmin = ({
                     />
                     <TimeSheetEstimation
                         label="Expected Payout"
-                        data={
-                            currency === 'NGN'
-                                ? Naira(expectedPay)
-                                : CAD(expectedPay)
-                        }
+                        data={` ${getCurrencySymbol(currency)} ${CUR(
+                            Round(expectedPay),
+                        )}`}
                         tip="Total amount you are expected to be paid this pay period if you work your full hours"
                     />
                     <TimeSheetEstimation
                         label="Actual Payout"
-                        data={
-                            currency === 'NGN'
-                                ? Naira(actualPayout)
-                                : CAD(actualPayout)
-                        }
+                        data={` ${getCurrencySymbol(currency)} ${CUR(
+                            Round(actualPayout),
+                        )}`}
                         tip="Number of hours you worked this month x Rate per hour"
                     />
                     {isSuperAdmin && <ApproveSelectedInput />}
