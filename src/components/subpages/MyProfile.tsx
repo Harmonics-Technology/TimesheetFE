@@ -476,7 +476,7 @@ function MyProfile({
                                 label="Date of Birth"
                                 error={errors.dateOfBirth}
                                 defaultValue={moment(user?.dateOfBirth).format(
-                                    'DD MM YYYY',
+                                    'YYYY/MM/DD',
                                 )}
                                 max={subDays(new Date(), 1)}
                             />

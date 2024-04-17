@@ -335,12 +335,14 @@ function InvoiceTemplate({
                                                     ?.currency
                                             }
                                             value={CUR(
-                                                clicked?.totalAmount as number,
+                                                Round(
+                                                    clicked?.totalAmount as number,
+                                                ),
                                             )}
                                         />
                                         <InvoiceTotalText
                                             label="Tax"
-                                            value={CUR(convertedTax)}
+                                            value={CUR(Round(convertedTax))}
                                             cur={
                                                 clicked?.employeeInformation
                                                     ?.currency
