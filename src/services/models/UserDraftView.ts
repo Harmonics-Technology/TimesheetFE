@@ -50,4 +50,16 @@ export type UserDraftView = {
     employeeType?: string | null;
     invoiceGenerationType?: string | null;
     enableFinancials?: boolean | null;
+    department?: string | null;
+    employmentContractType?: string | null;
+    timesheetFrequency?: string | null;
+    payrollStructure?: string | null;
+    rate?: number | null;
+    rateType?: string | null;
+    taxType?: string | null;
+    standardCanadianSystem?: string | null;
+    tax?: number | null;
+    payrollProcessingType?: string | null;
+    paymentProcessingFeeType?: string | null;
+    paymentProcessingFee?: number | null;
 };

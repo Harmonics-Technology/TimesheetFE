@@ -52,6 +52,7 @@ function FilterSearch({
     function setFilter(filter: string) {
         router.push({
             query: {
+                ...router.query,
                 limit: filter,
                 // offset: 0,
             },
@@ -75,6 +76,7 @@ function FilterSearch({
     function filterByDate() {
         router.push({
             query: {
+                ...router.query,
                 from: fromDate.format('YYYY-MM-DD'),
                 to: toDate.format('YYYY-MM-DD'),
             },

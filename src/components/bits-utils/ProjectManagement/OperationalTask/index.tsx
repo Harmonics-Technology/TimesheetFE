@@ -52,7 +52,12 @@ export const OperationalTask = ({
         <Box>
             <Box mb="1.5rem">
                 <ProjectTabs
-                    name={['dashboard', 'projects', 'operational-task']}
+                    name={[
+                        'dashboard',
+                        'projects',
+                        'operational-task',
+                        'resource-capacity',
+                    ]}
                 />
             </Box>
             <HStack py="1rem" justify="space-between">

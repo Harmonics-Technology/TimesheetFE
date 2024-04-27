@@ -2,16 +2,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { ProjectTaskAsigneeView } from './ProjectTaskAsigneeView';
-import type { ProjectTaskView } from './ProjectTaskView';
-
 export type ProjectSubTaskView = {
     id?: string;
     projectTaskId?: string;
-    projectTask?: ProjectTaskView;
     name?: string | null;
     projectTaskAsigneeId?: string;
-    projectTaskAsignee?: ProjectTaskAsigneeView;
+    assignee?: string | null;
     startDate?: string;
     endDate?: string;
     duration?: number;

@@ -19,6 +19,8 @@ import type { ProjectTimesheetListViewStandardResponse } from '../models/Project
 import type { ProjectTimesheetModel } from '../models/ProjectTimesheetModel';
 import type { ProjectViewPagedCollectionStandardResponse } from '../models/ProjectViewPagedCollectionStandardResponse';
 import type { ProjectViewStandardResponse } from '../models/ProjectViewStandardResponse';
+import type { ResourceCapacityDetailViewStandardResponse } from '../models/ResourceCapacityDetailViewStandardResponse';
+import type { ResourceCapacityViewStandardResponse } from '../models/ResourceCapacityViewStandardResponse';
 import type { UpdateProjectTimesheet } from '../models/UpdateProjectTimesheet';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -533,6 +535,67 @@ requestBody?: MarkAsCompletedModel,
             url: '/api/ProjectManagement/completed',
             body: requestBody,
             mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param superAdminId 
+     * @param startDate 
+     * @param endDate 
+     * @returns ResourceCapacityViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getResourcesCapacityOverview(
+offset?: number,
+limit?: number,
+superAdminId?: string,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<ResourceCapacityViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/resources-overview',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'superAdminId': superAdminId,
+                'StartDate': startDate,
+                'EndDate': endDate,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param userId 
+     * @param projectId 
+     * @param status 
+     * @param search 
+     * @returns ResourceCapacityDetailViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getResourceDetails(
+offset?: number,
+limit?: number,
+userId?: string,
+projectId?: string,
+status?: ProjectStatus,
+search?: string,
+): CancelablePromise<ResourceCapacityDetailViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/resource-detail',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'userId': userId,
+                'projectId': projectId,
+                'status': status,
+                'search': search,
+            },
         });
     }
 
