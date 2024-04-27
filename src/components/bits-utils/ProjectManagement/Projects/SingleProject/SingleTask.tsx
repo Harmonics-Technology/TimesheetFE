@@ -299,8 +299,7 @@ export const SingleTask = ({
                                                     px="0.5rem"
                                                 >
                                                     {
-                                                        x?.projectTaskAsignee
-                                                            ?.user?.fullName
+                                                        x?.assignee
                                                     }
                                                 </Flex>
                                             </HStack>
@@ -393,7 +392,7 @@ export const SingleTask = ({
                                                     onClose,
                                                 )
                                             }
-                                            loading={loading}
+                                            loading={loading.id === x?.id}
                                             text={`Marking this sub task as complete will prevent any further timesheet submissions for this sub task.<br/> Are you sure you want to proceed?`}
                                         />
                                     )}

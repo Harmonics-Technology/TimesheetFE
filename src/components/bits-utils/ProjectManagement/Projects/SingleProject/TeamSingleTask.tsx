@@ -351,8 +351,7 @@ export const TeamSingleTask = ({
                                                 px="0.5rem"
                                             >
                                                 {
-                                                    x?.projectTaskAsignee?.user
-                                                        ?.fullName
+                                                    x?.assignee
                                                 }
                                             </Flex>
                                         </HStack>

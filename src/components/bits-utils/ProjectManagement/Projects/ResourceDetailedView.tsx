@@ -18,16 +18,17 @@ import colorSwatch from '@components/generics/colorSwatch';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
-import { ResourceCapacityDetailView } from 'src/services';
+import { ProjectView, ResourceCapacityDetailView } from 'src/services';
 import { TableCard } from '../Generics/TableCard';
 import moment from 'moment';
 import { ProjectTabs } from '../Dashboard/ProjectTabs';
 
-export const ResourceDetailedView = ({ resource, userName }) => {
+export const ResourceDetailedView = ({ resource, userName, projects }) => {
     const router = useRouter();
     const filterByProject = (value) => {
         router.push({
             query: {
+                ...router.query,
                 subId: value,
             },
         });
@@ -41,7 +42,6 @@ export const ResourceDetailedView = ({ resource, userName }) => {
         });
     };
     const statuses = [
-        { id: '', name: 'All' },
         { id: 1, name: 'Not started' },
         { id: 2, name: 'Ongoing' },
         { id: 3, name: 'Completed' },
@@ -101,10 +101,9 @@ export const ResourceDetailedView = ({ resource, userName }) => {
                         bgColor="white"
                         onChange={(e) => filterByProject(e.target.value)}
                     >
-                        <option value={'opt'}>{'nmn'}</option>
-                        {/* {projects?.map((x) => (
+                        {projects?.value?.map((x: ProjectView) => (
                             <option value={x.id}>{x.name}</option>
-                        ))} */}
+                        ))}
                     </Select>
                     <Select
                         fontSize=".8rem"

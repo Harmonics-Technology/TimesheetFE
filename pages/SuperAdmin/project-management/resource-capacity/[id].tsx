@@ -5,15 +5,21 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import { ProjectManagementService } from 'src/services';
 
-const singleResource = ({ resource, userName }) => {
-    return <ResourceDetailedView resource={resource} userName={userName} />;
+const singleResource = ({ resource, userName, projects }) => {
+    return (
+        <ResourceDetailedView
+            resource={resource}
+            userName={userName}
+            projects={projects}
+        />
+    );
 };
 
 export default singleResource;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        // const superAdminId = JSON.parse(ctx.req.cookies.user).id;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const { id } = ctx.query;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const userName = ctx.req.cookies.userName;
@@ -27,10 +33,19 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.search,
             );
 
+            const projects = await ProjectManagementService.listProject(
+                0,
+                50,
+                superAdminId,
+                undefined,
+                id,
+            );
+
             return {
                 props: {
                     resource: data.data,
                     userName,
+                    projects: projects.data,
                 },
             };
         } catch (error: any) {
