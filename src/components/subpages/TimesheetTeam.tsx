@@ -64,15 +64,16 @@ const TimesheetTeam = ({
     timeSheets,
     id,
     payPeriod,
+    date,
+    end,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
     payPeriod: any;
+    end: any;
+    date: any;
 }) => {
     const router = useRouter();
-
-    const { date } = router.query;
-    const { end } = router.query;
 
     //
     const enableFinancials = (timeSheets as any)?.timeSheet[0]

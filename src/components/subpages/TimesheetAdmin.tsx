@@ -81,16 +81,18 @@ const TimesheetAdmin = ({
     id,
     payPeriod,
     isSuperAdmin,
+    date,
+    end,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
     payPeriod: any;
     isSuperAdmin?: any;
+    date: any;
+    end: any;
 }) => {
     const router = useRouter();
 
-    const { date } = router.query;
-    const { end } = router.query;
     const sheet = timeSheets?.timeSheet;
 
     const [singleReject, setSingleReject] = useState({

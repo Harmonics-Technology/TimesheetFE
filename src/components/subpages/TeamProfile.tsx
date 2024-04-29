@@ -564,7 +564,7 @@ function TeamProfile({
                                 options={
                                     <>
                                         {[
-                                            'Team member',
+                                            'Team Member',
                                             'Internal Supervisor',
                                             'Internal Admin',
                                             'Internal Payroll Manager',

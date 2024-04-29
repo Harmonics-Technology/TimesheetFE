@@ -47,6 +47,8 @@ import { ManageBtn } from '@components/bits-utils/ManageBtn';
 import markAsCompleted from '@components/generics/functions/markAsCompleted';
 import { ShowPrompt } from '../../Modals/ShowPrompt';
 import { useRouter } from 'next/router';
+import { ProgressSlider } from '@components/bits-utils/ProgressSlider';
+import { GiProgression } from 'react-icons/gi';
 
 export const TeamSingleTask = ({
     id,
@@ -64,10 +66,11 @@ export const TeamSingleTask = ({
     pm: any;
 }) => {
     const tableHead = [
-        'Task/Subtak Name',
-        'Task Priority',
-        'Task Due Date',
-        'Percentage Of  Completion',
+        'Subtask Name',
+        'Hours Spent',
+        'Start Date',
+        'End Date',
+        'Workdone',
         'Status',
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -76,11 +79,20 @@ export const TeamSingleTask = ({
         onOpen: onOpened,
         onClose: onClosed,
     } = useDisclosure();
+    const {
+        isOpen: isOpener,
+        onOpen: onOpener,
+        onClose: onCloser,
+    } = useDisclosure();
     const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
 
     const openModal = (item: any) => {
         setSubTask({ ...item, isEdit: true });
         onOpen();
+    };
+    const progressModal = (item: any) => {
+        setSubTask(item);
+        onOpener();
     };
 
     const pastDate = moment().diff(moment(task?.endDate), 'days') > 0;
@@ -93,6 +105,7 @@ export const TeamSingleTask = ({
         onOpen: onOpens,
         onClose: onCloses,
     } = useDisclosure();
+
     const [loadings, setLoadings] = useState({ id: '' });
     const [loading, setLoading] = useState({ id: '' });
 
@@ -104,6 +117,14 @@ export const TeamSingleTask = ({
         access?.projectMembersTaskCreation ||
         (access?.assignedPMTaskCreation && isPm);
     const isOrgPm = pm.value.find((x) => x.id == user?.id);
+
+    const updateProgress = async () => {
+        return;
+        // setLoading({ id: 'update' });
+    };
+    const [sliderValue, setSliderValue] = useState(
+        task?.percentageOfCompletion,
+    );
 
     return (
         <Box>
@@ -129,7 +150,7 @@ export const TeamSingleTask = ({
                             {task?.note}
                         </Text>
                         <Box w="full" mt="0.5rem">
-                            <ProgressBar
+                            {/* <ProgressBar
                                 barWidth={task?.percentageOfCompletion}
                                 showProgress={true}
                                 barColor={
@@ -147,10 +168,39 @@ export const TeamSingleTask = ({
                                 rightText={`${Round(
                                     task?.percentageOfCompletion,
                                 )}%`}
+                            /> */}
+                            <ProgressSlider
+                                sliderValue={sliderValue}
+                                setSliderValue={setSliderValue}
+                                leftText="Task Status"
+                                showProgress
+                                rightText={`${Round(sliderValue)}%`}
+                                barColor={
+                                    status == 'completed'
+                                        ? 'brand.400'
+                                        : status == 'ongoing' && pastDate
+                                        ? 'red'
+                                        : status == 'ongoing'
+                                        ? '#f7e277'
+                                        : status == 'not started'
+                                        ? 'gray.100'
+                                        : 'red'
+                                }
                             />
                         </Box>
                         {(isPm || isOrgPm) && (
-                            <Flex mt="1rem" justify="flex-end">
+                            <Flex mt="1rem" justify="space-between">
+                                <ManageBtn
+                                    onClick={updateProgress}
+                                    isLoading={loading.id == 'update'}
+                                    btn="Update"
+                                    bg="brand.600"
+                                    w="fit-content"
+                                    disabled={
+                                        sliderValue ===
+                                        task?.percentageOfCompletion
+                                    }
+                                />
                                 <ManageBtn
                                     onClick={onOpened}
                                     isLoading={loading.id == task?.id}
@@ -231,7 +281,7 @@ export const TeamSingleTask = ({
                     borderRadius=".2rem"
                     border="1px solid #efefef"
                     bgColor="white"
-                    w="80%"
+                    w="75%"
                     p="1rem"
                 >
                     <Text color="#2d3748" fontSize=".8rem" fontWeight={600}>
@@ -334,7 +384,7 @@ export const TeamSingleTask = ({
                                         name={x?.name}
                                         fontWeight="500"
                                     />
-                                    <td style={{ maxWidth: '300px' }}>
+                                    {/* <td style={{ maxWidth: '300px' }}>
                                         <HStack
                                             color="#c2cfe0"
                                             gap=".2rem"
@@ -350,12 +400,10 @@ export const TeamSingleTask = ({
                                                 h="1.6rem"
                                                 px="0.5rem"
                                             >
-                                                {
-                                                    x?.assignee
-                                                }
+                                                {x?.assignee}
                                             </Flex>
                                         </HStack>
-                                    </td>
+                                    </td> */}
                                     <TableData
                                         name={`${Round(x?.hoursSpent)} Hrs`}
                                         fontWeight="500"
@@ -370,6 +418,10 @@ export const TeamSingleTask = ({
                                         name={moment(x?.endDate).format(
                                             'DD/MM/YYYY',
                                         )}
+                                        fontWeight="500"
+                                    />
+                                    <TableData
+                                        name={`${x?.percentageOfCompletion}%`}
                                         fontWeight="500"
                                     />
                                     <NewTableState
@@ -424,6 +476,19 @@ export const TeamSingleTask = ({
                                                         />
                                                         Edit Sub-task
                                                     </MenuItem>
+                                                    <MenuItem
+                                                        onClick={() =>
+                                                            progressModal(x)
+                                                        }
+                                                        w="full"
+                                                    >
+                                                        <Icon
+                                                            as={GiProgression}
+                                                            mr=".5rem"
+                                                            color="brand.400"
+                                                        />
+                                                        Update Progress
+                                                    </MenuItem>
                                                 </MenuList>
                                             </Menu>
                                         </td>
@@ -458,6 +523,15 @@ export const TeamSingleTask = ({
                     }
                     loading={loading?.id == task.id}
                     text={`Marking this task as complete will prevent any further timesheet submissions for this task.<br/> Are you sure you want to proceed?`}
+                />
+            )}
+            {isOpener && (
+                <ShowPrompt
+                    isOpen={isOpener}
+                    onClose={onCloser}
+                    text={`Update progress`}
+                    isProgress={true}
+                    data={subTask}
                 />
             )}
         </Box>

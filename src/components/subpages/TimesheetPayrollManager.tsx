@@ -68,15 +68,16 @@ const TimesheetPayrollManager = ({
     timeSheets,
     id,
     payPeriod,
+    date,
+    end,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
     payPeriod: any;
+    date: any;
+    end: any;
 }) => {
     const router = useRouter();
-
-    const { date } = router.query;
-    const { end } = router.query;
 
     //
 
