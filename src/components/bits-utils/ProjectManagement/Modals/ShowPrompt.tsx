@@ -9,13 +9,16 @@ import {
     Button,
     Box,
     Text,
+    useToast,
 } from '@chakra-ui/react';
 import { ProgressSlider } from '@components/bits-utils/ProgressSlider';
 import { Round } from '@components/generics/functions/Round';
 import moment from 'moment';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { ProjectManagementService } from 'src/services';
 
 export const ShowPrompt = ({
     isOpen,
@@ -39,10 +42,44 @@ export const ShowPrompt = ({
     );
     const pastDate = moment().diff(moment(data?.endDate), 'days') > 0;
     const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+    const toast = useToast();
 
-    const updateProgress = () => {
-        // setIsLoading(true);
+    const updateProgress = async () => {
         return;
+        setIsLoading(true);
+        try {
+            const res = await ProjectManagementService.updateTaskProgress(
+                data?.id,
+                sliderValue,
+            );
+            if (res.status) {
+                setIsLoading(false);
+                router.replace(router.asPath);
+                toast({
+                    title: res.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                return;
+            }
+            setIsLoading(false);
+            toast({
+                title: res.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (err: any) {
+            setIsLoading(false);
+            toast({
+                title: err?.body?.message || err.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
     };
     return (
         <Modal

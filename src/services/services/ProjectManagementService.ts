@@ -599,4 +599,24 @@ search?: string,
         });
     }
 
+    /**
+     * @param taskId 
+     * @param percentageOfCompletion 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateTaskProgress(
+taskId?: string,
+percentageOfCompletion?: number,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-task-progress',
+            query: {
+                'taskId': taskId,
+                'percentageOfCompletion': percentageOfCompletion,
+            },
+        });
+    }
+
 }

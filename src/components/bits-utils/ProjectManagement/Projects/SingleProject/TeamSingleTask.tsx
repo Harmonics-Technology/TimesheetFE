@@ -34,6 +34,7 @@ import { StatusBadge } from '../../Generics/StatusBadge';
 import { TopBar } from './TopBar';
 import { AddSubTaskDrawer } from '../../Modals/AddSubTaskDrawer';
 import {
+    ProjectManagementService,
     ProjectSubTaskView,
     ProjectTaskAsigneeView,
     ProjectTaskView,
@@ -118,13 +119,45 @@ export const TeamSingleTask = ({
         (access?.assignedPMTaskCreation && isPm);
     const isOrgPm = pm.value.find((x) => x.id == user?.id);
 
-    const updateProgress = async () => {
-        return;
-        // setLoading({ id: 'update' });
-    };
     const [sliderValue, setSliderValue] = useState(
         task?.percentageOfCompletion,
     );
+
+    const updateProgress = async () => {
+        setLoading({ id: 'update' });
+        try {
+            const data = await ProjectManagementService.updateTaskProgress(
+                task?.id,
+                sliderValue,
+            );
+            if (data.status) {
+                setLoading({ id: '' });
+                router.replace(router.asPath);
+                toast({
+                    title: data.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                return;
+            }
+            setLoading({ id: '' });
+            toast({
+                title: data.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (err: any) {
+            setLoading({ id: '' });
+            toast({
+                title: err?.body?.message || err.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
 
     return (
         <Box>

@@ -44,6 +44,7 @@ import {
 import { LicenseEditBox } from '@components/bits-utils/LicenseEditBox';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import ContractTable from '@components/bits-utils/ContractTable';
+import { LicenseRevoke } from '@components/bits-utils/LicenseRevoke';
 
 const schema = yup.object().shape({});
 interface TeamProfileProps {
@@ -103,7 +104,7 @@ function TeamProfile({
             clientId: userProfile?.employeeInformation?.clientId,
             supervisorId: userProfile?.employeeInformation?.supervisorId,
             paymentPartnerId:
-                userProfile?.employeeInformation?.paymentPartnerId,
+                userProfile?.employeeInformation?.paymentPartnerId || undefined,
             currency: userProfile?.employeeInformation?.currency,
 
             paymentFrequency:
@@ -129,7 +130,8 @@ function TeamProfile({
             paymentProcessingFee:
                 userProfile?.employeeInformation?.paymentProcessingFee,
             paymentProcessingFeeType:
-                userProfile?.employeeInformation?.paymentProcessingFeeType,
+                userProfile?.employeeInformation?.paymentProcessingFeeType ||
+                undefined,
             payrollProcessingType:
                 userProfile?.employeeInformation?.payrollProcessingType,
             rate: userProfile?.employeeInformation?.rate,
@@ -731,6 +733,12 @@ function TeamProfile({
                                 'users in total assigned to this license'
                             }
                             checkbox
+                        />
+                        <LicenseRevoke
+                            userId={userProfile?.id}
+                            text="Revoke License"
+                            disabled={!curentLicense}
+                            setSelectedLicense={setSelectedLicense}
                         />
                     </Box>
                     {(includePayroll ||

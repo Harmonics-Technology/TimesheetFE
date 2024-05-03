@@ -985,4 +985,24 @@ id?: string,
         });
     }
 
+    /**
+     * @param userId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static revokeUserLicense(
+userId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/revoke-user-license',
+            query: {
+                'userId': userId,
+            },
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
 }

@@ -1,7 +1,6 @@
 import HidePage from '@components/bits-utils/HidePage';
 import useWindowSize from '@components/generics/useWindowSize';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import TimesheetAdmin from '@components/subpages/TimesheetAdmin';
 import TimesheetSupervisor from '@components/subpages/TimesheetSupervisor';
 import { endOfMonth, startOfMonth } from 'date-fns';
 import moment from 'moment';
