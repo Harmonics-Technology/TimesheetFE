@@ -619,4 +619,24 @@ percentageOfCompletion?: number,
         });
     }
 
+    /**
+     * @param subTaskId 
+     * @param percentageOfCompletion 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateSubtaskProgress(
+subTaskId?: string,
+percentageOfCompletion?: number,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-subtask-progress',
+            query: {
+                'subTaskId': subTaskId,
+                'percentageOfCompletion': percentageOfCompletion,
+            },
+        });
+    }
+
 }

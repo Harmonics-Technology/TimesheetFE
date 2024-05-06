@@ -46,10 +46,9 @@ export const ShowPrompt = ({
     const toast = useToast();
 
     const updateProgress = async () => {
-        return;
         setIsLoading(true);
         try {
-            const res = await ProjectManagementService.updateTaskProgress(
+            const res = await ProjectManagementService.updateSubtaskProgress(
                 data?.id,
                 sliderValue,
             );
