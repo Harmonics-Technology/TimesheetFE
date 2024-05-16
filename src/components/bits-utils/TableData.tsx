@@ -1441,7 +1441,9 @@ export function TrainingActions({
                 </MenuButton>
                 <MenuList w="full">
                     <MenuItem w="full">
-                        <Link href={route}>View</Link>
+                        <MenuItem onClick={() => router.push(route)} w="full">
+                            View
+                        </MenuItem>
                     </MenuItem>
                     {!viewOnly && (
                         <MenuItem onClick={() => deleteTraining()} w="full">

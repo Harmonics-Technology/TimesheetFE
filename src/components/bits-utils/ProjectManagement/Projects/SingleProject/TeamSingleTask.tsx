@@ -221,19 +221,18 @@ export const TeamSingleTask = ({
                                 }
                             />
                         </Box>
-                        {(isPm || isOrgPm) && (
-                            <Flex mt="1rem" justify="space-between">
-                                <ManageBtn
-                                    onClick={updateProgress}
-                                    isLoading={loading.id == 'update'}
-                                    btn="Update"
-                                    bg="brand.600"
-                                    w="fit-content"
-                                    disabled={
-                                        sliderValue ===
-                                        task?.percentageOfCompletion
-                                    }
-                                />
+                        <Flex mt="1rem" justify="space-between">
+                            <ManageBtn
+                                onClick={updateProgress}
+                                isLoading={loading.id == 'update'}
+                                btn="Update"
+                                bg="brand.600"
+                                w="fit-content"
+                                disabled={
+                                    sliderValue === task?.percentageOfCompletion
+                                }
+                            />
+                            {(isPm || isOrgPm) && (
                                 <ManageBtn
                                     onClick={onOpened}
                                     isLoading={loading.id == task?.id}
@@ -242,8 +241,8 @@ export const TeamSingleTask = ({
                                     w="fit-content"
                                     disabled={status == 'completed'}
                                 />
-                            </Flex>
-                        )}
+                            )}
+                        </Flex>
                     </Box>
                     <VStack
                         borderRadius=".2rem"

@@ -64,7 +64,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
         setSelecedUser(filtered);
     };
     const [uploadedFiles, setUploadedFiles] = useState<any>([]);
-    const [fileType, setFileType] = useState('');
+    const [fileType, setFileType] = useState('Select a Category');
     const [documentFile, setDocumentFile] = useState<any>({
         title: '',
         fileUrl: '',
