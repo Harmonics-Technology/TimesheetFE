@@ -10,6 +10,7 @@ export const SelectBlank = ({
     options,
     onChange,
     value,
+    w,
 }: {
     label?: any;
     fontSize?: any;
@@ -19,9 +20,10 @@ export const SelectBlank = ({
     options: any;
     onChange?: any;
     value?: any;
+    w?: any;
 }) => {
     return (
-        <Box>
+        <Box w={w}>
             <FormLabel
                 htmlFor={label}
                 textTransform="capitalize"

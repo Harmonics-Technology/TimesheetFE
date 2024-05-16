@@ -14,7 +14,7 @@ import {
     FaUsers,
 } from 'react-icons/fa';
 import { RiLineChartFill } from 'react-icons/ri';
-import { MdOutlineSupervisorAccount, MdSettings } from 'react-icons/md';
+import { MdModelTraining, MdOutlineSupervisorAccount, MdSettings } from 'react-icons/md';
 import { BsGraphUp } from 'react-icons/bs';
 import { AiFillSchedule } from 'react-icons/ai';
 import { TbCalendarTime } from 'react-icons/tb';
@@ -187,6 +187,17 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         linkName="report"
                         menuTitle="Reports"
                         icon={<BsGraphUp opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="training"
+                        menuTitle="Training"
+                        icon={<MdModelTraining opacity=".8" />}
                         option={false}
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
