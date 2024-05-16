@@ -6,7 +6,6 @@ import {
     Grid,
     HStack,
     Icon,
-    Image,
     Spinner,
     Text,
     VStack,
@@ -24,6 +23,7 @@ import YouTubePreview from './YoutubePreview';
 import { useState } from 'react';
 import { AddTrainingMaterialModal } from './AddTrainingMaterialModal';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { IoDocumentTextSharp } from 'react-icons/io5';
 
 export const ViewTraining = ({ id, data, users }) => {
     const newData = data as TrainingView;
@@ -143,7 +143,11 @@ export const ViewTraining = ({ id, data, users }) => {
                                     justify="center"
                                     align="center"
                                 >
-                                    <Image src="/assets/doc.png" />
+                                    <Icon
+                                        fontSize="3rem"
+                                        as={IoDocumentTextSharp}
+                                        color="#6A7F9D"
+                                    />
                                 </Flex>
                                 <VStack gap="0rem" align="flex-start" mt="15px">
                                     <Text

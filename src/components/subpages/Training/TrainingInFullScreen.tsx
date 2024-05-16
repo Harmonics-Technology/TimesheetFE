@@ -3,7 +3,7 @@ import {
     Button,
     Flex,
     HStack,
-    Image,
+    Icon,
     Modal,
     ModalBody,
     ModalContent,
@@ -15,6 +15,7 @@ import {
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
+import { IoDocumentTextSharp } from 'react-icons/io5';
 import { TrainingService } from 'src/services';
 
 export const TrainingInFullScreen = ({
@@ -45,6 +46,7 @@ export const TrainingInFullScreen = ({
                     position: 'top-right',
                 });
                 setLoading(false);
+                onClose();
                 router.replace(router.asPath);
                 return;
             }
@@ -80,6 +82,8 @@ export const TrainingInFullScreen = ({
                 borderRadius="0px"
                 w={['88%', '80%']}
                 overflow="hidden"
+                minW="0"
+                maxW="100%"
                 maxH="100vh"
                 pos="fixed"
                 mt="1rem"
@@ -92,7 +96,7 @@ export const TrainingInFullScreen = ({
                             userSelect="none"
                             fontSize=".9rem"
                         >
-                            {file?.name}
+                            {file?.title}
                         </Text>
                         <FaTimes onClick={onClose} />
                     </Flex>
@@ -101,7 +105,7 @@ export const TrainingInFullScreen = ({
                 <ModalBody>
                     <Box maxH="77vh" overflowY="auto" px={5}>
                         <Box>
-                            <Text fontSize=".9rem">
+                            <Text fontSize=".9rem" w="90%" mb="1rem" mx="auto">
                                 You are about to take a training that has been
                                 assigned to you, please be as honest as possible
                                 during the course of taking the training and
@@ -114,6 +118,8 @@ export const TrainingInFullScreen = ({
                                 border="0.55px solid"
                                 borderColor="#6A7F9D"
                                 borderRadius="20px"
+                                overflow="hidden"
+                                mx="auto"
                             >
                                 {file?.category == 'Video' ? (
                                     <Box w="full" h="full" overflow="hidden">
@@ -133,9 +139,12 @@ export const TrainingInFullScreen = ({
                                         w="full"
                                         h="full"
                                     >
-                                        <Image
-                                            src="/assets/doc.png"
-                                            alt="training material image"
+                                        <iframe
+                                            width="100%"
+                                            height="100%"
+                                            src={file?.fileUrl}
+                                            allowFullScreen
+                                            title="Document"
                                         />
                                     </Flex>
                                 )}
@@ -149,6 +158,7 @@ export const TrainingInFullScreen = ({
                                 color="white"
                                 borderRadius="8px"
                                 fontSize="1rem"
+                                w="80%"
                                 h="4rem"
                                 px="1rem"
                                 isLoading={loading}

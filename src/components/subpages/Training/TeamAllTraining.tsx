@@ -32,30 +32,35 @@ export const TeamAllTraning = ({ trainings }) => {
                     ]}
                 >
                     <>
-                        {trainings?.value?.map(
-                            (x: TrainingMaterialView, i: number) => (
-                                <Tr key={i}>
-                                    <TableData name={x.name} />
-                                    <TableData name={x.noOfTrainingFile} />
-                                    <Td w="250px" paddingInlineStart="8px">
-                                        <ProgressBar
-                                            barWidth={x?.progress}
-                                            showProgress={true}
-                                            barColor={'brand.400'}
-                                            rightText={x?.progress}
-                                        />
-                                    </Td>
-                                    <TableData
-                                        name={formatDate(x.dateCompleted)}
+                        {trainings?.value?.map((x: TrainingMaterialView) => (
+                            <Tr key={x.trainingId}>
+                                <TableData name={x.name} />
+                                <TableData name={x.noOfTrainingFile} />
+                                <Td w="250px" paddingInlineStart="8px">
+                                    <ProgressBar
+                                        barWidth={x?.progress}
+                                        showProgress={true}
+                                        barColor={'brand.400'}
+                                        rightText={x?.progress}
                                     />
-                                    <TrainingActions
-                                        viewOnly
-                                        id={''}
-                                        route={`/${role}/training/status/${x.name}`}
-                                    />
-                                </Tr>
-                            ),
-                        )}
+                                </Td>
+                                <TableData
+                                    name={
+                                        x?.status?.toLowerCase() == 'completed'
+                                            ? formatDate(x?.dateCompleted)
+                                            : x?.status?.toLowerCase() ==
+                                              'in progress'
+                                            ? 'Ongoing'
+                                            : 'Not started'
+                                    }
+                                />
+                                <TrainingActions
+                                    viewOnly
+                                    id={''}
+                                    route={`/${role}/training/${x.trainingId}`}
+                                />
+                            </Tr>
+                        ))}
                     </>
                 </Tables>
                 <Pagination data={trainings} />

@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 export type TrainingMaterialView = {
+    trainingId?: string;
     name?: string | null;
     noOfTrainingFile?: number;
     progress?: number;

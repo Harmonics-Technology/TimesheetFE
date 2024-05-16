@@ -2,31 +2,32 @@ import {
     Box,
     Flex,
     HStack,
-    Image,
-    Spinner,
+    Icon,
     Text,
     VStack,
     useDisclosure,
     useToast,
 } from '@chakra-ui/react';
-import { NotText } from '@components/bits-utils/NotText';
-import { TrainingService, TrainingView } from 'src/services';
+import { TrainingAssigneeView, TrainingService } from 'src/services';
 import { useRouter } from 'next/router';
 import moment from 'moment';
 import YouTubePreview from './YoutubePreview';
 import { TrainingInFullScreen } from './TrainingInFullScreen';
 import { useState } from 'react';
+import { IoDocumentTextSharp } from 'react-icons/io5';
+import { formatDate } from '@components/generics/functions/formatDate';
 
 export const TeamViewTraining = ({ training, userId, trainingId }) => {
-    const newData = training as TrainingView;
+    const newData = training as TrainingAssigneeView[];
+    console.log({ newData });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const [data, setData] = useState();
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setLoading] = useState({ id: '' });
     const toast = useToast();
 
     const startTraining = async (value: any) => {
-        setLoading(true);
+        setLoading({ id: value.id });
         try {
             const result = await TrainingService.startTraining(
                 userId,
@@ -34,7 +35,7 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                 value.id,
             );
             if (result.status) {
-                setLoading(false);
+                setLoading({ id: '' });
                 setData(value);
                 onOpen();
                 return;
@@ -45,9 +46,9 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                 isClosable: true,
                 position: 'top-right',
             });
-            setLoading(false);
+            setLoading({ id: '' });
         } catch (err: any) {
-            setLoading(false);
+            setLoading({ id: '' });
             toast({
                 title: err?.body?.message || err?.message,
                 status: 'error',
@@ -76,7 +77,7 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                 >
                     Back
                 </Text>
-                <NotText title={newData?.name} />
+                {/* <NotText title={newData?.name} /> */}
             </Box>
             <Box mt="0rem" w="100%" pb="2rem" borderBottom="1px solid #d9d9d9">
                 <Text
@@ -88,20 +89,26 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                     Documents
                 </Text>
                 <HStack gap="68px" align="flex-start">
-                    {newData?.files
-                        ?.filter((x) => x.category === 'Document')
+                    {newData
+                        ?.filter(
+                            (x) => x?.trainingFile?.category === 'Document',
+                        )
                         .map((x) => (
-                            <Box>
+                            <Box w="170px">
                                 <Flex
                                     border="0.55px solid"
                                     borderColor="#6A7F9D"
                                     borderRadius="15px"
                                     h="106px"
-                                    w="94px"
+                                    w="100px"
                                     justify="center"
                                     align="center"
                                 >
-                                    <Image src="/assets/doc.png" />
+                                    <Icon
+                                        fontSize="3rem"
+                                        as={IoDocumentTextSharp}
+                                        color="#6A7F9D"
+                                    />
                                 </Flex>
                                 <VStack gap="0rem" align="flex-start" mt="15px">
                                     <Text
@@ -109,22 +116,36 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                                         fontWeight={500}
                                         color="#1a202c"
                                     >
-                                        {x.title}
+                                        {x.trainingFile?.title}
                                     </Text>
                                     <Text
                                         fontSize="10px"
                                         fontWeight={400}
                                         color="#c4c4c4"
                                     >
-                                        {moment(x?.dateCreated).fromNow()}
+                                        {moment(
+                                            x?.trainingFile?.dateCreated,
+                                        ).fromNow()}
                                     </Text>
                                     <Text
-                                        fontSize=".9rem"
-                                        color="brand.400"
-                                        onClick={() => startTraining(x)}
+                                        fontSize=".8rem"
+                                        // color="brand.400"
+                                        onClick={() =>
+                                            startTraining(x.trainingFile)
+                                        }
+                                        mt=".5rem"
+                                        cursor="pointer"
+                                        wordBreak="break-word"
                                     >
-                                        {'Click to Start Training >> '}{' '}
-                                        {isLoading && <Spinner size="sm" />}
+                                        {isLoading.id == x.trainingFileId
+                                            ? 'Starting Training ...'
+                                            : x?.isCompleted
+                                            ? `Training Completed on ${formatDate(
+                                                  x?.dateCompleted,
+                                              )}`
+                                            : x?.isStarted
+                                            ? 'Continue Training >>'
+                                            : 'Click to Start Training >> '}
                                     </Text>
                                     {/* <HStack
                                         color="#a6acbe"
@@ -156,12 +177,12 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                     Videos
                 </Text>
                 <HStack gap="39px">
-                    {newData?.files
-                        ?.filter((x) => x.category === 'Video')
+                    {newData
+                        ?.filter((x) => x?.trainingFile?.category === 'Video')
                         .map((x) => (
                             <YouTubePreview
                                 file={x}
-                                key={x.id}
+                                key={x.trainingFileId}
                                 isLesson
                                 viewDoc={startTraining}
                                 isLoading={isLoading}
