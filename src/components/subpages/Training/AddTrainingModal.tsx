@@ -252,7 +252,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
                         label="Category"
                         w="full"
                         placeholder="Select Category"
-                        defaultValue={'Document'}
+                        defaultValue={''}
                         onChange={(e) => setFileType(e.target.value)}
                         options={['Document', 'Video'].map((x) => (
                             <option value={x}>{x}</option>
