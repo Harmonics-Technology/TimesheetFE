@@ -1440,10 +1440,8 @@ export function TrainingActions({
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
-                    <MenuItem w="full">
-                        <MenuItem onClick={() => router.push(route)} w="full">
-                            View
-                        </MenuItem>
+                    <MenuItem w="full" onClick={() => router.push(route)}>
+                        View
                     </MenuItem>
                     {!viewOnly && (
                         <MenuItem onClick={() => deleteTraining()} w="full">

@@ -19,7 +19,6 @@ import { formatDate } from '@components/generics/functions/formatDate';
 
 export const TeamViewTraining = ({ training, userId, trainingId }) => {
     const newData = training as TrainingAssigneeView[];
-    console.log({ newData });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const [data, setData] = useState();
@@ -129,13 +128,15 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                                     </Text>
                                     <Text
                                         fontSize=".8rem"
-                                        // color="brand.400"
                                         onClick={() =>
                                             startTraining(x.trainingFile)
                                         }
                                         mt=".5rem"
                                         cursor="pointer"
                                         wordBreak="break-word"
+                                        _hover={{
+                                            color: 'brand.400',
+                                        }}
                                     >
                                         {isLoading.id == x.trainingFileId
                                             ? 'Starting Training ...'

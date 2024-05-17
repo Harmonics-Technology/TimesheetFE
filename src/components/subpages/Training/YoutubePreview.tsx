@@ -42,9 +42,12 @@ const YouTubePreview = ({
                     mt=".5rem"
                     cursor="pointer"
                     wordBreak="break-word"
+                    _hover={{
+                        color: 'brand.400',
+                    }}
                 >
                     {/* {'Click to Start Training >> '}{' '}  <Spinner size="sm" /> */}
-                    {isLoading.id == file.id
+                    {isLoading.id == file.trainingFileId
                         ? 'Starting Training ...'
                         : file?.isCompleted
                         ? `Training Completed on ${formatDate(

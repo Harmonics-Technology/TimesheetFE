@@ -3,7 +3,6 @@ import {
     Button,
     Flex,
     HStack,
-    Icon,
     Modal,
     ModalBody,
     ModalContent,
@@ -15,7 +14,6 @@ import {
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
-import { IoDocumentTextSharp } from 'react-icons/io5';
 import { TrainingService } from 'src/services';
 
 export const TrainingInFullScreen = ({
@@ -26,6 +24,21 @@ export const TrainingInFullScreen = ({
     trainingId,
 }) => {
     const videoId = file.fileUrl.split('v=')[1];
+
+    const getIframeSrc = (url, fileType) => {
+        const fileExtension = fileType.split('.').pop().toLowerCase();
+        if (fileExtension === 'doc' || fileExtension === 'docx') {
+            return `https://docs.google.com/gview?url=${encodeURIComponent(
+                url,
+            )}&embedded=true`;
+        } else if (fileExtension === 'pdf') {
+            return url;
+        } else {
+            return null;
+        }
+    };
+
+    const iframeSrc = file ? getIframeSrc(file.fileUrl, file.title) : null;
 
     const [loading, setLoading] = useState(false);
     const toast = useToast();
@@ -71,7 +84,7 @@ export const TrainingInFullScreen = ({
         <Modal
             isOpen={isOpen}
             onClose={onClose}
-            motionPreset="slideInBottom"
+            trapFocus={false}
             isCentered
             closeOnOverlayClick={false}
         >
@@ -142,7 +155,7 @@ export const TrainingInFullScreen = ({
                                         <iframe
                                             width="100%"
                                             height="100%"
-                                            src={file?.fileUrl}
+                                            src={iframeSrc}
                                             allowFullScreen
                                             title="Document"
                                         />
