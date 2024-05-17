@@ -107,9 +107,15 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
     };
     const toast = useToast();
     const router = useRouter();
+    const isAllParticipant =
+        String(watch('isAllParticipant')) === 'Everybody' ||
+        watch('isAllParticipant') === true
+            ? true
+            : false;
     const onSubmit = async (data: TrainingModel) => {
         data.superAdminId = superAdminId;
         data.assignedUsers = selectedUser.map((x) => x.id);
+        data.isAllParticipant = isAllParticipant;
         data.trainingFiles = uploadedFiles.map((x) => ({
             title: x.title,
             fileUrl: x.fileUrl,
@@ -145,11 +151,6 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
             });
         }
     };
-    const isAllParticipant =
-        String(watch('isAllParticipant')) === 'Everybody' ||
-        watch('isAllParticipant') === true
-            ? true
-            : false;
 
     return (
         <DrawerWrapper onClose={onClose} isOpen={isOpen} title={'Add Training'}>
