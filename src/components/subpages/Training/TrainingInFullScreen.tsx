@@ -93,7 +93,7 @@ export const TrainingInFullScreen = ({
             <ModalContent
                 py={5}
                 borderRadius="0px"
-                w={['88%', '80%']}
+                w={['88%', '70%']}
                 overflow="hidden"
                 minW="0"
                 maxW="100%"
@@ -103,7 +103,7 @@ export const TrainingInFullScreen = ({
                 mb="1rem"
             >
                 <ModalHeader textAlign="center">
-                    <Flex justify="space-between" mb="1rem">
+                    <Flex justify="space-between">
                         <Text
                             fontWeight="500"
                             userSelect="none"
@@ -111,7 +111,7 @@ export const TrainingInFullScreen = ({
                         >
                             {file?.title}
                         </Text>
-                        <FaTimes onClick={onClose} />
+                        <FaTimes onClick={onClose} cursor="pointer" />
                     </Flex>
                 </ModalHeader>
 
@@ -126,8 +126,8 @@ export const TrainingInFullScreen = ({
                                 continue
                             </Text>
                             <Box
-                                w="90%"
-                                h="500px"
+                                w="80%"
+                                h="400px"
                                 border="0.55px solid"
                                 borderColor="#6A7F9D"
                                 borderRadius="20px"
@@ -163,7 +163,7 @@ export const TrainingInFullScreen = ({
                                 )}
                             </Box>
                         </Box>
-                        <HStack spacing={4} w="full" my="42px" justify="center">
+                        <HStack spacing={4} w="full" my="22px" justify="center">
                             <Button
                                 variant="solid"
                                 width="fit-content"
@@ -171,7 +171,7 @@ export const TrainingInFullScreen = ({
                                 color="white"
                                 borderRadius="8px"
                                 fontSize="1rem"
-                                w="80%"
+                                w="60%"
                                 h="4rem"
                                 px="1rem"
                                 isLoading={loading}

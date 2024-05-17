@@ -177,7 +177,7 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                 >
                     Videos
                 </Text>
-                <HStack gap="39px">
+                <HStack gap="39px" align="flex-start">
                     {newData
                         ?.filter((x) => x?.trainingFile?.category === 'Video')
                         .map((x) => (
