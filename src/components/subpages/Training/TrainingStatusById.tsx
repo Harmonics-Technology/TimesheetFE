@@ -90,7 +90,7 @@ export const TrainingStatusById = ({ trainings, trainingName }) => {
                         ))}
                     </>
                 </Tables>
-                <Pagination data={trainings} />
+                <Pagination data={trainings} loadMore />
             </Box>
         </Box>
     );

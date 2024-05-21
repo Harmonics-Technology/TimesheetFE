@@ -5,6 +5,7 @@ import { ProgressBar } from '@components/bits-utils/ProjectManagement/Generics/P
 import { TableData, TrainingActions } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import { UserContext } from '@components/context/UserContext';
+import { Round } from '@components/generics/functions/Round';
 import React, { useContext } from 'react';
 import { TrainingAssigneeView, TrainingView } from 'src/services';
 
@@ -90,7 +91,7 @@ export const TrainingStatus = ({ trainings }) => {
                                         barWidth={x?.progress}
                                         showProgress={true}
                                         barColor={'brand.400'}
-                                        rightText={x?.progress}
+                                        rightText={`${Round(x?.progress)}%`}
                                     />
                                 </Td>
                                 <TrainingActions

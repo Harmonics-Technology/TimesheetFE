@@ -87,7 +87,7 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                 >
                     Documents
                 </Text>
-                <HStack gap="68px" align="flex-start">
+                <HStack gap="68px" align="flex-start" flexWrap="wrap">
                     {newData
                         ?.filter(
                             (x) => x?.trainingFile?.category === 'Document',
@@ -177,7 +177,7 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                 >
                     Videos
                 </Text>
-                <HStack gap="39px" align="flex-start">
+                <HStack gap="39px" align="flex-start" flexWrap="wrap">
                     {newData
                         ?.filter((x) => x?.trainingFile?.category === 'Video')
                         .map((x) => (

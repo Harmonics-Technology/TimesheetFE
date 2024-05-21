@@ -7,6 +7,7 @@ import { TrainingMaterialView } from 'src/services';
 import { useContext } from 'react';
 import { UserContext } from '@components/context/UserContext';
 import { ProgressBar } from '@components/bits-utils/ProjectManagement/Generics/ProgressBar';
+import { Round } from '@components/generics/functions/Round';
 
 export const TeamAllTraning = ({ trainings }) => {
     const { user } = useContext(UserContext);
@@ -41,7 +42,7 @@ export const TeamAllTraning = ({ trainings }) => {
                                         barWidth={x?.progress}
                                         showProgress={true}
                                         barColor={'brand.400'}
-                                        rightText={x?.progress}
+                                        rightText={`${Round(x?.progress)}%`}
                                     />
                                 </Td>
                                 <TableData

@@ -129,7 +129,7 @@ export const ViewTraining = ({ id, data, users }) => {
                 >
                     Documents
                 </Text>
-                <HStack gap="68px" align="flex-start">
+                <HStack gap="68px" align="flex-start" flexWrap="wrap">
                     {newData?.files
                         ?.filter((x) => x.category === 'Document')
                         .map((x) => (
@@ -221,7 +221,7 @@ export const ViewTraining = ({ id, data, users }) => {
                 >
                     Videos
                 </Text>
-                <HStack gap="39px" align="flex-start">
+                <HStack gap="39px" align="flex-start" flexWrap="wrap">
                     {newData?.files
                         ?.filter((x) => x.category === 'Video')
                         .map((x) => (

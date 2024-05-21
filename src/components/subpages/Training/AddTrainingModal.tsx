@@ -72,6 +72,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
         loading: false,
         category: '',
     });
+    const [docFile, setDocFile] = useState<any>([]);
     const noLinkSetUp = !documentFile.title || !documentFile.fileUrl;
     const addToList = () => {
         if (noLinkSetUp) {
@@ -91,8 +92,9 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
         setUploadedFiles(foundItems);
     };
     const widgetApi = useRef<any>();
-    const uploadFunction = (file) => {
-        if (file) {
+    const uploadFunction = async (group) => {
+        const files = group.files();
+        files.forEach((file) => {
             file.progress(() => {
                 setDocumentFile({ loading: true });
             });
@@ -102,8 +104,16 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
                     fileUrl: info?.cdnUrl,
                     title: info?.name,
                 });
+                // setDocFile([
+                //     ...docFile,
+                //     {
+                //         loading: false,
+                //         fileUrl: info?.cdnUrl,
+                //         title: info?.name,
+                //     },
+                // ]);
             });
-        }
+        });
     };
     const toast = useToast();
     const router = useRouter();
@@ -274,6 +284,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
                                 h="186px"
                                 border="1px dashed"
                                 borderColor="brand.100"
+                                pos="relative"
                             >
                                 <VStack
                                     gap=".8rem"
@@ -325,14 +336,23 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
                                         </Button>
                                     )}
                                 </VStack>
-                                <Box display="none">
+                                <Box
+                                    display="block"
+                                    pos="absolute"
+                                    w="full"
+                                    h="full"
+                                    top="0"
+                                    left="0"
+                                    opacity="0"
+                                >
                                     <Widget
                                         publicKey="fda3a71102659f95625f"
                                         clearable
-                                        onFileSelect={uploadFunction}
+                                        onFileSelect={(e) => uploadFunction(e)}
                                         ref={widgetApi}
                                         systemDialog={true}
                                         inputAcceptTypes={'.docx,.pdf, .doc'}
+                                        multiple
                                     />
                                 </Box>
                             </Box>
