@@ -1010,7 +1010,7 @@ export const DraftOnboardingModal = ({
                     <SectionTitle text="Leave Management" />
                     <Box pos="relative" mb="1rem">
                         <PrimaryRadio<TeamMemberModel>
-                            label="Are you eligible for Leave"
+                            label="Is this team member eligible for leave?"
                             radios={['No', 'Yes']}
                             name="isEligibleForLeave"
                             control={control}

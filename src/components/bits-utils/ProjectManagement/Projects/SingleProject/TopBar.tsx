@@ -55,7 +55,7 @@ export const TopBar = ({
                     name={[
                         'dashboard',
                         'projects',
-                        'operational-task',
+                        // 'operational-task',
                         'resource-capacity',
                     ]}
                 />
@@ -97,7 +97,7 @@ export const TopBar = ({
                 name={[
                     'dashboard',
                     'project-task',
-                    // 'gantt-chart',
+                    'gantt-chart',
                     'team-members',
                     'budget',
                 ]}

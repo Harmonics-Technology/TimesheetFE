@@ -55,14 +55,14 @@ export const OperationalTask = ({
                     name={[
                         'dashboard',
                         'projects',
-                        'operational-task',
+                        // 'operational-task',
                         'resource-capacity',
                     ]}
                 />
             </Box>
             <HStack py="1rem" justify="space-between">
-                <HStack w="17%">
-                    <HStack w="full">
+                <HStack>
+                    <HStack w="fit-content">
                         <Image
                             src="/assets/filter.png"
                             alt="filter"
@@ -73,9 +73,10 @@ export const OperationalTask = ({
                             Filter By
                         </Text>
                     </HStack>
+
                     <Select
                         fontSize=".8rem"
-                        w="full"
+                        w="fit-content"
                         onChange={(e) => filterByStatus(e.target.value)}
                     >
                         <option value={''}>All</option>
@@ -135,12 +136,12 @@ export const OperationalTask = ({
                                     )}
                                 </HStack>
                             </td>
-                            <TableData
+                            {/* <TableData
                                 name={x?.category}
                                 fontWeight="500"
                                 full
                                 breakWord
-                            />
+                            /> */}
                             <TableData
                                 name={`${x?.department} Department`}
                                 fontWeight="500"

@@ -86,9 +86,10 @@ DashboardProps) {
 
     const isClient = subType == 'premium';
     const totalCounts =
-        (counts?.notStarted as number) +
-        (counts?.inProgress as number) +
-        (counts?.completed as number);
+        // (counts?.notStarted as number) +
+        counts?.inProgress as number;
+    // +
+    // (counts?.completed as number);
     const thead = [
         'No Of Users',
         'Total Hours',

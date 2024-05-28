@@ -62,7 +62,12 @@ export const ProjectPage = ({
             <Box mb="2.5rem">
                 {!isPm && (
                     <ProjectTabs
-                        name={['dashboard', 'projects', 'operational-task']}
+                        name={[
+                            'dashboard',
+                            'projects',
+                            // 'operational-task',
+                            'resource-capacity',
+                        ]}
                     />
                 )}
             </Box>

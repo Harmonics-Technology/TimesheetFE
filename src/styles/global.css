@@ -337,3 +337,6 @@ select option {
     width: 100%;
     height: 100%;
 }
+.calendar {
+    font-family: 'Rubik';
+}

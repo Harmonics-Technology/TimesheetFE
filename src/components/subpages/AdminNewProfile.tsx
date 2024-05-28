@@ -156,161 +156,191 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                     },
                 ]}
             />
-            <form>
-                <Box mt="2rem">
-                    <Text fontSize=".875rem" color="#1B1D21" mb="1rem">
-                        Personal Information
-                    </Text>
-                    <VStack align="flex-start" spacing="1.5rem" w="80%">
-                        <PrimaryInput<UpdateUserModel>
-                            label="Company Name"
-                            name="organizationName"
-                            error={errors.organizationName}
-                            placeholder=""
-                            defaultValue={''}
-                            register={register}
-                        />
-                        <Grid
-                            gap="1rem"
-                            templateColumns={{
-                                base: 'repeat(1, 2fr)',
-                                lg: 'repeat(2, 1fr)',
-                            }}
-                            w="full"
-                        >
-                            <InputBlank
-                                label="Email"
-                                placeholder=""
-                                defaultValue={
-                                    userInfo?.organizationEmail as string
-                                }
-                                disableLabel={true}
-                            />
-                            <PrimaryPhoneInput<UpdateUserModel>
-                                label="Phone Number"
-                                name="organizationPhone"
-                                error={errors.organizationPhone}
-                                placeholder={
-                                    userInfo?.organizationPhone as string
-                                }
-                                control={control}
-                            />
-                        </Grid>
-                        <PrimaryTextarea<UpdateUserModel>
-                            label="Address"
-                            name="organizationAddress"
-                            error={errors.organizationAddress}
-                            placeholder=""
-                            defaultValue={''}
-                            register={register}
-                        />
-                    </VStack>
-                </Box>
-                <Box mt="2rem">
-                    <Text fontSize=".875rem" color="#1B1D21" mb="1rem">
-                        Contact Person
-                    </Text>
-                    <VStack align="flex-start" spacing="1.5rem" w="80%">
-                        <Grid
-                            gap="1rem 1.5rem"
-                            templateColumns={{
-                                base: 'repeat(1, 2fr)',
-                                lg: 'repeat(2, 1fr)',
-                            }}
-                            w="full"
-                        >
-                            <PrimaryInput<UpdateUserModel>
-                                label="Contact Person First Name"
-                                name="firstName"
-                                error={errors.firstName}
-                                placeholder=""
-                                defaultValue={''}
-                                register={register}
-                            />
-                            <PrimaryInput<UpdateUserModel>
-                                label="Contact Person Last Name"
-                                name="lastName"
-                                error={errors.lastName}
-                                placeholder=""
-                                defaultValue={''}
-                                register={register}
-                            />
-                            <InputBlank
-                                label="Email"
-                                placeholder=""
-                                defaultValue={userInfo?.email as string}
-                                disableLabel={true}
-                            />
-                            <PrimaryPhoneInput<UpdateUserModel>
-                                label="Phone Number"
-                                name="phoneNumber"
-                                error={errors.phoneNumber}
-                                placeholder={userInfo?.phoneNumber as string}
-                                control={control}
-                            />
-                        </Grid>
-                    </VStack>
-                </Box>
-                <Box mt="1rem">
-                    <ShiftBtn
-                        text="Save"
-                        bg="brand.400"
-                        onClick={handleSubmit(onSubmit)}
-                        loading={isSubmitting}
-                    />
-                </Box>
-            </form>
-            <Box py="1.5rem" mt="1.5rem" borderTop="1px solid #c5c6cb">
-                <VStack align="flex-start" w={['full', '60%']} gap="1rem">
+            <Box w="full" bgColor="white" p="2rem" borderRadius="8px" mt="2rem">
+                <form>
                     <Box>
-                        <Text
-                            color="#484747"
-                            fontWeight="500"
-                            lineHeight="150%"
-                            mb="1rem"
-                        >
-                            Two factor authentication
+                        <Text fontSize=".875rem" color="#1B1D21" mb="1rem">
+                            Personal Information
                         </Text>
-                        <Text
-                            color="#484747"
-                            fontWeight="400"
-                            lineHeight="150%"
-                            fontSize="14px"
-                        >
-                            Two-Factor Authentication is an enhanced security
-                            measure. Once enabled, you will be required to give
-                            two types of Identification when you login.
-                        </Text>
-                    </Box>
-
-                    <FormControl
-                        display="flex"
-                        alignItems="flex-start"
-                        gap="1rem"
-                    >
-                        <ToggleSwitch
-                            label="two_fa_setup"
-                            onChange={() => settwofaState(!twofaState)}
-                            checked={
-                                userInfo?.twoFactorEnabled == true
-                                    ? true
-                                    : false
-                            }
-                        />
-                        {loading ? (
-                            <Spinner />
-                        ) : (
-                            <FormLabel
-                                htmlFor="two_fa_setup"
-                                mt=".4rem"
-                                fontSize="14px"
-                                fontWeight="500"
+                        <VStack align="flex-start" spacing="1.5rem" w="80%">
+                            <Grid
+                                gap="1rem 1.5rem"
+                                templateColumns={{
+                                    base: 'repeat(1, 2fr)',
+                                    lg: 'repeat(2, 1fr)',
+                                }}
+                                w="full"
                             >
-                                Enable
-                            </FormLabel>
-                        )}
-                    </FormControl>
-                </VStack>
+                                <PrimaryInput<UpdateUserModel>
+                                    label="First Name"
+                                    name="firstName"
+                                    error={errors.firstName}
+                                    placeholder=""
+                                    defaultValue={''}
+                                    register={register}
+                                />
+                                <PrimaryInput<UpdateUserModel>
+                                    label="Last Name"
+                                    name="lastName"
+                                    error={errors.lastName}
+                                    placeholder=""
+                                    defaultValue={''}
+                                    register={register}
+                                />
+                            </Grid>
+                            <PrimaryInput<UpdateUserModel>
+                                label="Company Name"
+                                name="organizationName"
+                                error={errors.organizationName}
+                                placeholder=""
+                                defaultValue={''}
+                                register={register}
+                            />
+                            <Grid
+                                gap="1rem"
+                                templateColumns={{
+                                    base: 'repeat(1, 2fr)',
+                                    lg: 'repeat(2, 1fr)',
+                                }}
+                                w="full"
+                            >
+                                <InputBlank
+                                    label="Email"
+                                    placeholder=""
+                                    defaultValue={
+                                        userInfo?.organizationEmail as string
+                                    }
+                                    disableLabel={true}
+                                />
+                                <PrimaryPhoneInput<UpdateUserModel>
+                                    label="Phone Number"
+                                    name="organizationPhone"
+                                    error={errors.organizationPhone}
+                                    placeholder={
+                                        userInfo?.organizationPhone as string
+                                    }
+                                    control={control}
+                                />
+                            </Grid>
+                            <PrimaryTextarea<UpdateUserModel>
+                                label="Address"
+                                name="organizationAddress"
+                                error={errors.organizationAddress}
+                                placeholder=""
+                                defaultValue={''}
+                                register={register}
+                            />
+                        </VStack>
+                    </Box>
+                    <Box mt="2rem" display="none">
+                        <Text fontSize=".875rem" color="#1B1D21" mb="1rem">
+                            Contact Person
+                        </Text>
+                        <VStack align="flex-start" spacing="1.5rem" w="80%">
+                            <Grid
+                                gap="1rem 1.5rem"
+                                templateColumns={{
+                                    base: 'repeat(1, 2fr)',
+                                    lg: 'repeat(2, 1fr)',
+                                }}
+                                w="full"
+                            >
+                                <PrimaryInput<UpdateUserModel>
+                                    label="Contact Person First Name"
+                                    name="firstName"
+                                    error={errors.firstName}
+                                    placeholder=""
+                                    defaultValue={''}
+                                    register={register}
+                                />
+                                <PrimaryInput<UpdateUserModel>
+                                    label="Contact Person Last Name"
+                                    name="lastName"
+                                    error={errors.lastName}
+                                    placeholder=""
+                                    defaultValue={''}
+                                    register={register}
+                                />
+                                <InputBlank
+                                    label="Email"
+                                    placeholder=""
+                                    defaultValue={userInfo?.email as string}
+                                    disableLabel={true}
+                                />
+                                <PrimaryPhoneInput<UpdateUserModel>
+                                    label="Phone Number"
+                                    name="phoneNumber"
+                                    error={errors.phoneNumber}
+                                    placeholder={
+                                        userInfo?.phoneNumber as string
+                                    }
+                                    control={control}
+                                />
+                            </Grid>
+                        </VStack>
+                    </Box>
+                    <Box mt="1rem">
+                        <ShiftBtn
+                            text="Save"
+                            bg="brand.400"
+                            onClick={handleSubmit(onSubmit)}
+                            loading={isSubmitting}
+                        />
+                    </Box>
+                </form>
+                <Box py="1.5rem" mt="1.5rem" borderTop="1px solid #c5c6cb">
+                    <VStack align="flex-start" w={['full', '60%']} gap="1rem">
+                        <Box>
+                            <Text
+                                color="#484747"
+                                fontWeight="500"
+                                lineHeight="150%"
+                                mb="1rem"
+                            >
+                                Two factor authentication
+                            </Text>
+                            <Text
+                                color="#484747"
+                                fontWeight="400"
+                                lineHeight="150%"
+                                fontSize="14px"
+                            >
+                                Two-Factor Authentication is an enhanced
+                                security measure. Once enabled, you will be
+                                required to give two types of Identification
+                                when you login.
+                            </Text>
+                        </Box>
+
+                        <FormControl
+                            display="flex"
+                            alignItems="flex-start"
+                            gap="1rem"
+                        >
+                            <ToggleSwitch
+                                label="two_fa_setup"
+                                onChange={() => settwofaState(!twofaState)}
+                                checked={
+                                    userInfo?.twoFactorEnabled == true
+                                        ? true
+                                        : false
+                                }
+                            />
+                            {loading ? (
+                                <Spinner />
+                            ) : (
+                                <FormLabel
+                                    htmlFor="two_fa_setup"
+                                    mt=".4rem"
+                                    fontSize="14px"
+                                    fontWeight="500"
+                                >
+                                    Enable
+                                </FormLabel>
+                            )}
+                        </FormControl>
+                    </VStack>
+                </Box>
             </Box>
             <TwoFaModal isOpen={open2Fa} onClose={close2Fa} data={twoFaData} />
         </Box>

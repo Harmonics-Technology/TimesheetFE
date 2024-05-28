@@ -61,7 +61,7 @@ export const ResourceDetailedView = ({ resource, userName, projects }) => {
                     name={[
                         'dashboard',
                         'projects',
-                        'operational-task',
+                        // 'operational-task',
                         'resource-capacity',
                     ]}
                 />

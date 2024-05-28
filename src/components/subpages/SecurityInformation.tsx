@@ -135,82 +135,84 @@ export const SecurityInformation = ({
                     },
                 ]}
             />
-            <Box mt="2rem" pb="3rem" borderBottom="1px solid #C2CFE0">
-                <Text fontSize=".875rem" color="#1B1D21" mb="1rem">
-                    Password Update Or Change
-                </Text>
-                <form>
-                    <VStack spacing="1.5rem" align="flex-start" w="80%">
-                        <PrimaryInput<PasswordReset>
-                            register={register}
-                            name="oldPassword"
-                            error={errors.oldPassword}
-                            defaultValue=""
-                            placeholder="*********"
-                            type={passwordVisible ? 'text' : 'password'}
-                            icon={true}
-                            passwordVisible={passwordVisible}
-                            changeVisibility={() =>
-                                setPasswordVisible(!passwordVisible)
-                            }
-                            label="Old Password"
-                            fontSize="1rem"
-                        />
-                        <PrimaryInput<PasswordReset>
-                            register={register}
-                            name="newPassword"
-                            error={errors.newPassword}
-                            defaultValue=""
-                            placeholder="*********"
-                            type={passwordVisible ? 'text' : 'password'}
-                            icon={true}
-                            passwordVisible={passwordVisibleA}
-                            changeVisibility={() =>
-                                setPasswordVisibleA(!passwordVisibleA)
-                            }
-                            label="New Password"
-                            fontSize="1rem"
-                        />
-                        <PrimaryInput<PasswordReset>
-                            register={register}
-                            name="confirmPassword"
-                            error={errors.confirmPassword}
-                            defaultValue=""
-                            label="Confirm Password"
-                            placeholder="*********"
-                            fontSize="1rem"
-                            type={passwordVisibleB ? 'text' : 'password'}
-                            icon={true}
-                            passwordVisible={passwordVisibleB}
-                            changeVisibility={() =>
-                                setPasswordVisibleB(!passwordVisibleB)
-                            }
+            <Box w="full" bgColor="white" p="2rem" borderRadius="8px" mt="2rem">
+                <Box pb="3rem" borderBottom="1px solid #C2CFE0">
+                    <Text fontSize=".875rem" color="#1B1D21" mb="1rem">
+                        Password Update Or Change
+                    </Text>
+                    <form>
+                        <VStack spacing="1.5rem" align="flex-start" w="80%">
+                            <PrimaryInput<PasswordReset>
+                                register={register}
+                                name="oldPassword"
+                                error={errors.oldPassword}
+                                defaultValue=""
+                                placeholder="*********"
+                                type={passwordVisible ? 'text' : 'password'}
+                                icon={true}
+                                passwordVisible={passwordVisible}
+                                changeVisibility={() =>
+                                    setPasswordVisible(!passwordVisible)
+                                }
+                                label="Old Password"
+                                fontSize="1rem"
+                            />
+                            <PrimaryInput<PasswordReset>
+                                register={register}
+                                name="newPassword"
+                                error={errors.newPassword}
+                                defaultValue=""
+                                placeholder="*********"
+                                type={passwordVisibleA ? 'text' : 'password'}
+                                icon={true}
+                                passwordVisible={passwordVisibleA}
+                                changeVisibility={() =>
+                                    setPasswordVisibleA(!passwordVisibleA)
+                                }
+                                label="New Password"
+                                fontSize="1rem"
+                            />
+                            <PrimaryInput<PasswordReset>
+                                register={register}
+                                name="confirmPassword"
+                                error={errors.confirmPassword}
+                                defaultValue=""
+                                label="Confirm Password"
+                                placeholder="*********"
+                                fontSize="1rem"
+                                type={passwordVisibleB ? 'text' : 'password'}
+                                icon={true}
+                                passwordVisible={passwordVisibleB}
+                                changeVisibility={() =>
+                                    setPasswordVisibleB(!passwordVisibleB)
+                                }
+                            />
+
+                            <ShiftBtn
+                                text="Update Password"
+                                bg="brand.400"
+                                onClick={handleSubmit(onSubmit)}
+                                loading={isSubmitting}
+                            />
+                        </VStack>
+                    </form>
+                </Box>
+
+                <Box w="full" py="1.5rem" borderBottom="1px solid #C2CFE0">
+                    <Flex justify="space-between" w="90%" gap="8rem">
+                        <TitleText
+                            title="Two Factor Authentication"
+                            text="Two-factor authentication (2FA), also known as two-step verification, is a security feature used to enhance the protection of online accounts and systems. It adds an extra layer of security by requiring users to provide two different types of credentials to verify their identity when logging in or accessing sensitive information. Enable two factor authentication for Users, Clients and Team members on the application"
                         />
 
-                        <ShiftBtn
-                            text="Update Password"
-                            bg="brand.400"
-                            onClick={handleSubmit(onSubmit)}
-                            loading={isSubmitting}
+                        <ToggleSwitch
+                            label="twofactor"
+                            onChange={() => setisTwoFa(!isTwoFa)}
+                            checked={isTwoFa}
+                            loading={loading}
                         />
-                    </VStack>
-                </form>
-            </Box>
-
-            <Box w="full" py="1.5rem" borderBottom="1px solid #C2CFE0">
-                <Flex justify="space-between" w="90%" gap="8rem">
-                    <TitleText
-                        title="Two Factor Authentication"
-                        text="Two-factor authentication (2FA), also known as two-step verification, is a security feature used to enhance the protection of online accounts and systems. It adds an extra layer of security by requiring users to provide two different types of credentials to verify their identity when logging in or accessing sensitive information. Enable two factor authentication for Users, Clients and Team members on the application"
-                    />
-
-                    <ToggleSwitch
-                        label="twofactor"
-                        onChange={() => setisTwoFa(!isTwoFa)}
-                        checked={isTwoFa}
-                        loading={loading}
-                    />
-                </Flex>
+                    </Flex>
+                </Box>
             </Box>
         </Box>
     );

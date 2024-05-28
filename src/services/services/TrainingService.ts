@@ -7,6 +7,7 @@ import type { TrainingAssigneeViewListStandardResponse } from '../models/Trainin
 import type { TrainingAssigneeViewPagedCollectionStandardResponse } from '../models/TrainingAssigneeViewPagedCollectionStandardResponse';
 import type { TrainingMaterialViewPagedCollectionStandardResponse } from '../models/TrainingMaterialViewPagedCollectionStandardResponse';
 import type { TrainingModel } from '../models/TrainingModel';
+import type { TrainingVideoProgressLogModel } from '../models/TrainingVideoProgressLogModel';
 import type { TrainingViewPagedCollectionStandardResponse } from '../models/TrainingViewPagedCollectionStandardResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -264,6 +265,45 @@ trainingId?: string,
             query: {
                 'userId': userId,
                 'trainingId': trainingId,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static createOrUpdateVideoRecordProgress(
+requestBody?: TrainingVideoProgressLogModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Training/update-video-progress',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param userId 
+     * @param trainingId 
+     * @param fileId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static getUserVideoLastRecordedProgress(
+userId?: string,
+trainingId?: string,
+fileId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Training/last-recorded-progress',
+            query: {
+                'userId': userId,
+                'trainingId': trainingId,
+                'fileId': fileId,
             },
         });
     }

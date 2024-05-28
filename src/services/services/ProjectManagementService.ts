@@ -277,7 +277,7 @@ search?: string,
 offset?: number,
 limit?: number,
 superAdminId?: string,
-status?: ProjectStatus,
+status?: string,
 userId?: string,
 search?: string,
 ): CancelablePromise<ProjectTaskViewPagedCollectionStandardResponse> {
@@ -414,6 +414,26 @@ userId?: string,
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/ProjectManagement/project/status-count',
+            query: {
+                'superAdminId': superAdminId,
+                'userId': userId,
+            },
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @param userId 
+     * @returns ProjectProgressCountViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getStatusCountForOperationalTask(
+superAdminId?: string,
+userId?: string,
+): CancelablePromise<ProjectProgressCountViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/operational-task/status-count',
             query: {
                 'superAdminId': superAdminId,
                 'userId': userId,

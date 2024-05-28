@@ -148,7 +148,6 @@ function ContractTable({ userProfile, isSuperAdmin }: adminProps) {
         }
     };
 
-
     return (
         <>
             <Box
@@ -188,7 +187,7 @@ function ContractTable({ userProfile, isSuperAdmin }: adminProps) {
                 <Tables
                     tableHead={[
                         'Job Title',
-                        'Employmet Type',
+                        'Employment Type',
                         'Start Date',
                         'End Date',
                         'Duration',

@@ -51,7 +51,7 @@ export const Dashboard = ({
                     name={[
                         'dashboard',
                         'projects',
-                        'operational-task',
+                        // 'operational-task',
                         'resource-capacity',
                     ]}
                 />

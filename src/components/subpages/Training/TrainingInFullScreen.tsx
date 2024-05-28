@@ -12,9 +12,10 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { TrainingService } from 'src/services';
+import ReactPlayer from 'react-player';
 
 export const TrainingInFullScreen = ({
     isOpen,
@@ -24,6 +25,7 @@ export const TrainingInFullScreen = ({
     trainingId,
 }) => {
     const videoId = file.fileUrl.split('v=')[1];
+    const watchedSeconds = file.progress;
 
     const getIframeSrc = (url, fileType) => {
         const fileExtension = fileType.split('.').pop().toLowerCase();
@@ -80,6 +82,24 @@ export const TrainingInFullScreen = ({
             });
         }
     };
+    const videoRef = useRef<any>();
+
+    const saveUserVideProgress = async () => {
+        const progress = videoRef?.current?.getCurrentTime();
+        try {
+            const result =
+                await TrainingService.createOrUpdateVideoRecordProgress({
+                    userId,
+                    trainingId,
+                    trainingFileId: file?.fileId,
+                    lastRecordedProgress: progress,
+                });
+            console.log(result.message);
+        } catch (err: any) {
+            console.log({ err });
+        }
+    };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -136,14 +156,30 @@ export const TrainingInFullScreen = ({
                             >
                                 {file?.category == 'Video' ? (
                                     <Box w="full" h="full" overflow="hidden">
-                                        <iframe
+                                        <ReactPlayer
+                                            url={file?.fileUrl}
+                                            width="100%"
+                                            height="100%"
+                                            ref={videoRef}
+                                            controls
+                                            onPause={() =>
+                                                saveUserVideProgress()
+                                            }
+                                            onReady={() =>
+                                                videoRef?.current?.seekTo(
+                                                    watchedSeconds,
+                                                    'seconds',
+                                                )
+                                            }
+                                        />
+                                        {/* <iframe
                                             width="100%"
                                             height="100%"
                                             src={`https://www.youtube.com/embed/${videoId}`}
                                             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                                             allowFullScreen
                                             title="YouTube Video"
-                                        />
+                                        /> */}
                                     </Box>
                                 ) : (
                                     <Flex

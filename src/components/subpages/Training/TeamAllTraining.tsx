@@ -50,7 +50,7 @@ export const TeamAllTraning = ({ trainings }) => {
                                         x?.status?.toLowerCase() == 'completed'
                                             ? formatDate(x?.dateCompleted)
                                             : x?.status?.toLowerCase() ==
-                                              'in progress'
+                                              'ongoing'
                                             ? 'Ongoing'
                                             : 'Not started'
                                     }

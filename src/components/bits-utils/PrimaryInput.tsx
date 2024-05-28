@@ -101,7 +101,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                         cursor="pointer"
                         color="brand.200"
                     >
-                        {passwordVisible ? <FaRegEye /> : <FaRegEyeSlash />}
+                        {!passwordVisible ? <FaRegEye /> : <FaRegEyeSlash />}
                     </InputRightElement>
                 )}
             </InputGroup>

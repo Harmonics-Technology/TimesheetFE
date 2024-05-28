@@ -105,10 +105,10 @@ function TeamManagement({
         'Name',
         'Job Title',
         'Client Name',
-        'Employement Type',
+        'Employment Type',
         'Role',
         'Status',
-        '',
+        'Action',
     ];
 
     return (

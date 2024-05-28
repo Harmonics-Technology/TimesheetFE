@@ -34,6 +34,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     metrics: [],

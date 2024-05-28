@@ -200,6 +200,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
                                 removeFn={removeUser}
                                 id="Assign user"
                                 error={errors.assignedUsers}
+                                searchable
                             />
                             <HStack justify="flex-end" mt=".5rem">
                                 <Link
@@ -233,6 +234,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
                                                 color="#707683"
                                                 key={i}
                                                 p=".1rem .4rem"
+                                                flexWrap="wrap"
                                             >
                                                 <Text
                                                     fontSize=".6rem"

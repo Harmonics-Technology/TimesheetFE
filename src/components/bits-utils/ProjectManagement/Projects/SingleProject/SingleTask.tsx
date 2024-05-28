@@ -34,6 +34,7 @@ import { StatusBadge } from '../../Generics/StatusBadge';
 import { TopBar } from './TopBar';
 import { AddSubTaskDrawer } from '../../Modals/AddSubTaskDrawer';
 import {
+    ProjectManagementService,
     ProjectSubTaskView,
     ProjectTaskAsigneeView,
     ProjectTaskView,
@@ -46,6 +47,7 @@ import { MdVerified } from 'react-icons/md';
 import { BsPenFill } from 'react-icons/bs';
 import { ShowPrompt } from '../../Modals/ShowPrompt';
 import { useRouter } from 'next/router';
+import { ProgressSlider } from '@components/bits-utils/ProgressSlider';
 
 export const SingleTask = ({
     id,
@@ -100,6 +102,46 @@ export const SingleTask = ({
     const taskStat = (x: any) => {
         setTaskStatus(x);
     };
+
+    const [sliderValue, setSliderValue] = useState(
+        task?.percentageOfCompletion,
+    );
+
+    const updateProgress = async () => {
+        setLoading({ id: 'update' });
+        try {
+            const data = await ProjectManagementService.updateTaskProgress(
+                task?.id,
+                sliderValue,
+            );
+            if (data.status) {
+                setLoading({ id: '' });
+                router.replace(router.asPath);
+                toast({
+                    title: data.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                return;
+            }
+            setLoading({ id: '' });
+            toast({
+                title: data.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (err: any) {
+            setLoading({ id: '' });
+            toast({
+                title: err?.body?.message || err.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
     return (
         <Box>
             <TopBar
@@ -129,7 +171,7 @@ export const SingleTask = ({
                             {task?.note}
                         </Text>
                         <Box w="full" mt="0.5rem">
-                            <ProgressBar
+                            {/* <ProgressBar
                                 barWidth={task?.percentageOfCompletion}
                                 showProgress={true}
                                 barColor={
@@ -147,9 +189,37 @@ export const SingleTask = ({
                                 rightText={`${Round(
                                     task?.percentageOfCompletion,
                                 )}%`}
+                            /> */}
+                            <ProgressSlider
+                                sliderValue={sliderValue}
+                                setSliderValue={setSliderValue}
+                                leftText="Task Status"
+                                showProgress
+                                rightText={`${Round(sliderValue)}%`}
+                                barColor={
+                                    status == 'completed'
+                                        ? 'brand.400'
+                                        : status == 'ongoing' && pastDate
+                                        ? 'red'
+                                        : status == 'ongoing'
+                                        ? '#f7e277'
+                                        : status == 'not started'
+                                        ? 'gray.100'
+                                        : 'red'
+                                }
                             />
                         </Box>
-                        <Flex mt="1rem" justify="flex-end">
+                        <Flex mt="1rem" justify="space-between">
+                            <ManageBtn
+                                onClick={updateProgress}
+                                isLoading={loading.id == 'update'}
+                                btn="Update"
+                                bg="brand.600"
+                                w="fit-content"
+                                disabled={
+                                    sliderValue === task?.percentageOfCompletion
+                                }
+                            />
                             <ManageBtn
                                 onClick={onOpened}
                                 isLoading={loading.id == task?.id}
@@ -298,9 +368,7 @@ export const SingleTask = ({
                                                     h="1.6rem"
                                                     px="0.5rem"
                                                 >
-                                                    {
-                                                        x?.assignee
-                                                    }
+                                                    {x?.assignee}
                                                 </Flex>
                                             </HStack>
                                         </td>

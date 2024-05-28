@@ -133,7 +133,7 @@ export const ViewTraining = ({ id, data, users }) => {
                     {newData?.files
                         ?.filter((x) => x.category === 'Document')
                         .map((x) => (
-                            <Box>
+                            <Box w="170px">
                                 <Flex
                                     border="0.55px solid"
                                     borderColor="#6A7F9D"

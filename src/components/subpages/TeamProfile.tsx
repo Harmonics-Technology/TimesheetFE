@@ -1056,7 +1056,7 @@ function TeamProfile({
                         >
                             <Box mb="1.5rem" pos="relative">
                                 <PrimaryRadio
-                                    label="Are you eligible for Leave"
+                                    label="Is this team member eligible for leave?"
                                     radios={['No', 'Yes']}
                                     name="isEligibleForLeave"
                                     control={control}

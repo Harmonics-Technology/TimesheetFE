@@ -50,7 +50,7 @@ export const ResourceView = ({ resources }) => {
                     name={[
                         'dashboard',
                         'projects',
-                        'operational-task',
+                        // 'operational-task',
                         'resource-capacity',
                     ]}
                 />

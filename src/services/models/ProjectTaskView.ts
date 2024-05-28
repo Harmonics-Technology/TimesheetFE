@@ -10,7 +10,6 @@ export type ProjectTaskView = {
     superAdminId?: string;
     projectId?: string | null;
     name?: string | null;
-    category?: string | null;
     department?: string | null;
     startDate?: string;
     endDate?: string;
@@ -23,6 +22,9 @@ export type ProjectTaskView = {
     progress?: number | null;
     percentageOfCompletion?: number;
     isCompleted?: boolean;
+    isAssignedToMe?: boolean | null;
+    isOperationalTask?: boolean;
+    operationalTaskStatus?: string | null;
     assignees?: Array<ProjectTaskAsigneeView> | null;
     subTasks?: Array<ProjectSubTaskView> | null;
 };
