@@ -32,7 +32,7 @@ const schema = yup.object().shape({
     endDate: yup.string().required(),
     duration: yup.number().required(),
     assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
-    category: yup.string().required(),
+    // category: yup.string().required(),
     department: yup.string().required(),
     taskPriority: yup.number().required(),
 });
@@ -136,9 +136,9 @@ export const AddOperationalTaskDrawer = ({
     useEffect(() => {
         setValue('department', selectedDepartment?.title);
     }, [selectedDepartment]);
-    useEffect(() => {
-        setValue('category', selectedCategory?.id);
-    }, [selectedCategory]);
+    // useEffect(() => {
+    //     setValue('category', selectedCategory?.id);
+    // }, [selectedCategory]);
 
     //
     return (
@@ -157,7 +157,7 @@ export const AddOperationalTaskDrawer = ({
                         defaultValue=""
                         register={register}
                     />
-                    <Box w="full">
+                    {/* <Box w="full">
                         <FormLabel
                             textTransform="capitalize"
                             width="fit-content"
@@ -176,7 +176,7 @@ export const AddOperationalTaskDrawer = ({
                             single
                             error={errors?.category}
                         />
-                    </Box>
+                    </Box> */}
                     <Box w="full">
                         <FormLabel
                             textTransform="capitalize"

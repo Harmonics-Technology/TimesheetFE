@@ -281,7 +281,7 @@ export const FillTimesheetModal = ({
                             0,
                             25,
                             superAdminId,
-                            2,
+                            '2',
                             userId,
                         );
                     if (res?.status) {
