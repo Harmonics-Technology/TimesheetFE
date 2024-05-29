@@ -128,9 +128,7 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                                     </Text>
                                     <Text
                                         fontSize=".8rem"
-                                        onClick={() =>
-                                            startTraining(x.trainingFile)
-                                        }
+                                        onClick={() => startTraining(x)}
                                         mt=".5rem"
                                         cursor="pointer"
                                         wordBreak="break-word"

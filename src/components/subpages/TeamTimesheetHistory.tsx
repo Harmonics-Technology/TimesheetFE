@@ -7,6 +7,7 @@ import Tables from '@components/bits-utils/Tables';
 import Pagination from '@components/bits-utils/Pagination';
 import {
     RecentTimeSheetView,
+    TimeSheetHistoryView,
     TimeSheetHistoryViewPagedCollectionStandardResponse,
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
@@ -54,35 +55,36 @@ function TeamTimesheetHistory({
                 <Tables
                     tableHead={[
                         'Name',
-                        'Year',
-                        'Month',
+                        // 'Year',
+                        // 'Month',
                         'Begining Period',
                         'Ending Period',
+                        'Total Hours',
                         'Approved Hours',
                         'Action',
                     ]}
                 >
                     <>
-                        {timeSheets?.data?.value?.map((x: any, i) => (
-                            <Tr key={i}>
-                                <TableData name={x.name} />
-                                <TableData name={x.year} />
-                                <TableData name={x.month} />
-                                <TableData name={formatDate(x.startDate)} />
-                                <TableData name={formatDate(x.endDate)} />
-                                <TableData
-                                    name={`${
-                                        x.hours as unknown as string
-                                    } Hours`}
-                                />
-                                <TableContractAction
-                                    id={x.employeeInformationId}
-                                    date={`${x.year}-${x.month}`}
-                                    team={true}
-                                    timeSheets={timesheet}
-                                />
-                            </Tr>
-                        ))}
+                        {timeSheets?.data?.value?.map(
+                            (x: TimeSheetHistoryView, i) => (
+                                <Tr key={i}>
+                                    <TableData name={x.name} />
+                                    {/* <TableData name={x.year} /> */}
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
+                                    <TableData name={x.totalHours} />
+                                    <TableData
+                                        name={`${x.approvedNumberOfHours} `}
+                                    />
+                                    <TableContractAction
+                                        id={x.employeeInformationId}
+                                        date={`${x?.startDate}`}
+                                        team={true}
+                                        timeSheets={timesheet}
+                                    />
+                                </Tr>
+                            ),
+                        )}
                     </>
                 </Tables>
                 <Pagination data={timeSheets} />

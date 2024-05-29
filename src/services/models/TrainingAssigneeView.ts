@@ -18,4 +18,5 @@ export type TrainingAssigneeView = {
     isCompleted?: boolean;
     dateCompleted?: string;
     status?: string | null;
+    lastRecordedProgress?: string | null;
 };

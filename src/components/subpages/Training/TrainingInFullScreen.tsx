@@ -24,8 +24,9 @@ export const TrainingInFullScreen = ({
     userId,
     trainingId,
 }) => {
-    const videoId = file.fileUrl.split('v=')[1];
-    const watchedSeconds = file.progress;
+    const newFile = file?.trainingFile;
+    const videoId = newFile.fileUrl.split('v=')[1];
+    const watchedSeconds = file?.lastRecordedProgress;
 
     const getIframeSrc = (url, fileType) => {
         const fileExtension = fileType.split('.').pop().toLowerCase();
@@ -40,7 +41,9 @@ export const TrainingInFullScreen = ({
         }
     };
 
-    const iframeSrc = file ? getIframeSrc(file.fileUrl, file.title) : null;
+    const iframeSrc = file
+        ? getIframeSrc(newFile.fileUrl, newFile.title)
+        : null;
 
     const [loading, setLoading] = useState(false);
     const toast = useToast();
@@ -51,7 +54,7 @@ export const TrainingInFullScreen = ({
             const result = await TrainingService.completeTraining(
                 userId,
                 trainingId,
-                file.id,
+                newFile.id,
             );
             if (result.status) {
                 toast({
@@ -91,7 +94,7 @@ export const TrainingInFullScreen = ({
                 await TrainingService.createOrUpdateVideoRecordProgress({
                     userId,
                     trainingId,
-                    trainingFileId: file?.fileId,
+                    trainingFileId: newFile?.fileId,
                     lastRecordedProgress: progress,
                 });
             console.log(result.message);
@@ -212,7 +215,7 @@ export const TrainingInFullScreen = ({
                                 px="1rem"
                                 isLoading={loading}
                                 onClick={() => markTrainingComplete()}
-                                isDisabled={file?.isCompleted}
+                                isDisabled={newFile?.isCompleted}
                             >
                                 Mark as Complete
                             </Button>
