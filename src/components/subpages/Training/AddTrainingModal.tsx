@@ -225,7 +225,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
                                 py="1rem"
                             >
                                 {selectedUser?.length > 0 && (
-                                    <HStack mb=".5rem">
+                                    <HStack mb=".5rem" flexWrap="wrap">
                                         {selectedUser?.map((x: any, i: any) => (
                                             <HStack
                                                 borderRadius="25px"

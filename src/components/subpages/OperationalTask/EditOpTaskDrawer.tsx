@@ -21,27 +21,32 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { ProjectManagementService, ProjectTaskModel } from 'src/services';
 import { DateObject } from 'react-multi-date-picker';
-import { CustomSelectBox } from '../Generics/CustomSelectBox';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import moment from 'moment';
 import { useRouter } from 'next/router';
+import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
+import { MdCancel } from 'react-icons/md';
+import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
+import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
     startDate: yup.string().required(),
     endDate: yup.string().required(),
-    duration: yup.number().required(),
+    // duration: yup.number().required(),
+    // isAssignedToMe: yup.number().required(),
     assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
     // category: yup.string().required(),
-    department: yup.string().required(),
-    taskPriority: yup.number().required(),
+    // department: yup.string().required(),
+    // taskPriority: yup.number().required(),
 });
 
-export const AddOperationalTaskDrawer = ({
+export const EditOpTaskDrawer = ({
     onClose,
     isOpen,
     superAdminId,
     users,
+    data,
 }) => {
     const {
         register,
@@ -56,12 +61,25 @@ export const AddOperationalTaskDrawer = ({
         mode: 'all',
         defaultValues: {
             superAdminId,
+            isOperationalTask: true,
+            name: data.name,
+            id: data?.id,
+            startDate: data?.startDate,
+            endDate: data?.endDate,
+            note: data?.note,
+            operationalTaskStatus: data?.operationalTaskStatus,
+            isAssignedToMe: data?.isAssignedToMe,
         },
     });
 
     const toast = useToast();
     const router = useRouter();
-    const [selectedUser, setSelecedUser] = useState<any>([]);
+    const [selectedUser, setSelecedUser] = useState<any>(
+        data?.assignees?.map((obj) => ({
+            id: obj?.userId,
+            fullName: obj?.user?.fullName,
+        })) || [],
+    );
     const addUser = (user) => {
         const filtered = selectedUser?.find((x) => x.id === user.id);
         if (filtered) return;
@@ -71,27 +89,20 @@ export const AddOperationalTaskDrawer = ({
         const filtered = selectedUser?.filter((x) => x.id !== id);
         setSelecedUser(filtered);
     };
-    const priority = [
-        { id: 1, name: 'High' },
-        { id: 2, name: 'Medium' },
-        { id: 3, name: 'Low' },
+    const statuses = [
+        { id: 1, name: 'To Do' },
+        { id: 2, name: 'In Progress' },
+        { id: 3, name: 'Completed' },
     ];
-    const [selectedPriority, setSelectedPriority] = useState<any>();
-    const selectPriority = (user) => {
-        setSelectedPriority(user);
-    };
-    const [selectedCategory, setSelectedCategory] = useState<any>();
-    const selectCategory = (user) => {
-        setSelectedCategory(user);
-    };
-    const [selectedDepartment, setSelectedDepartment] = useState<any>();
-    const selectDepartment = (user) => {
-        setSelectedDepartment(user);
-    };
+    const isAssignedToMe =
+        String(watch('isAssignedToMe')) === 'Myself' ||
+        watch('isAssignedToMe') === true
+            ? true
+            : false;
     const onSubmit = async (data: ProjectTaskModel) => {
-        //
+        data.isAssignedToMe = isAssignedToMe;
         try {
-            const result = await ProjectManagementService.createTask(data);
+            const result = await ProjectManagementService.updateTask(data);
             if (result.status) {
                 toast({
                     title: result.message,
@@ -130,12 +141,6 @@ export const AddOperationalTaskDrawer = ({
     useEffect(() => {
         setValue('duration', dateDiff + 1 || 0);
     }, [watch('startDate'), watch('endDate')]);
-    useEffect(() => {
-        setValue('taskPriority', selectedPriority?.id);
-    }, [selectedPriority]);
-    useEffect(() => {
-        setValue('department', selectedDepartment?.title);
-    }, [selectedDepartment]);
     // useEffect(() => {
     //     setValue('category', selectedCategory?.id);
     // }, [selectedCategory]);
@@ -157,71 +162,79 @@ export const AddOperationalTaskDrawer = ({
                         defaultValue=""
                         register={register}
                     />
-                    {/* <Box w="full">
-                        <FormLabel
-                            textTransform="capitalize"
-                            width="fit-content"
-                            fontSize=".8rem"
-                        >
-                            Category
-                        </FormLabel>
+                    <PrimaryRadio<ProjectTaskModel>
+                        label="Who are you assigning this task to ?"
+                        radios={['Specific team members', 'Myself']}
+                        name="isAssignedToMe"
+                        control={control}
+                        error={errors.isAssignedToMe}
+                        defaultValue={
+                            data?.isAssignedToMe
+                                ? 'Myself'
+                                : 'Specific team members'
+                        }
+                    />
+                    {!isAssignedToMe && (
+                        <Box w="full">
+                            <FormLabel
+                                textTransform="capitalize"
+                                width="fit-content"
+                                fontSize=".8rem"
+                            >
+                                Assign this task to
+                            </FormLabel>
 
-                        <CustomSelectBox
-                            data={[{ id: 1, name: 'Planning and Schedulling' }]}
-                            updateFunction={selectCategory}
-                            items={selectedCategory}
-                            customKeys={{ key: 'id', label: 'name' }}
-                            checkbox={false}
-                            id="users"
-                            single
-                            error={errors?.category}
-                        />
-                    </Box> */}
-                    <Box w="full">
-                        <FormLabel
-                            textTransform="capitalize"
-                            width="fit-content"
-                            fontSize=".8rem"
-                        >
-                            Assign this task to
-                        </FormLabel>
+                            <CustomSelectBox
+                                data={users?.value}
+                                updateFunction={addUser}
+                                items={selectedUser}
+                                customKeys={{ key: 'id', label: 'fullName' }}
+                                checkbox={false}
+                                id="tasks"
+                                error={errors?.assignedUsers}
+                                removeFn={removeUser}
+                            />
+                            <Box
+                                mt="1rem"
+                                borderY="1px solid #e5e5e5"
+                                w="full"
+                                py="1rem"
+                            >
+                                {selectedUser?.length > 0 && (
+                                    <HStack mb=".5rem" flexWrap="wrap">
+                                        {selectedUser?.map((x: any, i: any) => (
+                                            <HStack
+                                                borderRadius="25px"
+                                                border="1px solid #e5e5e5"
+                                                fontSize=".6rem"
+                                                color="#707683"
+                                                key={i}
+                                                p=".1rem .4rem"
+                                                flexWrap="wrap"
+                                            >
+                                                <Text
+                                                    fontSize=".6rem"
+                                                    color="#707683"
+                                                    mb="0"
+                                                >
+                                                    {x?.fullName}
+                                                </Text>
+                                                <Icon
+                                                    as={MdCancel}
+                                                    onClick={() =>
+                                                        removeUser(x?.id)
+                                                    }
+                                                />
+                                            </HStack>
+                                        ))}
+                                    </HStack>
+                                )}
+                            </Box>
+                        </Box>
+                    )}
 
-                        <CustomSelectBox
-                            data={users?.value}
-                            updateFunction={addUser}
-                            items={selectedUser}
-                            customKeys={{ key: 'id', label: 'fullName' }}
-                            checkbox={false}
-                            id="tasks"
-                            error={errors?.assignedUsers}
-                            removeFn={removeUser}
-                        />
-                    </Box>
-                    <Box w="full">
-                        <FormLabel
-                            textTransform="capitalize"
-                            width="fit-content"
-                            fontSize=".8rem"
-                        >
-                            Department
-                        </FormLabel>
-
-                        <CustomSelectBox
-                            data={[
-                                { id: 2, title: 'HR' },
-                                { id: 3, title: 'Admin' },
-                            ]}
-                            updateFunction={selectDepartment}
-                            items={selectedDepartment}
-                            customKeys={{ key: 'id', label: 'title' }}
-                            checkbox={false}
-                            id="dept"
-                            single
-                            error={errors?.department}
-                        />
-                    </Box>
                     <Grid
-                        templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
+                        templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                         gap="1rem 1rem"
                         w="full"
                     >
@@ -230,55 +243,44 @@ export const AddOperationalTaskDrawer = ({
                             name="startDate"
                             label="Start Date"
                             error={errors.startDate}
-                            // min={new DateObject()}
+                            min={new DateObject()}
+                            defaultValue={moment(data?.startDate)?.format(
+                                'YYYY-MM-DD',
+                            )}
                         />
                         <PrimaryDate<ProjectTaskModel>
                             control={control}
                             name="endDate"
                             label="Start Date"
                             error={errors.endDate}
-                            // min={new DateObject().add(1, 'days')}
-                        />
-
-                        <PrimaryInput<ProjectTaskModel>
-                            label="Duration"
-                            name="duration"
-                            error={errors.duration}
-                            placeholder=""
-                            defaultValue=""
-                            register={register}
-                            readonly={true}
+                            min={new DateObject().add(1, 'days')}
+                            defaultValue={moment(data?.endDate)?.format(
+                                'YYYY-MM-DD',
+                            )}
                         />
                     </Grid>
 
-                    <Box w="full">
-                        <FormLabel
-                            textTransform="capitalize"
-                            width="fit-content"
-                            fontSize=".8rem"
-                        >
-                            Task priority
-                        </FormLabel>
-                        <CustomSelectBox
-                            data={priority}
-                            updateFunction={selectPriority}
-                            items={selectedPriority}
-                            customKeys={{ key: 'id', label: 'name' }}
-                            id="priority"
-                            error={errors?.taskPriority}
-                            single
-                        />
-                    </Box>
+                    <PrimarySelect<ProjectTaskModel>
+                        label="Status"
+                        error={errors.operationalTaskStatus}
+                        name="operationalTaskStatus"
+                        register={register}
+                        options={statuses.map((x) => (
+                            <option value={x?.name} key={x.id}>
+                                {x?.name}
+                            </option>
+                        ))}
+                    />
 
-                    {/* <PrimaryTextarea<ProjectTaskModel>
+                    <PrimaryTextarea<ProjectTaskModel>
                         label="Notes"
                         color="#707683"
-                        name="firstName"
-                        error={errors.firstName}
+                        name="note"
+                        error={errors.note}
                         placeholder=""
                         defaultValue=""
                         register={register}
-                    /> */}
+                    />
 
                     <DrawerFooter my="2rem" p="0" w="full">
                         <Flex justify="space-between" w="full">

@@ -868,12 +868,14 @@ export function TableContractAction({
     timeSheets,
     supervisor,
     date,
+    end,
     team,
 }: {
     id: any;
     timeSheets?: boolean;
     supervisor?: boolean;
     date?: any;
+    end?: any;
     team?: boolean;
 }) {
     const { user } = useContext(UserContext);
@@ -899,7 +901,7 @@ export function TableContractAction({
                                 <NextLink
                                     href={
                                         date !== undefined
-                                            ? `/${role}/timesheets/${id}?date=${date}`
+                                            ? `/${role}/timesheets/${id}?date=${date}&end=${end}`
                                             : `/${role}/timesheets/${id}`
                                     }
                                     passHref

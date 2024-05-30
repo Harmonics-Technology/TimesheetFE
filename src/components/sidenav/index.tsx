@@ -253,6 +253,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="operational-task"
+                        menuTitle="Operational Tasks"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
                         linkName="account-management"
                         menuTitle="Account settings"
                         icon={<MdSettings opacity=".8" />}
