@@ -56,7 +56,7 @@ export const ApproveTimesheet = ({ isOpen, onClose, data }: ExportProps) => {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                setLoading(true);
+                setLoading(false);
                 onClose();
                 return;
             }

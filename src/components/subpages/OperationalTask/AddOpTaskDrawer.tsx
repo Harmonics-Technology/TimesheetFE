@@ -34,7 +34,7 @@ const schema = yup.object().shape({
     endDate: yup.string().required(),
     // duration: yup.number().required(),
     // isAssignedToMe: yup.number().required(),
-    assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
+    // assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
     // category: yup.string().required(),
     // department: yup.string().required(),
     // taskPriority: yup.number().required(),

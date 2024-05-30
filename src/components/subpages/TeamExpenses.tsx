@@ -91,7 +91,7 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                     position: 'top-right',
                 });
                 onClose();
-                reset()
+                reset();
                 router.replace(router.asPath);
                 return;
             }
@@ -200,7 +200,8 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                             name="expenseDate"
                             label="Date of Expense"
                             error={errors.expenseDate}
-                            max={new DateObject().subtract(1, 'days')}
+                            max={new DateObject()}
+                            // max={new DateObject().subtract(1, 'days')}
                         />
                     </Grid>
                     <PrimaryTextarea<ExpenseModel>

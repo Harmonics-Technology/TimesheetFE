@@ -393,6 +393,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="operational-task"
+                        menuTitle="Operational Tasks"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
                         linkName="training"
                         menuTitle="Training"
                         icon={<MdModelTraining opacity=".8" />}
@@ -472,6 +488,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         role={role}
                         display={true}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="operational-task"
+                        menuTitle="Operational Tasks"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
                     />
                     <MenuItem
                         change={change}
@@ -963,6 +995,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         change={change}
                         linkName="project-management"
                         menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="operational-task"
+                        menuTitle="Operational Tasks"
                         icon={<TbCalendarTime opacity=".8" />}
                         option={false}
                         dropDown={[]}

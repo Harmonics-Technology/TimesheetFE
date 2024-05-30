@@ -70,9 +70,9 @@ export const ApproveAllTimesheet = ({
                     isClosable: true,
                     position: 'top-right',
                 });
-                setData([]);
                 router.replace(router.asPath);
-                setLoading(true);
+                setData([]);
+                setLoading(false);
                 onClose();
                 return;
             }
