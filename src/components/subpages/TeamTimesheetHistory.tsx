@@ -26,7 +26,13 @@ function TeamTimesheetHistory({
     timesheet = false,
     id,
 }: adminProps) {
-    const thead = ['Name', 'Year', 'Month', 'Approved Hours', 'Action'];
+    const thead = [
+        'Name',
+        'Begining Period',
+        'Ending Period',
+        'Approved Hours',
+        'Action',
+    ];
     const { onOpen, onClose, isOpen } = useDisclosure();
 
     return (
@@ -59,7 +65,7 @@ function TeamTimesheetHistory({
                         'Begining Period',
                         'Ending Period',
                         'Total Hours',
-                        // 'Approved Hours',
+                        'Approved Hours',
                         'Action',
                     ]}
                 >
@@ -71,9 +77,7 @@ function TeamTimesheetHistory({
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />
                                 <TableData name={x.hours} />
-                                {/* <TableData
-                                        name={`${x.approvedNumberOfHours} `}
-                                    /> */}
+                                <TableData name={`${x.approvedHours} `} />
                                 <TableContractAction
                                     id={x.employeeInformationId}
                                     date={`${x?.startDate}`}
