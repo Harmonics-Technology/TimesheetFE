@@ -225,7 +225,7 @@ export const AddOpTaskDrawer = ({ onClose, isOpen, superAdminId, users }) => {
                         <PrimaryDate<ProjectTaskModel>
                             control={control}
                             name="endDate"
-                            label="Start Date"
+                            label="End Date"
                             error={errors.endDate}
                             // min={new DateObject().add(1, 'days')}
                         />
