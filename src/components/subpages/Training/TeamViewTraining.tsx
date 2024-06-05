@@ -26,12 +26,12 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
     const toast = useToast();
 
     const startTraining = async (value: any) => {
-        setLoading({ id: value.id });
+        setLoading({ id: value?.trainingFileId });
         try {
             const result = await TrainingService.startTraining(
                 userId,
                 trainingId,
-                value.id,
+                value?.trainingFileId,
             );
             if (result.status) {
                 setLoading({ id: '' });
@@ -183,7 +183,7 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
                                 file={x}
                                 key={x.trainingFileId}
                                 isLesson
-                                viewDoc={startTraining}
+                                viewDoc={() => startTraining(x)}
                                 isLoading={isLoading}
                             />
                         ))}

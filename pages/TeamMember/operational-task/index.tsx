@@ -17,6 +17,7 @@ const OperationTask = ({
     counts,
     users,
     superAdminId,
+    userId,
 }: {
     iProjects: any;
     nProjects: any;
@@ -25,6 +26,7 @@ const OperationTask = ({
     counts: ProjectProgressCountView;
     users: any;
     superAdminId: string;
+    userId;
 }) => {
     return (
         <OperationDashboard
@@ -35,6 +37,7 @@ const OperationTask = ({
             counts={counts}
             users={users}
             superAdminId={superAdminId}
+            id={userId}
         />
     );
 };
@@ -91,6 +94,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     users: users.data,
                     superAdminId,
                     counts: counts.data,
+                    userId,
                 },
             };
         } catch (error: any) {

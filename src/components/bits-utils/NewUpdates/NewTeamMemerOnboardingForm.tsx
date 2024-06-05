@@ -452,7 +452,7 @@ export const NewTeamMemerOnboardingForm = ({
                     <PrimaryDate<TeamMemberModel>
                         control={control}
                         name="dateOfBirth"
-                        label="Date of Birth (Not compulsory)"
+                        label="Date of Birth"
                         error={errors.dateOfBirth}
                         max={new DateObject().subtract(1, 'days')}
                         required={false}

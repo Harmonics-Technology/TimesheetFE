@@ -40,7 +40,13 @@ const schema = yup.object().shape({
     // taskPriority: yup.number().required(),
 });
 
-export const AddOpTaskDrawer = ({ onClose, isOpen, superAdminId, users }) => {
+export const AddOpTaskDrawer = ({
+    onClose,
+    isOpen,
+    superAdminId,
+    users,
+    id,
+}) => {
     const {
         register,
         handleSubmit,
@@ -82,6 +88,10 @@ export const AddOpTaskDrawer = ({ onClose, isOpen, superAdminId, users }) => {
             : false;
     const onSubmit = async (data: ProjectTaskModel) => {
         data.isAssignedToMe = isAssignedToMe;
+
+        data.assignedUsers = isAssignedToMe
+            ? [id || superAdminId]
+            : data.assignedUsers;
         try {
             const result = await ProjectManagementService.createTask(data);
             if (result.status) {
@@ -170,6 +180,7 @@ export const AddOpTaskDrawer = ({ onClose, isOpen, superAdminId, users }) => {
                                 id="tasks"
                                 error={errors?.assignedUsers}
                                 removeFn={removeUser}
+                                searchable
                             />
                             <Box
                                 mt="1rem"

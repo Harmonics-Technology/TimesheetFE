@@ -46,6 +46,7 @@ export const GantChart = ({
             progressSelectedColor: '#ff9e0d',
         },
     }));
+
     // const newTasks: Task[] = [
     //     {
     //         start: new Date(project?.startDate),
@@ -104,7 +105,13 @@ export const GantChart = ({
                 </HStack>
             </HStack>
             <Box w="full" bgColor="white" p="1rem" borderRadius="6px">
-                <Gantt tasks={newTasks as Task[]} listCellWidth="" />
+                <Gantt
+                    tasks={
+                        newTasks?.sort(
+                            (a, b) => (a?.start as any) - (b?.start as any),
+                        ) as Task[]
+                    }
+                />
             </Box>
             {isOpen && (
                 <AddNewTaskDrawer

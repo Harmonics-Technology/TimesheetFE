@@ -34,6 +34,7 @@ export const OperationDashboard = ({
     cProjects,
     counts,
     projects,
+    id,
 }: {
     iProjects: any;
     nProjects: any;
@@ -42,6 +43,7 @@ export const OperationDashboard = ({
     superAdminId: string;
     counts: ProjectProgressCountView;
     projects: any;
+    id?: any;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -138,8 +140,18 @@ export const OperationDashboard = ({
             .map((task: ProjectTaskView) => (
                 <OperationCard
                     key={task?.id}
-                    bg={task?.isAssignedToMe ? '#2383BD' : '#FFA681'}
-                    text={task?.isAssignedToMe ? 'My Task' : 'Task Assigned'}
+                    bg={
+                        task?.isAssignedToMe &&
+                        task?.assignees?.at(0)?.userId == id
+                            ? '#2383BD'
+                            : '#FFA681'
+                    }
+                    text={
+                        task?.isAssignedToMe &&
+                        task?.assignees?.at(0)?.userId == id
+                            ? 'My Task'
+                            : 'Organizational Task'
+                    }
                     title={task?.name}
                     sub={task?.note}
                     subBtm={`Due Date ; ${moment(task?.endDate).format(
@@ -272,6 +284,7 @@ export const OperationDashboard = ({
                     onClose={onClose}
                     superAdminId={superAdminId}
                     users={users}
+                    id={id}
                 />
             )}
             {isEditOpen && (
@@ -281,6 +294,7 @@ export const OperationDashboard = ({
                     superAdminId={superAdminId}
                     users={users}
                     data={cardData}
+                    id={id}
                 />
             )}
         </Box>

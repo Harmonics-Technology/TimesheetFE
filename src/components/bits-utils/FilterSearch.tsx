@@ -31,6 +31,7 @@ function FilterSearch({
     options = [],
     filter,
     noFilter,
+    filterTitle = 'Filter By',
 }: {
     hide?: boolean;
     hides?: boolean;
@@ -38,6 +39,7 @@ function FilterSearch({
     options?: any[];
     filter?: any;
     noFilter?: any;
+    filterTitle?: string;
 }) {
     const [search, setSearch] = useState('');
     const router = useRouter();
@@ -110,7 +112,7 @@ function FilterSearch({
                             display={hides ? 'box' : 'none'}
                         >
                             <Text noOfLines={1} mb="0">
-                                Filter By
+                                {filterTitle}
                             </Text>
                             {/* <Select
                             w="fit-content"

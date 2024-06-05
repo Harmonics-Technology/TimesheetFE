@@ -17,6 +17,7 @@ const OperationTask = ({
     counts,
     users,
     superAdminId,
+    userId,
 }: {
     iProjects: any;
     nProjects: any;
@@ -25,6 +26,7 @@ const OperationTask = ({
     counts: ProjectProgressCountView;
     users: any;
     superAdminId: string;
+    userId: string;
 }) => {
     return (
         <OperationDashboard
@@ -35,6 +37,7 @@ const OperationTask = ({
             counts={counts}
             users={users}
             superAdminId={superAdminId}
+            id={userId}
         />
     );
 };
@@ -44,6 +47,7 @@ export default OperationTask;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const superAdminId = JSON.parse(ctx.req.cookies.user).id;
+        const userId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         // const fetchProjectByStatus = (status) => {
         //     const data = ProjectManagementService.listOperationalTasks(
@@ -73,7 +77,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 'Team Member',
                 superAdminId,
                 pagingOptions.offset,
-                pagingOptions.limit || 50,
+                100,
                 pagingOptions.search,
             );
             const counts =
@@ -90,6 +94,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     users: users.data,
                     superAdminId,
                     counts: counts.data,
+                    userId,
                 },
             };
         } catch (error: any) {

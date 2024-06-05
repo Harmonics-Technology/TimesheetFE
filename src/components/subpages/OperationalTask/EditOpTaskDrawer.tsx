@@ -35,7 +35,7 @@ const schema = yup.object().shape({
     endDate: yup.string().required(),
     // duration: yup.number().required(),
     // isAssignedToMe: yup.number().required(),
-    assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
+    // assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
     // category: yup.string().required(),
     // department: yup.string().required(),
     // taskPriority: yup.number().required(),
@@ -47,7 +47,10 @@ export const EditOpTaskDrawer = ({
     superAdminId,
     users,
     data,
+    id,
 }) => {
+    const assignedPerson =
+        data?.isAssignedToMe && data?.assignees?.at(0)?.userId == id;
     const {
         register,
         handleSubmit,
@@ -68,7 +71,7 @@ export const EditOpTaskDrawer = ({
             endDate: data?.endDate,
             note: data?.note,
             operationalTaskStatus: data?.operationalTaskStatus,
-            isAssignedToMe: data?.isAssignedToMe,
+            isAssignedToMe: assignedPerson,
         },
     });
 
@@ -99,10 +102,13 @@ export const EditOpTaskDrawer = ({
         watch('isAssignedToMe') === true
             ? true
             : false;
-    const onSubmit = async (data: ProjectTaskModel) => {
-        data.isAssignedToMe = isAssignedToMe;
+    const onSubmit = async (value: ProjectTaskModel) => {
+        value.isAssignedToMe = isAssignedToMe;
+        value.assignedUsers = isAssignedToMe
+            ? [id || superAdminId]
+            : value.assignedUsers;
         try {
-            const result = await ProjectManagementService.updateTask(data);
+            const result = await ProjectManagementService.updateTask(value);
             if (result.status) {
                 toast({
                     title: result.message,
@@ -141,6 +147,7 @@ export const EditOpTaskDrawer = ({
     useEffect(() => {
         setValue('duration', dateDiff + 1 || 0);
     }, [watch('startDate'), watch('endDate')]);
+
     // useEffect(() => {
     //     setValue('category', selectedCategory?.id);
     // }, [selectedCategory]);
@@ -150,7 +157,7 @@ export const EditOpTaskDrawer = ({
         <DrawerWrapper
             onClose={onClose}
             isOpen={isOpen}
-            title={'Add Operation Task'}
+            title={'Edit Operation Task'}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack align="flex-start" spacing="1.5rem">
@@ -169,9 +176,7 @@ export const EditOpTaskDrawer = ({
                         control={control}
                         error={errors.isAssignedToMe}
                         defaultValue={
-                            data?.isAssignedToMe
-                                ? 'Myself'
-                                : 'Specific team members'
+                            assignedPerson ? 'Myself' : 'Specific team members'
                         }
                     />
                     {!isAssignedToMe && (

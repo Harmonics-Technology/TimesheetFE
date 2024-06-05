@@ -89,6 +89,7 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                     </Button>
                 </Flex>
                 <FilterSearch
+                    filterTitle="Timesheet Frequency"
                     hides
                     filter={
                         <Selectrix

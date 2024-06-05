@@ -25,8 +25,8 @@ export const TrainingInFullScreen = ({
     trainingId,
 }) => {
     const newFile = file?.trainingFile;
-    const videoId = newFile.fileUrl.split('v=')[1];
-    const watchedSeconds = file?.lastRecordedProgress;
+    // const videoId = newFile.fileUrl.split('v=')[1];
+    const watchedSeconds = file?.lastRecordedProgress || 0;
 
     const getIframeSrc = (url, fileType) => {
         const fileExtension = fileType.split('.').pop().toLowerCase();
@@ -42,7 +42,7 @@ export const TrainingInFullScreen = ({
     };
 
     const iframeSrc = file
-        ? getIframeSrc(newFile.fileUrl, newFile.title)
+        ? getIframeSrc(newFile?.fileUrl, newFile?.title)
         : null;
 
     const [loading, setLoading] = useState(false);
@@ -94,12 +94,24 @@ export const TrainingInFullScreen = ({
                 await TrainingService.createOrUpdateVideoRecordProgress({
                     userId,
                     trainingId,
-                    trainingFileId: newFile?.fileId,
+                    trainingFileId: newFile?.id,
                     lastRecordedProgress: progress,
                 });
+            router.replace(router.pathname);
             console.log(result.message);
         } catch (err: any) {
             console.log({ err });
+        }
+    };
+
+    const seekVideo = () => {
+        videoRef?.current?.seekTo(watchedSeconds, 'seconds');
+        const internalPlayer = videoRef.current.getInternalPlayer();
+        if (internalPlayer) {
+            internalPlayer.playVideo(); // Autoplay after seeking
+            setTimeout(() => {
+                internalPlayer.pauseVideo();
+            }, 1000);
         }
     };
 
@@ -132,7 +144,7 @@ export const TrainingInFullScreen = ({
                             userSelect="none"
                             fontSize=".9rem"
                         >
-                            {file?.title}
+                            {newFile?.title}
                         </Text>
                         <FaTimes onClick={onClose} cursor="pointer" />
                     </Flex>
@@ -157,10 +169,10 @@ export const TrainingInFullScreen = ({
                                 overflow="hidden"
                                 mx="auto"
                             >
-                                {file?.category == 'Video' ? (
+                                {newFile?.category == 'Video' ? (
                                     <Box w="full" h="full" overflow="hidden">
                                         <ReactPlayer
-                                            url={file?.fileUrl}
+                                            url={newFile?.fileUrl}
                                             width="100%"
                                             height="100%"
                                             ref={videoRef}
@@ -168,12 +180,7 @@ export const TrainingInFullScreen = ({
                                             onPause={() =>
                                                 saveUserVideProgress()
                                             }
-                                            onReady={() =>
-                                                videoRef?.current?.seekTo(
-                                                    watchedSeconds,
-                                                    'seconds',
-                                                )
-                                            }
+                                            onReady={() => seekVideo()}
                                         />
                                         {/* <iframe
                                             width="100%"
@@ -215,7 +222,7 @@ export const TrainingInFullScreen = ({
                                 px="1rem"
                                 isLoading={loading}
                                 onClick={() => markTrainingComplete()}
-                                isDisabled={newFile?.isCompleted}
+                                isDisabled={file?.isCompleted}
                             >
                                 Mark as Complete
                             </Button>
