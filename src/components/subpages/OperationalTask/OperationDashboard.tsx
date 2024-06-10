@@ -291,6 +291,7 @@ export const OperationDashboard = ({
                     users={users}
                     data={cardData}
                     id={id}
+                    departments={departments}
                 />
             )}
         </Box>

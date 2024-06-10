@@ -101,6 +101,7 @@ export const AddOpTaskDrawer = ({
         //         clientId: value,
         //     },
         // });
+        setDepartment(value);
         try {
             setIsLoading(true);
             const data = await UserService.listUsers(
@@ -123,7 +124,6 @@ export const AddOpTaskDrawer = ({
             setIsLoading(false);
             console.log({ error });
         }
-        setDepartment(value);
     };
 
     const onSubmit = async (data: ProjectTaskModel) => {
@@ -217,14 +217,6 @@ export const AddOpTaskDrawer = ({
                             ))}
                         />
                     )}
-                    {/* <PrimaryRadio<ProjectTaskModel>
-                        label="Who are you assigning this task to ?"
-                        radios={['Specific team members', 'Myself']}
-                        name="isAssignedToMe"
-                        control={control}
-                        error={errors.isAssignedToMe}
-                        defaultValue={'Specific team members'}
-                    /> */}
                     {department && (
                         <Box w="full">
                             <FormLabel
