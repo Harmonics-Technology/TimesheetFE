@@ -4,6 +4,7 @@
 
 import type { ProjectSubTaskView } from './ProjectSubTaskView';
 import type { ProjectTaskAsigneeView } from './ProjectTaskAsigneeView';
+import type { StrippedUserView } from './StrippedUserView';
 
 export type ProjectTaskView = {
     id?: string;
@@ -25,6 +26,8 @@ export type ProjectTaskView = {
     isAssignedToMe?: boolean | null;
     isOperationalTask?: boolean;
     operationalTaskStatus?: string | null;
+    createdByUserId?: string | null;
+    createdByUser?: StrippedUserView;
     assignees?: Array<ProjectTaskAsigneeView> | null;
     subTasks?: Array<ProjectSubTaskView> | null;
 };

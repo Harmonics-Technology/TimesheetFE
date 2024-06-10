@@ -15,4 +15,5 @@ export type ProjectTaskAsigneeView = {
     hoursLogged?: number;
     budget?: number;
     budgetSpent?: number;
+    disabled?: boolean;
 };

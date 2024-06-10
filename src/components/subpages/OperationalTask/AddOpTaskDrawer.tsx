@@ -19,7 +19,11 @@ import * as yup from 'yup';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { ProjectManagementService, ProjectTaskModel } from 'src/services';
+import {
+    ProjectManagementService,
+    ProjectTaskModel,
+    UserService,
+} from 'src/services';
 import { DateObject } from 'react-multi-date-picker';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import moment from 'moment';
@@ -27,6 +31,9 @@ import { useRouter } from 'next/router';
 import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 import { MdCancel } from 'react-icons/md';
 import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
+import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
+import { SelectBlank } from '@components/bits-utils/SelectBlank';
+import Loading from '@components/bits-utils/Loading';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -46,6 +53,7 @@ export const AddOpTaskDrawer = ({
     superAdminId,
     users,
     id,
+    departments,
 }) => {
     const {
         register,
@@ -81,13 +89,46 @@ export const AddOpTaskDrawer = ({
     //     { id: 2, name: 'Medium' },
     //     { id: 3, name: 'Low' },
     // ];
-    const isAssignedToMe =
-        String(watch('isAssignedToMe')) === 'Myself' ||
-        watch('isAssignedToMe') === true
-            ? true
-            : false;
+    const [taskType, setTaskType] = useState('');
+    const [department, setDepartment] = useState<any>();
+    const [isLoading, setIsLoading] = useState(false);
+    const isAssignedToMe = String(taskType) === 'Private' ? true : false;
+    const [deptUser, setDeptUser] = useState<any>([]);
+
+    const fetchUsersInDept = async (value: any) => {
+        // router.push({
+        //     query: {
+        //         clientId: value,
+        //     },
+        // });
+        try {
+            setIsLoading(true);
+            const data = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
+                0,
+                100,
+                '',
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                value,
+            );
+            if (data.status) {
+                setIsLoading(false);
+                setDeptUser(data.data?.value);
+            }
+        } catch (error) {
+            setIsLoading(false);
+            console.log({ error });
+        }
+        setDepartment(value);
+    };
+
     const onSubmit = async (data: ProjectTaskModel) => {
         data.isAssignedToMe = isAssignedToMe;
+        data.department = department;
 
         data.assignedUsers = isAssignedToMe
             ? [id || superAdminId]
@@ -143,8 +184,9 @@ export const AddOpTaskDrawer = ({
             isOpen={isOpen}
             title={'Add Operation Task'}
         >
+            {isLoading && <Loading loading={isLoading} />}
             <form onSubmit={handleSubmit(onSubmit)}>
-                <VStack align="flex-start" spacing="1.5rem">
+                <VStack align="flex-start" spacing="1.5rem" w="full">
                     <PrimaryInput<ProjectTaskModel>
                         label="Task Name"
                         name="name"
@@ -153,15 +195,96 @@ export const AddOpTaskDrawer = ({
                         defaultValue=""
                         register={register}
                     />
-                    <PrimaryRadio<ProjectTaskModel>
+                    <SelectBlank
+                        label="Task Type"
+                        onChange={(e) => setTaskType(e.target.value)}
+                        placeholder="Select one"
+                        options={[
+                            { id: true, name: 'Private' },
+                            { id: false, name: 'Departmental' },
+                            { id: false, name: 'Others' },
+                        ].map((x) => (
+                            <option value={x?.name}>{x.name}</option>
+                        ))}
+                    />
+                    {taskType == 'Departmental' && (
+                        <SelectBlank
+                            label="Department"
+                            placeholder="Select one"
+                            onChange={(e) => fetchUsersInDept(e.target.value)}
+                            options={departments.map((x) => (
+                                <option value={x?.name}>{x.name}</option>
+                            ))}
+                        />
+                    )}
+                    {/* <PrimaryRadio<ProjectTaskModel>
                         label="Who are you assigning this task to ?"
                         radios={['Specific team members', 'Myself']}
                         name="isAssignedToMe"
                         control={control}
                         error={errors.isAssignedToMe}
                         defaultValue={'Specific team members'}
-                    />
-                    {!isAssignedToMe && (
+                    /> */}
+                    {department && (
+                        <Box w="full">
+                            <FormLabel
+                                textTransform="capitalize"
+                                width="fit-content"
+                                fontSize=".8rem"
+                            >
+                                Assign this task to
+                            </FormLabel>
+
+                            <CustomSelectBox
+                                data={deptUser}
+                                updateFunction={addUser}
+                                items={selectedUser}
+                                customKeys={{ key: 'id', label: 'fullName' }}
+                                checkbox={false}
+                                id="tasks"
+                                error={errors?.assignedUsers}
+                                removeFn={removeUser}
+                                searchable
+                            />
+                            <Box
+                                mt="1rem"
+                                borderY="1px solid #e5e5e5"
+                                w="full"
+                                py="1rem"
+                            >
+                                {selectedUser?.length > 0 && (
+                                    <HStack mb=".5rem" flexWrap="wrap">
+                                        {selectedUser?.map((x: any, i: any) => (
+                                            <HStack
+                                                borderRadius="25px"
+                                                border="1px solid #e5e5e5"
+                                                fontSize=".6rem"
+                                                color="#707683"
+                                                key={i}
+                                                p=".1rem .4rem"
+                                                flexWrap="wrap"
+                                            >
+                                                <Text
+                                                    fontSize=".6rem"
+                                                    color="#707683"
+                                                    mb="0"
+                                                >
+                                                    {x?.fullName}
+                                                </Text>
+                                                <Icon
+                                                    as={MdCancel}
+                                                    onClick={() =>
+                                                        removeUser(x?.id)
+                                                    }
+                                                />
+                                            </HStack>
+                                        ))}
+                                    </HStack>
+                                )}
+                            </Box>
+                        </Box>
+                    )}
+                    {taskType == 'Others' && (
                         <Box w="full">
                             <FormLabel
                                 textTransform="capitalize"

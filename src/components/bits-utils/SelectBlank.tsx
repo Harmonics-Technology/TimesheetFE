@@ -10,7 +10,7 @@ export const SelectBlank = ({
     options,
     onChange,
     value,
-    w,
+    w = 'full',
 }: {
     label?: any;
     fontSize?: any;

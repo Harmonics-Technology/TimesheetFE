@@ -4,6 +4,7 @@
 
 import type { ProjectSubTask } from './ProjectSubTask';
 import type { ProjectTaskAsignee } from './ProjectTaskAsignee';
+import type { User } from './User';
 
 export type ProjectTask = {
     id?: string;
@@ -25,6 +26,8 @@ export type ProjectTask = {
     isAssignedToMe?: boolean | null;
     isOperationalTask?: boolean;
     operationalTaskStatus?: string | null;
+    createdByUserId?: string | null;
+    createdByUser?: User;
     subTasks?: Array<ProjectSubTask> | null;
     assignees?: Array<ProjectTaskAsignee> | null;
 };

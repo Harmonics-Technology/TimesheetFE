@@ -299,6 +299,7 @@ userId: string,
      * @param endDate 
      * @param subscriptionId 
      * @param productManagers 
+     * @param department 
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -313,6 +314,7 @@ startDate?: string,
 endDate?: string,
 subscriptionId?: string,
 productManagers?: boolean,
+department?: string,
 ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -330,6 +332,7 @@ productManagers?: boolean,
                 'EndDate': endDate,
                 'subscriptionId': subscriptionId,
                 'productManagers': productManagers,
+                'department': department,
             },
             errors: {
                 401: `Unauthorized`,

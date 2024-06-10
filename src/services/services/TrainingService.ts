@@ -285,27 +285,4 @@ requestBody?: TrainingVideoProgressLogModel,
         });
     }
 
-    /**
-     * @param userId 
-     * @param trainingId 
-     * @param fileId 
-     * @returns BooleanStandardResponse Success
-     * @throws ApiError
-     */
-    public static getUserVideoLastRecordedProgress(
-userId?: string,
-trainingId?: string,
-fileId?: string,
-): CancelablePromise<BooleanStandardResponse> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/Training/last-recorded-progress',
-            query: {
-                'userId': userId,
-                'trainingId': trainingId,
-                'fileId': fileId,
-            },
-        });
-    }
-
 }

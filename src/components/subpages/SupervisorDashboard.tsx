@@ -15,7 +15,7 @@ import {
 } from 'src/services';
 
 interface DashboardProps {
-    adminMetrics: DashboardTeamMemberView;
+    adminMetrics: any;
     expenses?: ExpenseView[];
 }
 
@@ -49,25 +49,27 @@ function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
                     <TableCards
                         title={'Recent Timesheet'}
                         url={'timesheets/approval'}
-                        data={adminMetrics?.recentTimeSheet
+                        data={(adminMetrics?.approvedTimesheet as any)
                             ?.slice(0, 4)
-                            .map((x: RecentTimeSheetView, i: any) => (
+                            .map((x: any, i: any) => (
                                 <Tr key={i}>
                                     <TableData name={x.name} />
-                                    <TableData name={x.year} />
-                                    <TableData name={x.month} />
-                                    {/* <TableData name={x.hours} /> */}
-                                    <TableData name={x.hours} />
-                                    <TableData name={x.numberOfDays} />
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
+                                    <TableData name={x.totalHours} />
+                                    <TableData
+                                        name={`${x.approvedNumberOfHours} `}
+                                    />
+                                    {/* <TableData name={x.numberOfDays} /> */}
                                 </Tr>
                             ))}
                         thead={[
                             'Name',
-                            'Year',
-                            'Month',
-                            // 'Expected Hours',
+                            'Begining Period',
+                            'Ending Period',
                             'Total Hours',
-                            'Days',
+                            'Approved Hours',
+                            // 'Days',
                         ]}
                         link={'/'}
                     />

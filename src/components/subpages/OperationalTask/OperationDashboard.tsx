@@ -20,7 +20,6 @@ import { AddOpTaskDrawer } from './AddOpTaskDrawer';
 import {
     ProjectManagementService,
     ProjectProgressCountView,
-    ProjectTaskModel,
     ProjectTaskView,
 } from 'src/services';
 import { EditOpTaskDrawer } from './EditOpTaskDrawer';
@@ -29,21 +28,17 @@ import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
 export const OperationDashboard = ({
     superAdminId,
     users,
-    iProjects,
-    nProjects,
-    cProjects,
     counts,
     projects,
     id,
+    departments,
 }: {
-    iProjects: any;
-    nProjects: any;
-    cProjects: any;
     users: any;
     superAdminId: string;
     counts: ProjectProgressCountView;
     projects: any;
     id?: any;
+    departments: any;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
@@ -150,7 +145,7 @@ export const OperationDashboard = ({
                         task?.isAssignedToMe &&
                         task?.assignees?.at(0)?.userId == id
                             ? 'My Task'
-                            : 'Organizational Task'
+                            : 'Task Assigned'
                     }
                     title={task?.name}
                     sub={task?.note}
@@ -285,6 +280,7 @@ export const OperationDashboard = ({
                     superAdminId={superAdminId}
                     users={users}
                     id={id}
+                    departments={departments}
                 />
             )}
             {isEditOpen && (

@@ -71,24 +71,28 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                             ?.slice(0, 4)
                             .map((x: RecentTimeSheetView, i: any) => (
                                 <Tr key={i}>
-                                    <TableData name={x.year} />
-                                    <TableData name={x.month} />
+                                    <TableData name={x.name} />
+                                    {/* <TableData name={x.year} /> */}
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
                                     <TableData name={x.hours} />
-                                    <TableData name={x.numberOfDays} />
-                                    <TableContractAction
+                                    <TableData name={`${x.approvedHours} `} />
+                                    {/* <TableContractAction
                                         id={x.employeeInformationId}
-                                        date={`${x.year}-${x.month}-01`}
+                                        date={`${x?.startDate}`}
+                                        end={`${x?.endDate}`}
                                         team={true}
                                         timeSheets={false}
-                                    />
+                                    /> */}
                                 </Tr>
                             ))}
                         thead={[
-                            'Year',
-                            'Month',
+                            'Name',
+                            'Begining Period',
+                            'Ending Period',
                             'Total Hours',
-                            'No. of Days',
-                            'Action',
+                            'Approved Hours',
+                            // 'Action',
                         ]}
                         link={'/'}
                     />
