@@ -125,6 +125,39 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="project-management"
+                        menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="operational-task"
+                        menuTitle="Operational Tasks"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+
+                    <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -133,6 +166,33 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['approval', 'history']}
                         display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="leave"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="shift-management"
+                        menuTitle="Shift Management"
+                        icon={<AiFillSchedule opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
                     />
                     <MenuItem
                         change={change}
@@ -208,65 +268,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         display={activeSub}
                     />
-                    <MenuItem
-                        change={change}
-                        linkName="leave"
-                        menuTitle="Leave Management"
-                        icon={<FaFile opacity=".8" />}
-                        option={false}
-                        setOpenSidenav={setOpenSidenav}
-                        dropDown={[]}
-                        role={role}
-                        display={activeSub}
-                    />
-                    <MenuItem
-                        change={change}
-                        linkName="shift-management"
-                        menuTitle="Shift Management"
-                        icon={<AiFillSchedule opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        setOpenSidenav={setOpenSidenav}
-                        role={role}
-                        display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
-                        }
-                    />
-                    <MenuItem
-                        change={change}
-                        linkName="project-management"
-                        menuTitle="Project Management"
-                        icon={<TbCalendarTime opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        setOpenSidenav={setOpenSidenav}
-                        role={role}
-                        display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
-                        }
-                    />
-                    <MenuItem
-                        change={change}
-                        linkName="operational-task"
-                        menuTitle="Operational Tasks"
-                        icon={<TbCalendarTime opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        setOpenSidenav={setOpenSidenav}
-                        role={role}
-                        display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
-                        }
-                    />
+
                     <MenuItem
                         change={change}
                         linkName="account-management"
@@ -274,22 +276,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         icon={<MdSettings opacity=".8" />}
                         option={true}
                         dropDown={[
+                            'personal info',
+                            'notification settings',
                             'manage subscription',
                             'department settings',
+                            'access control settings',
+                            'project managers',
                             'currency settings',
                             'expense type',
                             // 'onboarding fee',
                             'hst settings',
+                            'payment schedule settings',
                             'leave management settings',
                             {
                                 show: subType == 'basic',
                                 name: 'shift management settings',
                             },
-                            'access control settings',
-                            'payment schedule settings',
-                            'project managers',
-                            'personal info',
-                            'notification settings',
                         ]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}

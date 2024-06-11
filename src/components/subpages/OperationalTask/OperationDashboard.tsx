@@ -24,6 +24,7 @@ import {
 } from 'src/services';
 import { EditOpTaskDrawer } from './EditOpTaskDrawer';
 import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
+import Pagination from '@components/bits-utils/Pagination';
 
 export const OperationDashboard = ({
     superAdminId,
@@ -174,9 +175,9 @@ export const OperationDashboard = ({
                         onChange={(e) => filterByStatus(e?.target.value)}
                     >
                         <option value="">All</option>
-                        <option value="To Do">To Do</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Completed">Completed</option>
+                        <option value="1">Private</option>
+                        <option value="2">Departmental</option>
+                        <option value="3">Others</option>
                     </Select>
                     <DatePicker
                         value={date}
@@ -273,6 +274,7 @@ export const OperationDashboard = ({
                     </VStack>
                 </ContainerBox>
             </Grid>
+            <Pagination data={projects} loadMore />
             {isOpen && (
                 <AddOpTaskDrawer
                     isOpen={isOpen}

@@ -106,7 +106,7 @@ export const EditOpTaskDrawer = ({
         { id: 3, name: 'Completed' },
     ];
     const [taskType, setTaskType] = useState(
-        data?.isAssignedToMe
+        data?.isAssignedToMe && data.assignees?.at(0)?.userId == id
             ? 'Private'
             : data.department
             ? 'Departmental'
@@ -127,16 +127,10 @@ export const EditOpTaskDrawer = ({
         setDepartment(value);
         try {
             setIsLoading(true);
-            const data = await UserService.listUsers(
-                'Team Member',
+            const data = await UserService.listUsersByDepartment(
                 superAdminId,
                 0,
                 100,
-                '',
-                undefined,
-                undefined,
-                undefined,
-                undefined,
                 value,
             );
             if (data.status) {

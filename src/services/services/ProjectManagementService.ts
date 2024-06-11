@@ -4,6 +4,7 @@
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { BudgetSummaryReportViewStandardResponse } from '../models/BudgetSummaryReportViewStandardResponse';
 import type { MarkAsCompletedModel } from '../models/MarkAsCompletedModel';
+import type { OperationalTaskFilter } from '../models/OperationalTaskFilter';
 import type { ProjectModel } from '../models/ProjectModel';
 import type { ProjectProgressCountViewStandardResponse } from '../models/ProjectProgressCountViewStandardResponse';
 import type { ProjectStatus } from '../models/ProjectStatus';
@@ -270,6 +271,7 @@ search?: string,
      * @param status 
      * @param userId 
      * @param search 
+     * @param filter 
      * @returns ProjectTaskViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -280,6 +282,7 @@ superAdminId?: string,
 status?: string,
 userId?: string,
 search?: string,
+filter?: OperationalTaskFilter,
 ): CancelablePromise<ProjectTaskViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -291,6 +294,7 @@ search?: string,
                 'status': status,
                 'userId': userId,
                 'search': search,
+                'filter': filter,
             },
         });
     }

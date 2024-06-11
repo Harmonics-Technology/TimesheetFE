@@ -104,16 +104,10 @@ export const AddOpTaskDrawer = ({
         setDepartment(value);
         try {
             setIsLoading(true);
-            const data = await UserService.listUsers(
-                'Team Member',
+            const data = await UserService.listUsersByDepartment(
                 superAdminId,
                 0,
                 100,
-                '',
-                undefined,
-                undefined,
-                undefined,
-                undefined,
                 value,
             );
             if (data.status) {
@@ -125,6 +119,7 @@ export const AddOpTaskDrawer = ({
             console.log({ error });
         }
     };
+
 
     const onSubmit = async (data: ProjectTaskModel) => {
         data.isAssignedToMe = isAssignedToMe;

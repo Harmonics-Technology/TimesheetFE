@@ -111,6 +111,7 @@ export type { OnboardingFeeView } from './models/OnboardingFeeView';
 export type { OnboardingFeeViewPagedCollection } from './models/OnboardingFeeViewPagedCollection';
 export type { OnboardingFeeViewPagedCollectionStandardResponse } from './models/OnboardingFeeViewPagedCollectionStandardResponse';
 export type { OnboardingFeeViewStandardResponse } from './models/OnboardingFeeViewStandardResponse';
+export { OperationalTaskFilter } from './models/OperationalTaskFilter';
 export type { OprationTasksVsProjectTask } from './models/OprationTasksVsProjectTask';
 export type { PasswordReset } from './models/PasswordReset';
 export type { PaymentPartnerInvoiceModel } from './models/PaymentPartnerInvoiceModel';
