@@ -4,13 +4,13 @@
 
 import type { ProjectSubTaskView } from './ProjectSubTaskView';
 import type { ProjectTaskAsigneeView } from './ProjectTaskAsigneeView';
+import type { StrippedUserView } from './StrippedUserView';
 
 export type ProjectTaskView = {
     id?: string;
     superAdminId?: string;
     projectId?: string | null;
     name?: string | null;
-    category?: string | null;
     department?: string | null;
     startDate?: string;
     endDate?: string;
@@ -23,6 +23,11 @@ export type ProjectTaskView = {
     progress?: number | null;
     percentageOfCompletion?: number;
     isCompleted?: boolean;
+    isAssignedToMe?: boolean | null;
+    isOperationalTask?: boolean;
+    operationalTaskStatus?: string | null;
+    createdByUserId?: string | null;
+    createdByUser?: StrippedUserView;
     assignees?: Array<ProjectTaskAsigneeView> | null;
     subTasks?: Array<ProjectSubTaskView> | null;
 };

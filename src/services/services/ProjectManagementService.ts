@@ -4,6 +4,7 @@
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { BudgetSummaryReportViewStandardResponse } from '../models/BudgetSummaryReportViewStandardResponse';
 import type { MarkAsCompletedModel } from '../models/MarkAsCompletedModel';
+import type { OperationalTaskFilter } from '../models/OperationalTaskFilter';
 import type { ProjectModel } from '../models/ProjectModel';
 import type { ProjectProgressCountViewStandardResponse } from '../models/ProjectProgressCountViewStandardResponse';
 import type { ProjectStatus } from '../models/ProjectStatus';
@@ -19,6 +20,8 @@ import type { ProjectTimesheetListViewStandardResponse } from '../models/Project
 import type { ProjectTimesheetModel } from '../models/ProjectTimesheetModel';
 import type { ProjectViewPagedCollectionStandardResponse } from '../models/ProjectViewPagedCollectionStandardResponse';
 import type { ProjectViewStandardResponse } from '../models/ProjectViewStandardResponse';
+import type { ResourceCapacityDetailViewStandardResponse } from '../models/ResourceCapacityDetailViewStandardResponse';
+import type { ResourceCapacityViewStandardResponse } from '../models/ResourceCapacityViewStandardResponse';
 import type { UpdateProjectTimesheet } from '../models/UpdateProjectTimesheet';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -268,6 +271,7 @@ search?: string,
      * @param status 
      * @param userId 
      * @param search 
+     * @param filter 
      * @returns ProjectTaskViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -275,9 +279,10 @@ search?: string,
 offset?: number,
 limit?: number,
 superAdminId?: string,
-status?: ProjectStatus,
+status?: string,
 userId?: string,
 search?: string,
+filter?: OperationalTaskFilter,
 ): CancelablePromise<ProjectTaskViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -289,6 +294,7 @@ search?: string,
                 'status': status,
                 'userId': userId,
                 'search': search,
+                'filter': filter,
             },
         });
     }
@@ -420,6 +426,26 @@ userId?: string,
     }
 
     /**
+     * @param superAdminId 
+     * @param userId 
+     * @returns ProjectProgressCountViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getStatusCountForOperationalTask(
+superAdminId?: string,
+userId?: string,
+): CancelablePromise<ProjectProgressCountViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/operational-task/status-count',
+            query: {
+                'superAdminId': superAdminId,
+                'userId': userId,
+            },
+        });
+    }
+
+    /**
      * @param employeeId 
      * @param startDate 
      * @param endDate 
@@ -533,6 +559,107 @@ requestBody?: MarkAsCompletedModel,
             url: '/api/ProjectManagement/completed',
             body: requestBody,
             mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param superAdminId 
+     * @param startDate 
+     * @param endDate 
+     * @returns ResourceCapacityViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getResourcesCapacityOverview(
+offset?: number,
+limit?: number,
+superAdminId?: string,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<ResourceCapacityViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/resources-overview',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'superAdminId': superAdminId,
+                'StartDate': startDate,
+                'EndDate': endDate,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param userId 
+     * @param projectId 
+     * @param status 
+     * @param search 
+     * @returns ResourceCapacityDetailViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getResourceDetails(
+offset?: number,
+limit?: number,
+userId?: string,
+projectId?: string,
+status?: ProjectStatus,
+search?: string,
+): CancelablePromise<ResourceCapacityDetailViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/resource-detail',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'userId': userId,
+                'projectId': projectId,
+                'status': status,
+                'search': search,
+            },
+        });
+    }
+
+    /**
+     * @param taskId 
+     * @param percentageOfCompletion 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateTaskProgress(
+taskId?: string,
+percentageOfCompletion?: number,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-task-progress',
+            query: {
+                'taskId': taskId,
+                'percentageOfCompletion': percentageOfCompletion,
+            },
+        });
+    }
+
+    /**
+     * @param subTaskId 
+     * @param percentageOfCompletion 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateSubtaskProgress(
+subTaskId?: string,
+percentageOfCompletion?: number,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-subtask-progress',
+            query: {
+                'subTaskId': subTaskId,
+                'percentageOfCompletion': percentageOfCompletion,
+            },
         });
     }
 

@@ -14,7 +14,11 @@ import {
     FaUsers,
 } from 'react-icons/fa';
 import { RiLineChartFill } from 'react-icons/ri';
-import { MdOutlineSupervisorAccount, MdSettings } from 'react-icons/md';
+import {
+    MdModelTraining,
+    MdOutlineSupervisorAccount,
+    MdSettings,
+} from 'react-icons/md';
 import { BsGraphUp } from 'react-icons/bs';
 import { AiFillSchedule } from 'react-icons/ai';
 import { TbCalendarTime } from 'react-icons/tb';
@@ -121,6 +125,39 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="project-management"
+                        menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="operational-task"
+                        menuTitle="Operational Tasks"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+
+                    <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -132,6 +169,33 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="leave"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="shift-management"
+                        menuTitle="Shift Management"
+                        icon={<AiFillSchedule opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
                         linkName="financials"
                         menuTitle="Financials"
                         icon={<RiLineChartFill opacity=".8" />}
@@ -139,11 +203,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            { show: subType == 'basic', name: 'expenses' },
                             { show: subType == 'basic', name: 'payrolls' },
                             { show: subType == 'basic', name: 'payslips' },
                             { show: subType == 'basic', name: 'invoices' },
+                            { show: subType == 'basic', name: 'expenses' },
                         ]}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="training"
+                        menuTitle="Training"
+                        icon={<MdModelTraining opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
                         display={activeSub}
                     />
                     <MenuItem
@@ -193,49 +268,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         display={activeSub}
                     />
-                    <MenuItem
-                        change={change}
-                        linkName="leave"
-                        menuTitle="Leave Management"
-                        icon={<FaFile opacity=".8" />}
-                        option={false}
-                        setOpenSidenav={setOpenSidenav}
-                        dropDown={[]}
-                        role={role}
-                        display={activeSub}
-                    />
-                    <MenuItem
-                        change={change}
-                        linkName="shift-management"
-                        menuTitle="Shift Management"
-                        icon={<AiFillSchedule opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        setOpenSidenav={setOpenSidenav}
-                        role={role}
-                        display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
-                        }
-                    />
-                    <MenuItem
-                        change={change}
-                        linkName="project-management"
-                        menuTitle="Project Management"
-                        icon={<TbCalendarTime opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        setOpenSidenav={setOpenSidenav}
-                        role={role}
-                        display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
-                        }
-                    />
+
                     <MenuItem
                         change={change}
                         linkName="account-management"
@@ -243,22 +276,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         icon={<MdSettings opacity=".8" />}
                         option={true}
                         dropDown={[
+                            'personal info',
+                            'notification settings',
                             'manage subscription',
                             'department settings',
+                            'access control settings',
+                            'project managers',
                             'currency settings',
                             'expense type',
                             // 'onboarding fee',
                             'hst settings',
+                            'payment schedule settings',
                             'leave management settings',
                             {
                                 show: subType == 'basic',
                                 name: 'shift management settings',
                             },
-                            'access control settings',
-                            'payment schedule settings',
-                            'project managers',
-                            'personal info',
-                            'notification settings',
                         ]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
@@ -362,6 +395,33 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="operational-task"
+                        menuTitle="Operational Tasks"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="training"
+                        menuTitle="Training"
+                        icon={<MdModelTraining opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
                         icon={<FaUser opacity=".8" />}
@@ -430,6 +490,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         role={role}
                         display={true}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="operational-task"
+                        menuTitle="Operational Tasks"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
                     />
                     <MenuItem
                         change={change}
@@ -921,6 +997,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         change={change}
                         linkName="project-management"
                         menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="operational-task"
+                        menuTitle="Operational Tasks"
                         icon={<TbCalendarTime opacity=".8" />}
                         option={false}
                         dropDown={[]}

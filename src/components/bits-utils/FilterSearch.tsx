@@ -30,12 +30,16 @@ function FilterSearch({
     searchOptions,
     options = [],
     filter,
+    noFilter,
+    filterTitle = 'Filter By',
 }: {
     hide?: boolean;
     hides?: boolean;
     searchOptions?: string;
     options?: any[];
     filter?: any;
+    noFilter?: any;
+    filterTitle?: string;
 }) {
     const [search, setSearch] = useState('');
     const router = useRouter();
@@ -52,6 +56,7 @@ function FilterSearch({
     function setFilter(filter: string) {
         router.push({
             query: {
+                ...router.query,
                 limit: filter,
                 // offset: 0,
             },
@@ -75,6 +80,7 @@ function FilterSearch({
     function filterByDate() {
         router.push({
             query: {
+                ...router.query,
                 from: fromDate.format('YYYY-MM-DD'),
                 to: toDate.format('YYYY-MM-DD'),
             },
@@ -89,25 +95,26 @@ function FilterSearch({
             <Flex
                 justify="space-between"
                 align={['unset', 'flex-end']}
-                mb="1.5rem"
+                mb={!noFilter ? '1.5rem' : 0}
                 flexDirection={['column', 'row']}
             >
-                <HStack
-                    align="flex-end"
-                    mb={['.5rem', 'auto']}
-                    spacing={['0', 'inherit']}
-                    gap=".5rem"
-                >
-                    <Box
-                        fontSize=".8rem"
-                        w="fit-content"
-                        mb={['0rem', '0']}
-                        display={hides ? 'box' : 'none'}
+                {!noFilter && (
+                    <HStack
+                        align="flex-end"
+                        mb={['.5rem', 'auto']}
+                        spacing={['0', 'inherit']}
+                        gap=".5rem"
                     >
-                        <Text noOfLines={1} mb="0">
-                            Filter By
-                        </Text>
-                        {/* <Select
+                        <Box
+                            fontSize=".8rem"
+                            w="fit-content"
+                            mb={['0rem', '0']}
+                            display={hides ? 'box' : 'none'}
+                        >
+                            <Text noOfLines={1} mb="0">
+                                {filterTitle}
+                            </Text>
+                            {/* <Select
                             w="fit-content"
                             onChange={onChange}
                             borderRadius="0"
@@ -117,23 +124,28 @@ function FilterSearch({
                                 <option value={x.id}>{x.title}</option>
                             ))}
                         </Select> */}
-                        {filter}
-                    </Box>
-                    <HStack fontSize=".8rem" w="fit-content" mb={['1rem', '0']}>
-                        <Select
-                            w="fit-content"
-                            onChange={(e) => setFilter(e.target.value)}
-                            borderRadius="0"
+                            {filter}
+                        </Box>
+                        <HStack
                             fontSize=".8rem"
+                            w="fit-content"
+                            mb={['1rem', '0']}
                         >
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                        </Select>
+                            <Select
+                                w="fit-content"
+                                onChange={(e) => setFilter(e.target.value)}
+                                borderRadius="0"
+                                fontSize=".8rem"
+                            >
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                            </Select>
 
-                        <Text noOfLines={1}>entries per page</Text>
+                            <Text noOfLines={1}>entries per page</Text>
+                        </HStack>
                     </HStack>
-                </HStack>
+                )}
                 <HStack
                     gap="1rem"
                     align={['unset', 'center']}

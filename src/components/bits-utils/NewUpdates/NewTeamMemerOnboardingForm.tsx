@@ -452,7 +452,7 @@ export const NewTeamMemerOnboardingForm = ({
                     <PrimaryDate<TeamMemberModel>
                         control={control}
                         name="dateOfBirth"
-                        label="Date of Birth (Not compulsory)"
+                        label="Date of Birth"
                         error={errors.dateOfBirth}
                         max={new DateObject().subtract(1, 'days')}
                         required={false}
@@ -940,7 +940,7 @@ export const NewTeamMemerOnboardingForm = ({
                     <SectionTitle text="Leave Management" />
                     <Box pos="relative" mb="1rem">
                         <PrimaryRadio<TeamMemberModel>
-                            label="Are you eligible for Leave"
+                            label="Is this team member eligible for leave?"
                             radios={['No', 'Yes']}
                             name="isEligibleForLeave"
                             control={control}

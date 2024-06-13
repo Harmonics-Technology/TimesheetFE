@@ -26,8 +26,9 @@ export const SubSearchComponent = () => {
                 placeholder="Search"
                 onChange={(e) => debounced(e.target.value)}
                 borderRadius="3px"
-                bgColor="#F5F5F5"
+                // bgColor="#F5F5F5"
                 border="1px solid #e5e9ff"
+                bgColor="white"
             />
             <InputRightElement>
                 <Icon as={BsSearch} />

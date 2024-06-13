@@ -29,6 +29,7 @@ import {
     LeaveService,
     SettingsService,
     ShiftService,
+    TrainingService,
     UserService,
 } from 'src/services';
 import fileDownload from 'js-file-download';
@@ -867,12 +868,14 @@ export function TableContractAction({
     timeSheets,
     supervisor,
     date,
+    end,
     team,
 }: {
     id: any;
     timeSheets?: boolean;
     supervisor?: boolean;
     date?: any;
+    end?: any;
     team?: boolean;
 }) {
     const { user } = useContext(UserContext);
@@ -898,7 +901,7 @@ export function TableContractAction({
                                 <NextLink
                                     href={
                                         date !== undefined
-                                            ? `/${role}/timesheets/${id}?date=${date}`
+                                            ? `/${role}/timesheets/${id}?date=${date}&end=${end}`
                                             : `/${role}/timesheets/${id}`
                                     }
                                     passHref
@@ -1374,6 +1377,79 @@ export function TableSubscriptionActions({
                         />
                         Upgrade Subscription
                     </MenuItem>
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+
+export function TrainingActions({
+    id,
+    route,
+    viewOnly,
+}: {
+    id: any;
+    route: any;
+    viewOnly?: any;
+}) {
+    const toast = useToast();
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    const deleteTraining = async () => {
+        try {
+            setLoading(true);
+            const result = await TrainingService.deleteTraining(id);
+            if (result.status) {
+                toast({
+                    title: result.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                setLoading(false);
+                router.replace(router.asPath);
+                return;
+            }
+            setLoading(false);
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            setLoading(false);
+            toast({
+                title: error?.body?.message || error?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    <MenuItem w="full" onClick={() => router.push(route)}>
+                        View
+                    </MenuItem>
+                    {!viewOnly && (
+                        <MenuItem onClick={() => deleteTraining()} w="full">
+                            Delete
+                        </MenuItem>
+                    )}
                 </MenuList>
             </Menu>
         </td>

@@ -355,7 +355,7 @@ export const AddNewTaskDrawer = ({
                     name="trackedByHours"
                     flexDir="column"
                     defaultValue={
-                        data.trackedByHours == true
+                        data?.trackedByHours == true
                             ? 'Track by hours'
                             : 'Track by days'
                     }

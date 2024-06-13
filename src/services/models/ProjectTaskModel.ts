@@ -2,7 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { OprationTaskCategory } from './OprationTaskCategory';
 import type { TaskPriority } from './TaskPriority';
 
 export type ProjectTaskModel = {
@@ -10,7 +9,6 @@ export type ProjectTaskModel = {
     superAdminId?: string;
     projectId?: string | null;
     name?: string | null;
-    category?: OprationTaskCategory;
     assignedUsers?: Array<string> | null;
     department?: string | null;
     startDate?: string;
@@ -20,4 +18,7 @@ export type ProjectTaskModel = {
     durationInHours?: number | null;
     taskPriority?: TaskPriority;
     note?: string | null;
+    isAssignedToMe?: boolean;
+    isOperationalTask?: boolean;
+    operationalTaskStatus?: string | null;
 };

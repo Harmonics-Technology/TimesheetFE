@@ -67,6 +67,15 @@ export const ProjectTask = ({
         onOpen();
     };
 
+    const filterByStatus = (value) => {
+        router.push({
+            query: {
+                ...router.query,
+                status: value,
+            },
+        });
+    };
+
     return (
         <Box>
             <TopBar
@@ -76,8 +85,8 @@ export const ProjectTask = ({
                 users={users}
             />
             <HStack py="1rem" justify="space-between">
-                <HStack w="17%">
-                    <HStack w="full">
+                <HStack w="30%">
+                    <HStack w="fit-content">
                         <Image
                             src="/assets/filter.png"
                             alt="filter"
@@ -88,8 +97,15 @@ export const ProjectTask = ({
                             Filter By
                         </Text>
                     </HStack>
-                    <Select fontSize=".8rem" w="full">
-                        <option value="option1">Status</option>
+                    <Select
+                        fontSize=".8rem"
+                        w="fit-content"
+                        onChange={(e) => filterByStatus(e?.target.value)}
+                    >
+                        <option value="">All</option>
+                        <option value="1">Not Started</option>
+                        <option value="2">Ongoing</option>
+                        <option value="3">Completed</option>
                     </Select>
                 </HStack>
 

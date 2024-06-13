@@ -20,10 +20,14 @@ function SingleTimeSheet({
     timeSheets,
     id,
     payPeriod,
+    date,
+    end,
 }: {
     timeSheets: TimeSheetMonthlyView;
     id: string;
     payPeriod: any;
+    date: any;
+    end: any;
 }) {
     //
     // const size: Size = useWindowSize();
@@ -34,6 +38,8 @@ function SingleTimeSheet({
                 id={id}
                 payPeriod={payPeriod}
                 isSuperAdmin
+                date={date}
+                end={end}
             />
         </>
     );
@@ -46,15 +52,15 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const { id } = ctx.query;
         let { end } = ctx.query;
         let { date } = ctx.query;
-        if (date === undefined) {
+        if (date === undefined || date === '') {
             date = new Date(startOfMonth(new Date()));
         }
-        if (end === undefined) {
+        if (end === undefined || end === '') {
             end = new Date(endOfMonth(new Date()));
         }
 
         date = moment(date).format('YYYY-MM-DD');
-
+        end = moment(end).format('YYYY-MM-DD');
 
         try {
             const data = await TimeSheetService.getTimeSheet(id, date, end);
@@ -68,6 +74,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     timeSheets: data.data,
                     payPeriod: payPeriod.data,
                     id,
+                    date,
+                    end,
                 },
             };
         } catch (error: any) {

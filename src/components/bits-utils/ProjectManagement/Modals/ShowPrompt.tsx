@@ -9,12 +9,77 @@ import {
     Button,
     Box,
     Text,
+    useToast,
 } from '@chakra-ui/react';
-import React from 'react';
+import { ProgressSlider } from '@components/bits-utils/ProgressSlider';
+import { Round } from '@components/generics/functions/Round';
+import moment from 'moment';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import { FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { ProjectManagementService } from 'src/services';
 
-export const ShowPrompt = ({ isOpen, onClose, onSubmit, loading, text }) => {
+export const ShowPrompt = ({
+    isOpen,
+    onClose,
+    onSubmit,
+    loading,
+    text,
+    isProgress,
+    data,
+}: {
+    isOpen: any;
+    onClose: any;
+    onSubmit?: any;
+    loading?: any;
+    text: any;
+    isProgress?: any;
+    data?: any;
+}) => {
+    const [sliderValue, setSliderValue] = useState(
+        data?.percentageOfCompletion,
+    );
+    const pastDate = moment().diff(moment(data?.endDate), 'days') > 0;
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
+    const toast = useToast();
+
+    const updateProgress = async () => {
+        setIsLoading(true);
+        try {
+            const res = await ProjectManagementService.updateSubtaskProgress(
+                data?.id,
+                sliderValue,
+            );
+            if (res.status) {
+                setIsLoading(false);
+                router.replace(router.asPath);
+                toast({
+                    title: res.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                return;
+            }
+            setIsLoading(false);
+            toast({
+                title: res.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (err: any) {
+            setIsLoading(false);
+            toast({
+                title: err?.body?.message || err.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
     return (
         <Modal
             isOpen={isOpen}
@@ -56,25 +121,70 @@ export const ShowPrompt = ({ isOpen, onClose, onSubmit, loading, text }) => {
 
                 <ModalBody>
                     <Box maxH="77vh" overflowY="auto" px={5}>
-                        <HStack px=".8rem" spacing={4} w="full">
-                            <Button
-                                variant="outline"
-                                height="2.6rem"
-                                width="full"
-                                borderColor="black"
-                                // bgColor="black"
-                                // _hover={{
-                                //   bgColor: 'white',
-                                //   color: 'black',
-                                //   border: '1px solid',
-                                //   borderColor: 'black',
-                                // }}
-                                onClick={() => {
-                                    onClose();
-                                }}
-                            >
-                                No
-                            </Button>
+                        {isProgress && (
+                            <ProgressSlider
+                                sliderValue={sliderValue}
+                                setSliderValue={setSliderValue}
+                                leftText="SubTask Status"
+                                showProgress
+                                rightText={`${Round(sliderValue)}%`}
+                                barColor={
+                                    status == 'completed'
+                                        ? 'brand.400'
+                                        : status == 'ongoing' && pastDate
+                                        ? 'red'
+                                        : status == 'ongoing'
+                                        ? '#f7e277'
+                                        : status == 'not started'
+                                        ? 'gray.100'
+                                        : 'red'
+                                }
+                            />
+                        )}
+                        {!isProgress ? (
+                            <HStack px=".8rem" spacing={4} w="full">
+                                <Button
+                                    variant="outline"
+                                    height="2.6rem"
+                                    width="full"
+                                    borderColor="black"
+                                    // bgColor="black"
+                                    // _hover={{
+                                    //   bgColor: 'white',
+                                    //   color: 'black',
+                                    //   border: '1px solid',
+                                    //   borderColor: 'black',
+                                    // }}
+                                    onClick={() => {
+                                        onClose();
+                                    }}
+                                >
+                                    No
+                                </Button>
+                                <Button
+                                    variant="solid"
+                                    height="2.6rem"
+                                    width="full"
+                                    bgColor="brand.400"
+                                    color="white"
+                                    _hover={{
+                                        bgColor: 'white',
+                                        color: 'brand.400',
+                                        border: '1px solid',
+                                        borderColor: 'brand.400',
+                                    }}
+                                    isLoading={loading}
+                                    spinner={
+                                        <BeatLoader color="white" size={10} />
+                                    }
+                                    onClick={() => {
+                                        onSubmit();
+                                    }}
+                                >
+                                    Yes
+                                </Button>
+                            </HStack>
+                        ) : (
                             <Button
                                 variant="solid"
                                 height="2.6rem"
@@ -87,15 +197,15 @@ export const ShowPrompt = ({ isOpen, onClose, onSubmit, loading, text }) => {
                                     border: '1px solid',
                                     borderColor: 'brand.400',
                                 }}
-                                isLoading={loading}
+                                isLoading={isLoading}
                                 spinner={<BeatLoader color="white" size={10} />}
                                 onClick={() => {
-                                    onSubmit();
+                                    updateProgress();
                                 }}
                             >
-                                Yes
+                                Update
                             </Button>
-                        </HStack>
+                        )}
                     </Box>
                 </ModalBody>
             </ModalContent>

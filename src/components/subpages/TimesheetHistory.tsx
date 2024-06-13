@@ -49,7 +49,7 @@ function TimesheetHistory({ timeSheets }: adminProps) {
         'Job Title',
         'Begining Period',
         'Ending Period',
-        'Total Hours',
+        // 'Total Hours',
         'Approved Hours',
         'Action',
     ];
@@ -89,6 +89,7 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                     </Button>
                 </Flex>
                 <FilterSearch
+                    filterTitle="Timesheet Frequency"
                     hides
                     filter={
                         <Selectrix
@@ -115,9 +116,9 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                                     />
                                     <TableData name={formatDate(x.startDate)} />
                                     <TableData name={formatDate(x.endDate)} />
-                                    <TableData
+                                    {/* <TableData
                                         name={x.totalHours as unknown as string}
-                                    />
+                                    /> */}
                                     {/* <TableData
                                         name={
                                             x.numberOfDays as unknown as string

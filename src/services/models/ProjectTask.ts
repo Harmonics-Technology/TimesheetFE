@@ -4,6 +4,7 @@
 
 import type { ProjectSubTask } from './ProjectSubTask';
 import type { ProjectTaskAsignee } from './ProjectTaskAsignee';
+import type { User } from './User';
 
 export type ProjectTask = {
     id?: string;
@@ -12,17 +13,21 @@ export type ProjectTask = {
     superAdminId?: string;
     projectId?: string | null;
     name?: string | null;
-    category?: string | null;
     department?: string | null;
     startDate?: string;
     endDate?: string;
     duration?: number | null;
-    trackedByHours?: boolean;
-    durationInHours?: number;
+    trackedByHours?: boolean | null;
+    durationInHours?: number | null;
     taskPriority?: string | null;
     note?: string | null;
     isCompleted?: boolean;
     percentageOfCompletion?: number;
+    isAssignedToMe?: boolean | null;
+    isOperationalTask?: boolean;
+    operationalTaskStatus?: string | null;
+    createdByUserId?: string | null;
+    createdByUser?: User;
     subTasks?: Array<ProjectSubTask> | null;
     assignees?: Array<ProjectTaskAsignee> | null;
 };

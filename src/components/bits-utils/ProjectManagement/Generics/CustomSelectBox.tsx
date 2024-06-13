@@ -102,6 +102,10 @@ export const CustomSelectBox = ({
             setNewData(newFormattedData);
         }
     }, [selected]);
+
+    useEffect(() => {
+        setNewData(newFormattedData);
+    }, [data]);
     return (
         <FormControl
             isInvalid={

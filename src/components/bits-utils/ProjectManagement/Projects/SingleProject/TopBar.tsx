@@ -52,7 +52,12 @@ export const TopBar = ({
         <Box borderBottom={noTitle ? 'none' : '1px solid #e5e5e5'} pb="0rem">
             <Box mb="1.5rem">
                 <ProjectTabs
-                    name={['dashboard', 'projects', 'operational-task']}
+                    name={[
+                        'dashboard',
+                        'projects',
+                        // 'operational-task',
+                        'resource-capacity',
+                    ]}
                 />
             </Box>
             <Flex justify="space-between" align="center">
@@ -92,7 +97,7 @@ export const TopBar = ({
                 name={[
                     'dashboard',
                     'project-task',
-                    // 'gantt-chart',
+                    'gantt-chart',
                     'team-members',
                     'budget',
                 ]}

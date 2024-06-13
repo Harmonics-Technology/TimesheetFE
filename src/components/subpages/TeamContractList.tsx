@@ -44,7 +44,7 @@ function TeamContractList({ adminList }: adminProps) {
                             (x: ContractView) => (
                                 <Tr key={x.id}>
                                     <TableData name={x.name} />
-                                    <TableData name={x.title} />
+                                    <TableData name={x.jobTitle} />
                                     <TableData name={formatDate(x.startDate)} />
                                     <TableData name={formatDate(x.endDate)} />
                                     <TableData

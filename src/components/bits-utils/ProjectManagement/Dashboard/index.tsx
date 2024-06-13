@@ -48,7 +48,12 @@ export const Dashboard = ({
         <Box>
             <Box mb="2.5rem">
                 <ProjectTabs
-                    name={['dashboard', 'projects', 'operational-task']}
+                    name={[
+                        'dashboard',
+                        'projects',
+                        // 'operational-task',
+                        'resource-capacity',
+                    ]}
                 />
             </Box>
             <HStack

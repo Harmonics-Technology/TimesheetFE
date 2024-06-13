@@ -1,24 +1,38 @@
-import { OperationalTask } from '@components/bits-utils/ProjectManagement/OperationalTask';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
+import { OperationDashboard } from '@components/subpages/OperationalTask/OperationDashboard';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { ProjectManagementService, UserService } from 'src/services';
+import {
+    DepartmentService,
+    ProjectManagementService,
+    ProjectProgressCountView,
+    UserService,
+} from 'src/services';
 
 const OperationTask = ({
     projects,
+    counts,
     users,
     superAdminId,
+    userId,
+    departments,
 }: {
     projects: any;
+    counts: ProjectProgressCountView;
     users: any;
     superAdminId: string;
+    userId: string;
+    departments: any;
 }) => {
     return (
-        <OperationalTask
+        <OperationDashboard
             projects={projects}
+            counts={counts}
             users={users}
             superAdminId={superAdminId}
+            id={userId}
+            departments={departments}
         />
     );
 };
@@ -27,33 +41,47 @@ export default OperationTask;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const userId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
-        //
+
         try {
             const data = await ProjectManagementService.listOperationalTasks(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
-                pagingOptions.status,
+                undefined,
+                userId,
                 pagingOptions.search,
+                pagingOptions.status,
             );
             const users = await UserService.listUsers(
-                'Team Member',
+                'Team member',
                 superAdminId,
                 pagingOptions.offset,
-                pagingOptions.limit || 50,
+                100,
                 pagingOptions.search,
             );
+            const counts =
+                await ProjectManagementService.getStatusCountForOperationalTask(
+                    superAdminId,
+                );
+            const dept = await DepartmentService.listDepartments(superAdminId);
+
+            // console.log({ users });
 
             return {
                 props: {
                     projects: data.data,
                     users: users.data,
                     superAdminId,
+                    counts: counts.data,
+                    userId,
+                    departments: dept.data,
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     data: [],

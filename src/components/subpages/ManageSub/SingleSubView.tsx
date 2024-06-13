@@ -5,8 +5,9 @@ import { TableData } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import Pagination from '@components/bits-utils/Pagination';
-import { UserService } from 'src/services';
+import { UserService, UserView } from 'src/services';
 import Skeleton from 'react-loading-skeleton';
+import { LicenseRevoke } from '@components/bits-utils/LicenseRevoke';
 
 export const SingleSubView = ({
     setShowDetails,
@@ -132,15 +133,25 @@ export const SingleSubView = ({
                 ) : (
                     <>
                         <Tables
-                            tableHead={['Name', 'Email']}
+                            tableHead={['Name', 'Email', 'Action']}
                             bg="brand.400"
                             color="white"
                         >
                             <>
-                                {pageData?.data?.value?.map((x: any) => (
+                                {pageData?.data?.value?.map((x: UserView) => (
                                     <Tr key={x.id}>
                                         <TableData name={x?.fullName} />
                                         <TableData name={x?.email} />
+                                        <td>
+                                            <LicenseRevoke
+                                                userId={x?.id}
+                                                text="Revoke license"
+                                                h="2rem"
+                                                disabled={
+                                                    !x?.clientSubscriptionId
+                                                }
+                                            />
+                                        </td>
                                     </Tr>
                                 ))}
                             </>

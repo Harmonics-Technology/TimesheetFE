@@ -26,7 +26,13 @@ function TeamTimesheetHistory({
     timesheet = false,
     id,
 }: adminProps) {
-    const thead = ['Name', 'Year', 'Month', 'Approved Hours', 'Action'];
+    const thead = [
+        'Name',
+        'Begining Period',
+        'Ending Period',
+        'Approved Hours',
+        'Action',
+    ];
     const { onOpen, onClose, isOpen } = useDisclosure();
 
     return (
@@ -54,10 +60,11 @@ function TeamTimesheetHistory({
                 <Tables
                     tableHead={[
                         'Name',
-                        'Year',
-                        'Month',
+                        // 'Year',
+                        // 'Month',
                         'Begining Period',
                         'Ending Period',
+                        'Total Hours',
                         'Approved Hours',
                         'Action',
                     ]}
@@ -66,18 +73,15 @@ function TeamTimesheetHistory({
                         {timeSheets?.data?.value?.map((x: any, i) => (
                             <Tr key={i}>
                                 <TableData name={x.name} />
-                                <TableData name={x.year} />
-                                <TableData name={x.month} />
+                                {/* <TableData name={x.year} /> */}
                                 <TableData name={formatDate(x.startDate)} />
                                 <TableData name={formatDate(x.endDate)} />
-                                <TableData
-                                    name={`${
-                                        x.hours as unknown as string
-                                    } Hours`}
-                                />
+                                <TableData name={x.hours} />
+                                <TableData name={`${x.approvedHours} `} />
                                 <TableContractAction
                                     id={x.employeeInformationId}
-                                    date={`${x.year}-${x.month}`}
+                                    date={`${x?.startDate}`}
+                                    end={`${x?.endDate}`}
                                     team={true}
                                     timeSheets={timesheet}
                                 />

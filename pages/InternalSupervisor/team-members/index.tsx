@@ -51,13 +51,22 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const id = JSON.parse(ctx.req.cookies.user).id;
         try {
-            const data = await UserService.listUsers(
-                'Team Member',
-                superAdminId,
+            // const data = await UserService.listUsers(
+            //     'Team Member',
+            //     superAdminId,
+            //     pagingOptions.offset,
+            //     pagingOptions.limit,
+            //     pagingOptions.search,
+            //     pagingOptions.from,
+            //     pagingOptions.to,
+            // );
+            const data = await UserService.getSupervisees(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 pagingOptions.search,
+                id,
                 pagingOptions.from,
                 pagingOptions.to,
             );
