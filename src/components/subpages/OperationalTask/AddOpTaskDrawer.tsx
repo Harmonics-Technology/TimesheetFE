@@ -12,7 +12,7 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -34,6 +34,7 @@ import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generi
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import Loading from '@components/bits-utils/Loading';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -74,6 +75,8 @@ export const AddOpTaskDrawer = ({
 
     const toast = useToast();
     const router = useRouter();
+    const { user } = useContext(UserContext);
+    const role = user?.role;
     const [selectedUser, setSelecedUser] = useState<any>([]);
     const addUser = (user) => {
         const filtered = selectedUser?.find((x) => x.id === user.id);
@@ -120,6 +123,14 @@ export const AddOpTaskDrawer = ({
         }
     };
 
+    const configureTaskType = (value) => {
+        if (role == 'Team Member') {
+            setTaskType(value);
+            value == 'Departmental' && fetchUsersInDept(user.department);
+            return;
+        }
+        setTaskType(value);
+    };
 
     const onSubmit = async (data: ProjectTaskModel) => {
         data.isAssignedToMe = isAssignedToMe;
@@ -192,7 +203,7 @@ export const AddOpTaskDrawer = ({
                     />
                     <SelectBlank
                         label="Task Type"
-                        onChange={(e) => setTaskType(e.target.value)}
+                        onChange={(e) => configureTaskType(e.target.value)}
                         placeholder="Select one"
                         options={[
                             { id: true, name: 'Private' },
@@ -202,7 +213,7 @@ export const AddOpTaskDrawer = ({
                             <option value={x?.name}>{x.name}</option>
                         ))}
                     />
-                    {taskType == 'Departmental' && (
+                    {taskType == 'Departmental' && role !== 'Team Member' && (
                         <SelectBlank
                             label="Department"
                             placeholder="Select one"

@@ -228,6 +228,7 @@ export const EditOpTaskDrawer = ({
                         <SelectBlank
                             label="Department"
                             placeholder="Select one"
+                            defaultValue={data?.department}
                             onChange={(e) => fetchUsersInDept(e.target.value)}
                             options={departments.map((x) => (
                                 <option value={x?.name}>{x.name}</option>

@@ -84,7 +84,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
             ...uploadedFiles,
             { ...documentFile, id: generateRandomUUID(), category: fileType },
         ]);
-        setFileType('Select a type');
+        setFileType('Select a Category');
         return;
     };
     const removeFromList = (data: any) => {
@@ -264,7 +264,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
                         label="Category"
                         w="full"
                         placeholder="Select Category"
-                        defaultValue={''}
+                        value={fileType}
                         onChange={(e) => setFileType(e.target.value)}
                         options={['Document', 'Video'].map((x) => (
                             <option value={x}>{x}</option>
