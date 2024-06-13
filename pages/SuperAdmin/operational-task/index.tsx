@@ -50,9 +50,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
-                pagingOptions.status,
+                undefined,
                 undefined,
                 pagingOptions.search,
+                pagingOptions.status,
             );
             const users = await UserService.listUsers(
                 'Team member',

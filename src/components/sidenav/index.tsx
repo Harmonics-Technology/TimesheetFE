@@ -203,11 +203,22 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            { show: subType == 'basic', name: 'expenses' },
                             { show: subType == 'basic', name: 'payrolls' },
                             { show: subType == 'basic', name: 'payslips' },
                             { show: subType == 'basic', name: 'invoices' },
+                            { show: subType == 'basic', name: 'expenses' },
                         ]}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="training"
+                        menuTitle="Training"
+                        icon={<MdModelTraining opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
                         display={activeSub}
                     />
                     <MenuItem
@@ -251,17 +262,6 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         linkName="report"
                         menuTitle="Reports"
                         icon={<BsGraphUp opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        setOpenSidenav={setOpenSidenav}
-                        role={role}
-                        display={activeSub}
-                    />
-                    <MenuItem
-                        change={change}
-                        linkName="training"
-                        menuTitle="Training"
-                        icon={<MdModelTraining opacity=".8" />}
                         option={false}
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}

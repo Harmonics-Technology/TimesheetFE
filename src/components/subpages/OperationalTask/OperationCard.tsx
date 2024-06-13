@@ -1,13 +1,14 @@
 import { Box, HStack, Text, VStack } from '@chakra-ui/react';
 import shadeColor from '@components/generics/functions/shadeColor';
 import React from 'react';
+import { StrippedUserView } from 'src/services';
 
 interface IOperationProps {
     text: string;
     bg: string;
     title: any;
     sub: any;
-    isMine?: boolean | null | undefined;
+    user?: StrippedUserView;
     subBtm: any;
     onClick: any;
     onDragStart: any;
@@ -19,7 +20,7 @@ export const OperationCard = ({
     bg,
     title,
     sub,
-    isMine,
+    user,
     subBtm,
     onClick,
     onDragStart,
@@ -76,15 +77,12 @@ export const OperationCard = ({
                         {sub}
                     </Text>
                 </VStack>
-                <HStack
-                    justify={isMine ? 'space-between' : 'flex-end'}
-                    w="full"
-                >
-                    {isMine && (
-                        <Text fontWeight={500} color="#787486" fontSize="12px">
-                            My Task
-                        </Text>
-                    )}
+                <HStack justify={'space-between'} w="full">
+                    {/* {isMine && ( */}
+                    <Text fontWeight={500} color="#787486" fontSize="12px" noOfLines={1}>
+                        {user?.fullName}
+                    </Text>
+                    {/* )} */}
                     <Text fontWeight={400} color="#787486" fontSize="12px">
                         {subBtm}
                     </Text>

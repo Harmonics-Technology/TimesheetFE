@@ -27,6 +27,7 @@ import { IoDocumentTextSharp } from 'react-icons/io5';
 
 export const ViewTraining = ({ id, data, users }) => {
     const newData = data as TrainingView;
+    // console.log({ newData });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const toast = useToast();
@@ -225,7 +226,12 @@ export const ViewTraining = ({ id, data, users }) => {
                     {newData?.files
                         ?.filter((x) => x.category === 'Video')
                         .map((x) => (
-                            <YouTubePreview file={x} key={x.id} />
+                            <YouTubePreview
+                                file={x}
+                                key={x.id}
+                                deleteFile={deleteFile}
+                                loading={loading}
+                            />
                         ))}
                 </HStack>
             </Box>

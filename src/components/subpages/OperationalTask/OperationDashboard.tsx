@@ -145,7 +145,7 @@ export const OperationDashboard = ({
                     text={
                         task?.isAssignedToMe &&
                         task?.assignees?.at(0)?.userId == id
-                            ? 'My Task'
+                            ? 'Private Task'
                             : 'Task Assigned'
                     }
                     title={task?.name}
@@ -153,7 +153,7 @@ export const OperationDashboard = ({
                     subBtm={`Due Date ; ${moment(task?.endDate).format(
                         'DD-MM-YYYY',
                     )}`}
-                    isMine={task?.isAssignedToMe}
+                    user={task?.createdByUser}
                     onClick={() => triggerEditCard(task)}
                     onDragStart={(e) => handleDragStart(e, task)}
                     onDragEnd={(e) => handleDragEnd(e)}

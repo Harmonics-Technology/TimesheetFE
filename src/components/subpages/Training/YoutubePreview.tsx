@@ -1,17 +1,22 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, HStack, Icon, Spinner, Text } from '@chakra-ui/react';
 import { formatDate } from '@components/generics/functions/formatDate';
 import React from 'react';
+import { MdDelete } from 'react-icons/md';
 
 const YouTubePreview = ({
     file,
     isLesson,
     viewDoc,
     isLoading,
+    deleteFile,
+    loading,
 }: {
     file: any;
     isLesson?: boolean;
     viewDoc?: any;
     isLoading?: any;
+    deleteFile?: any;
+    loading?: any;
 }) => {
     // Extract video ID from the YouTube link
     const videoId =
@@ -34,7 +39,7 @@ const YouTubePreview = ({
                     style={{ pointerEvents: 'none' }}
                 />
             </Box>
-            {isLesson && (
+            {isLesson ? (
                 <Text
                     fontSize=".8rem"
                     // color="brand.400"
@@ -57,6 +62,22 @@ const YouTubePreview = ({
                         ? 'Continue Training >>'
                         : 'Click to Start Training >> '}
                 </Text>
+            ) : (
+                <HStack
+                    color="#a6acbe"
+                    fontSize="16px"
+                    cursor="pointer"
+                    mt=".2rem"
+                >
+                    {loading?.id === file?.id ? (
+                        <Spinner size="sm" />
+                    ) : (
+                        <Icon
+                            as={MdDelete}
+                            onClick={() => deleteFile(file?.id)}
+                        />
+                    )}
+                </HStack>
             )}
         </Box>
     );
