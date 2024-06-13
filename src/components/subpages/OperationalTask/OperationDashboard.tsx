@@ -130,6 +130,13 @@ export const OperationDashboard = ({
         e.preventDefault();
     };
 
+    const getCount = (status: string) => {
+        return (
+            opTaskItem?.filter(
+                (x: ProjectTaskView) => x?.operationalTaskStatus == status,
+            )?.length || 0
+        );
+    };
     const renderItems = (status: string) => {
         return opTaskItem
             ?.filter((x: ProjectTaskView) => x?.operationalTaskStatus == status)
@@ -242,7 +249,7 @@ export const OperationDashboard = ({
                 <ContainerBox
                     bg="#2383BD"
                     text="To Do"
-                    num={counts?.notStarted}
+                    num={getCount('To Do')}
                     onDrop={(e) => handleOnDrop(e, 'To Do')}
                     onDragOver={handleDragOver}
                 >
@@ -254,7 +261,7 @@ export const OperationDashboard = ({
                 <ContainerBox
                     bg="#FFA500"
                     text="In Progress"
-                    num={counts?.inProgress}
+                    num={getCount('In Progress')}
                     onDrop={(e) => handleOnDrop(e, 'In Progress')}
                     onDragOver={handleDragOver}
                 >
@@ -265,7 +272,7 @@ export const OperationDashboard = ({
                 <ContainerBox
                     bg="brand.400"
                     text="Completed"
-                    num={counts?.completed}
+                    num={getCount('Completed')}
                     onDrop={(e) => handleOnDrop(e, 'Completed')}
                     onDragOver={handleDragOver}
                 >
