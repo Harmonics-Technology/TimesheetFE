@@ -50,4 +50,5 @@ export type UserView = {
     isBirthDayToday?: boolean;
     isAnniversaryToday?: boolean;
     contractStartDate?: string | null;
+    department?: string | null;
 };

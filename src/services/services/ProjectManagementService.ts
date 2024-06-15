@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { BudgetSummaryReportViewStandardResponse } from '../models/BudgetSummaryReportViewStandardResponse';
+import type { ListProjectViewPagedCollectionStandardResponse } from '../models/ListProjectViewPagedCollectionStandardResponse';
 import type { MarkAsCompletedModel } from '../models/MarkAsCompletedModel';
 import type { OperationalTaskFilter } from '../models/OperationalTaskFilter';
 import type { ProjectModel } from '../models/ProjectModel';
@@ -171,6 +172,38 @@ requestBody?: ProjectTimesheetApprovalModel,
             url: '/api/ProjectManagement/treat-timesheet',
             body: requestBody,
             mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param superAdminId 
+     * @param status 
+     * @param userId 
+     * @param search 
+     * @returns ListProjectViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listStrippedProject(
+offset?: number,
+limit?: number,
+superAdminId?: string,
+status?: ProjectStatus,
+userId?: string,
+search?: string,
+): CancelablePromise<ListProjectViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/projects/stripped',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'superAdminId': superAdminId,
+                'status': status,
+                'userId': userId,
+                'search': search,
+            },
         });
     }
 

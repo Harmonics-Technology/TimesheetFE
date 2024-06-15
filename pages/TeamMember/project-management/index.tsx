@@ -10,7 +10,6 @@ import {
     UserService,
     UtilityService,
 } from 'src/services';
-import axios from 'axios';
 
 const projectsIndex = ({
     iProjects,
@@ -77,7 +76,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const isPm = user.isOrganizationProjectManager;
         const fetchProjectByStatus = (status) => {
-            const data = ProjectManagementService.listProject(
+            const data = ProjectManagementService.listStrippedProject(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
@@ -92,7 +91,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const nProgress = await fetchProjectByStatus(1);
             const iProgress = await fetchProjectByStatus(2);
             const cProgress = await fetchProjectByStatus(3);
-            const data = await ProjectManagementService.listProject(
+            const data = await ProjectManagementService.listStrippedProject(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,

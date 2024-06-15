@@ -5,7 +5,11 @@ import React, { useContext } from 'react';
 import { ProgressBar } from '../Generics/ProgressBar';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
-import { ProjectTaskAsigneeView, ProjectView } from 'src/services';
+import {
+    ProjectTaskAsigneeView,
+    ProjectView,
+    StrippedProjectAssignee,
+} from 'src/services';
 import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 
 export const ProjectCard = ({ data }: { data: ProjectView }) => {
@@ -81,12 +85,11 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                     <HStack gap="0">
                         {assignees
                             ?.slice(0, 3)
-                            .map((x: ProjectTaskAsigneeView, i: any) => (
+                            .map((x: StrippedProjectAssignee, i: any) => (
                                 <Avatar
                                     key={x.id}
                                     size={'sm'}
-                                    name={x?.user?.fullName as string}
-                                    src={x?.user?.profilePicture as string}
+                                    name={x?.fullName as string}
                                     border="1px solid white"
                                     transform={`translateX(${-i * 10}px)`}
                                 />

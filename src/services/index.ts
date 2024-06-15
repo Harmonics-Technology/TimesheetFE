@@ -94,6 +94,9 @@ export type { LeaveViewPagedCollectionStandardResponse } from './models/LeaveVie
 export type { LeaveViewStandardResponse } from './models/LeaveViewStandardResponse';
 export type { LicenseUpdateModel } from './models/LicenseUpdateModel';
 export type { Link } from './models/Link';
+export type { ListProjectView } from './models/ListProjectView';
+export type { ListProjectViewPagedCollection } from './models/ListProjectViewPagedCollection';
+export type { ListProjectViewPagedCollectionStandardResponse } from './models/ListProjectViewPagedCollectionStandardResponse';
 export type { LoginModel } from './models/LoginModel';
 export type { MarkAsCompletedModel } from './models/MarkAsCompletedModel';
 export type { MicrosoftIdTokenDetailsModel } from './models/MicrosoftIdTokenDetailsModel';
@@ -186,6 +189,7 @@ export type { ShiftUsersListViewPagedCollectionStandardResponse } from './models
 export type { ShiftView } from './models/ShiftView';
 export type { ShiftViewListStandardResponse } from './models/ShiftViewListStandardResponse';
 export type { Status } from './models/Status';
+export type { StrippedProjectAssignee } from './models/StrippedProjectAssignee';
 export type { StrippedUserView } from './models/StrippedUserView';
 export type { Subscription } from './models/Subscription';
 export type { SubscriptionClientDetail } from './models/SubscriptionClientDetail';
