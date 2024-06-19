@@ -213,7 +213,7 @@ export const AddOpTaskDrawer = ({
                             <option value={x?.name}>{x.name}</option>
                         ))}
                     />
-                    {taskType == 'Departmental' && role !== 'Team Member' && (
+                    {taskType == 'Departmental' && (
                         <SelectBlank
                             label="Department"
                             placeholder="Select one"
