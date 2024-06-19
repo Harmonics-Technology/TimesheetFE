@@ -190,19 +190,19 @@ function TwoFaModal({
                                             authenticator app.
                                         </Text>
                                         <Flex justify="space-around" py="1rem">
-                                            {/* <Image
+                                            <Image
                                                 src={data?.qrCodeUrl as string}
                                                 w="auto"
                                                 h="auto"
-                                            /> */}
-                                            <QRCode
+                                            />
+                                            {/* <QRCode
                                                 size={256}
                                                 bgColor="white"
                                                 value={
-                                                    data?.qrCodeUrl as string
+                                                    data?.alternativeKey as string
                                                 }
                                                 viewBox={`0 0 256 256`}
-                                            />
+                                            /> */}
                                         </Flex>
                                     </>
                                 )}
