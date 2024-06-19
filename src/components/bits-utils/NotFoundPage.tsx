@@ -54,7 +54,7 @@ const NotFoundPage = () => {
                     color="#151723"
                     textTransform="uppercase"
                 >
-                    Oops! Page Not Be Found
+                    Oops! Page Not Found
                 </Text>
                 <Text as="p" fontFamily="Nunito" mb="1rem" color="#999fa5">
                     Sorry but the page you are looking for does not exist, have
