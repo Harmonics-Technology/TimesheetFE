@@ -40,10 +40,8 @@ function TwofaLogin() {
         resolver: yupResolver(schema),
         mode: 'all',
     });
-    const expiresIn =
-        process.env.NODE_ENV == 'development'
-            ? 7
-            : new Date(new Date().getTime() + 2 * 60 * 60 * 1000);
+    // const token = Cookies.get('token');
+    // console.log({ token });
     const onSubmit = async (data: TwoFaModel) => {
         try {
             const result =
@@ -52,12 +50,6 @@ function TwofaLogin() {
                     twoFactorCode,
                 )) as UserViewStandardResponse;
             if (result.status) {
-                Cookies.set('user', JSON.stringify(result.data));
-                result.data &&
-                    Cookies.set('token', result.data.token as string, {
-                        expires: expiresIn,
-                    });
-                OpenAPI.TOKEN = result?.data?.token as string;
                 const getControlSettings =
                     await UserService.getControlSettingById(
                         result.data?.superAdminId as string,
@@ -80,7 +72,7 @@ function TwofaLogin() {
                               ),
                           )
                         : router.push(
-                              `${result?.data?.role?.replaceAll(
+                              `/${result?.data?.role?.replaceAll(
                                   ' ',
                                   '',
                               )}/dashboard`,

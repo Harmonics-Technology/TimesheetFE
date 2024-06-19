@@ -32,6 +32,7 @@ import OtpInput from 'react-otp-input';
 import { useContext, useState } from 'react';
 import { UserContext } from '@components/context/UserContext';
 import Cookies from 'js-cookie';
+import QRCode from 'react-qr-code';
 
 function TwoFaModal({
     isOpen,
@@ -188,11 +189,19 @@ function TwoFaModal({
                                             Scan the QR Code below with your
                                             authenticator app.
                                         </Text>
-                                        <Flex justify="space-around">
-                                            <Image
+                                        <Flex justify="space-around" py="1rem">
+                                            {/* <Image
                                                 src={data?.qrCodeUrl as string}
                                                 w="auto"
                                                 h="auto"
+                                            /> */}
+                                            <QRCode
+                                                size={256}
+                                                bgColor="white"
+                                                value={
+                                                    data?.qrCodeUrl as string
+                                                }
+                                                viewBox={`0 0 256 256`}
                                             />
                                         </Flex>
                                     </>
@@ -201,10 +210,15 @@ function TwoFaModal({
                                     onClick={() => setCodeText(!codeText)}
                                     textAlign="center"
                                     cursor="pointer"
+                                    py="1rem"
+                                    _hover={{
+                                        color: 'brand.400',
+                                        textDecor: 'underline',
+                                    }}
                                 >
                                     {codeText
                                         ? 'Scan Code Instead'
-                                        : "Can't Scan Code?"}
+                                        : 'Try Security Key Setup'}
                                 </Text>
                             </Box>
                         ) : step == 2 ? (
