@@ -40,24 +40,24 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
         subType == 'basic'
             ? [
                   'admin',
-                  { show: true, name: 'clients' },
                   'supervisors',
                   'team members',
+                  { show: true, name: 'clients' },
               ]
             : subType == 'standard'
             ? [
                   'admin',
-                  { show: true, name: 'clients' },
                   'supervisors',
                   'team members',
+                  { show: true, name: 'clients' },
                   'payment partners',
               ]
             : subType == 'premium'
             ? [
                   'admin',
-                  { show: false, name: 'clients' },
                   'supervisors',
                   'team members',
+                  { show: false, name: 'clients' },
                   'payment partners',
               ]
             : [{ show: true, name: 'admin' }];
