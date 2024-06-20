@@ -178,7 +178,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         display={activeSub}
                     />
-                    <MenuItem
+                    {/* <MenuItem
                         change={change}
                         linkName="shift-management"
                         menuTitle="Shift Management"
@@ -193,7 +193,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                                 ? true
                                 : false
                         }
-                    />
+                    /> */}
                     <MenuItem
                         change={change}
                         linkName="financials"
