@@ -47,23 +47,6 @@ export const GantChart = ({
         },
     }));
 
-    // const newTasks: Task[] = [
-    //     {
-    //         start: new Date(project?.startDate),
-    //         end: new Date(project?.endDate),
-    //         name: project.name,
-    //         id: project.id,
-    //         type: 'task',
-    //         progress: project?.progress,
-    //         isDisabled: true,
-    //         dependencies: tasks?.value?.map((x) => x.projectId),
-    //         styles: {
-    //             progressColor: '#ffbb54',
-    //             progressSelectedColor: '#ff9e0d',
-    //         },
-    //     },
-    // ];
-
     return (
         <Box>
             <TopBar
@@ -105,13 +88,19 @@ export const GantChart = ({
                 </HStack>
             </HStack>
             <Box w="full" bgColor="white" p="1rem" borderRadius="6px">
-                <Gantt
-                    tasks={
-                        newTasks?.sort(
-                            (a, b) => (a?.start as any) - (b?.start as any),
-                        ) as Task[]
-                    }
-                />
+                {(newTasks?.length as any) > 0 ? (
+                    <Gantt
+                        tasks={
+                            newTasks?.sort(
+                                (a, b) => (a?.start as any) - (b?.start as any),
+                            ) as Task[]
+                        }
+                    />
+                ) : (
+                    <HStack h="30vh" justify="center">
+                        <Text>No data to show!!!</Text>
+                    </HStack>
+                )}
             </Box>
             {isOpen && (
                 <AddNewTaskDrawer

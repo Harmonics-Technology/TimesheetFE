@@ -116,7 +116,7 @@ function Login() {
                               ),
                           )
                         : router.push(
-                              `${result?.data?.role?.replaceAll(
+                              `/${result?.data?.role?.replaceAll(
                                   ' ',
                                   '',
                               )}/dashboard`,

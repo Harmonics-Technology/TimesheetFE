@@ -230,10 +230,10 @@ function MyProfile({
     );
     //
 
-    const twoFaSubmitFun = async () => {
+    const twoFaSubmitFun = async (value) => {
         setLoading(true);
         try {
-            const result = await UserService.enable2Fa(twofaState);
+            const result = await UserService.enable2Fa(value);
             if (result.status) {
                 setLoading(false);
                 //
@@ -270,9 +270,10 @@ function MyProfile({
         }
     };
 
-    // useNonInitialEffect(() => {
-    //     twoFaSubmitFun();
-    // }, [twofaState]);
+    const trigger2fa = (value: any) => {
+        settwofaState(value);
+        twoFaSubmitFun(value);
+    };
 
     return (
         <Box>
@@ -603,7 +604,7 @@ function MyProfile({
                         >
                             <Switch
                                 id="email-alerts"
-                                onChange={() => settwofaState(!twofaState)}
+                                onChange={() => trigger2fa(!twofaState)}
                                 defaultChecked={
                                     user?.twoFactorEnabled == true
                                         ? true

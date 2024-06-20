@@ -40,6 +40,8 @@ function TwofaLogin() {
         resolver: yupResolver(schema),
         mode: 'all',
     });
+    // const token = Cookies.get('token');
+    // console.log({ token });
     const onSubmit = async (data: TwoFaModel) => {
         try {
             const result =
@@ -48,36 +50,44 @@ function TwofaLogin() {
                     twoFactorCode,
                 )) as UserViewStandardResponse;
             if (result.status) {
+                const getControlSettings =
+                    await UserService.getControlSettingById(
+                        result.data?.superAdminId as string,
+                    );
+                if (getControlSettings.status) {
+                    Cookies.set(
+                        'access-controls',
+                        JSON.stringify(getControlSettings.data),
+                    );
+                    toast({
+                        title: `Login Successful`,
+                        status: 'success',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                    router.query.from
+                        ? router.push(
+                              decodeURIComponent(
+                                  router.query.from as unknown as string,
+                              ),
+                          )
+                        : router.push(
+                              `/${result?.data?.role?.replaceAll(
+                                  ' ',
+                                  '',
+                              )}/dashboard`,
+                          );
+
+                    return;
+                }
                 toast({
-                    title: `Login Successful`,
-                    status: 'success',
+                    title: result.message,
+                    status: 'error',
                     isClosable: true,
                     position: 'top-right',
                 });
-                Cookies.set('user', JSON.stringify(result.data));
-                OpenAPI.TOKEN = result?.data?.token as string;
-                router.query.from
-                    ? router.push(
-                          decodeURIComponent(
-                              router.query.from as unknown as string,
-                          ),
-                      )
-                    : router.push(
-                          `${result?.data?.role?.replaceAll(
-                              ' ',
-                              '',
-                          )}/dashboard`,
-                      );
-
                 return;
             }
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            return;
         } catch (error: any) {
             toast({
                 title: error?.message || error?.body?.message,

@@ -53,14 +53,15 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     pagingOptions.to || end,
                     pagingOptions.clientId,
                 );
-            const allProjects = await ProjectManagementService.listProject(
-                pagingOptions.offset,
-                pagingOptions.limit || 50,
-                superAdminId,
-                pagingOptions.status,
-                id,
-                pagingOptions.search,
-            );
+            const allProjects =
+                await ProjectManagementService.listStrippedProject(
+                    pagingOptions.offset,
+                    50,
+                    superAdminId,
+                    pagingOptions.status,
+                    id,
+                    pagingOptions.search,
+                );
             const access =
                 await UserService.getSuperAdminProjectManagementSettings(
                     superAdminId,

@@ -65,7 +65,7 @@ export const Dashboard = ({
                 borderRadius="5px"
             >
                 <HStack>
-                    <HStack w="fit-content">
+                    <HStack w="100%">
                         <Image
                             src="/assets/filter.png"
                             alt="filter"

@@ -18,7 +18,6 @@ import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import ToggleSwitch from '@components/bits-utils/ToggleSwitch';
 import TwoFaModal from '@components/bits-utils/TwoFaModal';
-import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
@@ -68,14 +67,16 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
         onOpen: onOpen2Fa,
         onClose: close2Fa,
     } = useDisclosure();
-    const twoFaSubmitFun = async () => {
+
+    const twoFaSubmitFun = async (value) => {
         setLoading(true);
         try {
-            const result = await UserService.enable2Fa(twofaState);
+            const result = await UserService.enable2Fa(value);
             if (result.status) {
                 setLoading(false);
                 //
                 if (result.data?.enable2FA) {
+                    console.log({ res: result?.data });
                     setTwoFaData(result.data);
                     onOpen2Fa();
                     return;
@@ -106,6 +107,11 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
             });
             setLoading(false);
         }
+    };
+
+    const trigger2fa = (value: any) => {
+        settwofaState(value);
+        twoFaSubmitFun(value);
     };
 
     const onSubmit = async (data: UpdateUserModel) => {
@@ -139,9 +145,6 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
         }
     };
 
-    useNonInitialEffect(() => {
-        twoFaSubmitFun();
-    }, [twofaState]);
     return (
         <Box>
             <LeaveTab
@@ -319,12 +322,8 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                         >
                             <ToggleSwitch
                                 label="two_fa_setup"
-                                onChange={() => settwofaState(!twofaState)}
-                                checked={
-                                    userInfo?.twoFactorEnabled == true
-                                        ? true
-                                        : false
-                                }
+                                onChange={() => trigger2fa(!twofaState)}
+                                checked={twofaState}
                             />
                             {loading ? (
                                 <Spinner />
