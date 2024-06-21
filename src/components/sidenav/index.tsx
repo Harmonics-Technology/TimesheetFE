@@ -288,10 +288,10 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'hst settings',
                             'payment schedule settings',
                             'leave management settings',
-                            {
-                                show: subType == 'basic',
-                                name: 'shift management settings',
-                            },
+                            // {
+                            //     show: subType == 'basic',
+                            //     name: 'shift management settings',
+                            // },
                         ]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
