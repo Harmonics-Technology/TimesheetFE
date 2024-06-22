@@ -67,11 +67,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     ?.client?.id;
             const paymentId = data.data?.employeeInformation?.paymentPartnerId;
             //
-            const supervisor = await UserService.getClientSupervisors(
-                0,
-                18,
-                '',
-                clientId,
+            const supervisor = await UserService.listSupervisorsAndAdmins(
+                clientId as string,
             );
             const department = await DepartmentService.listDepartments(
                 superAdminId,
@@ -88,7 +85,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 props: {
                     userProfile: data.data,
                     paymentPartner: paymentPartner?.data?.value,
-                    supervisor: supervisor?.data?.value,
+                    supervisor: supervisor?.data,
                     id,
                     department: department.data,
                     currencies: currencies.data,

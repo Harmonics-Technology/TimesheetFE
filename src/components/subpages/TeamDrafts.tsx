@@ -60,7 +60,7 @@ function TeamDraft({
         }
         setLoading({ id: loadId });
         try {
-            const data = await UserService.getSupervisors(id);
+            const data = await UserService.listSupervisorsAndAdmins(id);
             const payFees = await OnboardingFeeService.listOnboardingFee(
                 0,
                 10,
