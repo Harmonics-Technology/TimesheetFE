@@ -58,7 +58,7 @@ function SuperadminProfile({ userProfile, subs }: SuperadminProfileProps) {
     const router = useRouter();
     const onSubmit = async (data: UpdateUserModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
-
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         try {
             const result = await UserService.adminUpdateUser(data);
             //
