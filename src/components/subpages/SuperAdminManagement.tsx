@@ -1,6 +1,6 @@
 import { Box, Button, Grid, Text, useToast } from '@chakra-ui/react';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -11,6 +11,8 @@ import InputBlank from '@components/bits-utils/InputBlank';
 import { useRouter } from 'next/router';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { LicenseEditBox } from '@components/bits-utils/LicenseEditBox';
+import { LicenseRevoke } from '@components/bits-utils/LicenseRevoke';
 
 const schema = yup.object().shape({
     firstName: yup.string().required(),
@@ -21,8 +23,9 @@ const schema = yup.object().shape({
 });
 interface SuperadminProfileProps {
     userProfile?: UserView;
+    subs: any;
 }
-function SuperadminProfile({ userProfile }: SuperadminProfileProps) {
+function SuperadminProfile({ userProfile, subs }: SuperadminProfileProps) {
     //
     const {
         register,
@@ -38,6 +41,17 @@ function SuperadminProfile({ userProfile }: SuperadminProfileProps) {
             role: userProfile?.role,
         },
     });
+
+    const curentLicense = subs?.find(
+        (x) => x.subscriptionId === userProfile?.clientSubscriptionId,
+    );
+    const [selectedLicense, setSelectedLicense] = useState<any>(curentLicense);
+    const addLicense = (license) => {
+        setSelectedLicense(license);
+    };
+    const removeLicense = (id) => {
+        setSelectedLicense(undefined);
+    };
     //
 
     const toast = useToast();
@@ -146,6 +160,38 @@ function SuperadminProfile({ userProfile }: SuperadminProfileProps) {
                         ]}
                     />
                 </Grid>
+                <Box borderY="1px solid #d9d9d9" py="1rem" my="2rem">
+                    <Text
+                        fontWeight="600"
+                        fontSize="1.1rem"
+                        mb="1rem"
+                        textTransform="capitalize"
+                        color="brand.200"
+                    >
+                        License Plan Assigned
+                    </Text>
+                    <LicenseEditBox
+                        data={subs}
+                        updateFunction={addLicense}
+                        items={selectedLicense}
+                        customKeys={{
+                            key: 'subscriptionId',
+                            label: 'subscriptionType',
+                            used: 'noOfLicenceUsed',
+                            total: 'noOfLicensePurchased',
+                        }}
+                        removeFn={removeLicense}
+                        id="assignLicense"
+                        extraField={'users in total assigned to this license'}
+                        checkbox
+                    />
+                    <LicenseRevoke
+                        userId={userProfile?.id}
+                        text="Revoke License"
+                        disabled={!curentLicense}
+                        setSelectedLicense={setSelectedLicense}
+                    />
+                </Box>
                 <Grid
                     templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                     gap="1rem 2rem"
