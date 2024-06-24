@@ -1,24 +1,16 @@
 import {
     Box,
-    Button,
     Flex,
     HStack,
     Text,
     Tr,
     VStack,
     useDisclosure,
-    useToast,
 } from '@chakra-ui/react';
-import { LabelSign } from '@components/bits-utils/LabelSign';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { ManageBtn } from '@components/bits-utils/ManageBtn';
-import { RenewSubscription } from '@components/bits-utils/RenewSubscription';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
-import {
-    TableData,
-    TableStatus,
-    TableSubscriptionActions,
-} from '@components/bits-utils/TableData';
+import { TableData, TableStatus } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
 import { UpgradeSubModal } from '@components/bits-utils/UpgradeSubModal';
 import { UserContext } from '@components/context/UserContext';
@@ -27,20 +19,15 @@ import { CAD } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
 import moment from 'moment';
 import { useRouter } from 'next/router';
-import React, { useContext, useState } from 'react';
-import { UserService, UserView } from 'src/services';
+import React, { useContext } from 'react';
 
 export const SubscriptionDetails = ({ data }) => {
-    const { user, subType } = useContext(UserContext);
-    const userInfo: UserView = user;
+    const { user, subType, subDetails } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
-    const curSub = user?.subscriptiobDetails?.data;
+    const curSub = subDetails?.data;
     const { onOpen, isOpen, onClose } = useDisclosure();
     const router = useRouter();
-    const daysLeft = moment(userInfo?.subscriptiobDetails?.data?.endDate).diff(
-        moment(),
-        'day',
-    );
+    const daysLeft = moment(subDetails?.data?.endDate).diff(moment(), 'day');
 
     // const currentSub: any = user?.subscriptiobDetails?.data?.subscription;
 
@@ -97,15 +84,11 @@ export const SubscriptionDetails = ({ data }) => {
                 <VStack spacing="2rem" align="flex-start">
                     <TextWithBottom
                         title="Subscription Date"
-                        text={formatDate(
-                            userInfo?.subscriptiobDetails?.data?.startDate,
-                        )}
+                        text={formatDate(subDetails?.data?.startDate)}
                     />
                     <TextWithBottom
                         title="Subscription Renewal Date"
-                        text={`${formatDate(
-                            userInfo?.subscriptiobDetails?.data?.endDate,
-                        )}
+                        text={`${formatDate(subDetails?.data?.endDate)}
                         (${daysLeft < 0 ? '0' : daysLeft + 1}
                         days)`}
                         sub={daysLeft < 0 ? 'Expired' : 'Active'}

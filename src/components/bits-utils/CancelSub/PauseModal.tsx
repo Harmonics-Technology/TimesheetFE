@@ -26,8 +26,8 @@ interface PauseModel {
 }
 
 export const PauseModal = ({ isOpen, onClose }) => {
-    const { user } = useContext(UserContext);
-    const currentSub: any = user?.subscriptiobDetails?.data;
+    const { user, subDetails } = useContext(UserContext);
+    const currentSub: any = subDetails?.data;
     const {
         handleSubmit,
         control,

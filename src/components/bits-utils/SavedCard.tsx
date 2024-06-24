@@ -28,7 +28,7 @@ export const SavedCard = ({
     data: Card;
     setIsEditing?: any;
 }) => {
-    const { user } = useContext(UserContext);
+    const { user, subDetails } = useContext(UserContext);
     const [loading, setLoading] = useState({ status: false, type: '' });
     const [editCard, setEditCard] = useState({
         status: false,
@@ -116,7 +116,7 @@ export const SavedCard = ({
                 ) : (
                     <Text fontSize=".875rem" color="#252f40" fontWeight={500}>
                         Your next billing date is{' '}
-                        {formatDate(user?.subscriptiobDetails?.data?.endDate)}
+                        {formatDate(subDetails?.data?.endDate)}
                     </Text>
                 )}
             </HStack>

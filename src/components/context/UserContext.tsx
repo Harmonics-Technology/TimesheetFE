@@ -10,27 +10,32 @@ export const UserProvider = ({ children }: { children: any }) => {
     let subType;
     let activeSub;
     let accessControls;
+    let subDetails;
     const users = Cookies.get('user') as unknown as string;
+    const subs = Cookies.get('subDetails') as unknown as string;
     const isDev = process.env.NEXT_PUBLIC_ENV == 'development';
     if (users !== undefined) {
         user = JSON.parse(users);
-        subType = JSON.parse(users)
-            ?.subscriptiobDetails?.data?.subscription?.name?.split(' ')[0]
-            ?.toLowerCase();
-        const daysLeft = moment(
-            JSON.parse(users)?.subscriptiobDetails?.data?.endDate,
-        ).diff(moment(), 'day');
-        activeSub =
-            JSON.parse(users)?.subscriptiobDetails?.data?.status == 'ACTIVE' &&
-            daysLeft >= 0
-                ? true
-                : isDev
-                ? true
-                : false;
     }
     const access = Cookies.get('access-controls') as unknown as string;
     if (users !== undefined && access !== undefined) {
         accessControls = JSON.parse(access);
+    }
+    if (subs !== undefined) {
+        subDetails = JSON.parse(subs);
+        subType = subDetails?.data?.subscription?.name
+            ?.split(' ')[0]
+            ?.toLowerCase();
+        const daysLeft = moment(subDetails?.data?.endDate).diff(
+            moment(),
+            'day',
+        );
+        activeSub =
+            subDetails?.data?.status == 'ACTIVE' && daysLeft >= 0
+                ? true
+                : isDev
+                ? true
+                : false;
     }
 
     const { isOpen, onOpen: opens, onClose } = useDisclosure();
@@ -44,6 +49,7 @@ export const UserProvider = ({ children }: { children: any }) => {
                     activeSub,
                     accessControls,
                     opens,
+                    subDetails,
                 }}
             >
                 {children}
