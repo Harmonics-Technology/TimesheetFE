@@ -100,7 +100,7 @@ function Login() {
                     twoFactorEnabled: result.data?.twoFactorEnabled,
                     currency: result.data?.currency,
                     department: result.data?.department,
-                    employeeInformationId: result.data?.employeeInformation,
+                    employeeInformationId: result.data?.employeeInformationId,
                     id: result.data?.id,
                 };
                 const subDetails = result.data?.subscriptiobDetails;
