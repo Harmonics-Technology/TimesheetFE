@@ -54,6 +54,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 userId,
                 pagingOptions.search,
                 pagingOptions.status,
+                pagingOptions.department,
             );
             const users = await UserService.listUsers(
                 'Team member',

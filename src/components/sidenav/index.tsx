@@ -918,83 +918,6 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
-                        linkName="timesheets"
-                        menuTitle="Timesheets"
-                        icon={<FaCalendar opacity=".8" />}
-                        option={true}
-                        role={role}
-                        setOpenSidenav={setOpenSidenav}
-                        dropDown={['approval', 'history']}
-                    />
-                    <MenuItem
-                        change={change}
-                        linkName="financials"
-                        menuTitle="Financials"
-                        icon={<RiLineChartFill opacity=".8" />}
-                        option={true}
-                        role={role}
-                        setOpenSidenav={setOpenSidenav}
-                        dropDown={[
-                            'expenses',
-                            'payrolls',
-                            'payslips',
-                            'invoices',
-                        ]}
-                    />
-                    <MenuItem
-                        change={change}
-                        linkName="contracts"
-                        menuTitle="Contracts"
-                        icon={<FaFile opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        role={role}
-                        setOpenSidenav={setOpenSidenav}
-                    />
-                    {userAccess?.adminReport && (
-                        <MenuItem
-                            change={change}
-                            linkName="report"
-                            menuTitle="Reports"
-                            icon={<BsGraphUp opacity=".8" />}
-                            option={false}
-                            dropDown={[]}
-                            setOpenSidenav={setOpenSidenav}
-                            role={role}
-                            display={activeSub}
-                        />
-                    )}
-                    {userAccess?.adminLeaveManagement && (
-                        <MenuItem
-                            change={change}
-                            linkName="leave"
-                            menuTitle="Leave Management"
-                            icon={<FaFile opacity=".8" />}
-                            option={false}
-                            setOpenSidenav={setOpenSidenav}
-                            dropDown={[]}
-                            role={role}
-                            display={activeSub}
-                        />
-                    )}
-                    <MenuItem
-                        change={change}
-                        linkName="shift-management"
-                        menuTitle="Shift Management"
-                        icon={<AiFillSchedule opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        setOpenSidenav={setOpenSidenav}
-                        role={role}
-                        display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
-                        }
-                    />
-                    <MenuItem
-                        change={change}
                         linkName="project-management"
                         menuTitle="Project Management"
                         icon={<TbCalendarTime opacity=".8" />}
@@ -1025,6 +948,96 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                                 : false
                         }
                     />
+                    <MenuItem
+                        change={change}
+                        linkName="timesheets"
+                        menuTitle="Timesheets"
+                        icon={<FaCalendar opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['approval', 'history']}
+                    />
+                    {userAccess?.adminLeaveManagement && (
+                        <MenuItem
+                            change={change}
+                            linkName="leave"
+                            menuTitle="Leave Management"
+                            icon={<FaFile opacity=".8" />}
+                            option={false}
+                            setOpenSidenav={setOpenSidenav}
+                            dropDown={[]}
+                            role={role}
+                            display={activeSub}
+                        />
+                    )}
+                    <MenuItem
+                        change={change}
+                        linkName="financials"
+                        menuTitle="Financials"
+                        icon={<RiLineChartFill opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[
+                            'payrolls',
+                            'payslips',
+                            'invoices',
+                            'expenses',
+                        ]}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="training"
+                        menuTitle="Training"
+                        icon={<MdModelTraining opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="contracts"
+                        menuTitle="Contracts"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                    />
+                    {userAccess?.adminReport && (
+                        <MenuItem
+                            change={change}
+                            linkName="report"
+                            menuTitle="Reports"
+                            icon={<BsGraphUp opacity=".8" />}
+                            option={false}
+                            dropDown={[]}
+                            setOpenSidenav={setOpenSidenav}
+                            role={role}
+                            display={activeSub}
+                        />
+                    )}
+
+                    {/* <MenuItem
+                        change={change}
+                        linkName="shift-management"
+                        menuTitle="Shift Management"
+                        icon={<AiFillSchedule opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={
+                            (subType == 'standard' && activeSub) ||
+                            (subType == 'premium' && activeSub)
+                                ? true
+                                : false
+                        }
+                    /> */}
+
                     {userAccess?.adminExpenseTypeAndHST && (
                         <MenuItem
                             change={change}
