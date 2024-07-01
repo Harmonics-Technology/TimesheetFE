@@ -4,6 +4,7 @@
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { CancelSubscriptionModel } from '../models/CancelSubscriptionModel';
 import type { CardsStandardResponse } from '../models/CardsStandardResponse';
+import type { ChangePasswordModel } from '../models/ChangePasswordModel';
 import type { ClientSubscriptionDetailViewListStandardResponse } from '../models/ClientSubscriptionDetailViewListStandardResponse';
 import type { ClientSubscriptionInvoiceViewStandardResponse } from '../models/ClientSubscriptionInvoiceViewStandardResponse';
 import type { ClientSubscriptionResponseViewModelStandardResponse } from '../models/ClientSubscriptionResponseViewModelStandardResponse';
@@ -241,19 +242,18 @@ requestBody?: MicrosoftIdTokenDetailsModel,
     }
 
     /**
-     * @param password 
+     * @param requestBody 
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static updatePassword(
-password?: string,
+requestBody?: ChangePasswordModel,
 ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/change_password',
-            query: {
-                'password': password,
-            },
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
         });
     }
 
@@ -307,6 +307,7 @@ role: string,
 superAdminId?: string,
 offset?: number,
 limit?: number,
+// role?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
