@@ -26,6 +26,8 @@ import Checkbox from '@components/bits-utils/Checkbox';
 import Pagination from '@components/bits-utils/Pagination';
 import Link from 'next/link';
 import { UserContext } from '@components/context/UserContext';
+import { LicenseRevoke } from '@components/bits-utils/LicenseRevoke';
+import { LicenseEditBox } from '@components/bits-utils/LicenseEditBox';
 
 const schema = yup.object().shape({
     firstName: yup.string().required(),
@@ -37,8 +39,13 @@ const schema = yup.object().shape({
 interface SupervisorProfileProps {
     userProfile?: UserView;
     teamList?: UserViewPagedCollectionStandardResponse;
+    subs: any;
 }
-function SupervisorProfile({ userProfile, teamList }: SupervisorProfileProps) {
+function SupervisorProfile({
+    userProfile,
+    teamList,
+    subs,
+}: SupervisorProfileProps) {
     //
     const {
         register,
@@ -59,9 +66,19 @@ function SupervisorProfile({ userProfile, teamList }: SupervisorProfileProps) {
     const toast = useToast();
     const router = useRouter();
     const [teamMembers, setTeamMembers] = useState(false);
+    const curentLicense = subs?.find(
+        (x) => x.subscriptionId === userProfile?.clientSubscriptionId,
+    );
+    const [selectedLicense, setSelectedLicense] = useState<any>(curentLicense);
+    const addLicense = (license) => {
+        setSelectedLicense(license);
+    };
+    const removeLicense = (id) => {
+        setSelectedLicense(undefined);
+    };
     const onSubmit = async (data: UpdateUserModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
-
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         try {
             const result = await UserService.adminUpdateUser(data);
             //
@@ -189,6 +206,39 @@ function SupervisorProfile({ userProfile, teamList }: SupervisorProfileProps) {
                         ]}
                     />
                 </Grid>
+
+                <Box borderY="1px solid #d9d9d9" py="1rem" my="2rem">
+                    <Text
+                        fontWeight="600"
+                        fontSize="1.1rem"
+                        mb="1rem"
+                        textTransform="capitalize"
+                        color="brand.200"
+                    >
+                        License Plan Assigned
+                    </Text>
+                    <LicenseEditBox
+                        data={subs}
+                        updateFunction={addLicense}
+                        items={selectedLicense}
+                        customKeys={{
+                            key: 'subscriptionId',
+                            label: 'subscriptionType',
+                            used: 'noOfLicenceUsed',
+                            total: 'noOfLicensePurchased',
+                        }}
+                        removeFn={removeLicense}
+                        id="assignLicense"
+                        extraField={'users in total assigned to this license'}
+                        checkbox
+                    />
+                    <LicenseRevoke
+                        userId={userProfile?.id}
+                        text="Revoke License"
+                        disabled={!curentLicense}
+                        setSelectedLicense={setSelectedLicense}
+                    />
+                </Box>
 
                 <Grid
                     templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
