@@ -305,6 +305,7 @@ search?: string,
      * @param userId 
      * @param search 
      * @param filter 
+     * @param departmentToFilter 
      * @returns ProjectTaskViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
@@ -316,6 +317,7 @@ status?: string,
 userId?: string,
 search?: string,
 filter?: OperationalTaskFilter,
+departmentToFilter?: string,
 ): CancelablePromise<ProjectTaskViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -328,6 +330,7 @@ filter?: OperationalTaskFilter,
                 'userId': userId,
                 'search': search,
                 'filter': filter,
+                'departmentToFilter': departmentToFilter,
             },
         });
     }

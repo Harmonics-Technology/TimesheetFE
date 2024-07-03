@@ -9,7 +9,7 @@ import {
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { ContainerBox } from './ContainerBox';
 import { OperationCard } from './OperationCard';
 import moment from 'moment';
@@ -25,6 +25,7 @@ import {
 import { EditOpTaskDrawer } from './EditOpTaskDrawer';
 import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
 import Pagination from '@components/bits-utils/Pagination';
+import { UserContext } from '@components/context/UserContext';
 
 export const OperationDashboard = ({
     superAdminId,
@@ -42,6 +43,8 @@ export const OperationDashboard = ({
     departments: any;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { user } = useContext(UserContext);
+    const role = user?.role.replaceAll(' ', '');
     const {
         isOpen: isEditOpen,
         onOpen: onEditOpen,
@@ -70,11 +73,35 @@ export const OperationDashboard = ({
         });
         dateRef.current.closeCalendar();
     };
+    const [filter, setFilter] = useState<any>('');
     const filterByStatus = (value) => {
+        setFilter(value);
+        if (value == '2' && role != 'TeamMember') {
+            return;
+        }
+        if (value == '2' && role == 'TeamMember') {
+            router.push({
+                query: {
+                    ...router.query,
+                    department: user?.department,
+                    status: '',
+                },
+            });
+        }
         router.push({
             query: {
                 ...router.query,
                 status: value,
+                department: '',
+            },
+        });
+    };
+    const filterByDepartment = (value) => {
+        router.push({
+            query: {
+                ...router.query,
+                department: value,
+                status: '',
             },
         });
     };
@@ -161,6 +188,7 @@ export const OperationDashboard = ({
                         'DD-MM-YYYY',
                     )}`}
                     user={task?.createdByUser}
+                    assignees={task?.assignees}
                     onClick={() => triggerEditCard(task)}
                     onDragStart={(e) => handleDragStart(e, task)}
                     onDragEnd={(e) => handleDragEnd(e)}
@@ -186,6 +214,21 @@ export const OperationDashboard = ({
                         <option value="2">Departmental</option>
                         <option value="3">Others</option>
                     </Select>
+                    {filter == '2' && role != 'TeamMember' && (
+                        <Select
+                            fontSize=".8rem"
+                            w="fit-content"
+                            onChange={(e) =>
+                                filterByDepartment(e?.target.value)
+                            }
+                        >
+                            <option value="">Select Department</option>
+                            {departments?.map((x) => (
+                                <option value={x.name}>{x.name}</option>
+                            ))}
+                        </Select>
+                    )}
+
                     <DatePicker
                         value={date}
                         onChange={setDate}

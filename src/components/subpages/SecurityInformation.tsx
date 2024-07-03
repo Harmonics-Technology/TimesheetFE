@@ -10,7 +10,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { ControlSettingView, UserService } from 'src/services';
+import {
+    ChangePasswordModel,
+    ControlSettingView,
+    UserService,
+} from 'src/services';
 import * as yup from 'yup';
 
 const schema = yup.object().shape({
@@ -52,7 +56,10 @@ export const SecurityInformation = ({
 
     const onSubmit = async (data: PasswordReset) => {
         try {
-            const result = await UserService.updatePassword(data.newPassword);
+            const result = await UserService.updatePassword({
+                oldPassword: data.oldPassword,
+                newPassword: data.newPassword,
+            });
             if (result.status) {
                 //
                 toast({

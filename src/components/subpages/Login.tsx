@@ -83,7 +83,29 @@ function Login() {
                     Cookies.remove('details');
                 }
 
-                Cookies.set('user', JSON.stringify(result.data));
+                const strippedData = {
+                    clientSubscriptionId: result.data?.clientSubscriptionId,
+                    email: result.data?.email,
+                    firstName: result.data?.firstName,
+                    lastName: result.data?.lastName,
+                    fullName: result.data?.fullName,
+                    role: result.data?.role,
+                    isActive: result.data?.isActive,
+                    isAnniversaryToday: result.data?.isAnniversaryToday,
+                    isBirthDayToday: result.data?.isBirthDayToday,
+                    isOrganizationProjectManager:
+                        result.data?.isOrganizationProjectManager,
+                    organizationName: result.data?.organizationName,
+                    superAdminId: result.data?.superAdminId,
+                    twoFactorEnabled: result.data?.twoFactorEnabled,
+                    currency: result.data?.currency,
+                    department: result.data?.department,
+                    employeeInformationId: result.data?.employeeInformationId,
+                    id: result.data?.id,
+                };
+                const subDetails = result.data?.subscriptiobDetails;
+                Cookies.set('user', JSON.stringify(strippedData));
+                Cookies.set('subDetails', JSON.stringify(subDetails));
                 result.data &&
                     Cookies.set('token', result.data.token as string, {
                         expires: expiresIn,

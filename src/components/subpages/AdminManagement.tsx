@@ -295,6 +295,7 @@ function ProfileManagementAdmin({
                         <Grid
                             templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                             gap="1rem 2rem"
+                            mb=".5rem"
                         >
                             <PrimaryInput<RegisterModel>
                                 label="First Name"
@@ -389,6 +390,7 @@ function ProfileManagementAdmin({
                             borderBottom="1px solid"
                             borderColor="#e5e5e5"
                             py="1rem"
+                            my="1rem"
                         >
                             OR
                         </Text>
@@ -401,6 +403,7 @@ function ProfileManagementAdmin({
                                 <Grid
                                     templateColumns="repeat(2,1fr)"
                                     gap="1rem 2rem"
+                                    mb=".5rem"
                                 >
                                     <Box>
                                         <Box>
@@ -453,6 +456,14 @@ function ProfileManagementAdmin({
                                         />
                                     </Box>
                                 </Grid>
+
+                                <LicenseSelection
+                                    addLicense={addLicense}
+                                    removeLicense={removeLicense}
+                                    errors={errors}
+                                    selectedLicense={selectedLicense}
+                                    subs={subs}
+                                />
                                 <DrawerFooter
                                     borderTopWidth="1px"
                                     mt="2rem"

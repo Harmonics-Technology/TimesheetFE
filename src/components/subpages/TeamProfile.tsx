@@ -149,6 +149,8 @@ function TeamProfile({
     const toast = useToast();
     const includePayroll = watch('enableFinancials');
 
+    console.log({ userProfile });
+
     // console.log({ userProfile, rle: watch('role') });
     //
     const isFlatFeeSelected = watch('payrollStructure') == 'flat';
@@ -302,12 +304,8 @@ function TeamProfile({
                 ? (data.isEligibleForLeave = true)
                 : (data.isEligibleForLeave = false);
         }
-        {
-            (data?.enableFinancials as unknown as string) == 'Yes' ||
-            data.enableFinancials == true
-                ? (data.enableFinancials = true)
-                : (data.enableFinancials = false);
-        }
+        data.enableFinancials = (data.enableFinancials as any) === 'true';
+
         // data.clientId = !clientType ? user?.superAdminId : data.clientId;
         try {
             const result = await UserService.updateTeamMember(data);

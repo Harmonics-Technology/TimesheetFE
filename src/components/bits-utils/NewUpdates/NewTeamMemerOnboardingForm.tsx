@@ -175,7 +175,7 @@ export const NewTeamMemerOnboardingForm = ({
         setLoading(true);
 
         try {
-            const data = await UserService.getSupervisors(id);
+            const data = await UserService.listSupervisorsAndAdmins(id);
             setLoading(false);
 
             if (data.status) {

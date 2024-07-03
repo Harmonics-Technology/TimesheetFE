@@ -49,9 +49,9 @@ const reasons = [
     { title: 'The purpose of use was completed', id: 8 },
 ];
 const CancelSub = () => {
-    const { user } = useContext(UserContext);
+    const { user, subDetails } = useContext(UserContext);
     const router = useRouter();
-    const currentSub: any = user?.subscriptiobDetails?.data;
+    const currentSub: any = subDetails?.data;
     const { activeStep, setActiveStep } = useSteps({
         index: 1,
         count: steps.length,

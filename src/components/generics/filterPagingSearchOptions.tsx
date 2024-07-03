@@ -13,6 +13,7 @@ export const filterPagingSearchOptions = (ctx: any) => {
         status,
         subId,
         convert,
+        department,
     } = ctx.query;
     const options = {
         limit: limit ? limit : 10,
@@ -27,6 +28,7 @@ export const filterPagingSearchOptions = (ctx: any) => {
         chartYear: chartYear ? chartYear : moment(new Date()).format('YYYY'),
         subId: subId,
         convert: convert,
+        department: department,
     };
 
     return options;

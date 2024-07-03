@@ -21,6 +21,7 @@ export type { CancelSubscriptionModel } from './models/CancelSubscriptionModel';
 export type { Card } from './models/Card';
 export type { Cards } from './models/Cards';
 export type { CardsStandardResponse } from './models/CardsStandardResponse';
+export type { ChangePasswordModel } from './models/ChangePasswordModel';
 export type { ClientSubscriptionDetailView } from './models/ClientSubscriptionDetailView';
 export type { ClientSubscriptionDetailViewListStandardResponse } from './models/ClientSubscriptionDetailViewListStandardResponse';
 export type { ClientSubscriptionInvoiceView } from './models/ClientSubscriptionInvoiceView';

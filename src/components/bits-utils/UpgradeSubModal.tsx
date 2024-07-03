@@ -25,8 +25,8 @@ import { useRouter } from 'next/router';
 import { UpdateClientStripeSubscriptionModel, UserService } from 'src/services';
 
 export const UpgradeSubModal = ({ isOpen, onClose }: any) => {
-    const { user } = useContext(UserContext);
-    const subType = user?.subscriptiobDetails?.data;
+    const { user, subDetails } = useContext(UserContext);
+    const subType = subDetails?.data;
     const [allSubs, setAllSubs] = useState<any>([]);
     const [subData, setSubData] = useState<any>([]);
     const [loading, setLoading] = useState(false);

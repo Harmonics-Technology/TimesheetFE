@@ -189,6 +189,10 @@ export const EditOpTaskDrawer = ({
         setValue('duration', dateDiff + 1 || 0);
     }, [watch('startDate'), watch('endDate')]);
 
+    useEffect(() => {
+        fetchUsersInDept(data.department);
+    }, []);
+
     // useEffect(() => {
     //     setValue('category', selectedCategory?.id);
     // }, [selectedCategory]);
