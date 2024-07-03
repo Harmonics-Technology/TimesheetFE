@@ -250,7 +250,7 @@ requestBody?: MicrosoftIdTokenDetailsModel,
 requestBody?: ChangePasswordModel,
 ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
-            method: 'GET',
+            method: 'POST',
             url: '/api/User/change_password',
             body: requestBody,
             mediaType: 'application/json-patch+json',

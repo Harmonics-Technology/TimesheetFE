@@ -18,7 +18,7 @@
         "schema:generate": "node ./script/schema-codegen.js --srcPath ./src/types/api-schema.json --destPath ./src/types/api --separatedFiles true",
         "schema:codegen": "yarn schema:fetch && yarn schema:generate",
         "format-staged": "pretty-quick --staged",
-        "openapi:codegen": "openapi --input https://insighttimesheetapi.azurewebsites.net/swagger/v1/swagger.json --output ./src/services --client axios"
+        "openapi:codegen": "openapi --input https://timba-api-staging.azurewebsites.net/swagger/v1/swagger.json --output ./src/services --client axios"
     },
     "dependencies": {
         "@azure/msal-browser": "^3.1.0",
