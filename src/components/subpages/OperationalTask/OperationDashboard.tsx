@@ -76,9 +76,9 @@ export const OperationDashboard = ({
     const [filter, setFilter] = useState<any>('');
     const filterByStatus = (value) => {
         setFilter(value);
-        if (value == '2' && role != 'TeamMember') {
-            return;
-        }
+        // if (value == '2' && role != 'TeamMember') {
+        //     return;
+        // }
         if (value == '2' && role == 'TeamMember') {
             router.push({
                 query: {
@@ -101,7 +101,7 @@ export const OperationDashboard = ({
             query: {
                 ...router.query,
                 department: value,
-                status: '',
+                status: 2,
             },
         });
     };
@@ -223,6 +223,7 @@ export const OperationDashboard = ({
                             }
                         >
                             <option value="">Select Department</option>
+                            <option value="">All</option>
                             {departments?.map((x) => (
                                 <option value={x.name}>{x.name}</option>
                             ))}
