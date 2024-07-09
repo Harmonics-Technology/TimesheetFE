@@ -155,10 +155,10 @@ export const TrainingInFullScreen = ({
                         <Box>
                             <Text fontSize=".9rem" w="90%" mb="1rem" mx="auto">
                                 You are about to take a training that has been
-                                assigned to you, please be as honest as possible
-                                during the course of taking the training and
-                                click on the 'Mark as Complete' button to
-                                continue
+                                assigned to you. Please be as honest as possible
+                                during the course of the training. Once you have
+                                completed it, click on the “Mark as Complete”
+                                button.
                             </Text>
                             <Box
                                 w="80%"

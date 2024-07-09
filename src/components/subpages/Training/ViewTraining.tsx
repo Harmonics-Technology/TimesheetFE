@@ -24,6 +24,7 @@ import { useState } from 'react';
 import { AddTrainingMaterialModal } from './AddTrainingMaterialModal';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { IoDocumentTextSharp } from 'react-icons/io5';
+import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
 
 export const ViewTraining = ({ id, data, users }) => {
     const newData = data as TrainingView;
@@ -65,7 +66,15 @@ export const ViewTraining = ({ id, data, users }) => {
             });
         }
     };
-    const deleteFile = async (fileId: any) => {
+    const {
+        isOpen: opens,
+        onOpen: onOpened,
+        onClose: onCloses,
+    } = useDisclosure();
+
+    const [fileId, setFileId] = useState('');
+    const deleteFile = async () => {
+        onCloses();
         setLoading({ id: fileId });
         try {
             const result = await TrainingService.deleteTrainingFile(fileId);
@@ -97,9 +106,15 @@ export const ViewTraining = ({ id, data, users }) => {
             });
         }
     };
+
+    const openDeleteModal = (fileId: any) => {
+        onOpened();
+        setFileId(fileId);
+    };
     const viewDoc = (url: any) => {
         window.open(url, '_blank');
     };
+
     return (
         <Box
             py="1.5rem"
@@ -180,7 +195,7 @@ export const ViewTraining = ({ id, data, users }) => {
                                             <Icon
                                                 as={MdDelete}
                                                 onClick={() =>
-                                                    deleteFile(x?.id)
+                                                    openDeleteModal(x?.id)
                                                 }
                                             />
                                         )}
@@ -222,14 +237,14 @@ export const ViewTraining = ({ id, data, users }) => {
                 >
                     Videos
                 </Text>
-                <HStack gap="39px" align="flex-start" flexWrap="wrap">
+                <HStack gap="39px" align="flex-end" flexWrap="wrap">
                     {newData?.files
                         ?.filter((x) => x.category === 'Video')
                         .map((x) => (
                             <YouTubePreview
                                 file={x}
                                 key={x.id}
-                                deleteFile={deleteFile}
+                                deleteFile={openDeleteModal}
                                 loading={loading}
                             />
                         ))}
@@ -298,6 +313,15 @@ export const ViewTraining = ({ id, data, users }) => {
                     isOpen={open}
                     onClose={close}
                     trainingId={id}
+                />
+            )}
+            {opens && (
+                <ShowPrompt
+                    isOpen={opens}
+                    onClose={onCloses}
+                    onSubmit={deleteFile}
+                    loading={loading.id === fileId}
+                    text={`Are you sure you want to delete this training material? This action cannot be undone.`}
                 />
             )}
         </Box>

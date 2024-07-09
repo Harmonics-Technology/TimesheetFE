@@ -25,7 +25,7 @@ const YouTubePreview = ({
 
     return (
         <Box w="170px">
-            <Text fontSize="12px" fontWeight={500} color="#1a202c" mb="7px">
+            <Text fontSize="12px" fontWeight={500} color="#1a202c" mb="7px" noOfLines={2}>
                 {file?.trainingFile?.title || file?.title}
             </Text>
             <Box w="100%" h="104px" overflow="hidden">
