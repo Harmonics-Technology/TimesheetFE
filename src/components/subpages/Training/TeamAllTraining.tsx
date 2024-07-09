@@ -57,7 +57,6 @@ export const TeamAllTraning = ({ trainings }) => {
                                 />
                                 <TrainingActions
                                     viewOnly
-                                    id={''}
                                     route={`/${role}/training/${x.trainingId}`}
                                 />
                             </Tr>

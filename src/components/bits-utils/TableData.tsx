@@ -1389,8 +1389,8 @@ export function TrainingActions({
     viewOnly,
     deleteTraining,
 }: {
-    loading: any;
-    route: any;
+    loading?: any;
+    route?: any;
     viewOnly?: any;
     deleteTraining?: any;
 }) {
