@@ -346,7 +346,7 @@ export const ProjectMgtAccess = ({
                             label="Everyone assigned to the task"
                             dir="rtl"
                             color="#696969"
-                            disabled
+                            // disabled
                             onChange={() =>
                                 setAccess({
                                     ...access,

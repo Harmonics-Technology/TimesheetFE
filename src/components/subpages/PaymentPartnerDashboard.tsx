@@ -49,7 +49,8 @@ function PaymentPartnerDashboard({
     result,
 }: DashboardProps) {
     // const adminMetrics = metrics?.data as DashboardPaymentPartnerView;
-    const { messages, markAsRead, loading } = useContext(NotificationContext);
+    const { messages, markAsRead, loading, setLimit } =
+        useContext(NotificationContext);
     const router = useRouter();
     const { user } = useContext(UserContext);
     //
@@ -82,7 +83,8 @@ function PaymentPartnerDashboard({
     };
 
     return (
-        <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
+        // <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
+        <Box>
             <VStack gap="1rem">
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
@@ -168,6 +170,7 @@ function PaymentPartnerDashboard({
                     data={messages}
                     markAsRead={markAsRead}
                     loading={loading}
+                    setLimit={setLimit}
                 />
                 {/* <Flex
                     minH="5rem"
@@ -212,7 +215,8 @@ function PaymentPartnerDashboard({
                     </Button>
                 </Flex> */}
             </VStack>
-        </Grid>
+        </Box>
+        // </Grid>
     );
 }
 

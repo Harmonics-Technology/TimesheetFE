@@ -49,12 +49,13 @@ function ClientDashboard({
 }: DashboardProps) {
     const adminMetrics = metrics?.data as DashboardTeamMemberView;
     const clientMetrics = metrics?.data as DashboardClientView;
-    const { messages, markAsRead, loading } = useContext(NotificationContext);
+    const { messages, markAsRead, loading, setLimit } =
+        useContext(NotificationContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
 
     return (
-        <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
+        <Box>
             <VStack gap="1rem">
                 <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
@@ -146,13 +147,14 @@ function ClientDashboard({
                 data={messages}
                 markAsRead={markAsRead}
                 loading={loading}
+                setLimit={setLimit}
             />
             <ClientInvoicedInvoice
                 isOpen={isOpen}
                 onClose={onClose}
                 clicked={clicked}
             />
-        </Grid>
+        </Box>
     );
 }
 

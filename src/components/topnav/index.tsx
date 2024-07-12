@@ -301,7 +301,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
             </Box>
             {isOpen && (
                 <BirthDayModal
-                    isOpen={isOpen}
+                    isOpen={true}
                     onClose={closeModal}
                     user={user}
                     type={isUserBirthDay ? 'Birthday' : 'Work Anniversary'}

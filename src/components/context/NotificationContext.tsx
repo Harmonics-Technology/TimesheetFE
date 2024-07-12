@@ -7,16 +7,17 @@ import { NotificationService } from 'src/services';
 export const NotificationContext = createContext<any | null>(null);
 export const NotificationProvider = ({ children }: { children: any }) => {
     const [messages, setMessages] = useState({});
+    const [limit, setLimit] = useState(10);
 
     const toast = useToast();
     const router = useRouter();
     const [loading, setLoading] = useState({ id: '' });
 
     const offset = router.query.offset || 0;
-    const limit = router.query.limit || 6;
 
     //
     const getNotifications = async () => {
+        setLoading({ id: 'fetching' });
         try {
             const data = await NotificationService.listMyNotifications(
                 offset as unknown as number,
@@ -24,7 +25,9 @@ export const NotificationProvider = ({ children }: { children: any }) => {
             );
             if (data.status) {
                 //
+                setLoading({ id: '' });
                 setMessages(data);
+                return;
                 // toast({
                 //     position: 'top-right',
                 //     status: 'success',
@@ -32,6 +35,7 @@ export const NotificationProvider = ({ children }: { children: any }) => {
                 // });
             }
         } catch (error: any) {
+            setLoading({ id: '' });
             toast({
                 position: 'top-right',
                 status: 'error',
@@ -63,9 +67,9 @@ export const NotificationProvider = ({ children }: { children: any }) => {
     //Getting Notification on Page load
     useEffect(() => {
         getNotifications();
-    }, []);
+    }, [limit]);
 
-    const contextValues = { messages, markAsRead, loading };
+    const contextValues = { messages, markAsRead, loading, setLimit };
     return (
         <NotificationContext.Provider value={contextValues}>
             {children}

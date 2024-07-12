@@ -53,7 +53,8 @@ function InvoiceTemplate({
         calculatePercentage(amountMinusExpense, taxCalculated),
     );
 
-    const finalTotal = Number(amountMinusExpense) + Number(convertedTax);
+    const finalTotal =
+        Number(clicked?.totalAmount as number) + Number(convertedTax);
 
     return (
         <>

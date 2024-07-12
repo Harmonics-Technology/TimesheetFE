@@ -69,7 +69,10 @@ export const SupportBox = () => {
             pos="fixed"
             right={['1rem', '2rem']}
             bottom="2rem"
-            w={['90%', '28%']}
+            w={[
+                !showForm ? '90%' : 'fit-content',
+                !showForm ? '28%' : 'fit-content',
+            ]}
             overflowY="auto"
             maxH="90vh"
             zIndex={999}

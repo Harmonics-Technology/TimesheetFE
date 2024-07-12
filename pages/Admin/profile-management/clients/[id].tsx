@@ -12,6 +12,7 @@ interface pageOptions {
     teamList: UserViewPagedCollectionStandardResponse;
     supervisorList: UserViewPagedCollectionStandardResponse;
     id: any;
+    subs: any;
 }
 
 function ClientDetails({
@@ -19,6 +20,7 @@ function ClientDetails({
     teamList,
     supervisorList,
     id,
+    subs,
 }: pageOptions) {
     return (
         <ClientProfile
@@ -26,6 +28,7 @@ function ClientDetails({
             teamList={teamList}
             supervisorList={supervisorList}
             id={id}
+            subs={subs}
         />
     );
 }
@@ -37,6 +40,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const { id } = ctx.query;
         //
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await UserService.getUserById(id);
             const teamList = await UserService.getClientTeamMembers(
@@ -51,6 +55,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.search,
                 id,
             );
+            const subs = await UserService.getClientSubScriptions(superAdminId);
             //
             return {
                 props: {
@@ -58,6 +63,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     teamList,
                     supervisorList,
                     id,
+                    subs: subs.data,
                 },
             };
         } catch (error: any) {

@@ -4,7 +4,6 @@ import {
     ModalContent,
     ModalHeader,
     ModalBody,
-    Button,
     Text,
     Box,
     HStack,
@@ -13,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import useWindowSize from '@components/generics/useWindowSize';
 import Confetti from 'react-confetti';
+import { LiaTimesSolid } from 'react-icons/lia';
 
 type Props = {
     isOpen?: any;
@@ -60,6 +60,19 @@ export const BirthDayModal = ({ isOpen, onClose, user, type }: Props) => {
                     >
                         <ModalHeader textAlign="center">
                             <>
+                                <HStack
+                                    height="2.34rem"
+                                    width="2.34rem"
+                                    bgColor="brand.800"
+                                    color="white"
+                                    borderRadius="50%"
+                                    onClick={onClose}
+                                    justify="center"
+                                    cursor="pointer"
+                                    ml="auto"
+                                >
+                                    <LiaTimesSolid />
+                                </HStack>
                                 <Flex justify="center" mb="1rem">
                                     <Box w="290px">
                                         <Image
@@ -76,7 +89,7 @@ export const BirthDayModal = ({ isOpen, onClose, user, type }: Props) => {
                                     fontWeight="500"
                                     userSelect="none"
                                 >
-                                    {`${user?.organizationName} is wishing you Happy ${type}
+                                    {`${user?.organizationName} is wishing you a Happy ${type}
                             !!!`}
                                 </Text>
                             </>
@@ -89,26 +102,6 @@ export const BirthDayModal = ({ isOpen, onClose, user, type }: Props) => {
                             height={height}
                             // recycle={false}
                         /> */}
-                                <HStack
-                                    px=".8rem"
-                                    spacing={4}
-                                    w="full"
-                                    justify="center"
-                                    mb="1.5rem"
-                                >
-                                    <Button
-                                        variant="solid"
-                                        height="2.34rem"
-                                        width="100px"
-                                        bgColor="brand.800"
-                                        color="white"
-                                        borderRadius="5px"
-                                        border="0"
-                                        onClick={onClose}
-                                    >
-                                        Close
-                                    </Button>
-                                </HStack>
                             </Box>
                         </ModalBody>
                     </Box>

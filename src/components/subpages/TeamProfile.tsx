@@ -77,7 +77,10 @@ function TeamProfile({
     clients =
         clients?.length <= 0
             ? [{ id: user?.superAdminId, fullName: user?.fullName }]
-            : clients;
+            : [
+                  ...clients,
+                  { id: user?.superAdminId, fullName: user?.fullName },
+              ];
     //
     const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
     const {
@@ -149,8 +152,6 @@ function TeamProfile({
     const toast = useToast();
     const includePayroll = watch('enableFinancials');
 
-    console.log({ userProfile });
-
     // console.log({ userProfile, rle: watch('role') });
     //
     const isFlatFeeSelected = watch('payrollStructure') == 'flat';
@@ -162,6 +163,7 @@ function TeamProfile({
     const uniqueItems = getUniqueListBy(currencies, 'currency');
     const [payFees, setPayFees] = useState<any>(fees);
 
+    // console.log({ userProfile, payFees });
     const getPaymentPartnerFees = async (id) => {
         if (id === undefined) {
             return;
@@ -375,6 +377,10 @@ function TeamProfile({
         }
     };
 
+    const paymentPartnerCurrency = paymentPartner?.find(
+        (x) => x.id === watch('paymentPartnerId'),
+    )?.currency;
+
     // console.log({ fee: watch('dateOfBirth'), fin: watch('enableFinancials') });
     return (
         <>
@@ -534,7 +540,7 @@ function TeamProfile({
                                     <>
                                         {clients?.map((x) => (
                                             <option value={x.id}>
-                                                {x.fullName}
+                                                {x.organizationName}
                                             </option>
                                         ))}
                                     </>
@@ -983,7 +989,13 @@ function TeamProfile({
                                             register={register}
                                             error={errors.paymentProcessingFee}
                                             name="paymentProcessingFee"
-                                            label="Processing fee"
+                                            label={`Processing fee ${
+                                                watch(
+                                                    'paymentProcessingFeeType',
+                                                ) == 'percentage'
+                                                    ? '(%)'
+                                                    : `(${paymentPartnerCurrency})`
+                                            }`}
                                             placeholder={
                                                 // (userProfile
                                                 //     ?.employeeInformation

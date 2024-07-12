@@ -1384,49 +1384,18 @@ export function TableSubscriptionActions({
 }
 
 export function TrainingActions({
-    id,
+    loading,
     route,
     viewOnly,
+    deleteTraining,
 }: {
-    id: any;
-    route: any;
+    loading?: any;
+    route?: any;
     viewOnly?: any;
+    deleteTraining?: any;
 }) {
-    const toast = useToast();
-    const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const deleteTraining = async () => {
-        try {
-            setLoading(true);
-            const result = await TrainingService.deleteTraining(id);
-            if (result.status) {
-                toast({
-                    title: result.message,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                setLoading(false);
-                router.replace(router.asPath);
-                return;
-            }
-            setLoading(false);
-            toast({
-                title: result.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        } catch (error: any) {
-            setLoading(false);
-            toast({
-                title: error?.body?.message || error?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+
     return (
         <td>
             <Menu>
@@ -1446,7 +1415,7 @@ export function TrainingActions({
                         View
                     </MenuItem>
                     {!viewOnly && (
-                        <MenuItem onClick={() => deleteTraining()} w="full">
+                        <MenuItem onClick={deleteTraining} w="full">
                             Delete
                         </MenuItem>
                     )}

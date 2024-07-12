@@ -1,5 +1,5 @@
 import { Box, Grid, HStack, Image, Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { MiniCards } from './MiniCards';
 import { ProjectTabs } from './ProjectTabs';
 import { RiBriefcase2Line, RiTimeLine } from 'react-icons/ri';
@@ -28,15 +28,23 @@ import { Round } from '@components/generics/functions/Round';
 import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import { UserContext } from '@components/context/UserContext';
 
 export const Dashboard = ({
     metrics,
 }: {
     metrics: DashboardProjectManagementView;
 }) => {
-    console.log({ metrics });
+    // console.log({ metrics });
+    const { accessControls } = useContext(UserContext);
     const [budget, setBudget] = useState<any>(
-        metrics?.totalBudgetSpent?.filter((x) => x.currency !== null).at(0),
+        metrics?.totalBudgetSpent
+            ?.filter(
+                (x) =>
+                    x.currency !== null &&
+                    x.currency == accessControls?.organizationDefaultCurrency,
+            )
+            ?.at(0),
     );
     const projectSummary = ['Project Name', 'Due Date', 'Status', 'Progress'];
     const overdue = ['Project Name', 'Deadline', 'Overdue'];

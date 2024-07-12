@@ -102,6 +102,9 @@ function Login() {
                     department: result.data?.department,
                     employeeInformationId: result.data?.employeeInformationId,
                     id: result.data?.id,
+                    numberOfDaysEligible: result.data?.numberOfDaysEligible,
+                    numberOfLeaveDaysTaken: result.data?.numberOfLeaveDaysTaken,
+                    twoFactorCode: result.data?.twoFactorCode,
                 };
                 const subDetails = result.data?.subscriptiobDetails;
                 Cookies.set('user', JSON.stringify(strippedData));

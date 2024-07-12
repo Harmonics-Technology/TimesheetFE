@@ -56,10 +56,11 @@ export const SecurityInformation = ({
 
     const onSubmit = async (data: PasswordReset) => {
         try {
-            const result = await UserService.updatePassword({
+            const res = await UserService.updatePassword({
                 oldPassword: data.oldPassword,
                 newPassword: data.newPassword,
             });
+            const { result } = res as any;
             if (result.status) {
                 //
                 toast({

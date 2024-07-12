@@ -96,7 +96,6 @@ export const TrainingStatus = ({ trainings }) => {
                                 </Td>
                                 <TrainingActions
                                     viewOnly
-                                    id={x.id}
                                     route={`/${role}/training/status/${x.id}?trainingName=${x.name}`}
                                 />
                             </Tr>
