@@ -59,11 +59,13 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
         onClose: onCloses,
     } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    const { messages, markAsRead, loading } = useContext(NotificationContext);
+    const { messages, markAsRead, loading, setLimit } =
+        useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
 
     return (
-        <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
+        // <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
+        <Box>
             <VStack gap="1rem">
                 {/* <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
@@ -284,6 +286,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                 data={messages}
                 markAsRead={markAsRead}
                 loading={loading}
+                setLimit={setLimit}
             />
             <PayrollInvoice
                 isOpen={isOpen}
@@ -300,7 +303,8 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
                 onClose={onCloses}
                 clicked={clicked}
             />
-        </Grid>
+        </Box>
+        // </Grid>
     );
 }
 
