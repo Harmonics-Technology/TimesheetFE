@@ -7,13 +7,12 @@ import {
     Spinner,
     HStack,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { NotificationView } from 'src/services';
-import Pagination from './Pagination';
-import Loading from './Loading';
 import { formatDate } from '@components/generics/functions/formatDate';
 import Skeleton from 'react-loading-skeleton';
 import shadeColor from '@components/generics/functions/shadeColor';
+import { UserContext } from '@components/context/UserContext';
 
 export const NotificationBox = ({
     data,
@@ -27,18 +26,19 @@ export const NotificationBox = ({
     setLimit: any;
 }) => {
     const unRead = data?.data?.value?.filter((x) => !x.isRead);
+    const { user } = useContext(UserContext);
 
     return (
         <Box
             pos="fixed"
-            top="18.3%"
+            top={user?.twoFactorEnabled ? '12%' : '18.3%'}
             w="21.5%"
             bgColor="white"
             boxShadow="md"
             borderRadius="10px"
             right="2rem"
             p="1rem .8rem"
-            h="80vh"
+            h={user?.twoFactorEnabled ? '87vh' : '80vh'}
             overflow="auto"
 
             // h="fit-content"
