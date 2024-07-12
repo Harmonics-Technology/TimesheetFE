@@ -37,10 +37,12 @@ interface DashboardClientView {
 function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
     const adminMetrics = metrics?.data as DashboardTeamMemberView;
     const clientMetrics = metrics?.data as DashboardClientView;
-    const { messages, markAsRead, loading } = useContext(NotificationContext);
+    const { messages, markAsRead, loading, setLimit } =
+        useContext(NotificationContext);
 
     return (
-        <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
+        // <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
+        <Box>
             <VStack gap="1rem">
                 <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
@@ -205,8 +207,10 @@ function TeamDashboard({ metrics, payslip, role }: DashboardProps) {
                 data={messages}
                 markAsRead={markAsRead}
                 loading={loading}
+                setLimit={setLimit}
             />
-        </Grid>
+        </Box>
+        // </Grid>
     );
 }
 

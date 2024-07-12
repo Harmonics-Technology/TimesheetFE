@@ -42,7 +42,9 @@ export const TeamAllTraning = ({ trainings }) => {
                                         barWidth={x?.progress}
                                         showProgress={true}
                                         barColor={'brand.400'}
-                                        rightText={`${Round(x?.progress)}%`}
+                                        rightText={`${Round(
+                                            x?.progress || 0,
+                                        )}%`}
                                     />
                                 </Td>
                                 <TableData

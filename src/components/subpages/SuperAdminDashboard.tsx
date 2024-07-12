@@ -81,7 +81,8 @@ DashboardProps) {
         onClose: onCloses,
     } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    const { messages, markAsRead, loading } = useContext(NotificationContext);
+    const { messages, markAsRead, loading, setLimit } =
+        useContext(NotificationContext);
     const adminMetrics = metrics?.data as DashboardView;
 
     const isClient = subType == 'premium';
@@ -101,8 +102,9 @@ DashboardProps) {
     // handleCatchErrors(error);
 
     return (
-        <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
-            <VStack gap="1rem">
+        // <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
+        <Box pos="relative">
+            <VStack gap="1rem" w="70%">
                 <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
                     gap="1.2rem"
@@ -227,10 +229,10 @@ DashboardProps) {
                                         name={x.employeeInformation?.jobTitle}
                                     />
                                     {/* <TableData
-                                        name={formatDate(x.dateCreated).format(
-                                            'DD/MM/YYYY',
-                                        )}
-                                    /> */}
+                                    name={formatDate(x.dateCreated).format(
+                                        'DD/MM/YYYY',
+                                    )}
+                                /> */}
                                     <TableData
                                         name={`${formatDate(
                                             x.startDate,
@@ -296,56 +298,56 @@ DashboardProps) {
                     </Grid>
                 )}
                 {/* <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
-                    <TableCards
-                        title={'Recent Payslip'}
-                        url={'financials/payslips'}
-                        data={metrics?.data?.recentPayslips
-                            ?.slice(0, 4)
-                            .map((x: PaySlipView, i) => (
-                                <Tr key={i}>
-                                    <TableData name={x?.invoice?.name} />
-                                    <TableData
-                                        name={formatDate(
-                                            x?.invoice?.startDate,
-                                        ).format('DD-MM-YY')}
-                                    />
-                                    <TableData
-                                        name={formatDate(
-                                            x?.invoice?.endDate,
-                                        ).format('DD-MM-YY')}
-                                    />
-                                    <TableData
-                                        name={formatDate(
-                                            x?.invoice?.paymentDate,
-                                        ).format('DD-MM-YY')}
-                                    />
+                <TableCards
+                    title={'Recent Payslip'}
+                    url={'financials/payslips'}
+                    data={metrics?.data?.recentPayslips
+                        ?.slice(0, 4)
+                        .map((x: PaySlipView, i) => (
+                            <Tr key={i}>
+                                <TableData name={x?.invoice?.name} />
+                                <TableData
+                                    name={formatDate(
+                                        x?.invoice?.startDate,
+                                    ).format('DD-MM-YY')}
+                                />
+                                <TableData
+                                    name={formatDate(
+                                        x?.invoice?.endDate,
+                                    ).format('DD-MM-YY')}
+                                />
+                                <TableData
+                                    name={formatDate(
+                                        x?.invoice?.paymentDate,
+                                    ).format('DD-MM-YY')}
+                                />
 
-                                    <TableData
-                                        name={
-                                            (x?.invoice
-                                                ?.totalAmount as number) +
-                                            (
-                                                x?.invoice
-                                                    ?.expenses as unknown as ExpenseView[]
-                                            )?.reduce(
-                                                (a, b) =>
-                                                    a + (b?.amount as number),
-                                                0,
-                                            )
-                                        }
-                                    />
-                                </Tr>
-                            ))}
-                        thead={[
-                            'Name',
-                            'Start Date',
-                            'End Date',
-                            'Payment Date',
-                            'Total Amount',
-                        ]}
-                        link={'/'}
-                    />
-                </Grid> */}
+                                <TableData
+                                    name={
+                                        (x?.invoice
+                                            ?.totalAmount as number) +
+                                        (
+                                            x?.invoice
+                                                ?.expenses as unknown as ExpenseView[]
+                                        )?.reduce(
+                                            (a, b) =>
+                                                a + (b?.amount as number),
+                                            0,
+                                        )
+                                    }
+                                />
+                            </Tr>
+                        ))}
+                    thead={[
+                        'Name',
+                        'Start Date',
+                        'End Date',
+                        'Payment Date',
+                        'Total Amount',
+                    ]}
+                    link={'/'}
+                />
+            </Grid> */}
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Invoice'}
@@ -401,6 +403,7 @@ DashboardProps) {
                 data={messages}
                 markAsRead={markAsRead}
                 loading={loading}
+                setLimit={setLimit}
             />
             <PayrollInvoice
                 isOpen={isOpen}
@@ -427,7 +430,8 @@ DashboardProps) {
                     model="summary-report"
                 />
             )}
-        </Grid>
+        </Box>
+        // </Grid>
     );
 }
 

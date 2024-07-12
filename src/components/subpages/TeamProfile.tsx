@@ -540,7 +540,7 @@ function TeamProfile({
                                     <>
                                         {clients?.map((x) => (
                                             <option value={x.id}>
-                                                {x.fullName}
+                                                {x.organizationName}
                                             </option>
                                         ))}
                                     </>

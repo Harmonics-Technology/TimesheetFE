@@ -314,69 +314,6 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         role={role}
                     />
-
-                    <MenuItem
-                        change={change}
-                        linkName="timesheets"
-                        menuTitle="Manage Timesheets"
-                        icon={<FaCalendar opacity=".8" />}
-                        option={true}
-                        role={role}
-                        setOpenSidenav={setOpenSidenav}
-                        dropDown={['my timesheet', 'timesheet history']}
-                        display={activeSub}
-                    />
-                    <MenuItem
-                        change={change}
-                        linkName="financials"
-                        menuTitle="Financials"
-                        icon={<RiLineChartFill opacity=".8" />}
-                        option={true}
-                        role={role}
-                        setOpenSidenav={setOpenSidenav}
-                        dropDown={
-                            user?.invoiceGenerationType?.toLowerCase() ==
-                            'payroll'
-                                ? ['my expenses', 'my payslips']
-                                : ['my expenses', 'my payslips', 'my invoices']
-                        }
-                        display={activeSub}
-                    />
-                    <MenuItem
-                        change={change}
-                        linkName="my-contracts"
-                        menuTitle="My Contracts"
-                        icon={<FaFile opacity=".8" />}
-                        option={false}
-                        setOpenSidenav={setOpenSidenav}
-                        dropDown={[]}
-                        role={role}
-                        display={activeSub}
-                    />
-                    <MenuItem
-                        change={change}
-                        linkName="leave"
-                        menuTitle="Leave Management"
-                        icon={<FaFile opacity=".8" />}
-                        option={false}
-                        setOpenSidenav={setOpenSidenav}
-                        dropDown={[]}
-                        role={role}
-                        display={activeSub}
-                    />
-                    {user?.employeeType?.toLowerCase() == 'shift' && (
-                        <MenuItem
-                            change={change}
-                            linkName="shift-management"
-                            menuTitle="Shift Management"
-                            icon={<AiFillSchedule opacity=".8" />}
-                            option={false}
-                            dropDown={[]}
-                            setOpenSidenav={setOpenSidenav}
-                            role={role}
-                            display={activeSub}
-                        />
-                    )}
                     <MenuItem
                         change={change}
                         linkName="project-management"
@@ -411,6 +348,44 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="timesheets"
+                        menuTitle="Manage Timesheets"
+                        icon={<FaCalendar opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['my timesheet', 'timesheet history']}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="leave"
+                        menuTitle="Leave Management"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="financials"
+                        menuTitle="Financials"
+                        icon={<RiLineChartFill opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={
+                            user?.invoiceGenerationType?.toLowerCase() ==
+                            'payroll'
+                                ? ['my expenses', 'my payslips']
+                                : ['my expenses', 'my payslips', 'my invoices']
+                        }
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
                         linkName="training"
                         menuTitle="Training"
                         icon={<MdModelTraining opacity=".8" />}
@@ -420,6 +395,32 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         display={activeSub}
                     />
+                    <MenuItem
+                        change={change}
+                        linkName="my-contracts"
+                        menuTitle="My Contracts"
+                        icon={<FaFile opacity=".8" />}
+                        option={false}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        role={role}
+                        display={activeSub}
+                    />
+
+                    {user?.employeeType?.toLowerCase() == 'shift' && (
+                        <MenuItem
+                            change={change}
+                            linkName="shift-management"
+                            menuTitle="Shift Management"
+                            icon={<AiFillSchedule opacity=".8" />}
+                            option={false}
+                            dropDown={[]}
+                            setOpenSidenav={setOpenSidenav}
+                            role={role}
+                            display={activeSub}
+                        />
+                    )}
+
                     <MenuItem
                         change={change}
                         linkName="my-profile"
