@@ -70,8 +70,8 @@ export const SupportBox = () => {
             right={['1rem', '2rem']}
             bottom="2rem"
             w={[
-                !showForm ? '90%' : 'fit-content',
-                !showForm ? '28%' : 'fit-content',
+                showForm ? '90%' : 'fit-content',
+                showForm ? '28%' : 'fit-content',
             ]}
             overflowY="auto"
             maxH="90vh"
