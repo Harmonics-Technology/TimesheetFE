@@ -93,7 +93,7 @@ export const OperationCard = ({
                             <Avatar
                                 key={x.id}
                                 size={'sm'}
-                                name={x?.user?.fullName as string}
+                                name={x?.fullName as string}
                                 border="1px solid white"
                                 transform={`translateX(${-i * 10}px)`}
                             />

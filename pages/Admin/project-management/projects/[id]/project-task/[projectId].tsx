@@ -35,7 +35,7 @@ export default ProjectSingleTask;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const { projectId } = ctx.query;
         const { id } = ctx.query;
