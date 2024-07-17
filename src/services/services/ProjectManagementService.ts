@@ -14,6 +14,7 @@ import type { ProjectSubTaskViewPagedCollectionStandardResponse } from '../model
 import type { ProjectSubTaskViewStandardResponse } from '../models/ProjectSubTaskViewStandardResponse';
 import type { ProjectTaskAsigneeViewPagedCollectionStandardResponse } from '../models/ProjectTaskAsigneeViewPagedCollectionStandardResponse';
 import type { ProjectTaskModel } from '../models/ProjectTaskModel';
+import type { ProjectTaskViewListStandardResponse } from '../models/ProjectTaskViewListStandardResponse';
 import type { ProjectTaskViewPagedCollectionStandardResponse } from '../models/ProjectTaskViewPagedCollectionStandardResponse';
 import type { ProjectTaskViewStandardResponse } from '../models/ProjectTaskViewStandardResponse';
 import type { ProjectTimesheetApprovalModel } from '../models/ProjectTimesheetApprovalModel';
@@ -298,33 +299,27 @@ search?: string,
     }
 
     /**
-     * @param offset 
-     * @param limit 
      * @param superAdminId 
      * @param status 
      * @param userId 
      * @param search 
      * @param filter 
      * @param departmentToFilter 
-     * @returns ProjectTaskViewPagedCollectionStandardResponse Success
+     * @returns ProjectTaskViewListStandardResponse Success
      * @throws ApiError
      */
     public static listOperationalTasks(
-offset?: number,
-limit?: number,
 superAdminId?: string,
 status?: string,
 userId?: string,
 search?: string,
 filter?: OperationalTaskFilter,
 departmentToFilter?: string,
-): CancelablePromise<ProjectTaskViewPagedCollectionStandardResponse> {
+): CancelablePromise<ProjectTaskViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/ProjectManagement/operational-tasks',
             query: {
-                'Offset': offset,
-                'Limit': limit,
                 'superAdminId': superAdminId,
                 'status': status,
                 'userId': userId,
