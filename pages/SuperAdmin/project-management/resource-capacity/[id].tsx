@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.search,
             );
 
-            const projects = await ProjectManagementService.listProject(
+            const projects = await ProjectManagementService.listStrippedProject(
                 0,
                 50,
                 superAdminId,

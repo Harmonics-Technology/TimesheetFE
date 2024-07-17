@@ -56,7 +56,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         //
         const fetchProjectByStatus = (status) => {
-            const data = ProjectManagementService.listProject(
+            const data = ProjectManagementService.listStrippedProject(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
