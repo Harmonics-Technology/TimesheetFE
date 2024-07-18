@@ -58,7 +58,7 @@ export const EditOpTaskDrawer = ({
 }) => {
     // console.log({ data });
     const assignedPerson =
-        data?.isAssignedToMe && data?.assignees?.at(0)?.userId == id;
+        data?.isAssignedToMe && data?.assignees?.at(0)?.id == id;
     const {
         register,
         handleSubmit,
@@ -87,8 +87,8 @@ export const EditOpTaskDrawer = ({
     const router = useRouter();
     const [selectedUser, setSelecedUser] = useState<any>(
         data?.assignees?.map((obj) => ({
-            id: obj?.userId,
-            fullName: obj?.user?.fullName,
+            id: obj?.id,
+            fullName: obj?.fullName,
         })) || [],
     );
     const addUser = (user) => {

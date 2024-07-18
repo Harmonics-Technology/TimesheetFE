@@ -60,7 +60,7 @@ export const OperationDashboard = ({
         new DateObject().add(4, 'days'),
     ]);
     // console.log({ projects });
-    const [opTaskItem, setOpTaskItem] = useState(projects?.value);
+    const [opTaskItem, setOpTaskItem] = useState(projects);
     const router = useRouter();
     const dateRef = useRef<any>();
     const filterByDate = (value) => {
@@ -197,7 +197,7 @@ export const OperationDashboard = ({
     };
 
     useNonInitialEffect(() => {
-        setOpTaskItem(projects?.value);
+        setOpTaskItem(projects);
     }, [projects]);
 
     return (
@@ -325,7 +325,7 @@ export const OperationDashboard = ({
                     </VStack>
                 </ContainerBox>
             </Grid>
-            <Pagination data={projects} loadMore />
+            {/* <Pagination data={projects} loadMore /> */}
             {isOpen && (
                 <AddOpTaskDrawer
                     isOpen={isOpen}

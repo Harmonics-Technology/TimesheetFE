@@ -19,7 +19,7 @@ export default singleResource;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const { id } = ctx.query;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const userName = ctx.req.cookies.userName;

@@ -85,7 +85,7 @@ function PaymentPartnerDashboard({
     return (
         // <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
         <Box>
-            <VStack gap="1rem">
+            <VStack gap="1rem" w="70%">
                 <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
                     <TableCards
                         title={'Recent Payroll'}

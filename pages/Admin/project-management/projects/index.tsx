@@ -52,11 +52,11 @@ export default projectsIndex;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const pagingOptions = filterPagingSearchOptions(ctx);
         //
         const fetchProjectByStatus = (status) => {
-            const data = ProjectManagementService.listProject(
+            const data = ProjectManagementService.listStrippedProject(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,

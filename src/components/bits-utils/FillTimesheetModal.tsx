@@ -278,14 +278,15 @@ export const FillTimesheetModal = ({
                 try {
                     const res =
                         await ProjectManagementService.listOperationalTasks(
-                            0,
-                            25,
                             superAdminId,
-                            '2',
+                            undefined,
                             userId,
+                            '',
+                            undefined,
+                            '',
                         );
                     if (res?.status) {
-                        setOperationalTasks(res?.data?.value);
+                        setOperationalTasks(res?.data);
                         setLoading(false);
                         return;
                     }

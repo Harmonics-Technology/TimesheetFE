@@ -155,6 +155,7 @@ export type { ProjectTaskAsigneeViewPagedCollectionStandardResponse } from './mo
 export type { ProjectTaskModel } from './models/ProjectTaskModel';
 export type { ProjectTaskStatusCount } from './models/ProjectTaskStatusCount';
 export type { ProjectTaskView } from './models/ProjectTaskView';
+export type { ProjectTaskViewListStandardResponse } from './models/ProjectTaskViewListStandardResponse';
 export type { ProjectTaskViewPagedCollection } from './models/ProjectTaskViewPagedCollection';
 export type { ProjectTaskViewPagedCollectionStandardResponse } from './models/ProjectTaskViewPagedCollectionStandardResponse';
 export type { ProjectTaskViewStandardResponse } from './models/ProjectTaskViewStandardResponse';

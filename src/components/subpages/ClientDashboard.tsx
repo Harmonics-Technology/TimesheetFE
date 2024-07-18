@@ -56,7 +56,7 @@ function ClientDashboard({
 
     return (
         <Box>
-            <VStack gap="1rem">
+            <VStack gap="1rem" w="70%">
                 <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
                     gap="1.2rem"

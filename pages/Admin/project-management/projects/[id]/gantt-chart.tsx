@@ -1,7 +1,6 @@
-import { SingleTask } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/SingleTask';
+import { GantChart } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/GantChart';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import { id } from 'date-fns/locale';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
@@ -10,43 +9,34 @@ import {
     UtilityService,
 } from 'src/services';
 
-const ProjectSingleTask = ({
-    projectId,
-    task,
-    tasks,
-    project,
-    users,
-    id,
-    currencies,
-}) => {
+const index = ({ id, project, tasks, users, currencies }) => {
     return (
-        <SingleTask
+        <GantChart
             id={id}
             project={project}
             tasks={tasks}
-            task={task}
             users={users}
             currencies={currencies}
         />
     );
 };
 
-export default ProjectSingleTask;
+export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const pagingOptions = filterPagingSearchOptions(ctx);
-        const { projectId } = ctx.query;
         const { id } = ctx.query;
         try {
             const data = await ProjectManagementService.getProject(id);
-            const task = await ProjectManagementService.getTask(projectId);
-            const tasks = await ProjectManagementService.listSubTasks(
+            const tasks = await ProjectManagementService.listTasks(
                 pagingOptions.offset,
                 pagingOptions.limit,
-                projectId,
+                superAdminId,
+                id,
                 pagingOptions.status,
+                undefined,
                 pagingOptions.search,
             );
             const users = await UserService.listUsers(
@@ -61,8 +51,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             return {
                 props: {
                     project: data.data,
-                    task: task.data,
-                    projectId,
                     id,
                     tasks: tasks.data,
                     users: users.data,
