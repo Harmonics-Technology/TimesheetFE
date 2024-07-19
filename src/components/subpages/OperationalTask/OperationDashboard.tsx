@@ -84,7 +84,7 @@ export const OperationDashboard = ({
                 query: {
                     ...router.query,
                     department: user?.department,
-                    status: '',
+                    status: 2,
                 },
             });
         }
