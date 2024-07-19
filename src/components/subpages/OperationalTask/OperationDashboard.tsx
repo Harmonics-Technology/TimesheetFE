@@ -164,6 +164,7 @@ export const OperationDashboard = ({
             )?.length || 0
         );
     };
+    
     const renderItems = (status: string) => {
         return opTaskItem
             ?.filter((x: ProjectTaskView) => x?.operationalTaskStatus == status)
@@ -171,13 +172,12 @@ export const OperationDashboard = ({
                 <OperationCard
                     key={task?.id}
                     bg={
-                        task?.isAssignedToMe &&
-                        task?.assignees?.at(0)?.userId == id
+                        task?.isAssignedToMe && task?.createdByUserId == id
                             ? '#2383BD'
                             : '#FFA681'
                     }
                     text={
-                        task?.isAssignedToMe && task?.assignees?.at(0)?.id == id
+                        task?.isAssignedToMe && task?.createdByUserId == id
                             ? 'Private Task'
                             : 'Task Assigned'
                     }
