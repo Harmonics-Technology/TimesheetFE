@@ -177,8 +177,7 @@ export const OperationDashboard = ({
                             : '#FFA681'
                     }
                     text={
-                        task?.isAssignedToMe &&
-                        task?.assignees?.at(0)?.userId == id
+                        task?.isAssignedToMe && task?.assignees?.at(0)?.id == id
                             ? 'Private Task'
                             : 'Task Assigned'
                     }

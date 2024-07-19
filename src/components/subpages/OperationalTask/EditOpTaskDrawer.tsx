@@ -106,7 +106,7 @@ export const EditOpTaskDrawer = ({
         { id: 3, name: 'Completed' },
     ];
     const [taskType, setTaskType] = useState(
-        data?.isAssignedToMe && data.assignees?.at(0)?.userId == id
+        data?.isAssignedToMe && data.assignees?.at(0)?.id == id
             ? 'Private'
             : data.department
             ? 'Departmental'
