@@ -87,7 +87,7 @@ export const EditOpTaskDrawer = ({
     const router = useRouter();
     const [selectedUser, setSelecedUser] = useState<any>(
         data?.assignees?.map((obj) => ({
-            id: obj?.id,
+            id: obj?.userId,
             fullName: obj?.fullName,
         })) || [],
     );

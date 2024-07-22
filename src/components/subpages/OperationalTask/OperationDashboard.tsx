@@ -117,6 +117,7 @@ export const OperationDashboard = ({
             endDate: task.endDate,
             note: task.note,
             operationalTaskStatus: status,
+            department: task.department,
             assignedUsers: (task?.assignees as any).map((x) => x.userId) || [],
         };
         try {
