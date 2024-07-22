@@ -54,4 +54,6 @@ export type EmployeeInformation = {
     payrollProcessingType?: string | null;
     paymentProcessingFeeType?: string | null;
     paymentProcessingFee?: number;
+    isTrainingManager?: boolean;
+    canManageAllTraining?: boolean;
 };

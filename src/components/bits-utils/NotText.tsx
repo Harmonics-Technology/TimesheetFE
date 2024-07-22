@@ -1,14 +1,22 @@
 import { VStack, Text } from '@chakra-ui/react';
 import React from 'react';
 
-export const NotText = ({ title, sub }: { title?: any; sub?: any }) => {
+export const NotText = ({
+    title,
+    fontWeight = '500',
+    sub,
+}: {
+    title?: any;
+    fontWeight?: any;
+    sub?: any;
+}) => {
     return (
         <VStack align="flex-start" mb="1rem">
             {title && (
                 <Text
                     color="#002861"
                     fontSize="0.93rem"
-                    fontWeight="500"
+                    fontWeight={fontWeight}
                     mb="0"
                 >
                     {title}

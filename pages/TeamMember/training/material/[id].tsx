@@ -1,10 +1,10 @@
 import { withPageAuth } from '@components/generics/withPageAuth';
-import { TeamViewTraining } from '@components/subpages/Training/TeamViewTraining';
+import { ViewTraining } from '@components/subpages/Training/ViewTraining';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { TrainingService } from 'src/services';
+import { TrainingService, UserService } from 'src/services';
 
-const singleTraining = ({ training, userId, id, isManager }) => {
+const index = ({ data, id, users }) => {
     const tabs = [
         {
             text: 'My Training',
@@ -19,38 +19,42 @@ const singleTraining = ({ training, userId, id, isManager }) => {
             url: `/training/status`,
         },
     ];
-    return (
-        <TeamViewTraining
-            training={training}
-            userId={userId}
-            trainingId={id}
-            tabs={isManager ? tabs : tabs?.slice(0, 1)}
-        />
-    );
+    return <ViewTraining id={id} data={data} users={users} tabs={tabs} />;
 };
 
-export default singleTraining;
+export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const userId = JSON.parse(ctx.req.cookies.user).id;
-        const isManager = JSON.parse(ctx.req.cookies.user)?.isTrainingManager;
         const { id } = ctx.query;
         try {
-            const training = await TrainingService.listUserTrainingMaterials(
-                userId,
+            const data = await TrainingService.listTraining(
+                0,
+                1,
+                superAdminId,
                 id,
+                '',
+                undefined,
+                undefined,
+                userId,
             );
+            const users = await UserService.listUsers(
+                'Team Member',
+                superAdminId,
+                0,
+                80,
+            );
+
             return {
                 props: {
-                    training: training.data,
-                    userId,
+                    data: data.data?.value?.at(0),
+                    users: users?.data,
                     id,
-                    isManager: isManager || false,
                 },
             };
         } catch (error: any) {
-            console.log({ error });
             return {
                 props: {
                     data: [],

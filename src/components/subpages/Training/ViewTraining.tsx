@@ -25,8 +25,9 @@ import { AddTrainingMaterialModal } from './AddTrainingMaterialModal';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { IoDocumentTextSharp } from 'react-icons/io5';
 import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
-export const ViewTraining = ({ id, data, users }) => {
+export const ViewTraining = ({ id, data, users, tabs }) => {
     const newData = data as TrainingView;
     // console.log({ newData });
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -123,6 +124,9 @@ export const ViewTraining = ({ id, data, users }) => {
             px="1rem"
             borderRadius="10px"
         >
+            <Box w="full" mb="1rem">
+                <LeaveTab tabValue={tabs} useStartWith />
+            </Box>
             <Box mt="0rem" w="70%">
                 <Text
                     color="brand.400"

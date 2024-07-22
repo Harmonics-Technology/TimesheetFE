@@ -6,11 +6,22 @@ import React from 'react';
 import { TrainingService, UserService } from 'src/services';
 
 const index = ({ users, trainings, superAdminId }) => {
+    const tabs = [
+        {
+            text: 'Training Materials',
+            url: `/training/material`,
+        },
+        {
+            text: 'Training Status',
+            url: `/training/status`,
+        },
+    ];
     return (
         <AllTraning
             users={users}
             trainings={trainings}
             superAdminId={superAdminId}
+            tabs={tabs}
         />
     );
 };

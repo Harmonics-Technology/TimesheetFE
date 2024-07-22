@@ -19,7 +19,7 @@ import { UserContext } from '@components/context/UserContext';
 import { useRouter } from 'next/router';
 import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
 
-export const AllTraning = ({ users, superAdminId, trainings }) => {
+export const AllTraning = ({ users, superAdminId, trainings, tabs }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
@@ -77,18 +77,7 @@ export const AllTraning = ({ users, superAdminId, trainings }) => {
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
             <Box w="full" mb="1rem">
-                <LeaveTab
-                    tabValue={[
-                        {
-                            text: 'Training Materials',
-                            url: `/training`,
-                        },
-                        {
-                            text: 'Training Status',
-                            url: `/training/status`,
-                        },
-                    ]}
-                />
+                <LeaveTab tabValue={tabs} />
             </Box>
             <Flex align="center" justify="space-between" mb="1rem">
                 <Button
@@ -112,7 +101,11 @@ export const AllTraning = ({ users, superAdminId, trainings }) => {
                                 <TableData name={x.name} />
                                 <TableData name={formatDate(x.dateCreated)} />
                                 <TrainingActions
-                                    route={`/${role}/training/${x.id}`}
+                                    route={
+                                        tabs?.length == 2
+                                            ? `/${role}/training/${x.id}`
+                                            : `/${role}/training/material/${x.id}`
+                                    }
                                     deleteTraining={() => openDeleteModal(x.id)}
                                     loading={loading.id === x?.id}
                                 />

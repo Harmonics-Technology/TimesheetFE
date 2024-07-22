@@ -232,6 +232,7 @@ export type { TrainingAssigneeViewPagedCollection } from './models/TrainingAssig
 export type { TrainingAssigneeViewPagedCollectionStandardResponse } from './models/TrainingAssigneeViewPagedCollectionStandardResponse';
 export type { TrainingFileModel } from './models/TrainingFileModel';
 export type { TrainingFileView } from './models/TrainingFileView';
+export type { TrainingManagerModel } from './models/TrainingManagerModel';
 export type { TrainingMaterialView } from './models/TrainingMaterialView';
 export type { TrainingMaterialViewPagedCollection } from './models/TrainingMaterialViewPagedCollection';
 export type { TrainingMaterialViewPagedCollectionStandardResponse } from './models/TrainingMaterialViewPagedCollectionStandardResponse';

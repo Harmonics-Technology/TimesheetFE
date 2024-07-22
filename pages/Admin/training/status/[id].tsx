@@ -6,8 +6,22 @@ import React from 'react';
 import { TrainingService } from 'src/services';
 
 const index = ({ trainings, trainingName }) => {
+    const tabs = [
+        {
+            text: 'Training Materials',
+            url: `/training/material`,
+        },
+        {
+            text: 'Training Status',
+            url: `/training/status`,
+        },
+    ];
     return (
-        <TrainingStatusById trainings={trainings} trainingName={trainingName} />
+        <TrainingStatusById
+            trainings={trainings}
+            trainingName={trainingName}
+            tabs={tabs}
+        />
     );
 };
 

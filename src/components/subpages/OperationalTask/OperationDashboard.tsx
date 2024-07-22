@@ -87,12 +87,12 @@ export const OperationDashboard = ({
                     status: 2,
                 },
             });
+            return;
         }
         router.push({
             query: {
                 ...router.query,
                 status: value,
-                department: '',
             },
         });
     };
@@ -164,7 +164,7 @@ export const OperationDashboard = ({
             )?.length || 0
         );
     };
-    
+
     const renderItems = (status: string) => {
         return opTaskItem
             ?.filter((x: ProjectTaskView) => x?.operationalTaskStatus == status)

@@ -1,10 +1,11 @@
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import { TeamViewTraining } from '@components/subpages/Training/TeamViewTraining';
+import { TrainingStatusById } from '@components/subpages/Training/TrainingStatusById';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import { TrainingService } from 'src/services';
 
-const singleTraining = ({ training, userId, id, isManager }) => {
+const index = ({ trainings, trainingName }) => {
     const tabs = [
         {
             text: 'My Training',
@@ -20,33 +21,33 @@ const singleTraining = ({ training, userId, id, isManager }) => {
         },
     ];
     return (
-        <TeamViewTraining
-            training={training}
-            userId={userId}
-            trainingId={id}
-            tabs={isManager ? tabs : tabs?.slice(0, 1)}
+        <TrainingStatusById
+            trainings={trainings}
+            trainingName={trainingName}
+            tabs={tabs}
         />
     );
 };
 
-export default singleTraining;
+export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const userId = JSON.parse(ctx.req.cookies.user).id;
-        const isManager = JSON.parse(ctx.req.cookies.user)?.isTrainingManager;
+        // const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const { id } = ctx.query;
+        const pagingOptions = filterPagingSearchOptions(ctx);
+        const { trainingName } = ctx.query;
         try {
-            const training = await TrainingService.listUserTrainingMaterials(
-                userId,
+            const data = await TrainingService.listTrainingStatus(
+                pagingOptions.offset,
+                pagingOptions.limit,
                 id,
             );
+
             return {
                 props: {
-                    training: training.data,
-                    userId,
-                    id,
-                    isManager: isManager || false,
+                    trainings: data.data,
+                    trainingName,
                 },
             };
         } catch (error: any) {

@@ -1,10 +1,11 @@
+import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import { TeamViewTraining } from '@components/subpages/Training/TeamViewTraining';
+import { TrainingStatus } from '@components/subpages/Training/TrainingStatus';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import { TrainingService } from 'src/services';
 
-const singleTraining = ({ training, userId, id, isManager }) => {
+const index = ({ trainings }) => {
     const tabs = [
         {
             text: 'My Training',
@@ -19,38 +20,33 @@ const singleTraining = ({ training, userId, id, isManager }) => {
             url: `/training/status`,
         },
     ];
-    return (
-        <TeamViewTraining
-            training={training}
-            userId={userId}
-            trainingId={id}
-            tabs={isManager ? tabs : tabs?.slice(0, 1)}
-        />
-    );
+    return <TrainingStatus trainings={trainings} tabs={tabs} />;
 };
 
-export default singleTraining;
+export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const userId = JSON.parse(ctx.req.cookies.user).id;
-        const isManager = JSON.parse(ctx.req.cookies.user)?.isTrainingManager;
-        const { id } = ctx.query;
+        const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const training = await TrainingService.listUserTrainingMaterials(
+            const trainings = await TrainingService.listTraining(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                superAdminId,
+                undefined,
+                pagingOptions.search,
+                pagingOptions.from,
+                pagingOptions.to,
                 userId,
-                id,
             );
             return {
                 props: {
-                    training: training.data,
-                    userId,
-                    id,
-                    isManager: isManager || false,
+                    trainings: trainings.data,
                 },
             };
         } catch (error: any) {
-            console.log({ error });
             return {
                 props: {
                     data: [],

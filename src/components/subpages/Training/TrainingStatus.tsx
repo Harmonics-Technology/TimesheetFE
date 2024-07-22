@@ -9,7 +9,7 @@ import { Round } from '@components/generics/functions/Round';
 import React, { useContext } from 'react';
 import { TrainingAssigneeView, TrainingView } from 'src/services';
 
-export const TrainingStatus = ({ trainings }) => {
+export const TrainingStatus = ({ trainings, tabs }) => {
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
     return (
@@ -20,18 +20,7 @@ export const TrainingStatus = ({ trainings }) => {
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
             <Box w="full" mb="1rem">
-                <LeaveTab
-                    tabValue={[
-                        {
-                            text: 'Training Materials',
-                            url: `/training`,
-                        },
-                        {
-                            text: 'Training Status',
-                            url: `/training/status`,
-                        },
-                    ]}
-                />
+                <LeaveTab tabValue={tabs} />
             </Box>
             <Box>
                 <Tables

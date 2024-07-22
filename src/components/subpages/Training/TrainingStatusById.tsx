@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { TrainingAssigneeView } from 'src/services';
 
-export const TrainingStatusById = ({ trainings, trainingName }) => {
+export const TrainingStatusById = ({ trainings, trainingName, tabs }) => {
     const router = useRouter();
     return (
         <Box
@@ -18,19 +18,7 @@ export const TrainingStatusById = ({ trainings, trainingName }) => {
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
             <Box w="full" mb="1rem">
-                <LeaveTab
-                    tabValue={[
-                        {
-                            text: 'Training Materials',
-                            url: `/training/material`,
-                        },
-                        {
-                            text: 'Training Status',
-                            url: `/training/status`,
-                        },
-                    ]}
-                    useStartWith
-                />
+                <LeaveTab tabValue={tabs} useStartWith />
             </Box>
             <Box>
                 <Text

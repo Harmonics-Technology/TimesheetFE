@@ -10,6 +10,8 @@ export type TrainingModel = {
     name?: string | null;
     isAllParticipant?: boolean;
     note?: string | null;
+    createdByUserId?: string;
+    trainingManagerId?: string | null;
     assignedUsers?: Array<string> | null;
     trainingFiles?: Array<TrainingFileModel> | null;
 };

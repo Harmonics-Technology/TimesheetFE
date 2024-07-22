@@ -52,7 +52,7 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
                     error?.type === 'required' || error?.message !== undefined
                 }
             >
-                <Text fontSize="1rem" fontWeight="500" mb=".7rem">
+                <Text fontSize=".8rem" fontWeight="500" mb=".7rem">
                     {label}
                 </Text>
                 <Controller
