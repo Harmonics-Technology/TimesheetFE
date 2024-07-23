@@ -16,8 +16,9 @@ import { TrainingInFullScreen } from './TrainingInFullScreen';
 import { useState } from 'react';
 import { IoDocumentTextSharp } from 'react-icons/io5';
 import { formatDate } from '@components/generics/functions/formatDate';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
-export const TeamViewTraining = ({ training, userId, trainingId }) => {
+export const TeamViewTraining = ({ training, userId, trainingId, tabs }) => {
     const newData = training as TrainingAssigneeView[];
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
@@ -65,6 +66,9 @@ export const TeamViewTraining = ({ training, userId, trainingId }) => {
             px="1rem"
             borderRadius="10px"
         >
+            <Box w="full" mb="1rem">
+                <LeaveTab tabValue={tabs} useStartWith />
+            </Box>
             <Box mt="0rem" w="70%">
                 <Text
                     color="brand.400"

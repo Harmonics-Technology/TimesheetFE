@@ -5,7 +5,17 @@ import React from 'react';
 import { TrainingService, UserService } from 'src/services';
 
 const index = ({ data, id, users }) => {
-    return <ViewTraining id={id} data={data} users={users} />;
+    const tabs = [
+        {
+            text: 'Training Materials',
+            url: `/training/material`,
+        },
+        {
+            text: 'Training Status',
+            url: `/training/status`,
+        },
+    ];
+    return <ViewTraining id={id} data={data} users={users} tabs={tabs} />;
 };
 
 export default index;

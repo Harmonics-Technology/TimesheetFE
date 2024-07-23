@@ -14,6 +14,7 @@ export type TrainingView = {
     dateCreated?: string;
     dateModified?: string;
     progress?: number | null;
+    trainingManagerId?: string | null;
     assignees?: Array<TrainingAssigneeView> | null;
     files?: Array<TrainingFileView> | null;
 };

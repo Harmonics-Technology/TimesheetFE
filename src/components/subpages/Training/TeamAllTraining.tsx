@@ -8,10 +8,12 @@ import { useContext } from 'react';
 import { UserContext } from '@components/context/UserContext';
 import { ProgressBar } from '@components/bits-utils/ProjectManagement/Generics/ProgressBar';
 import { Round } from '@components/generics/functions/Round';
+import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
-export const TeamAllTraning = ({ trainings }) => {
+export const TeamAllTraning = ({ trainings, tabs }) => {
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
+
     return (
         <Box
             bgColor="white"
@@ -19,9 +21,9 @@ export const TeamAllTraning = ({ trainings }) => {
             padding="1.5rem"
             boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
         >
-            <Text fontWeight={500} color="#000">
-                Training Materials
-            </Text>
+            <Box w="full" mb="1rem">
+                <LeaveTab tabValue={tabs} />
+            </Box>
             <Box>
                 <Tables
                     tableHead={[

@@ -131,6 +131,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
             fileUrl: x.fileUrl,
             category: x.category,
         }));
+        data.createdByUserId = user?.id;
         try {
             const result = await TrainingService.addTraining(data);
             if (result.status) {

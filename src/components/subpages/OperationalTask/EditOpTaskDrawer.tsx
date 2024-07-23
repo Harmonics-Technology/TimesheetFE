@@ -87,7 +87,7 @@ export const EditOpTaskDrawer = ({
     const router = useRouter();
     const [selectedUser, setSelecedUser] = useState<any>(
         data?.assignees?.map((obj) => ({
-            id: obj?.id,
+            id: obj?.userId,
             fullName: obj?.fullName,
         })) || [],
     );
@@ -106,7 +106,7 @@ export const EditOpTaskDrawer = ({
         { id: 3, name: 'Completed' },
     ];
     const [taskType, setTaskType] = useState(
-        data?.isAssignedToMe && data.assignees?.at(0)?.userId == id
+        data?.isAssignedToMe && data.createdByUserId == id
             ? 'Private'
             : data.department
             ? 'Departmental'

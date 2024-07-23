@@ -55,4 +55,6 @@ export type EmployeeInformationView = {
     paymentProcessingFeeType?: string | null;
     paymentProcessingFee?: number;
     newPayrollStructureEnabled?: boolean;
+    isTrainingManager?: boolean;
+    canManageAllTraining?: boolean;
 };

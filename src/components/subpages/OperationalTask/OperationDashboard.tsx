@@ -84,15 +84,15 @@ export const OperationDashboard = ({
                 query: {
                     ...router.query,
                     department: user?.department,
-                    status: '',
+                    status: 2,
                 },
             });
+            return;
         }
         router.push({
             query: {
                 ...router.query,
                 status: value,
-                department: '',
             },
         });
     };
@@ -117,6 +117,7 @@ export const OperationDashboard = ({
             endDate: task.endDate,
             note: task.note,
             operationalTaskStatus: status,
+            department: task.department,
             assignedUsers: (task?.assignees as any).map((x) => x.userId) || [],
         };
         try {
@@ -164,6 +165,7 @@ export const OperationDashboard = ({
             )?.length || 0
         );
     };
+
     const renderItems = (status: string) => {
         return opTaskItem
             ?.filter((x: ProjectTaskView) => x?.operationalTaskStatus == status)
@@ -171,14 +173,12 @@ export const OperationDashboard = ({
                 <OperationCard
                     key={task?.id}
                     bg={
-                        task?.isAssignedToMe &&
-                        task?.assignees?.at(0)?.userId == id
+                        task?.isAssignedToMe && task?.createdByUserId == id
                             ? '#2383BD'
                             : '#FFA681'
                     }
                     text={
-                        task?.isAssignedToMe &&
-                        task?.assignees?.at(0)?.userId == id
+                        task?.isAssignedToMe && task?.createdByUserId == id
                             ? 'Private Task'
                             : 'Task Assigned'
                     }

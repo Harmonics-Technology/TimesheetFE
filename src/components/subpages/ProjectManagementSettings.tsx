@@ -13,6 +13,7 @@ import moment from 'moment';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import Pagination from '@components/bits-utils/Pagination';
+import { removeItemsFromArray } from '@components/generics/functions/removeItemsFromArray';
 
 const schema = yup.object().shape({
     id: yup.string().required(),
@@ -40,10 +41,7 @@ export const ProjectManagementSettings = ({
     const toast = useToast();
     const router = useRouter();
     const [loading, setLoading] = useState<any>({ id: '' });
-    function removeItemsFromArray(array1, array2) {
-        const array2Ids = array2.map((item) => item.id);
-        return array1?.filter((item) => !array2Ids?.includes(item.id));
-    }
+   
     const newOptions = removeItemsFromArray(options, pm?.data.value);
 
     const onSubmit = async (data: setAsPM) => {

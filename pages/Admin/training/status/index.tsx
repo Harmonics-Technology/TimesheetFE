@@ -6,7 +6,17 @@ import React from 'react';
 import { TrainingService } from 'src/services';
 
 const index = ({ trainings }) => {
-    return <TrainingStatus trainings={trainings} />;
+    const tabs = [
+        {
+            text: 'Training Materials',
+            url: `/training/material`,
+        },
+        {
+            text: 'Training Status',
+            url: `/training/status`,
+        },
+    ];
+    return <TrainingStatus trainings={trainings} tabs={tabs} />;
 };
 
 export default index;

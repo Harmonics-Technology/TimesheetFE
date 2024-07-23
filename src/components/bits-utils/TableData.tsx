@@ -432,6 +432,38 @@ export function TablePmActions({
         </td>
     );
 }
+export function TableCustomActions({
+    loading,
+    data,
+}: {
+    loading: any;
+    data: any;
+}) {
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    {data?.map((x) => (
+                        <MenuItem onClick={x?.onClick} w="full" key={x?.id}>
+                            {x?.name}
+                        </MenuItem>
+                    ))}
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
 export function TableDraftActions({
     data,
     setDraftData,

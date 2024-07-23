@@ -193,8 +193,8 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                     mb="0"
                                 >
                                     {curPage?.startsWith('[')
-                                        ? idPage?.replace('-', ' ')
-                                        : curPage?.replace('-', ' ')}
+                                        ? idPage?.replaceAll('-', ' ')
+                                        : curPage?.replaceAll('-', ' ')}
                                 </Text>
                             </>
                         )}
