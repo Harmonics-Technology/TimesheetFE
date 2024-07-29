@@ -85,6 +85,7 @@ export const EditOpTaskDrawer = ({
 
     const toast = useToast();
     const router = useRouter();
+    console.log({ data });
     const [selectedUser, setSelecedUser] = useState<any>(
         data?.assignees?.map((obj) => ({
             id: obj?.userId,
@@ -309,7 +310,7 @@ export const EditOpTaskDrawer = ({
                             </FormLabel>
 
                             <CustomSelectBox
-                                data={users?.value}
+                                data={users}
                                 updateFunction={addUser}
                                 items={selectedUser}
                                 customKeys={{ key: 'id', label: 'fullName' }}
