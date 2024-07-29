@@ -49,17 +49,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const data = await ProjectManagementService.listOperationalTasks(
                 superAdminId,
                 undefined,
-                undefined,
+                pagingOptions.subId,
                 pagingOptions.search,
                 pagingOptions.status,
                 pagingOptions.department,
             );
-            const users = await UserService.listUsers(
-                'Team member',
+            const users = await UserService.listUsersByRoles(
                 superAdminId,
-                pagingOptions.offset,
-                100,
-                pagingOptions.search,
+                'team member,super admin,admin,supervisor,payroll manager',
             );
             const counts = 0;
             // await ProjectManagementService.getStatusCountForOperationalTask(

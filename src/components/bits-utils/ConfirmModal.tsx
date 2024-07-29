@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { FaTimesCircle, FaTrash } from 'react-icons/fa';
+import { FaTimesCircle } from 'react-icons/fa';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { ContractService } from 'src/services';
 

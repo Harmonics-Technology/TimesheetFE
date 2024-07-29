@@ -55,17 +55,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.status,
                 pagingOptions.department,
             );
-            const users = await UserService.listUsers(
-                'Team member',
+            const users = await UserService.listUsersByRoles(
                 superAdminId,
-                pagingOptions.offset,
-                100,
-                pagingOptions.search,
+                'team member,super admin,admin,supervisor,payroll manager',
             );
-            const counts =
-                await ProjectManagementService.getStatusCountForOperationalTask(
-                    superAdminId,
-                );
+            const counts = 0;
+            // await ProjectManagementService.getStatusCountForOperationalTask(
+            //     superAdminId,
+            // );
             const dept = await DepartmentService.listDepartments(superAdminId);
 
             // console.log({ users });
@@ -75,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     projects: data.data,
                     users: users.data,
                     superAdminId,
-                    counts: counts.data,
+                    counts,
                     userId,
                     departments: dept.data,
                 },
