@@ -19,7 +19,7 @@
 .rdw-colorpicker-modal-options{
     overflow: auto !important;
 }
-.rdw-link-modal{
+.rdw-link-modal,.rdw-embedded-modal{
     height: fit-content !important;
 }
 .rdw-suggestion-dropdown{
@@ -40,4 +40,10 @@ border: 1px solid #2eafa3;
     /* color: #2eafa3; */
     color: blue;
     cursor: pointer;
+}
+.rdw-link-wrapper, .rdw-image-wrapper,.rdw-emoji-wrapper,.rdw-colorpicker-wrapper,.rdw-embedded-wrapper{
+    position: unset !important;
+}
+.rdw-editor-toolbar{
+    position: relative;
 }
