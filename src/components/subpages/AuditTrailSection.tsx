@@ -17,10 +17,30 @@ import React, { useEffect, useState } from 'react';
 import { FiMessageSquare } from 'react-icons/fi';
 import Skeleton from 'react-loading-skeleton';
 import { AuditrailView, ProjectManagementService } from 'src/services';
+import parse from 'react-html-parser';
+
+moment.updateLocale('en', {
+    relativeTime: {
+        future: 'in %s',
+        past: '%s ago',
+        s: '%d second',
+        ss: '%d seconds',
+        m: '%d minute',
+        mm: '%d minutes',
+        h: 'an hour',
+        hh: '%d hours',
+        d: '%d day',
+        dd: '%d days',
+        M: '%d month',
+        MM: '%d months',
+        y: 'a year',
+        yy: '%d years',
+    },
+});
 
 export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
     const [activities, setActivities] = useState<AuditrailView[]>([]);
-    const [limit, setLimit] = useState(20);
+    const [limit, setLimit] = useState(5);
     const [trigger, setTrigger] = useState(false);
     const [loading, setLoading] = useState({ id: '' });
     const toast = useToast();
@@ -62,10 +82,17 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
         }
     }, [limit, trigger]);
 
+    console.log({ activities });
+
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
-        <HStack py="1rem" justify="space-between" align="flex-start">
+        <HStack
+            py="1rem"
+            justify="space-between"
+            align="flex-start"
+            pos="relative"
+        >
             <>
                 {loading?.id == 'fetching' ? (
                     <Box w="80%">
@@ -84,7 +111,7 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                         <ListItem
                                             key={x?.id}
                                             borderLeft="3px solid #E9ECEF"
-                                            h="9rem"
+                                            h="8rem"
                                             pl="29px"
                                             pos="relative"
                                             _last={{
@@ -104,8 +131,11 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                 border: '5px solid #4FD1C5',
                                             }}
                                         >
-                                            <VStack align="flex-start">
-                                                <HStack gap=".5rem">
+                                            <VStack
+                                                align="flex-start"
+                                                gap=".3rem"
+                                            >
+                                                <HStack gap=".2rem">
                                                     <Text
                                                         color="#04040B"
                                                         fontSize="14px"
@@ -156,17 +186,18 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                     fontWeight={400}
                                                     textTransform="capitalize"
                                                 >
-                                                    {moment(
-                                                        x?.dateCreated,
-                                                    )?.fromNow()}
+                                                    {moment(x?.dateCreated)
+                                                        .add(1, 'hours')
+                                                        ?.fromNow()}
                                                 </Text>
                                                 {x?.isComment ? (
                                                     <Text
                                                         color="#2D3748"
                                                         fontSize="14px"
                                                         fontWeight={400}
+                                                        className="rdw-link-decorator-wrapper"
                                                     >
-                                                        {x?.comment}
+                                                        {parse(x?.comment)}
                                                     </Text>
                                                 ) : (
                                                     <HStack gap="1rem">
@@ -207,7 +238,7 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                         </ListItem>
                                     ))}
                                 </UnorderedList>
-                                <HStack justify="flex-start" mt="3rem">
+                                <HStack justify="flex-start" mt="2rem">
                                     <Text
                                         mb="0"
                                         mt="1rem"
@@ -248,6 +279,8 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                 fontSize="13px"
                 fontWeight={500}
                 cursor="pointer"
+                pos="absolute"
+                right={0}
             >
                 <Icon as={FiMessageSquare} />
                 <Text>Add Comment</Text>

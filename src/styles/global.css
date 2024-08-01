@@ -5,7 +5,9 @@
 @import url('./scheduler.css');
 @import url('./toggleswitch.css');
 @import url('./circularcheckbox.css');
+@import url('./editor.css');
 @import url('react-loading-skeleton/dist/skeleton.css');
+@import url('react-draft-wysiwyg/dist/react-draft-wysiwyg.css');
 /* @import url('./scrollbar.css'); */
 
 .skeleton {

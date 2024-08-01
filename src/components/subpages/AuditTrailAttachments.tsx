@@ -24,6 +24,25 @@ import {
     ProjectManagementService,
 } from 'src/services';
 
+moment.updateLocale('en', {
+    relativeTime: {
+        future: 'in %s',
+        past: '%s ago',
+        s: '%d second',
+        ss: '%d seconds',
+        m: '%d minute',
+        mm: '%d minutes',
+        h: 'an hour',
+        hh: '%d hours',
+        d: '%d day',
+        dd: '%d days',
+        M: '%d month',
+        MM: '%d months',
+        y: 'a year',
+        yy: '%d years',
+    },
+});
+
 export const AuditTrailAttachments = ({ taskId }: { taskId: string }) => {
     const [activities, setActivities] = useState<AttachmentView[]>([]);
     const [refetch, setRefetch] = useState(false);
@@ -193,9 +212,9 @@ export const AuditTrailAttachments = ({ taskId }: { taskId: string }) => {
                                                 fontWeight={400}
                                                 color="#c4c4c4"
                                             >
-                                                {moment(
-                                                    x?.dateCreated,
-                                                ).fromNow()}
+                                                {moment(x?.dateCreated)
+                                                    ?.add(1, 'hour')
+                                                    .fromNow()}
                                             </Text>
                                             <Text
                                                 color="#2D3748"

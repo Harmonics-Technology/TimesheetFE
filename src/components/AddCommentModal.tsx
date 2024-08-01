@@ -10,13 +10,22 @@ import {
     useToast,
     Flex,
 } from '@chakra-ui/react';
-import * as yup from 'yup';
-import { useForm } from 'react-hook-form';
 import { IoCloseOutline } from 'react-icons/io5';
-import { ProjectManagementService, TaskComment } from 'src/services';
+import { ProjectManagementService, TaskComment, UserView } from 'src/services';
 import { ShiftBtn } from './bits-utils/ShiftBtn';
-import { PrimaryTextarea } from './bits-utils/PrimaryTextArea';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { EditorState, convertToRaw, Modifier } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import dynamic from 'next/dynamic';
+import { useContext, useEffect, useState } from 'react';
+import { fetchAllUserRoles } from './generics/functions/FetchAllUsers';
+import { UserContext } from './context/UserContext';
+
+const Editor = dynamic(
+    () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
+    {
+        ssr: false,
+    },
+);
 
 type Props = {
     isOpen?: any;
@@ -25,37 +34,62 @@ type Props = {
     setTrigger: any;
 };
 
-const schema = yup.object().shape({
-    comment: yup.string().required(),
-});
-
+const CustomButton = ({ addAtSymbol }) => (
+    <div className="rdw-option-wrapper" onClick={addAtSymbol}>
+        @
+    </div>
+);
 const AddCommentModal = ({ isOpen, onClose, taskId, setTrigger }: Props) => {
     const toast = useToast();
+    const [isLoading, setIsLoading] = useState({ id: '' });
+    const [users, setUsers] = useState([]);
+    const { user } = useContext(UserContext);
 
-    const {
-        handleSubmit,
-        register,
-        formState: { errors, isSubmitting },
-    } = useForm<TaskComment>({
-        resolver: yupResolver(schema),
-        mode: 'all',
-        defaultValues: {
+    const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+    const handleEditorChange = (newEditorState: EditorState) => {
+        setEditorState(newEditorState);
+    };
+
+    const addAtSymbol = () => {
+        const contentState = Modifier.replaceText(
+            editorState.getCurrentContent(),
+            editorState.getSelection(),
+            '@',
+            editorState.getCurrentInlineStyle(),
+        );
+        const newEditorState = EditorState.push(
+            editorState,
+            contentState,
+            'insert-characters',
+        );
+        setEditorState(newEditorState);
+    };
+
+    const getHtmlContent = () => {
+        const rawContentState = convertToRaw(editorState.getCurrentContent());
+        const htmlContent = draftToHtml(rawContentState);
+        return htmlContent;
+    };
+
+    const postAComment = async () => {
+        const data: TaskComment = {
             projectTaskId: taskId,
-        },
-    });
-
-    const postAComment = async (data: TaskComment) => {
+            comment: getHtmlContent() as string,
+        };
+        setIsLoading({ id: 'posting' });
         try {
             const result = await ProjectManagementService.addComment(data);
             if (result.status) {
                 toast({
-                    title: 'Contract Terminated',
+                    title: 'Successful',
                     status: 'success',
                     isClosable: true,
                     position: 'top-right',
                 });
                 setTrigger((prev: boolean) => !prev);
                 onClose();
+                setIsLoading({ id: '' });
                 return;
             }
             toast({
@@ -65,6 +99,7 @@ const AddCommentModal = ({ isOpen, onClose, taskId, setTrigger }: Props) => {
                 position: 'top-right',
             });
         } catch (err: any) {
+            setIsLoading({ id: '' });
             toast({
                 title: err?.message || err?.body?.message,
                 status: 'error',
@@ -73,6 +108,15 @@ const AddCommentModal = ({ isOpen, onClose, taskId, setTrigger }: Props) => {
             });
         }
     };
+
+    useEffect(() => {
+        fetchAllUserRoles({
+            role: 'team member,super admin,admin,supervisor,payroll manager',
+            setLoading: setIsLoading,
+            superAdminId: user?.superAdminId,
+            setUsers,
+        });
+    }, []);
     return (
         <Modal
             isOpen={isOpen}
@@ -85,9 +129,10 @@ const AddCommentModal = ({ isOpen, onClose, taskId, setTrigger }: Props) => {
             <ModalContent
                 py={5}
                 borderRadius="0px"
-                w={['88%', '30%']}
+                w={['88%', '35%']}
                 overflow="hidden"
                 maxH="100vh"
+                maxW="unset"
                 pos="fixed"
                 mt="1rem"
                 mb="1rem"
@@ -108,16 +153,74 @@ const AddCommentModal = ({ isOpen, onClose, taskId, setTrigger }: Props) => {
                     </Flex>
                 </ModalHeader>
 
-                <ModalBody pt="0">
+                <ModalBody pt=".5rem">
                     <Box maxH="77vh" overflowY="auto">
-                        <form onSubmit={handleSubmit(postAComment)}>
-                            <PrimaryTextarea<TaskComment>
+                        <form>
+                            {/* <PrimaryTextarea<TaskComment>
                                 register={register}
                                 error={errors?.comment}
                                 name="comment"
                                 defaultValue=""
                                 // label="Comment"
-                            />
+                            /> */}
+                            <Box w="full">
+                                <Editor
+                                    //@ts-ignore
+                                    editorState={editorState}
+                                    onEditorStateChange={handleEditorChange}
+                                    placeholder="Start typing..."
+                                    editorClassName="editor-class"
+                                    wrapperClassName="wrapper-class"
+                                    toolbarClassName="toolbar-class"
+                                    toolbarCustomButtons={[
+                                        <CustomButton
+                                            addAtSymbol={addAtSymbol}
+                                        />,
+                                    ]}
+                                    mention={{
+                                        separator: ' ',
+                                        trigger: '@',
+                                        suggestions: users?.map(
+                                            (x: UserView) => ({
+                                                text: x.fullName,
+                                                value: x.fullName,
+                                                url: x.fullName,
+                                            }),
+                                        ),
+                                    }}
+                                    toolbar={{
+                                        options: [
+                                            'inline',
+                                            // 'blockType',
+                                            // 'fontSize',
+                                            // 'fontFamily',
+                                            'list',
+                                            'textAlign',
+                                            'emoji',
+                                            'image',
+                                            'colorPicker',
+                                            'link',
+                                            'embedded',
+                                            'remove',
+                                            'history',
+                                        ],
+                                        inline: {
+                                            options: [
+                                                'bold',
+                                                'italic',
+                                                'underline',
+                                                'strikethrough',
+                                                'monospace',
+                                            ],
+                                            inDropdown: false,
+                                        },
+                                        list: { inDropdown: true },
+                                        textAlign: { inDropdown: true },
+                                        link: { inDropdown: false },
+                                        history: { inDropdown: false },
+                                    }}
+                                />
+                            </Box>
                             <HStack gap="1rem" w="full" mt="1rem">
                                 <ShiftBtn
                                     text="Save"
@@ -126,7 +229,8 @@ const AddCommentModal = ({ isOpen, onClose, taskId, setTrigger }: Props) => {
                                     h="34px"
                                     px="1rem"
                                     type="submit"
-                                    loading={isSubmitting}
+                                    onClick={postAComment}
+                                    loading={isLoading?.id == 'posting'}
                                 />
                                 <ShiftBtn
                                     text="Cancel"

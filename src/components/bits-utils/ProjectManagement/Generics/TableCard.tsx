@@ -56,7 +56,7 @@ export const TableCard = ({
                     //@ts-ignore
                     children?.props?.children?.length > 0 ||
                     //@ts-ignore
-                    children[0]?.props?.children?.length > 0 ? (
+                    children?.at(0)?.props?.children?.length > 0 ? (
                         <Tbody>{children}</Tbody>
                     ) : (
                         <TableNoContentWrapper
