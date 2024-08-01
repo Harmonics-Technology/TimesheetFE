@@ -106,6 +106,7 @@ function Login() {
                     numberOfLeaveDaysTaken: result.data?.numberOfLeaveDaysTaken,
                     twoFactorCode: result.data?.twoFactorCode,
                     isTrainingManager: result.data?.isTrainingManager,
+                    clientId: result.data?.clientId,
                 };
                 const subDetails = result.data?.subscriptiobDetails;
                 Cookies.set('user', JSON.stringify(strippedData));

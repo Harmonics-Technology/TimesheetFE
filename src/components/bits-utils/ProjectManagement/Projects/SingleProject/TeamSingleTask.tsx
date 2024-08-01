@@ -50,6 +50,8 @@ import { ShowPrompt } from '../../Modals/ShowPrompt';
 import { useRouter } from 'next/router';
 import { ProgressSlider } from '@components/bits-utils/ProgressSlider';
 import { GiProgression } from 'react-icons/gi';
+import { AuditTrailSection } from '@components/subpages/AuditTrailSection';
+import { AuditTrailAttachments } from '@components/subpages/AuditTrailAttachments';
 
 export const TeamSingleTask = ({
     id,
@@ -75,6 +77,7 @@ export const TeamSingleTask = ({
         'Status',
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [currentView, setCurrentView] = useState('Activity');
     const {
         isOpen: isOpened,
         onOpen: onOpened,
@@ -529,6 +532,37 @@ export const TeamSingleTask = ({
                             );
                         })}
                     </TableCard>
+                    <Box>
+                        <HStack borderY="1px solid #D9D9D9" w="full">
+                            {['Activity', 'Attachments'].map((x) => (
+                                <HStack
+                                    h="33px"
+                                    px="10px"
+                                    onClick={() => setCurrentView(x)}
+                                    bgColor={
+                                        currentView == x ? '#E9ECEF' : '#fff'
+                                    }
+                                    color={
+                                        currentView == x ? '#2383BD' : '#2D3748'
+                                    }
+                                >
+                                    <Text fontSize="14px" cursor="pointer">
+                                        {x}
+                                    </Text>
+                                </HStack>
+                            ))}
+                        </HStack>
+                        {currentView == 'Activity' && (
+                            <AuditTrailSection taskId={task?.id as string} />
+                        )}
+                        {currentView == 'Attachments' && (
+                            <Box py="1rem">
+                                <AuditTrailAttachments
+                                    taskId={task?.id as string}
+                                />
+                            </Box>
+                        )}
+                    </Box>
                 </Box>
             </Flex>
             {isOpen && (
