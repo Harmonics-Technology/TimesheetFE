@@ -111,9 +111,10 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                         <ListItem
                                             key={x?.id}
                                             borderLeft="3px solid #E9ECEF"
-                                            h="8rem"
+                                            minH="8rem"
                                             pl="29px"
                                             pos="relative"
+                                            pb="1rem"
                                             _last={{
                                                 borderLeft: '0',
                                             }}
