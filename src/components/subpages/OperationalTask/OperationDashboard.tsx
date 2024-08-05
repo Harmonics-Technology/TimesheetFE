@@ -221,7 +221,7 @@ export const OperationDashboard = ({
                         'DD-MM-YYYY',
                     )}`}
                     user={task?.createdByUser}
-                    assignees={task?.assignees}
+                    assignees={task?.assignees?.filter((x) => !x?.disabled)}
                     onClick={() => triggerEditCard(task)}
                     onDragStart={(e) => handleDragStart(e, task)}
                     onDragEnd={(e) => handleDragEnd(e)}
