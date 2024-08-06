@@ -1,6 +1,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AttachmentModel } from '../models/AttachmentModel';
+import type { AttachmentViewListStandardResponse } from '../models/AttachmentViewListStandardResponse';
+import type { AuditrailViewPagedCollectionStandardResponse } from '../models/AuditrailViewPagedCollectionStandardResponse';
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { BudgetSummaryReportViewStandardResponse } from '../models/BudgetSummaryReportViewStandardResponse';
 import type { ListProjectViewPagedCollectionStandardResponse } from '../models/ListProjectViewPagedCollectionStandardResponse';
@@ -24,6 +27,7 @@ import type { ProjectViewPagedCollectionStandardResponse } from '../models/Proje
 import type { ProjectViewStandardResponse } from '../models/ProjectViewStandardResponse';
 import type { ResourceCapacityDetailViewStandardResponse } from '../models/ResourceCapacityDetailViewStandardResponse';
 import type { ResourceCapacityViewStandardResponse } from '../models/ResourceCapacityViewStandardResponse';
+import type { TaskComment } from '../models/TaskComment';
 import type { UpdateProjectTimesheet } from '../models/UpdateProjectTimesheet';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -690,6 +694,116 @@ percentageOfCompletion?: number,
             query: {
                 'subTaskId': subTaskId,
                 'percentageOfCompletion': percentageOfCompletion,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static addComment(
+requestBody?: TaskComment,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/add-task-comment',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param isDelete 
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateComment(
+isDelete: boolean = false,
+requestBody?: TaskComment,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-task-comment',
+            query: {
+                'isDelete': isDelete,
+            },
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param taskId 
+     * @returns AuditrailViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listActivities(
+offset?: number,
+limit?: number,
+taskId?: string,
+): CancelablePromise<AuditrailViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/task-activities',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'taskId': taskId,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static addAttachment(
+requestBody?: AttachmentModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/add-task-attachment',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param attachmentId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static deleteAttachment(
+attachmentId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/delete-task-attachment',
+            query: {
+                'attachmentId': attachmentId,
+            },
+        });
+    }
+
+    /**
+     * @param taskId 
+     * @returns AttachmentViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static listAttachments(
+taskId?: string,
+): CancelablePromise<AttachmentViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/task-attachments',
+            query: {
+                'taskId': taskId,
             },
         });
     }

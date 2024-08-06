@@ -14,6 +14,7 @@ interface shiftBtnProps {
     w?: any;
     px?: any;
     disabled?: any;
+    type?: 'button' | 'submit' | 'reset' | undefined;
 }
 
 export const ShiftBtn = ({
@@ -28,6 +29,7 @@ export const ShiftBtn = ({
     w,
     px = '2rem',
     disabled,
+    type = 'button',
 }: shiftBtnProps) => {
     return (
         <Button
@@ -43,6 +45,7 @@ export const ShiftBtn = ({
             w={w}
             h={h}
             isDisabled={disabled}
+            type={type}
             spinner={<BeatLoader color="white" size={10} />}
         >
             {text}

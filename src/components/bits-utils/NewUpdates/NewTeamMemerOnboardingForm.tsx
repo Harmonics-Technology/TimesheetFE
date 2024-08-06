@@ -352,7 +352,7 @@ export const NewTeamMemerOnboardingForm = ({
         }
     };
     const saveToDraft = async (data: TeamMemberModel) => {
-        // data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax;
+        // data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax || 0;
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;

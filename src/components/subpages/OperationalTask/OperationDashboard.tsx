@@ -21,6 +21,7 @@ import {
     ProjectManagementService,
     ProjectProgressCountView,
     ProjectTaskView,
+    UserService,
 } from 'src/services';
 import { EditOpTaskDrawer } from './EditOpTaskDrawer';
 import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
@@ -74,6 +75,27 @@ export const OperationDashboard = ({
         dateRef.current.closeCalendar();
     };
     const [filter, setFilter] = useState<any>('');
+    const [deptUsers, setDeptUsers] = useState<any>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const fetchDeptUser = async (value: any) => {
+        try {
+            setIsLoading(true);
+            const data = await UserService.listUsersByDepartment(
+                superAdminId,
+                0,
+                100,
+                value,
+            );
+            if (data.status) {
+                setIsLoading(false);
+                setDeptUsers(data.data?.value);
+            }
+        } catch (error) {
+            setIsLoading(false);
+            console.log({ error });
+        }
+    };
     const filterByStatus = (value) => {
         setFilter(value);
         // if (value == '2' && role != 'TeamMember') {
@@ -87,6 +109,7 @@ export const OperationDashboard = ({
                     status: 2,
                 },
             });
+            fetchDeptUser(user?.department);
             return;
         }
         router.push({
@@ -96,12 +119,22 @@ export const OperationDashboard = ({
             },
         });
     };
+
     const filterByDepartment = (value) => {
         router.push({
             query: {
                 ...router.query,
                 department: value,
                 status: 2,
+            },
+        });
+        fetchDeptUser(value);
+    };
+    const filterByUser = (value) => {
+        router.push({
+            query: {
+                ...router.query,
+                subId: value,
             },
         });
     };
@@ -188,13 +221,20 @@ export const OperationDashboard = ({
                         'DD-MM-YYYY',
                     )}`}
                     user={task?.createdByUser}
-                    assignees={task?.assignees}
+                    assignees={task?.assignees?.filter((x) => !x?.disabled)}
                     onClick={() => triggerEditCard(task)}
                     onDragStart={(e) => handleDragStart(e, task)}
                     onDragEnd={(e) => handleDragEnd(e)}
                 />
             ));
     };
+
+    const { department, status, subId } = router?.query;
+
+    // console.log(
+    //     users?.value?.filter((x) => x?.department == department),
+    //     users,
+    // );
 
     useNonInitialEffect(() => {
         setOpTaskItem(projects);
@@ -208,24 +248,41 @@ export const OperationDashboard = ({
                         fontSize=".8rem"
                         w="fit-content"
                         onChange={(e) => filterByStatus(e?.target.value)}
+                        value={status}
                     >
                         <option value="">All</option>
                         <option value="1">Private</option>
                         <option value="2">Departmental</option>
                         <option value="3">Others</option>
                     </Select>
-                    {filter == '2' && role != 'TeamMember' && (
+                    {(filter == '2' || status == '2') &&
+                        role != 'TeamMember' && (
+                            <Select
+                                fontSize=".8rem"
+                                w="fit-content"
+                                onChange={(e) =>
+                                    filterByDepartment(e?.target.value)
+                                }
+                                value={department}
+                            >
+                                <option value="">Select Department</option>
+                                <option value="">All</option>
+                                {departments?.map((x) => (
+                                    <option value={x.name}>{x.name}</option>
+                                ))}
+                            </Select>
+                        )}
+                    {department && (
                         <Select
                             fontSize=".8rem"
                             w="fit-content"
-                            onChange={(e) =>
-                                filterByDepartment(e?.target.value)
-                            }
+                            onChange={(e) => filterByUser(e?.target.value)}
+                            value={subId}
                         >
-                            <option value="">Select Department</option>
+                            <option value="">Select A User</option>
                             <option value="">All</option>
-                            {departments?.map((x) => (
-                                <option value={x.name}>{x.name}</option>
+                            {deptUsers?.map((x) => (
+                                <option value={x.id}>{x.fullName}</option>
                             ))}
                         </Select>
                     )}

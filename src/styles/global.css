@@ -2,11 +2,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=Roboto:wght@400;500&display=swap');
 @import url('./calendar.css');
-@import url('./scrollbar.css');
 @import url('./scheduler.css');
 @import url('./toggleswitch.css');
 @import url('./circularcheckbox.css');
+@import url('./editor.css');
 @import url('react-loading-skeleton/dist/skeleton.css');
+@import url('react-draft-wysiwyg/dist/react-draft-wysiwyg.css');
+/* @import url('./scrollbar.css'); */
 
 .skeleton {
     height: 3rem;

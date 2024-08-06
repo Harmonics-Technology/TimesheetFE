@@ -85,11 +85,14 @@ export const EditOpTaskDrawer = ({
 
     const toast = useToast();
     const router = useRouter();
+    console.log({ data });
     const [selectedUser, setSelecedUser] = useState<any>(
-        data?.assignees?.map((obj) => ({
-            id: obj?.userId,
-            fullName: obj?.fullName,
-        })) || [],
+        data?.assignees
+            ?.filter((x) => !x?.disabled)
+            .map((obj) => ({
+                id: obj?.userId,
+                fullName: obj?.fullName,
+            })) || [],
     );
     const addUser = (user) => {
         const filtered = selectedUser?.find((x) => x.id === user.id);
@@ -309,7 +312,7 @@ export const EditOpTaskDrawer = ({
                             </FormLabel>
 
                             <CustomSelectBox
-                                data={users?.value}
+                                data={users}
                                 updateFunction={addUser}
                                 items={selectedUser}
                                 customKeys={{ key: 'id', label: 'fullName' }}

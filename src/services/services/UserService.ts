@@ -338,6 +338,29 @@ export class UserService {
 
     /**
      * @param superAdminId
+     * @param roles
+     * @returns UserViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static listUsersByRoles(
+        superAdminId?: string,
+        roles?: string,
+    ): CancelablePromise<UserViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/list-user-by-roles',
+            query: {
+                superAdminId: superAdminId,
+                roles: roles,
+            },
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param superAdminId
      * @param offset
      * @param limit
      * @param department

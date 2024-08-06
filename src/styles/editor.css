@@ -1,0 +1,49 @@
+.editor-class{
+    padding: 0 .5rem;
+    min-height: 15rem;
+}
+.wrapper-class{
+    border: 1px solid #eee;
+}
+.toolbar-class{
+    border: 0;
+    border-bottom: 1px solid #eee;
+}
+.rdw-image-modal,.rdw-emoji-modal,.rdw-link-modal{
+    right: 5px;
+    left: unset !important;
+}
+.rdw-colorpicker-modal{
+    width: 370px !important;
+}
+.rdw-colorpicker-modal-options{
+    overflow: auto !important;
+}
+.rdw-link-modal,.rdw-embedded-modal{
+    height: fit-content !important;
+}
+.rdw-suggestion-dropdown{
+    min-width: 200px !important;
+}
+.rdw-suggestion-option{
+    cursor: pointer;
+}
+.rdw-link-modal-target-option{
+    display: flex;
+}
+.rdw-link-modal-target-option input[type='checkbox']{
+width: 1rem;
+height: 1rem;
+border: 1px solid #2eafa3;
+}
+.rdw-link-decorator-wrapper a{
+    /* color: #2eafa3; */
+    color: blue;
+    cursor: pointer;
+}
+.rdw-link-wrapper, .rdw-image-wrapper,.rdw-emoji-wrapper,.rdw-colorpicker-wrapper,.rdw-embedded-wrapper{
+    position: unset !important;
+}
+.rdw-editor-toolbar{
+    position: relative;
+}
