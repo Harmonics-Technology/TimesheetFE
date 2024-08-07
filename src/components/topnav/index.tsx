@@ -63,6 +63,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
         router.pathname === `/${role?.replaceAll(' ', '')}/dashboard`;
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const isTfa = controls?.twoFactorEnabled;
 
     const closeModal = () => {
         Cookies.set('isBdChecked', 'true');
@@ -96,7 +97,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
             >
                 Back
             </Button> */}
-            {user?.twoFactorEnabled == false && (
+            {user?.twoFactorEnabled == false && isTfa && (
                 <Flex
                     gap=".5rem"
                     bgColor="red.100"

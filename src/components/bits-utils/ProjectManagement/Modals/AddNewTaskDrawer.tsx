@@ -315,8 +315,8 @@ export const AddNewTaskDrawer = ({
                         error={errors.startDate}
                         min={project?.startDate}
                         // max={project?.endDate}
-                        placeholder={moment(data?.startDate).format(
-                            'DD/MM/YYYY',
+                        defaultValue={moment(data?.startDate).format(
+                            'YYYY-MM-DD',
                         )}
                     />
                     <PrimaryDate<ProjectTaskModel>
@@ -326,7 +326,9 @@ export const AddNewTaskDrawer = ({
                         error={errors.endDate}
                         min={project?.startDate}
                         // max={project?.endDate}
-                        placeholder={moment(data?.endDate).format('DD/MM/YYYY')}
+                        defaultValue={moment(data?.endDate).format(
+                            'YYYY-MM-DD',
+                        )}
                     />
 
                     <PrimaryInput<ProjectTaskModel>

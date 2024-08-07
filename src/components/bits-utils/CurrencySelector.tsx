@@ -54,11 +54,13 @@ export const CurrencySelector = ({
                                 />
                             </Box>
                             <Text fontSize="13px" color="#263238">
-                                {`${
-                                    selectedCountry?.currency
-                                } (${getCurrencyName(
-                                    selectedCountry.currency,
-                                )})`}
+                                {selectedCountry
+                                    ? `${
+                                          selectedCountry?.currency
+                                      } (${getCurrencyName(
+                                          selectedCountry.currency,
+                                      )})`
+                                    : 'Select Currency'}
                             </Text>
                         </HStack>
                     ) : (

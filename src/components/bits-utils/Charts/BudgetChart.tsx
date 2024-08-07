@@ -23,7 +23,11 @@ export default function BudgetChart({
             ctx.fillStyle = '#000';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(`${CAD(total)}`, xCoor, yCoor);
+            ctx.fillText(
+                `${total == 'N/A' ? total : CAD(total)}`,
+                xCoor,
+                yCoor,
+            );
         },
     };
     const options = {

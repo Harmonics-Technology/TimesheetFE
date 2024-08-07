@@ -282,7 +282,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'department settings',
                             'access control settings',
                             'project managers',
-                            'training access control settings',
+                            'training access and permissions',
                             'currency settings',
                             'expense type',
                             'hst settings',

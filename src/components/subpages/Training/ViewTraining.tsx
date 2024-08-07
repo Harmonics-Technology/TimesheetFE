@@ -27,6 +27,25 @@ import { IoDocumentTextSharp } from 'react-icons/io5';
 import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 
+moment.updateLocale('en', {
+    relativeTime: {
+        future: 'in %s',
+        past: '%s ago',
+        s: '%d second',
+        ss: '%d seconds',
+        m: '%d minute',
+        mm: '%d minutes',
+        h: 'an hour',
+        hh: '%d hours',
+        d: '%d day',
+        dd: '%d days',
+        M: '%d month',
+        MM: '%d months',
+        y: 'a year',
+        yy: '%d years',
+    },
+});
+
 export const ViewTraining = ({ id, data, users, tabs }) => {
     const newData = data as TrainingView;
     // console.log({ newData });
@@ -182,7 +201,9 @@ export const ViewTraining = ({ id, data, users, tabs }) => {
                                         fontWeight={400}
                                         color="#c4c4c4"
                                     >
-                                        {moment(x?.dateCreated).fromNow()}
+                                        {moment(x?.dateCreated)
+                                            ?.add(1, 'hours')
+                                            .fromNow()}
                                     </Text>
                                     <HStack
                                         color="#a6acbe"

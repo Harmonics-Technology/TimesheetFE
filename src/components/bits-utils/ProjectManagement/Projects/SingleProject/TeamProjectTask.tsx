@@ -80,7 +80,7 @@ export const TeamProjectTask = ({
 
     return (
         <Box>
-            <TeamTopBar data={project} />
+            <TeamTopBar data={project} id={id} />
             <HStack py="1rem" justify="space-between">
                 <HStack w="17%">
                     <HStack w="full">

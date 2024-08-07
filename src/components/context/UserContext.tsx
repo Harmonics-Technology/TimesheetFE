@@ -8,7 +8,7 @@ export const UserContext = createContext<any | null>(null);
 export const UserProvider = ({ children }: { children: any }) => {
     let user;
     let subType;
-    let activeSub;
+    let activeSub = true;
     let accessControls;
     let subDetails;
     const users = Cookies.get('user') as unknown as string;
