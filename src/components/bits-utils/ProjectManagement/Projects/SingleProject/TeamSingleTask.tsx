@@ -164,7 +164,7 @@ export const TeamSingleTask = ({
 
     return (
         <Box>
-            <TeamTopBar data={project} />
+            <TeamTopBar data={project} id={id} />
             <Flex gap=".5rem">
                 <VStack w="25%">
                     <Box
