@@ -808,4 +808,21 @@ taskId?: string,
         });
     }
 
+    /**
+     * @param taskId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static deleteOperationalTask(
+taskId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/delete-opearional-task',
+            query: {
+                'taskId': taskId,
+            },
+        });
+    }
+
 }

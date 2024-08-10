@@ -63,9 +63,12 @@ export const CreateProjectDrawer = ({
             .min(1, 'Select atleast one assignee')
             .required(),
         note: yup.string().required(),
-        projectManagerId: nonApplicable
+        projectMangers: nonApplicable
             ? yup.string()
-            : yup.string().required(),
+            : yup
+                  .array()
+                  .min(1, 'Select atleast one project manager')
+                  .required(),
         // documentURL: yup.string().required(),
     });
 
@@ -108,9 +111,11 @@ export const CreateProjectDrawer = ({
         const filtered = selectedUser?.filter((x) => x.id !== id);
         setSelecedUser(filtered);
     };
-    const [selectedManager, setSelectedManager] = useState<any>();
+    const [selectedManager, setSelectedManager] = useState<any>([]);
     const addManager = (user) => {
-        setSelectedManager(user);
+        const filtered = selectedManager?.find((x) => x.id === user.id);
+        if (filtered) return;
+        setSelectedManager([...selectedManager, user]);
     };
     const removeManager = (id) => {
         const filtered = selectedManager?.filter((x) => x.id !== id);
@@ -185,11 +190,17 @@ export const CreateProjectDrawer = ({
         );
     }, [selectedUser]);
     useEffect(() => {
+        setValue(
+            'projectManagers',
+            selectedManager.map((x) => x.id),
+        );
+    }, [selectedManager]);
+    useEffect(() => {
         setValue('documentURL', fileDoc?.url?.cdnUrl);
     }, [fileDoc]);
-    useEffect(() => {
-        setValue('projectManagerId', selectedManager?.id);
-    }, [selectedManager]);
+    // useEffect(() => {
+    //     setValue('projectManagerId', selectedManager?.id);
+    // }, [selectedManager]);
 
     //
     return (
@@ -370,9 +381,47 @@ export const CreateProjectDrawer = ({
                             customKeys={{ key: 'id', label: 'fullName' }}
                             removeFn={removeManager}
                             id="AssignProjectManager"
-                            single
-                            error={errors.projectManagerId}
+                            error={errors.projectManagers}
                         />
+                        <Box
+                            mt="1rem"
+                            borderY="1px solid #e5e5e5"
+                            w="full"
+                            py="1rem"
+                        >
+                            {selectedManager?.length > 0 && (
+                                <HStack mb=".5rem">
+                                    {selectedManager?.map((x: any, i: any) => (
+                                        <HStack
+                                            borderRadius="25px"
+                                            border="1px solid #e5e5e5"
+                                            fontSize=".6rem"
+                                            color="#707683"
+                                            key={i}
+                                            p=".1rem .4rem"
+                                        >
+                                            <Text
+                                                fontSize=".6rem"
+                                                color="#707683"
+                                                mb="0"
+                                            >
+                                                {x?.fullName}
+                                            </Text>
+                                            <Icon
+                                                as={MdCancel}
+                                                onClick={() =>
+                                                    removeManager(x?.id)
+                                                }
+                                            />
+                                        </HStack>
+                                    ))}
+                                </HStack>
+                            )}
+                            <Text fontSize=".6rem" color="#707683" mb="0">
+                                These team members were added as a manager to
+                                this project
+                            </Text>
+                        </Box>
                         <Box mt="1rem">
                             <Checkbox
                                 label="Not Applicable"

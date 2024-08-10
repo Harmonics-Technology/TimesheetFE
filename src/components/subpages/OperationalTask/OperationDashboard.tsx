@@ -205,6 +205,7 @@ export const OperationDashboard = ({
             .map((task: ProjectTaskView) => (
                 <OperationCard
                     key={task?.id}
+                    id={task?.id}
                     bg={
                         task?.isAssignedToMe && task?.createdByUserId == id
                             ? '#2383BD'

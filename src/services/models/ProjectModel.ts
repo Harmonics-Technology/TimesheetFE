@@ -17,4 +17,5 @@ export type ProjectModel = {
     budgetThreshold?: number | null;
     projectManagerId?: string | null;
     currency?: string | null;
+    projectManagers?: Array<string> | null;
 };

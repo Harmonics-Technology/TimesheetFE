@@ -141,6 +141,8 @@ export type { Project } from './models/Project';
 export type { ProjectManagementSettingModel } from './models/ProjectManagementSettingModel';
 export type { ProjectManagementSettingView } from './models/ProjectManagementSettingView';
 export type { ProjectManagementSettingViewStandardResponse } from './models/ProjectManagementSettingViewStandardResponse';
+export type { ProjectManager } from './models/ProjectManager';
+export type { ProjectManagerView } from './models/ProjectManagerView';
 export type { ProjectMetrics } from './models/ProjectMetrics';
 export type { ProjectModel } from './models/ProjectModel';
 export type { ProjectProgressCountView } from './models/ProjectProgressCountView';

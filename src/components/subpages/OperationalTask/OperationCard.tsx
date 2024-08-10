@@ -1,7 +1,21 @@
-import { Avatar, Box, HStack, Text, VStack } from '@chakra-ui/react';
+import {
+    Avatar,
+    Box,
+    HStack,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Spinner,
+    Text,
+    useToast,
+    VStack,
+} from '@chakra-ui/react';
 import shadeColor from '@components/generics/functions/shadeColor';
-import React from 'react';
-import { StrippedUserView } from 'src/services';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { FaEllipsisH } from 'react-icons/fa';
+import { ProjectManagementService, StrippedUserView } from 'src/services';
 
 interface IOperationProps {
     text: string;
@@ -14,6 +28,7 @@ interface IOperationProps {
     onDragStart: any;
     onDragEnd: any;
     assignees?: any;
+    id: any;
 }
 
 export const OperationCard = ({
@@ -27,13 +42,45 @@ export const OperationCard = ({
     onDragStart,
     onDragEnd,
     assignees,
+    id,
 }: IOperationProps) => {
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    const toast = useToast();
+
+    const deleteTask = async () => {
+        setLoading(true);
+        try {
+            const data = await ProjectManagementService.deleteOperationalTask(
+                id,
+            );
+            if (data.status) {
+                setLoading(false);
+                toast({
+                    title: data.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.replace(router.asPath);
+                return;
+            }
+        } catch (err: any) {
+            setLoading(false);
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
     return (
         <Box
             borderRadius="16px"
             bgColor="white"
             p="10px 15px"
-            onClick={onClick}
+            // onClick={onClick}
             draggable
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
@@ -112,6 +159,31 @@ export const OperationCard = ({
                     <Text fontWeight={400} color="#787486" fontSize="12px">
                         {subBtm}
                     </Text>
+                    <Menu>
+                        <MenuButton>
+                            <Box
+                                fontSize="1rem"
+                                pl="1rem"
+                                fontWeight="bold"
+                                cursor="pointer"
+                                color="brand.300"
+                            >
+                                {loading ? (
+                                    <Spinner size="sm" />
+                                ) : (
+                                    <FaEllipsisH />
+                                )}
+                            </Box>
+                        </MenuButton>
+                        <MenuList w="full" fontSize=".7rem">
+                            <MenuItem onClick={() => onClick()} w="full">
+                                View
+                            </MenuItem>
+                            <MenuItem onClick={() => deleteTask()} w="full">
+                                Delete
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>
                 </HStack>
             </VStack>
         </Box>
