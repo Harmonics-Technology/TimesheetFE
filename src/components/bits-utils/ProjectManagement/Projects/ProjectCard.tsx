@@ -1,16 +1,32 @@
-import { Box, VStack, Text, HStack, Avatar } from '@chakra-ui/react';
+import {
+    Box,
+    VStack,
+    Text,
+    HStack,
+    Avatar,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    Spinner,
+    useDisclosure,
+    useToast,
+} from '@chakra-ui/react';
 import { CUR } from '@components/generics/functions/Naira';
 import moment from 'moment';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ProgressBar } from '../Generics/ProgressBar';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
 import {
+    ProjectManagementService,
     ProjectTaskAsigneeView,
     ProjectView,
     StrippedProjectAssignee,
 } from 'src/services';
 import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import { FaEllipsisH } from 'react-icons/fa';
+import { ShowPrompt } from '../Modals/ShowPrompt';
 
 export const ProjectCard = ({ data }: { data: ProjectView }) => {
     const dateDiff = moment(data?.endDate).diff(data?.startDate, 'day');
@@ -28,6 +44,36 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
     ) as any;
     //
 
+    const [loading, setLoading] = useState(false);
+    const toast = useToast();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const deleteTask = async () => {
+        setLoading(true);
+        try {
+            const res = await ProjectManagementService.deleteProject(data.id);
+            if (res.status) {
+                setLoading(false);
+                toast({
+                    title: res.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.replace(router.asPath);
+                onClose();
+                return;
+            }
+        } catch (err: any) {
+            setLoading(false);
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
     return (
         <Box
             borderRadius=".6rem"
@@ -36,20 +82,54 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
             border="1px solid #C2CFE0"
             cursor="pointer"
             w="full"
-            onClick={() =>
-                router.push(`/${role}/project-management/projects/${data?.id}`)
-            }
+            // onClick={() =>
+            //     router.push(`/${role}/project-management/projects/${data?.id}`)
+            // }
         >
             <VStack justify="space-between" align="flex-start" w="full">
-                <Box>
-                    <Text
-                        fontWeight={500}
-                        color="black"
-                        mb="0"
-                        fontFamily="Roboto"
-                    >
-                        {data?.name}
-                    </Text>
+                <Box w="full">
+                    <HStack justify={'space-between'} w="full">
+                        <Text
+                            fontWeight={500}
+                            color="black"
+                            mb="0"
+                            fontFamily="Roboto"
+                        >
+                            {data?.name}
+                        </Text>
+                        <Menu>
+                            <MenuButton>
+                                <Box
+                                    fontSize="1rem"
+                                    pl="1rem"
+                                    fontWeight="bold"
+                                    cursor="pointer"
+                                    color="brand.300"
+                                >
+                                    {loading ? (
+                                        <Spinner size="sm" />
+                                    ) : (
+                                        <FaEllipsisH />
+                                    )}
+                                </Box>
+                            </MenuButton>
+                            <MenuList w="full" fontSize=".7rem">
+                                <MenuItem
+                                    onClick={() =>
+                                        router.push(
+                                            `/${role}/project-management/projects/${data?.id}`,
+                                        )
+                                    }
+                                    w="full"
+                                >
+                                    View
+                                </MenuItem>
+                                <MenuItem onClick={() => onOpen()} w="full">
+                                    Delete
+                                </MenuItem>
+                            </MenuList>
+                        </Menu>
+                    </HStack>
                     <Text
                         fontWeight={400}
                         color="#b6b6b6"
@@ -121,6 +201,15 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                     />
                 </Box>
             </VStack>
+            {isOpen && (
+                <ShowPrompt
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    onSubmit={deleteTask}
+                    loading={loading}
+                    text={`Are you sure you want to delete this project?`}
+                />
+            )}
         </Box>
     );
 };

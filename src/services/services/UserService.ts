@@ -40,15 +40,14 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class UserService {
-
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static create(
-requestBody?: RegisterModel,
-): CancelablePromise<UserViewStandardResponse> {
+        requestBody?: RegisterModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/register',
@@ -58,13 +57,13 @@ requestBody?: RegisterModel,
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static loginUser(
-requestBody?: LoginModel,
-): CancelablePromise<UserViewStandardResponse> {
+        requestBody?: LoginModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/login',
@@ -74,37 +73,37 @@ requestBody?: LoginModel,
     }
 
     /**
-     * @param token 
+     * @param token
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static verify(
-token: string,
-): CancelablePromise<UserViewStandardResponse> {
+        token: string,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/verifyUser/{token}',
             path: {
-                'token': token,
+                token: token,
             },
         });
     }
 
     /**
-     * @param redirectUrl 
-     * @param requestBody 
+     * @param redirectUrl
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static initiateReset(
-redirectUrl?: string,
-requestBody?: InitiateResetModel,
-): CancelablePromise<UserViewStandardResponse> {
+        redirectUrl?: string,
+        requestBody?: InitiateResetModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/reset/initiate',
             query: {
-                'redirectUrl': redirectUrl,
+                redirectUrl: redirectUrl,
             },
             body: requestBody,
             mediaType: 'application/json-patch+json',
@@ -112,13 +111,13 @@ requestBody?: InitiateResetModel,
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static completeReset(
-requestBody?: PasswordReset,
-): CancelablePromise<UserViewStandardResponse> {
+        requestBody?: PasswordReset,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/reset/complete',
@@ -128,30 +127,30 @@ requestBody?: PasswordReset,
     }
 
     /**
-     * @param superAdminId 
+     * @param superAdminId
      * @returns ControlSettingViewStandardResponse Success
      * @throws ApiError
      */
     public static getControlSettingById(
-superAdminId?: string,
-): CancelablePromise<ControlSettingViewStandardResponse> {
+        superAdminId?: string,
+    ): CancelablePromise<ControlSettingViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/control-settings',
             query: {
-                'superAdminId': superAdminId,
+                superAdminId: superAdminId,
             },
         });
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static updateControlSettings(
-requestBody?: ControlSettingModel,
-): CancelablePromise<BooleanStandardResponse> {
+        requestBody?: ControlSettingModel,
+    ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/update-control-settings',
@@ -161,30 +160,30 @@ requestBody?: ControlSettingModel,
     }
 
     /**
-     * @param superAdminId 
+     * @param superAdminId
      * @returns ProjectManagementSettingViewStandardResponse Success
      * @throws ApiError
      */
     public static getSuperAdminProjectManagementSettings(
-superAdminId?: string,
-): CancelablePromise<ProjectManagementSettingViewStandardResponse> {
+        superAdminId?: string,
+    ): CancelablePromise<ProjectManagementSettingViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/project-management-settings',
             query: {
-                'superAdminId': superAdminId,
+                superAdminId: superAdminId,
             },
         });
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static updateProjectManagementSettings(
-requestBody?: ProjectManagementSettingModel,
-): CancelablePromise<BooleanStandardResponse> {
+        requestBody?: ProjectManagementSettingModel,
+    ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/update-project-management-settings',
@@ -194,13 +193,13 @@ requestBody?: ProjectManagementSettingModel,
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static updateUser(
-requestBody?: UpdateUserModel,
-): CancelablePromise<UserViewStandardResponse> {
+        requestBody?: UpdateUserModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/update',
@@ -210,13 +209,13 @@ requestBody?: UpdateUserModel,
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static updateClientSubscription(
-requestBody?: UpdateClientSubscriptionModel,
-): CancelablePromise<UserViewStandardResponse> {
+        requestBody?: UpdateClientSubscriptionModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/update/client-subscription',
@@ -226,13 +225,13 @@ requestBody?: UpdateClientSubscriptionModel,
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static microsoftLogin(
-requestBody?: MicrosoftIdTokenDetailsModel,
-): CancelablePromise<UserViewStandardResponse> {
+        requestBody?: MicrosoftIdTokenDetailsModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/microsoft-login',
@@ -242,13 +241,13 @@ requestBody?: MicrosoftIdTokenDetailsModel,
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static updatePassword(
-requestBody?: ChangePasswordModel,
-): CancelablePromise<UserViewStandardResponse> {
+        requestBody?: ChangePasswordModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/change_password',
@@ -258,18 +257,18 @@ requestBody?: ChangePasswordModel,
     }
 
     /**
-     * @param userId 
+     * @param userId
      * @returns UserProfileViewStandardResponse Success
      * @throws ApiError
      */
     public static userProfile(
-userId: string,
-): CancelablePromise<UserProfileViewStandardResponse> {
+        userId: string,
+    ): CancelablePromise<UserProfileViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/user-profile/{userId}',
             path: {
-                'userId': userId,
+                userId: userId,
             },
         });
     }
@@ -289,47 +288,47 @@ userId: string,
     }
 
     /**
-     * @param role 
-     * @param superAdminId 
-     * @param offset 
-     * @param limit 
-     * @param role 
-     * @param search 
-     * @param startDate 
-     * @param endDate 
-     * @param subscriptionId 
-     * @param productManagers 
+     * @param role
+     * @param superAdminId
+     * @param offset
+     * @param limit
+     * @param role
+     * @param search
+     * @param startDate
+     * @param endDate
+     * @param subscriptionId
+     * @param productManagers
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static listUsers(
-role: string,
-superAdminId?: string,
-offset?: number,
-limit?: number,
-// role?: string,
-search?: string,
-startDate?: string,
-endDate?: string,
-subscriptionId?: string,
-productManagers?: boolean,
-): CancelablePromise<UserViewPagedCollectionStandardResponse> {
+        role: string,
+        superAdminId?: string,
+        offset?: number,
+        limit?: number,
+        // role?: string,
+        search?: string,
+        startDate?: string,
+        endDate?: string,
+        subscriptionId?: string,
+        productManagers?: boolean,
+    ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/list/{role}',
             path: {
-                'role': role,
+                role: role,
             },
             query: {
-                'superAdminId': superAdminId,
-                'Offset': offset,
-                'Limit': limit,
-                'role': role,
-                'Search': search,
-                'StartDate': startDate,
-                'EndDate': endDate,
-                'subscriptionId': subscriptionId,
-                'productManagers': productManagers,
+                superAdminId: superAdminId,
+                Offset: offset,
+                Limit: limit,
+                role: role,
+                Search: search,
+                StartDate: startDate,
+                EndDate: endDate,
+                subscriptionId: subscriptionId,
+                productManagers: productManagers,
             },
             errors: {
                 401: `Unauthorized`,
@@ -338,21 +337,21 @@ productManagers?: boolean,
     }
 
     /**
-     * @param superAdminId 
-     * @param roles 
+     * @param superAdminId
+     * @param roles
      * @returns UserViewListStandardResponse Success
      * @throws ApiError
      */
     public static listUsersByRoles(
-superAdminId?: string,
-roles?: string,
-): CancelablePromise<UserViewListStandardResponse> {
+        superAdminId?: string,
+        roles?: string,
+    ): CancelablePromise<UserViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/list-user-by-roles',
             query: {
-                'superAdminId': superAdminId,
-                'roles': roles,
+                superAdminId: superAdminId,
+                roles: roles,
             },
             errors: {
                 401: `Unauthorized`,
@@ -361,27 +360,27 @@ roles?: string,
     }
 
     /**
-     * @param superAdminId 
-     * @param offset 
-     * @param limit 
-     * @param department 
+     * @param superAdminId
+     * @param offset
+     * @param limit
+     * @param department
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static listUsersByDepartment(
-superAdminId?: string,
-offset?: number,
-limit?: number,
-department?: string,
-): CancelablePromise<UserViewPagedCollectionStandardResponse> {
+        superAdminId?: string,
+        offset?: number,
+        limit?: number,
+        department?: string,
+    ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/list-by-department',
             query: {
-                'superAdminId': superAdminId,
-                'Offset': offset,
-                'Limit': limit,
-                'department': department,
+                superAdminId: superAdminId,
+                Offset: offset,
+                Limit: limit,
+                department: department,
             },
             errors: {
                 401: `Unauthorized`,
@@ -390,13 +389,13 @@ department?: string,
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static resendInvite(
-requestBody?: InitiateResetModel,
-): CancelablePromise<UserViewStandardResponse> {
+        requestBody?: InitiateResetModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/invite/resend',
@@ -406,18 +405,18 @@ requestBody?: InitiateResetModel,
     }
 
     /**
-     * @param id 
+     * @param id
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static getUserById(
-id: string,
-): CancelablePromise<UserViewStandardResponse> {
+        id: string,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/get/{id}',
             path: {
-                'id': id,
+                id: id,
             },
             errors: {
                 401: `Unauthorized`,
@@ -426,18 +425,18 @@ id: string,
     }
 
     /**
-     * @param id 
+     * @param id
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static toggleUserActive(
-id: string,
-): CancelablePromise<UserViewStandardResponse> {
+        id: string,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/toggle-active/{id}',
             path: {
-                'id': id,
+                id: id,
             },
             errors: {
                 401: `Unauthorized`,
@@ -446,13 +445,13 @@ id: string,
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static adminUpdateUser(
-requestBody?: UpdateUserModel,
-): CancelablePromise<UserViewStandardResponse> {
+        requestBody?: UpdateUserModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/admin-update-user',
@@ -462,13 +461,13 @@ requestBody?: UpdateUserModel,
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static addTeamMember(
-requestBody?: TeamMemberModel,
-): CancelablePromise<UserViewStandardResponse> {
+        requestBody?: TeamMemberModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/add-team-member',
@@ -478,30 +477,30 @@ requestBody?: TeamMemberModel,
     }
 
     /**
-     * @param id 
+     * @param id
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static activateTeamMember(
-id: string,
-): CancelablePromise<UserViewStandardResponse> {
+        id: string,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/activate-team-member/{id}',
             path: {
-                'id': id,
+                id: id,
             },
         });
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static updateTeamMember(
-requestBody?: TeamMemberModel,
-): CancelablePromise<UserViewStandardResponse> {
+        requestBody?: TeamMemberModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/update-team-member',
@@ -511,330 +510,330 @@ requestBody?: TeamMemberModel,
     }
 
     /**
-     * @param clientId 
+     * @param clientId
      * @returns UserViewListStandardResponse Success
      * @throws ApiError
      */
     public static getSupervisors(
-clientId: string,
-): CancelablePromise<UserViewListStandardResponse> {
+        clientId: string,
+    ): CancelablePromise<UserViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/supervisors/{clientId}',
             path: {
-                'clientId': clientId,
+                clientId: clientId,
             },
         });
     }
 
     /**
-     * @param clientId 
+     * @param clientId
      * @returns UserViewListStandardResponse Success
      * @throws ApiError
      */
     public static listSupervisorsAndAdmins(
-clientId: string,
-): CancelablePromise<UserViewListStandardResponse> {
+        clientId: string,
+    ): CancelablePromise<UserViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/supervisors-admins/{clientId}',
             path: {
-                'clientId': clientId,
+                clientId: clientId,
             },
         });
     }
 
     /**
-     * @param offset 
-     * @param limit 
-     * @param superAdminId 
-     * @param startDate 
-     * @param endDate 
+     * @param offset
+     * @param limit
+     * @param superAdminId
+     * @param startDate
+     * @param endDate
      * @returns ShiftUsersListViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static listShiftUsers(
-offset?: number,
-limit?: number,
-superAdminId?: string,
-startDate?: string,
-endDate?: string,
-): CancelablePromise<ShiftUsersListViewPagedCollectionStandardResponse> {
+        offset?: number,
+        limit?: number,
+        superAdminId?: string,
+        startDate?: string,
+        endDate?: string,
+    ): CancelablePromise<ShiftUsersListViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/shift-users',
             query: {
-                'Offset': offset,
-                'Limit': limit,
-                'superAdminId': superAdminId,
-                'startDate': startDate,
-                'endDate': endDate,
+                Offset: offset,
+                Limit: limit,
+                superAdminId: superAdminId,
+                startDate: startDate,
+                endDate: endDate,
             },
         });
     }
 
     /**
-     * @param offset 
-     * @param limit 
-     * @param search 
-     * @param supervisorId 
-     * @param startDate 
-     * @param endDate 
+     * @param offset
+     * @param limit
+     * @param search
+     * @param supervisorId
+     * @param startDate
+     * @param endDate
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getSupervisees(
-offset?: number,
-limit?: number,
-search?: string,
-supervisorId?: string,
-startDate?: string,
-endDate?: string,
-): CancelablePromise<UserViewPagedCollectionStandardResponse> {
+        offset?: number,
+        limit?: number,
+        search?: string,
+        supervisorId?: string,
+        startDate?: string,
+        endDate?: string,
+    ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/supervisees',
             query: {
-                'Offset': offset,
-                'Limit': limit,
-                'search': search,
-                'supervisorId': supervisorId,
-                'StartDate': startDate,
-                'EndDate': endDate,
+                Offset: offset,
+                Limit: limit,
+                search: search,
+                supervisorId: supervisorId,
+                StartDate: startDate,
+                EndDate: endDate,
             },
         });
     }
 
     /**
-     * @param offset 
-     * @param limit 
-     * @param search 
-     * @param clientId 
-     * @param startDate 
-     * @param endDate 
+     * @param offset
+     * @param limit
+     * @param search
+     * @param clientId
+     * @param startDate
+     * @param endDate
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getClientSupervisors(
-offset?: number,
-limit?: number,
-search?: string,
-clientId?: string,
-startDate?: string,
-endDate?: string,
-): CancelablePromise<UserViewPagedCollectionStandardResponse> {
+        offset?: number,
+        limit?: number,
+        search?: string,
+        clientId?: string,
+        startDate?: string,
+        endDate?: string,
+    ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/client/supervisors',
             query: {
-                'Offset': offset,
-                'Limit': limit,
-                'search': search,
-                'clientId': clientId,
-                'StartDate': startDate,
-                'EndDate': endDate,
+                Offset: offset,
+                Limit: limit,
+                search: search,
+                clientId: clientId,
+                StartDate: startDate,
+                EndDate: endDate,
             },
         });
     }
 
     /**
-     * @param offset 
-     * @param limit 
-     * @param search 
-     * @param clientId 
-     * @param startDate 
-     * @param endDate 
+     * @param offset
+     * @param limit
+     * @param search
+     * @param clientId
+     * @param startDate
+     * @param endDate
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getClientTeamMembers(
-offset?: number,
-limit?: number,
-search?: string,
-clientId?: string,
-startDate?: string,
-endDate?: string,
-): CancelablePromise<UserViewPagedCollectionStandardResponse> {
+        offset?: number,
+        limit?: number,
+        search?: string,
+        clientId?: string,
+        startDate?: string,
+        endDate?: string,
+    ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/client/team-members',
             query: {
-                'Offset': offset,
-                'Limit': limit,
-                'search': search,
-                'clientId': clientId,
-                'StartDate': startDate,
-                'EndDate': endDate,
+                Offset: offset,
+                Limit: limit,
+                search: search,
+                clientId: clientId,
+                StartDate: startDate,
+                EndDate: endDate,
             },
         });
     }
 
     /**
-     * @param offset 
-     * @param limit 
-     * @param search 
-     * @param paymentPartnerId 
-     * @param startDate 
-     * @param endDate 
+     * @param offset
+     * @param limit
+     * @param search
+     * @param paymentPartnerId
+     * @param startDate
+     * @param endDate
      * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static getPaymentPartnerTeamMembers(
-offset?: number,
-limit?: number,
-search?: string,
-paymentPartnerId?: string,
-startDate?: string,
-endDate?: string,
-): CancelablePromise<UserViewPagedCollectionStandardResponse> {
+        offset?: number,
+        limit?: number,
+        search?: string,
+        paymentPartnerId?: string,
+        startDate?: string,
+        endDate?: string,
+    ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/payment-partner/team-members',
             query: {
-                'Offset': offset,
-                'Limit': limit,
-                'search': search,
-                'paymentPartnerId': paymentPartnerId,
-                'StartDate': startDate,
-                'EndDate': endDate,
+                Offset: offset,
+                Limit: limit,
+                search: search,
+                paymentPartnerId: paymentPartnerId,
+                StartDate: startDate,
+                EndDate: endDate,
             },
         });
     }
 
     /**
-     * @param is2FaEnabled 
+     * @param is2FaEnabled
      * @returns Enable2FAViewStandardResponse Success
      * @throws ApiError
      */
     public static enable2Fa(
-is2FaEnabled?: boolean,
-): CancelablePromise<Enable2FAViewStandardResponse> {
+        is2FaEnabled?: boolean,
+    ): CancelablePromise<Enable2FAViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/enable2fa',
             query: {
-                'is2FAEnabled': is2FaEnabled,
+                is2FAEnabled: is2FaEnabled,
             },
         });
     }
 
     /**
-     * @param code 
-     * @param twoFactorCode 
+     * @param code
+     * @param twoFactorCode
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static completeTowFactorAuthentication(
-code: string,
-twoFactorCode: string,
-): CancelablePromise<UserViewStandardResponse> {
+        code: string,
+        twoFactorCode: string,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/enable2fa/complete/{code}/{twoFactorCode}',
             path: {
-                'code': code,
-                'twoFactorCode': twoFactorCode,
+                code: code,
+                twoFactorCode: twoFactorCode,
             },
         });
     }
 
     /**
-     * @param code 
-     * @param twoFactorCode 
+     * @param code
+     * @param twoFactorCode
      * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static completeTowFactorAuthenticationLogin(
-code: string,
-twoFactorCode: string,
-): CancelablePromise<UserViewStandardResponse> {
+        code: string,
+        twoFactorCode: string,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/login/complete/{code}/{twoFactorCode}',
             path: {
-                'code': code,
-                'twoFactorCode': twoFactorCode,
+                code: code,
+                twoFactorCode: twoFactorCode,
             },
         });
     }
 
     /**
-     * @param year 
+     * @param year
      * @returns UserCountByPayrollTypeViewListStandardResponse Success
      * @throws ApiError
      */
     public static getUserCountByPayrolltypePerYear(
-year?: number,
-): CancelablePromise<UserCountByPayrollTypeViewListStandardResponse> {
+        year?: number,
+    ): CancelablePromise<UserCountByPayrollTypeViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/chart/teammembers-by-payrolls',
             query: {
-                'year': year,
+                year: year,
             },
         });
     }
 
     /**
-     * @param superAdminId 
-     * @param offset 
-     * @param limit 
-     * @param search 
+     * @param superAdminId
+     * @param offset
+     * @param limit
+     * @param search
      * @returns SubscriptionHistoryViewModelStandardResponse Success
      * @throws ApiError
      */
     public static getClientSubscriptionHistory(
-superAdminId?: string,
-offset?: number,
-limit?: number,
-search?: string,
-): CancelablePromise<SubscriptionHistoryViewModelStandardResponse> {
+        superAdminId?: string,
+        offset?: number,
+        limit?: number,
+        search?: string,
+    ): CancelablePromise<SubscriptionHistoryViewModelStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/subscription/history',
             query: {
-                'superAdminId': superAdminId,
-                'Offset': offset,
-                'Limit': limit,
-                'search': search,
+                superAdminId: superAdminId,
+                Offset: offset,
+                Limit: limit,
+                search: search,
             },
         });
     }
 
     /**
-     * @param superAdminId 
-     * @param offset 
-     * @param limit 
-     * @param search 
+     * @param superAdminId
+     * @param offset
+     * @param limit
+     * @param search
      * @returns ClientSubscriptionInvoiceViewStandardResponse Success
      * @throws ApiError
      */
     public static getClientInvoices(
-superAdminId?: string,
-offset?: number,
-limit?: number,
-search?: string,
-): CancelablePromise<ClientSubscriptionInvoiceViewStandardResponse> {
+        superAdminId?: string,
+        offset?: number,
+        limit?: number,
+        search?: string,
+    ): CancelablePromise<ClientSubscriptionInvoiceViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/subscription/invoices',
             query: {
-                'superAdminId': superAdminId,
-                'Offset': offset,
-                'Limit': limit,
-                'search': search,
+                superAdminId: superAdminId,
+                Offset: offset,
+                Limit: limit,
+                search: search,
             },
         });
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static cancelSubscription(
-requestBody?: CancelSubscriptionModel,
-): CancelablePromise<BooleanStandardResponse> {
+        requestBody?: CancelSubscriptionModel,
+    ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/subscription/cancel',
@@ -844,33 +843,33 @@ requestBody?: CancelSubscriptionModel,
     }
 
     /**
-     * @param subscriptionId 
-     * @param pauseDuration 
+     * @param subscriptionId
+     * @param pauseDuration
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static pauseSubscription(
-subscriptionId?: string,
-pauseDuration?: number,
-): CancelablePromise<BooleanStandardResponse> {
+        subscriptionId?: string,
+        pauseDuration?: number,
+    ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/subscription/pause',
             query: {
-                'subscriptionId': subscriptionId,
-                'pauseDuration': pauseDuration,
+                subscriptionId: subscriptionId,
+                pauseDuration: pauseDuration,
             },
         });
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns ClientSubscriptionResponseViewModelStandardResponse Success
      * @throws ApiError
      */
     public static upgradeSubscription(
-requestBody?: UpdateClientStripeSubscriptionModel,
-): CancelablePromise<ClientSubscriptionResponseViewModelStandardResponse> {
+        requestBody?: UpdateClientStripeSubscriptionModel,
+    ): CancelablePromise<ClientSubscriptionResponseViewModelStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/subscription/upgrade',
@@ -880,74 +879,74 @@ requestBody?: UpdateClientStripeSubscriptionModel,
     }
 
     /**
-     * @param userId 
+     * @param userId
      * @returns CardsStandardResponse Success
      * @throws ApiError
      */
     public static getUserCards(
-userId?: string,
-): CancelablePromise<CardsStandardResponse> {
+        userId?: string,
+    ): CancelablePromise<CardsStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/billing/cards',
             query: {
-                'userId': userId,
+                userId: userId,
             },
         });
     }
 
     /**
-     * @param userId 
+     * @param userId
      * @returns CommandCenterAddCardResponseStandardResponse Success
      * @throws ApiError
      */
     public static addNewCard(
-userId?: string,
-): CancelablePromise<CommandCenterAddCardResponseStandardResponse> {
+        userId?: string,
+    ): CancelablePromise<CommandCenterAddCardResponseStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/billing/add-card',
             query: {
-                'userId': userId,
+                userId: userId,
             },
         });
     }
 
     /**
-     * @param userId 
-     * @param paymentMethod 
+     * @param userId
+     * @param paymentMethod
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static setAsDefaulCard(
-userId?: string,
-paymentMethod?: string,
-): CancelablePromise<BooleanStandardResponse> {
+        userId?: string,
+        paymentMethod?: string,
+    ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/billing/set-as-default',
             query: {
-                'userId': userId,
-                'paymentMethod': paymentMethod,
+                userId: userId,
+                paymentMethod: paymentMethod,
             },
         });
     }
 
     /**
-     * @param userId 
-     * @param requestBody 
+     * @param userId
+     * @param requestBody
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static updateUserCardDetails(
-userId?: string,
-requestBody?: UpdateCardDetailsModel,
-): CancelablePromise<BooleanStandardResponse> {
+        userId?: string,
+        requestBody?: UpdateCardDetailsModel,
+    ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/billing/update-card',
             query: {
-                'userId': userId,
+                userId: userId,
             },
             body: requestBody,
             mediaType: 'application/json-patch+json',
@@ -955,33 +954,33 @@ requestBody?: UpdateCardDetailsModel,
     }
 
     /**
-     * @param userId 
-     * @param paymentMethod 
+     * @param userId
+     * @param paymentMethod
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static deletePaymentCard(
-userId?: string,
-paymentMethod?: string,
-): CancelablePromise<BooleanStandardResponse> {
+        userId?: string,
+        paymentMethod?: string,
+    ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/billing/delete-card',
             query: {
-                'userId': userId,
-                'paymentMethod': paymentMethod,
+                userId: userId,
+                paymentMethod: paymentMethod,
             },
         });
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns ClientSubscriptionResponseViewModelStandardResponse Success
      * @throws ApiError
      */
     public static purchaseNewLicensePlan(
-requestBody?: PurchaseNewLicensePlanModel,
-): CancelablePromise<ClientSubscriptionResponseViewModelStandardResponse> {
+        requestBody?: PurchaseNewLicensePlanModel,
+    ): CancelablePromise<ClientSubscriptionResponseViewModelStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/license/purchase-new-license',
@@ -991,13 +990,13 @@ requestBody?: PurchaseNewLicensePlanModel,
     }
 
     /**
-     * @param requestBody 
+     * @param requestBody
      * @returns ClientSubscriptionResponseViewModelStandardResponse Success
      * @throws ApiError
      */
     public static addOrRemoveLicense(
-requestBody?: LicenseUpdateModel,
-): CancelablePromise<ClientSubscriptionResponseViewModelStandardResponse> {
+        requestBody?: LicenseUpdateModel,
+    ): CancelablePromise<ClientSubscriptionResponseViewModelStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/license/update-license-count',
@@ -1018,35 +1017,35 @@ requestBody?: LicenseUpdateModel,
     }
 
     /**
-     * @param superAdminId 
+     * @param superAdminId
      * @returns ClientSubscriptionDetailViewListStandardResponse Success
      * @throws ApiError
      */
     public static getClientSubScriptions(
-superAdminId?: string,
-): CancelablePromise<ClientSubscriptionDetailViewListStandardResponse> {
+        superAdminId?: string,
+    ): CancelablePromise<ClientSubscriptionDetailViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/subscriptions',
             query: {
-                'superAdminId': superAdminId,
+                superAdminId: superAdminId,
             },
         });
     }
 
     /**
-     * @param id 
+     * @param id
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static toggleOrganizationProjectManager(
-id?: string,
-): CancelablePromise<BooleanStandardResponse> {
+        id?: string,
+    ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/set-as-pm',
             query: {
-                'id': id,
+                id: id,
             },
             errors: {
                 401: `Unauthorized`,
@@ -1055,23 +1054,22 @@ id?: string,
     }
 
     /**
-     * @param userId 
+     * @param userId
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static revokeUserLicense(
-userId?: string,
-): CancelablePromise<BooleanStandardResponse> {
+        userId?: string,
+    ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/revoke-user-license',
             query: {
-                'userId': userId,
+                userId: userId,
             },
             errors: {
                 401: `Unauthorized`,
             },
         });
     }
-
 }

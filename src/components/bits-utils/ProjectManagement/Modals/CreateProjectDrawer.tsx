@@ -23,12 +23,10 @@ import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { ProjectManagementService, ProjectModel } from 'src/services';
-import { DateObject } from 'react-multi-date-picker';
 import { Widget } from '@uploadcare/react-widget';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { MdCancel } from 'react-icons/md';
 import { CustomSelectBox } from '../Generics/CustomSelectBox';
-import moment from 'moment';
 import { useRouter } from 'next/router';
 import Checkbox from '@components/bits-utils/Checkbox';
 import Link from 'next/link';
@@ -56,19 +54,22 @@ export const CreateProjectDrawer = ({
         startDate: yup.string().required(),
         endDate: yup.string().required(),
         duration: yup.string().required(),
-        budget: yup.number().required(),
+        budget: yup
+            .number()
+            .required()
+            .transform((val, orig) => (orig == '' ? undefined : val)),
         budgetThreshold: yup.number().required().max(currentBudget),
         assignedUsers: yup
             .array()
             .min(1, 'Select atleast one assignee')
             .required(),
         note: yup.string().required(),
-        projectMangers: nonApplicable
-            ? yup.string()
-            : yup
-                  .array()
-                  .min(1, 'Select atleast one project manager')
-                  .required(),
+        // projectMangers: nonApplicable
+        //     ? yup.string()
+        //     : yup
+        //           .array()
+        //           .min(1, 'Select atleast one project manager')
+        //           .required(),
         // documentURL: yup.string().required(),
     });
 
@@ -128,7 +129,7 @@ export const CreateProjectDrawer = ({
     const setIfNonApplicable = (value: any) => {
         setNonApplicable(value);
         if (value == true) {
-            setSelectedManager(undefined);
+            setSelectedManager([]);
             return;
         }
     };
@@ -191,7 +192,7 @@ export const CreateProjectDrawer = ({
     }, [selectedUser]);
     useEffect(() => {
         setValue(
-            'projectManagers',
+            'assignedProjectManagers',
             selectedManager.map((x) => x.id),
         );
     }, [selectedManager]);
@@ -374,59 +375,75 @@ export const CreateProjectDrawer = ({
                             Assign Project Manager
                         </FormLabel>
 
-                        <CustomSelectBox
-                            data={projectMangers?.value}
-                            updateFunction={addManager}
-                            items={selectedManager}
-                            customKeys={{ key: 'id', label: 'fullName' }}
-                            removeFn={removeManager}
-                            id="AssignProjectManager"
-                            error={errors.projectManagers}
-                        />
-                        <Box
-                            mt="1rem"
-                            borderY="1px solid #e5e5e5"
-                            w="full"
-                            py="1rem"
-                        >
-                            {selectedManager?.length > 0 && (
-                                <HStack mb=".5rem">
-                                    {selectedManager?.map((x: any, i: any) => (
-                                        <HStack
-                                            borderRadius="25px"
-                                            border="1px solid #e5e5e5"
-                                            fontSize=".6rem"
-                                            color="#707683"
-                                            key={i}
-                                            p=".1rem .4rem"
-                                        >
-                                            <Text
-                                                fontSize=".6rem"
-                                                color="#707683"
-                                                mb="0"
-                                            >
-                                                {x?.fullName}
-                                            </Text>
-                                            <Icon
-                                                as={MdCancel}
-                                                onClick={() =>
-                                                    removeManager(x?.id)
-                                                }
-                                            />
+                        {!nonApplicable && (
+                            <>
+                                <CustomSelectBox
+                                    data={projectMangers?.value}
+                                    updateFunction={addManager}
+                                    items={selectedManager}
+                                    customKeys={{
+                                        key: 'id',
+                                        label: 'fullName',
+                                    }}
+                                    removeFn={removeManager}
+                                    id="AssignProjectManager"
+                                    error={errors.assignedProjectManagers}
+                                />
+                                <Box
+                                    mt="1rem"
+                                    borderY="1px solid #e5e5e5"
+                                    w="full"
+                                    py="1rem"
+                                >
+                                    {selectedManager?.length > 0 && (
+                                        <HStack mb=".5rem">
+                                            {selectedManager?.map(
+                                                (x: any, i: any) => (
+                                                    <HStack
+                                                        borderRadius="25px"
+                                                        border="1px solid #e5e5e5"
+                                                        fontSize=".6rem"
+                                                        color="#707683"
+                                                        key={i}
+                                                        p=".1rem .4rem"
+                                                    >
+                                                        <Text
+                                                            fontSize=".6rem"
+                                                            color="#707683"
+                                                            mb="0"
+                                                        >
+                                                            {x?.fullName}
+                                                        </Text>
+                                                        <Icon
+                                                            as={MdCancel}
+                                                            onClick={() =>
+                                                                removeManager(
+                                                                    x?.id,
+                                                                )
+                                                            }
+                                                        />
+                                                    </HStack>
+                                                ),
+                                            )}
                                         </HStack>
-                                    ))}
-                                </HStack>
-                            )}
-                            <Text fontSize=".6rem" color="#707683" mb="0">
-                                These team members were added as a manager to
-                                this project
-                            </Text>
-                        </Box>
+                                    )}
+                                    <Text
+                                        fontSize=".6rem"
+                                        color="#707683"
+                                        mb="0"
+                                    >
+                                        These team members were added as a
+                                        manager to this project
+                                    </Text>
+                                </Box>
+                            </>
+                        )}
                         <Box mt="1rem">
                             <Checkbox
                                 label="Not Applicable"
                                 dir="rtl"
                                 color="black"
+                                checked={nonApplicable}
                                 onChange={(e: any) =>
                                     setIfNonApplicable(e.target.checked)
                                 }

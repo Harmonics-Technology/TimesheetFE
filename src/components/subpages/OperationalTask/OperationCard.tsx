@@ -8,9 +8,11 @@ import {
     MenuList,
     Spinner,
     Text,
+    useDisclosure,
     useToast,
     VStack,
 } from '@chakra-ui/react';
+import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
 import shadeColor from '@components/generics/functions/shadeColor';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -47,6 +49,7 @@ export const OperationCard = ({
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const toast = useToast();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const deleteTask = async () => {
         setLoading(true);
@@ -62,6 +65,7 @@ export const OperationCard = ({
                     isClosable: true,
                     position: 'top-right',
                 });
+                onClose();
                 router.replace(router.asPath);
                 return;
             }
@@ -179,13 +183,22 @@ export const OperationCard = ({
                             <MenuItem onClick={() => onClick()} w="full">
                                 View
                             </MenuItem>
-                            <MenuItem onClick={() => deleteTask()} w="full">
+                            <MenuItem onClick={() => onOpen()} w="full">
                                 Delete
                             </MenuItem>
                         </MenuList>
                     </Menu>
                 </HStack>
             </VStack>
+            {isOpen && (
+                <ShowPrompt
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    onSubmit={deleteTask}
+                    loading={loading}
+                    text={`Are you sure you want to delete this task?`}
+                />
+            )}
         </Box>
     );
 };

@@ -825,4 +825,38 @@ taskId?: string,
         });
     }
 
+    /**
+     * @param taskId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static deleteProjectTask(
+taskId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/delete-task',
+            query: {
+                'taskId': taskId,
+            },
+        });
+    }
+
+    /**
+     * @param projectId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static deleteProject(
+projectId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/delete-project',
+            query: {
+                'projectId': projectId,
+            },
+        });
+    }
+
 }

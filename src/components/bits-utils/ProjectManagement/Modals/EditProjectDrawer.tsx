@@ -15,7 +15,7 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -27,7 +27,6 @@ import {
     ProjectModel,
     ProjectView,
 } from 'src/services';
-import { DateObject } from 'react-multi-date-picker';
 import { Widget } from '@uploadcare/react-widget';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { MdCancel } from 'react-icons/md';
@@ -162,12 +161,10 @@ export const EditProjectDrawer = ({
     const setIfNonApplicable = (value: any) => {
         setNonApplicable(value);
         if (value == true) {
-            setSelectedManager(null);
+            setSelectedManager([]);
             return;
         }
     };
-
-    console.log({ errors, mn: watch('projectManagers') });
 
     const onSubmit = async (data: ProjectModel) => {
         const newPm = data?.projectManagerId ? data?.projectManagerId : null;
@@ -224,7 +221,7 @@ export const EditProjectDrawer = ({
     }, [fileDoc]);
     useEffect(() => {
         setValue(
-            'projectManagers',
+            'assignedProjectManagers',
             selectedManager.map((x) => x.id),
         );
     }, [selectedManager]);
@@ -398,7 +395,7 @@ export const EditProjectDrawer = ({
                             customKeys={{ key: 'id', label: 'fullName' }}
                             removeFn={removeManager}
                             id="AssignProjectManager"
-                            error={errors.projectManagers}
+                            error={errors.assignedProjectManagers}
                         />
                         <Box
                             mt="1rem"
