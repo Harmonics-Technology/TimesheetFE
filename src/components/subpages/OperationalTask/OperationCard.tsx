@@ -50,6 +50,11 @@ export const OperationCard = ({
     const router = useRouter();
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isOpens,
+        onOpen: onOpens,
+        onClose: onCloses,
+    } = useDisclosure();
 
     const deleteTask = async () => {
         setLoading(true);
@@ -65,7 +70,7 @@ export const OperationCard = ({
                     isClosable: true,
                     position: 'top-right',
                 });
-                onClose();
+                onCloses();
                 router.replace(router.asPath);
                 return;
             }
@@ -84,7 +89,7 @@ export const OperationCard = ({
             borderRadius="16px"
             bgColor="white"
             p="10px 15px"
-            // onClick={onClick}
+            onClick={onClick}
             draggable
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
@@ -164,7 +169,7 @@ export const OperationCard = ({
                         {subBtm}
                     </Text>
                     <Menu>
-                        <MenuButton>
+                        <MenuButton onClick={(e) => e.stopPropagation()}>
                             <Box
                                 fontSize="1rem"
                                 pl="1rem"
@@ -183,7 +188,13 @@ export const OperationCard = ({
                             <MenuItem onClick={() => onClick()} w="full">
                                 View
                             </MenuItem>
-                            <MenuItem onClick={() => onOpen()} w="full">
+                            <MenuItem
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onOpen();
+                                }}
+                                w="full"
+                            >
                                 Delete
                             </MenuItem>
                         </MenuList>
@@ -194,9 +205,21 @@ export const OperationCard = ({
                 <ShowPrompt
                     isOpen={isOpen}
                     onClose={onClose}
-                    onSubmit={deleteTask}
+                    onSubmit={() => {
+                        onClose();
+                        onOpens();
+                    }}
                     loading={loading}
                     text={`Are you sure you want to delete this task?`}
+                />
+            )}
+            {isOpens && (
+                <ShowPrompt
+                    isOpen={isOpens}
+                    onClose={onCloses}
+                    onSubmit={deleteTask}
+                    loading={loading}
+                    text={`Are you sure you want to delete this task? <br/> This action cannot be undone`}
                 />
             )}
         </Box>

@@ -6,7 +6,6 @@ import {
     Select,
     Text,
     useDisclosure,
-    Icon,
     Flex,
     Menu,
     MenuButton,
@@ -26,8 +25,7 @@ import {
 } from '@components/bits-utils/TableData';
 import moment from 'moment';
 import colorSwatch from '@components/generics/colorSwatch';
-import { BiSolidPencil } from 'react-icons/bi';
-import { FaEllipsisH, FaEye } from 'react-icons/fa';
+import { FaEllipsisH } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
 import { AddNewTaskDrawer } from '../../Modals/AddNewTaskDrawer';
@@ -91,6 +89,11 @@ export const ProjectTask = ({
         onOpen: onOpened,
         onClose: onClosed,
     } = useDisclosure();
+    const {
+        isOpen: isOpens,
+        onOpen: onOpens,
+        onClose: onCloses,
+    } = useDisclosure();
 
     const openPrompt = (item: any) => {
         setData({ isEdit: false, raw: item });
@@ -113,7 +116,7 @@ export const ProjectTask = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                onClosed();
+                onCloses();
                 return;
             }
         } catch (err: any) {
@@ -305,9 +308,21 @@ export const ProjectTask = ({
                 <ShowPrompt
                     isOpen={isOpened}
                     onClose={onClosed}
-                    onSubmit={deleteTask}
+                    onSubmit={() => {
+                        onClosed();
+                        onOpens();
+                    }}
                     loading={loading}
                     text={`Are you sure you want to delete this task?`}
+                />
+            )}
+            {isOpens && (
+                <ShowPrompt
+                    isOpen={isOpens}
+                    onClose={onCloses}
+                    onSubmit={deleteTask}
+                    loading={loading}
+                    text={`Are you sure you want to delete this task? <br/> This action cannot be undone`}
                 />
             )}
         </Box>

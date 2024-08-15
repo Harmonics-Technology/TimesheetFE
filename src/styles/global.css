@@ -342,3 +342,7 @@ select option {
 .calendar {
     font-family: 'Rubik';
 }
+
+._3eULf > div:first-of-type{
+    display: none !important;
+}

@@ -47,6 +47,11 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const {
+        isOpen: isOpens,
+        onOpen: onOpens,
+        onClose: onCloses,
+    } = useDisclosure();
 
     const deleteTask = async () => {
         setLoading(true);
@@ -61,7 +66,7 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                onClose();
+                onCloses();
                 return;
             }
         } catch (err: any) {
@@ -82,9 +87,9 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
             border="1px solid #C2CFE0"
             cursor="pointer"
             w="full"
-            // onClick={() =>
-            //     router.push(`/${role}/project-management/projects/${data?.id}`)
-            // }
+            onClick={() =>
+                router.push(`/${role}/project-management/projects/${data?.id}`)
+            }
         >
             <VStack justify="space-between" align="flex-start" w="full">
                 <Box w="full">
@@ -98,7 +103,7 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                             {data?.name}
                         </Text>
                         <Menu>
-                            <MenuButton>
+                            <MenuButton onClick={(e) => e.stopPropagation()}>
                                 <Box
                                     fontSize="1rem"
                                     pl="1rem"
@@ -124,7 +129,13 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                                 >
                                     View
                                 </MenuItem>
-                                <MenuItem onClick={() => onOpen()} w="full">
+                                <MenuItem
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onOpen();
+                                    }}
+                                    w="full"
+                                >
                                     Delete
                                 </MenuItem>
                             </MenuList>
@@ -205,9 +216,21 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                 <ShowPrompt
                     isOpen={isOpen}
                     onClose={onClose}
-                    onSubmit={deleteTask}
+                    onSubmit={() => {
+                        onClose();
+                        onOpens();
+                    }}
                     loading={loading}
                     text={`Are you sure you want to delete this project?`}
+                />
+            )}
+            {isOpens && (
+                <ShowPrompt
+                    isOpen={isOpens}
+                    onClose={onCloses}
+                    onSubmit={deleteTask}
+                    loading={loading}
+                    text={`Are you sure you want to delete this project? <br/> This action cannot be undone`}
                 />
             )}
         </Box>
