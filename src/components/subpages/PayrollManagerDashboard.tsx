@@ -27,8 +27,6 @@ import { CUR } from '@components/generics/functions/Naira';
 import moment from 'moment';
 import { useContext, useState } from 'react';
 import {
-    DashboardView,
-    DashboardViewStandardResponse,
     ExpenseView,
     InvoiceView,
     PaySlipView,
@@ -41,7 +39,7 @@ import { Round } from '@components/generics/functions/Round';
 import ClientInvoicedInvoice from './ClientInvoicedInvoice';
 
 interface DashboardProps {
-    metrics: DashboardViewStandardResponse;
+    metrics: any;
 }
 
 function PayrollManagerDashboard({ metrics }: DashboardProps) {
@@ -61,7 +59,7 @@ function PayrollManagerDashboard({ metrics }: DashboardProps) {
     const [clicked, setClicked] = useState<InvoiceView>();
     const { messages, markAsRead, loading, setLimit } =
         useContext(NotificationContext);
-    const adminMetrics = metrics?.data as DashboardView;
+    const adminMetrics = metrics?.data as any;
 
     return (
         // <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">

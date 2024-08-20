@@ -69,7 +69,7 @@ function TeamDashboard() {
         }
     }, []);
 
-    console.log({ dashData });
+    // console.log({ dashData });
 
     return (
         // <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">

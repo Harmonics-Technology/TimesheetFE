@@ -8,7 +8,6 @@ import { CUR } from '@components/generics/functions/Naira';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { useContext } from 'react';
 import {
-    DashboardTeamMemberView,
     ExpenseView,
     RecentTimeSheetView,
     TimeSheetApprovedView,
@@ -24,114 +23,98 @@ function SupervisorDashboard({ adminMetrics, expenses }: DashboardProps) {
         useContext(NotificationContext);
     return (
         // <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
-            <Box>
-                <VStack gap="1rem" w="70%">
-                    <Grid
-                        templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
-                        gap="1.2rem"
-                        w="full"
-                    >
-                        <DashboardCard
-                            url=""
-                            title="Approved Timesheet"
-                            value={adminMetrics?.approvedTimeSheet}
-                        />
-                        <DashboardCard
-                            url=""
-                            title="Awaiting TimeSheet"
-                            value={adminMetrics?.awaitingTimeSheet}
-                        />
-                        <DashboardCard
-                            url=""
-                            title="Rejected Timesheet"
-                            value={adminMetrics?.rejectedTimeSheet}
-                        />
-                    </Grid>
-                    <Grid
-                        templateColumns={['1fr', '1fr']}
-                        gap="1.2rem"
-                        w="full"
-                    >
-                        <TableCards
-                            title={'Recent Timesheet'}
-                            url={'timesheets/approval'}
-                            data={(adminMetrics?.approvedTimesheet as any)
-                                ?.slice(0, 4)
-                                .map((x: any, i: any) => (
-                                    <Tr key={i}>
-                                        <TableData name={x.name} />
-                                        <TableData
-                                            name={formatDate(x.startDate)}
-                                        />
-                                        <TableData
-                                            name={formatDate(x.endDate)}
-                                        />
-                                        <TableData name={x.totalHours} />
-                                        <TableData
-                                            name={`${x.approvedNumberOfHours} `}
-                                        />
-                                        {/* <TableData name={x.numberOfDays} /> */}
-                                    </Tr>
-                                ))}
-                            thead={[
-                                'Name',
-                                'Begining Period',
-                                'Ending Period',
-                                'Total Hours',
-                                'Approved Hours',
-                                // 'Days',
-                            ]}
-                            link={'/'}
-                        />
-                    </Grid>
+        <Box>
+            <VStack gap="1rem" w="70%">
+                <Grid
+                    templateColumns={['repeat(1, 1fr)', 'repeat(3, 1fr)']}
+                    gap="1.2rem"
+                    w="full"
+                >
+                    <DashboardCard
+                        url=""
+                        title="Approved Timesheet"
+                        value={adminMetrics?.approvedTimeSheet}
+                    />
+                    <DashboardCard
+                        url=""
+                        title="Awaiting TimeSheet"
+                        value={adminMetrics?.awaitingTimeSheet}
+                    />
+                    <DashboardCard
+                        url=""
+                        title="Rejected Timesheet"
+                        value={adminMetrics?.rejectedTimeSheet}
+                    />
+                </Grid>
+                <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
+                    <TableCards
+                        title={'Recent Timesheet'}
+                        url={'timesheets/approval'}
+                        data={(adminMetrics?.approvedTimesheet as any)
+                            ?.slice(0, 4)
+                            .map((x: any, i: any) => (
+                                <Tr key={i}>
+                                    <TableData name={x.name} />
+                                    <TableData name={formatDate(x.startDate)} />
+                                    <TableData name={formatDate(x.endDate)} />
+                                    <TableData name={x.totalHours} />
+                                    <TableData
+                                        name={`${x.approvedNumberOfHours} `}
+                                    />
+                                    {/* <TableData name={x.numberOfDays} /> */}
+                                </Tr>
+                            ))}
+                        thead={[
+                            'Name',
+                            'Begining Period',
+                            'Ending Period',
+                            'Total Hours',
+                            'Approved Hours',
+                            // 'Days',
+                        ]}
+                        link={'/'}
+                    />
+                </Grid>
 
-                    <Grid
-                        templateColumns={['1fr', '1fr']}
-                        gap="1.2rem"
-                        w="full"
-                    >
-                        <TableCards
-                            title={'Recent Expenses'}
-                            url={'financials/expenses'}
-                            data={expenses
-                                ?.slice(0, 4)
-                                .map((x: ExpenseView, i: any) => (
-                                    <Tr key={i}>
-                                        <TableData
-                                            name={x.teamMember?.fullName}
-                                        />
-                                        <TableData name={x.description} />
-                                        <TableData
-                                            name={CUR(
-                                                `${x.currency}${x.amount}`,
-                                            )}
-                                        />
-                                        <TableData
-                                            name={formatDate(x.expenseDate)}
-                                        />
-                                        <TableData name={x.expenseType} />
-                                        <TableState name={x.status} />
-                                    </Tr>
-                                ))}
-                            thead={[
-                                'Name',
-                                'Desc',
-                                'Amount',
-                                'Expense Date',
-                                'Expense Type',
-                                'Status',
-                            ]}
-                            link={'/'}
-                        />
-                    </Grid>
-                </VStack>
-                <NotificationBox
-                    data={messages}
-                    markAsRead={markAsRead}
-                    loading={loading}
-                    setLimit={setLimit}
-                />
-            </Box>
+                <Grid templateColumns={['1fr', '1fr']} gap="1.2rem" w="full">
+                    <TableCards
+                        title={'Recent Expenses'}
+                        url={'financials/expenses'}
+                        data={expenses
+                            ?.slice(0, 4)
+                            .map((x: ExpenseView, i: any) => (
+                                <Tr key={i}>
+                                    <TableData name={x.teamMember?.fullName} />
+                                    <TableData name={x.description} />
+                                    <TableData
+                                        name={CUR(`${x.currency}${x.amount}`)}
+                                    />
+                                    <TableData
+                                        name={formatDate(x.expenseDate)}
+                                    />
+                                    <TableData name={x.expenseType} />
+                                    <TableState name={x.status} />
+                                </Tr>
+                            ))}
+                        thead={[
+                            'Name',
+                            'Desc',
+                            'Amount',
+                            'Expense Date',
+                            'Expense Type',
+                            'Status',
+                        ]}
+                        link={'/'}
+                    />
+                </Grid>
+            </VStack>
+            <NotificationBox
+                data={messages}
+                markAsRead={markAsRead}
+                loading={loading}
+                setLimit={setLimit}
+            />
+        </Box>
         // </Grid>
     );
 }
