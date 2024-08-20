@@ -55,7 +55,7 @@ export const CustomSelectBox = ({
     } = useComponentVisible(false);
     const dataAsFiltered = single
         ? data
-        : data.filter((x) => !items?.some((user) => user.id === x.id));
+        : data?.filter((x) => !items?.some((user) => user.id === x.id));
     const newFormattedData = dataAsFiltered?.map((x: any) => {
         return {
             label: eval(`x.${customKeys.label}`),

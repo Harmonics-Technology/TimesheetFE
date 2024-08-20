@@ -26,7 +26,7 @@ export const filterPagingSearchOptions = (ctx: any) => {
         status: status,
         paySlipFilter: paySlipFilter ? paySlipFilter : '',
         chartYear: chartYear ? chartYear : moment(new Date()).format('YYYY'),
-        subId: subId,
+        subId: subId || null,
         convert: convert,
         department: department,
     };

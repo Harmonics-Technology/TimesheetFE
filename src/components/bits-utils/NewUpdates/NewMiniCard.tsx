@@ -1,4 +1,5 @@
 import { Box, Text } from '@chakra-ui/react';
+import { Round } from '@components/generics/functions/Round';
 import React from 'react';
 import Skeleton from 'react-loading-skeleton';
 
@@ -48,7 +49,7 @@ export const NewMiniCard = ({ text, count, per, loading }) => {
                         bottom={'15px'}
                         right={'10px'}
                     >
-                        {per}%
+                        {Round(per)}%
                     </Box>
                 </Box>
             )}

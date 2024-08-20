@@ -303,7 +303,7 @@ export const CreateProjectDrawer = ({
                         </FormLabel>
 
                         <CustomSelectBox
-                            data={users?.value}
+                            data={users}
                             updateFunction={addUser}
                             items={selectedUser}
                             customKeys={{ key: 'id', label: 'fullName' }}

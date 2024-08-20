@@ -233,7 +233,7 @@ function TeamDashboard() {
                             mt="15px"
                         >
                             <NewMiniCard
-                                text="Ongoing Projects"
+                                text="Task In Progress"
                                 count={
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.ongoingTask
@@ -242,7 +242,7 @@ function TeamDashboard() {
                                 loading={isLoading}
                             />
                             <NewMiniCard
-                                text="Projects Completed"
+                                text="Task Completed"
                                 count={
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.completedTask
@@ -251,7 +251,7 @@ function TeamDashboard() {
                                 loading={isLoading}
                             />
                             <NewMiniCard
-                                text="Projects Not Started"
+                                text="Task Not Started"
                                 count={
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.notStartedTask
@@ -260,7 +260,7 @@ function TeamDashboard() {
                                 loading={isLoading}
                             />
                             <NewMiniCard
-                                text="Overdue Projects"
+                                text="Overdue Task"
                                 count={
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.overdueTask

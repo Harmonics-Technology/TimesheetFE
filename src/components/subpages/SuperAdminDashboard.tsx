@@ -49,6 +49,7 @@ import Cookies from 'js-cookie';
 import handleCatchErrors from '@components/generics/functions/handleCatchErrors';
 import { NewMiniCard } from '@components/bits-utils/NewUpdates/NewMiniCard';
 import Skeleton from 'react-loading-skeleton';
+import { calculatePer } from '@components/generics/functions/calculatePer';
 
 interface DashboardProps {
     isSuperAdmin?: boolean;
@@ -211,7 +212,12 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                                     dashData?.projectManagementDashboardMetric
                                         ?.ongoingProject
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.ongoingProject,
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.noOfProject,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
@@ -220,7 +226,12 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                                     dashData?.projectManagementDashboardMetric
                                         ?.completedProject
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.completedProject,
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.noOfProject,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
@@ -229,7 +240,12 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                                     dashData?.projectManagementDashboardMetric
                                         ?.notStartedProject
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.notStartedProject,
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.noOfProject,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
@@ -238,7 +254,12 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                                     dashData?.projectManagementDashboardMetric
                                         ?.overdueProject
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.overdueProject,
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.noOfProject,
+                                )}
                                 loading={isLoading}
                             />
                         </Grid>
@@ -301,39 +322,59 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                             mt="15px"
                         >
                             <NewMiniCard
-                                text="Ongoing Projects"
+                                text="Task In Progress"
                                 count={
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.ongoingTask
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.ongoingProject,
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.ongoingTask,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
-                                text="Projects Completed"
+                                text="Task Completed"
                                 count={
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.completedTask
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.completedTask,
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.ongoingTask,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
-                                text="Projects Not Started"
+                                text="Task Not Started"
                                 count={
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.notStartedTask
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.notStartedTask,
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.ongoingTask,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
-                                text="Overdue Projects"
+                                text="Overdue Task"
                                 count={
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.overdueTask
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.overdueTask,
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.ongoingTask,
+                                )}
                                 loading={isLoading}
                             />
                         </Grid>
@@ -351,7 +392,7 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                                         name={Round(
                                             dashData
                                                 ?.resourceUtilizationOverview
-                                                ?.averageHoursPerResource || 0,
+                                                ?.totalAvailableHours || 0,
                                         )}
                                     />
                                     <TableData
@@ -372,7 +413,7 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                                         name={`${Round(
                                             dashData
                                                 ?.resourceUtilizationOverview
-                                                ?.totalAvailableHours || 0,
+                                                ?.averageHoursPerResource || 0,
                                         )}`}
                                     />
                                     <TableData
@@ -398,9 +439,13 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                             .map((x, i) => (
                                 <Tr key={i}>
                                     <TableData name={x?.fullName} />
-                                    <TableData name={x?.totalHoursAvailable} />
-                                    <TableData name={x?.utilizedHours} />
-                                    <TableData name={x?.utilizationRate} />
+                                    <TableData
+                                        name={Round(x?.totalHoursAvailable)}
+                                    />
+                                    <TableData name={Round(x?.utilizedHours)} />
+                                    <TableData
+                                        name={Round(x?.utilizationRate)}
+                                    />
                                     {/* <TableState name={x.status} /> */}
                                 </Tr>
                             ))}
