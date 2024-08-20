@@ -78,7 +78,7 @@ function TableCards({
                     opacity=".8"
                     mb="1rem"
                     textTransform="capitalize"
-                    color="brand.200"
+                    color="#2F363As"
                 >
                     {title}
                 </Text>

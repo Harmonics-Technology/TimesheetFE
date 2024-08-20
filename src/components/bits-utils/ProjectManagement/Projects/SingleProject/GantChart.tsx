@@ -199,7 +199,13 @@ export const GantChart = ({
                                         To
                                     </Th>
                                 </Tr>
-                                {newTasks?.map(renderTaskList)}
+                                {newTasks
+                                    ?.sort(
+                                        (a, b) =>
+                                            (a?.start as any) -
+                                            (b?.start as any),
+                                    )
+                                    .map(renderTaskList)}
                             </Table>
                         </Box>
                         <Box overflow="auto" w="70%">

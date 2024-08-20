@@ -2,10 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { DashboardView } from './DashboardView';
 import type { HttpStatusCode } from './HttpStatusCode';
+import type { SuperAdminDashboardView } from './SuperAdminDashboardView';
 
-export type DashboardViewStandardResponse = {
+export type SuperAdminDashboardViewStandardResponse = {
     href?: string | null;
     relations?: Array<string> | null;
     method?: string | null;
@@ -13,7 +13,7 @@ export type DashboardViewStandardResponse = {
     routeValues?: any;
     status?: boolean;
     message?: string | null;
-    data?: DashboardView;
+    data?: SuperAdminDashboardView;
     statusCode?: HttpStatusCode;
     errors?: any;
 };

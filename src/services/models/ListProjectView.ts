@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 import type { StrippedProjectAssignee } from './StrippedProjectAssignee';
+import type { StrippedProjectManager } from './StrippedProjectManager';
 
 export type ListProjectView = {
     id?: string;
@@ -19,4 +20,5 @@ export type ListProjectView = {
     projectManagerId?: string | null;
     currency?: string | null;
     assignees?: Array<StrippedProjectAssignee> | null;
+    projectManagers?: Array<StrippedProjectManager> | null;
 };

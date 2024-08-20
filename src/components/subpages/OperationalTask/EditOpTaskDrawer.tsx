@@ -85,7 +85,7 @@ export const EditOpTaskDrawer = ({
 
     const toast = useToast();
     const router = useRouter();
-    console.log({ data });
+    // console.log({ data });
     const [selectedUser, setSelecedUser] = useState<any>(
         data?.assignees
             ?.filter((x) => !x?.disabled)
@@ -148,10 +148,13 @@ export const EditOpTaskDrawer = ({
     };
     const onSubmit = async (value: ProjectTaskModel) => {
         value.isAssignedToMe = isAssignedToMe;
-        value.assignedUsers = isAssignedToMe
+        value.department = department;
+        if (taskType !== 'Private') {
+            value.isAssignedToMe = false;
+        }
+        value.assignedUsers = value.isAssignedToMe
             ? [id || superAdminId]
             : value.assignedUsers;
-        value.department = department;
         try {
             const result = await ProjectManagementService.updateTask(value);
             if (result.status) {
