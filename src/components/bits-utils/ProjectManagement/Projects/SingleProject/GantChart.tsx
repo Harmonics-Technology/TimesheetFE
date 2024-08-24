@@ -120,8 +120,10 @@ export const GantChart = ({
     };
 
     const getRandomColor = () => {
-        const colors = Highcharts.getOptions().colors || '';
-        return colors[Math.floor(Math.random() * colors.length)];
+        if (typeof Highcharts === 'object') {
+            const colors = Highcharts?.getOptions().colors || '';
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
     };
 
     const chartData = useMemo(() => {
@@ -343,7 +345,7 @@ export const GantChart = ({
                 users={users}
                 // noTitle
             />
-            <HStack py="1rem" justify="space-between" display="none">
+            <HStack py="1rem" justify="space-between" display="none" mt="1rem">
                 <HStack w="17%">
                     <HStack w="full">
                         <Image
@@ -413,52 +415,6 @@ export const GantChart = ({
                 </HStack>
                 {(newTasks?.length as any) > 0 ? (
                     <HStack w="full" overflow={'auto'} align="flex-start">
-                        <Box w="30%" display="none">
-                            <Table border="1px solid" borderColor="gray.200">
-                                <Tr>
-                                    <Th
-                                        fontWeight={400}
-                                        textTransform="capitalize"
-                                        pr="0"
-                                        pl=".5rem"
-                                        py="1rem"
-                                        w="200px"
-                                        borderRight="1px solid"
-                                        borderColor="gray.200"
-                                    >
-                                        Name
-                                    </Th>
-                                    <Th
-                                        fontWeight={400}
-                                        textTransform="capitalize"
-                                        px="0"
-                                        w="85px"
-                                        borderRight="1px solid"
-                                        borderColor="gray.200"
-                                        pl=".4rem"
-                                    >
-                                        From
-                                    </Th>
-                                    <Th
-                                        fontWeight={400}
-                                        textTransform="capitalize"
-                                        px="0"
-                                        w="85px"
-                                        pl=".4rem"
-                                    >
-                                        To
-                                    </Th>
-                                </Tr>
-                                {newTasks
-                                    ?.sort(
-                                        (a, b) =>
-                                            (a?.start as any) -
-                                            (b?.start as any),
-                                    )
-                                    .map(renderTaskList)}
-                            </Table>
-                        </Box>
-
                         <Box overflow="auto" w="100%" minH="50vh">
                             {/* <Gantt
                                 tasks={
