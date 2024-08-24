@@ -346,3 +346,14 @@ select option {
 ._3eULf > div:first-of-type{
     display: none !important;
 }
+.highcharts-credits{
+    display: none !important;
+}
+.highcharts-contextbutton {
+    transform: translate(10px, 10px) !important;
+}
+.highcharts-contextmenu{
+    left: -18px;
+    right: 0 !important;
+    width: fit-content;
+}

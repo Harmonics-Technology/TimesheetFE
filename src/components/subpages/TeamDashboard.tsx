@@ -11,6 +11,7 @@ import {
 import { NotificationContext } from '@components/context/NotificationContext';
 import { UserContext } from '@components/context/UserContext';
 import { CUR } from '@components/generics/functions/Naira';
+import { calculatePer } from '@components/generics/functions/calculatePer';
 import { formatDate } from '@components/generics/functions/formatDate';
 import moment from 'moment';
 import { useContext, useEffect, useState } from 'react';
@@ -143,7 +144,12 @@ function TeamDashboard() {
                                     dashData?.projectManagementDashboardMetric
                                         ?.ongoingProject
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.ongoingProject,
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.noOfProject,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
@@ -152,7 +158,12 @@ function TeamDashboard() {
                                     dashData?.projectManagementDashboardMetric
                                         ?.completedProject
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.completedProject,
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.noOfProject,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
@@ -161,7 +172,12 @@ function TeamDashboard() {
                                     dashData?.projectManagementDashboardMetric
                                         ?.notStartedProject
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.notStartedProject,
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.noOfProject,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
@@ -170,7 +186,12 @@ function TeamDashboard() {
                                     dashData?.projectManagementDashboardMetric
                                         ?.overdueProject
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.overdueProject,
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.noOfProject,
+                                )}
                                 loading={isLoading}
                             />
                         </Grid>
@@ -238,7 +259,12 @@ function TeamDashboard() {
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.ongoingTask
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.projectManagementDashboardMetric
+                                        ?.completedProject,
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.noOfTask,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
@@ -247,7 +273,12 @@ function TeamDashboard() {
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.completedTask
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.completedTask,
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.noOfTask,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
@@ -256,7 +287,12 @@ function TeamDashboard() {
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.notStartedTask
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.notStartedTask,
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.noOfTask,
+                                )}
                                 loading={isLoading}
                             />
                             <NewMiniCard
@@ -265,7 +301,12 @@ function TeamDashboard() {
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.overdueTask
                                 }
-                                per={'75'}
+                                per={calculatePer(
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.overdueTask,
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.noOfTask,
+                                )}
                                 loading={isLoading}
                             />
                         </Grid>
