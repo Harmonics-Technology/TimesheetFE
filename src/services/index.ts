@@ -59,6 +59,7 @@ export type { DashboardProjectManagementViewStandardResponse } from './models/Da
 export type { DashboardProjectView } from './models/DashboardProjectView';
 export type { DashboardProjectViewStandardResponse } from './models/DashboardProjectViewStandardResponse';
 export type { Data } from './models/Data';
+export type { Department } from './models/Department';
 export type { DepartmentView } from './models/DepartmentView';
 export type { DepartmentViewListStandardResponse } from './models/DepartmentViewListStandardResponse';
 export type { EmployeeInformation } from './models/EmployeeInformation';
@@ -264,6 +265,8 @@ export type { UpdateUserModel } from './models/UpdateUserModel';
 export type { User } from './models/User';
 export type { UserCountByPayrollTypeView } from './models/UserCountByPayrollTypeView';
 export type { UserCountByPayrollTypeViewListStandardResponse } from './models/UserCountByPayrollTypeViewListStandardResponse';
+export type { UserDepartment } from './models/UserDepartment';
+export type { UserDepartmentView } from './models/UserDepartmentView';
 export type { UserDraftModel } from './models/UserDraftModel';
 export type { UserDraftView } from './models/UserDraftView';
 export type { UserDraftViewPagedCollection } from './models/UserDraftViewPagedCollection';

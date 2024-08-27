@@ -87,7 +87,7 @@ export const OperationCard = ({
     const NewMenuItem = ({ name, onClick }) => {
         return (
             <HStack
-                onClick={() => onClick()}
+                onClick={onClick}
                 w="full"
                 bgColor="white"
                 _hover={{ bgColor: 'gray.200' }}

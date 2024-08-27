@@ -56,19 +56,28 @@ export const CustomSelectBox = ({
     const dataAsFiltered = single
         ? data
         : data?.filter((x) => !items?.some((user) => user.id === x.id));
-    const newFormattedData = dataAsFiltered?.map((x: any) => {
-        return {
-            label: eval(`x.${customKeys.label}`),
-            key: x[customKeys.key],
-            used: x[customKeys?.used],
-            total: x[customKeys.total],
-        };
-    });
+    const newFormattedData = checkbox
+        ? data?.map((x: any) => {
+              return {
+                  label: eval(`x.${customKeys.label}`),
+                  key: x[customKeys.key],
+                  used: x[customKeys?.used],
+                  total: x[customKeys.total],
+              };
+          })
+        : dataAsFiltered?.map((x: any) => {
+              return {
+                  label: eval(`x.${customKeys.label}`),
+                  key: x[customKeys.key],
+                  used: x[customKeys?.used],
+                  total: x[customKeys.total],
+              };
+          });
 
     let newData = newFormattedData;
 
     // const [newData, setNewData] = useState(newFormattedData);
-    console.log({ data, dataAsFiltered, newData });
+    // console.log({ data, dataAsFiltered, newData });
     const checkBoxFn = (x) => {
         const exist = single
             ? items?.[customKeys.key] == x.id

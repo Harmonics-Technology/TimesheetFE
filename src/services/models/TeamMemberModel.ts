@@ -67,4 +67,5 @@ export type TeamMemberModel = {
     payrollProcessingType?: string | null;
     paymentProcessingFeeType?: string | null;
     paymentProcessingFee?: number;
+    departments?: Array<string> | null;
 };
