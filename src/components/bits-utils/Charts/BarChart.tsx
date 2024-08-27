@@ -125,7 +125,7 @@ export function BarChart({ chart }: { chart: any }) {
         labels,
         datasets: [
             {
-                label: 'Task completed',
+                label: 'Task created',
                 data: chart?.map((x: any) => x.taskCompleted),
                 backgroundColor: '#4FD1C5',
                 barPercentage: 0.5,

@@ -43,6 +43,8 @@ export const TeamPrjDashboard = ({
     const { user } = useContext(UserContext);
     const isProjectPm = projects?.projectManagerId == user?.id;
 
+    const isPm = user?.isOrganizationProjectManager;
+
     return (
         <Box>
             <TeamTopBar data={projects} id={id} />
@@ -72,16 +74,18 @@ export const TeamPrjDashboard = ({
                 />
                 <MiniCards
                     value={
-                        isProjectPm
+                        !isProjectPm && !isPm
                             ? 'N/A'
                             : metrics?.budgetSpentAndRemain?.budgetSpent
                     }
                     title="Total Budget Spent"
                     icon={PiMoneyBold}
                     color="#F8C200"
-                    isPrice={isProjectPm ? false : true}
+                    isPrice={!isProjectPm && !isPm ? false : true}
                     allBudget={
-                        isProjectPm ? [] : [{ currency: projects.currency }]
+                        !isProjectPm && !isPm
+                            ? []
+                            : [{ currency: projects.currency }]
                     }
                     budget={{ currency: projects.currency }}
                 />
@@ -141,21 +145,23 @@ export const TeamPrjDashboard = ({
                         chart={[
                             {
                                 name: 'Budget spent',
-                                count: isProjectPm
-                                    ? 0
-                                    : metrics?.budgetSpentAndRemain
-                                          ?.budgetSpent,
+                                count:
+                                    !isProjectPm && !isPm
+                                        ? 0
+                                        : metrics?.budgetSpentAndRemain
+                                              ?.budgetSpent,
                             },
                             {
                                 name: 'Remaining Budget',
-                                count: isProjectPm
-                                    ? 0
-                                    : metrics?.budgetSpentAndRemain
-                                          ?.budgetRemain,
+                                count:
+                                    !isProjectPm && !isPm
+                                        ? 0
+                                        : metrics?.budgetSpentAndRemain
+                                              ?.budgetRemain,
                             },
                         ]}
                         total={
-                            isProjectPm
+                            !isProjectPm && !isPm
                                 ? 'N/A'
                                 : metrics?.budgetSpentAndRemain?.budget
                         }

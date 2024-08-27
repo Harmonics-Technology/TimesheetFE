@@ -64,7 +64,11 @@ export const CustomSelectBox = ({
             total: x[customKeys.total],
         };
     });
-    const [newData, setNewData] = useState(newFormattedData);
+
+    let newData = newFormattedData;
+
+    // const [newData, setNewData] = useState(newFormattedData);
+    console.log({ data, dataAsFiltered, newData });
     const checkBoxFn = (x) => {
         const exist = single
             ? items?.[customKeys.key] == x.id
@@ -94,18 +98,15 @@ export const CustomSelectBox = ({
         const filteredData = newFormattedData.filter((x: any) => {
             return x.label.toLowerCase().includes(e.target.value.toLowerCase());
         });
-        setNewData(filteredData);
+        newData = filteredData;
     };
 
     useEffect(() => {
         if (!checkbox) {
-            setNewData(newFormattedData);
+            newData = newFormattedData;
         }
     }, [selected]);
 
-    useEffect(() => {
-        setNewData(newFormattedData);
-    }, [data]);
     return (
         <FormControl
             isInvalid={

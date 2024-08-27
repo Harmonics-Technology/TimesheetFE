@@ -2,10 +2,6 @@ import {
     Avatar,
     Box,
     HStack,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuList,
     Spinner,
     Text,
     useDisclosure,
@@ -14,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
 import shadeColor from '@components/generics/functions/shadeColor';
+import useComponentVisible from '@components/generics/useComponentVisible';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FaEllipsisH } from 'react-icons/fa';
@@ -50,6 +47,8 @@ export const OperationCard = ({
     const router = useRouter();
     const toast = useToast();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { ref, isComponentVisible, setIsComponentVisible } =
+        useComponentVisible(false);
     const {
         isOpen: isOpens,
         onOpen: onOpens,
@@ -83,6 +82,25 @@ export const OperationCard = ({
                 position: 'top-right',
             });
         }
+    };
+
+    const NewMenuItem = ({ name, onClick }) => {
+        return (
+            <HStack
+                onClick={() => onClick()}
+                w="full"
+                bgColor="white"
+                _hover={{ bgColor: 'gray.200' }}
+                fontSize=".75rem"
+                py=".3rem"
+                px=".5rem"
+                minW="100px"
+                cursor="pointer"
+                transition=".5s ease"
+            >
+                <Text>{name}</Text>
+            </HStack>
+        );
     };
     return (
         <Box
@@ -168,37 +186,46 @@ export const OperationCard = ({
                     <Text fontWeight={400} color="#787486" fontSize="12px">
                         {subBtm}
                     </Text>
-                    <Menu>
-                        <MenuButton onClick={(e) => e.stopPropagation()}>
-                            <Box
-                                fontSize="1rem"
-                                pl="1rem"
-                                fontWeight="bold"
-                                cursor="pointer"
-                                color="brand.300"
+                    <Box
+                        pos="relative"
+                        onClick={(e) => e.stopPropagation()}
+                        ref={ref}
+                    >
+                        <Box
+                            fontSize="1rem"
+                            pl="1rem"
+                            fontWeight="bold"
+                            cursor="pointer"
+                            color="brand.300"
+                            onClick={() =>
+                                setIsComponentVisible((prev) => !prev)
+                            }
+                        >
+                            {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
+                        </Box>
+                        {isComponentVisible && (
+                            <VStack
+                                align="flex-start"
+                                gap="0"
+                                pos="absolute"
+                                bottom={'20px'}
+                                right={0}
+                                boxShadow="md"
+                                borderRadius="6px"
+                                bgColor="white"
+                                overflow="hidden"
                             >
-                                {loading ? (
-                                    <Spinner size="sm" />
-                                ) : (
-                                    <FaEllipsisH />
-                                )}
-                            </Box>
-                        </MenuButton>
-                        <MenuList w="full" fontSize=".7rem">
-                            <MenuItem onClick={() => onClick()} w="full">
-                                View
-                            </MenuItem>
-                            <MenuItem
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    onOpen();
-                                }}
-                                w="full"
-                            >
-                                Delete
-                            </MenuItem>
-                        </MenuList>
-                    </Menu>
+                                <NewMenuItem name="View" onClick={onClick} />
+                                <NewMenuItem
+                                    name="Delete"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onOpen();
+                                    }}
+                                />
+                            </VStack>
+                        )}
+                    </Box>
                 </HStack>
             </VStack>
             {isOpen && (

@@ -1,5 +1,5 @@
 import { Box, Text, HStack, Grid } from '@chakra-ui/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { ColoredTag } from '../../Generics/ColoredTag';
 import moment from 'moment';
 import { CAD } from '@components/generics/functions/Naira';
@@ -24,6 +24,7 @@ import BudgetChart from '@components/bits-utils/Charts/BudgetChart';
 import DoughnutChart from '@components/bits-utils/Charts/DoughnutChart';
 import { BarChart } from '@components/bits-utils/Charts/BarChart';
 import { Round } from '@components/generics/functions/Round';
+import { UserContext } from '@components/context/UserContext';
 
 export const SingleProjectPage = ({
     id,
@@ -39,6 +40,8 @@ export const SingleProjectPage = ({
     currencies: any;
 }) => {
     const projectSummary = ['Task Name', 'Deadline', 'Team member', 'Workload'];
+    const { user } = useContext(UserContext);
+    const role = user?.role?.replaceAll(' ', '');
     return (
         <Box>
             <TopBar
@@ -86,7 +89,11 @@ export const SingleProjectPage = ({
                 templateColumns={['repeat(1,1fr)', '2fr 1fr']}
                 gap="1.06rem"
             >
-                <TableBox title="Upcoming Deadlines" tableHead={projectSummary}>
+                <TableBox
+                    title="Upcoming Deadlines"
+                    tableHead={projectSummary}
+                    url={`/${role}/project-management/projects/${id}/project-task`}
+                >
                     {metrics?.upcomingDeadlines?.slice(0, 3)?.map((x) => {
                         const status = x.status?.toLowerCase();
                         const pastDate =
@@ -176,8 +183,8 @@ export const SingleProjectPage = ({
                     />
                 </ChartMiniCard>
                 <ChartLargeCard
-                    title="Number of Task completed"
-                    sub="Operational Vs Project Task activity Rate"
+                    title="Number of Task Created"
+                    sub="Project Task activity Rate"
                 >
                     <BarChart chart={metrics?.monthlyCompletedTasks} />
                 </ChartLargeCard>

@@ -18,11 +18,10 @@ import {
     ProjectProgressCountView,
 } from 'src/services';
 import { UserContext } from '@components/context/UserContext';
+import Pagination from '@components/bits-utils/Pagination';
 
 export const ProjectPage = ({
-    iProjects,
-    nProjects,
-    cProjects,
+    projects,
     users,
     superAdminId,
     counts,
@@ -31,9 +30,7 @@ export const ProjectPage = ({
     isPm,
     currencies,
 }: {
-    iProjects: any;
-    nProjects: any;
-    cProjects: any;
+    projects: any;
     users: any;
     superAdminId: string;
     counts: ProjectProgressCountView;
@@ -53,6 +50,12 @@ export const ProjectPage = ({
             },
         });
     }
+
+    const listProjectByStatus = (status) => {
+        return projects?.value?.filter((x) => x.status === status);
+    };
+
+    // console.log({ projects });
     const hasAccess =
         (access?.adminProjectCreation && user?.role !== 'Team Member') ||
         (access?.pmProjectCreation && isPm);
@@ -101,8 +104,8 @@ export const ProjectPage = ({
                             onClick={void 0}
                             num="1"
                         />
-                        {nProjects?.value?.map((x, i) => (
-                            <ProjectCard data={x} key={i} />
+                        {listProjectByStatus('Not Started')?.map((x) => (
+                            <ProjectCard data={x} key={x?.id} />
                         ))}
                     </VStack>
                     <VStack bgColor="gray.100" p=".5rem .5rem">
@@ -112,8 +115,8 @@ export const ProjectPage = ({
                             onClick={void 0}
                             num="2"
                         />
-                        {iProjects?.value?.map((x, i) => (
-                            <ProjectCard data={x} key={i} />
+                        {listProjectByStatus('Ongoing')?.map((x) => (
+                            <ProjectCard data={x} key={x?.id} />
                         ))}
                     </VStack>
                     <VStack bgColor="gray.100" p=".5rem .5rem">
@@ -123,11 +126,12 @@ export const ProjectPage = ({
                             onClick={void 0}
                             num="3"
                         />
-                        {cProjects?.value?.map((x, i) => (
-                            <ProjectCard data={x} key={i} />
+                        {listProjectByStatus('Completed')?.map((x) => (
+                            <ProjectCard data={x} key={x?.id} />
                         ))}
                     </VStack>
                 </Grid>
+                <Pagination data={projects} loadMore />
                 {/* <Grid
                     templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                     my="2rem"

@@ -82,7 +82,7 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
         }
     }, [limit, trigger]);
 
-    console.log({ activities });
+    // console.log({ activities });
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -144,6 +144,9 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                     >
                                                         {x?.isComment
                                                             ? 'Comment'
+                                                            : !x?.isComment &&
+                                                              !x?.assignee
+                                                            ? 'Task Created'
                                                             : 'Task Assigned'}
                                                     </Text>
                                                     <HStack gap="1rem">
@@ -154,6 +157,9 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                         >
                                                             {x?.isComment
                                                                 ? 'Comment by'
+                                                                : !x?.isComment &&
+                                                                  !x?.assignee
+                                                                ? 'Created by'
                                                                 : ' Assigned by'}
                                                         </Text>
                                                         <Avatar
@@ -191,7 +197,8 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                         .add(1, 'hours')
                                                         ?.fromNow()}
                                                 </Text>
-                                                {x?.isComment ? (
+                                                {x?.isComment ||
+                                                !x?.assignee ? (
                                                     <Text
                                                         color="#2D3748"
                                                         fontSize="14px"

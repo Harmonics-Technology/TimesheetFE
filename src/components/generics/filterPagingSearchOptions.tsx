@@ -16,7 +16,7 @@ export const filterPagingSearchOptions = (ctx: any) => {
         department,
     } = ctx.query;
     const options = {
-        limit: limit ? limit : 10,
+        limit: limit ? limit : 30,
         clientId: clientId,
         shiftLimit: limit ? limit : 5,
         offset: offset ? offset : 0,

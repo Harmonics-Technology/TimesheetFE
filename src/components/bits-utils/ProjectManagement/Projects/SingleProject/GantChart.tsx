@@ -345,7 +345,7 @@ export const GantChart = ({
                 users={users}
                 // noTitle
             />
-            <HStack py="1rem" justify="space-between" display="none" mt="1rem">
+            <HStack py="1rem" justify="space-between" display="none" mt="1rem" >
                 <HStack w="17%">
                     <HStack w="full">
                         <Image

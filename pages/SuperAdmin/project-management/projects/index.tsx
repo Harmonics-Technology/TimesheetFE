@@ -12,9 +12,7 @@ import {
 } from 'src/services';
 
 const projectsIndex = ({
-    iProjects,
-    nProjects,
-    cProjects,
+    projects,
     users,
     superAdminId,
     counts,
@@ -22,9 +20,7 @@ const projectsIndex = ({
     access,
     currencies,
 }: {
-    iProjects: any;
-    nProjects: any;
-    cProjects: any;
+    projects: any;
     users: any;
     superAdminId: string;
     counts: ProjectProgressCountView;
@@ -34,9 +30,7 @@ const projectsIndex = ({
 }) => {
     return (
         <ProjectPage
-            iProjects={iProjects}
-            nProjects={nProjects}
-            cProjects={cProjects}
+            projects={projects}
             users={users}
             superAdminId={superAdminId}
             counts={counts}
@@ -55,21 +49,29 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         //
-        const fetchProjectByStatus = (status) => {
-            const data = ProjectManagementService.listStrippedProject(
+        // const fetchProjectByStatus = (status) => {
+        //     const data = ProjectManagementService.listStrippedProject(
+        //         pagingOptions.offset,
+        //         pagingOptions.limit,
+        //         superAdminId,
+        //         status,
+        //         undefined,
+        //         pagingOptions.search,
+        //     );
+        //     return data;
+        // };
+        try {
+            // const nProgress = await fetchProjectByStatus(1);
+            // const iProgress = await fetchProjectByStatus(2);
+            // const cProgress = await fetchProjectByStatus(3);
+            const data = await ProjectManagementService.listStrippedProject(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
-                status,
+                undefined,
                 undefined,
                 pagingOptions.search,
             );
-            return data;
-        };
-        try {
-            const nProgress = await fetchProjectByStatus(1);
-            const iProgress = await fetchProjectByStatus(2);
-            const cProgress = await fetchProjectByStatus(3);
             const users = await UserService.listUsersByRoles(
                 superAdminId,
                 'team member,super admin,admin',
@@ -98,9 +100,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             //
             return {
                 props: {
-                    iProjects: iProgress.data,
-                    nProjects: nProgress.data,
-                    cProjects: cProgress.data,
+                    projects: data.data,
                     users: users.data,
                     superAdminId,
                     counts: counts.data,

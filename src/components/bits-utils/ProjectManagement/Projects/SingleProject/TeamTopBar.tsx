@@ -12,11 +12,18 @@ export const TeamTopBar = ({ data, id }) => {
     const isPm = user?.isOrganizationProjectManager;
     const isProjectPm = data?.projectManagerId == user?.id;
 
-    const menuItems = isPm
-        ? ['dashboard', 'project-task', 'gantt-chart', 'team-members', 'budget']
-        : isProjectPm
-        ? ['dashboard', 'project-task', 'gantt-chart', 'team-members']
-        : ['project-task', 'gantt-chart', 'team-members'];
+    const menuItems =
+        isPm && isProjectPm
+            ? [
+                  'dashboard',
+                  'project-task',
+                  'gantt-chart',
+                  'team-members',
+                  'budget',
+              ]
+            : ['dashboard', 'project-task', 'gantt-chart', 'team-members'];
+    //   : isProjectPm
+    //   ? ['dashboard', 'project-task', 'gantt-chart', 'team-members']
     return (
         <Box>
             <TaskMenu name={menuItems} id={id} />

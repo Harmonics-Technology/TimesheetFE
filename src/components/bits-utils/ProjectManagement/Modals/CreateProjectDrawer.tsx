@@ -378,7 +378,7 @@ export const CreateProjectDrawer = ({
                         {!nonApplicable && (
                             <>
                                 <CustomSelectBox
-                                    data={projectMangers?.value}
+                                    data={projectMangers}
                                     updateFunction={addManager}
                                     items={selectedManager}
                                     customKeys={{

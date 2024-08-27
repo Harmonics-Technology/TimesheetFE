@@ -333,7 +333,7 @@ export const EditProjectDrawer = ({
                         </FormLabel>
 
                         <CustomSelectBox
-                            data={users?.value}
+                            data={users}
                             updateFunction={addUser}
                             items={selectedUser}
                             customKeys={{ key: 'id', label: 'fullName' }}
@@ -391,7 +391,7 @@ export const EditProjectDrawer = ({
                                     Assign Project Manager
                                 </FormLabel>
                                 <CustomSelectBox
-                                    data={projectMangers?.value}
+                                    data={projectMangers}
                                     updateFunction={addManager}
                                     items={selectedManager}
                                     customKeys={{

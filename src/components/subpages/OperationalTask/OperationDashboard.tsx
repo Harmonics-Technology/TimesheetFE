@@ -185,7 +185,7 @@ export const OperationDashboard = ({
                 return x;
             });
         });
-        // updateTaskStatus(parsedTask, status);
+        updateTaskStatus(parsedTask, status);
     };
     const handleDragOver = (e: any) => {
         e.preventDefault();
