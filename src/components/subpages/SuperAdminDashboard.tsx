@@ -434,6 +434,7 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                     <TableCards
                         title={'Top Resource Data'}
                         url={''}
+                        link=""
                         data={dashData?.topResourceReport
                             ?.slice(0, 4)
                             .map((x, i) => (
@@ -457,11 +458,10 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                             // 'Status',
                             // 'Action',
                         ]}
-                        link={'/'}
                     />
                     <TableCards
                         title={'Timesheet Report'}
-                        url={'timesheets/approval'}
+                        url={'timesheets/history'}
                         data={dashData?.recentTimeSheet
                             ?.slice(0, 4)
                             .map((x: any, i) => (

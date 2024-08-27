@@ -269,7 +269,7 @@ function ProfileManagementAdmin({
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
-                                <TableData name={x.firstName} />
+                                <TableData name={x.fullName} />
                                 <TableData name={x.email} />
                                 <TableData name={x.role} />
                                 <TableStatus name={x.isActive} />
