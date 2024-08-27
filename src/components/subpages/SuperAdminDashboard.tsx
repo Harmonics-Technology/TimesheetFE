@@ -328,10 +328,10 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                                         ?.ongoingTask
                                 }
                                 per={calculatePer(
-                                    dashData?.projectManagementDashboardMetric
-                                        ?.ongoingProject,
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.ongoingTask,
+                                    dashData?.operationalTaskDashboardMetrics
+                                        ?.noOfTask,
                                 )}
                                 loading={isLoading}
                             />
@@ -345,7 +345,7 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.completedTask,
                                     dashData?.operationalTaskDashboardMetrics
-                                        ?.ongoingTask,
+                                        ?.noOfTask,
                                 )}
                                 loading={isLoading}
                             />
@@ -359,7 +359,7 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.notStartedTask,
                                     dashData?.operationalTaskDashboardMetrics
-                                        ?.ongoingTask,
+                                        ?.noOfTask,
                                 )}
                                 loading={isLoading}
                             />
@@ -373,7 +373,7 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                                     dashData?.operationalTaskDashboardMetrics
                                         ?.overdueTask,
                                     dashData?.operationalTaskDashboardMetrics
-                                        ?.ongoingTask,
+                                        ?.noOfTask,
                                 )}
                                 loading={isLoading}
                             />
