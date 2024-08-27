@@ -1,6 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Gantt, Task, ViewMode } from 'gantt-task-react';
-import 'gantt-task-react/dist/index.css';
+import React, { useMemo, useState } from 'react';
 import { TopBar } from './TopBar';
 import {
     Box,
@@ -8,11 +6,7 @@ import {
     HStack,
     Image,
     Select,
-    Table,
-    Td,
     Text,
-    Th,
-    Tr,
     useDisclosure,
 } from '@chakra-ui/react';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
@@ -45,51 +39,12 @@ export const GantChart = ({
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [data, setData] = useState<any>();
-    const [viewMode, setViewMode] = useState(ViewMode.Day);
     const [view, setView] = useState('daily');
     const [len, setLen] = useState(0);
 
     const ReactHighChart = dynamic(() => import('highcharts-react-official'), {
         ssr: false,
     });
-
-    const newTasks = tasks?.value?.map((x) => ({
-        start: new Date(x?.startDate as string),
-        end: new Date(x?.endDate as string),
-        name: x.name,
-        id: x.id,
-        type: 'task',
-        progress: x?.percentageOfCompletion,
-        isDisabled: true,
-        startFormatted: moment(x?.startDate).format('DD/MM/YY'), // Formatted start date
-        endFormatted: moment(x?.endDate).format('DD/MM/YY'),
-        // dependencies: [x.id],
-        project: 'Yomy',
-        styles: {
-            progressColor: '#ffbb54',
-            progressSelectedColor: '#ff9e0d',
-        },
-    }));
-
-    // const [chartOptions, setChartOptions] = useState({
-    //     chart: {
-    //         type: 'gantt',
-    //     },
-    //     title: {
-    //         text: 'Project Gantt Chart',
-    //     },
-    //     xAxis: {
-    //         type: 'datetime',
-    //     },
-    //     yAxis: {
-    //         type: 'category',
-    //     },
-    //     series: [
-    //         {
-    //             newTasks,
-    //         },
-    //     ],
-    // });
 
     const day = 24 * 36e5,
         today = Math.floor(Date.now() / day) * day;
@@ -164,12 +119,12 @@ export const GantChart = ({
                             fontFamily: 'Rubik, sans-serif', // Change font family
                         },
                     },
-                    title: {
-                        text: 'Days',
-                        style: {
-                            fontFamily: 'Rubik, sans-serif', // Change font family
-                        },
-                    },
+                    // title: {
+                    //     text: 'Days',
+                    //     style: {
+                    //         fontFamily: 'Rubik, sans-serif', // Change font family
+                    //     },
+                    // },
                 };
             case 'weekly':
                 return {
@@ -181,12 +136,12 @@ export const GantChart = ({
                             fontFamily: 'Rubik, sans-serif', // Change font family
                         },
                     },
-                    title: {
-                        text: 'Weeks',
-                        style: {
-                            fontFamily: 'Rubik, sans-serif', // Change font family
-                        },
-                    },
+                    // title: {
+                    //     text: 'Weeks',
+                    //     style: {
+                    //         fontFamily: 'Rubik, sans-serif', // Change font family
+                    //     },
+                    // },
                 };
             case 'monthly':
                 return {
@@ -198,12 +153,12 @@ export const GantChart = ({
                             fontFamily: 'Rubik, sans-serif', // Change font family
                         },
                     },
-                    title: {
-                        text: 'Months',
-                        style: {
-                            fontFamily: 'Rubik, sans-serif', // Change font family
-                        },
-                    },
+                    // title: {
+                    //     text: 'Months',
+                    //     style: {
+                    //         fontFamily: 'Rubik, sans-serif', // Change font family
+                    //     },
+                    // },
                 };
             default:
                 return {};
@@ -227,11 +182,35 @@ export const GantChart = ({
                     fontSize: '13px',
                 },
             },
-            title: {
-                text: 'Task Name',
-                style: {
-                    fontFamily: 'Rubik, sans-serif',
-                },
+            grid: {
+                enabled: true,
+                columns: [
+                    {
+                        title: {
+                            text: 'Task Name',
+                        },
+                        labels: {
+                            formatter: (ctx) => ctx?.value,
+                        },
+                    },
+                    {
+                        labels: {
+                            format: '{point.start:%d/%m/%y}',
+                        },
+                        title: {
+                            text: 'Start date',
+                        },
+                    },
+                    {
+                        title: {
+                            text: 'End date',
+                        },
+                        // offset: 30,
+                        labels: {
+                            format: '{point.end:%d/%m/%y}',
+                        },
+                    },
+                ],
             },
         },
         plotOptions: {
@@ -307,35 +286,6 @@ export const GantChart = ({
         ],
     };
 
-    const renderTaskList = (task) => (
-        <Tr fontSize="12px">
-            <Td
-                noOfLines={1}
-                pr="0"
-                minW={0}
-                w="200px"
-                pl=".5rem"
-                borderRight="1px solid"
-                borderColor="gray.200"
-            >
-                {task.name}
-            </Td>
-            <Td
-                px="0"
-                minW={0}
-                w="70px"
-                borderRight="1px solid"
-                borderColor="gray.200"
-                pl=".4rem"
-            >
-                {task.startFormatted}
-            </Td>
-            <Td px="0" minW={0} w="70px" pl=".4rem">
-                {task.endFormatted}
-            </Td>
-        </Tr>
-    );
-
     return (
         <Box>
             <TopBar
@@ -345,7 +295,7 @@ export const GantChart = ({
                 users={users}
                 // noTitle
             />
-            <HStack py="1rem" justify="space-between" display="none" mt="1rem" >
+            <HStack py="1rem" justify="space-between" display="none" mt="1rem">
                 <HStack w="17%">
                     <HStack w="full">
                         <Image
@@ -413,21 +363,9 @@ export const GantChart = ({
                         Month View
                     </Button>
                 </HStack>
-                {(newTasks?.length as any) > 0 ? (
+                {(tasks?.value?.length as any) > 0 ? (
                     <HStack w="full" overflow={'auto'} align="flex-start">
                         <Box overflow="auto" w="100%" minH="50vh">
-                            {/* <Gantt
-                                tasks={
-                                    newTasks?.sort(
-                                        (a, b) =>
-                                            (a?.start as any) -
-                                            (b?.start as any),
-                                    ) as Task[]
-                                }
-                                // listCellWidth={'0'}
-                                fontFamily="'Rubik', sans-serif"
-                                viewMode={viewMode}
-                            /> */}
                             <ReactHighChart
                                 highcharts={Highcharts}
                                 options={options}
