@@ -11,7 +11,7 @@ export default async function markAsCompleted(
     onClosed,
 ) {
     // const { showToastSuccess, showToastError } = useToastMessages();
-    if (data?.status) {
+    if (data?.isCompleted) {
         toast({
             title: 'Item has already been marked as completed',
             status: 'error',
