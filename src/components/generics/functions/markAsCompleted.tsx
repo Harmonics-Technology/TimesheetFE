@@ -36,6 +36,7 @@ export default async function markAsCompleted(
             setLoading({ id: '' });
             router.replace(router.asPath);
             setStatus('completed');
+            router.reload();
             onClosed();
             return;
         }
