@@ -299,7 +299,7 @@ function TeamProfile({
     // ];
     const [selectedDepartment, setSelectedDepartment] = useState<any>(
         userProfile?.userDepartments?.map((obj) => ({
-            id: obj?.department?.name,
+            id: obj?.department?.id,
             name: obj?.department?.name,
         })) || [],
     );
