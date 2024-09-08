@@ -16,6 +16,7 @@ import {
     MenuItem,
     Menu,
     useToast,
+    Stack, Switch, FormLabel
 } from '@chakra-ui/react';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import {
@@ -52,7 +53,15 @@ import { ProgressSlider } from '@components/bits-utils/ProgressSlider';
 import { GiProgression } from 'react-icons/gi';
 import { AuditTrailSection } from '@components/subpages/AuditTrailSection';
 import { AuditTrailAttachments } from '@components/subpages/AuditTrailAttachments';
+import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { TeamMemberModel } from 'src/services';
+import * as yup from 'yup';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
+import ToggleSwitch from '@components/bits-utils/ToggleSwitch';
 
+const schema = yup.object().shape({});
 export const TeamSingleTask = ({
     id,
     project,
@@ -78,6 +87,7 @@ export const TeamSingleTask = ({
     ];
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [currentView, setCurrentView] = useState('Activity');
+
     const {
         isOpen: isOpened,
         onOpen: onOpened,
@@ -162,6 +172,18 @@ export const TeamSingleTask = ({
         }
     };
 
+    const {
+        register,
+        handleSubmit,
+        control,
+        watch,
+        formState: { errors, isSubmitting, isDirty },
+    } = useForm<TeamMemberModel>({
+        resolver: yupResolver(schema),
+        mode: 'all',
+        defaultValues: {},
+    });
+
     return (
         <Box>
             <TeamTopBar data={project} />
@@ -185,27 +207,55 @@ export const TeamSingleTask = ({
                         >
                             {task?.note}
                         </Text>
-                        <Box w="full" mt="0.5rem">
-                            {/* <ProgressBar
-                                barWidth={task?.percentageOfCompletion}
-                                showProgress={true}
-                                barColor={
-                                    status == 'completed'
-                                        ? 'brand.400'
-                                        : status == 'ongoing' && pastDate
-                                        ? 'red'
-                                        : status == 'ongoing'
-                                        ? '#f7e277'
-                                        : status == 'not started'
-                                        ? 'gray.100'
-                                        : 'red'
-                                }
-                                leftText="Task Status"
-                                rightText={`${Round(
-                                    task?.percentageOfCompletion,
-                                )}%`}
-                            /> */}
-                            <ProgressSlider
+                        <Stack spacing="15px">
+                            <PrimaryDate<TeamMemberModel>
+                                control={control}
+                                name="dateOfBirth"
+                                label="Start Date"
+                                error={errors.dateOfBirth}
+                                defaultValue={moment(task?.startDate).format(
+                                    'DD MM YYYY',
+                                )}
+                                // max={new DateObject().subtract(1, 'days')}
+                            />
+                            <PrimaryDate<TeamMemberModel>
+                                control={control}
+                                name="dateOfBirth"
+                                label="End Date"
+                                error={errors.dateOfBirth}
+                                defaultValue={moment(task?.endDate).format(
+                                    'DD MM YYYY',
+                                )}
+                                // max={new DateObject().subtract(1, 'days')}
+                            />
+                            <PrimaryInput
+                                name="dateOfBirth"
+                                label="Add Hours"
+                                error={errors.dateOfBirth}
+                                defaultValue=""
+                                register={register}
+                            />
+                            <Box w="full" mt="0.5rem" mb="23px">
+                                <ProgressBar
+                                    barWidth={task?.percentageOfCompletion}
+                                    showProgress={true}
+                                    barColor={
+                                        status == 'completed'
+                                            ? 'brand.400'
+                                            : status == 'ongoing' && pastDate
+                                            ? 'red'
+                                            : status == 'ongoing'
+                                            ? '#f7e277'
+                                            : status == 'not started'
+                                            ? 'gray.100'
+                                            : 'red'
+                                    }
+                                    leftText="Percntage of Completion"
+                                    rightText={`${Round(
+                                        task?.percentageOfCompletion,
+                                    )}%`}
+                                />
+                                {/* <ProgressSlider
                                 sliderValue={sliderValue}
                                 setSliderValue={setSliderValue}
                                 leftText="Task Status"
@@ -222,9 +272,30 @@ export const TeamSingleTask = ({
                                         ? 'gray.100'
                                         : 'red'
                                 }
+                            /> */}
+                            </Box>
+                            <Box mb="7px" textAlign="right">
+                                <ManageBtn
+                                    onClick={onOpened}
+                                    isLoading={loading.id == task?.id}
+                                    btn="Update"
+                                    bg="brand.400"
+                                    w="fit-content"
+                                    disabled={status == 'completed'}
+                                    h="35px"
+                                />
+                            </Box>
+
+                            <PrimaryInput
+                                name="dateOfBirth"
+                                label="Total Hours Spent"
+                                error={errors.dateOfBirth}
+                                defaultValue="10 Hours"
+                                register={register}
                             />
-                        </Box>
-                        <Flex mt="1rem" justify="space-between">
+                        </Stack>
+
+                        {/* <Flex mt="1rem" justify="space-between">
                             <ManageBtn
                                 onClick={updateProgress}
                                 isLoading={loading.id == 'update'}
@@ -245,9 +316,9 @@ export const TeamSingleTask = ({
                                     disabled={status == 'completed'}
                                 />
                             )}
-                        </Flex>
+                        </Flex> */}
                     </Box>
-                    <VStack
+                    {/* <VStack
                         borderRadius=".2rem"
                         border="1px solid #efefef"
                         bgColor="white"
@@ -270,7 +341,7 @@ export const TeamSingleTask = ({
                             title="Status:"
                             text={task?.status}
                         />
-                    </VStack>
+                    </VStack> */}
                     <Box
                         borderRadius=".2rem"
                         border="1px solid #efefef"
@@ -279,7 +350,7 @@ export const TeamSingleTask = ({
                         p="1rem"
                     >
                         <Text color="#2d3748" fontWeight={600} fontSize=".8rem">
-                            Assigned Team
+                            Assigned Team Members
                         </Text>
 
                         {task?.assignees?.map(
@@ -304,7 +375,7 @@ export const TeamSingleTask = ({
                                             color="#a6acb3"
                                             fontWeight={400}
                                         >
-                                            {x?.user?.email}
+                                            {x?.user?.role}
                                         </Text>
                                     </Box>
                                 </HStack>
@@ -319,9 +390,18 @@ export const TeamSingleTask = ({
                     w="75%"
                     p="1rem"
                 >
-                    <Text color="#2d3748" fontSize=".8rem" fontWeight={600}>
-                        My Task
-                    </Text>
+                    <Stack spacing="24px">
+                        <Text color="#2d3748" fontSize=".8rem" fontWeight={600}>
+                            My Task
+                        </Text>
+                        <Box>
+                            <Flex alignItems="flex-start" gap="9px">
+                                <FormLabel>Add hours to timesheet</FormLabel>
+                                <Switch mt='1' />
+                            </Flex>
+                        </Box>
+                    </Stack>
+
                     <HStack justify="flex-end">
                         {hasAccess && (
                             <Button
@@ -534,23 +614,29 @@ export const TeamSingleTask = ({
                     </TableCard>
                     <Box>
                         <HStack borderY="1px solid #D9D9D9" w="full">
-                            {['Activity', 'Attachments'].map((x) => (
-                                <HStack
-                                    h="33px"
-                                    px="10px"
-                                    onClick={() => setCurrentView(x)}
-                                    bgColor={
-                                        currentView == x ? '#E9ECEF' : '#fff'
-                                    }
-                                    color={
-                                        currentView == x ? '#2383BD' : '#2D3748'
-                                    }
-                                >
-                                    <Text fontSize="14px" cursor="pointer">
-                                        {x}
-                                    </Text>
-                                </HStack>
-                            ))}
+                            {['Activity', 'Attachments', 'Hours Spent'].map(
+                                (x) => (
+                                    <HStack
+                                        h="33px"
+                                        px="10px"
+                                        onClick={() => setCurrentView(x)}
+                                        bgColor={
+                                            currentView == x
+                                                ? '#E9ECEF'
+                                                : '#fff'
+                                        }
+                                        color={
+                                            currentView == x
+                                                ? '#2383BD'
+                                                : '#2D3748'
+                                        }
+                                    >
+                                        <Text fontSize="14px" cursor="pointer">
+                                            {x}
+                                        </Text>
+                                    </HStack>
+                                ),
+                            )}
                         </HStack>
                         {currentView == 'Activity' && (
                             <AuditTrailSection taskId={task?.id as string} />
