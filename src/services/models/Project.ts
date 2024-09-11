@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ProjectManager } from './ProjectManager';
 import type { ProjectTaskAsignee } from './ProjectTaskAsignee';
 
 export type Project = {
@@ -23,4 +24,5 @@ export type Project = {
     projectManagerId?: string | null;
     currency?: string | null;
     assignees?: Array<ProjectTaskAsignee> | null;
+    projectManagers?: Array<ProjectManager> | null;
 };

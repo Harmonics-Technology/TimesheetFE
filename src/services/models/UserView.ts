@@ -5,6 +5,7 @@
 import type { ClientSubscriptionResponseViewModel } from './ClientSubscriptionResponseViewModel';
 import type { ControlSettingView } from './ControlSettingView';
 import type { EmployeeInformationView } from './EmployeeInformationView';
+import type { UserDepartmentView } from './UserDepartmentView';
 
 export type UserView = {
     id?: string;
@@ -52,4 +53,5 @@ export type UserView = {
     contractStartDate?: string | null;
     department?: string | null;
     isTrainingManager?: boolean;
+    userDepartments?: Array<UserDepartmentView> | null;
 };

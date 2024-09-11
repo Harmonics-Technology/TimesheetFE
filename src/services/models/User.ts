@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 import type { EmployeeInformation } from './EmployeeInformation';
+import type { UserDepartment } from './UserDepartment';
 
 export type User = {
     id?: string;
@@ -60,4 +61,5 @@ export type User = {
     supervisees?: Array<EmployeeInformation> | null;
     teamMembers?: Array<EmployeeInformation> | null;
     payees?: Array<EmployeeInformation> | null;
+    userDepartments?: Array<UserDepartment> | null;
 };

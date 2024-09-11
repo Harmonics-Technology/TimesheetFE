@@ -413,10 +413,10 @@ export const EditOpTaskDrawer = ({
 
                                 <PrimaryInput<ProjectTaskModel>
                                     label="Hours"
-                                    name="name"
-                                    error={errors.name}
+                                    name='operationalTaskHours'
+                                    error={errors.operationalTaskHours}
                                     placeholder=""
-                                    defaultValue=""
+                                    defaultValue={data?.operationalTaskHours}
                                     register={register}
                                     disableLabel={
                                         data.operationalTaskStatus ===

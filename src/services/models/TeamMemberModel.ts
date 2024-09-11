@@ -27,7 +27,7 @@ export type TeamMemberModel = {
     payrollGroupId?: number | null;
     supervisorId?: string | null;
     clientId?: string | null;
-    ratePerHour?: number;
+    ratePerHour?: number | null;
     dateOfBirth?: string;
     jobTitle?: string | null;
     hoursPerDay?: number;
@@ -46,7 +46,7 @@ export type TeamMemberModel = {
     clientRate?: number | null;
     monthlyPayoutRate?: number | null;
     paymentFrequency?: string | null;
-    isActive?: boolean;
+    isActive?: boolean | null;
     onBoradingFee?: number;
     isEligibleForLeave?: boolean | null;
     numberOfDaysEligible?: number | null;
@@ -59,12 +59,13 @@ export type TeamMemberModel = {
     employmentContractType?: string | null;
     timesheetFrequency?: string | null;
     payrollStructure?: string | null;
-    rate?: number;
+    rate?: number | null;
     rateType?: string | null;
     taxType?: string | null;
     standardCanadianSystem?: string | null;
-    tax?: number;
+    tax?: number | null;
     payrollProcessingType?: string | null;
     paymentProcessingFeeType?: string | null;
-    paymentProcessingFee?: number;
+    paymentProcessingFee?: number | null;
+    departments?: Array<string> | null;
 };

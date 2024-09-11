@@ -7,4 +7,7 @@ export type StrippedProjectAssignee = {
     userId?: string;
     fullName?: string | null;
     disabled?: boolean;
+    projectId?: string | null;
+    projectTaskId?: string | null;
+    addTaskToTimesheet?: boolean;
 };

@@ -4,8 +4,8 @@
 import type { DashboardPaymentPartnerViewStandardResponse } from '../models/DashboardPaymentPartnerViewStandardResponse';
 import type { DashboardProjectManagementViewStandardResponse } from '../models/DashboardProjectManagementViewStandardResponse';
 import type { DashboardProjectViewStandardResponse } from '../models/DashboardProjectViewStandardResponse';
-import type { DashboardTeamMemberViewStandardResponse } from '../models/DashboardTeamMemberViewStandardResponse';
-import type { DashboardViewStandardResponse } from '../models/DashboardViewStandardResponse';
+import type { SuperAdminDashboardViewStandardResponse } from '../models/SuperAdminDashboardViewStandardResponse';
+import type { TeammemberDashboardViewStandardResponse } from '../models/TeammemberDashboardViewStandardResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -15,12 +15,12 @@ export class DashboardService {
 
     /**
      * @param superAminId 
-     * @returns DashboardViewStandardResponse Success
+     * @returns SuperAdminDashboardViewStandardResponse Success
      * @throws ApiError
      */
     public static getAdminMetrics(
 superAminId?: string,
-): CancelablePromise<DashboardViewStandardResponse> {
+): CancelablePromise<SuperAdminDashboardViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Dashboard/admin-metrics',
@@ -31,18 +31,18 @@ superAminId?: string,
     }
 
     /**
-     * @param employeeInformationId 
-     * @returns DashboardTeamMemberViewStandardResponse Success
+     * @param userId 
+     * @returns TeammemberDashboardViewStandardResponse Success
      * @throws ApiError
      */
     public static getTeamMemberMetrics(
-employeeInformationId?: string,
-): CancelablePromise<DashboardTeamMemberViewStandardResponse> {
+userId?: string,
+): CancelablePromise<TeammemberDashboardViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Dashboard/team-member-metrics',
             query: {
-                'employeeInformationId': employeeInformationId,
+                'userId': userId,
             },
         });
     }

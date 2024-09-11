@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ProjectManagerView } from './ProjectManagerView';
 import type { ProjectMetrics } from './ProjectMetrics';
 import type { ProjectTaskAsigneeView } from './ProjectTaskAsigneeView';
 
@@ -23,4 +24,5 @@ export type ProjectView = {
     projectManagerId?: string | null;
     currency?: string | null;
     assignees?: Array<ProjectTaskAsigneeView> | null;
+    projectManagers?: Array<ProjectManagerView> | null;
 };
