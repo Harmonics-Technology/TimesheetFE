@@ -22,14 +22,12 @@ import { NotificationContext } from '@components/context/NotificationContext';
 import { UserContext } from '@components/context/UserContext';
 import { useContext } from 'react';
 import {
-    DashboardView,
-    DashboardViewStandardResponse,
     UserView,
     UserViewPagedCollectionStandardResponse,
 } from 'src/services';
 
 interface DashboardProps {
-    metrics: DashboardViewStandardResponse;
+    metrics: any;
     team: UserViewPagedCollectionStandardResponse;
 }
 
@@ -38,7 +36,7 @@ function SadminDashboard({ metrics, team }: DashboardProps) {
     const role = user?.role.replaceAll(' ', '');
     const { messages, markAsRead, loading, setLimit } =
         useContext(NotificationContext);
-    const adminMetrics = metrics?.data as DashboardView;
+    const adminMetrics = metrics?.data as any;
     return (
         // <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
         <Box>

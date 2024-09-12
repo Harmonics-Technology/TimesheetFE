@@ -18,15 +18,15 @@ import { MiniCards } from '../../Dashboard/MiniCards';
 import { ProgressBar } from '../../Generics/ProgressBar';
 import { TableBox } from '../../Generics/TableBox';
 import { ChartLargeCard } from '../../Dashboard/ChartLargeCard';
-import { TopBar } from './TopBar';
 import { DashboardProjectView } from 'src/services';
 import BudgetChart from '@components/bits-utils/Charts/BudgetChart';
 import DoughnutChart from '@components/bits-utils/Charts/DoughnutChart';
 import { BarChart } from '@components/bits-utils/Charts/BarChart';
 import { Round } from '@components/generics/functions/Round';
+import { TeamTopBar } from '../SingleProject/TeamTopBar';
 import { UserContext } from '@components/context/UserContext';
 
-export const SingleProjectPage = ({
+export const TeamPrjDashboard = ({
     id,
     projects,
     metrics,
@@ -41,15 +41,13 @@ export const SingleProjectPage = ({
 }) => {
     const projectSummary = ['Task Name', 'Deadline', 'Team member', 'Workload'];
     const { user } = useContext(UserContext);
-    const role = user?.role?.replaceAll(' ', '');
+    const isProjectPm = projects?.projectManagerId == user?.id;
+
+    const isPm = user?.isOrganizationProjectManager;
+
     return (
         <Box>
-            <TopBar
-                currencies={currencies}
-                id={id}
-                data={projects}
-                users={users}
-            />
+            <TeamTopBar data={projects} id={id} />
 
             <Grid
                 mb="1.25rem"
@@ -75,12 +73,20 @@ export const SingleProjectPage = ({
                     color="#2383BD"
                 />
                 <MiniCards
-                    value={metrics?.budgetSpentAndRemain?.budgetSpent}
+                    value={
+                        !isProjectPm && !isPm
+                            ? 'N/A'
+                            : metrics?.budgetSpentAndRemain?.budgetSpent
+                    }
                     title="Total Budget Spent"
                     icon={PiMoneyBold}
                     color="#F8C200"
-                    isPrice
-                    allBudget={[{ currency: projects.currency }]}
+                    isPrice={!isProjectPm && !isPm ? false : true}
+                    allBudget={
+                        !isProjectPm && !isPm
+                            ? []
+                            : [{ currency: projects.currency }]
+                    }
                     budget={{ currency: projects.currency }}
                 />
             </Grid>
@@ -89,11 +95,7 @@ export const SingleProjectPage = ({
                 templateColumns={['repeat(1,1fr)', '2fr 1fr']}
                 gap="1.06rem"
             >
-                <TableBox
-                    title="Upcoming Deadlines"
-                    tableHead={projectSummary}
-                    url={`/${role}/project-management/projects/${id}/project-task`}
-                >
+                <TableBox title="Upcoming Deadlines" tableHead={projectSummary}>
                     {metrics?.upcomingDeadlines?.slice(0, 3)?.map((x) => {
                         const status = x.status?.toLowerCase();
                         const pastDate =
@@ -143,16 +145,26 @@ export const SingleProjectPage = ({
                         chart={[
                             {
                                 name: 'Budget spent',
-                                count: metrics?.budgetSpentAndRemain
-                                    ?.budgetSpent,
+                                count:
+                                    !isProjectPm && !isPm
+                                        ? 0
+                                        : metrics?.budgetSpentAndRemain
+                                              ?.budgetSpent,
                             },
                             {
                                 name: 'Remaining Budget',
-                                count: metrics?.budgetSpentAndRemain
-                                    ?.budgetRemain,
+                                count:
+                                    !isProjectPm && !isPm
+                                        ? 0
+                                        : metrics?.budgetSpentAndRemain
+                                              ?.budgetRemain,
                             },
                         ]}
-                        total={metrics?.budgetSpentAndRemain?.budget}
+                        total={
+                            !isProjectPm && !isPm
+                                ? 'N/A'
+                                : metrics?.budgetSpentAndRemain?.budget
+                        }
                     />
                 </ChartMiniCard>
             </Grid>
@@ -183,8 +195,8 @@ export const SingleProjectPage = ({
                     />
                 </ChartMiniCard>
                 <ChartLargeCard
-                    title="Number of Task Created"
-                    sub="Project Task activity Rate"
+                    title="Number of Task completed"
+                    sub="Operational Vs Project Task activity Rate"
                 >
                     <BarChart chart={metrics?.monthlyCompletedTasks} />
                 </ChartLargeCard>

@@ -12,9 +12,6 @@ import {
 } from 'src/services';
 
 const projectsIndex = ({
-    iProjects,
-    nProjects,
-    cProjects,
     projects,
     users,
     superAdminId,
@@ -24,9 +21,6 @@ const projectsIndex = ({
     projectMangers,
     currencies,
 }: {
-    iProjects: any;
-    nProjects: any;
-    cProjects: any;
     projects: any;
     users: any;
     superAdminId: string;
@@ -40,9 +34,7 @@ const projectsIndex = ({
         <>
             {isPm ? (
                 <ProjectPage
-                    iProjects={iProjects}
-                    nProjects={nProjects}
-                    cProjects={cProjects}
+                    projects={projects}
                     users={users}
                     superAdminId={superAdminId}
                     counts={counts}
@@ -75,36 +67,37 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const userId = user.id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const isPm = user.isOrganizationProjectManager;
-        const fetchProjectByStatus = (status) => {
-            const data = ProjectManagementService.listStrippedProject(
-                pagingOptions.offset,
-                pagingOptions.limit,
-                superAdminId,
-                status,
-                undefined,
-                pagingOptions.search,
-            );
-            return data;
-        };
+
         //
         try {
-            const nProgress = await fetchProjectByStatus(1);
-            const iProgress = await fetchProjectByStatus(2);
-            const cProgress = await fetchProjectByStatus(3);
+            // const nProgress = await fetchProjectByStatus(1);
+            // const iProgress = await fetchProjectByStatus(2);
+            // const cProgress = await fetchProjectByStatus(3);
+
+            // const fetchProjectByStatus = () => {
             const data = await ProjectManagementService.listStrippedProject(
                 pagingOptions.offset,
                 pagingOptions.limit,
                 superAdminId,
                 pagingOptions.status,
-                userId,
+                isPm ? undefined : userId,
                 pagingOptions.search,
             );
-            const users = await UserService.listUsers(
-                'Team Member',
+            //     return data;
+            // };
+
+            // console.log({ iProgress });
+            // const data = await ProjectManagementService.listStrippedProject(
+            //     pagingOptions.offset,
+            //     pagingOptions.limit,
+            //     superAdminId,
+            //     pagingOptions.status,
+            //     userId,
+            //     pagingOptions.search,
+            // );
+            const users = await UserService.listUsersByRoles(
                 superAdminId,
-                pagingOptions.offset,
-                80,
-                pagingOptions.search,
+                'team member,super admin,admin',
             );
 
             const access =
@@ -139,9 +132,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     access: access.data,
                     // projectMangers: projectMangers.data,
                     isPm,
-                    iProjects: iProgress.data,
-                    nProjects: nProgress.data,
-                    cProjects: cProgress.data,
                     currencies: currencies.data,
                 },
             };

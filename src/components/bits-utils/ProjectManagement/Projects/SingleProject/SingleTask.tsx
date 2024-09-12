@@ -89,6 +89,12 @@ export const SingleTask = ({
     const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
     const [status, setStatus] = useState(task?.status?.toLowerCase());
 
+    const {
+        isOpen: isOpens,
+        onOpen: onOpens,
+        onClose: onCloses,
+    } = useDisclosure();
+
     const openModal = (item: any) => {
         setSubTask({ ...item, isEdit: true });
         onOpen();
@@ -96,11 +102,7 @@ export const SingleTask = ({
     const pastDate = moment().diff(moment(task?.endDate), 'days') > 0;
 
     const [taskStatus, setTaskStatus] = useState();
-    const {
-        isOpen: isOpens,
-        onOpen: onOpens,
-        onClose: onCloses,
-    } = useDisclosure();
+
     const [loadings, setLoadings] = useState({ id: '' });
     const taskStat = (x: any) => {
         setTaskStatus(x);
@@ -416,11 +418,6 @@ export const SingleTask = ({
                                                     <MenuItem
                                                         onClick={onOpens}
                                                         w="full"
-                                                        isDisabled={
-                                                            taskStatus ||
-                                                            x?.status?.toLowerCase() ==
-                                                                'completed'
-                                                        }
                                                     >
                                                         <Icon
                                                             as={MdVerified}
@@ -455,12 +452,13 @@ export const SingleTask = ({
                                                     {
                                                         type: 3,
                                                         taskId: x?.id,
+                                                        status: x?.status,
                                                     },
                                                     setLoadings,
                                                     toast,
                                                     taskStat,
                                                     router,
-                                                    onClose,
+                                                    onCloses,
                                                 )
                                             }
                                             loading={loading.id === x?.id}
@@ -518,7 +516,7 @@ export const SingleTask = ({
                     onClose={onClosed}
                     onSubmit={() =>
                         markAsCompleted(
-                            { type: 2, taskId: task.id },
+                            { type: 2, taskId: task.id, status: task?.status },
                             setLoading,
                             toast,
                             setStatus,

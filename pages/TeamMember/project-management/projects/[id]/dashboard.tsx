@@ -1,27 +1,28 @@
-import { Budgets } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/Budgets';
+import { TeamPrjDashboard } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/TeamPrjDashboard';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
+    DashboardService,
     ProjectManagementService,
     UserService,
     UtilityService,
 } from 'src/services';
 
-const budget = ({ id, project, budgets, users, currencies }) => {
+const projectDashboard = ({ id, projects, metrics, users, currencies }) => {
     return (
-        <Budgets
+        <TeamPrjDashboard
             id={id}
-            project={project}
-            budgets={budgets}
+            projects={projects}
+            metrics={metrics}
             users={users}
             currencies={currencies}
         />
     );
 };
 
-export default budget;
+export default projectDashboard;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
@@ -30,12 +31,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const { id } = ctx.query;
         try {
             const data = await ProjectManagementService.getProject(id);
-            const budgets =
-                await ProjectManagementService.listProjectAssigneeDetail(
-                    pagingOptions.offset,
-                    pagingOptions.limit,
-                    id,
-                );
+            const metrics = await DashboardService.getProjectDashboard(id);
             const users = await UserService.listUsersByRoles(
                 superAdminId,
                 'team member,super admin,admin',
@@ -43,14 +39,16 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const currencies = await UtilityService.listCountries();
             return {
                 props: {
-                    project: data.data,
-                    budgets: budgets.data,
-                    users: users.data,
+                    projects: data.data,
+                    superAdminId,
+                    metrics: metrics.data,
                     id,
+                    users: users.data,
                     currencies: currencies.data,
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     data: [],

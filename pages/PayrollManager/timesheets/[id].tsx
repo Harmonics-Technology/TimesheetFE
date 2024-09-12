@@ -1,6 +1,7 @@
 import HidePage from '@components/bits-utils/HidePage';
 import useWindowSize from '@components/generics/useWindowSize';
 import { withPageAuth } from '@components/generics/withPageAuth';
+import TimesheetAdmin from '@components/subpages/TimesheetAdmin';
 import TimesheetPayrollManager from '@components/subpages/TimesheetPayrollManager';
 import { endOfMonth, startOfMonth } from 'date-fns';
 import moment from 'moment';
@@ -33,7 +34,14 @@ function SingleTimeSheet({
     // const size: Size = useWindowSize();
     return (
         <>
-            <TimesheetPayrollManager
+            {/* <TimesheetPayrollManager
+                timeSheets={timeSheets}
+                id={id}
+                payPeriod={payPeriod}
+                date={date}
+                end={end}
+            /> */}
+            <TimesheetAdmin
                 timeSheets={timeSheets}
                 id={id}
                 payPeriod={payPeriod}

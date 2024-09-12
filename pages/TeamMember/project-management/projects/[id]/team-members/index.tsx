@@ -1,4 +1,5 @@
-import { Budgets } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/Budgets';
+import { TeamMembersView } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/TeamMembersView';
+import { TeamMemberAllView } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/TeamMemberAllView';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
@@ -9,19 +10,18 @@ import {
     UtilityService,
 } from 'src/services';
 
-const budget = ({ id, project, budgets, users, currencies }) => {
+const index = ({ id, teams, users, currencies }) => {
     return (
-        <Budgets
+        <TeamMemberAllView
             id={id}
-            project={project}
-            budgets={budgets}
+            teams={teams}
             users={users}
             currencies={currencies}
         />
     );
 };
 
-export default budget;
+export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
@@ -30,12 +30,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const { id } = ctx.query;
         try {
             const data = await ProjectManagementService.getProject(id);
-            const budgets =
-                await ProjectManagementService.listProjectAssigneeDetail(
-                    pagingOptions.offset,
-                    pagingOptions.limit,
-                    id,
-                );
             const users = await UserService.listUsersByRoles(
                 superAdminId,
                 'team member,super admin,admin',
@@ -43,8 +37,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const currencies = await UtilityService.listCountries();
             return {
                 props: {
-                    project: data.data,
-                    budgets: budgets.data,
+                    teams: data.data,
                     users: users.data,
                     id,
                     currencies: currencies.data,

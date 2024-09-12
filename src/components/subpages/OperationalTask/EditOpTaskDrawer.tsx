@@ -105,6 +105,7 @@ export const EditOpTaskDrawer = ({
     };
     const statuses = [
         { id: 1, name: 'To Do' },
+
         { id: 2, name: 'In Progress' },
         { id: 3, name: 'Completed' },
     ];
@@ -147,10 +148,13 @@ export const EditOpTaskDrawer = ({
     };
     const onSubmit = async (value: ProjectTaskModel) => {
         value.isAssignedToMe = isAssignedToMe;
-        value.assignedUsers = isAssignedToMe
+        value.department = department;
+        if (taskType !== 'Private') {
+            value.isAssignedToMe = false;
+        }
+        value.assignedUsers = value.isAssignedToMe
             ? [id || superAdminId]
             : value.assignedUsers;
-        value.department = department;
         try {
             const result = await ProjectManagementService.updateTask(value);
             if (result.status) {
@@ -372,7 +376,7 @@ export const EditOpTaskDrawer = ({
                             name="startDate"
                             label="Start Date"
                             error={errors.startDate}
-                            min={new DateObject()}
+                            // min={new DateObject()}
                             defaultValue={moment(data?.startDate)?.format(
                                 'YYYY-MM-DD',
                             )}
@@ -382,7 +386,7 @@ export const EditOpTaskDrawer = ({
                             name="endDate"
                             label="End Date"
                             error={errors.endDate}
-                            min={new DateObject().add(1, 'days')}
+                            // min={new DateObject().add(1, 'days')}
                             defaultValue={moment(data?.endDate)?.format(
                                 'YYYY-MM-DD',
                             )}

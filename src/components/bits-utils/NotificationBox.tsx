@@ -13,6 +13,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import Skeleton from 'react-loading-skeleton';
 import shadeColor from '@components/generics/functions/shadeColor';
 import { UserContext } from '@components/context/UserContext';
+import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 
 export const NotificationBox = ({
     data,
@@ -27,18 +28,20 @@ export const NotificationBox = ({
 }) => {
     const unRead = data?.data?.value?.filter((x) => !x.isRead);
     const { user } = useContext(UserContext);
+    const { controls } = useContext(OnboardingFeeContext);
+    const isTfa = controls?.twoFactorEnabled;
 
     return (
         <Box
             pos="fixed"
-            top={user?.twoFactorEnabled ? '12%' : '18.3%'}
+            top={user?.twoFactorEnabled || !isTfa ? '12%' : '18.3%'}
             w="21.5%"
             bgColor="white"
             boxShadow="md"
             borderRadius="10px"
             right="2rem"
             p="1rem .8rem"
-            h={user?.twoFactorEnabled ? '87vh' : '80vh'}
+            h={user?.twoFactorEnabled || !isTfa ? '87vh' : '80vh'}
             overflow="auto"
 
             // h="fit-content"
@@ -143,22 +146,24 @@ export const NotificationBox = ({
                 </>
             )}
 
-            <HStack justify="center">
-                <Text
-                    mb="0"
-                    mt="1rem"
-                    fontSize=".8rem"
-                    fontWeight="500"
-                    cursor="pointer"
-                    onClick={() => setLimit((prev) => prev + 10)}
-                    p=".5rem 1.5rem"
-                    _hover={{
-                        bgColor: shadeColor('#2EAFA3', 0.1),
-                    }}
-                >
-                    Load More
-                </Text>
-            </HStack>
+            {data?.data?.next?.href && (
+                <HStack justify="center">
+                    <Text
+                        mb="0"
+                        mt="1rem"
+                        fontSize=".8rem"
+                        fontWeight="500"
+                        cursor="pointer"
+                        onClick={() => setLimit((prev) => prev + 10)}
+                        p=".5rem 1.5rem"
+                        _hover={{
+                            bgColor: shadeColor('#2EAFA3', 0.1),
+                        }}
+                    >
+                        Load More
+                    </Text>
+                </HStack>
+            )}
 
             {/* <Pagination data={data} /> */}
         </Box>

@@ -11,6 +11,16 @@ export default async function markAsCompleted(
     onClosed,
 ) {
     // const { showToastSuccess, showToastError } = useToastMessages();
+    if (data?.isCompleted) {
+        toast({
+            title: 'Item has already been marked as completed',
+            status: 'error',
+            isClosable: true,
+            position: 'top-right',
+        });
+        onClosed();
+        return;
+    }
     data.isCompleted = true;
     setLoading({ id: data.taskId });
     try {
@@ -26,6 +36,7 @@ export default async function markAsCompleted(
             setLoading({ id: '' });
             router.replace(router.asPath);
             setStatus('completed');
+            router.reload();
             onClosed();
             return;
         }

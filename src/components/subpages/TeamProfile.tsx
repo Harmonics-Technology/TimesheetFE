@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Flex,
+    FormLabel,
     Grid,
     HStack,
     Text,
@@ -45,6 +46,7 @@ import { LicenseEditBox } from '@components/bits-utils/LicenseEditBox';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import ContractTable from '@components/bits-utils/ContractTable';
 import { LicenseRevoke } from '@components/bits-utils/LicenseRevoke';
+import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
 
 const schema = yup.object().shape({});
 interface TeamProfileProps {
@@ -124,7 +126,7 @@ function TeamProfile({
                 userProfile?.employeeInformation?.invoiceGenerationType,
             enableFinancials:
                 userProfile?.employeeInformation?.enableFinancials,
-            department: userProfile?.employeeInformation?.department,
+            departments: userProfile?.userDepartments as any,
             address: userProfile?.address,
             clientSubscriptionId: userProfile?.clientSubscriptionId,
             employmentContractType:
@@ -291,6 +293,30 @@ function TeamProfile({
         setSelectedLicense(undefined);
     };
 
+    // const joinedDept = [
+    //     ...userProfile?.employeeInformation?.department,
+    //     userProfile?.userDepartments,
+    // ];
+    const [selectedDepartment, setSelectedDepartment] = useState<any>(
+        userProfile?.userDepartments?.map((obj) => ({
+            id: obj?.department?.id,
+            name: obj?.department?.name,
+        })) || [],
+    );
+
+    console.log({ selectedDepartment });
+    //
+    const addDepartment = (user) => {
+        const filtered = selectedDepartment?.find((x) => x.id === user.id);
+        if (filtered) return;
+        setSelectedDepartment([...selectedDepartment, user]);
+    };
+    //
+    const removeDepartment = (id) => {
+        const filtered = selectedDepartment?.filter((x) => x.id !== id);
+        setSelectedDepartment(filtered);
+    };
+
     const onSubmit = async (data: TeamMemberModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
 
@@ -380,6 +406,13 @@ function TeamProfile({
     const paymentPartnerCurrency = paymentPartner?.find(
         (x) => x.id === watch('paymentPartnerId'),
     )?.currency;
+
+    useEffect(() => {
+        setValue(
+            'departments',
+            selectedDepartment.map((x) => x.id),
+        );
+    }, [selectedDepartment]);
 
     // console.log({ fee: watch('dateOfBirth'), fin: watch('enableFinancials') });
     return (
@@ -641,7 +674,31 @@ function TeamProfile({
                                     </>
                                 }
                             />
-                            <PrimarySelect<TeamMemberModel>
+                            <Box w="full">
+                                <FormLabel
+                                    textTransform="capitalize"
+                                    width="fit-content"
+                                    fontSize=".8rem"
+                                >
+                                    Department
+                                </FormLabel>
+
+                                <CustomSelectBox
+                                    data={department}
+                                    updateFunction={addDepartment}
+                                    items={selectedDepartment}
+                                    customKeys={{
+                                        key: 'id',
+                                        label: 'name',
+                                    }}
+                                    checkbox={true}
+                                    id="users"
+                                    error={errors?.departments}
+                                    removeFn={removeDepartment}
+                                    // single
+                                />
+                            </Box>
+                            {/* <PrimarySelect<TeamMemberModel>
                                 register={register}
                                 error={errors.department}
                                 name="department"
@@ -656,7 +713,7 @@ function TeamProfile({
                                         ))}
                                     </>
                                 }
-                            />
+                            /> */}
                             <PrimarySelect<TeamMemberModel>
                                 register={register}
                                 error={errors.enableFinancials}

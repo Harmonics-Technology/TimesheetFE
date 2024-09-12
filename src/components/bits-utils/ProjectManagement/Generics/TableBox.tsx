@@ -1,6 +1,7 @@
-import { Box, Flex, Link, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 import { TableCard } from './TableCard';
+import Link from 'next/link';
 
 export const TableBox = ({
     title,
@@ -34,7 +35,7 @@ export const TableBox = ({
                 <TableCard tableHead={tableHead}>{children}</TableCard>
             </Box>
             <Flex justify="flex-end" p="1rem">
-                <Link href={url}>
+                <Link href={(url as string) || ''} passHref>
                     <Text color="brand.400" fontSize=".75rem" fontWeight="500">
                         View more
                     </Text>

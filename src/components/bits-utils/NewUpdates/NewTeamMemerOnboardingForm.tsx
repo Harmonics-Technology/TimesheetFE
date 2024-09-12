@@ -7,6 +7,7 @@ import {
     HStack,
     Button,
     DrawerFooter,
+    FormLabel,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DateObject } from 'react-multi-date-picker';
@@ -37,6 +38,7 @@ import { RiMailSendFill } from 'react-icons/ri';
 import { ShowPrompt } from '../ProjectManagement/Modals/ShowPrompt';
 import UploadCareWidget from '../UploadCareWidget';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import { CustomSelectBox } from '../ProjectManagement/Generics/CustomSelectBox';
 
 export const NewTeamMemerOnboardingForm = ({
     isOpen,
@@ -289,6 +291,19 @@ export const NewTeamMemerOnboardingForm = ({
         getPaymentPartnerFees(paymentPartnerId);
     }, [paymentPartnerId]);
 
+    const [selectedDepartment, setSelectedDepartment] = useState<any>([]);
+    //
+    const addDepartment = (user) => {
+        const filtered = selectedDepartment?.find((x) => x.id === user.id);
+        if (filtered) return;
+        setSelectedDepartment([...selectedDepartment, user]);
+    };
+    //
+    const removeDepartment = (id) => {
+        const filtered = selectedDepartment?.filter((x) => x.id !== id);
+        setSelectedDepartment(filtered);
+    };
+
     // console.log({ errors });
 
     const onSubmit = async (data: TeamMemberModel) => {
@@ -406,6 +421,13 @@ export const NewTeamMemerOnboardingForm = ({
 
     const taxes = isIncSelected ? ['hst'] : ['hst', 'custom', 'exempt'];
 
+    useEffect(() => {
+        setValue(
+            'departments',
+            selectedDepartment.map((x) => x.id),
+        );
+    }, [selectedDepartment]);
+
     return (
         <DrawerWrapper
             onClose={closeModal}
@@ -499,7 +521,31 @@ export const NewTeamMemerOnboardingForm = ({
                             defaultValue=""
                             register={register}
                         />
-                        <PrimarySelect<TeamMemberModel>
+                        <Box w="full">
+                            <FormLabel
+                                textTransform="capitalize"
+                                width="fit-content"
+                                fontSize=".8rem"
+                            >
+                                Department
+                            </FormLabel>
+
+                            <CustomSelectBox
+                                data={department}
+                                updateFunction={addDepartment}
+                                items={selectedDepartment}
+                                customKeys={{
+                                    key: 'id',
+                                    label: 'name',
+                                }}
+                                checkbox={true}
+                                id="users"
+                                error={errors?.departments}
+                                removeFn={removeDepartment}
+                                // single
+                            />
+                        </Box>
+                        {/* <PrimarySelect<TeamMemberModel>
                             register={register}
                             error={errors.department}
                             name="department"
@@ -514,7 +560,7 @@ export const NewTeamMemerOnboardingForm = ({
                                     ))}
                                 </>
                             }
-                        />
+                        /> */}
                         {clientType && (
                             <PrimarySelect<TeamMemberModel>
                                 register={register}

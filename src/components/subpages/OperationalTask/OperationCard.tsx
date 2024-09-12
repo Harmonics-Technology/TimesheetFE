@@ -1,7 +1,20 @@
-import { Avatar, Box, HStack, Text, VStack } from '@chakra-ui/react';
+import {
+    Avatar,
+    Box,
+    HStack,
+    Spinner,
+    Text,
+    useDisclosure,
+    useToast,
+    VStack,
+} from '@chakra-ui/react';
+import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
 import shadeColor from '@components/generics/functions/shadeColor';
-import React from 'react';
-import { StrippedUserView } from 'src/services';
+import useComponentVisible from '@components/generics/useComponentVisible';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { FaEllipsisH } from 'react-icons/fa';
+import { ProjectManagementService, StrippedUserView } from 'src/services';
 
 interface IOperationProps {
     text: string;
@@ -14,6 +27,7 @@ interface IOperationProps {
     onDragStart: any;
     onDragEnd: any;
     assignees?: any;
+    id: any;
 }
 
 export const OperationCard = ({
@@ -27,7 +41,67 @@ export const OperationCard = ({
     onDragStart,
     onDragEnd,
     assignees,
+    id,
 }: IOperationProps) => {
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    const toast = useToast();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { ref, isComponentVisible, setIsComponentVisible } =
+        useComponentVisible(false);
+    const {
+        isOpen: isOpens,
+        onOpen: onOpens,
+        onClose: onCloses,
+    } = useDisclosure();
+
+    const deleteTask = async () => {
+        setLoading(true);
+        try {
+            const data = await ProjectManagementService.deleteOperationalTask(
+                id,
+            );
+            if (data.status) {
+                setLoading(false);
+                toast({
+                    title: data.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                onCloses();
+                router.replace(router.asPath);
+                return;
+            }
+        } catch (err: any) {
+            setLoading(false);
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
+    const NewMenuItem = ({ name, onClick }) => {
+        return (
+            <HStack
+                onClick={onClick}
+                w="full"
+                bgColor="white"
+                _hover={{ bgColor: 'gray.200' }}
+                fontSize=".75rem"
+                py=".3rem"
+                px=".5rem"
+                minW="100px"
+                cursor="pointer"
+                transition=".5s ease"
+            >
+                <Text>{name}</Text>
+            </HStack>
+        );
+    };
     return (
         <Box
             borderRadius="16px"
@@ -112,8 +186,69 @@ export const OperationCard = ({
                     <Text fontWeight={400} color="#787486" fontSize="12px">
                         {subBtm}
                     </Text>
+                    <Box
+                        pos="relative"
+                        onClick={(e) => e.stopPropagation()}
+                        ref={ref}
+                    >
+                        <Box
+                            fontSize="1rem"
+                            pl="1rem"
+                            fontWeight="bold"
+                            cursor="pointer"
+                            color="brand.300"
+                            onClick={() =>
+                                setIsComponentVisible((prev) => !prev)
+                            }
+                        >
+                            {loading ? <Spinner size="sm" /> : <FaEllipsisH />}
+                        </Box>
+                        {isComponentVisible && (
+                            <VStack
+                                align="flex-start"
+                                gap="0"
+                                pos="absolute"
+                                bottom={'20px'}
+                                right={0}
+                                boxShadow="md"
+                                borderRadius="6px"
+                                bgColor="white"
+                                overflow="hidden"
+                            >
+                                <NewMenuItem name="View" onClick={onClick} />
+                                <NewMenuItem
+                                    name="Delete"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onOpen();
+                                    }}
+                                />
+                            </VStack>
+                        )}
+                    </Box>
                 </HStack>
             </VStack>
+            {isOpen && (
+                <ShowPrompt
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    onSubmit={() => {
+                        onClose();
+                        onOpens();
+                    }}
+                    loading={loading}
+                    text={`Are you sure you want to delete this task?`}
+                />
+            )}
+            {isOpens && (
+                <ShowPrompt
+                    isOpen={isOpens}
+                    onClose={onCloses}
+                    onSubmit={deleteTask}
+                    loading={loading}
+                    text={`Are you sure you want to delete this task? <br/> This action cannot be undone`}
+                />
+            )}
         </Box>
     );
 };

@@ -1,4 +1,4 @@
-import { Budgets } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/Budgets';
+import { TeamGantChart } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/TeamGantChart';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
@@ -9,44 +9,48 @@ import {
     UtilityService,
 } from 'src/services';
 
-const budget = ({ id, project, budgets, users, currencies }) => {
+const index = ({ id, project, tasks, users, currencies }) => {
     return (
-        <Budgets
+        <TeamGantChart
             id={id}
             project={project}
-            budgets={budgets}
+            tasks={tasks}
             users={users}
             currencies={currencies}
         />
     );
 };
 
-export default budget;
+export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const { id } = ctx.query;
         try {
             const data = await ProjectManagementService.getProject(id);
-            const budgets =
-                await ProjectManagementService.listProjectAssigneeDetail(
-                    pagingOptions.offset,
-                    pagingOptions.limit,
-                    id,
-                );
+            const tasks = await ProjectManagementService.listTasks(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                superAdminId,
+                id,
+                pagingOptions.status,
+                undefined,
+                pagingOptions.search,
+            );
             const users = await UserService.listUsersByRoles(
                 superAdminId,
                 'team member,super admin,admin',
             );
             const currencies = await UtilityService.listCountries();
+
             return {
                 props: {
                     project: data.data,
-                    budgets: budgets.data,
-                    users: users.data,
                     id,
+                    tasks: tasks.data,
+                    users: users.data,
                     currencies: currencies.data,
                 },
             };

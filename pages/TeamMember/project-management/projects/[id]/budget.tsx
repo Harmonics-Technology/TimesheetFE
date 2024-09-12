@@ -1,4 +1,5 @@
 import { Budgets } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/Budgets';
+import { TeamBudgets } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/TeamBudgetPage';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
@@ -11,7 +12,7 @@ import {
 
 const budget = ({ id, project, budgets, users, currencies }) => {
     return (
-        <Budgets
+        <TeamBudgets
             id={id}
             project={project}
             budgets={budgets}

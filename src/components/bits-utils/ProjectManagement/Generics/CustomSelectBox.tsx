@@ -55,16 +55,29 @@ export const CustomSelectBox = ({
     } = useComponentVisible(false);
     const dataAsFiltered = single
         ? data
-        : data.filter((x) => !items?.some((user) => user.id === x.id));
-    const newFormattedData = dataAsFiltered?.map((x: any) => {
-        return {
-            label: eval(`x.${customKeys.label}`),
-            key: x[customKeys.key],
-            used: x[customKeys?.used],
-            total: x[customKeys.total],
-        };
-    });
-    const [newData, setNewData] = useState(newFormattedData);
+        : data?.filter((x) => !items?.some((user) => user.id === x.id));
+    const newFormattedData = checkbox
+        ? data?.map((x: any) => {
+              return {
+                  label: eval(`x.${customKeys.label}`),
+                  key: x[customKeys.key],
+                  used: x[customKeys?.used],
+                  total: x[customKeys.total],
+              };
+          })
+        : dataAsFiltered?.map((x: any) => {
+              return {
+                  label: eval(`x.${customKeys.label}`),
+                  key: x[customKeys.key],
+                  used: x[customKeys?.used],
+                  total: x[customKeys.total],
+              };
+          });
+
+    let newData = newFormattedData;
+
+    // const [newData, setNewData] = useState(newFormattedData);
+    // console.log({ data, dataAsFiltered, newData });
     const checkBoxFn = (x) => {
         const exist = single
             ? items?.[customKeys.key] == x.id
@@ -94,18 +107,15 @@ export const CustomSelectBox = ({
         const filteredData = newFormattedData.filter((x: any) => {
             return x.label.toLowerCase().includes(e.target.value.toLowerCase());
         });
-        setNewData(filteredData);
+        newData = filteredData;
     };
 
     useEffect(() => {
         if (!checkbox) {
-            setNewData(newFormattedData);
+            newData = newFormattedData;
         }
     }, [selected]);
 
-    useEffect(() => {
-        setNewData(newFormattedData);
-    }, [data]);
     return (
         <FormControl
             isInvalid={

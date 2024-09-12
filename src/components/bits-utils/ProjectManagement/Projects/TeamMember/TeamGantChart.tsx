@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { TopBar } from './TopBar';
+import { Gantt, Task, ViewMode } from 'gantt-task-react';
+import 'gantt-task-react/dist/index.css';
 import {
     Box,
     Button,
@@ -12,7 +13,7 @@ import {
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import { AddNewTaskDrawer } from '../../Modals/AddNewTaskDrawer';
 import { ProjectTaskViewPagedCollection, ProjectView } from 'src/services';
-import moment from 'moment';
+import { TeamTopBar } from '../SingleProject/TeamTopBar';
 import Highcharts from 'highcharts';
 import HighchartsExporting from 'highcharts/modules/exporting';
 import highchartsGantt from 'highcharts/modules/gantt';
@@ -24,7 +25,7 @@ if (typeof Highcharts === 'object') {
     highchartsGantt(Highcharts);
 }
 
-export const GantChart = ({
+export const TeamGantChart = ({
     id,
     project,
     tasks,
@@ -213,6 +214,22 @@ export const GantChart = ({
                 ],
             },
         },
+        // yAxis: {
+        //     uniqueNames: true,
+        //     labels: {
+        //         style: {
+        //             fontFamily: 'Rubik, sans-serif', // Change font family
+        //             fontWeight: 'normal',
+        //             fontSize: '13px',
+        //         },
+        //     },
+        //     title: {
+        //         text: 'Task Name',
+        //         style: {
+        //             fontFamily: 'Rubik, sans-serif',
+        //         },
+        //     },
+        // },
         plotOptions: {
             series: {
                 groupPadding: 0,
@@ -288,14 +305,8 @@ export const GantChart = ({
 
     return (
         <Box>
-            <TopBar
-                currencies={currencies}
-                id={id}
-                data={project}
-                users={users}
-                // noTitle
-            />
-            <HStack py="1rem" justify="space-between" display="none" mt="1rem">
+            <TeamTopBar data={project} id={id} />
+            <HStack py="1rem" justify="space-between">
                 <HStack w="17%">
                     <HStack w="full">
                         <Image

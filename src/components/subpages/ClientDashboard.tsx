@@ -15,9 +15,6 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import moment from 'moment';
 import { useContext, useState } from 'react';
 import {
-    DashboardTeamMemberView,
-    DashboardView,
-    DashboardViewStandardResponse,
     ExpenseView,
     InvoiceView,
     InvoiceViewPagedCollectionStandardResponse,
@@ -32,7 +29,7 @@ import PayrollInvoice from './PayrollInvoice';
 import ClientInvoicedInvoice from './ClientInvoicedInvoice';
 
 interface DashboardProps {
-    metrics: DashboardViewStandardResponse;
+    metrics: any;
     supervisor: UserViewPagedCollectionStandardResponse;
     team: UserViewPagedCollectionStandardResponse;
     invoice: InvoiceViewPagedCollectionStandardResponse;
@@ -47,7 +44,7 @@ function ClientDashboard({
     team,
     invoice,
 }: DashboardProps) {
-    const adminMetrics = metrics?.data as DashboardTeamMemberView;
+    const adminMetrics = metrics?.data as any;
     const clientMetrics = metrics?.data as DashboardClientView;
     const { messages, markAsRead, loading, setLimit } =
         useContext(NotificationContext);
