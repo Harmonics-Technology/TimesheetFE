@@ -84,6 +84,7 @@ const UpdateTaskModal = ({
     totalHoursSpent?: any;
 
 }) => {
+    console.log("this is the task", task)
     const pastDate = moment().diff(moment(data?.endDate), 'days') > 0;
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
@@ -232,9 +233,7 @@ const UpdateTaskModal = ({
                                     label="Start Date"
                                     error={errors.startDate}
                                     min={new DateObject()}
-                                    // defaultValue={moment(
-                                    //     data?.startDate,
-                                    // )?.format('YYYY-MM-DD')}
+                                    // defaultValue={new Date(data?.startDate)}
                                 />
                                 <PrimaryDate<ProjectManagementTimesheetModel>
                                     control={control}

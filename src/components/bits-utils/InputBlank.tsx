@@ -52,12 +52,12 @@ function InputBlank({
                 <Input
                     type={type}
                     placeholder={placeholder}
-                    variant="outline"
+                    variant="filled"
                     disabled={disableLabel}
                     onChange={onChange}
                     defaultValue={defaultValue}
                     value={value}
-                    borderColor="gray.400"
+                    // borderColor="gray.400"
                     borderRadius="0"
                     h="2.6rem"
                     readOnly={readonly}

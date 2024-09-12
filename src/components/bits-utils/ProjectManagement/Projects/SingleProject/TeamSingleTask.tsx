@@ -91,6 +91,7 @@ export const TeamSingleTask = ({
     access: any;
     pm: any;
 }) => {
+    console.log("🚀 ~ task:", task)
     const tableHead = [
         'Subtask Name',
         'Hours Spent',
@@ -150,7 +151,7 @@ export const TeamSingleTask = ({
     const hasAccess =
         access?.projectMembersTaskCreation ||
         (access?.assignedPMTaskCreation && isPm);
-    const isOrgPm = pm.value.find((x) => x.id == user?.id);
+    const isOrgPm = pm?.value.find((x) => x.id == user?.id);
 
     const [sliderValue, setSliderValue] = useState(
         task?.percentageOfCompletion,
@@ -224,7 +225,7 @@ export const TeamSingleTask = ({
 
     const projectTaskAssineeId = project?.assignees?.find(
         (item) => item.userId === user?.id,
-    ).id;
+    )?.id;
 
     const getProjectAssigneeDetails = async () => {
         try {
@@ -391,9 +392,7 @@ export const TeamSingleTask = ({
                                 name="startDate"
                                 label="Start Date"
                                 error={errors.startDate}
-                                // defaultValue={moment(task?.startDate).format(
-                                //     'DD MM YYYY',
-                                // )}
+                                defaultValue={new Date(task.startDate)}
                                 // max={new DateObject().subtract(1, 'days')}
                             />
                             <PrimaryDate<ProjectManagementTimesheetModel>
@@ -401,14 +400,12 @@ export const TeamSingleTask = ({
                                 name="endDate"
                                 label="End Date"
                                 error={errors.endDate}
-                                // defaultValue={moment(task?.endDate).format(
-                                //     'DD MM YYYY',
-                                // )}
+                                defaultValue={new Date(task.endDate)}
                                 // max={new DateObject().subtract(1, 'days')}
                             />
                             <Box>
                                 <Flex alignItems="flex-end" gap="7px" h="100%">
-                                    <Box h="100%">
+                                    <Box h="100%" w={'100%'}>
                                         <PrimaryInput<ProjectManagementTimesheetModel>
                                             name="hours"
                                             label="Add Hours"
@@ -500,7 +497,7 @@ export const TeamSingleTask = ({
                                 />
                             </Box>
 
-                            <InputBlank
+                            <InputBlank 
                                 label="Total Hours Spent"
                                 defaultValue={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
                                 disableLabel={true}
