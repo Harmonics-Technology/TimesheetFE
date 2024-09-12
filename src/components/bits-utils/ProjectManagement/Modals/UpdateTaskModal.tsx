@@ -91,41 +91,41 @@ const UpdateTaskModal = ({
     const toast = useToast();
     const [hours, setHours] = useState<number>(0);
     
-    const updateProgress = async () => {
-        setIsLoading(true);
-        try {
-            const res = await ProjectManagementService.updateSubtaskProgress(
-                data?.id,
-                sliderValue,
-            );
-            if (res.status) {
-                setIsLoading(false);
-                router.replace(router.asPath);
-                toast({
-                    title: res.message,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                return;
-            }
-            setIsLoading(false);
-            toast({
-                title: res.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        } catch (err: any) {
-            setIsLoading(false);
-            toast({
-                title: err?.body?.message || err.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        }
-    };
+    // const updateProgress = async () => {
+    //     setIsLoading(true);
+    //     try {
+    //         const res = await ProjectManagementService.updateSubtaskProgress(
+    //             data?.id,
+    //             sliderValue,
+    //         );
+    //         if (res.status) {
+    //             setIsLoading(false);
+    //             router.replace(router.asPath);
+    //             toast({
+    //                 title: res.message,
+    //                 status: 'success',
+    //                 isClosable: true,
+    //                 position: 'top-right',
+    //             });
+    //             return;
+    //         }
+    //         setIsLoading(false);
+    //         toast({
+    //             title: res.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     } catch (err: any) {
+    //         setIsLoading(false);
+    //         toast({
+    //             title: err?.body?.message || err.message,
+    //             status: 'error',
+    //             isClosable: true,
+    //             position: 'top-right',
+    //         });
+    //     }
+    // };
 
     // const {
     //     register,
