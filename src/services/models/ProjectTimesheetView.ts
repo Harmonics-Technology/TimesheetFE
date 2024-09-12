@@ -25,4 +25,6 @@ export type ProjectTimesheetView = {
     reason?: string | null;
     isApproved?: boolean;
     isEdited?: boolean;
+    isProjectManagementTimesheet?: boolean;
+    addToTimesheet?: boolean;
 };

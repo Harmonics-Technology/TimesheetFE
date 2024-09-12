@@ -28,6 +28,7 @@ export type ProjectTask = {
     operationalTaskStatus?: string | null;
     createdByUserId?: string | null;
     createdByUser?: User;
+    operationalTaskHours?: number | null;
     subTasks?: Array<ProjectSubTask> | null;
     assignees?: Array<ProjectTaskAsignee> | null;
 };

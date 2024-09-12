@@ -21,4 +21,5 @@ export type ProjectTaskModel = {
     isAssignedToMe?: boolean;
     isOperationalTask?: boolean;
     operationalTaskStatus?: string | null;
+    operationalTaskHours?: number | null;
 };

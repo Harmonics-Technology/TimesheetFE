@@ -140,6 +140,7 @@ export type { ProjectManagementDashboardMetric } from './models/ProjectManagemen
 export type { ProjectManagementSettingModel } from './models/ProjectManagementSettingModel';
 export type { ProjectManagementSettingView } from './models/ProjectManagementSettingView';
 export type { ProjectManagementSettingViewStandardResponse } from './models/ProjectManagementSettingViewStandardResponse';
+export type { ProjectManagementTimesheetModel } from './models/ProjectManagementTimesheetModel';
 export type { ProjectManager } from './models/ProjectManager';
 export type { ProjectManagerView } from './models/ProjectManagerView';
 export type { ProjectMetrics } from './models/ProjectMetrics';
@@ -173,6 +174,7 @@ export type { ProjectTimesheetListViewStandardResponse } from './models/ProjectT
 export type { ProjectTimesheetModel } from './models/ProjectTimesheetModel';
 export type { ProjectTimesheetRange } from './models/ProjectTimesheetRange';
 export type { ProjectTimesheetView } from './models/ProjectTimesheetView';
+export type { ProjectTimesheetViewListStandardResponse } from './models/ProjectTimesheetViewListStandardResponse';
 export type { ProjectView } from './models/ProjectView';
 export type { ProjectViewPagedCollection } from './models/ProjectViewPagedCollection';
 export type { ProjectViewPagedCollectionStandardResponse } from './models/ProjectViewPagedCollectionStandardResponse';
@@ -200,6 +202,7 @@ export type { ShiftView } from './models/ShiftView';
 export type { ShiftViewListStandardResponse } from './models/ShiftViewListStandardResponse';
 export type { Status } from './models/Status';
 export type { StrippedProjectAssignee } from './models/StrippedProjectAssignee';
+export type { StrippedProjectAssigneeStandardResponse } from './models/StrippedProjectAssigneeStandardResponse';
 export type { StrippedProjectManager } from './models/StrippedProjectManager';
 export type { StrippedUserView } from './models/StrippedUserView';
 export type { Subscription } from './models/Subscription';

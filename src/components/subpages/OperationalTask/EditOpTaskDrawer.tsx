@@ -12,7 +12,7 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -56,7 +56,7 @@ export const EditOpTaskDrawer = ({
     id,
     departments,
 }) => {
-    // console.log({ data });
+    // console.log({data})
     const assignedPerson =
         data?.isAssignedToMe && data?.assignees?.at(0)?.id == id;
     const {
@@ -205,6 +205,7 @@ export const EditOpTaskDrawer = ({
     // }, [selectedCategory]);
 
     //
+    console.log({data});
     return (
         <DrawerWrapper
             onClose={onClose}
@@ -392,17 +393,85 @@ export const EditOpTaskDrawer = ({
                         />
                     </Grid>
 
-                    <PrimarySelect<ProjectTaskModel>
-                        label="Status"
-                        error={errors.operationalTaskStatus}
-                        name="operationalTaskStatus"
-                        register={register}
-                        options={statuses.map((x) => (
-                            <option value={x?.name} key={x.id}>
-                                {x?.name}
-                            </option>
-                        ))}
-                    />
+                    <Fragment>
+                        {data?.operationalTaskStatus === 'Completed' ? (    
+                            <Grid
+                                templateColumns={[
+                                    'repeat(1,1fr)',
+                                    'repeat(2,1fr)',
+                                ]}
+                                gap="1rem 1rem"
+                                w="full"
+                            >
+                                <PrimarySelect<ProjectTaskModel>
+                                    label="Status"
+                                    error={errors.operationalTaskStatus}
+                                    name="operationalTaskStatus"
+                                    register={register}
+                                    options={statuses.map((x) => (
+                                        <option value={x?.name} key={x.id}>
+                                            {x?.name}
+                                        </option>
+                                    ))}
+                                />
+
+                                <PrimaryInput<ProjectTaskModel>
+                                    label="Hours"
+                                    name='operationalTaskHours'
+                                    error={errors.operationalTaskHours}
+                                    placeholder=""
+                                    defaultValue={data?.operationalTaskHours}
+                                    register={register}
+                                    disableLabel={
+                                        data.operationalTaskStatus ===
+                                        'Completed'
+                                    }
+                                />
+                            </Grid>
+                        ) : (
+                            <PrimarySelect<ProjectTaskModel>
+                                label="Status"
+                                error={errors.operationalTaskStatus}
+                                name="operationalTaskStatus"
+                                register={register}
+                                options={statuses.map((x) => (
+                                    <option value={x?.name} key={x.id}>
+                                        {x?.name}
+                                    </option>
+                                ))}
+                            />
+                        )}
+                    </Fragment>
+                    
+                    {/* <Grid
+                        templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
+                        gap="1rem 1rem"
+                        w="full"
+                    >
+                        <PrimarySelect<ProjectTaskModel>
+                            label="Status"
+                            error={errors.operationalTaskStatus}
+                            name="operationalTaskStatus"
+                            register={register}
+                            options={statuses.map((x) => (
+                                <option value={x?.name} key={x.id}>
+                                    {x?.name}
+                                </option>
+                            ))}
+                        />
+
+                        <PrimaryInput<ProjectTaskModel>
+                            label="Hours"
+                            name="name"
+                            error={errors.name}
+                            placeholder=""
+                            defaultValue=""
+                            register={register}
+                            disableLabel={
+                                data.operationalTaskStatus === 'Completed'
+                            }
+                        />
+                    </Grid> */}
 
                     <PrimaryTextarea<ProjectTaskModel>
                         label="Notes"

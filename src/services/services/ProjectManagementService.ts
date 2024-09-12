@@ -9,6 +9,7 @@ import type { BudgetSummaryReportViewStandardResponse } from '../models/BudgetSu
 import type { ListProjectViewPagedCollectionStandardResponse } from '../models/ListProjectViewPagedCollectionStandardResponse';
 import type { MarkAsCompletedModel } from '../models/MarkAsCompletedModel';
 import type { OperationalTaskFilter } from '../models/OperationalTaskFilter';
+import type { ProjectManagementTimesheetModel } from '../models/ProjectManagementTimesheetModel';
 import type { ProjectModel } from '../models/ProjectModel';
 import type { ProjectProgressCountViewStandardResponse } from '../models/ProjectProgressCountViewStandardResponse';
 import type { ProjectStatus } from '../models/ProjectStatus';
@@ -23,10 +24,12 @@ import type { ProjectTaskViewStandardResponse } from '../models/ProjectTaskViewS
 import type { ProjectTimesheetApprovalModel } from '../models/ProjectTimesheetApprovalModel';
 import type { ProjectTimesheetListViewStandardResponse } from '../models/ProjectTimesheetListViewStandardResponse';
 import type { ProjectTimesheetModel } from '../models/ProjectTimesheetModel';
+import type { ProjectTimesheetViewListStandardResponse } from '../models/ProjectTimesheetViewListStandardResponse';
 import type { ProjectViewPagedCollectionStandardResponse } from '../models/ProjectViewPagedCollectionStandardResponse';
 import type { ProjectViewStandardResponse } from '../models/ProjectViewStandardResponse';
 import type { ResourceCapacityDetailViewStandardResponse } from '../models/ResourceCapacityDetailViewStandardResponse';
 import type { ResourceCapacityViewStandardResponse } from '../models/ResourceCapacityViewStandardResponse';
+import type { StrippedProjectAssigneeStandardResponse } from '../models/StrippedProjectAssigneeStandardResponse';
 import type { TaskComment } from '../models/TaskComment';
 import type { UpdateProjectTimesheet } from '../models/UpdateProjectTimesheet';
 
@@ -153,12 +156,44 @@ requestBody?: ProjectTimesheetModel,
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
+    public static fillProjectManagementTimesheetForProject(
+requestBody?: ProjectManagementTimesheetModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/fill-project-management-timesheet',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
     public static updateFilledTimesheet(
 requestBody?: UpdateProjectTimesheet,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/ProjectManagement/update-timesheet',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateProjectManagementTimesheetForProject(
+requestBody?: ProjectManagementTimesheetModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-project-management-timesheet',
             body: requestBody,
             mediaType: 'application/json-patch+json',
         });
@@ -855,6 +890,66 @@ projectId?: string,
             url: '/api/ProjectManagement/delete-project',
             query: {
                 'projectId': projectId,
+            },
+        });
+    }
+
+    /**
+     * @param taskId 
+     * @returns ProjectTimesheetViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static listUserProjectManagementTimesheet(
+taskId?: string,
+): CancelablePromise<ProjectTimesheetViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/users-project-management-timesheets',
+            query: {
+                'taskId': taskId,
+            },
+        });
+    }
+
+    /**
+     * @param userId 
+     * @param taskId 
+     * @param addToTimesheet 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static addTaskToTimesheet(
+userId?: string,
+taskId?: string,
+addToTimesheet: boolean = false,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/insert-pm-task-to-timesheet',
+            query: {
+                'userId': userId,
+                'taskId': taskId,
+                'addToTimesheet': addToTimesheet,
+            },
+        });
+    }
+
+    /**
+     * @param userId 
+     * @param taskId 
+     * @returns StrippedProjectAssigneeStandardResponse Success
+     * @throws ApiError
+     */
+    public static getAssigneeDetail(
+userId?: string,
+taskId?: string,
+): CancelablePromise<StrippedProjectAssigneeStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/assignee-detail',
+            query: {
+                'userId': userId,
+                'taskId': taskId,
             },
         });
     }

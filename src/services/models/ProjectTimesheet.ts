@@ -31,4 +31,6 @@ export type ProjectTimesheet = {
     reason?: string | null;
     isApproved?: boolean;
     isEdited?: boolean;
+    isProjectManagementTimesheet?: boolean;
+    addToTimesheet?: boolean;
 };

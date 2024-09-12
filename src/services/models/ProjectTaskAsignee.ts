@@ -21,5 +21,6 @@ export type ProjectTaskAsignee = {
     budget?: number | null;
     budgetSpent?: number | null;
     disabled?: boolean;
+    addTaskToTimesheet?: boolean;
     subTasks?: Array<ProjectSubTask> | null;
 };
