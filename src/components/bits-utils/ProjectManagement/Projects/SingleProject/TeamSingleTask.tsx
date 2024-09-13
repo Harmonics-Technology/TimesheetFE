@@ -45,6 +45,7 @@ import {
     ProjectSubTaskView,
     ProjectTaskAsigneeView,
     ProjectTaskView,
+    ProjectSubTaskModel,
 } from 'src/services';
 import { Round } from '@components/generics/functions/Round';
 import { TeamTopBar } from './TeamTopBar';
@@ -71,8 +72,8 @@ import UpdateTaskModal from '../../Modals/UpdateTaskModal';
 import AddHoursToTimesheetModal from '../../Modals/AddHoursToTimesheetModal';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { StrippedProjectAssignee } from 'src/services';
-import { log } from 'console';
-
+import UpdateSubTaskModal from '../../Modals/UpdateSubTaskModal';
+import UpdateTimesheetModal from '../../Modals/UpdateTimesheetModal';
 
 
 const schema = yup.object().shape({});
@@ -103,8 +104,13 @@ export const TeamSingleTask = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [currentView, setCurrentView] = useState('Activity');
     const [hours, setHours] = useState<number>(0);
-    const [projectAssigneeDetails, setProjectAssigneeDetails] = useState<any>([]);
-    const [userProjectManagementTimesheet, setUserProjectManagementTimesheet] = useState<any>([])
+    const [openEditTimesheetModal, setOpenEditTimeSheetModal] = useState<boolean>(false);
+    const [selectedTimesheet, setSelectedTimesheet] = useState<any>([])
+    const [projectAssigneeDetails, setProjectAssigneeDetails] = useState<any>(
+        [],
+    );
+    const [userProjectManagementTimesheet, setUserProjectManagementTimesheet] =
+        useState<any>([]);
 
     const {
         isOpen: isOpened,
@@ -122,6 +128,17 @@ export const TeamSingleTask = ({
         setSubTask({ ...item, isEdit: true });
         onOpen();
     };
+
+    const OpenEditSubtaskModal = (item: any) => {
+        setSubTask({...item});
+        setOpenEditSubtaskModal(true)
+    }
+
+    const OpenEditTimesheetModal = (item: any) => {
+        setSelectedTimesheet(item );
+        setOpenEditTimeSheetModal(true);
+    };
+
     const progressModal = (item: any) => {
         setSubTask(item);
         onOpener();
@@ -140,9 +157,12 @@ export const TeamSingleTask = ({
         onOpen: onOpens,
         onClose: onCloses,
     } = useDisclosure();
+    const [openEditSubtaskModal, setOpenEditSubtaskModal] = useState<boolean>(false)
 
     const [loadings, setLoadings] = useState({ id: '' });
     const [loading, setLoading] = useState({ id: '' });
+    const taskPriorityList = [{id: 1, label: 'High'}, {id: 2, label: 'Medium'}, {id: 3, label: "Low"}]
+    const [taskPriority, setTaskPriority] = useState<number>()
 
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
@@ -156,60 +176,37 @@ export const TeamSingleTask = ({
     const [sliderValue, setSliderValue] = useState(
         task?.percentageOfCompletion,
     );
+    const [editSubTaskSliderValue, setEditSubTaskSliderValue] =
+        useState<number>(subTask?.percentageOfCompletion ?? 0);
+     const [editTimesheetSliderValue, setEditTimesheetSliderValue] =
+         useState<number>(selectedTimesheet?.percentageOfCompletion ?? 0);
 
-    const ToggleAddToTimesheet = async(addToSheet: boolean) => {
+    useEffect(() => {
+        setEditSubTaskSliderValue(subTask?.percentageOfCompletion ?? 0);
+        setEditTimesheetSliderValue(selectedTimesheet?.percentageOfCompletion)
+    }, [subTask, selectedTimesheet]);
+
+    const ToggleAddToTimesheet = async (addToSheet: boolean) => {
         try {
-            const res = await ProjectManagementService.addTaskToTimesheet(user?.id, task?.id, addToSheet);
+            const res = await ProjectManagementService.addTaskToTimesheet(
+                user?.id,
+                task?.id,
+                addToSheet,
+            );
             if (res.status === true) {
                 setAddToTimesheet(addToSheet);
                 return;
             }
-        } catch (error:any) {
-             toast({
-                 title: error?.body?.message || error.message,
-                 status: 'error',
-                 isClosable: true,
-                 position: 'top-right',
-             });
+        } catch (error: any) {
+            toast({
+                title: error?.body?.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
         }
-    }
-    
+    };
 
-    // const updateProgress = async () => {
-    //     setLoading({ id: 'update' });
-    //     try {
-    //         const data = await ProjectManagementService.updateTaskProgress(
-    //             task?.id,
-    //             sliderValue,
-    //         );
-    //         if (data.status) {
-    //             setLoading({ id: '' });
-    //             router.replace(router.asPath);
-    //             toast({
-    //                 title: data.message,
-    //                 status: 'success',
-    //                 isClosable: true,
-    //                 position: 'top-right',
-    //             });
-    //             return;
-    //         }
-    //         setLoading({ id: '' });
-    //         toast({
-    //             title: data.message,
-    //             status: 'error',
-    //             isClosable: true,
-    //             position: 'top-right',
-    //         });
-    //     } catch (err: any) {
-    //         setLoading({ id: '' });
-    //         toast({
-    //             title: err?.body?.message || err.message,
-    //             status: 'error',
-    //             isClosable: true,
-    //             position: 'top-right',
-    //         });
-    //     }
-    // };
 
     const {
         register,
@@ -240,20 +237,19 @@ export const TeamSingleTask = ({
         }
     };
 
-
     const projectTaskAssineeId = project?.assignees?.find(
         (item) => item.userId === user?.id,
     )?.id;
 
     const getProjectAssigneeDetails = async () => {
         try {
-            const res =
-                await ProjectManagementService.getAssigneeDetail(user?.id as string, task?.id);
+            const res = await ProjectManagementService.getAssigneeDetail(
+                user?.id as string,
+                task?.id,
+            );
             if (res.status) {
                 setProjectAssigneeDetails(res.data);
-                setAddToTimesheet(
-                    res?.data?.addTaskToTimesheet
-                );
+                setAddToTimesheet(res?.data?.addTaskToTimesheet);
                 return;
             }
         } catch (error: any) {
@@ -266,15 +262,17 @@ export const TeamSingleTask = ({
         }
     };
 
-
-     const ListUserTimesheet = async() => {
+    const ListUserTimesheet = async () => {
         try {
-            const res = await ProjectManagementService.listUserProjectManagementTimesheet(task?.id);
+            const res =
+                await ProjectManagementService.listUserProjectManagementTimesheet(
+                    task?.id,
+                );
             if (res.status === true) {
                 setUserProjectManagementTimesheet(res.data);
                 return;
             }
-        } catch (error:any) {
+        } catch (error: any) {
             toast({
                 title: error?.body?.message || error.message,
                 status: 'error',
@@ -282,14 +280,12 @@ export const TeamSingleTask = ({
                 position: 'top-right',
             });
         }
-    }
-
+    };
 
     useEffect(() => {
         getProjectAssigneeDetails();
         ListUserTimesheet();
     }, []);
-
 
     const AddHoursToTask = async (data: ProjectManagementTimesheetModel) => {
         if (addToTimesheet) {
@@ -301,31 +297,44 @@ export const TeamSingleTask = ({
             data.percentageOfCompletion = sliderValue;
             data.projectTaskAsigneeId = projectTaskAssineeId;
             try {
-                const res =
-                    await ProjectManagementService.fillProjectManagementTimesheetForProject(
-                        data,
-                    );
-                if (res?.status === true) {
-                    setLoading({ id: '' });
-                    router.replace(router.asPath);
+                if (
+                    (tasks?.value?.length > 0 &&
+                        data?.projectSubTaskId === '') ||
+                    data?.projectSubTaskId === null
+                ) {
                     toast({
-                        title: res.message,
-                        status: 'success',
+                        title: 'Please select a SubTask to continue',
+                        status: 'error',
                         isClosable: true,
                         position: 'top-right',
                     });
-                    onClosed();
-                    router.reload();
-                    reset();
-                    return;
+                } else {
+                    const res =
+                        await ProjectManagementService.fillProjectManagementTimesheetForProject(
+                            data,
+                        );
+                    if (res?.status === true) {
+                        setLoading({ id: '' });
+                        router.replace(router.asPath);
+                        toast({
+                            title: res.message,
+                            status: 'success',
+                            isClosable: true,
+                            position: 'top-right',
+                        });
+                        onClosed();
+                        router.reload();
+                        reset();
+                        return;
+                    }
+                    setLoading({ id: '' });
+                    toast({
+                        title: res.message,
+                        status: 'error',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
                 }
-                setLoading({ id: '' });
-                toast({
-                    title: res.message,
-                    status: 'error',
-                    isClosable: true,
-                    position: 'top-right',
-                });
             } catch (err: any) {
                 setLoading({ id: '' });
                 toast({
@@ -347,31 +356,43 @@ export const TeamSingleTask = ({
         data.percentageOfCompletion = sliderValue;
         data.projectTaskAsigneeId = projectTaskAssineeId;
         try {
-            const res =
-                await ProjectManagementService.fillProjectManagementTimesheetForProject(
-                    data,
-                );
-            if (res?.status === true) {
-                setLoading({ id: '' });
-                router.replace(router.asPath);
+            if (
+                (tasks?.value?.length > 0 && data?.projectSubTaskId === '') ||
+                data?.projectSubTaskId === null
+            ) {
                 toast({
-                    title: res.message,
-                    status: 'success',
+                    title: 'Please go back and select a SubTask to continue',
+                    status: 'error',
                     isClosable: true,
                     position: 'top-right',
                 });
-                setOpenAddToTimesheetModal(false);
-                router.reload();
-                reset();
-                return;
+            } else {
+                const res =
+                    await ProjectManagementService.fillProjectManagementTimesheetForProject(
+                        data,
+                    );
+                if (res?.status === true) {
+                    setLoading({ id: '' });
+                    router.replace(router.asPath);
+                    toast({
+                        title: res.message,
+                        status: 'success',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                    setOpenAddToTimesheetModal(false);
+                    router.reload();
+                    reset();
+                    return;
+                }
+                setLoading({ id: '' });
+                toast({
+                    title: res.message,
+                    status: 'error',
+                    isClosable: true,
+                    position: 'top-right',
+                });
             }
-            setLoading({ id: '' });
-            toast({
-                title: res.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
         } catch (err: any) {
             setLoading({ id: '' });
             toast({
@@ -384,8 +405,7 @@ export const TeamSingleTask = ({
     };
 
 
-    
-    
+    console.log(selectedTimesheet);
     
 
     return (
@@ -835,7 +855,7 @@ export const TeamSingleTask = ({
                                                     </MenuItem>
                                                     <MenuItem
                                                         onClick={() =>
-                                                            openModal(x)
+                                                             OpenEditSubtaskModal(x)
                                                         }
                                                         w="full"
                                                     >
@@ -953,6 +973,43 @@ export const TeamSingleTask = ({
                                                         ).format('DD/MM/YYYY')}
                                                         fontWeight="500"
                                                     />
+                                                    <td>
+                                                        <Menu>
+                                                            <MenuButton>
+                                                                <Box
+                                                                    fontSize="1rem"
+                                                                    pl="1rem"
+                                                                    fontWeight="bold"
+                                                                    cursor="pointer"
+                                                                    color="brand.300"
+                                                                >
+                                                                    {loadings.id ==
+                                                                    x.id ? (
+                                                                        <Spinner size="sm" />
+                                                                    ) : (
+                                                                        <FaEllipsisH />
+                                                                    )}
+                                                                </Box>
+                                                            </MenuButton>
+                                                            <MenuList>
+                                                                <MenuItem
+                                                                    onClick={() =>
+                                                                     OpenEditTimesheetModal(x)
+                                                                    }
+                                                                    w="full"
+                                                                >
+                                                                    <Icon
+                                                                        as={
+                                                                            BsPenFill
+                                                                        }
+                                                                        mr=".5rem"
+                                                                        color="brand.400"
+                                                                    />
+                                                                    Edit
+                                                                </MenuItem>
+                                                            </MenuList>
+                                                        </Menu>
+                                                    </td>
                                                 </TableRow>
                                             );
                                         },
@@ -969,6 +1026,16 @@ export const TeamSingleTask = ({
                     onClose={onClose}
                     data={task}
                     subTask={subTask}
+                />
+            )}
+            {openEditSubtaskModal && (
+                <UpdateSubTaskModal
+                    task={task}
+                    subTask={subTask}
+                    isOpen={openEditSubtaskModal}
+                    onClose={() => setOpenEditSubtaskModal(false)}
+                    taskPriorityList={taskPriorityList}
+                    projectTaskAssigneeId={projectTaskAssineeId}
                 />
             )}
             {isOpened && (
@@ -1003,6 +1070,21 @@ export const TeamSingleTask = ({
                     task={task}
                     subTask={tasks?.value}
                     onSubmit={() => handleSubmit(AddHoursToTimesheet)()}
+                />
+            )}
+            {openEditTimesheetModal && (
+                <UpdateTimesheetModal
+                    task={task}
+                    subTask={tasks?.value}
+                    isOpen={openEditTimesheetModal}
+                    onClose={() => setOpenEditTimeSheetModal(false)}
+                    taskPriorityList={taskPriorityList}
+                    projectTaskAssigneeId={projectTaskAssineeId}
+                    selectedTimesheet={selectedTimesheet}
+                    sliderValue={editTimesheetSliderValue}
+                    setSliderValue={setEditTimesheetSliderValue}
+                    projectId={project?.id}
+                    addToTimesheet={addToTimesheet}
                 />
             )}
         </Box>
