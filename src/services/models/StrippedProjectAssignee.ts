@@ -10,4 +10,5 @@ export type StrippedProjectAssignee = {
     projectId?: string | null;
     projectTaskId?: string | null;
     addTaskToTimesheet?: boolean;
+    projectManagementTimesheetHours?: number | null;
 };

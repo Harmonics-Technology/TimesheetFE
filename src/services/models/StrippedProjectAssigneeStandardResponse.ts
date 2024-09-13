@@ -5,7 +5,7 @@
 import type { HttpStatusCode } from './HttpStatusCode';
 import type { StrippedProjectAssignee } from './StrippedProjectAssignee';
 
-export type SuperAdminDashboardViewStandardResponse = {
+export type StrippedProjectAssigneeStandardResponse = {
     href?: string | null;
     relations?: Array<string> | null;
     method?: string | null;
