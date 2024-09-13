@@ -422,10 +422,10 @@ export const EditOpTaskDrawer = ({
                                     placeholder=""
                                     defaultValue={data?.operationalTaskHours}
                                     register={register}
-                                    disableLabel={
-                                        data.operationalTaskStatus ===
-                                        'Completed'
-                                    }
+                                    // disableLabel={
+                                    //     data.operationalTaskStatus ===
+                                    //     'Completed'
+                                    // }
                                 />
                             </Grid>
                         ) : (

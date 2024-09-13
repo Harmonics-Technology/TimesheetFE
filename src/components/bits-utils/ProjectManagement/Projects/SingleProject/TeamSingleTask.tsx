@@ -91,7 +91,7 @@ export const TeamSingleTask = ({
     access: any;
     pm: any;
 }) => {
-    console.log("🚀 ~ task:", task)
+    // console.log("🚀 ~ task:", task)
     const tableHead = [
         'Subtask Name',
         'Hours Spent',
@@ -130,7 +130,7 @@ export const TeamSingleTask = ({
     const pastDate = moment().diff(moment(task?.endDate), 'days') > 0;
     const [taskStatus, setTaskStatus] = useState();
     const [status, setStatus] = useState(task?.status?.toLowerCase());
-    const addToTimesheet: boolean = true;
+    const [addToTimesheet, setAddToTimesheet] = useState<boolean>();
     const [openAddToTimesheetModal, setOpenAddToTimesheetModal] =
         useState(false);
     const toast = useToast();
@@ -156,6 +156,24 @@ export const TeamSingleTask = ({
     const [sliderValue, setSliderValue] = useState(
         task?.percentageOfCompletion,
     );
+
+    const ToggleAddToTimesheet = async(addToSheet: boolean) => {
+        try {
+            const res = await ProjectManagementService.addTaskToTimesheet(user?.id, task?.id, addToSheet);
+            if (res.status === true) {
+                setAddToTimesheet(addToSheet);
+                return;
+            }
+        } catch (error:any) {
+             toast({
+                 title: error?.body?.message || error.message,
+                 status: 'error',
+                 isClosable: true,
+                 position: 'top-right',
+             });
+        }
+    }
+    
 
     // const updateProgress = async () => {
     //     setLoading({ id: 'update' });
@@ -233,6 +251,9 @@ export const TeamSingleTask = ({
                 await ProjectManagementService.getAssigneeDetail(user?.id as string, task?.id);
             if (res.status) {
                 setProjectAssigneeDetails(res.data);
+                setAddToTimesheet(
+                    res?.data?.addTaskToTimesheet
+                );
                 return;
             }
         } catch (error: any) {
@@ -361,6 +382,10 @@ export const TeamSingleTask = ({
             });
         }
     };
+
+
+    
+    
     
 
     return (
@@ -394,6 +419,7 @@ export const TeamSingleTask = ({
                                 error={errors.startDate}
                                 defaultValue={new Date(task.startDate)}
                                 // max={new DateObject().subtract(1, 'days')}
+                                disabled={tasks?.value?.length < 1}
                             />
                             <PrimaryDate<ProjectManagementTimesheetModel>
                                 control={control}
@@ -402,6 +428,7 @@ export const TeamSingleTask = ({
                                 error={errors.endDate}
                                 defaultValue={new Date(task.endDate)}
                                 // max={new DateObject().subtract(1, 'days')}
+                                disabled={tasks?.value?.length < 1}
                             />
                             <Box>
                                 <Flex alignItems="flex-end" gap="7px" h="100%">
@@ -413,6 +440,9 @@ export const TeamSingleTask = ({
                                             defaultValue={hours}
                                             value={hours}
                                             register={register}
+                                            disableLabel={
+                                                tasks?.value?.length < 1
+                                            }
                                         />
                                     </Box>
                                     <Box>
@@ -472,6 +502,7 @@ export const TeamSingleTask = ({
                                     leftText="Percntage of Completion"
                                     showProgress
                                     rightText={`${Round(sliderValue)}%`}
+                                    readonly={tasks?.value?.length < 1}
                                     barColor={
                                         status == 'completed'
                                             ? 'brand.400'
@@ -492,14 +523,17 @@ export const TeamSingleTask = ({
                                     btn="Update"
                                     bg="brand.400"
                                     w="fit-content"
-                                    disabled={status == 'completed'}
+                                    disabled={
+                                        status == 'completed' ||
+                                        tasks?.value?.length < 1
+                                    }
                                     h="35px"
                                 />
                             </Box>
 
-                            <InputBlank 
+                            <InputBlank
                                 label="Total Hours Spent"
-                                defaultValue={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
+                                // defaultValue={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
                                 disableLabel={true}
                                 readonly={true}
                                 value={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
@@ -610,8 +644,13 @@ export const TeamSingleTask = ({
                                 <FormLabel>Add hours to timesheet</FormLabel>
                                 <Switch
                                     mt="1"
-                                    isChecked={
-                                        projectAssigneeDetails?.addTaskToTimesheet
+                                    // isChecked={
+                                    //     projectAssigneeDetails?.addTaskToTimesheet
+                                    // }
+                                    isChecked={addToTimesheet}
+                                    // onChange={() => ToggleAddToTimesheet(addToTimesheet === false ? true : false)}
+                                    onChange={() =>
+                                        ToggleAddToTimesheet(!addToTimesheet)
                                     }
                                 />
                             </Flex>
