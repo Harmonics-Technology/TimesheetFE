@@ -75,7 +75,6 @@ import { StrippedProjectAssignee } from 'src/services';
 import UpdateSubTaskModal from '../../Modals/UpdateSubTaskModal';
 import UpdateTimesheetModal from '../../Modals/UpdateTimesheetModal';
 
-
 const schema = yup.object().shape({});
 export const TeamSingleTask = ({
     id,
@@ -104,8 +103,9 @@ export const TeamSingleTask = ({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [currentView, setCurrentView] = useState('Activity');
     const [hours, setHours] = useState<number>(0);
-    const [openEditTimesheetModal, setOpenEditTimeSheetModal] = useState<boolean>(false);
-    const [selectedTimesheet, setSelectedTimesheet] = useState<any>([])
+    const [openEditTimesheetModal, setOpenEditTimeSheetModal] =
+        useState<boolean>(false);
+    const [selectedTimesheet, setSelectedTimesheet] = useState<any>([]);
     const [projectAssigneeDetails, setProjectAssigneeDetails] = useState<any>(
         [],
     );
@@ -130,12 +130,12 @@ export const TeamSingleTask = ({
     };
 
     const OpenEditSubtaskModal = (item: any) => {
-        setSubTask({...item});
-        setOpenEditSubtaskModal(true)
-    }
+        setSubTask({ ...item });
+        setOpenEditSubtaskModal(true);
+    };
 
     const OpenEditTimesheetModal = (item: any) => {
-        setSelectedTimesheet(item );
+        setSelectedTimesheet(item);
         setOpenEditTimeSheetModal(true);
     };
 
@@ -157,12 +157,17 @@ export const TeamSingleTask = ({
         onOpen: onOpens,
         onClose: onCloses,
     } = useDisclosure();
-    const [openEditSubtaskModal, setOpenEditSubtaskModal] = useState<boolean>(false)
+    const [openEditSubtaskModal, setOpenEditSubtaskModal] =
+        useState<boolean>(false);
 
     const [loadings, setLoadings] = useState({ id: '' });
     const [loading, setLoading] = useState({ id: '' });
-    const taskPriorityList = [{id: 1, label: 'High'}, {id: 2, label: 'Medium'}, {id: 3, label: "Low"}]
-    const [taskPriority, setTaskPriority] = useState<number>()
+    const taskPriorityList = [
+        { id: 1, label: 'High' },
+        { id: 2, label: 'Medium' },
+        { id: 3, label: 'Low' },
+    ];
+    const [taskPriority, setTaskPriority] = useState<number>();
 
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
@@ -178,12 +183,12 @@ export const TeamSingleTask = ({
     );
     const [editSubTaskSliderValue, setEditSubTaskSliderValue] =
         useState<number>(subTask?.percentageOfCompletion ?? 0);
-     const [editTimesheetSliderValue, setEditTimesheetSliderValue] =
-         useState<number>(selectedTimesheet?.percentageOfCompletion ?? 0);
+    const [editTimesheetSliderValue, setEditTimesheetSliderValue] =
+        useState<number>(selectedTimesheet?.percentageOfCompletion ?? 0);
 
     useEffect(() => {
         setEditSubTaskSliderValue(subTask?.percentageOfCompletion ?? 0);
-        setEditTimesheetSliderValue(selectedTimesheet?.percentageOfCompletion)
+        setEditTimesheetSliderValue(selectedTimesheet?.percentageOfCompletion);
     }, [subTask, selectedTimesheet]);
 
     const ToggleAddToTimesheet = async (addToSheet: boolean) => {
@@ -206,7 +211,6 @@ export const TeamSingleTask = ({
             });
         }
     };
-
 
     const {
         register,
@@ -240,6 +244,11 @@ export const TeamSingleTask = ({
     const projectTaskAssineeId = project?.assignees?.find(
         (item) => item.userId === user?.id,
     )?.id;
+
+    const ProjectTimesheetAssigneeId = task?.assignees?.find(
+        (x) => x.userId === user?.id,
+    )?.user?.id
+    
 
     const getProjectAssigneeDetails = async () => {
         try {
@@ -347,7 +356,6 @@ export const TeamSingleTask = ({
         }
     };
 
-
     const AddHoursToTimesheet = async (
         data: ProjectManagementTimesheetModel,
     ) => {
@@ -403,10 +411,6 @@ export const TeamSingleTask = ({
             });
         }
     };
-
-
-    console.log(selectedTimesheet);
-    
 
     return (
         <Box>
@@ -855,7 +859,9 @@ export const TeamSingleTask = ({
                                                     </MenuItem>
                                                     <MenuItem
                                                         onClick={() =>
-                                                             OpenEditSubtaskModal(x)
+                                                            OpenEditSubtaskModal(
+                                                                x,
+                                                            )
                                                         }
                                                         w="full"
                                                     >
@@ -994,7 +1000,9 @@ export const TeamSingleTask = ({
                                                             <MenuList>
                                                                 <MenuItem
                                                                     onClick={() =>
-                                                                     OpenEditTimesheetModal(x)
+                                                                        OpenEditTimesheetModal(
+                                                                            x,
+                                                                        )
                                                                     }
                                                                     w="full"
                                                                 >
@@ -1079,7 +1087,7 @@ export const TeamSingleTask = ({
                     isOpen={openEditTimesheetModal}
                     onClose={() => setOpenEditTimeSheetModal(false)}
                     taskPriorityList={taskPriorityList}
-                    projectTaskAssigneeId={projectTaskAssineeId}
+                    projectTaskAssigneeId={ProjectTimesheetAssigneeId}
                     selectedTimesheet={selectedTimesheet}
                     sliderValue={editTimesheetSliderValue}
                     setSliderValue={setEditTimesheetSliderValue}

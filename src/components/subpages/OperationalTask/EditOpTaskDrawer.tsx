@@ -200,12 +200,6 @@ export const EditOpTaskDrawer = ({
         fetchUsersInDept(data.department);
     }, []);
 
-    // useEffect(() => {
-    //     setValue('category', selectedCategory?.id);
-    // }, [selectedCategory]);
-
-    //
-    console.log({data});
     return (
         <DrawerWrapper
             onClose={onClose}
