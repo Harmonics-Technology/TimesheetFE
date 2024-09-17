@@ -16,6 +16,7 @@ const DeleteMessagePrompt = ({
     onSubmit
 }: {
     isOpen: boolean;
+    
     onClose: () => void;
     onSubmit: () => void,
 }) => {
@@ -43,7 +44,8 @@ const DeleteMessagePrompt = ({
                 </ModalHeader>
 
                 <ModalBody>
-                    <Text textAlign='center' mb='8'>Are you sure you want to delete this task?</Text>
+                    <Text textAlign='center' mb='8'>Are you sure you want 
+                        to delete this comment? This action cannot be undone</Text>
                     <HStack px=".8rem" spacing={4} w="full">
                         <Button
                             variant="outline"
