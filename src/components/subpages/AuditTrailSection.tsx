@@ -30,7 +30,7 @@ import { FaEllipsisH } from 'react-icons/fa';
 import EditCommentModal from '@components/EditCommentModal';
 import { TaskComment } from 'src/services';
 import { da } from 'date-fns/locale';
-
+import DeleteMessagePrompt from '@components/bits-utils/ProjectManagement/Modals/DeleteMessagePrompt';
 
 moment.updateLocale('en', {
     relativeTime: {
@@ -57,7 +57,9 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
     const [trigger, setTrigger] = useState(false);
     const [loading, setLoading] = useState({ id: '' });
     const toast = useToast();
-    const [selectedComment, setSelectedComment] = useState<string>();
+    const [selectedComment, setSelectedComment] = useState<any>();
+    const [showDeleteMessagePrompt, setShowDeleteMessagePrompt] =
+        useState<boolean>(false);
 
     const fetchAuditData = async () => {
         setLoading({ id: 'fetching' });
@@ -107,14 +109,17 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
         setOpenEditCommentModal(true);
     };
 
-    const DeleteComment = async (comment: any) => {
-         const data: TaskComment = {
-             id: comment?.id,
-             projectTaskId: taskId,
-             comment: comment?.comment as string,
-         };
+    const DeleteComment = async () => {
+        const data: TaskComment = {
+            id: selectedComment?.id,
+            projectTaskId: taskId,
+            comment: selectedComment?.comment as string,
+        };
         try {
-            const res = await ProjectManagementService.updateComment(true, data);
+            const res = await ProjectManagementService.updateComment(
+                true,
+                data,
+            );
             if (res?.status) {
                 toast({
                     title: 'Comment deleted successfully',
@@ -123,6 +128,7 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                     position: 'top-right',
                 });
                 setTrigger((prev) => !prev);
+                setShowDeleteMessagePrompt(false);
                 return;
             }
             toast({
@@ -139,6 +145,12 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                 position: 'top-right',
             });
         }
+    };
+
+
+    const OpenDeleteModal = (comment: any) => {
+        setSelectedComment(comment);
+        setShowDeleteMessagePrompt(true);
     }
 
     return (
@@ -334,7 +346,9 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                         Edit comment
                                                     </MenuItem>
                                                     <MenuItem
-                                                        onClick={() => DeleteComment(x)}
+                                                        onClick={ () => 
+                                                            OpenDeleteModal(x)
+                                                        }
                                                         w="full"
                                                         fontSize={13}
                                                     >
@@ -421,6 +435,14 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                     taskId={taskId}
                     setTrigger={setTrigger}
                     defaultComment={selectedComment}
+                />
+            )}
+
+            {showDeleteMessagePrompt && (
+                <DeleteMessagePrompt
+                    onSubmit={() => DeleteComment()}
+                    isOpen={showDeleteMessagePrompt}
+                    onClose={() => setShowDeleteMessagePrompt(false)}
                 />
             )}
         </HStack>
