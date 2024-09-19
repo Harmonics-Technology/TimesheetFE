@@ -152,6 +152,7 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
         setSelectedComment(comment);
         setShowDeleteMessagePrompt(true);
     }
+    
 
     return (
         <HStack
@@ -318,49 +319,53 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                     )}
                                                 </VStack>
                                             </ListItem>
-                                            <Menu>
-                                                <MenuButton mt="2">
-                                                    <Box
-                                                        fontSize="1.2rem"
-                                                        pl="1rem"
-                                                        fontWeight="bold"
-                                                        cursor="pointer"
-                                                        color="brand.300"
-                                                    >
-                                                        <FaEllipsisH />
-                                                    </Box>
-                                                </MenuButton>
-                                                <MenuList>
-                                                    <MenuItem
-                                                        onClick={() =>
-                                                            OpenEditModal(x)
-                                                        }
-                                                        w="full"
-                                                        fontSize={13}
-                                                    >
-                                                        <Icon
-                                                            as={BsPenFill}
-                                                            mr=".5rem"
-                                                            color="brand.400"
-                                                        />
-                                                        Edit comment
-                                                    </MenuItem>
-                                                    <MenuItem
-                                                        onClick={ () => 
-                                                            OpenDeleteModal(x)
-                                                        }
-                                                        w="full"
-                                                        fontSize={13}
-                                                    >
-                                                        <Icon
-                                                            as={BsTrash3}
-                                                            mr=".5rem"
-                                                            color="brand.400"
-                                                        />
-                                                        Delete comment
-                                                    </MenuItem>
-                                                </MenuList>
-                                            </Menu>
+                                            {x?.isComment && (
+                                                <Menu>
+                                                    <MenuButton mt="2">
+                                                        <Box
+                                                            fontSize="1.2rem"
+                                                            pl="1rem"
+                                                            fontWeight="bold"
+                                                            cursor="pointer"
+                                                            color="brand.300"
+                                                        >
+                                                            <FaEllipsisH />
+                                                        </Box>
+                                                    </MenuButton>
+                                                    <MenuList>
+                                                        <MenuItem
+                                                            onClick={() =>
+                                                                OpenEditModal(x)
+                                                            }
+                                                            w="full"
+                                                            fontSize={13}
+                                                        >
+                                                            <Icon
+                                                                as={BsPenFill}
+                                                                mr=".5rem"
+                                                                color="brand.400"
+                                                            />
+                                                            Edit comment
+                                                        </MenuItem>
+                                                        <MenuItem
+                                                            onClick={() =>
+                                                                OpenDeleteModal(
+                                                                    x,
+                                                                )
+                                                            }
+                                                            w="full"
+                                                            fontSize={13}
+                                                        >
+                                                            <Icon
+                                                                as={BsTrash3}
+                                                                mr=".5rem"
+                                                                color="brand.400"
+                                                            />
+                                                            Delete comment
+                                                        </MenuItem>
+                                                    </MenuList>
+                                                </Menu>
+                                            )}
                                         </Flex>
                                     ))}
                                 </UnorderedList>

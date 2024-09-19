@@ -858,10 +858,8 @@ export const TeamSingleTask = ({
                                                         Mark as complete
                                                     </MenuItem>
                                                     <MenuItem
-                                                        onClick={() =>
-                                                            OpenEditSubtaskModal(
-                                                                x,
-                                                            )
+                                                        onClick={
+                                                            onOpen
                                                         }
                                                         w="full"
                                                     >
@@ -873,8 +871,12 @@ export const TeamSingleTask = ({
                                                         Edit Sub-task
                                                     </MenuItem>
                                                     <MenuItem
-                                                        onClick={() =>
-                                                            progressModal(x)
+                                                        onClick={
+                                                            () =>
+                                                                OpenEditSubtaskModal(
+                                                                    x,
+                                                                )
+                                                            // progressModal(x)
                                                         }
                                                         w="full"
                                                     >
