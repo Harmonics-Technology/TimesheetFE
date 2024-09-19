@@ -71,6 +71,7 @@ export const EditOpTaskDrawer = ({
         resolver: yupResolver(schema),
         mode: 'all',
         defaultValues: {
+            operationalTaskHours: data?.operationalTaskHours,
             superAdminId,
             isOperationalTask: true,
             name: data.name,
@@ -85,7 +86,7 @@ export const EditOpTaskDrawer = ({
 
     const toast = useToast();
     const router = useRouter();
-    // console.log({ data });
+    console.log({ data });
     const [selectedUser, setSelecedUser] = useState<any>(
         data?.assignees
             ?.filter((x) => !x?.disabled)
@@ -146,6 +147,7 @@ export const EditOpTaskDrawer = ({
             console.log({ error });
         }
     };
+
     const onSubmit = async (value: ProjectTaskModel) => {
         value.isAssignedToMe = isAssignedToMe;
         value.department = department;
