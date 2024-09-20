@@ -74,6 +74,9 @@ import InputBlank from '@components/bits-utils/InputBlank';
 import { StrippedProjectAssignee } from 'src/services';
 import UpdateSubTaskModal from '../../Modals/UpdateSubTaskModal';
 import UpdateTimesheetModal from '../../Modals/UpdateTimesheetModal';
+import { EditSubTaskDrawer } from '../../Modals/EditSubTaskDrawer';
+
+
 
 const schema = yup.object().shape({});
 export const TeamSingleTask = ({
@@ -150,6 +153,8 @@ export const TeamSingleTask = ({
     const [addToTimesheet, setAddToTimesheet] = useState<boolean>();
     const [openAddToTimesheetModal, setOpenAddToTimesheetModal] =
         useState(false);
+    const [openEditSubtaskDrawer, setOpenEditSubtaskDrawer] = useState(false);
+    const [selectedSubtask, setSelectedSubtask] = useState<ProjectSubTaskView>({});
     const toast = useToast();
     const router = useRouter();
     const {
@@ -412,6 +417,11 @@ export const TeamSingleTask = ({
         }
     };
 
+    const OpenEditSubtaskDrawer = (item: any) => {
+        setSelectedSubtask(item);
+        setOpenEditSubtaskDrawer(true);
+    }
+
     return (
         <Box>
             <TeamTopBar data={project} id={id} />
@@ -443,7 +453,7 @@ export const TeamSingleTask = ({
                                 error={errors.startDate}
                                 defaultValue={new Date(task.startDate)}
                                 // max={new DateObject().subtract(1, 'days')}
-                                disabled={tasks?.value?.length < 1}
+                                // disabled={tasks?.value?.length < 1}
                             />
                             <PrimaryDate<ProjectManagementTimesheetModel>
                                 control={control}
@@ -452,7 +462,7 @@ export const TeamSingleTask = ({
                                 error={errors.endDate}
                                 defaultValue={new Date(task.endDate)}
                                 // max={new DateObject().subtract(1, 'days')}
-                                disabled={tasks?.value?.length < 1}
+                                // disabled={tasks?.value?.length < 1}
                             />
                             <Box>
                                 <Flex alignItems="flex-end" gap="7px" h="100%">
@@ -464,9 +474,6 @@ export const TeamSingleTask = ({
                                             defaultValue={hours}
                                             value={hours}
                                             register={register}
-                                            disableLabel={
-                                                tasks?.value?.length < 1
-                                            }
                                         />
                                     </Box>
                                     <Box>
@@ -526,7 +533,7 @@ export const TeamSingleTask = ({
                                     leftText="Percntage of Completion"
                                     showProgress
                                     rightText={`${Round(sliderValue)}%`}
-                                    readonly={tasks?.value?.length < 1}
+                                    // readonly={tasks?.value?.length < 1}
                                     barColor={
                                         status == 'completed'
                                             ? 'brand.400'
@@ -547,10 +554,7 @@ export const TeamSingleTask = ({
                                     btn="Update"
                                     bg="brand.400"
                                     w="fit-content"
-                                    disabled={
-                                        status == 'completed' ||
-                                        tasks?.value?.length < 1
-                                    }
+                                    disabled={status == 'completed'}
                                     h="35px"
                                 />
                             </Box>
@@ -858,9 +862,7 @@ export const TeamSingleTask = ({
                                                         Mark as complete
                                                     </MenuItem>
                                                     <MenuItem
-                                                        onClick={
-                                                            onOpen
-                                                        }
+                                                        onClick={() => OpenEditSubtaskDrawer(x)}
                                                         w="full"
                                                     >
                                                         <Icon
@@ -1038,6 +1040,14 @@ export const TeamSingleTask = ({
                     subTask={subTask}
                 />
             )}
+            {openEditSubtaskDrawer && (
+                <EditSubTaskDrawer
+                    isOpen={openEditSubtaskDrawer}
+                    onClose={() => setOpenEditSubtaskDrawer(false)}
+                    data={task}
+                    subTask={selectedSubtask}
+                />
+            )}
             {openEditSubtaskModal && (
                 <UpdateSubTaskModal
                     task={task}
@@ -1046,6 +1056,9 @@ export const TeamSingleTask = ({
                     onClose={() => setOpenEditSubtaskModal(false)}
                     taskPriorityList={taskPriorityList}
                     projectTaskAssigneeId={projectTaskAssineeId}
+                    totalHoursSpent={
+                        projectAssigneeDetails?.projectManagementTimesheetHours
+                    }
                 />
             )}
             {isOpened && (

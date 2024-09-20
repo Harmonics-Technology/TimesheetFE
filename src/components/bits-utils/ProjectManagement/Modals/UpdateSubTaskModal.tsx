@@ -64,6 +64,7 @@ const UpdateSubTaskModal = ({
     subTask,
     taskPriorityList,
     projectTaskAssigneeId,
+    totalHoursSpent
 }: {
     isOpen: any;
     onClose: any;
@@ -75,6 +76,7 @@ const UpdateSubTaskModal = ({
     subTask?: any;
     taskPriorityList?: any;
     projectTaskAssigneeId: any;
+    totalHoursSpent?: any;
 }) => {
     const pastDate = moment().diff(moment(data?.endDate), 'days') > 0;
     const [isLoading, setIsLoading] = useState(false);
@@ -210,6 +212,22 @@ const UpdateSubTaskModal = ({
                                 defaultValue={subTask?.name as string}
                                 readonly={true}
                             />
+                            <PrimarySelect<ProjectSubTaskModel>
+                                register={register}
+                                error={errors.taskPriority}
+                                name="taskPriority"
+                                label="Sub Task Priority"
+                                placeholder="Select Sub Task priority"
+                                options={
+                                    <>
+                                        {taskPriorityList?.map((x, index) => (
+                                            <option value={x.id}>
+                                                {x.label}
+                                            </option>
+                                        ))}
+                                    </>
+                                }
+                            />
                             <Grid
                                 templateColumns={[
                                     'repeat(1,1fr)',
@@ -305,25 +323,9 @@ const UpdateSubTaskModal = ({
                                     defaultValue=""
                                     readonly={true}
                                     disableLabel={true}
-                                    value={`${subTask?.hoursSpent} Hours`}
+                                    value={`${totalHoursSpent} Hours`}
                                 />
                             </Grid>
-                            <PrimarySelect<ProjectSubTaskModel>
-                                register={register}
-                                error={errors.taskPriority}
-                                name="taskPriority"
-                                label="Sub Task Priority"
-                                placeholder="Select Sub Taskask priority"
-                                options={
-                                    <>
-                                        {taskPriorityList?.map((x, index) => (
-                                            <option value={x.id}>
-                                                {x.label}
-                                            </option>
-                                        ))}
-                                    </>
-                                }
-                            />
                             {/* <ProgressSlider
                                 sliderValue={sliderValue}
                                 setSliderValue={setSliderValue}
@@ -379,7 +381,9 @@ const UpdateSubTaskModal = ({
                                     // spinner={
                                     //     <BeatLoader color="white" size={10} />
                                     // }
-                                    onClick={() => handleSubmit(UpdateSubTask)()}
+                                    onClick={() =>
+                                        handleSubmit(UpdateSubTask)()
+                                    }
                                 >
                                     Update
                                 </Button>
