@@ -203,22 +203,25 @@ const UpdateTaskModal = ({
                                 defaultValue={task?.name as string}
                                 readonly={true}
                             />
-                            <PrimarySelect<ProjectManagementTimesheetModel>
-                                register={register}
-                                error={errors.projectSubTaskId}
-                                name="projectSubTaskId"
-                                label="Sub Task Name"
-                                placeholder="Select a sub Task"
-                                options={
-                                    <>
-                                        {subTask?.map((x) => (
-                                            <option value={x?.id}>
-                                                {x.name}
-                                            </option>
-                                        ))}
-                                    </>
-                                }
-                            />
+                            {subTask?.length > 0 && (
+                                <PrimarySelect<ProjectManagementTimesheetModel>
+                                    register={register}
+                                    error={errors.projectSubTaskId}
+                                    name="projectSubTaskId"
+                                    label="Sub Task Name"
+                                    placeholder="Select a sub Task"
+                                    options={
+                                        <>
+                                            {subTask?.map((x) => (
+                                                <option value={x?.id}>
+                                                    {x.name}
+                                                </option>
+                                            ))}
+                                        </>
+                                    }
+                                />
+                            )}
+
                             <Grid
                                 templateColumns={[
                                     'repeat(1,1fr)',

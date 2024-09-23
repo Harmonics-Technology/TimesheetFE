@@ -1,3 +1,5 @@
+'use client';
+
 import {
     Flex,
     Box,
@@ -16,6 +18,7 @@ import {
     MenuList,
     Spinner,
     useToast,
+    Stack,
 } from '@chakra-ui/react';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import {
@@ -25,7 +28,7 @@ import {
 } from '@components/bits-utils/TableData';
 import colorSwatch from '@components/generics/colorSwatch';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BiSolidPencil } from 'react-icons/bi';
 import { FaEllipsisH, FaEye } from 'react-icons/fa';
 import { ProgressBar } from '../../Generics/ProgressBar';
@@ -50,6 +53,17 @@ import { useRouter } from 'next/router';
 import { ProgressSlider } from '@components/bits-utils/ProgressSlider';
 import { AuditTrailSection } from '@components/subpages/AuditTrailSection';
 import { AuditTrailAttachments } from '@components/subpages/AuditTrailAttachments';
+import InputBlank from '@components/bits-utils/InputBlank';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
+import { GreenPlusIcon, RedMinusIcon } from '@components/icons/Icons';
+import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
+import { ProjectManagementTimesheetModel } from 'src/services';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { UserContext } from '@components/context/UserContext';
+
+const schema = yup.object().shape({});
 
 export const SingleTask = ({
     id,
@@ -82,12 +96,18 @@ export const SingleTask = ({
         onOpen: onOpened,
         onClose: onClosed,
     } = useDisclosure();
+    const { user } = useContext(UserContext);
     const [loading, setLoading] = useState({ id: '' });
     const toast = useToast();
     const router = useRouter();
 
     const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
     const [status, setStatus] = useState(task?.status?.toLowerCase());
+    const [hours, setHours] = useState<number>(0);
+    const [projectAssigneeDetails, setProjectAssigneeDetails] = useState<any>(
+        [],
+    );
+    const [addToTimesheet, setAddToTimesheet] = useState<boolean>();
 
     const {
         isOpen: isOpens,
@@ -102,7 +122,19 @@ export const SingleTask = ({
     const pastDate = moment().diff(moment(task?.endDate), 'days') > 0;
 
     const [taskStatus, setTaskStatus] = useState();
-
+    const {
+        register,
+        handleSubmit,
+        control,
+        watch,
+        setValue,
+        reset,
+        formState: { errors, isSubmitting, isDirty },
+    } = useForm<ProjectManagementTimesheetModel>({
+        resolver: yupResolver(schema),
+        mode: 'all',
+        defaultValues: {},
+    });
     const [loadings, setLoadings] = useState({ id: '' });
     const taskStat = (x: any) => {
         setTaskStatus(x);
@@ -112,41 +144,46 @@ export const SingleTask = ({
         task?.percentageOfCompletion,
     );
 
-    const updateProgress = async () => {
-        setLoading({ id: 'update' });
-        try {
-            const data = await ProjectManagementService.updateTaskProgress(
-                task?.id,
-                sliderValue,
-            );
-            if (data.status) {
-                setLoading({ id: '' });
-                router.replace(router.asPath);
-                toast({
-                    title: data.message,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
+    const updateHours = (type: 'minus' | 'plus') => {
+        if (type === 'plus') {
+            setValue('hours', Number(watch('hours')) + 1);
+            return;
+        }
+        if (type === 'minus') {
+            if (Number(watch('hours')) <= 0) {
+                setValue('hours', 0);
                 return;
             }
-            setLoading({ id: '' });
+            setValue('hours', Number(watch('hours')) - 1);
+            return;
+        }
+    };
+
+    const getProjectAssigneeDetails = async () => {
+        try {
+            const res = await ProjectManagementService.getAssigneeDetail(
+                user?.id as string,
+                task?.id,
+            );
+            if (res.status) {
+                setProjectAssigneeDetails(res.data);
+                setAddToTimesheet(res?.data?.addTaskToTimesheet);
+                return;
+            }
+        } catch (error: any) {
             toast({
-                title: data.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-        } catch (err: any) {
-            setLoading({ id: '' });
-            toast({
-                title: err?.body?.message || err.message,
+                title: error?.body?.message || error.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
             });
         }
     };
+
+    useEffect(() => {
+        getProjectAssigneeDetails();
+    }, []);
+
     return (
         <Box>
             <TopBar
@@ -175,46 +212,134 @@ export const SingleTask = ({
                         >
                             {task?.note}
                         </Text>
-                        <Box w="full" mt="0.5rem">
-                            {/* <ProgressBar
-                                barWidth={task?.percentageOfCompletion}
-                                showProgress={true}
-                                barColor={
-                                    status == 'completed'
-                                        ? 'brand.400'
-                                        : status == 'ongoing' && pastDate
-                                        ? 'red'
-                                        : status == 'ongoing'
-                                        ? '#f7e277'
-                                        : status == 'not started'
-                                        ? 'gray.100'
-                                        : 'red'
+                        <Stack spacing="15px">
+                            <PrimaryDate<ProjectManagementTimesheetModel>
+                                control={control}
+                                name="startDate"
+                                label="Start Date"
+                                error={errors.startDate}
+                                defaultValue={
+                                    new Date(task?.startDate || Date.now())
                                 }
-                                leftText="Task Status"
-                                rightText={`${Round(
-                                    task?.percentageOfCompletion,
-                                )}%`}
-                            /> */}
-                            <ProgressSlider
-                                sliderValue={sliderValue}
-                                setSliderValue={setSliderValue}
-                                leftText="Task Status"
-                                showProgress
-                                rightText={`${Round(sliderValue)}%`}
-                                barColor={
-                                    status == 'completed'
-                                        ? 'brand.400'
-                                        : status == 'ongoing' && pastDate
-                                        ? 'red'
-                                        : status == 'ongoing'
-                                        ? '#f7e277'
-                                        : status == 'not started'
-                                        ? 'gray.100'
-                                        : 'red'
-                                }
+                                // max={new DateObject().subtract(1, 'days')}
+                                // disabled={tasks?.value?.length < 1}
                             />
-                        </Box>
-                        <Flex mt="1rem" justify="space-between">
+                            <PrimaryDate<ProjectManagementTimesheetModel>
+                                control={control}
+                                name="endDate"
+                                label="End Date"
+                                error={errors.endDate}
+                                defaultValue={
+                                    new Date(task.endDate || Date.now())
+                                }
+                                // max={new DateObject().subtract(1, 'days')}
+                                // disabled={tasks?.value?.length < 1}
+                            />
+                            <Box>
+                                <Flex alignItems="flex-end" gap="7px" h="100%">
+                                    <Box h="100%" w={'100%'}>
+                                        <PrimaryInput<ProjectManagementTimesheetModel>
+                                            name="hours"
+                                            label="Add Hours"
+                                            error={errors.hours}
+                                            defaultValue={hours}
+                                            value={hours}
+                                            register={register}
+                                        />
+                                    </Box>
+                                    <Box>
+                                        <Stack spacing="12px">
+                                            <Button
+                                                p="0"
+                                                bg="none"
+                                                _hover={{ bg: 'none', p: 0 }}
+                                                onClick={() =>
+                                                    updateHours('plus')
+                                                }
+                                                w="14px"
+                                                h="14px"
+                                            >
+                                                <GreenPlusIcon />
+                                            </Button>
+                                            <Button
+                                                p="0"
+                                                bg="none"
+                                                _hover={{ bg: 'none', p: 0 }}
+                                                onClick={() =>
+                                                    updateHours('minus')
+                                                }
+                                                w="14px"
+                                                h="14px"
+                                            >
+                                                <RedMinusIcon />
+                                            </Button>
+                                        </Stack>
+                                    </Box>
+                                </Flex>
+                            </Box>
+
+                            <Box w="full" mt="0.5rem" mb="0px">
+                                {/* <ProgressBar
+                                    barWidth={task?.percentageOfCompletion}
+                                    showProgress={true}
+                                    barColor={
+                                        status == 'completed'
+                                            ? 'brand.400'
+                                            : status == 'ongoing' && pastDate
+                                            ? 'red'
+                                            : status == 'ongoing'
+                                            ? '#f7e277'
+                                            : status == 'not started'
+                                            ? 'gray.100'
+                                            : 'red'
+                                    }
+                                    leftText="Percntage of Completion"
+                                    rightText={`${Round(
+                                        task?.percentageOfCompletion,
+                                    )}%`}
+                                /> */}
+                                <ProgressSlider
+                                    sliderValue={sliderValue}
+                                    setSliderValue={setSliderValue}
+                                    leftText="Percntage of Completion"
+                                    showProgress
+                                    rightText={`${Round(sliderValue)}%`}
+                                    // readonly={tasks?.value?.length < 1}
+                                    barColor={
+                                        status == 'completed'
+                                            ? 'brand.400'
+                                            : status == 'ongoing' && pastDate
+                                            ? 'red'
+                                            : status == 'ongoing'
+                                            ? '#f7e277'
+                                            : status == 'not started'
+                                            ? 'gray.100'
+                                            : 'red'
+                                    }
+                                />
+                            </Box>
+                            <Box mb="7px" textAlign="right">
+                                <ManageBtn
+                                    onClick={onOpened}
+                                    isLoading={loading.id == task?.id}
+                                    btn="Update"
+                                    bg="brand.400"
+                                    w="fit-content"
+                                    disabled={status == 'completed'}
+                                    h="35px"
+                                />
+                            </Box>
+
+                            <InputBlank
+                                label="Total Hours Spent"
+                                // defaultValue={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
+                                disableLabel={true}
+                                readonly={true}
+                                value={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
+                            />
+                        </Stack>
+                        
+                        {/* <Flex mt="1rem" justify="space-between">
                             <ManageBtn
                                 onClick={updateProgress}
                                 isLoading={loading.id == 'update'}
@@ -233,9 +358,9 @@ export const SingleTask = ({
                                 w="fit-content"
                                 disabled={status == 'completed'}
                             />
-                        </Flex>
+                        </Flex> */}
                     </Box>
-                    <VStack
+                    {/* <VStack
                         borderRadius=".2rem"
                         border="1px solid #efefef"
                         bgColor="white"
@@ -258,7 +383,7 @@ export const SingleTask = ({
                             title="Status:"
                             text={task?.status}
                         />
-                    </VStack>
+                    </VStack> */}
                     <Box
                         borderRadius=".2rem"
                         border="1px solid #efefef"

@@ -42,10 +42,10 @@ import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import { ProjectSubTaskModel } from 'src/services';
 
 const schema = yup.object().shape({
-    startDate: yup.string().required(),
-    endDate: yup.string().required(),
-    taskPriority: yup.number().required(),
-    duration: yup.number(),
+    startDate: yup.string().required('Start Date is required'),
+    endDate: yup.string().required('End Date is required'),
+    hours: yup.number().required('Hours is required'),
+
     // duration: yup.number().required(),
     // isAssignedToMe: yup.number().required(),
     // assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
@@ -57,17 +57,14 @@ const schema = yup.object().shape({
 const UpdateSubTaskModal = ({
     isOpen,
     onClose,
-    loading,
-    isProgress,
     data,
     task,
     subTask,
-    taskPriorityList,
     projectTaskAssigneeId,
+    totalHoursSpent
 }: {
     isOpen: any;
     onClose: any;
-
     loading?: any;
     isProgress?: any;
     data?: any;
@@ -75,12 +72,16 @@ const UpdateSubTaskModal = ({
     subTask?: any;
     taskPriorityList?: any;
     projectTaskAssigneeId: any;
+    totalHoursSpent?: any;
 }) => {
     const pastDate = moment().diff(moment(data?.endDate), 'days') > 0;
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const toast = useToast();
     const [hours, setHours] = useState<number>(0);
+    const [sliderValue, setSliderValue] = useState(
+        subTask?.percentageOfCompletion,
+    );
 
     const {
         register,
@@ -90,7 +91,7 @@ const UpdateSubTaskModal = ({
         setValue,
         reset,
         formState: { errors, isSubmitting, isDirty },
-    } = useForm<ProjectSubTaskModel>({
+    } = useForm<ProjectManagementTimesheetModel>({
         resolver: yupResolver(schema),
         mode: 'all',
         defaultValues: {},
@@ -98,27 +99,27 @@ const UpdateSubTaskModal = ({
 
     const updateHours = (type: 'minus' | 'plus') => {
         if (type === 'plus') {
-            setValue('duration', Number(watch('duration')) + 1);
+            setValue('hours', Number(watch('hours')) + 1);
             return;
         }
         if (type === 'minus') {
-            if (Number(watch('duration')) <= 0) {
-                setValue('duration', 0);
+            if (Number(watch('hours')) <= 0) {
+                setValue('hours', 0);
                 return;
             }
-            setValue('duration', Number(watch('duration')) - 1);
+            setValue('hours', Number(watch('hours')) - 1);
             return;
         }
     };
 
-    const UpdateSubTask = async (data: ProjectSubTaskModel) => {
-        data.name = subTask?.name as string;
+    const UpdateSubTask = async (data: ProjectManagementTimesheetModel) => {
         data.id = subTask?.id as string;
         data.projectTaskId = task?.id;
-        data.projectTaskAsigneeId = projectTaskAssigneeId;
-        // data.taskPriority = ;
+        // data.projectTaskAsigneeId = projectTaskAssigneeId;
+        data.projectTaskAsigneeId = subTask?.projectTaskAsigneeId;
+        data.percentageOfCompletion = sliderValue;
         try {
-            const res = await ProjectManagementService.updateSubTask(data);
+            const res = await ProjectManagementService.fillProjectManagementTimesheetForProject(data);
             if (res?.status === true) {
                 //   setLoading({ id: '' });
                 router.replace(router.asPath);
@@ -130,7 +131,7 @@ const UpdateSubTaskModal = ({
                 });
                 //   setOpenAddToTimesheetModal(false);
                 onClose();
-                router.reload();
+                // router.reload();
                 reset();
                 return;
             }
@@ -151,6 +152,9 @@ const UpdateSubTaskModal = ({
             });
         }
     };
+
+    console.log(subTask);
+    
     
     return (
         <Modal
@@ -180,7 +184,7 @@ const UpdateSubTaskModal = ({
                             pb="10px"
                         >
                             <Heading fontSize={16} fontWeight={600}>
-                                Update Sub Task
+                                Update Sub Task Progress
                             </Heading>
                             <Button
                                 onClick={() => {
@@ -210,6 +214,22 @@ const UpdateSubTaskModal = ({
                                 defaultValue={subTask?.name as string}
                                 readonly={true}
                             />
+                            {/* <PrimarySelect<ProjectSubTaskModel>
+                                register={register}
+                                error={errors.taskPriority}
+                                name="taskPriority"
+                                label="Sub Task Priority"
+                                placeholder="Select Sub Task priority"
+                                options={
+                                    <>
+                                        {taskPriorityList?.map((x, index) => (
+                                            <option value={x.id}>
+                                                {x.label}
+                                            </option>
+                                        ))}
+                                    </>
+                                }
+                            /> */}
                             <Grid
                                 templateColumns={[
                                     'repeat(1,1fr)',
@@ -218,7 +238,7 @@ const UpdateSubTaskModal = ({
                                 gap="1rem 1rem"
                                 w="full"
                             >
-                                <PrimaryDate<ProjectSubTaskModel>
+                                <PrimaryDate<ProjectManagementTimesheetModel>
                                     control={control}
                                     name="startDate"
                                     label="Start Date"
@@ -231,7 +251,7 @@ const UpdateSubTaskModal = ({
                                     //         .split('T')[0]
                                     // }
                                 />
-                                <PrimaryDate<ProjectSubTaskModel>
+                                <PrimaryDate<ProjectManagementTimesheetModel>
                                     control={control}
                                     name="endDate"
                                     label="End Date"
@@ -255,10 +275,10 @@ const UpdateSubTaskModal = ({
                             >
                                 <Box>
                                     <Flex alignItems="flex-end" gap="5px">
-                                        <PrimaryInput<ProjectSubTaskModel>
-                                            label="Edit Duration"
-                                            name="duration"
-                                            error={errors.duration}
+                                        <PrimaryInput<ProjectManagementTimesheetModel>
+                                            label="Edit Hours"
+                                            name="hours"
+                                            error={errors.hours}
                                             placeholder=""
                                             defaultValue={subTask?.duration}
                                             register={register}
@@ -308,23 +328,7 @@ const UpdateSubTaskModal = ({
                                     value={`${subTask?.hoursSpent} Hours`}
                                 />
                             </Grid>
-                            <PrimarySelect<ProjectSubTaskModel>
-                                register={register}
-                                error={errors.taskPriority}
-                                name="taskPriority"
-                                label="Sub Task Priority"
-                                placeholder="Select Sub Taskask priority"
-                                options={
-                                    <>
-                                        {taskPriorityList?.map((x, index) => (
-                                            <option value={x.id}>
-                                                {x.label}
-                                            </option>
-                                        ))}
-                                    </>
-                                }
-                            />
-                            {/* <ProgressSlider
+                            <ProgressSlider
                                 sliderValue={sliderValue}
                                 setSliderValue={setSliderValue}
                                 leftText="Percentage Of Completetion"
@@ -341,7 +345,7 @@ const UpdateSubTaskModal = ({
                                         ? 'gray.100'
                                         : 'red'
                                 }
-                            /> */}
+                            />
                             <HStack
                                 px=".8rem"
                                 spacing={4}
@@ -379,7 +383,9 @@ const UpdateSubTaskModal = ({
                                     // spinner={
                                     //     <BeatLoader color="white" size={10} />
                                     // }
-                                    onClick={() => handleSubmit(UpdateSubTask)()}
+                                    onClick={() =>
+                                        handleSubmit(UpdateSubTask)()
+                                    }
                                 >
                                     Update
                                 </Button>

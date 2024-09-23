@@ -19,7 +19,7 @@ import {
 import AddCommentModal from '@components/AddCommentModal';
 import shadeColor from '@components/generics/functions/shadeColor';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FiMessageSquare } from 'react-icons/fi';
 import Skeleton from 'react-loading-skeleton';
 import { AuditrailView, ProjectManagementService } from 'src/services';
@@ -31,6 +31,7 @@ import EditCommentModal from '@components/EditCommentModal';
 import { TaskComment } from 'src/services';
 import { da } from 'date-fns/locale';
 import DeleteMessagePrompt from '@components/bits-utils/ProjectManagement/Modals/DeleteMessagePrompt';
+import { UserContext } from '@components/context/UserContext';
 
 moment.updateLocale('en', {
     relativeTime: {
@@ -52,6 +53,7 @@ moment.updateLocale('en', {
 });
 
 export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
+    const { user } = useContext(UserContext);
     const [activities, setActivities] = useState<AuditrailView[]>([]);
     const [limit, setLimit] = useState(5);
     const [trigger, setTrigger] = useState(false);
@@ -147,12 +149,10 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
         }
     };
 
-
     const OpenDeleteModal = (comment: any) => {
         setSelectedComment(comment);
         setShowDeleteMessagePrompt(true);
-    }
-    
+    };
 
     return (
         <HStack
@@ -319,53 +319,61 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                     )}
                                                 </VStack>
                                             </ListItem>
-                                            {x?.isComment && (
-                                                <Menu>
-                                                    <MenuButton mt="2">
-                                                        <Box
-                                                            fontSize="1.2rem"
-                                                            pl="1rem"
-                                                            fontWeight="bold"
-                                                            cursor="pointer"
-                                                            color="brand.300"
-                                                        >
-                                                            <FaEllipsisH />
-                                                        </Box>
-                                                    </MenuButton>
-                                                    <MenuList>
-                                                        <MenuItem
-                                                            onClick={() =>
-                                                                OpenEditModal(x)
-                                                            }
-                                                            w="full"
-                                                            fontSize={13}
-                                                        >
-                                                            <Icon
-                                                                as={BsPenFill}
-                                                                mr=".5rem"
-                                                                color="brand.400"
-                                                            />
-                                                            Edit comment
-                                                        </MenuItem>
-                                                        <MenuItem
-                                                            onClick={() =>
-                                                                OpenDeleteModal(
-                                                                    x,
-                                                                )
-                                                            }
-                                                            w="full"
-                                                            fontSize={13}
-                                                        >
-                                                            <Icon
-                                                                as={BsTrash3}
-                                                                mr=".5rem"
-                                                                color="brand.400"
-                                                            />
-                                                            Delete comment
-                                                        </MenuItem>
-                                                    </MenuList>
-                                                </Menu>
-                                            )}
+                                            {x?.isComment &&
+                                                x?.createdByUserId ===
+                                                    user?.id && (
+                                                    <Menu>
+                                                        <MenuButton mt="2">
+                                                            <Box
+                                                                fontSize="1.2rem"
+                                                                pl="1rem"
+                                                                fontWeight="bold"
+                                                                cursor="pointer"
+                                                                color="brand.300"
+                                                            >
+                                                                <FaEllipsisH />
+                                                            </Box>
+                                                        </MenuButton>
+                                                        <MenuList>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    OpenEditModal(
+                                                                        x,
+                                                                    )
+                                                                }
+                                                                w="full"
+                                                                fontSize={13}
+                                                            >
+                                                                <Icon
+                                                                    as={
+                                                                        BsPenFill
+                                                                    }
+                                                                    mr=".5rem"
+                                                                    color="brand.400"
+                                                                />
+                                                                Edit comment
+                                                            </MenuItem>
+                                                            <MenuItem
+                                                                onClick={() =>
+                                                                    OpenDeleteModal(
+                                                                        x,
+                                                                    )
+                                                                }
+                                                                w="full"
+                                                                fontSize={13}
+                                                            >
+                                                                <Icon
+                                                                    as={
+                                                                        BsTrash3
+                                                                    }
+                                                                    mr=".5rem"
+                                                                    color="brand.400"
+                                                                />
+                                                                Delete comment
+                                                            </MenuItem>
+                                                        </MenuList>
+                                                    </Menu>
+                                                )}
                                         </Flex>
                                     ))}
                                 </UnorderedList>

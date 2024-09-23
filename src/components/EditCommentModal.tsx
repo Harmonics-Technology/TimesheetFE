@@ -90,6 +90,7 @@ const EditCommentModal = ({ isOpen, onClose, taskId, setTrigger, defaultComment 
         setIsLoading({ id: 'posting' });
         try {
         const result = await ProjectManagementService.updateComment(false, data);
+        
             if (result.status) {
                 toast({
                     title: 'Comment Edited Successfully',
@@ -103,7 +104,7 @@ const EditCommentModal = ({ isOpen, onClose, taskId, setTrigger, defaultComment 
                 return;
             }
             toast({
-                title: result.message,
+                title: result?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -111,7 +112,7 @@ const EditCommentModal = ({ isOpen, onClose, taskId, setTrigger, defaultComment 
         } catch (err: any) {
             setIsLoading({ id: '' });
             toast({
-                title: err?.message || err?.body?.message,
+                title: err?.body?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',

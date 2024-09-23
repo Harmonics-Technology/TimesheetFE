@@ -141,6 +141,7 @@ export const OperationDashboard = ({
 
     const updateTaskStatus = async (task: any, status: string) => {
         const reformattedTask = {
+            operationalTaskHours: task.operationalTaskHours,
             superAdminId: task.superAdminId,
             isAssignedToMe: task.isAssignedToMe,
             isOperationalTask: true,
