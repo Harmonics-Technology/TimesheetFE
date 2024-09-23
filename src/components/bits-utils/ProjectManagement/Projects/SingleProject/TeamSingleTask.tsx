@@ -1055,7 +1055,7 @@ export const TeamSingleTask = ({
                     isOpen={openEditSubtaskModal}
                     onClose={() => setOpenEditSubtaskModal(false)}
                     taskPriorityList={taskPriorityList}
-                    projectTaskAssigneeId={projectTaskAssineeId}
+                    projectTaskAssigneeId={ProjectTimesheetAssigneeId}
                     totalHoursSpent={
                         projectAssigneeDetails?.projectManagementTimesheetHours
                     }

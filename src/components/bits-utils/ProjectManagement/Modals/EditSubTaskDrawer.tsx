@@ -180,7 +180,7 @@ export const EditSubTaskDrawer = ({
             isOpen={isOpen}
             title={
                 // isEdit ? 'Edit Sub-Task':
-                'Add New Sub-Task'
+                'Edit Sub-Task'
             }
         >
             <form onSubmit={handleSubmit(onSubmit)}>
