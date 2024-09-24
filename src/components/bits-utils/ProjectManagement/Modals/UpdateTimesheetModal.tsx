@@ -63,6 +63,7 @@ const UpdateTimesheetModal = ({
     setSliderValue,
     projectId,
     addToTimesheet,
+    totalHoursSpent
 }: {
     isOpen: any;
     onClose: any;
@@ -79,6 +80,7 @@ const UpdateTimesheetModal = ({
     setSliderValue: any;
     projectId: any;
     addToTimesheet: any;
+    totalHoursSpent: any,
 }) => {
     console.log('this is the task', task);
     const pastDate = moment().diff(moment(data?.endDate), 'days') > 0;
@@ -121,6 +123,7 @@ const UpdateTimesheetModal = ({
         data.projectId = projectId;
         data.percentageOfCompletion = sliderValue;
         data.projectTaskAsigneeId = projectTaskAssigneeId;
+        data.addToTimesheet = addToTimesheet;
         try {
             if (
                 (subTask?.length > 0 && data?.projectSubTaskId === '') ||
@@ -324,7 +327,9 @@ const UpdateTimesheetModal = ({
                                                 name="hours"
                                                 error={errors.hours}
                                                 placeholder=""
-                                                defaultValue={subTask?.duration}
+                                                defaultValue={
+                                                    selectedTimesheet?.totalHours
+                                                }
                                                 register={register}
                                             />
                                             <Box>
@@ -369,7 +374,7 @@ const UpdateTimesheetModal = ({
                                         defaultValue=""
                                         readonly={true}
                                         disableLabel={true}
-                                        value={`${selectedTimesheet?.totalHours} Hours`}
+                                        value={`${totalHoursSpent} Hours`}
                                     />
                                 </Grid>
                                 {/* <PrimarySelect<ProjectManagementTimesheetModel>
