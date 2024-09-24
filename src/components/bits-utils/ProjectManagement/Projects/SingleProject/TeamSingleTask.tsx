@@ -862,7 +862,11 @@ export const TeamSingleTask = ({
                                                         Mark as complete
                                                     </MenuItem>
                                                     <MenuItem
-                                                        onClick={() => OpenEditSubtaskDrawer(x)}
+                                                        onClick={() =>
+                                                            OpenEditSubtaskDrawer(
+                                                                x,
+                                                            )
+                                                        }
                                                         w="full"
                                                     >
                                                         <Icon
@@ -1102,12 +1106,15 @@ export const TeamSingleTask = ({
                     isOpen={openEditTimesheetModal}
                     onClose={() => setOpenEditTimeSheetModal(false)}
                     taskPriorityList={taskPriorityList}
-                    projectTaskAssigneeId={ProjectTimesheetAssigneeId}
+                    projectTaskAssigneeId={user?.id}
                     selectedTimesheet={selectedTimesheet}
                     sliderValue={editTimesheetSliderValue}
                     setSliderValue={setEditTimesheetSliderValue}
                     projectId={project?.id}
                     addToTimesheet={addToTimesheet}
+                    totalHoursSpent={
+                        projectAssigneeDetails?.projectManagementTimesheetHours
+                    }
                 />
             )}
         </Box>
