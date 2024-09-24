@@ -119,10 +119,11 @@ const UpdateTimesheetModal = ({
     };
 
     const UpdateTimesheet = async (data: ProjectManagementTimesheetModel) => {
+        data.id = selectedTimesheet.id;
         data.projectTaskId = task.id;
         data.projectId = projectId;
         data.percentageOfCompletion = sliderValue;
-        data.projectTaskAsigneeId = projectTaskAssigneeId;
+        data.projectTaskAsigneeId = selectedTimesheet?.projectTaskAsigneeId;
         data.addToTimesheet = addToTimesheet;
         try {
             if (
