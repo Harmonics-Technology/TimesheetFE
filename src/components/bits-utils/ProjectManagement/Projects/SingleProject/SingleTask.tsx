@@ -335,10 +335,10 @@ export const SingleTask = ({
                                 // defaultValue={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
                                 disableLabel={true}
                                 readonly={true}
-                                value={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
+                                value={`${task?.hoursSpent} Hours`}
                             />
                         </Stack>
-                        
+
                         {/* <Flex mt="1rem" justify="space-between">
                             <ManageBtn
                                 onClick={updateProgress}

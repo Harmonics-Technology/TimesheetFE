@@ -88,12 +88,13 @@ export const EditOpTaskDrawer = ({
     const router = useRouter();
     console.log({ data });
     const [selectedUser, setSelecedUser] = useState<any>(
-        data?.assignees
-            ?.filter((x) => !x?.disabled)
-            .map((obj) => ({
-                id: obj?.userId,
-                fullName: obj?.fullName,
-            })) || [],
+        // data?.assignees
+        //     ?.filter((x) => !x?.disabled)
+        //     .map((obj) => ({
+        //         id: obj?.userId,
+        //         fullName: obj?.fullName,
+        //     })) || [],
+        []
     );
     const addUser = (user) => {
         const filtered = selectedUser?.find((x) => x.id === user.id);

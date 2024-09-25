@@ -422,6 +422,9 @@ export const TeamSingleTask = ({
         setOpenEditSubtaskDrawer(true);
     }
 
+    console.log(task);
+    
+
     return (
         <Box>
             <TeamTopBar data={project} id={id} />
@@ -564,7 +567,7 @@ export const TeamSingleTask = ({
                                 // defaultValue={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
                                 disableLabel={true}
                                 readonly={true}
-                                value={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
+                                value={`${task?.hoursSpent} Hours`}
                             />
                         </Stack>
 
@@ -862,7 +865,11 @@ export const TeamSingleTask = ({
                                                         Mark as complete
                                                     </MenuItem>
                                                     <MenuItem
-                                                        onClick={() => OpenEditSubtaskDrawer(x)}
+                                                        onClick={() =>
+                                                            OpenEditSubtaskDrawer(
+                                                                x,
+                                                            )
+                                                        }
                                                         w="full"
                                                     >
                                                         <Icon
@@ -1056,9 +1063,7 @@ export const TeamSingleTask = ({
                     onClose={() => setOpenEditSubtaskModal(false)}
                     taskPriorityList={taskPriorityList}
                     projectTaskAssigneeId={ProjectTimesheetAssigneeId}
-                    totalHoursSpent={
-                        projectAssigneeDetails?.projectManagementTimesheetHours
-                    }
+                    totalHoursSpent={task?.hoursSpent}
                 />
             )}
             {isOpened && (
@@ -1075,9 +1080,7 @@ export const TeamSingleTask = ({
                     updateHours={updateHours}
                     addToTimesheet={addToTimesheet}
                     setOpenAddToTimesheetModal={setOpenAddToTimesheetModal}
-                    totalHoursSpent={
-                        projectAssigneeDetails?.projectManagementTimesheetHours
-                    }
+                    totalHoursSpent={task?.hoursSpent}
                     onSubmit={() => handleSubmit(AddHoursToTask)()}
                 />
             )}
@@ -1102,12 +1105,13 @@ export const TeamSingleTask = ({
                     isOpen={openEditTimesheetModal}
                     onClose={() => setOpenEditTimeSheetModal(false)}
                     taskPriorityList={taskPriorityList}
-                    projectTaskAssigneeId={ProjectTimesheetAssigneeId}
+                    projectTaskAssigneeId={user?.id}
                     selectedTimesheet={selectedTimesheet}
                     sliderValue={editTimesheetSliderValue}
                     setSliderValue={setEditTimesheetSliderValue}
                     projectId={project?.id}
                     addToTimesheet={addToTimesheet}
+                    totalHoursSpent={task?.hoursSpent}
                 />
             )}
         </Box>
