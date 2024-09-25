@@ -422,6 +422,9 @@ export const TeamSingleTask = ({
         setOpenEditSubtaskDrawer(true);
     }
 
+    console.log(task);
+    
+
     return (
         <Box>
             <TeamTopBar data={project} id={id} />
@@ -564,7 +567,7 @@ export const TeamSingleTask = ({
                                 // defaultValue={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
                                 disableLabel={true}
                                 readonly={true}
-                                value={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
+                                value={`${task?.hoursSpent} Hours`}
                             />
                         </Stack>
 
@@ -1060,9 +1063,7 @@ export const TeamSingleTask = ({
                     onClose={() => setOpenEditSubtaskModal(false)}
                     taskPriorityList={taskPriorityList}
                     projectTaskAssigneeId={ProjectTimesheetAssigneeId}
-                    totalHoursSpent={
-                        projectAssigneeDetails?.projectManagementTimesheetHours
-                    }
+                    totalHoursSpent={task?.hoursSpent}
                 />
             )}
             {isOpened && (
@@ -1079,9 +1080,7 @@ export const TeamSingleTask = ({
                     updateHours={updateHours}
                     addToTimesheet={addToTimesheet}
                     setOpenAddToTimesheetModal={setOpenAddToTimesheetModal}
-                    totalHoursSpent={
-                        projectAssigneeDetails?.projectManagementTimesheetHours
-                    }
+                    totalHoursSpent={task?.hoursSpent}
                     onSubmit={() => handleSubmit(AddHoursToTask)()}
                 />
             )}
@@ -1112,9 +1111,7 @@ export const TeamSingleTask = ({
                     setSliderValue={setEditTimesheetSliderValue}
                     projectId={project?.id}
                     addToTimesheet={addToTimesheet}
-                    totalHoursSpent={
-                        projectAssigneeDetails?.projectManagementTimesheetHours
-                    }
+                    totalHoursSpent={task?.hoursSpent}
                 />
             )}
         </Box>
