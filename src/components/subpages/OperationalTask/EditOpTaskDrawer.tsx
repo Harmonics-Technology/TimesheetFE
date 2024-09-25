@@ -106,7 +106,6 @@ export const EditOpTaskDrawer = ({
     };
     const statuses = [
         { id: 1, name: 'To Do' },
-
         { id: 2, name: 'In Progress' },
         { id: 3, name: 'Completed' },
     ];
@@ -117,19 +116,25 @@ export const EditOpTaskDrawer = ({
             ? 'Departmental'
             : 'Others',
     );
+
+    const changeTaskType = (value: string) => {
+        setTaskType(value);
+        setSelecedUser([]);
+    };
     const isAssignedToMe =
         String(taskType) === 'Private' || data?.isAssignedToMe ? true : false;
     const [department, setDepartment] = useState<any>(data?.department);
     const [isLoading, setIsLoading] = useState(false);
     const [deptUser, setDeptUser] = useState<any>([]);
 
-    const fetchUsersInDept = async (value: any) => {
+    const fetchUsersInDept = async (value: any, trigger?: boolean) => {
         // router.push({
         //     query: {
         //         clientId: value,
         //     },
         // });
         setDepartment(value);
+
         try {
             setIsLoading(true);
             const data = await UserService.listUsersByDepartment(
@@ -140,6 +145,7 @@ export const EditOpTaskDrawer = ({
             );
             if (data.status) {
                 setIsLoading(false);
+                trigger && setSelecedUser([]);
                 setDeptUser(data.data?.value);
             }
         } catch (error) {
@@ -221,7 +227,7 @@ export const EditOpTaskDrawer = ({
                     />
                     <SelectBlank
                         label="Task Type"
-                        onChange={(e) => setTaskType(e.target.value)}
+                        onChange={(e) => changeTaskType(e.target.value)}
                         placeholder="Select one"
                         defaultValue={taskType}
                         options={[
@@ -237,7 +243,9 @@ export const EditOpTaskDrawer = ({
                             label="Department"
                             placeholder="Select one"
                             defaultValue={data?.department}
-                            onChange={(e) => fetchUsersInDept(e.target.value)}
+                            onChange={(e) =>
+                                fetchUsersInDept(e.target.value, true)
+                            }
                             options={departments.map((x) => (
                                 <option value={x?.name}>{x.name}</option>
                             ))}
@@ -390,7 +398,7 @@ export const EditOpTaskDrawer = ({
                     </Grid>
 
                     <Fragment>
-                        {data?.operationalTaskStatus === 'Completed' ? (    
+                        {data?.operationalTaskStatus === 'Completed' ? (
                             <Grid
                                 templateColumns={[
                                     'repeat(1,1fr)',
@@ -413,7 +421,7 @@ export const EditOpTaskDrawer = ({
 
                                 <PrimaryInput<ProjectTaskModel>
                                     label="Hours"
-                                    name='operationalTaskHours'
+                                    name="operationalTaskHours"
                                     error={errors.operationalTaskHours}
                                     placeholder=""
                                     defaultValue={data?.operationalTaskHours}
@@ -438,7 +446,7 @@ export const EditOpTaskDrawer = ({
                             />
                         )}
                     </Fragment>
-                    
+
                     {/* <Grid
                         templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                         gap="1rem 1rem"
