@@ -369,7 +369,10 @@ export const AddOpTaskDrawer = ({
                             name="endDate"
                             label="End Date"
                             error={errors.endDate}
-                            // min={new DateObject().add(1, 'days')}
+                            min={new DateObject(watch('startDate') as any).add(
+                                1,
+                                'days',
+                            )}
                         />
                     </Grid>
 
