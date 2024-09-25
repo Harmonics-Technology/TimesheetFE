@@ -51,9 +51,9 @@ export const LicenseHome = ({
         onOpen: onOpens,
         onClose: onCloses,
     } = useDisclosure();
-    const subId = router.query?.subId || subs[0].subscriptionId;
+    const subId = router.query?.subId || subs[0]?.subscriptionId;
     const [showDetails, setShowDetails] = useState<any>();
-    const selected: ClientSubscriptionDetailView = subs.find(
+    const selected: ClientSubscriptionDetailView = subs?.find(
         (x) => x.subscriptionId == subId,
     ) as ClientSubscriptionDetailView;
 
@@ -63,7 +63,7 @@ export const LicenseHome = ({
         100;
     const daysLeft = moment(selected?.endDate).diff(moment(), 'day');
 
-    const otherSubs = subs.filter((x) => x?.subscriptionId !== subId);
+    const otherSubs = subs?.filter((x) => x?.subscriptionId !== subId);
 
     const triggerNewSub = (id: string) => {
         router.push({
@@ -114,7 +114,7 @@ export const LicenseHome = ({
                                                 )
                                             }
                                         >
-                                            {x.subscriptionType}
+                                            {x?.subscriptionType}
                                         </Text>
                                     ))}
                                 </HStack>

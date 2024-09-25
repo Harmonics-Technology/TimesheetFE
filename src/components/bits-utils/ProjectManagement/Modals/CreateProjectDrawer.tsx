@@ -58,7 +58,7 @@ export const CreateProjectDrawer = ({
             .number()
             .required()
             .transform((val, orig) => (orig == '' ? undefined : val)),
-        budgetThreshold: yup.number().required().max(currentBudget),
+        // budgetThreshold: yup.number().required().max(currentBudget),
         assignedUsers: yup
             .array()
             .min(1, 'Select atleast one assignee')

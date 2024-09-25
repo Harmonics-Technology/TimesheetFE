@@ -18,9 +18,10 @@ type Props = {
     onClose?: any;
     user?: any;
     loading?: any;
+    text?: any;
 };
 
-const UpgradePromptModal = ({ isOpen, onClose }: Props) => {
+const UpgradePromptModal = ({ isOpen, onClose, text }: Props) => {
     const router = useRouter();
     return (
         <Modal
@@ -64,9 +65,10 @@ const UpgradePromptModal = ({ isOpen, onClose }: Props) => {
 
                 <ModalBody>
                     <Box maxH="77vh" overflowY="auto" px={5}>
-                        <Text fontSize="1.2rem" mb="2rem">
-                            Your current subscription plan does not include this
-                            feature, please upgrade to enable this feature.
+                        <Text fontSize="1rem" mb="2rem">
+                            {text ||
+                                `Your current subscription plan does not include this
+                            feature, please upgrade to enable this feature.`}
                         </Text>
                         <HStack spacing={4} w="full">
                             <Button

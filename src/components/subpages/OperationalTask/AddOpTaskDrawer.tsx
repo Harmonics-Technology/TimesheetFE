@@ -136,6 +136,16 @@ export const AddOpTaskDrawer = ({
         data.isAssignedToMe = isAssignedToMe;
         data.department = department;
 
+        if (!data.isAssignedToMe && (data.assignedUsers as any)?.length < 1) {
+            toast({
+                title: 'You must select atleast an assignee to continue',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
+
         data.assignedUsers = isAssignedToMe
             ? [id || superAdminId]
             : data.assignedUsers;

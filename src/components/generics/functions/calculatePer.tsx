@@ -1,3 +1,4 @@
 export function calculatePer(divisor, divider) {
-    return (divisor / divider) * 100;
+    const value = ((divisor || 0) / (divider || 0)) * 100;
+    return isNaN(value) ? 0 : value;
 }

@@ -43,6 +43,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                   'supervisors',
                   'team members',
                   { show: true, name: 'clients' },
+                  { show: true, name: 'payment partners' },
               ]
             : subType == 'standard'
             ? [
@@ -132,12 +133,12 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
-                        display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
-                        }
+                        // display={
+                        //     (subType == 'standard' && activeSub) ||
+                        //     (subType == 'premium' && activeSub)
+                        //         ? true
+                        //         : false
+                        // }
                     />
                     <MenuItem
                         change={change}
@@ -149,10 +150,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         role={role}
                         display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
+                            subType == 'premium' && activeSub ? true : false
                         }
                     />
 
@@ -340,10 +338,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         role={role}
                         display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
+                            subType == 'premium' && activeSub ? true : false
                         }
                     />
                     <MenuItem
@@ -502,10 +497,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         role={role}
                         display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
+                            subType == 'premium' && activeSub ? true : false
                         }
                     />
                     <MenuItem
@@ -943,10 +935,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         role={role}
                         display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
+                            subType == 'premium' && activeSub ? true : false
                         }
                     />
                     <MenuItem

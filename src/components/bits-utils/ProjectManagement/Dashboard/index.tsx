@@ -29,6 +29,7 @@ import { getCurrencyName } from '@components/generics/functions/getCurrencyName'
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 import { UserContext } from '@components/context/UserContext';
+import { TabMenu } from '../Generics/TabMenu';
 
 export const Dashboard = ({
     metrics,
@@ -36,7 +37,7 @@ export const Dashboard = ({
     metrics: DashboardProjectManagementView;
 }) => {
     // console.log({ metrics });
-    const { accessControls } = useContext(UserContext);
+    const { accessControls, subType } = useContext(UserContext);
     const [budget, setBudget] = useState<any>(
         metrics?.totalBudgetSpent
             ?.filter(
@@ -52,17 +53,11 @@ export const Dashboard = ({
         (metrics?.totalBudgetSpent as any)?.filter((x) => x.currency !== null),
         'currency',
     );
+
     return (
         <Box>
             <Box mb="2.5rem">
-                <ProjectTabs
-                    name={[
-                        'dashboard',
-                        'projects',
-                        // 'operational-task',
-                        'resource-capacity',
-                    ]}
-                />
+                <ProjectTabs name={TabMenu(subType)} />
             </Box>
             <HStack
                 ml="auto"

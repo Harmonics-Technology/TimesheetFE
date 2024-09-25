@@ -9,11 +9,18 @@ export default invoices;
 
 export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
     const role = JSON.parse(ctx.req.cookies.user).role.replaceAll(' ', '');
+    const sub = JSON.parse(
+        ctx.req.cookies.subDetails,
+    )?.data?.subscription?.name?.toLowerCase();
+    console.log({ sub });
     //
     return {
         redirect: {
             permanent: false,
-            destination: `/${role}/project-management/dashboard`,
+            destination:
+                sub == 'basic'
+                    ? `/${role}/project-management/projects`
+                    : `/${role}/project-management/dashboard`,
         },
         props: {},
     };

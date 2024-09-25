@@ -12,6 +12,7 @@ import { UserContext } from '@components/context/UserContext';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import { ProjectTabs } from '../Dashboard/ProjectTabs';
 import Cookies from 'js-cookie';
+import { TabMenu } from '../Generics/TabMenu';
 
 export const ResourceView = ({ resources }) => {
     const [date, setDate] = useState<any>([
@@ -20,7 +21,7 @@ export const ResourceView = ({ resources }) => {
     ]);
 
     const router = useRouter();
-    const { user } = useContext(UserContext);
+    const { user, subType } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
     const tableHead = [
         'Team Member',
@@ -46,14 +47,7 @@ export const ResourceView = ({ resources }) => {
     return (
         <Box>
             <Box mb="2rem">
-                <ProjectTabs
-                    name={[
-                        'dashboard',
-                        'projects',
-                        // 'operational-task',
-                        'resource-capacity',
-                    ]}
-                />
+                <ProjectTabs name={TabMenu(subType)} />
             </Box>
             <HStack pb="1rem" justify="space-between">
                 <Text fontSize="1rem" color="#263238" fontWeight={500}>

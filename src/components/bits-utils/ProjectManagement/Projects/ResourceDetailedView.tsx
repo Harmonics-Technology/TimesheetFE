@@ -16,12 +16,14 @@ import {
 } from '@components/bits-utils/TableData';
 import colorSwatch from '@components/generics/colorSwatch';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { ProjectView, ResourceCapacityDetailView } from 'src/services';
 import { TableCard } from '../Generics/TableCard';
 import moment from 'moment';
 import { ProjectTabs } from '../Dashboard/ProjectTabs';
+import { TabMenu } from '../Generics/TabMenu';
+import { UserContext } from '@components/context/UserContext';
 
 export const ResourceDetailedView = ({ resource, userName, projects }) => {
     const router = useRouter();
@@ -54,17 +56,12 @@ export const ResourceDetailedView = ({ resource, userName, projects }) => {
         'Due Date',
         'Status',
     ];
+
+    const { subType } = useContext(UserContext);
     return (
         <Box>
             <Box mb="2rem">
-                <ProjectTabs
-                    name={[
-                        'dashboard',
-                        'projects',
-                        // 'operational-task',
-                        'resource-capacity',
-                    ]}
-                />
+                <ProjectTabs name={TabMenu(subType)} />
             </Box>
             <HStack
                 fontSize=".875rem"

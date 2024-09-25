@@ -8,7 +8,7 @@ import {
     useToast,
     useDisclosure,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { ProjectTabs } from '../../Dashboard/ProjectTabs';
 import { TaskMenu } from '../../Generics/TaskMenu';
@@ -23,6 +23,8 @@ import { ProjectView } from 'src/services';
 import { EditProjectDrawer } from '../../Modals/EditProjectDrawer';
 import { ShowPrompt } from '../../Modals/ShowPrompt';
 import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import { SubTabMenu, TabMenu } from '../../Generics/TabMenu';
+import { UserContext } from '@components/context/UserContext';
 
 export const TopBar = ({
     noTitle = false,
@@ -47,18 +49,12 @@ export const TopBar = ({
         isOpen: isOpened,
         onClose: onClosed,
     } = useDisclosure();
+    const { subType } = useContext(UserContext);
 
     return (
         <Box borderBottom={noTitle ? 'none' : '1px solid #e5e5e5'} pb="0rem">
             <Box mb="1.5rem">
-                <ProjectTabs
-                    name={[
-                        'dashboard',
-                        'projects',
-                        // 'operational-task',
-                        'resource-capacity',
-                    ]}
-                />
+                <ProjectTabs name={TabMenu(subType)} />
             </Box>
             <Flex justify="space-between" align="center">
                 <HStack
@@ -94,13 +90,7 @@ export const TopBar = ({
                 </HStack>
             </Flex>
             <TaskMenu
-                name={[
-                    'dashboard',
-                    'project-task',
-                    'gantt-chart',
-                    'team-members',
-                    'budget',
-                ]}
+                name={SubTabMenu(subType)}
                 id={id}
             />
             {!noTitle && (

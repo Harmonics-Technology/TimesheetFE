@@ -36,7 +36,12 @@ export const TableBox = ({
             </Box>
             <Flex justify="flex-end" p="1rem">
                 <Link href={(url as string) || ''} passHref>
-                    <Text color="brand.400" fontSize=".75rem" fontWeight="500">
+                    <Text
+                        color="brand.400"
+                        fontSize=".75rem"
+                        fontWeight="500"
+                        cursor="pointer"
+                    >
                         View more
                     </Text>
                 </Link>

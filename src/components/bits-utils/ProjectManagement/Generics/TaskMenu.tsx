@@ -1,4 +1,5 @@
-import { HStack, Flex } from '@chakra-ui/react';
+import { HStack, Flex, useDisclosure } from '@chakra-ui/react';
+import UpgradePromptModal from '@components/bits-utils/UpgradePromptModal';
 import { UserContext } from '@components/context/UserContext';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
@@ -7,6 +8,8 @@ export const TaskMenu = ({ name, id }) => {
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
     const router = useRouter();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
     return (
         <HStack
             my="2rem"
@@ -16,7 +19,7 @@ export const TaskMenu = ({ name, id }) => {
         >
             {name.map((x: any) => {
                 const isActive = router.pathname.startsWith(
-                    `/${role}/project-management/projects/[id]/${x.replaceAll(
+                    `/${role}/project-management/projects/[id]/${x?.name.replaceAll(
                         ' ',
                         '-',
                     )}`,
@@ -30,17 +33,22 @@ export const TaskMenu = ({ name, id }) => {
                         fontWeight="500"
                         textTransform="capitalize"
                         fontSize=".87rem"
-                        cursor="pointer"
-                        onClick={() =>
-                            router.push(
-                                `/${role}/project-management/projects/${id}/${x}`,
-                            )
+                        onClick={
+                            x?.show
+                                ? () => {
+                                      router.push(
+                                          `/${role}/project-management/projects/${id}/${x?.name}`,
+                                      );
+                                  }
+                                : onOpen
                         }
+                        cursor={x?.show ? 'pointer' : 'not-allowed'}
                     >
-                        {x.replaceAll('-', ' ')}
+                        {x?.name.replaceAll('-', ' ')}
                     </Flex>
                 );
             })}
+            <UpgradePromptModal isOpen={isOpen} onClose={onClose} />
         </HStack>
     );
 };

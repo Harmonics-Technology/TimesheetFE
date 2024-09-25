@@ -19,6 +19,8 @@ import {
 } from 'src/services';
 import { UserContext } from '@components/context/UserContext';
 import Pagination from '@components/bits-utils/Pagination';
+import { TabMenu } from '../Generics/TabMenu';
+import UpgradePromptModal from '@components/bits-utils/UpgradePromptModal';
 
 export const ProjectPage = ({
     projects,
@@ -40,7 +42,8 @@ export const ProjectPage = ({
     currencies: any;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { user } = useContext(UserContext);
+    const { isOpen: open, onOpen: opens, onClose: close } = useDisclosure();
+    const { user, subType } = useContext(UserContext);
     const router = useRouter();
     function filterProjects(val: number) {
         router.push({
@@ -60,29 +63,40 @@ export const ProjectPage = ({
         (access?.adminProjectCreation && user?.role !== 'Team Member') ||
         (access?.pmProjectCreation && isPm);
 
+    const projectSize = projects?.size;
+
     return (
         <Box>
             <Box mb="2.5rem">
-                {!isPm && (
-                    <ProjectTabs
-                        name={[
-                            'dashboard',
-                            'projects',
-                            // 'operational-task',
-                            'resource-capacity',
-                        ]}
-                    />
-                )}
+                {!isPm && <ProjectTabs name={TabMenu(subType)} />}
             </Box>
             <Flex justify="flex-end" gap="1rem">
                 <SubSearchComponent />
                 {hasAccess && (
                     <Button
-                        onClick={onOpen}
-                        bgColor="brand.400"
+                        onClick={() =>
+                            subType == 'basic' && projectSize >= 2
+                                ? opens()
+                                : onOpen()
+                        }
+                        bgColor={
+                            subType == 'basic' && projectSize >= 2
+                                ? 'gray.300'
+                                : 'brand.400'
+                        }
+                        cursor={
+                            subType == 'basic' && projectSize >= 2
+                                ? 'not-allowed'
+                                : 'pointer'
+                        }
                         color="white"
                         h="2.5rem"
                         borderRadius=".3rem"
+                        // isDisabled={
+                        //     subType == 'basic' && projectSize >= 2
+                        //         ? true
+                        //         : false
+                        // }
                     >
                         Create New Project
                     </Button>
@@ -153,6 +167,12 @@ export const ProjectPage = ({
                     currencies={currencies}
                 />
             )}
+
+            <UpgradePromptModal
+                isOpen={open}
+                onClose={close}
+                text="You’ve reached the maximum of 2 projects allowed in the Basic package. To create more projects, please consider upgrading to a different package."
+            />
         </Box>
     );
 };

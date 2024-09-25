@@ -55,7 +55,7 @@ export const EditProjectDrawer = ({
     projectMangers: any;
 }) => {
     const [nonApplicable, setNonApplicable] = useState(
-        (data?.projectManagers as any)?.length > 0 ? true : false,
+        (data?.projectManagers as any)?.length > 0 ? false : true,
     );
     const schema = yup.object().shape({
         name: yup.string().required(),

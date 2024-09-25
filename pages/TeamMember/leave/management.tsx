@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         try {
             const teamMembers = await UserService.getClientTeamMembers(
                 pagingOptions.offset,
-                50,
+                100,
                 pagingOptions.search,
                 clientId,
                 pagingOptions.from,
