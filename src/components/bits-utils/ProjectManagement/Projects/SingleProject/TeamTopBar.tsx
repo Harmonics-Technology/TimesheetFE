@@ -6,9 +6,10 @@ import React, { useContext } from 'react';
 import { ColoredTag } from '../../Generics/ColoredTag';
 import { TaskMenu } from '../../Generics/TaskMenu';
 import { UserContext } from '@components/context/UserContext';
+import { TeamTabMenu } from '../../Generics/TabMenu';
 
 export const TeamTopBar = ({ data, id }) => {
-    const { user } = useContext(UserContext);
+    const { user, subType } = useContext(UserContext);
     const isPm = user?.isOrganizationProjectManager;
     const isProjectPm = data?.projectManagerId == user?.id;
 
@@ -26,7 +27,7 @@ export const TeamTopBar = ({ data, id }) => {
     //   ? ['dashboard', 'project-task', 'gantt-chart', 'team-members']
     return (
         <Box>
-            <TaskMenu name={menuItems} id={id} />
+            <TaskMenu name={TeamTabMenu(subType, isPm, isProjectPm)} id={id} />
             <HStack justify="space-between" my="2rem" align="flex-start">
                 <Box>
                     <Text color="#2d3748" fontWeight={600}>

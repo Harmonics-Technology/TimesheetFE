@@ -10,7 +10,7 @@ export const ProjectTabs = ({ name }: { name: any[] }) => {
     const role = user?.role?.replaceAll(' ', '');
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    console.log({ user });
+    // console.log({ user });
     return (
         <Flex bgColor="white" w="full" borderRadius=".3rem" p=".5rem 1rem">
             {name.map((x: any) => {
