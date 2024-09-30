@@ -193,7 +193,7 @@ const UpdateTimesheetModal = ({
             >
                 <ModalHeader textAlign="center">
                     <>
-                        {!addToTimesheet && (
+                        {!selectedTimesheet?.addToTimesheet && (
                             <Flex
                                 alignItems="center"
                                 color="gray.500"
@@ -220,10 +220,10 @@ const UpdateTimesheetModal = ({
                 </ModalHeader>
 
                 <ModalBody>
-                    {addToTimesheet ? (
+                    {selectedTimesheet?.addToTimesheet ? (
                         <Box w="100%">
                             <Text mb="7" textAlign="center">
-                                Time not added dded to timesheet. Kindly make
+                                Time was added to timesheet. Kindly make
                                 update from the task calendar view
                             </Text>
                             <Box
