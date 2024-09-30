@@ -6,7 +6,7 @@ import {
     Grid,
     HStack,
     Text,
-    useDisclosure,
+    useDisclosure, Heading,
     useToast,
 } from '@chakra-ui/react';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
@@ -47,6 +47,8 @@ import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import ContractTable from '@components/bits-utils/ContractTable';
 import { LicenseRevoke } from '@components/bits-utils/LicenseRevoke';
 import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
+import InputBlank from '@components/bits-utils/InputBlank';
+
 
 const schema = yup.object().shape({});
 interface TeamProfileProps {
@@ -148,6 +150,9 @@ function TeamProfile({
                 userProfile?.employeeInformation?.timesheetFrequency,
             payrollStructure:
                 userProfile?.employeeInformation?.payrollStructure,
+            rolledOverLeave: userProfile?.employeeInformation?.rolledOverLeave,
+            hasRollOverLeave: userProfile?.employeeInformation?.hasRollOverLeave,
+            expiryDateOfRolledOverLeave: userProfile?.employeeInformation?.expiryDateOfRolledOverLeave,
         },
     });
     const router = useRouter();
@@ -202,6 +207,7 @@ function TeamProfile({
     const onboarding = watch('fixedAmount');
 
     const isEligibleForLeave = watch('isEligibleForLeave');
+    const hasRolledOverLeave = watch('hasRollOverLeave');
 
     const [contract, setContractFile] = useState<any>('');
     const [showLoading, setShowLoading] = useState(false);
@@ -1156,7 +1162,64 @@ function TeamProfile({
                                     register={register}
                                 />
                             ) : null}
+
+                            <Box mb="1.5rem" pos="relative">
+                                <PrimaryRadio
+                                    label="Does this team member have a rolled over leave?"
+                                    radios={['No', 'Yes']}
+                                    name="hasRollOverLeave"
+                                    control={control}
+                                    error={errors.hasRollOverLeave}
+                                    // defaultValue={
+                                    //     eligible == true ? 'Yes' : 'No'
+                                    // }
+                                />
+                            </Box>
+
+                            {(hasRolledOverLeave as unknown as string) ==
+                                'Yes' && (
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Rolled Over Leave"
+                                    name="rolledOverLeave"
+                                    error={errors.rolledOverLeave}
+                                    placeholder=""
+                                    defaultValue={''}
+                                    register={register}
+                                />
+                            )}
+                            {(hasRolledOverLeave as unknown as string) ==
+                                'Yes' && (
+                                <PrimaryDate<TeamMemberModel>
+                                    label="Expiry date of rolled over leave"
+                                    name="expiryDateOfRolledOverLeave"
+                                    error={errors.expiryDateOfRolledOverLeave}
+                                    placeholder=""
+                                    defaultValue={''}
+                                    control={control}
+                                    // register={register}
+                                />
+                            )}
                         </Grid>
+                    </Box>
+                    <Box mt='5'>
+                        <Heading
+                            fontSize={13}
+                            mb="12px"
+                            color="#1A202C"
+                            fontWeight={500}
+                        >
+                            Team member leave balance
+                        </Heading>
+                        <Box w='266px'>
+                            <InputBlank
+                                label="Leave Balance"
+                                placeholder=""
+                                defaultValue=""
+                                readonly={true}
+                                disableLabel={true}
+                                value={`${userProfile?.employeeInformation?.numberOfDaysEligible} Days`}
+                            />
+                        </Box>
                     </Box>
                     <ContractTable
                         userProfile={userProfile}

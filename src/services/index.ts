@@ -270,6 +270,7 @@ export type { UserCountByPayrollTypeView } from './models/UserCountByPayrollType
 export type { UserCountByPayrollTypeViewListStandardResponse } from './models/UserCountByPayrollTypeViewListStandardResponse';
 export type { UserDepartment } from './models/UserDepartment';
 export type { UserDepartmentView } from './models/UserDepartmentView';
+export type { UserDepartmentViewListStandardResponse } from './models/UserDepartmentViewListStandardResponse';
 export type { UserDraftModel } from './models/UserDraftModel';
 export type { UserDraftView } from './models/UserDraftView';
 export type { UserDraftViewPagedCollection } from './models/UserDraftViewPagedCollection';

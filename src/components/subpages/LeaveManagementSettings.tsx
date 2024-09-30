@@ -20,6 +20,7 @@ import ToggleSwitch from '@components/bits-utils/ToggleSwitch';
 import { UserContext } from '@components/context/UserContext';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from 'react';
 import { FaEllipsisH } from 'react-icons/fa';
@@ -54,6 +55,7 @@ export const LeaveManagementSettings = ({
     const [access, setAccess] = useState<ControlSettingModel>({
         allowIneligibleLeaveCode: controls?.allowIneligibleLeaveCode,
     });
+
     const deleteLeave = async (id: string) => {
         setLoading({ state: true, id });
         try {
@@ -129,17 +131,59 @@ export const LeaveManagementSettings = ({
     }, [access]);
 
     return (
-        <Box>
+        <Box bg="#FFFFFF" boxShadow="md" px="18px" py="18px" borderRadius="8px">
             <Flex
-                justify="space-between"
-                pb="1rem"
-                borderBottom="1px solid #C2CFE0"
                 align="center"
+                gap="19px"
             >
-                <Text fontSize=".875rem" color="#2d3748" mb="0">
-                    Leave Management Preference
-                </Text>
+                <Link href="/SuperAdmin/account-management/leave-management-settings">
+                    <Text
+                        fontSize=".875rem"
+                        pb="8px"
+                        fontWeight={500}
+                        color={
+                            router.pathname ===
+                            '/SuperAdmin/account-management/leave-management-settings'
+                                ? '#2EAFA3'
+                                : '#2d3748'
+                        }
+                        mb="0"
+                        borderBottom={
+                            router.pathname ===
+                            '/SuperAdmin/account-management/leave-management-settings'
+                                ? '2px solid #2EAFA3'
+                                : 'none'
+                        }
+                        cursor='pointer'
+                    >
+                        Leave Management Preference
+                    </Text>
+                </Link>
+                <Link href="/SuperAdmin/account-management/leave-settings">
+                    <Text
+                        pb='8px'
+                        fontSize=".875rem"
+                        color={
+                            router.pathname ===
+                            '/SuperAdmin/account-management/leave-settings'
+                                ? '#2EAFA3'
+                                : '#2d3748'
+                        }
+                        mb="0"
+                        fontWeight={500}
+                        borderBottom={
+                            router.pathname ===
+                            '/SuperAdmin/account-management/leave-settings'
+                                ? '2px solid #2EAFA3'
+                                : 'none'
+                        }
+                        cursor="pointer"
+                    >
+                        Leave Settings
+                    </Text>
+                </Link>
             </Flex>
+            <Box w="100%" h="1px" bg="#C2CFE0"></Box>
             <Grid
                 templateColumns={{
                     base: 'repeat(1, 2fr)',

@@ -68,4 +68,9 @@ export type TeamMemberModel = {
     paymentProcessingFeeType?: string | null;
     paymentProcessingFee?: number | null;
     departments?: Array<string> | null;
+    hasUtilizeLeaveDaysToDate?: boolean | null;
+    utilizedLeave?: number | null;
+    hasRollOverLeave?: boolean | null;
+    rolledOverLeave?: number | null;
+    expiryDateOfRolledOverLeave?: string | null;
 };

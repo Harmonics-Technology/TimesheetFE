@@ -30,6 +30,7 @@ import type { UpdateClientStripeSubscriptionModel } from '../models/UpdateClient
 import type { UpdateClientSubscriptionModel } from '../models/UpdateClientSubscriptionModel';
 import type { UpdateUserModel } from '../models/UpdateUserModel';
 import type { UserCountByPayrollTypeViewListStandardResponse } from '../models/UserCountByPayrollTypeViewListStandardResponse';
+import type { UserDepartmentViewListStandardResponse } from '../models/UserDepartmentViewListStandardResponse';
 import type { UserProfileViewStandardResponse } from '../models/UserProfileViewStandardResponse';
 import type { UserViewListStandardResponse } from '../models/UserViewListStandardResponse';
 import type { UserViewPagedCollectionStandardResponse } from '../models/UserViewPagedCollectionStandardResponse';
@@ -381,6 +382,26 @@ department?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'department': department,
+            },
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param userId 
+     * @returns UserDepartmentViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static listUsersDepartment(
+userId?: string,
+): CancelablePromise<UserDepartmentViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/list-user-departments',
+            query: {
+                'userId': userId,
             },
             errors: {
                 401: `Unauthorized`,

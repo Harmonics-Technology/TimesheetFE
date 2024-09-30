@@ -7,4 +7,7 @@ export type LeaveConfigurationModel = {
     superAdminId?: string | null;
     eligibleLeaveDays?: number | null;
     isStandardEligibleDays?: boolean | null;
+    isProrated?: boolean | null;
+    allowRollover?: boolean | null;
+    noOfMonthValid?: number | null;
 };
