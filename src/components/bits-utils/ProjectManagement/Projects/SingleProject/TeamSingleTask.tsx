@@ -78,6 +78,7 @@ import { EditSubTaskDrawer } from '../../Modals/EditSubTaskDrawer';
 
 
 
+
 const schema = yup.object().shape({});
 export const TeamSingleTask = ({
     id,
@@ -151,6 +152,7 @@ export const TeamSingleTask = ({
     const [taskStatus, setTaskStatus] = useState();
     const [status, setStatus] = useState(task?.status?.toLowerCase());
     const [addToTimesheet, setAddToTimesheet] = useState<boolean>();
+    const [addItemToTimesheet, setAddItemToTimesheet] = useState<boolean>();
     const [openAddToTimesheetModal, setOpenAddToTimesheetModal] =
         useState(false);
     const [openEditSubtaskDrawer, setOpenEditSubtaskDrawer] = useState(false);
@@ -364,6 +366,7 @@ export const TeamSingleTask = ({
     const AddHoursToTimesheet = async (
         data: ProjectManagementTimesheetModel,
     ) => {
+        data.addToTimesheet = addItemToTimesheet;
         data.projectTaskId = task.id;
         data.projectId = project.id;
         data.percentageOfCompletion = sliderValue;
@@ -394,7 +397,7 @@ export const TeamSingleTask = ({
                         position: 'top-right',
                     });
                     setOpenAddToTimesheetModal(false);
-                    router.reload();
+                    // router.reload();
                     reset();
                     return;
                 }
@@ -421,8 +424,6 @@ export const TeamSingleTask = ({
         setSelectedSubtask(item);
         setOpenEditSubtaskDrawer(true);
     }
-
-    console.log(task);
     
 
     return (
@@ -1096,6 +1097,7 @@ export const TeamSingleTask = ({
                     task={task}
                     subTask={tasks?.value}
                     onSubmit={() => handleSubmit(AddHoursToTimesheet)()}
+                    setAddItemToTimesheet={setAddItemToTimesheet}
                 />
             )}
             {openEditTimesheetModal && (

@@ -12,7 +12,7 @@ import {
     useToast,
     Heading,
     Stack,
-    Grid, Progress
+    Grid, Progress, 
 } from '@chakra-ui/react';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
@@ -34,6 +34,8 @@ import { ProjectManagementService } from 'src/services';
 import { ProjectTaskModel } from 'src/services';
 import * as yup from 'yup';
 import moment from 'moment';
+import { ProjectManagementTimesheetModel } from 'src/services';
+
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -51,7 +53,7 @@ const AddHoursToTimesheetModal = ({
     isOpen,
     onClose,
     onSubmit,
-    loading,
+    // loading,
     text,
     isProgress,
     data,
@@ -60,6 +62,8 @@ const AddHoursToTimesheetModal = ({
     task,
     subTask,
     onSunmit,
+    loading,
+    setAddItemToTimesheet,
 }: {
     isOpen: any;
     onClose: any;
@@ -73,8 +77,8 @@ const AddHoursToTimesheetModal = ({
     task?: any;
     subTask?: any;
     onSunmit?: any;
+    setAddItemToTimesheet?: any;
 }) => {
-    // const pastDate = moment().diff(moment(data?.endDate), 'days') > 0;
     // const [isLoading, setIsLoading] = useState(false);
     // const router = useRouter();
     // const toast = useToast();
@@ -138,7 +142,15 @@ const AddHoursToTimesheetModal = ({
     //         //  isAssignedToMe: assignedPerson,
     //     },
     // });
-    const subTaskValue = subTask?.find((x: any) => x?.id === watch('projectSubTaskId'))
+    const subTaskValue = subTask?.find(
+        (x: any) => x?.id === watch('projectSubTaskId'),
+    );
+
+    const handleClick = async (type: string) => {
+        await setAddItemToTimesheet(type === 'Yes' ? true : false);
+        await onSubmit();
+    };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -173,9 +185,7 @@ const AddHoursToTimesheetModal = ({
                                 >
                                     Task Name
                                 </Heading>
-                                <Text fontSize={14.5}>
-                                    {task?.name}
-                                </Text>
+                                <Text fontSize={14.5}>{task?.name}</Text>
                             </Box>
                             <Box>
                                 <Heading
@@ -232,9 +242,7 @@ const AddHoursToTimesheetModal = ({
                                 >
                                     Hours
                                 </Heading>
-                                <Text fontSize={14.5}>
-                                    {watch('hours')}
-                                </Text>
+                                <Text fontSize={14.5}>{watch('hours')}</Text>
                             </Box>
                             <Box>
                                 <Heading
@@ -245,14 +253,18 @@ const AddHoursToTimesheetModal = ({
                                     Percentage Complete
                                 </Heading>
                                 <Box>
-                                    <Text textAlign="right" color="#787486" fontSize={12}> 
+                                    <Text
+                                        textAlign="right"
+                                        color="#787486"
+                                        fontSize={12}
+                                    >
                                         {sliderValue}%
                                     </Text>
                                     <Progress
                                         value={sliderValue}
                                         h="5px"
                                         borderRadius="5px"
-                                        colorScheme='green'
+                                        colorScheme="green"
                                     />
                                 </Box>
                             </Box>
@@ -269,9 +281,7 @@ const AddHoursToTimesheetModal = ({
                                     color="#ffffff"
                                     bg="#FF5B79"
                                     fontWeight={500}
-                                    onClick={() => {
-                                        onClose();
-                                    }}
+                                    onClick={() => handleClick('No')}
                                 >
                                     No
                                 </Button>
@@ -293,9 +303,7 @@ const AddHoursToTimesheetModal = ({
                                     spinner={
                                         <BeatLoader color="white" size={10} />
                                     }
-                                    onClick={() => {
-                                        onSubmit();
-                                    }}
+                                    onClick={() => handleClick('Yes')}
                                 >
                                     Add to timesheet
                                 </Button>
