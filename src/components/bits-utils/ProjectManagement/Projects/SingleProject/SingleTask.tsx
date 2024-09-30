@@ -62,6 +62,8 @@ import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { UserContext } from '@components/context/UserContext';
+import UpdateTimesheetModal from '../../Modals/UpdateTimesheetModal';
+
 
 const schema = yup.object().shape({});
 
@@ -101,13 +103,29 @@ export const SingleTask = ({
     const toast = useToast();
     const router = useRouter();
 
+     const ProjectTimesheetAssigneeId = task?.assignees?.find(
+         (x) => x.userId === user?.id,
+     )?.user?.id;
+
     const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
     const [status, setStatus] = useState(task?.status?.toLowerCase());
     const [hours, setHours] = useState<number>(0);
     const [projectAssigneeDetails, setProjectAssigneeDetails] = useState<any>(
         [],
     );
+    const [openEditTimesheetModal, setOpenEditTimeSheetModal] =
+        useState<boolean>(false);
     const [addToTimesheet, setAddToTimesheet] = useState<boolean>();
+    const [userProjectManagementTimesheet, setUserProjectManagementTimesheet] =
+         useState<any>([]);
+    const [selectedTimesheet, setSelectedTimesheet] = useState<any>([]);
+     const [editTimesheetSliderValue, setEditTimesheetSliderValue] =
+         useState<number>(selectedTimesheet?.percentageOfCompletion ?? 0);
+     const taskPriorityList = [
+         { id: 1, label: 'High' },
+         { id: 2, label: 'Medium' },
+         { id: 3, label: 'Low' },
+     ];
 
     const {
         isOpen: isOpens,
@@ -180,9 +198,36 @@ export const SingleTask = ({
         }
     };
 
-    useEffect(() => {
-        getProjectAssigneeDetails();
-    }, []);
+    const OpenEditTimesheetModal = (item: any) => {
+        setSelectedTimesheet(item);
+        setOpenEditTimeSheetModal(true);
+    };
+
+     const ListUserTimesheet = async () => {
+         try {
+             const res =
+                 await ProjectManagementService.listUserProjectManagementTimesheet(
+                     task?.id,
+                 );
+             if (res.status === true) {
+                 setUserProjectManagementTimesheet(res.data);
+                 return;
+             }
+         } catch (error: any) {
+             toast({
+                 title: error?.body?.message || error.message,
+                 status: 'error',
+                 isClosable: true,
+                 position: 'top-right',
+             });
+         }
+     };
+
+     useEffect(() => {
+         getProjectAssigneeDetails();
+         ListUserTimesheet();
+     }, []);
+
 
     return (
         <Box>
@@ -596,23 +641,29 @@ export const SingleTask = ({
                     </TableCard>
                     <Box>
                         <HStack borderY="1px solid #D9D9D9" w="full">
-                            {['Activity', 'Attachments'].map((x) => (
-                                <HStack
-                                    h="33px"
-                                    px="10px"
-                                    onClick={() => setCurrentView(x)}
-                                    bgColor={
-                                        currentView == x ? '#E9ECEF' : '#fff'
-                                    }
-                                    color={
-                                        currentView == x ? '#2383BD' : '#2D3748'
-                                    }
-                                >
-                                    <Text fontSize="14px" cursor="pointer">
-                                        {x}
-                                    </Text>
-                                </HStack>
-                            ))}
+                            {['Activity', 'Attachments', 'Hours Spent'].map(
+                                (x) => (
+                                    <HStack
+                                        h="33px"
+                                        px="10px"
+                                        onClick={() => setCurrentView(x)}
+                                        bgColor={
+                                            currentView == x
+                                                ? '#E9ECEF'
+                                                : '#fff'
+                                        }
+                                        color={
+                                            currentView == x
+                                                ? '#2383BD'
+                                                : '#2D3748'
+                                        }
+                                    >
+                                        <Text fontSize="14px" cursor="pointer">
+                                            {x}
+                                        </Text>
+                                    </HStack>
+                                ),
+                            )}
                         </HStack>
                         {currentView == 'Activity' && (
                             <AuditTrailSection taskId={task?.id as string} />
@@ -622,6 +673,102 @@ export const SingleTask = ({
                                 <AuditTrailAttachments
                                     taskId={task?.id as string}
                                 />
+                            </Box>
+                        )}
+                        {currentView == 'Hours Spent' && (
+                            <Box py=".5rem">
+                                <TableCard
+                                    tableHead={[
+                                        'Task Name',
+                                        'Team Member',
+                                        'Hours Spent',
+                                        'Start Date',
+                                        'End Date',
+                                    ]}
+                                >
+                                    {userProjectManagementTimesheet?.map(
+                                        (x: any) => {
+                                            const projectTaskAssigneeName =
+                                                x?.project?.assignees?.find(
+                                                    (k) =>
+                                                        k?.id ===
+                                                        x.projectTaskAsigneeId,
+                                                );
+                                            return (
+                                                <TableRow key={x.id}>
+                                                    <TableData
+                                                        name={task?.name}
+                                                        fontWeight="500"
+                                                    />
+                                                    <TableData
+                                                        name={
+                                                            projectTaskAssigneeName
+                                                                ?.user?.fullName
+                                                        }
+                                                        fontWeight="500"
+                                                    />
+                                                    <TableData
+                                                        name={`${Round(
+                                                            x?.totalHours,
+                                                        )} Hrs`}
+                                                        fontWeight="500"
+                                                    />
+                                                    <TableData
+                                                        name={moment(
+                                                            x?.startDate,
+                                                        ).format('DD/MM/YYYY')}
+                                                        fontWeight="500"
+                                                    />
+                                                    <TableData
+                                                        name={moment(
+                                                            x?.endDate,
+                                                        ).format('DD/MM/YYYY')}
+                                                        fontWeight="500"
+                                                    />
+                                                    <td>
+                                                        <Menu>
+                                                            <MenuButton>
+                                                                <Box
+                                                                    fontSize="1rem"
+                                                                    pl="1rem"
+                                                                    fontWeight="bold"
+                                                                    cursor="pointer"
+                                                                    color="brand.300"
+                                                                >
+                                                                    {loadings.id ==
+                                                                    x.id ? (
+                                                                        <Spinner size="sm" />
+                                                                    ) : (
+                                                                        <FaEllipsisH />
+                                                                    )}
+                                                                </Box>
+                                                            </MenuButton>
+                                                            <MenuList>
+                                                                <MenuItem
+                                                                    onClick={() =>
+                                                                        OpenEditTimesheetModal(
+                                                                            x,
+                                                                        )
+                                                                    }
+                                                                    w="full"
+                                                                >
+                                                                    <Icon
+                                                                        as={
+                                                                            BsPenFill
+                                                                        }
+                                                                        mr=".5rem"
+                                                                        color="brand.400"
+                                                                    />
+                                                                    Edit
+                                                                </MenuItem>
+                                                            </MenuList>
+                                                        </Menu>
+                                                    </td>
+                                                </TableRow>
+                                            );
+                                        },
+                                    )}
+                                </TableCard>
                             </Box>
                         )}
                     </Box>
@@ -651,6 +798,22 @@ export const SingleTask = ({
                     }
                     loading={loading?.id == task.id}
                     text={`Marking this task as complete will prevent any further timesheet submissions for this task.<br/> Are you sure you want to proceed?`}
+                />
+            )}
+            {openEditTimesheetModal && (
+                <UpdateTimesheetModal
+                    task={task}
+                    subTask={tasks?.value}
+                    isOpen={openEditTimesheetModal}
+                    onClose={() => setOpenEditTimeSheetModal(false)}
+                    taskPriorityList={taskPriorityList}
+                    projectTaskAssigneeId={ProjectTimesheetAssigneeId}
+                    selectedTimesheet={selectedTimesheet}
+                    sliderValue={editTimesheetSliderValue}
+                    setSliderValue={setEditTimesheetSliderValue}
+                    projectId={project?.id}
+                    addToTimesheet={addToTimesheet}
+                    totalHoursSpent={task?.hoursSpent}
                 />
             )}
         </Box>

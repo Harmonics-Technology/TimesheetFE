@@ -57,4 +57,9 @@ export type EmployeeInformationView = {
     newPayrollStructureEnabled?: boolean;
     isTrainingManager?: boolean;
     canManageAllTraining?: boolean;
+    hasUtilizeLeaveDaysToDate?: boolean | null;
+    utilizedLeave?: number | null;
+    hasRollOverLeave?: boolean | null;
+    rolledOverLeave?: number | null;
+    expiryDateOfRolledOverLeave?: string | null;
 };

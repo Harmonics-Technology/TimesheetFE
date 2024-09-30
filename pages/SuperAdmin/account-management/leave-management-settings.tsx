@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/react';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { LeaveManagementSettings } from '@components/subpages/LeaveManagementSettings';
@@ -10,6 +11,7 @@ import {
     LeaveTypeViewPagedCollectionStandardResponse,
     UserService,
 } from 'src/services';
+
 
 interface leavesProps {
     leaves: LeaveTypeViewPagedCollectionStandardResponse;
