@@ -13,7 +13,7 @@ import { LeaveConfigurationView } from 'src/services';
 const schema = yup.object().shape({});
 
 interface leavesProps {
-    leaveConfiguration: LeaveConfigurationView;
+    leaveConfiguration?: LeaveConfigurationView;
 }
 
 const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
@@ -102,7 +102,7 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                             Prorated Leave
                         </Heading>
                         <Text fontSize={14} color="#696969">
-                            Prorated Leave refers to the proportional allocation
+                            Prorated Leave refers to the proportional allocation
                             of annual leave based on an employee's period of
                             employment during a particular leave year. It
                             ensures that employees are granted a fair amount of
@@ -142,7 +142,7 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                             Leave Rollover
                         </Heading>
                         <Text fontSize={14} color="#696969">
-                            Leave Rollover refers to the practice of
+                            Leave Rollover refers to the practice of
                             transferring unused paid time off (PTO) from one
                             calendar year to the next. This policy allows
                             employees to carry over their unused leave days for
@@ -162,7 +162,7 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                             error={errors.isStandardEligibleDays}
                             defaultValue={leaveconfig}
                             flexDir="column"
-                            gap='10px'
+                            gap="10px"
                         />
                     </Box>
                 </Stack>
