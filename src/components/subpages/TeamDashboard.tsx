@@ -75,7 +75,7 @@ function TeamDashboard() {
     return (
         // <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
         <Box>
-            <VStack gap="1rem" w="70%">
+            <VStack gap="1rem" w={['full', '70%']}>
                 <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)']}
                     gap="1.2rem"
@@ -131,7 +131,7 @@ function TeamDashboard() {
                         </Box>
                         <Grid
                             templateColumns={[
-                                'repeat(2, 1fr)',
+                                'repeat(1, 1fr)',
                                 'repeat(2, 1fr)',
                             ]}
                             gap="13px"
@@ -246,7 +246,7 @@ function TeamDashboard() {
                         </Box>
                         <Grid
                             templateColumns={[
-                                'repeat(2, 1fr)',
+                                'repeat(1, 1fr)',
                                 'repeat(2, 1fr)',
                             ]}
                             gap="13px"

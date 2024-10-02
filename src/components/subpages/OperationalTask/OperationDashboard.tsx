@@ -35,6 +35,7 @@ export const OperationDashboard = ({
     projects,
     id,
     departments,
+    userDepartments,
 }: {
     users: any;
     superAdminId: string;
@@ -42,6 +43,7 @@ export const OperationDashboard = ({
     projects: any;
     id?: any;
     departments: any;
+    userDepartments?: any;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { user } = useContext(UserContext);
@@ -135,6 +137,14 @@ export const OperationDashboard = ({
             query: {
                 ...router.query,
                 subId: value,
+            },
+        });
+    };
+    const filterByUserDepartment = (value) => {
+        router.push({
+            query: {
+                ...router.query,
+                deptType: value,
             },
         });
     };
@@ -271,6 +281,25 @@ export const OperationDashboard = ({
                                 <option value="">All</option>
                                 {departments?.map((x) => (
                                     <option value={x.name}>{x.name}</option>
+                                ))}
+                            </Select>
+                        )}
+                    {(filter == '2' || status == '2') &&
+                        role == 'TeamMember' &&
+                        userDepartments?.length > 1 && (
+                            <Select
+                                fontSize=".8rem"
+                                w="fit-content"
+                                onChange={(e) =>
+                                    filterByDepartment(e?.target.value)
+                                }
+                                value={department}
+                            >
+                                <option value="">All</option>
+                                {userDepartments?.map((x) => (
+                                    <option value={x.department?.name}>
+                                        {x.department?.name}
+                                    </option>
                                 ))}
                             </Select>
                         )}

@@ -33,14 +33,15 @@ export const NotificationBox = ({
 
     return (
         <Box
-            pos="fixed"
+            pos={['static', 'fixed']}
             top={user?.twoFactorEnabled || !isTfa ? '12%' : '18.3%'}
-            w="21.5%"
+            w={['full', '21.5%']}
             bgColor="white"
             boxShadow="md"
             borderRadius="10px"
             right="2rem"
             p="1rem .8rem"
+            mt={['1rem', '0']}
             h={user?.twoFactorEnabled || !isTfa ? '87vh' : '80vh'}
             overflow="auto"
 

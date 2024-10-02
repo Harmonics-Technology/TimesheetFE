@@ -329,9 +329,10 @@ function ProfileManagementAdmin({
                                 keyLabel="title"
                                 label="Role"
                                 options={
-                                    subType == 'basic'
-                                        ? [{ title: 'Admin' }]
-                                        : roles.slice(1, 3)
+                                    // subType == 'basic'
+                                    //     ? [{ title: 'Admin' }]
+                                    //     :
+                                    roles.slice(1, 3)
                                 }
                             />
                         </Grid>
@@ -438,14 +439,15 @@ function ProfileManagementAdmin({
                                                 label: 'title',
                                             }}
                                             options={
-                                                subType == 'basic'
-                                                    ? [
-                                                          {
-                                                              id: 'admin',
-                                                              title: 'Internal Admin',
-                                                          },
-                                                      ]
-                                                    : roles.slice(3, 6)
+                                                // subType == 'basic'
+                                                //     ? [
+                                                //           {
+                                                //               id: 'admin',
+                                                //               title: 'Internal Admin',
+                                                //           },
+                                                //       ]
+                                                //     :
+                                                roles.slice(3, 6)
                                             }
                                             onChange={(value: any) =>
                                                 setUserDetail((exist) => ({

@@ -281,9 +281,9 @@ function MenuItem({
                     <>
                         {option ? (
                             <Box
-                                onClick={() =>
-                                    display ? setOpenMenu(!openMenu) : onOpen()
-                                }
+                                // onClick={() =>
+                                //     display ? setOpenMenu(!openMenu) : onOpen()
+                                // }
                                 overflow="hidden"
                                 transition="all .35s ease-in-out"
                                 maxH={openMenu ? 'auto' : '2rem'}
@@ -292,11 +292,20 @@ function MenuItem({
                                     justify="space-between"
                                     align="center"
                                     cursor="pointer"
+                                    onClick={() =>
+                                        display
+                                            ? setOpenMenu((prev) => !prev)
+                                            : void 0
+                                    }
                                 >
                                     <HStack>
                                         <Square
                                             bgColor={
-                                                router.pathname.startsWith(url)
+                                                !display
+                                                    ? 'gray.300'
+                                                    : router.pathname.startsWith(
+                                                          url,
+                                                      )
                                                     ? 'brand.400'
                                                     : 'brand.100'
                                             }
@@ -313,7 +322,11 @@ function MenuItem({
                                         </Square>
                                         <Text
                                             color={
-                                                router.pathname.startsWith(url)
+                                                !display
+                                                    ? 'gray.300'
+                                                    : router.pathname.startsWith(
+                                                          url,
+                                                      )
                                                     ? 'brand.200'
                                                     : 'brand.300'
                                             }
@@ -387,7 +400,7 @@ function MenuItem({
                                             <Box
                                                 onClick={
                                                     x?.show
-                                                        ? void 0
+                                                        ? onOpen
                                                         : () => {
                                                               router.push(
                                                                   `${url}/${
@@ -419,69 +432,67 @@ function MenuItem({
                                 </UnorderedList>
                             </Box>
                         ) : (
-                            <Link href={url} passHref>
-                                <Box
-                                    overflow="hidden"
-                                    cursor={
-                                        !display ? 'not-allowed' : 'pointer'
-                                    }
-                                    onClick={
-                                        display
-                                            ? () => {
-                                                  router.push(url);
-                                                  setOpenSidenav(false);
-                                              }
-                                            : void 0
-                                    }
-                                >
-                                    <HStack>
-                                        <Square
-                                            bgColor={
-                                                !display
-                                                    ? 'gray.300'
-                                                    : router.pathname.startsWith(
-                                                          url,
-                                                      )
-                                                    ? 'brand.400'
-                                                    : 'brand.100'
-                                            }
-                                            color={
-                                                router.pathname.startsWith(url)
-                                                    ? 'white'
-                                                    : 'brand.400'
-                                            }
-                                            borderRadius="8px"
-                                            size="2rem"
-                                            fontSize=".65rem"
-                                        >
-                                            {icon}
-                                        </Square>
-                                        <Text
-                                            color={
-                                                !display
-                                                    ? 'gray.300'
-                                                    : router.pathname.startsWith(
-                                                          url,
-                                                      )
-                                                    ? 'brand.200'
-                                                    : 'brand.300'
-                                            }
-                                            fontWeight={
-                                                router.pathname.startsWith(url)
-                                                    ? '600'
-                                                    : '500'
-                                            }
-                                            fontSize=".9rem"
-                                            pl=".5rem"
-                                            noOfLines={1}
-                                            mb="0"
-                                        >
-                                            {menuTitle}
-                                        </Text>
-                                        <Text display="none">{linkName}</Text>
-                                    </HStack>
-                                </Box>
-                            </Link>
+                            // <Link href={url} passHref>
+                            <Box
+                                overflow="hidden"
+                                cursor={!display ? 'not-allowed' : 'pointer'}
+                                onClick={
+                                    display
+                                        ? () => {
+                                              router.push(url);
+                                              setOpenSidenav(false);
+                                          }
+                                        : onOpen
+                                }
+                            >
+                                <HStack>
+                                    <Square
+                                        bgColor={
+                                            !display
+                                                ? 'gray.300'
+                                                : router.pathname.startsWith(
+                                                      url,
+                                                  )
+                                                ? 'brand.400'
+                                                : 'brand.100'
+                                        }
+                                        color={
+                                            router.pathname.startsWith(url)
+                                                ? 'white'
+                                                : 'brand.400'
+                                        }
+                                        borderRadius="8px"
+                                        size="2rem"
+                                        fontSize=".65rem"
+                                    >
+                                        {icon}
+                                    </Square>
+                                    <Text
+                                        color={
+                                            !display
+                                                ? 'gray.300'
+                                                : router.pathname.startsWith(
+                                                      url,
+                                                  )
+                                                ? 'brand.200'
+                                                : 'brand.300'
+                                        }
+                                        fontWeight={
+                                            router.pathname.startsWith(url)
+                                                ? '600'
+                                                : '500'
+                                        }
+                                        fontSize=".9rem"
+                                        pl=".5rem"
+                                        noOfLines={1}
+                                        mb="0"
+                                    >
+                                        {menuTitle}
+                                    </Text>
+                                    <Text display="none">{linkName}</Text>
+                                </HStack>
+                            </Box>
+                            // </Link>
                         )}
                     </>
                 )}

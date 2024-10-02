@@ -128,7 +128,7 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
     return (
         // <Grid templateColumns={['1fr', '3fr 1fr']} gap="1.2rem" w="full">
         <Box pos="relative">
-            <VStack gap="1rem" w="70%">
+            <VStack gap="1rem" w={['full', '70%']}>
                 <Grid
                     templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)']}
                     gap="20px"
@@ -199,7 +199,7 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                         </Box>
                         <Grid
                             templateColumns={[
-                                'repeat(2, 1fr)',
+                                'repeat(1, 1fr)',
                                 'repeat(2, 1fr)',
                             ]}
                             gap="13px"
@@ -314,7 +314,7 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                         </Box>
                         <Grid
                             templateColumns={[
-                                'repeat(2, 1fr)',
+                                'repeat(1, 1fr)',
                                 'repeat(2, 1fr)',
                             ]}
                             gap="13px"

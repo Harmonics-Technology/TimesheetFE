@@ -18,7 +18,11 @@ import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { ProgressSlider } from '@components/bits-utils/ProgressSlider';
 import { Round } from '@components/generics/functions/Round';
-import { CloseIcon, GreenPlusIcon, RedMinusIcon } from '@components/icons/Icons';
+import {
+    CloseIcon,
+    GreenPlusIcon,
+    RedMinusIcon,
+} from '@components/icons/Icons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DateObject } from 'react-multi-date-picker';
 import { useRouter } from 'next/router';
@@ -26,14 +30,15 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { ProjectManagementService, ProjectManagementTimesheetModel } from 'src/services';
+import {
+    ProjectManagementService,
+    ProjectManagementTimesheetModel,
+} from 'src/services';
 import { ProjectTaskModel } from 'src/services';
 import * as yup from 'yup';
 import moment from 'moment';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
-
-
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -62,8 +67,9 @@ const UpdateTaskModal = ({
     sliderValue,
     setSliderValue,
     updateHours,
-    addToTimesheet, setOpenAddToTimesheetModal,
-    totalHoursSpent
+    addToTimesheet,
+    setOpenAddToTimesheetModal,
+    totalHoursSpent,
 }: {
     isOpen: any;
     onClose: any;
@@ -72,25 +78,24 @@ const UpdateTaskModal = ({
     isProgress?: any;
     data?: any;
     register?: any;
-    errors?: any,
-    task?: any,
-    subTask?: any
-    control?: any,
-    sliderValue?: any,
-    setSliderValue?: any,
+    errors?: any;
+    task?: any;
+    subTask?: any;
+    control?: any;
+    sliderValue?: any;
+    setSliderValue?: any;
     updateHours: (value: 'minus' | 'plus') => void;
     addToTimesheet?: boolean;
     setOpenAddToTimesheetModal?: (value: boolean) => void;
     totalHoursSpent?: any;
-
 }) => {
-    console.log("this is the task", task)
+    console.log('this is the task', task);
     const pastDate = moment().diff(moment(data?.endDate), 'days') > 0;
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const toast = useToast();
     const [hours, setHours] = useState<number>(0);
-    
+
     // const updateProgress = async () => {
     //     setIsLoading(true);
     //     try {
@@ -164,7 +169,7 @@ const UpdateTaskModal = ({
                 pb="5"
                 borderRadius="0px"
                 w="88%"
-                overflow="hidden"
+                // overflow="hidden"
                 maxH="100vh"
                 pos="fixed"
             >
@@ -235,7 +240,7 @@ const UpdateTaskModal = ({
                                     name="startDate"
                                     label="Start Date"
                                     error={errors.startDate}
-                                    min={new DateObject()}
+                                    // min={new DateObject()}
                                     // defaultValue={new Date(data?.startDate)}
                                 />
                                 <PrimaryDate<ProjectManagementTimesheetModel>
@@ -243,7 +248,7 @@ const UpdateTaskModal = ({
                                     name="endDate"
                                     label="End Date"
                                     error={errors.endDate}
-                                    min={new DateObject().add(1, 'days')}
+                                    // min={new DateObject().add(1, 'days')}
                                     // defaultValue={moment(data?.endDate)?.format(
                                     //     'YYYY-MM-DD',
                                     // )}

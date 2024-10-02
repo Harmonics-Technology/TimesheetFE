@@ -39,7 +39,7 @@ export const TeamPrjDashboard = ({
     users: any;
     currencies: any;
 }) => {
-    const projectSummary = ['Task Name', 'Deadline', 'Team member', 'Workload'];
+    const projectSummary = ['Task Name', 'Deadline', 'Status', 'Workload'];
     const { user } = useContext(UserContext);
     const isProjectPm = projects?.projectManagerId == user?.id;
 

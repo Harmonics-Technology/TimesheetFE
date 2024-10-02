@@ -3,52 +3,17 @@ import {
     ModalOverlay,
     ModalContent,
     ModalHeader,
-    Flex,
     ModalBody,
     HStack,
     Button,
     Box,
     Text,
-    useToast,
     Heading,
     Stack,
-    Grid, Progress, 
+    Grid,
+    Progress,
 } from '@chakra-ui/react';
-import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
-import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
-import { ProgressSlider } from '@components/bits-utils/ProgressSlider';
-import { Round } from '@components/generics/functions/Round';
-import {
-    CloseIcon,
-    GreenPlusIcon,
-    RedMinusIcon,
-} from '@components/icons/Icons';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { DateObject } from 'react-multi-date-picker';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { ProjectManagementService } from 'src/services';
-import { ProjectTaskModel } from 'src/services';
-import * as yup from 'yup';
-import moment from 'moment';
-import { ProjectManagementTimesheetModel } from 'src/services';
-
-
-const schema = yup.object().shape({
-    name: yup.string().required(),
-    startDate: yup.string().required(),
-    endDate: yup.string().required(),
-    // duration: yup.number().required(),
-    // isAssignedToMe: yup.number().required(),
-    // assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
-    // category: yup.string().required(),
-    // department: yup.string().required(),
-    // taskPriority: yup.number().required(),
-});
-
 const AddHoursToTimesheetModal = ({
     isOpen,
     onClose,
@@ -79,77 +44,9 @@ const AddHoursToTimesheetModal = ({
     onSunmit?: any;
     setAddItemToTimesheet?: any;
 }) => {
-    // const [isLoading, setIsLoading] = useState(false);
-    // const router = useRouter();
-    // const toast = useToast();
-    // const [hours, setHours] = useState<number>(0);
-
-    // const updateProgress = async () => {
-    //     setIsLoading(true);
-    //     try {
-    //         const res = await ProjectManagementService.updateSubtaskProgress(
-    //             data?.id,
-    //             sliderValue,
-    //         );
-    //         if (res.status) {
-    //             setIsLoading(false);
-    //             router.replace(router.asPath);
-    //             toast({
-    //                 title: res.message,
-    //                 status: 'success',
-    //                 isClosable: true,
-    //                 position: 'top-right',
-    //             });
-    //             return;
-    //         }
-    //         setIsLoading(false);
-    //         toast({
-    //             title: res.message,
-    //             status: 'error',
-    //             isClosable: true,
-    //             position: 'top-right',
-    //         });
-    //     } catch (err: any) {
-    //         setIsLoading(false);
-    //         toast({
-    //             title: err?.body?.message || err.message,
-    //             status: 'error',
-    //             isClosable: true,
-    //             position: 'top-right',
-    //         });
-    //     }
-    // };
-
-    // const {
-    //     register,
-    //     handleSubmit,
-    //     control,
-    //     setValue,
-    //     reset,
-    //     formState: { errors, isSubmitting },
-    // } = useForm<ProjectTaskModel>({
-    //     resolver: yupResolver(schema),
-    //     mode: 'all',
-    //     defaultValues: {
-    //         //  superAdminId,
-    //         isOperationalTask: true,
-    //         name: data?.name,
-    //         id: data?.id,
-    //         startDate: data?.startDate,
-    //         endDate: data?.endDate,
-    //         note: data?.note,
-    //         operationalTaskStatus: data?.operationalTaskStatus,
-    //         //  isAssignedToMe: assignedPerson,
-    //     },
-    // });
     const subTaskValue = subTask?.find(
         (x: any) => x?.id === watch('projectSubTaskId'),
     );
-
-    const handleClick = async (type: string) => {
-        await setAddItemToTimesheet(type === 'Yes' ? true : false);
-        await onSubmit();
-    };
 
     return (
         <Modal
@@ -281,7 +178,7 @@ const AddHoursToTimesheetModal = ({
                                     color="#ffffff"
                                     bg="#FF5B79"
                                     fontWeight={500}
-                                    onClick={() => handleClick('No')}
+                                    onClick={() => onSubmit(false)}
                                 >
                                     No
                                 </Button>
@@ -303,7 +200,7 @@ const AddHoursToTimesheetModal = ({
                                     spinner={
                                         <BeatLoader color="white" size={10} />
                                     }
-                                    onClick={() => handleClick('Yes')}
+                                    onClick={() => onSubmit(true)}
                                 >
                                     Add to timesheet
                                 </Button>

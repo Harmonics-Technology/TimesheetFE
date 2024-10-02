@@ -201,10 +201,10 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         role={role}
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[
-                            { show: subType == 'basic', name: 'payrolls' },
-                            { show: subType == 'basic', name: 'payslips' },
-                            { show: subType == 'basic', name: 'invoices' },
-                            { show: subType == 'basic', name: 'expenses' },
+                            { show: false, name: 'payrolls' },
+                            { show: false, name: 'payslips' },
+                            { show: false, name: 'invoices' },
+                            { show: false, name: 'expenses' },
                         ]}
                         display={activeSub}
                     />
@@ -321,12 +321,12 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
-                        display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
-                        }
+                        // display={
+                        //     (subType == 'standard' && activeSub) ||
+                        //     (subType == 'premium' && activeSub)
+                        //         ? true
+                        //         : false
+                        // }
                     />
                     <MenuItem
                         change={change}
@@ -918,12 +918,12 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
-                        display={
-                            (subType == 'standard' && activeSub) ||
-                            (subType == 'premium' && activeSub)
-                                ? true
-                                : false
-                        }
+                        // display={
+                        //     (subType == 'standard' && activeSub) ||
+                        //     (subType == 'premium' && activeSub)
+                        //         ? true
+                        //         : false
+                        // }
                     />
                     <MenuItem
                         change={change}

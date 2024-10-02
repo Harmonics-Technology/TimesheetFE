@@ -76,9 +76,6 @@ import UpdateSubTaskModal from '../../Modals/UpdateSubTaskModal';
 import UpdateTimesheetModal from '../../Modals/UpdateTimesheetModal';
 import { EditSubTaskDrawer } from '../../Modals/EditSubTaskDrawer';
 
-
-
-
 const schema = yup.object().shape({});
 export const TeamSingleTask = ({
     id,
@@ -156,7 +153,9 @@ export const TeamSingleTask = ({
     const [openAddToTimesheetModal, setOpenAddToTimesheetModal] =
         useState(false);
     const [openEditSubtaskDrawer, setOpenEditSubtaskDrawer] = useState(false);
-    const [selectedSubtask, setSelectedSubtask] = useState<ProjectSubTaskView>({});
+    const [selectedSubtask, setSelectedSubtask] = useState<ProjectSubTaskView>(
+        {},
+    );
     const toast = useToast();
     const router = useRouter();
     const {
@@ -254,8 +253,14 @@ export const TeamSingleTask = ({
 
     const ProjectTimesheetAssigneeId = task?.assignees?.find(
         (x) => x.userId === user?.id,
-    )?.user?.id
-    
+    )?.id;
+
+    console.log({
+        projectTaskAssineeId,
+        ProjectTimesheetAssigneeId,
+        project,
+        task,
+    });
 
     const getProjectAssigneeDetails = async () => {
         try {
@@ -311,7 +316,7 @@ export const TeamSingleTask = ({
             data.projectTaskId = task.id;
             data.projectId = project.id;
             data.percentageOfCompletion = sliderValue;
-            data.projectTaskAsigneeId = projectTaskAssineeId;
+            data.projectTaskAsigneeId = ProjectTimesheetAssigneeId;
             try {
                 if (
                     (tasks?.value?.length > 0 &&
@@ -365,12 +370,13 @@ export const TeamSingleTask = ({
 
     const AddHoursToTimesheet = async (
         data: ProjectManagementTimesheetModel,
+        isToTimesheet?: boolean,
     ) => {
-        data.addToTimesheet = addItemToTimesheet;
+        data.addToTimesheet = isToTimesheet;
         data.projectTaskId = task.id;
         data.projectId = project.id;
         data.percentageOfCompletion = sliderValue;
-        data.projectTaskAsigneeId = projectTaskAssineeId;
+        data.projectTaskAsigneeId = ProjectTimesheetAssigneeId;
         try {
             if (
                 (tasks?.value?.length > 0 && data?.projectSubTaskId === '') ||
@@ -420,11 +426,14 @@ export const TeamSingleTask = ({
         }
     };
 
+    const onSubmitBtn = (isToTimesheet: boolean) => {
+        handleSubmit((data: any) => AddHoursToTimesheet(data, isToTimesheet))();
+    };
+
     const OpenEditSubtaskDrawer = (item: any) => {
         setSelectedSubtask(item);
         setOpenEditSubtaskDrawer(true);
-    }
-    
+    };
 
     return (
         <Box>
@@ -1083,6 +1092,7 @@ export const TeamSingleTask = ({
                     setOpenAddToTimesheetModal={setOpenAddToTimesheetModal}
                     totalHoursSpent={task?.hoursSpent}
                     onSubmit={() => handleSubmit(AddHoursToTask)()}
+                    loading={isSubmitting}
                 />
             )}
             {openAddToTimesheetModal && (
@@ -1096,8 +1106,9 @@ export const TeamSingleTask = ({
                     watch={watch}
                     task={task}
                     subTask={tasks?.value}
-                    onSubmit={() => handleSubmit(AddHoursToTimesheet)()}
+                    onSubmit={onSubmitBtn}
                     setAddItemToTimesheet={setAddItemToTimesheet}
+                    loading={isSubmitting}
                 />
             )}
             {openEditTimesheetModal && (

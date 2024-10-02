@@ -80,7 +80,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.limit,
                 superAdminId,
                 pagingOptions.status,
-                isPm ? undefined : userId,
+                undefined,
+                // isPm ? undefined : userId,
                 pagingOptions.search,
             );
             //     return data;

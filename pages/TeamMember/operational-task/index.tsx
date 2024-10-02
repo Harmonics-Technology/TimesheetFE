@@ -17,6 +17,7 @@ const OperationTask = ({
     superAdminId,
     userId,
     departments,
+    userDepartments,
 }: {
     projects: any;
     counts: ProjectProgressCountView;
@@ -24,6 +25,7 @@ const OperationTask = ({
     superAdminId: string;
     userId: string;
     departments: any;
+    userDepartments?: any;
 }) => {
     return (
         <OperationDashboard
@@ -33,6 +35,7 @@ const OperationTask = ({
             superAdminId={superAdminId}
             id={userId}
             departments={departments}
+            userDepartments={userDepartments}
         />
     );
 };
@@ -58,6 +61,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 superAdminId,
                 'team member,super admin,admin,supervisor,payroll manager',
             );
+            const userDepartments = await UserService.listUsersDepartment(
+                userId,
+            );
             const counts = 0;
             // await ProjectManagementService.getStatusCountForOperationalTask(
             //     superAdminId,
@@ -74,6 +80,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     counts,
                     userId,
                     departments: dept.data,
+                    userDepartments: userDepartments.data,
                 },
             };
         } catch (error: any) {
