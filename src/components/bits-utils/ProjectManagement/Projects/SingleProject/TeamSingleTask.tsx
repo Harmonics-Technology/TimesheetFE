@@ -255,12 +255,12 @@ export const TeamSingleTask = ({
         (x) => x.userId === user?.id,
     )?.id;
 
-    console.log({
-        projectTaskAssineeId,
-        ProjectTimesheetAssigneeId,
-        project,
-        task,
-    });
+    // console.log({
+    //     projectTaskAssineeId,
+    //     ProjectTimesheetAssigneeId,
+    //     project,
+    //     task,
+    // });
 
     const getProjectAssigneeDetails = async () => {
         try {
