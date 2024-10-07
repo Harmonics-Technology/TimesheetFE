@@ -371,7 +371,12 @@ export const TeamSingleTask = ({
     const AddHoursToTimesheet = async (
         data: ProjectManagementTimesheetModel,
         isToTimesheet?: boolean,
+        startTime?: string,
     ) => {
+        if (startTime) {
+            data.startDate =
+                moment(data.startDate).format('YYYY-MM-DD') + ' ' + startTime;
+        }
         data.addToTimesheet = isToTimesheet;
         data.projectTaskId = task.id;
         data.projectId = project.id;
@@ -426,8 +431,10 @@ export const TeamSingleTask = ({
         }
     };
 
-    const onSubmitBtn = (isToTimesheet: boolean) => {
-        handleSubmit((data: any) => AddHoursToTimesheet(data, isToTimesheet))();
+    const onSubmitBtn = (isToTimesheet: boolean, startTime?: string) => {
+        handleSubmit((data: any) =>
+            AddHoursToTimesheet(data, isToTimesheet, startTime),
+        )();
     };
 
     const OpenEditSubtaskDrawer = (item: any) => {

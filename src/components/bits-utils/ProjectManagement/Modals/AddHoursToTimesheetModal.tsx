@@ -13,6 +13,10 @@ import {
     Grid,
     Progress,
 } from '@chakra-ui/react';
+import { CustomTime } from '@components/bits-utils/CustomTime';
+import useComponentVisible from '@components/generics/useComponentVisible';
+import moment from 'moment';
+import { useState } from 'react';
 import BeatLoader from 'react-spinners/BeatLoader';
 const AddHoursToTimesheetModal = ({
     isOpen,
@@ -47,6 +51,14 @@ const AddHoursToTimesheetModal = ({
     const subTaskValue = subTask?.find(
         (x: any) => x?.id === watch('projectSubTaskId'),
     );
+
+    const [addTime, setAddTime] = useState(false);
+    const [time, setTime] = useState();
+    const {
+        ref: timeRef,
+        isComponentVisible: startVisible,
+        setIsComponentVisible: startIsVisible,
+    } = useComponentVisible(false);
 
     return (
         <Modal
@@ -115,7 +127,9 @@ const AddHoursToTimesheetModal = ({
                                         Start Date
                                     </Heading>
                                     <Text fontSize={14.5}>
-                                        {watch('startDate')}
+                                        {moment(watch('startDate')).format(
+                                            'YYYY/MM/DD',
+                                        )}
                                     </Text>
                                 </Box>
                                 <Box>
@@ -127,7 +141,9 @@ const AddHoursToTimesheetModal = ({
                                         End Date
                                     </Heading>
                                     <Text fontSize={14.5}>
-                                        {watch('endDate')}
+                                        {moment(watch('endDate')).format(
+                                            'YYYY/MM/DD',
+                                        )}
                                     </Text>
                                 </Box>
                             </Grid>
@@ -165,46 +181,108 @@ const AddHoursToTimesheetModal = ({
                                     />
                                 </Box>
                             </Box>
-                            <HStack
-                                px=".8rem"
-                                spacing={4}
-                                w="full"
-                                justifyContent="space-between"
-                            >
-                                <Button
-                                    borderRadius="5px"
-                                    height="2.6rem"
-                                    width="70px"
-                                    color="#ffffff"
-                                    bg="#FF5B79"
-                                    fontWeight={500}
-                                    onClick={() => onSubmit(false)}
+                            {addTime && (
+                                <Box w="full">
+                                    <CustomTime
+                                        time={time}
+                                        timeRef={timeRef}
+                                        startIsVisible={startIsVisible}
+                                        startVisible={startVisible}
+                                        setTime={setTime}
+                                        w="40%"
+                                    />
+                                </Box>
+                            )}
+                            {addTime ? (
+                                <HStack
+                                    px=".8rem"
+                                    spacing={4}
+                                    w="full"
+                                    justifyContent="space-between"
                                 >
-                                    No
-                                </Button>
-                                <Button
-                                    variant="solid"
-                                    height="2.6rem"
-                                    width="auto"
-                                    bgColor="brand.400"
-                                    color="white"
-                                    borderRadius="5px"
-                                    fontWeight={500}
-                                    _hover={{
-                                        bgColor: 'white',
-                                        color: 'brand.400',
-                                        border: '1px solid',
-                                        borderColor: 'brand.400',
-                                    }}
-                                    isLoading={loading}
-                                    spinner={
-                                        <BeatLoader color="white" size={10} />
-                                    }
-                                    onClick={() => onSubmit(true)}
+                                    <Button
+                                        borderRadius="5px"
+                                        height="2.6rem"
+                                        width="70px"
+                                        color="#ffffff"
+                                        bg="#FF5B79"
+                                        fontWeight={500}
+                                        onClick={() => setAddTime(false)}
+                                    >
+                                        Back
+                                    </Button>
+                                    <Button
+                                        variant="solid"
+                                        height="2.6rem"
+                                        width="auto"
+                                        bgColor="brand.400"
+                                        color="white"
+                                        borderRadius="5px"
+                                        fontWeight={500}
+                                        _hover={{
+                                            bgColor: 'white',
+                                            color: 'brand.400',
+                                            border: '1px solid',
+                                            borderColor: 'brand.400',
+                                        }}
+                                        isLoading={loading}
+                                        spinner={
+                                            <BeatLoader
+                                                color="white"
+                                                size={10}
+                                            />
+                                        }
+                                        isDisabled={!time}
+                                        onClick={() => onSubmit(true, time)}
+                                    >
+                                        Confirm
+                                    </Button>
+                                </HStack>
+                            ) : (
+                                <HStack
+                                    px=".8rem"
+                                    spacing={4}
+                                    w="full"
+                                    justifyContent="space-between"
                                 >
-                                    Add to timesheet
-                                </Button>
-                            </HStack>
+                                    <Button
+                                        borderRadius="5px"
+                                        height="2.6rem"
+                                        width="70px"
+                                        color="#ffffff"
+                                        bg="#FF5B79"
+                                        fontWeight={500}
+                                        onClick={() => onSubmit(false)}
+                                    >
+                                        No
+                                    </Button>
+                                    <Button
+                                        variant="solid"
+                                        height="2.6rem"
+                                        width="auto"
+                                        bgColor="brand.400"
+                                        color="white"
+                                        borderRadius="5px"
+                                        fontWeight={500}
+                                        _hover={{
+                                            bgColor: 'white',
+                                            color: 'brand.400',
+                                            border: '1px solid',
+                                            borderColor: 'brand.400',
+                                        }}
+                                        isLoading={loading}
+                                        spinner={
+                                            <BeatLoader
+                                                color="white"
+                                                size={10}
+                                            />
+                                        }
+                                        onClick={() => setAddTime(true)}
+                                    >
+                                        Add to timesheet
+                                    </Button>
+                                </HStack>
+                            )}
                         </Stack>
                     </Box>
                 </ModalBody>
