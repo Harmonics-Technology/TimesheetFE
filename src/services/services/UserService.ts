@@ -307,7 +307,6 @@ export class UserService {
         superAdminId?: string,
         offset?: number,
         limit?: number,
-        // role?: string,
         search?: string,
         startDate?: string,
         endDate?: string,

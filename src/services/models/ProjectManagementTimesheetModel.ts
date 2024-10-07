@@ -13,4 +13,5 @@ export type ProjectManagementTimesheetModel = {
     endDate?: string;
     hours?: number;
     percentageOfCompletion?: number;
+    startTime?: number;
 };

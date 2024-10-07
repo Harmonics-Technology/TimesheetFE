@@ -14,6 +14,7 @@ import {
     Progress,
 } from '@chakra-ui/react';
 import { CustomTime } from '@components/bits-utils/CustomTime';
+import { Round } from '@components/generics/functions/Round';
 import useComponentVisible from '@components/generics/useComponentVisible';
 import moment from 'moment';
 import { useState } from 'react';
@@ -171,7 +172,7 @@ const AddHoursToTimesheetModal = ({
                                         color="#787486"
                                         fontSize={12}
                                     >
-                                        {sliderValue}%
+                                        {Round(sliderValue)}%
                                     </Text>
                                     <Progress
                                         value={sliderValue}
@@ -183,6 +184,13 @@ const AddHoursToTimesheetModal = ({
                             </Box>
                             {addTime && (
                                 <Box w="full">
+                                    <Heading
+                                        mb="8px"
+                                        fontSize={15}
+                                        fontWeight={500}
+                                    >
+                                        Please select start time
+                                    </Heading>
                                     <CustomTime
                                         time={time}
                                         timeRef={timeRef}

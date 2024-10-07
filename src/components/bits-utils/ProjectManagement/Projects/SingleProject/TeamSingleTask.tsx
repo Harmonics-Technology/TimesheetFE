@@ -374,8 +374,7 @@ export const TeamSingleTask = ({
         startTime?: string,
     ) => {
         if (startTime) {
-            data.startDate =
-                moment(data.startDate).format('YYYY-MM-DD') + ' ' + startTime;
+            data.startTime = Number(startTime.replaceAll(':', '.'));
         }
         data.addToTimesheet = isToTimesheet;
         data.projectTaskId = task.id;
@@ -839,7 +838,9 @@ export const TeamSingleTask = ({
                                         fontWeight="500"
                                     />
                                     <TableData
-                                        name={`${x?.percentageOfCompletion}%`}
+                                        name={`${Round(
+                                            x?.percentageOfCompletion,
+                                        )}%`}
                                         fontWeight="500"
                                     />
                                     <NewTableState
