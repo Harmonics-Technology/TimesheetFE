@@ -40,6 +40,7 @@ import UploadCareWidget from '../UploadCareWidget';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import { CustomSelectBox } from '../ProjectManagement/Generics/CustomSelectBox';
 
+
 export const NewTeamMemerOnboardingForm = ({
     isOpen,
     onClose,
@@ -140,6 +141,8 @@ export const NewTeamMemerOnboardingForm = ({
             is: false,
             then: yup.string().required(),
         }),
+        hasRolledOverLeave: yup.string().required('Please select an option'),
+
     });
     const draftSchema = yup.object().shape({});
 
@@ -233,6 +236,7 @@ export const NewTeamMemerOnboardingForm = ({
     const taxType = watch('taxType');
     const uniqueItems = getUniqueListBy(currencies, 'currency');
     const isEligibleForLeave = watch('isEligibleForLeave');
+    const hasRolledOverLeave = watch('hasRollOverLeave');
 
     const [clientType, setClientType] = useState(false);
     const [contract, setContractFile] = useState<any>('');
@@ -319,6 +323,11 @@ export const NewTeamMemerOnboardingForm = ({
                 ? (data.isEligibleForLeave = true)
                 : (data.isEligibleForLeave = false);
         }
+         {
+             (data?.hasRollOverLeave as unknown as string) == 'Yes'
+                 ? (data.hasRollOverLeave = true)
+                 : (data.hasRollOverLeave = false);
+         }
         {
             (data?.enableFinancials as unknown as string) == 'Yes'
                 ? (data.enableFinancials = true)
@@ -366,6 +375,7 @@ export const NewTeamMemerOnboardingForm = ({
             });
         }
     };
+
     const saveToDraft = async (data: TeamMemberModel) => {
         // data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax || 0;
         data.superAdminId = user?.superAdminId;
@@ -998,6 +1008,7 @@ export const NewTeamMemerOnboardingForm = ({
                         <Grid
                             templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
+                            mb="1rem"
                         >
                             <PrimaryInput<TeamMemberModel>
                                 label="Eligible number of days"
@@ -1015,6 +1026,41 @@ export const NewTeamMemerOnboardingForm = ({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                            />
+                        </Grid>
+                    )}
+                    <Box pos="relative" mb="1rem">
+                        <PrimaryRadio<TeamMemberModel>
+                            label="Does this team member have a rolled over leave?"
+                            radios={['No', 'Yes']}
+                            name="hasRollOverLeave"
+                            control={control}
+                            error={errors.hasRollOverLeave}
+                            defaultValue={'No'}
+                        />
+                    </Box>
+                    {(hasRolledOverLeave as unknown as string) == 'Yes' && (
+                        <Grid
+                            templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
+                            gap="1rem 2rem"
+                        >
+                            <PrimaryInput<TeamMemberModel>
+                                label="Rolled Over Leave"
+                                name="rolledOverLeave"
+                                error={errors.rolledOverLeave}
+                                placeholder="5 days"
+                                defaultValue=""
+                                register={register}
+                                // readonly={leaveSettings?.isStandardEligibleDays}
+                            />
+                            <PrimaryDate<TeamMemberModel>
+                                label="Expiry date of rolled over leave"
+                                name="expiryDateOfRolledOverLeave"
+                                error={errors.expiryDateOfRolledOverLeave}
+                                placeholder=""
+                                defaultValue=""
+                                control={control}
+                                // register={register}
                             />
                         </Grid>
                     )}
