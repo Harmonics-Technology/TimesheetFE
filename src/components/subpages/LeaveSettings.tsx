@@ -1,4 +1,12 @@
-import { Box, Flex, Text, Heading, Stack, Grid } from '@chakra-ui/react';
+import {
+    Box,
+    Flex,
+    Text,
+    Heading,
+    Stack,
+    Grid,
+    Button,
+} from '@chakra-ui/react';
 import Link from 'next/link';
 import React from 'react';
 import { useRouter } from 'next/router';
@@ -10,6 +18,7 @@ import * as yup from 'yup';
 import { LeaveConfigurationModel } from 'src/services';
 import { LeaveConfigurationView } from 'src/services';
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
+import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 
 const schema = yup.object().shape({});
 
@@ -19,6 +28,7 @@ interface leavesProps {
 
 const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
     const router = useRouter();
+    const [addCustomPeriod, setAddCustomPeriod] = React.useState(false);
     const leaveconfig =
         leaveConfiguration?.isStandardEligibleDays == true ? 'Yes' : 'No';
     const {
@@ -40,6 +50,7 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
 
     const isProratedLeave = watch('isProrated');
     const allowRollover = watch('allowRollover');
+    
     return (
         <Box bg="#FFFFFF" boxShadow="md" px="18px" py="18px" borderRadius="8px">
             <Flex align="center" gap="19px">
@@ -153,13 +164,13 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                         <PrimaryRadio<LeaveConfigurationModel>
                             label=""
                             radios={[
-                                'Roll over unused leave days',
                                 'Expire if leave not used',
+                                'Roll over unused leave days',
                             ]}
                             name="allowRollover"
                             control={control}
                             error={errors.allowRollover}
-                            defaultValue={leaveconfig}
+                            defaultValue={'Expire if leave not used'}
                             flexDir="row"
                             gap="30px"
                         />
@@ -170,38 +181,66 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                             templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
                             gap="1rem 2rem"
                         >
-                            <PrimarySelect<LeaveConfigurationModel>
-                                label="Rolled Over Leave"
-                                name="noOfMonthValid"
-                                error={errors.noOfMonthValid}
-                                placeholder="3 Months"
-                                defaultValue=""
-                                register={register}
-                                options={
-                                    <>
-                                        {[
-                                            { label: '3 Months', id: 3 },
-                                            { label: '6 Months', id: 6 },
-                                            { label: 'Never', id: 0 },
-                                        ]?.map((x: any) => (
-                                            <option value={x?.id}>
-                                                {x.label}
-                                            </option>
-                                        ))}
-                                    </>
-                                }
-                            />
-                            {/* <PrimaryDate<LeaveCon>
-                                label="Expiry date of rolled over leave"
-                                name="expiryDateOfRolledOverLeave"
-                                error={errors.expiryDateOfRolledOverLeave}
-                                placeholder=""
-                                defaultValue=""
-                                control={control}
-                                // register={register}
-                            /> */}
+                            {addCustomPeriod ? (
+                                <PrimaryInput<LeaveConfigurationModel>
+                                    label=""
+                                    name="noOfMonthValid"
+                                    error={errors.noOfMonthValid}
+                                    placeholder="Enter number of period in months"
+                                    defaultValue=""
+                                    register={register}
+                                />
+                            ) : (
+                                <PrimarySelect<LeaveConfigurationModel>
+                                    label="Select the period you like for a rolled over leave to expire or add a custom period"
+                                    name="noOfMonthValid"
+                                    error={errors.noOfMonthValid}
+                                    placeholder="3 Months"
+                                    defaultValue=""
+                                    register={register}
+                                    options={
+                                        <>
+                                            {[
+                                                { label: '3 Months', id: 3 },
+                                                { label: '6 Months', id: 6 },
+                                                { label: 'Never', id: 0 },
+                                            ]?.map((x: any) => (
+                                                <option value={x?.id}>
+                                                    {x.label}
+                                                </option>
+                                            ))}
+                                        </>
+                                    }
+                                />
+                            )}
                         </Grid>
                     )}
+                    {(allowRollover as unknown as string) ==
+                        'Roll over unused leave days' && (
+                        <Box w="150px">
+                            <Button
+                                color="#2EAFA3"
+                                bg="none"
+                                _hover={{ bg: 'none' }}
+                                p="0"
+                                fontSize={13}
+                                fontWeight={600}
+                                onClick={() => setAddCustomPeriod(!addCustomPeriod)}
+                            >
+                                {addCustomPeriod ? 'Select period' : 'Add Custom period'}
+                            </Button>
+                        </Box>
+                    )}
+                    <Button
+                        borderRadius="5px"
+                        bg="#2EAFA3"
+                        color="#ffffff"
+                        fontSize={13}
+                        fontWeight={500}
+                        w="100px"
+                    >
+                        Save
+                    </Button>
                 </Stack>
             </Box>
         </Box>
