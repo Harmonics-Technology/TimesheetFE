@@ -40,6 +40,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     changeVisibility?: any;
     h?: string;
     readonly?: boolean;
+    suffix?: JSX.Element;
 }
 export const PrimaryInput = <TFormValues extends Record<string, any>>({
     name,
@@ -61,6 +62,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
     h = '2.6rem',
     w = 'full',
     readonly = false,
+    suffix,
 }: FormInputProps<TFormValues>) => {
     return (
         <FormControl
@@ -104,6 +106,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                         {!passwordVisible ? <FaRegEye /> : <FaRegEyeSlash />}
                     </InputRightElement>
                 )}
+                {suffix && suffix}
             </InputGroup>
             <FormErrorMessage fontSize=".7rem" color="red">
                 {(error?.type === 'required' &&

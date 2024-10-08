@@ -8,6 +8,7 @@ import {
     Button,
     DrawerFooter,
     FormLabel,
+    Icon,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DateObject } from 'react-multi-date-picker';
@@ -39,7 +40,7 @@ import { ShowPrompt } from '../ProjectManagement/Modals/ShowPrompt';
 import UploadCareWidget from '../UploadCareWidget';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import { CustomSelectBox } from '../ProjectManagement/Generics/CustomSelectBox';
-
+import { BsFillInfoSquareFill } from 'react-icons/bs';
 
 export const NewTeamMemerOnboardingForm = ({
     isOpen,
@@ -62,88 +63,88 @@ export const NewTeamMemerOnboardingForm = ({
     const toast = useToast();
     const { hstAmount } = useContext(OnboardingFeeContext);
 
-    const schema = yup.object().shape({
-        lastName: yup.string().required(),
-        firstName: yup.string().required(),
-        email: yup.string().email().required(),
-        phoneNumber: yup.string().required(),
-        jobTitle: yup.string().required(),
-        // clientId: yup.string().required(),
-        supervisorId: yup.string().required(),
-        isActive: yup.boolean().required(),
-        hoursPerDay: yup.number().required(),
-        payRollTypeId: yup.number().when('enableFinancials', {
-            is: true,
-            then: yup.number().required(),
-        }),
-        paymentPartnerId: yup.string().when('enableFinancials', {
-            is: true,
-            then: yup.string().nullable().when('payRollTypeId', {
-                is: 2,
-                then: yup.string().required(),
-            }),
-        }),
-        ratePerHour: yup.string().when('enableFinancials', {
-            is: true,
-            then: yup.string().nullable().when('payRollTypeId', {
-                is: 1,
-                then: yup.string().required(),
-            }),
-        }),
-        hstNumber: yup.number().when('enableFinancials', {
-            is: true,
-            then: yup.number().nullable().when('payRollTypeId', {
-                is: 1,
-                then: yup.number().required(),
-            }),
-        }),
-        monthlyPayoutRate: yup.string().when('enableFinancials', {
-            is: true,
-            then: yup.string().nullable().when('payRollTypeId', {
-                is: 2,
-                then: yup.string().required(),
-            }),
-        }),
-        currency: yup.string().required(),
-        // paymentRate: yup.string().required(),
-        fixedAmount: yup.boolean().when('enableFinancials', {
-            is: true,
-            then: yup.boolean().required(),
-        }),
-        title: yup.string().required(),
-        startDate: yup.string().required(),
-        endDate: yup.string().required(),
-        dateOfBirth: yup.string().required(),
-        paymentFrequency: yup.string().required(),
-        address: yup.string().required(),
-        clientRate: yup.string().when('enableFinancials', {
-            is: true,
-            then: yup.string().required(),
-        }),
-        // timeSheetGenerationStartDate: yup.string().required(),
-        isEligibleForLeave: yup.string().required(),
-        employeeType: yup.string().required(),
-        numberOfDaysEligible: yup
-            .string()
-            .nullable()
-            .when('isEligibleForLeave', {
-                is: 'Yes' || true,
-                then: yup.string().required(),
-            }),
-        numberOfHoursEligible: yup
-            .string()
-            .nullable()
-            .when('isEligibleForLeave', {
-                is: 'Yes' || true,
-                then: yup.string().required(),
-            }),
-        onBoradingFee: yup.string().when('fixedAmount', {
-            is: false,
-            then: yup.string().required(),
-        }),
-        hasRolledOverLeave: yup.string().required('Please select an option'),
+    // const schema = yup.object().shape({
+    //     lastName: yup.string().required(),
+    //     firstName: yup.string().required(),
+    //     email: yup.string().email().required(),
+    //     phoneNumber: yup.string().required(),
+    //     jobTitle: yup.string().required(),
+    //     // clientId: yup.string().required(),
+    //     supervisorId: yup.string().required(),
+    //     isActive: yup.boolean().required(),
+    //     hoursPerDay: yup.number().required(),
+    //     payRollTypeId: yup.number().when('enableFinancials', {
+    //         is: true,
+    //         then: yup.number().required(),
+    //     }),
+    //     paymentPartnerId: yup.string().when('enableFinancials', {
+    //         is: true,
+    //         then: yup.string().nullable().when('payRollTypeId', {
+    //             is: 2,
+    //             then: yup.string().required(),
+    //         }),
+    //     }),
+    //     ratePerHour: yup.string().when('enableFinancials', {
+    //         is: true,
+    //         then: yup.string().nullable().when('payRollTypeId', {
+    //             is: 1,
+    //             then: yup.string().required(),
+    //         }),
+    //     }),
+    //     hstNumber: yup.number().when('enableFinancials', {
+    //         is: true,
+    //         then: yup.number().nullable().when('payRollTypeId', {
+    //             is: 1,
+    //             then: yup.number().required(),
+    //         }),
+    //     }),
+    //     monthlyPayoutRate: yup.string().when('enableFinancials', {
+    //         is: true,
+    //         then: yup.string().nullable().when('payRollTypeId', {
+    //             is: 2,
+    //             then: yup.string().required(),
+    //         }),
+    //     }),
+    //     currency: yup.string().required(),
+    //     // paymentRate: yup.string().required(),
+    //     fixedAmount: yup.boolean().when('enableFinancials', {
+    //         is: true,
+    //         then: yup.boolean().required(),
+    //     }),
+    //     title: yup.string().required(),
+    //     startDate: yup.string().required(),
+    //     endDate: yup.string().required(),
+    //     dateOfBirth: yup.string().required(),
+    //     paymentFrequency: yup.string().required(),
+    //     address: yup.string().required(),
+    //     clientRate: yup.string().when('enableFinancials', {
+    //         is: true,
+    //         then: yup.string().required(),
+    //     }),
+    //     // timeSheetGenerationStartDate: yup.string().required(),
+    //     isEligibleForLeave: yup.string().required(),
+    //     employeeType: yup.string().required(),
+    //     numberOfDaysEligible: yup
+    //         .string()
+    //         .nullable()
+    //         .when('isEligibleForLeave', {
+    //             is: 'Yes' || true,
+    //             then: yup.string().required(),
+    //         }),
+    //     numberOfHoursEligible: yup
+    //         .string()
+    //         .nullable()
+    //         .when('isEligibleForLeave', {
+    //             is: 'Yes' || true,
+    //             then: yup.string().required(),
+    //         }),
+    //     onBoradingFee: yup.string().when('fixedAmount', {
+    //         is: false,
+    //         then: yup.string().required(),
+    //     }),
+    //     hasRolledOverLeave: yup.string().required('Please select an option'),
 
-    });
+    // });
     const draftSchema = yup.object().shape({});
 
     const {
@@ -237,6 +238,7 @@ export const NewTeamMemerOnboardingForm = ({
     const uniqueItems = getUniqueListBy(currencies, 'currency');
     const isEligibleForLeave = watch('isEligibleForLeave');
     const hasRolledOverLeave = watch('hasRollOverLeave');
+    const hasUtilizeLeaveDaysToDate = watch('hasUtilizeLeaveDaysToDate');
 
     const [clientType, setClientType] = useState(false);
     const [contract, setContractFile] = useState<any>('');
@@ -318,21 +320,15 @@ export const NewTeamMemerOnboardingForm = ({
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
-        {
-            (data?.isEligibleForLeave as unknown as string) == 'Yes'
-                ? (data.isEligibleForLeave = true)
-                : (data.isEligibleForLeave = false);
-        }
-         {
-             (data?.hasRollOverLeave as unknown as string) == 'Yes'
-                 ? (data.hasRollOverLeave = true)
-                 : (data.hasRollOverLeave = false);
-         }
-        {
-            (data?.enableFinancials as unknown as string) == 'Yes'
-                ? (data.enableFinancials = true)
-                : (data.enableFinancials = false);
-        }
+        data.isEligibleForLeave =
+            (data?.isEligibleForLeave as any) == 'Yes' ? true : false;
+        data.enableFinancials =
+            (data?.enableFinancials as any) == 'Yes' ? true : false;
+        data.hasRollOverLeave =
+            (data?.hasRollOverLeave as any) == 'Yes' ? true : false;
+        data.hasUtilizeLeaveDaysToDate =
+            (data?.hasUtilizeLeaveDaysToDate as any) == 'Yes' ? true : false;
+
         data.clientId = !clientType ? user?.superAdminId : data.clientId;
         if (data.supervisorId === undefined || '') {
             toast({
@@ -385,16 +381,15 @@ export const NewTeamMemerOnboardingForm = ({
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
-        {
-            (data?.isEligibleForLeave as unknown as string) == 'Yes'
-                ? (data.isEligibleForLeave = true)
-                : (data.isEligibleForLeave = false);
-        }
-        {
-            (data?.enableFinancials as unknown as string) == 'Yes'
-                ? (data.enableFinancials = true)
-                : (data.enableFinancials = false);
-        }
+        data.isEligibleForLeave =
+            (data?.isEligibleForLeave as any) == 'Yes' ? true : false;
+        data.enableFinancials =
+            (data?.enableFinancials as any) == 'Yes' ? true : false;
+        data.hasRollOverLeave =
+            (data?.hasRollOverLeave as any) == 'Yes' ? true : false;
+        data.hasUtilizeLeaveDaysToDate =
+            (data?.hasUtilizeLeaveDaysToDate as any) == 'Yes' ? true : false;
+
         data.clientId = !clientType ? user?.superAdminId : data.clientId;
         try {
             const result = await DraftService.createDraft(
@@ -993,7 +988,29 @@ export const NewTeamMemerOnboardingForm = ({
                     )}
                 </Box>
                 <Box w="full">
-                    <SectionTitle text="Leave Management" />
+                    <SectionTitle
+                        text="Leave Management"
+                        sub={
+                            <HStack
+                                bgColor="#f1f4f8"
+                                p="6px 11px"
+                                gap="8px"
+                                color="#6A7F9D"
+                                align="flex-start"
+                            >
+                                <Icon
+                                    as={BsFillInfoSquareFill}
+                                    fontSize="13px"
+                                    mt="3px"
+                                />
+                                <Text fontSize="11px" fontWeight={400}>
+                                    You can setup leave for your team member in
+                                    the team members profile, it is not
+                                    compulsory at onboarding stage
+                                </Text>
+                            </HStack>
+                        }
+                    />
                     <Box pos="relative" mb="1rem">
                         <PrimaryRadio<TeamMemberModel>
                             label="Is this team member eligible for leave?"
@@ -1005,12 +1022,16 @@ export const NewTeamMemerOnboardingForm = ({
                         />
                     </Box>
                     {(isEligibleForLeave as unknown as string) == 'Yes' && (
-                        <Grid
-                            templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
-                            gap="1rem 2rem"
-                            mb="1rem"
-                        >
-                            <PrimaryInput<TeamMemberModel>
+                        <>
+                            <Grid
+                                templateColumns={[
+                                    'repeat(1,1fr)',
+                                    'repeat(2,1fr)',
+                                ]}
+                                gap="1rem 2rem"
+                                mb="1rem"
+                            >
+                                {/* <PrimaryInput<TeamMemberModel>
                                 label="Eligible number of days"
                                 name="numberOfDaysEligible"
                                 error={errors.numberOfDaysEligible}
@@ -1018,51 +1039,90 @@ export const NewTeamMemerOnboardingForm = ({
                                 defaultValue=""
                                 register={register}
                                 readonly={leaveSettings?.isStandardEligibleDays}
-                            />
-                            <PrimaryInput<TeamMemberModel>
-                                label="Eligible number of hours"
-                                name="numberOfHoursEligible"
-                                error={errors.numberOfHoursEligible}
-                                placeholder=""
-                                defaultValue=""
-                                register={register}
-                            />
-                        </Grid>
-                    )}
-                    <Box pos="relative" mb="1rem">
-                        <PrimaryRadio<TeamMemberModel>
-                            label="Does this team member have a rolled over leave?"
-                            radios={['No', 'Yes']}
-                            name="hasRollOverLeave"
-                            control={control}
-                            error={errors.hasRollOverLeave}
-                            defaultValue={'No'}
-                        />
-                    </Box>
-                    {(hasRolledOverLeave as unknown as string) == 'Yes' && (
-                        <Grid
-                            templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
-                            gap="1rem 2rem"
-                        >
-                            <PrimaryInput<TeamMemberModel>
-                                label="Rolled Over Leave"
-                                name="rolledOverLeave"
-                                error={errors.rolledOverLeave}
-                                placeholder="5 days"
-                                defaultValue=""
-                                register={register}
-                                // readonly={leaveSettings?.isStandardEligibleDays}
-                            />
-                            <PrimaryDate<TeamMemberModel>
-                                label="Expiry date of rolled over leave"
-                                name="expiryDateOfRolledOverLeave"
-                                error={errors.expiryDateOfRolledOverLeave}
-                                placeholder=""
-                                defaultValue=""
-                                control={control}
-                                // register={register}
-                            />
-                        </Grid>
+                            /> */}
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Eligible number of hours"
+                                    name="numberOfHoursEligible"
+                                    error={errors.numberOfHoursEligible}
+                                    placeholder=""
+                                    defaultValue=""
+                                    register={register}
+                                />
+                            </Grid>
+
+                            <Box pos="relative" mb="1rem">
+                                <PrimaryRadio<TeamMemberModel>
+                                    label="Does this team member have a rolled over leave?"
+                                    radios={['No', 'Yes']}
+                                    name="hasRollOverLeave"
+                                    control={control}
+                                    error={errors.hasRollOverLeave}
+                                    defaultValue={'No'}
+                                />
+                            </Box>
+                            {(hasRolledOverLeave as unknown as string) ==
+                                'Yes' && (
+                                <Grid
+                                    templateColumns={[
+                                        'repeat(1,1fr)',
+                                        'repeat(2,1fr)',
+                                    ]}
+                                    gap="1rem 2rem"
+                                    mb="1rem"
+                                >
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Rolled Over Leave"
+                                        name="rolledOverLeave"
+                                        error={errors.rolledOverLeave}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                        // readonly={leaveSettings?.isStandardEligibleDays}
+                                    />
+                                    <PrimaryDate<TeamMemberModel>
+                                        label="Expiry date of rolled over leave"
+                                        name="expiryDateOfRolledOverLeave"
+                                        error={
+                                            errors.expiryDateOfRolledOverLeave
+                                        }
+                                        placeholder=""
+                                        defaultValue=""
+                                        control={control}
+                                        // register={register}
+                                    />
+                                </Grid>
+                            )}
+                            <Box pos="relative" mb="1rem">
+                                <PrimaryRadio<TeamMemberModel>
+                                    label="Has this team member utilized any leave Hours to date?"
+                                    radios={['No', 'Yes']}
+                                    name="hasUtilizeLeaveDaysToDate"
+                                    control={control}
+                                    error={errors.hasUtilizeLeaveDaysToDate}
+                                    defaultValue={'No'}
+                                />
+                            </Box>
+                            {(hasUtilizeLeaveDaysToDate as unknown as string) ==
+                                'Yes' && (
+                                <Grid
+                                    templateColumns={[
+                                        'repeat(1,1fr)',
+                                        'repeat(2,1fr)',
+                                    ]}
+                                    gap="1rem 2rem"
+                                >
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Utilized Leave"
+                                        name="utilizedLeave"
+                                        error={errors.utilizedLeave}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                        // readonly={leaveSettings?.isStandardEligibleDays}
+                                    />
+                                </Grid>
+                            )}
+                        </>
                     )}
                 </Box>
                 <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">

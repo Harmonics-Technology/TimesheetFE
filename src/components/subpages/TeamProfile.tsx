@@ -6,7 +6,8 @@ import {
     Grid,
     HStack,
     Text,
-    useDisclosure, Heading,
+    useDisclosure,
+    Heading,
     useToast,
 } from '@chakra-ui/react';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
@@ -49,7 +50,6 @@ import { LicenseRevoke } from '@components/bits-utils/LicenseRevoke';
 import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
 import InputBlank from '@components/bits-utils/InputBlank';
 
-
 const schema = yup.object().shape({});
 interface TeamProfileProps {
     userProfile?: UserView;
@@ -87,6 +87,7 @@ function TeamProfile({
               ];
     //
     const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
+
     const {
         register,
         handleSubmit,
@@ -151,13 +152,16 @@ function TeamProfile({
             payrollStructure:
                 userProfile?.employeeInformation?.payrollStructure,
             rolledOverLeave: userProfile?.employeeInformation?.rolledOverLeave,
-            hasRollOverLeave: userProfile?.employeeInformation?.hasRollOverLeave,
-            expiryDateOfRolledOverLeave: userProfile?.employeeInformation?.expiryDateOfRolledOverLeave,
+            hasRollOverLeave:
+                userProfile?.employeeInformation?.hasRollOverLeave,
+            expiryDateOfRolledOverLeave:
+                userProfile?.employeeInformation?.expiryDateOfRolledOverLeave,
         },
     });
     const router = useRouter();
     const toast = useToast();
     const includePayroll = watch('enableFinancials');
+    const hasUtlized = watch('hasUtilizeLeaveDaysToDate');
 
     // console.log({ userProfile, rle: watch('role') });
     //
@@ -376,7 +380,7 @@ function TeamProfile({
         }
     };
 
-    const show = router.asPath.startsWith('/clients/team-members');
+    const show = router.asPath.startsWith('/client/team-members');
     //
 
     useLeavePageConfirmation(isDirty && !isSubmitting);
@@ -779,40 +783,42 @@ function TeamProfile({
                             </Box>
                         </Grid>
                     </Box>
-                    <Box borderY="1px solid #d9d9d9" py="1rem" my="2rem">
-                        <Text
-                            fontWeight="600"
-                            fontSize="1.1rem"
-                            mb="1rem"
-                            textTransform="capitalize"
-                            color="brand.200"
-                        >
-                            License Plan Assigned
-                        </Text>
-                        <LicenseEditBox
-                            data={subs}
-                            updateFunction={addLicense}
-                            items={selectedLicense}
-                            customKeys={{
-                                key: 'subscriptionId',
-                                label: 'subscriptionType',
-                                used: 'noOfLicenceUsed',
-                                total: 'noOfLicensePurchased',
-                            }}
-                            removeFn={removeLicense}
-                            id="assignLicense"
-                            extraField={
-                                'users in total assigned to this license'
-                            }
-                            checkbox
-                        />
-                        <LicenseRevoke
-                            userId={userProfile?.id}
-                            text="Revoke License"
-                            disabled={!curentLicense}
-                            setSelectedLicense={setSelectedLicense}
-                        />
-                    </Box>
+                    {role !== 'client' && (
+                        <Box borderY="1px solid #d9d9d9" py="1rem" my="2rem">
+                            <Text
+                                fontWeight="600"
+                                fontSize="1.1rem"
+                                mb="1rem"
+                                textTransform="capitalize"
+                                color="brand.200"
+                            >
+                                License Plan Assigned
+                            </Text>
+                            <LicenseEditBox
+                                data={subs}
+                                updateFunction={addLicense}
+                                items={selectedLicense}
+                                customKeys={{
+                                    key: 'subscriptionId',
+                                    label: 'subscriptionType',
+                                    used: 'noOfLicenceUsed',
+                                    total: 'noOfLicensePurchased',
+                                }}
+                                removeFn={removeLicense}
+                                id="assignLicense"
+                                extraField={
+                                    'users in total assigned to this license'
+                                }
+                                checkbox
+                            />
+                            <LicenseRevoke
+                                userId={userProfile?.id}
+                                text="Revoke License"
+                                disabled={!curentLicense}
+                                setSelectedLicense={setSelectedLicense}
+                            />
+                        </Box>
+                    )}
                     {(includePayroll ||
                         (includePayroll as unknown as string) == 'Yes') && (
                         <Box w="full">
@@ -1145,87 +1151,154 @@ function TeamProfile({
                                 />
                             </Box>
 
-                            {(isEligibleForLeave as unknown as string) ==
-                                'Yes' || eligible == true ? (
-                                <PrimaryInput<TeamMemberModel>
-                                    label="Eligible number of days"
-                                    name="numberOfDaysEligible"
-                                    error={errors.numberOfDaysEligible}
-                                    placeholder=""
-                                    defaultValue={''}
-                                    register={register}
-                                />
-                            ) : null}
-                            {(isEligibleForLeave as unknown as string) ==
-                                'Yes' || eligible == true ? (
-                                <PrimaryInput<TeamMemberModel>
-                                    label="Eligible number of hours"
-                                    name="numberOfHoursEligible"
-                                    error={errors.numberOfHoursEligible}
-                                    placeholder=""
-                                    defaultValue={''}
-                                    register={register}
-                                />
-                            ) : null}
+                            {((isEligibleForLeave as unknown as string) ==
+                                'Yes' ||
+                                eligible == true) && (
+                                <>
+                                    {/* <PrimaryInput<TeamMemberModel>
+                                        label="Eligible number of days"
+                                        name="numberOfDaysEligible"
+                                        error={errors.numberOfDaysEligible}
+                                        placeholder=""
+                                        defaultValue={''}
+                                        register={register}
+                                    /> */}
 
-                            <Box mb="1.5rem" pos="relative">
-                                <PrimaryRadio
-                                    label="Does this team member have a rolled over leave?"
-                                    radios={['No', 'Yes']}
-                                    name="hasRollOverLeave"
-                                    control={control}
-                                    error={errors.hasRollOverLeave}
-                                    // defaultValue={
-                                    //     eligible == true ? 'Yes' : 'No'
-                                    // }
-                                />
-                            </Box>
-
-                            {(hasRolledOverLeave as unknown as string) ==
-                                'Yes' && (
-                                <PrimaryInput<TeamMemberModel>
-                                    label="Rolled Over Leave"
-                                    name="rolledOverLeave"
-                                    error={errors.rolledOverLeave}
-                                    placeholder=""
-                                    defaultValue={''}
-                                    register={register}
-                                />
-                            )}
-                            {(hasRolledOverLeave as unknown as string) ==
-                                'Yes' && (
-                                <PrimaryDate<TeamMemberModel>
-                                    label="Expiry date of rolled over leave"
-                                    name="expiryDateOfRolledOverLeave"
-                                    error={errors.expiryDateOfRolledOverLeave}
-                                    placeholder=""
-                                    defaultValue={''}
-                                    control={control}
-                                    // register={register}
-                                />
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Eligible number of hours"
+                                        name="numberOfHoursEligible"
+                                        error={errors.numberOfHoursEligible}
+                                        placeholder=""
+                                        defaultValue={''}
+                                        register={register}
+                                    />
+                                    <Box />
+                                </>
                             )}
                         </Grid>
+                        <>
+                            {((isEligibleForLeave as unknown as string) ==
+                                'Yes' ||
+                                eligible == true) && (
+                                <>
+                                    <Grid
+                                        templateColumns={[
+                                            'repeat(1,1fr)',
+                                            'repeat(3,1fr)',
+                                        ]}
+                                        gap="1rem 2rem"
+                                        my="1rem"
+                                    >
+                                        <Box mb="1.5rem" pos="relative">
+                                            <PrimaryRadio
+                                                label="Does this team member have a rolled over leave?"
+                                                radios={['No', 'Yes']}
+                                                name="hasRollOverLeave"
+                                                control={control}
+                                                error={errors.hasRollOverLeave}
+                                                // defaultValue={
+                                                //     eligible == true ? 'Yes' : 'No'
+                                                // }
+                                            />
+                                        </Box>
+
+                                        {(hasRolledOverLeave as unknown as string) ==
+                                            'Yes' && (
+                                            <PrimaryInput<TeamMemberModel>
+                                                label="Rolled Over Leave"
+                                                name="rolledOverLeave"
+                                                error={errors.rolledOverLeave}
+                                                placeholder=""
+                                                defaultValue={
+                                                    hasRolledOverLeave
+                                                        ? 'Yes'
+                                                        : 'No'
+                                                }
+                                                register={register}
+                                            />
+                                        )}
+                                        {(hasRolledOverLeave as unknown as string) ==
+                                            'Yes' && (
+                                            <PrimaryDate<TeamMemberModel>
+                                                label="Expiry date of rolled over leave"
+                                                name="expiryDateOfRolledOverLeave"
+                                                error={
+                                                    errors.expiryDateOfRolledOverLeave
+                                                }
+                                                placeholder=""
+                                                defaultValue={''}
+                                                control={control}
+                                                // register={register}
+                                            />
+                                        )}
+                                    </Grid>
+                                    <Grid
+                                        templateColumns={[
+                                            'repeat(1,1fr)',
+                                            'repeat(3,1fr)',
+                                        ]}
+                                        gap="1rem 2rem"
+                                    >
+                                        <Box mb="1.5rem" pos="relative">
+                                            <PrimaryRadio
+                                                label="Has this team member utilized any leave Hours to date?"
+                                                radios={['No', 'Yes']}
+                                                name="hasUtilizeLeaveDaysToDate"
+                                                control={control}
+                                                error={
+                                                    errors.hasUtilizeLeaveDaysToDate
+                                                }
+                                                defaultValue={
+                                                    hasUtlized ? 'Yes' : 'No'
+                                                }
+                                            />
+                                        </Box>
+
+                                        {((hasUtlized as unknown as string) ==
+                                            'Yes' ||
+                                            userProfile?.employeeInformation
+                                                ?.hasUtilizeLeaveDaysToDate) && (
+                                            <PrimaryInput<TeamMemberModel>
+                                                label="Utilized Leave"
+                                                name="utilizedLeave"
+                                                error={errors.utilizedLeave}
+                                                placeholder=""
+                                                defaultValue={
+                                                    userProfile
+                                                        ?.employeeInformation
+                                                        ?.utilizedLeave
+                                                }
+                                                register={register}
+                                            />
+                                        )}
+                                    </Grid>
+                                </>
+                            )}
+                        </>
                     </Box>
-                    <Box mt='5'>
-                        <Heading
+                    {((isEligibleForLeave as unknown as string) == 'Yes' ||
+                        eligible == true) && (
+                        <Box mt="5">
+                            {/* <Heading
                             fontSize={13}
                             mb="12px"
                             color="#1A202C"
                             fontWeight={500}
                         >
                             Team member leave balance
-                        </Heading>
-                        <Box w='266px'>
-                            <InputBlank
-                                label="Leave Balance"
-                                placeholder=""
-                                defaultValue=""
-                                readonly={true}
-                                disableLabel={true}
-                                value={`${userProfile?.employeeInformation?.numberOfDaysEligible} Days`}
-                            />
+                        </Heading> */}
+                            <Box w="266px">
+                                <InputBlank
+                                    label="Team member leave balance"
+                                    placeholder=""
+                                    defaultValue=""
+                                    readonly={true}
+                                    disableLabel={true}
+                                    value={`${userProfile?.employeeInformation?.numberOfDaysEligible} Days`}
+                                />
+                            </Box>
                         </Box>
-                    </Box>
+                    )}
                     <ContractTable
                         userProfile={userProfile}
                         isSuperAdmin={isSuperAdmin}
@@ -1248,7 +1321,7 @@ function TeamProfile({
                     >
                         Back
                     </Button>
-                    {!show && (
+                    {!show && role == 'client' && (
                         <Button
                             bgColor="brand.400"
                             color="white"

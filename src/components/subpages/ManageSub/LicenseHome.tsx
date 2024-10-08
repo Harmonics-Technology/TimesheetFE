@@ -160,7 +160,9 @@ export const LicenseHome = ({
                             <VStack w="full" align="flex-start" gap="32px">
                                 <LicenseTopBtmText
                                     top="Payment Method"
-                                    title={`${selected?.brand} ***** ${selected?.paymentMethod}`}
+                                    title={`${selected?.brand || ''} ***** ${
+                                        selected?.paymentMethod || ''
+                                    }`}
                                     sub="Edit/manage payment method"
                                     url={`/${role}/account-management/billing-information`}
                                 />
@@ -240,29 +242,31 @@ export const LicenseHome = ({
                                             <TableData name={x.licenceType} />
                                             <TableData
                                                 name={moment(
-                                                    x.startDate,
+                                                    x?.startDate,
                                                 ).format('DD/MM/YYYY')}
                                             />
                                             <TableData
-                                                name={moment(x.endDate).format(
+                                                name={moment(x?.endDate).format(
                                                     'DD/MM/YYYY',
                                                 )}
                                             />
                                             <TableData
-                                                name={`${moment(x.endDate).diff(
+                                                name={`${moment(
+                                                    x?.endDate,
+                                                ).diff(
                                                     x.startDate,
                                                     'month',
                                                 )} Months`}
                                             />
                                             <TableData
                                                 name={CAD(
-                                                    (x.amountInCent as number) /
+                                                    (x?.amountInCent as number) /
                                                         100,
                                                 )}
                                             />
                                             <TableStatus
                                                 name={
-                                                    x.status == 'active'
+                                                    x?.status == 'active'
                                                         ? true
                                                         : false
                                                 }
@@ -270,7 +274,7 @@ export const LicenseHome = ({
                                             <td>
                                                 <Link
                                                     href={
-                                                        x.invoicePDFURL as string
+                                                        x?.invoicePDFURL as string
                                                     }
                                                     fontSize="1.2rem"
                                                     target="_blank"

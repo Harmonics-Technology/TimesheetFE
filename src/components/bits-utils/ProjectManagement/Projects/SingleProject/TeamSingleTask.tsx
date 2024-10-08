@@ -336,6 +336,7 @@ export const TeamSingleTask = ({
                         );
                     if (res?.status === true) {
                         setLoading({ id: '' });
+                        ListUserTimesheet();
                         router.replace(router.asPath);
                         toast({
                             title: res.message,
@@ -399,6 +400,7 @@ export const TeamSingleTask = ({
                     );
                 if (res?.status === true) {
                     setLoading({ id: '' });
+                    ListUserTimesheet();
                     router.replace(router.asPath);
                     toast({
                         title: res.message,

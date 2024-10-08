@@ -23,6 +23,8 @@ interface InputProps {
     value?: any;
     readonly?: any;
     w?: any;
+    suffix?: JSX.Element;
+    variant?: any;
 }
 function InputBlank({
     type,
@@ -38,6 +40,8 @@ function InputBlank({
     value,
     readonly,
     w = 'full',
+    suffix,
+    variant = 'filled',
 }: InputProps) {
     return (
         <FormControl w={w}>
@@ -52,7 +56,7 @@ function InputBlank({
                 <Input
                     type={type}
                     placeholder={placeholder}
-                    variant="filled"
+                    variant={variant}
                     disabled={disableLabel}
                     onChange={onChange}
                     defaultValue={defaultValue}
@@ -73,6 +77,7 @@ function InputBlank({
                         {passwordVisible ? <FaRegEye /> : <FaRegEyeSlash />}
                     </InputRightElement>
                 )}
+                {suffix && suffix}
             </InputGroup>
             <Text fontSize=".7rem" color="red" />
         </FormControl>

@@ -1,7 +1,13 @@
 import { Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 
-export const SectionTitle = ({ text }: { text: string }) => {
+export const SectionTitle = ({
+    text,
+    sub,
+}: {
+    text?: string;
+    sub?: JSX.Element;
+}) => {
     return (
         <Flex
             justify="space-between"
@@ -10,15 +16,20 @@ export const SectionTitle = ({ text }: { text: string }) => {
             py="1rem"
             borderY="1px solid"
             borderColor="gray.300"
+            gap=".5rem"
         >
-            <Text
-                textTransform="uppercase"
-                mb="0"
-                fontSize="1.3rem"
-                fontWeight="500"
-            >
-                {text}
-            </Text>
+            {text && (
+                <Text
+                    textTransform="uppercase"
+                    mb="0"
+                    fontSize="1.3rem"
+                    fontWeight="500"
+                    whiteSpace="nowrap"
+                >
+                    {text}
+                </Text>
+            )}
+            {sub && sub}
         </Flex>
     );
 };
