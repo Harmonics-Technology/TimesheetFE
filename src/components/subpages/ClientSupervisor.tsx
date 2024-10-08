@@ -36,6 +36,8 @@ import Loading from '@components/bits-utils/Loading';
 import { SelectrixBox } from '@components/bits-utils/Selectrix';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { UserContext } from '@components/context/UserContext';
+import { useContext } from 'react';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -61,6 +63,8 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
+    const { user } = useContext(UserContext);
+    const role = user?.role?.replaceAll(' ', '');
 
     const onSubmit = async (data: RegisterModel) => {
         try {
@@ -73,7 +77,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                 reset()
+                reset();
                 onClose();
                 return;
             }
@@ -102,7 +106,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Button
+                {/* <Button
                     bgColor="brand.400"
                     color="white"
                     p=".5rem 1.5rem"
@@ -112,7 +116,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                     mb="1rem"
                 >
                     +Supervisor
-                </Button>
+                </Button> */}
                 <FilterSearch />
                 <Tables
                     tableHead={['Name', 'Email', 'Role', 'Status', 'Action']}
@@ -128,6 +132,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                                     id={x.id}
                                     route="supervisors"
                                     email={x.email}
+                                    role={role}
                                 />
                             </Tr>
                         ))}

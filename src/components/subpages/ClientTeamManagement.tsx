@@ -23,7 +23,7 @@ import {
     TableStatus,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Widget } from '@uploadcare/react-widget';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -48,6 +48,7 @@ import { DateObject } from 'react-multi-date-picker';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import Loading from '@components/bits-utils/Loading';
 import BeatLoader from 'react-spinners/BeatLoader';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -115,6 +116,8 @@ function ClientTeamManagement({
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     const toast = useToast();
+    const { user } = useContext(UserContext);
+    const role = user?.role?.replaceAll(' ', '');
     //
     const payroll = watch('payRollTypeId');
     const clientId = watch('clientId');
@@ -240,7 +243,7 @@ function ClientTeamManagement({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                reset()
+                reset();
                 onClose();
                 return;
             }
@@ -312,6 +315,7 @@ function ClientTeamManagement({
                                     id={x.id}
                                     route="team-members"
                                     email={x.email}
+                                    role={role}
                                 />
                             </Tr>
                         ))}

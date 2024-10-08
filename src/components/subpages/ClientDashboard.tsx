@@ -27,6 +27,7 @@ import {
 } from 'src/services';
 import PayrollInvoice from './PayrollInvoice';
 import ClientInvoicedInvoice from './ClientInvoicedInvoice';
+import { UserContext } from '@components/context/UserContext';
 
 interface DashboardProps {
     metrics: any;
@@ -50,6 +51,8 @@ function ClientDashboard({
         useContext(NotificationContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
+    const { user } = useContext(UserContext);
+    const role = user?.role?.replaceAll(' ', '');
 
     return (
         <Box>
@@ -86,15 +89,12 @@ function ClientDashboard({
                                     <TableData name={x.firstName} />
                                     <TableData name={x.lastName} />
                                     <TableData name={x.email} />
-                                    <TableData
-                                        name={
-                                            x.employeeInformation?.payrollGroup
-                                        }
-                                    />
+                                    <TableData name={x.role} />
                                     <TableActions
                                         id={x.id}
                                         email={x.email}
-                                        route={''}
+                                        route={`/${role}/team-members`}
+                                        role={role}
                                     />
                                 </Tr>
                             ))}
@@ -102,7 +102,7 @@ function ClientDashboard({
                             'First Name',
                             'Last Name',
                             'Email',
-                            'Affilated with',
+                            'Role',
                             'Action',
                         ]}
                         link={'/'}

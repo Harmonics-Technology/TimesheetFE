@@ -147,7 +147,7 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
                     />
                 </Grid>
                 <Grid
-                    templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
+                    templateColumns={['repeat(1,1fr)', 'repeat(1,1fr)']}
                     gap="1rem 2rem"
                     my="2rem"
                 >
@@ -161,7 +161,7 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
                     >
                         Back
                     </Button>
-                    <Button
+                    {/* <Button
                         bgColor="brand.400"
                         color="white"
                         height="3rem"
@@ -175,7 +175,7 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
                             <VscSaveAs />
                         </Box>
                         <Box>Update Profile</Box>
-                    </Button>
+                    </Button> */}
                 </Grid>
             </form>
         </Box>

@@ -383,6 +383,7 @@ function MyProfile({
                                 fontSize=".8rem"
                                 color="brand.300"
                                 fontWeight="bold"
+                                textTransform="capitalize"
                             >
                                 {user?.role} Profile
                             </Text>

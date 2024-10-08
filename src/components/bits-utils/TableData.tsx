@@ -326,10 +326,12 @@ export function TableActions({
     id,
     route,
     email,
+    role,
 }: {
     id: any;
     route: string;
     email: any;
+    role?: any;
 }) {
     const toast = useToast();
     const [loading, setLoading] = useState(false);
@@ -381,16 +383,34 @@ export function TableActions({
                     </Box>
                 </MenuButton>
                 <MenuList w="full">
-                    <MenuItem onClick={() => resendInvite({ email })} w="full">
-                        Resend Invite
-                    </MenuItem>
-                    <MenuItem w="full">
-                        <NextLink href={`${route}/${id}`} passHref>
-                            <Link width="100%" textDecor="none !important">
-                                View Profile
-                            </Link>
-                        </NextLink>
-                    </MenuItem>
+                    {role == 'client' ? (
+                        <MenuItem w="full">
+                            <NextLink href={`${route}/${id}`} passHref>
+                                <Link width="100%" textDecor="none !important">
+                                    View Profile
+                                </Link>
+                            </NextLink>
+                        </MenuItem>
+                    ) : (
+                        <>
+                            <MenuItem
+                                onClick={() => resendInvite({ email })}
+                                w="full"
+                            >
+                                Resend Invite
+                            </MenuItem>
+                            <MenuItem w="full">
+                                <NextLink href={`${route}/${id}`} passHref>
+                                    <Link
+                                        width="100%"
+                                        textDecor="none !important"
+                                    >
+                                        View Profile
+                                    </Link>
+                                </NextLink>
+                            </MenuItem>
+                        </>
+                    )}
                 </MenuList>
             </Menu>
         </td>
