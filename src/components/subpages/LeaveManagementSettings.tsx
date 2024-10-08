@@ -132,10 +132,7 @@ export const LeaveManagementSettings = ({
 
     return (
         <Box bg="#FFFFFF" boxShadow="md" px="18px" py="18px" borderRadius="8px">
-            <Flex
-                align="center"
-                gap="19px"
-            >
+            <Flex align="center" gap="19px">
                 <Link href="/SuperAdmin/account-management/leave-management-settings">
                     <Text
                         fontSize=".875rem"
@@ -154,14 +151,14 @@ export const LeaveManagementSettings = ({
                                 ? '2px solid #2EAFA3'
                                 : 'none'
                         }
-                        cursor='pointer'
+                        cursor="pointer"
                     >
                         Leave Management Preference
                     </Text>
                 </Link>
                 <Link href="/SuperAdmin/account-management/leave-settings">
                     <Text
-                        pb='8px'
+                        pb="8px"
                         fontSize=".875rem"
                         color={
                             router.pathname ===
@@ -253,7 +250,7 @@ export const LeaveManagementSettings = ({
                     <AddEditLeave data={data} />
                 </Box>
             </Grid>
-            <Box borderBottom="1px solid #C2CFE0" pb="1.5rem">
+            <Box borderBottom="1px solid #C2CFE0" pb="1.5rem" w="full">
                 <LeaveDaysDefaults leaveConfiguration={leaveConfiguration} />
             </Box>
             <Box w="full" py="1.5rem" borderBottom="1px solid #C2CFE0">
