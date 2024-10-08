@@ -338,6 +338,11 @@ function TeamProfile({
                 ? (data.isEligibleForLeave = true)
                 : (data.isEligibleForLeave = false);
         }
+        {
+            (data?.hasRollOverLeave as unknown as string) == 'Yes'
+                ? (data.hasRollOverLeave = true)
+                : (data.hasRollOverLeave = false);
+        }
         data.enableFinancials = (data.enableFinancials as any) === 'true';
 
         // data.clientId = !clientType ? user?.superAdminId : data.clientId;
