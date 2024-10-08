@@ -4,21 +4,20 @@ import {
     Text,
     Heading,
     Stack,
-    Grid,
     Button,
+    useToast,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import React from 'react';
 import { useRouter } from 'next/router';
 import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
-import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { LeaveConfigurationModel } from 'src/services';
+import { LeaveConfigurationModel, LeaveService } from 'src/services';
 import { LeaveConfigurationView } from 'src/services';
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
+import { useState } from 'react';
 
 const schema = yup.object().shape({});
 
@@ -28,7 +27,7 @@ interface leavesProps {
 
 const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
     const router = useRouter();
-    const [addCustomPeriod, setAddCustomPeriod] = React.useState(false);
+    const [addCustomPeriod, setAddCustomPeriod] = useState(false);
     const leaveconfig =
         leaveConfiguration?.isStandardEligibleDays == true ? 'Yes' : 'No';
     const {
@@ -50,7 +49,47 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
 
     const isProratedLeave = watch('isProrated');
     const allowRollover = watch('allowRollover');
-    
+
+    console.log({ leaveConfiguration });
+
+    const toast = useToast();
+
+    const onSubmit = async (data: LeaveConfigurationModel) => {
+        data.allowRollover =
+            (data.allowRollover as any) == 'Roll over unused leave days'
+                ? true
+                : false;
+        data.isProrated = (data.isProrated as any) == 'Yes' ? true : false;
+        data.noOfMonthValid = Number(data.noOfMonthValid);
+        try {
+            const result = await LeaveService.updateLeaveConfiguration(data);
+            if (result.status) {
+                toast({
+                    title: `Successful`,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.replace(router.asPath);
+                return;
+            }
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        } catch (err: any) {
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
     return (
         <Box bg="#FFFFFF" boxShadow="md" px="18px" py="18px" borderRadius="8px">
             <Flex align="center" gap="19px">
@@ -108,7 +147,7 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                     pb="19px"
                     borderBottom="1px solid #C2CFE0"
                 >
-                    <Box>
+                    <Box w="60%">
                         <Heading
                             fontSize={14}
                             fontWeight={500}
@@ -125,7 +164,7 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                             leave based on their time working for the company.
                         </Text>
                     </Box>
-                    <Box>
+                    <Box w="60%">
                         <PrimaryRadio<LeaveConfigurationModel>
                             label="Is leave prorated in your organization or company"
                             radios={['Yes', 'No']}
@@ -142,7 +181,7 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                     pb="63px"
                     borderBottom="1px solid #C2CFE0"
                 >
-                    <Box>
+                    <Box w="60%">
                         <Heading
                             fontSize={14}
                             fontWeight={500}
@@ -160,60 +199,69 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                             year.
                         </Text>
                     </Box>
-                    <Box>
+                    <Box w="60%">
                         <PrimaryRadio<LeaveConfigurationModel>
                             label=""
                             radios={[
-                                'Expire if leave not used',
                                 'Roll over unused leave days',
+                                'Expire if leave not used',
                             ]}
                             name="allowRollover"
                             control={control}
                             error={errors.allowRollover}
-                            defaultValue={'Expire if leave not used'}
-                            flexDir="row"
-                            gap="30px"
+                            defaultValue={''}
+                            flexDir="column"
+                            gap="14px"
                         />
                     </Box>
                     {(allowRollover as unknown as string) ==
                         'Roll over unused leave days' && (
-                        <Grid
-                            templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
-                            gap="1rem 2rem"
-                        >
-                            {addCustomPeriod ? (
-                                <PrimaryInput<LeaveConfigurationModel>
-                                    label=""
-                                    name="noOfMonthValid"
-                                    error={errors.noOfMonthValid}
-                                    placeholder="Enter number of period in months"
-                                    defaultValue=""
-                                    register={register}
-                                />
-                            ) : (
-                                <PrimarySelect<LeaveConfigurationModel>
-                                    label="Select the period you like for a rolled over leave to expire or add a custom period"
-                                    name="noOfMonthValid"
-                                    error={errors.noOfMonthValid}
-                                    placeholder="3 Months"
-                                    defaultValue=""
-                                    register={register}
-                                    options={
-                                        <>
-                                            {[
-                                                { label: '3 Months', id: 3 },
-                                                { label: '6 Months', id: 6 },
-                                                { label: 'Never', id: 0 },
-                                            ]?.map((x: any) => (
-                                                <option value={x?.id}>
-                                                    {x.label}
-                                                </option>
-                                            ))}
-                                        </>
-                                    }
-                                />
-                            )}
-                        </Grid>
+                        <Box mt=".6rem">
+                            <Text fontSize="14px" color="#1b1d21">
+                                Select the period you like for a rolled over
+                                leave to expire or add a custom period
+                            </Text>
+                            <Box w="30%">
+                                {addCustomPeriod ? (
+                                    <PrimaryInput<LeaveConfigurationModel>
+                                        label=""
+                                        name="noOfMonthValid"
+                                        error={errors.noOfMonthValid}
+                                        placeholder="Enter number of period in months"
+                                        defaultValue=""
+                                        register={register}
+                                    />
+                                ) : (
+                                    <PrimarySelect<LeaveConfigurationModel>
+                                        label=""
+                                        name="noOfMonthValid"
+                                        error={errors.noOfMonthValid}
+                                        placeholder="3 Months"
+                                        defaultValue=""
+                                        register={register}
+                                        options={
+                                            <>
+                                                {[
+                                                    {
+                                                        label: '3 Months',
+                                                        id: 3,
+                                                    },
+                                                    {
+                                                        label: '6 Months',
+                                                        id: 6,
+                                                    },
+                                                    { label: 'Never', id: 0 },
+                                                ]?.map((x: any) => (
+                                                    <option value={x?.id}>
+                                                        {x.label}
+                                                    </option>
+                                                ))}
+                                            </>
+                                        }
+                                    />
+                                )}
+                            </Box>
+                        </Box>
                     )}
                     {(allowRollover as unknown as string) ==
                         'Roll over unused leave days' && (
@@ -225,22 +273,31 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                                 p="0"
                                 fontSize={13}
                                 fontWeight={600}
-                                onClick={() => setAddCustomPeriod(!addCustomPeriod)}
+                                onClick={() =>
+                                    setAddCustomPeriod(!addCustomPeriod)
+                                }
                             >
-                                {addCustomPeriod ? 'Select period' : 'Add Custom period'}
+                                {addCustomPeriod
+                                    ? 'Select period'
+                                    : 'Add Custom period'}
                             </Button>
                         </Box>
                     )}
-                    <Button
-                        borderRadius="5px"
-                        bg="#2EAFA3"
-                        color="#ffffff"
-                        fontSize={13}
-                        fontWeight={500}
-                        w="100px"
-                    >
-                        Save
-                    </Button>
+                    {allowRollover && (
+                        <Button
+                            borderRadius="5px"
+                            bg="#2EAFA3"
+                            color="#ffffff"
+                            fontSize={13}
+                            fontWeight={500}
+                            w="100px"
+                            mt="2rem"
+                            isLoading={isSubmitting}
+                            onClick={handleSubmit(onSubmit)}
+                        >
+                            Save
+                        </Button>
+                    )}
                 </Stack>
             </Box>
         </Box>
