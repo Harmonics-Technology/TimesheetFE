@@ -174,6 +174,8 @@ function TeamProfile({
     const uniqueItems = getUniqueListBy(currencies, 'currency');
     const [payFees, setPayFees] = useState<any>(fees);
 
+    // console.log({ clients });
+
     // console.log({ userProfile, payFees });
     const getPaymentPartnerFees = async (id) => {
         if (id === undefined) {
@@ -588,7 +590,8 @@ function TeamProfile({
                                     <>
                                         {clients?.map((x) => (
                                             <option value={x.id}>
-                                                {x.organizationName}
+                                                {x?.organizationName ||
+                                                    x?.fullName}
                                             </option>
                                         ))}
                                     </>
@@ -1321,7 +1324,7 @@ function TeamProfile({
                     >
                         Back
                     </Button>
-                    {!show && role == 'client' && (
+                    {!show && role !== 'client' && (
                         <Button
                             bgColor="brand.400"
                             color="white"

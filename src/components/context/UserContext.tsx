@@ -14,7 +14,7 @@ export const UserProvider = ({ children }: { children: any }) => {
     const users = Cookies.get('user') as unknown as string;
     const subs = Cookies.get('subDetails') as unknown as string;
     const isDev = process.env.NEXT_PUBLIC_ENV == 'development';
-    console.log({ isDev });
+    // console.log({ isDev });
     if (users !== undefined) {
         user = JSON.parse(users);
     }

@@ -63,10 +63,14 @@ function TimesheetClient({ timeSheets }: adminProps) {
                                         }
                                     />
 
-                                    <TableContractAction
+                                    {/* <TableContractAction
                                         id={x.employeeInformationId}
                                         supervisor={true}
                                         date={date}
+                                    /> */}
+                                    <TableContractAction
+                                        id={x.employeeInformationId}
+                                        timeSheets={true}
                                     />
                                 </Tr>
                             ),
