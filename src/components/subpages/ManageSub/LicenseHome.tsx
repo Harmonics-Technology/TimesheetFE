@@ -12,7 +12,7 @@ import React, { useState, useContext } from 'react';
 import { LicenseTopBtmText } from './LicenseTopBtmText';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import { LicenseProgressUsage } from './LicenseProgressUsage';
-import { MdCheckCircle } from 'react-icons/md';
+import { MdCancel, MdCheckCircle } from 'react-icons/md';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
 import Tables from '@components/bits-utils/Tables';
 import { TableData, TableStatus } from '@components/bits-utils/TableData';
@@ -36,11 +36,13 @@ export const LicenseHome = ({
     subs,
     users,
     superAdminId,
+    subId,
 }: {
     data: any;
     subs: ClientSubscriptionDetailView[];
     users: any;
     superAdminId: any;
+    subId?: any;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { user } = useContext(UserContext);
@@ -51,7 +53,7 @@ export const LicenseHome = ({
         onOpen: onOpens,
         onClose: onCloses,
     } = useDisclosure();
-    const subId = router.query?.subId || subs[0]?.subscriptionId;
+    // const subId = router.query?.subId || subs[0]?.subscriptionId;
     const [showDetails, setShowDetails] = useState<any>();
     const selected: ClientSubscriptionDetailView = subs?.find(
         (x) => x.subscriptionId == subId,
@@ -135,10 +137,26 @@ export const LicenseHome = ({
                                 />
                                 <LicenseProgressUsage
                                     progress={percentUsed}
-                                    title={`${selected?.noOfLicenceUsed}/${selected?.noOfLicensePurchased} license assigned`}
-                                    sub={`${selected?.noOfLicenceUsed} of ${selected?.noOfLicensePurchased} users in total assigned to this license`}
+                                    title={`${
+                                        selected?.noOfLicenceUsed || '0'
+                                    }/${
+                                        selected?.noOfLicensePurchased || '0'
+                                    } license assigned`}
+                                    sub={`${
+                                        selected?.noOfLicenceUsed || '0'
+                                    } of ${
+                                        selected?.noOfLicensePurchased || '0'
+                                    } users in total assigned to this license`}
                                 />
-                                <HStack gap="1rem" my="21px">
+                                <HStack
+                                    gap="1rem"
+                                    my="21px"
+                                    display={
+                                        selected?.subscriptionStatus
+                                            ? 'flex'
+                                            : 'none'
+                                    }
+                                >
                                     <ShiftBtn
                                         color="white"
                                         bg="brand.400"
@@ -173,8 +191,21 @@ export const LicenseHome = ({
                                             ? 'Active'
                                             : 'Inactive'
                                     }
-                                    sub="Cancel subscription"
-                                    icon={MdCheckCircle}
+                                    sub={
+                                        selected?.subscriptionStatus
+                                            ? 'Cancel subscription'
+                                            : ''
+                                    }
+                                    icon={
+                                        selected?.subscriptionStatus
+                                            ? MdCheckCircle
+                                            : MdCancel
+                                    }
+                                    iconColor={
+                                        selected?.subscriptionStatus
+                                            ? 'brand.400'
+                                            : 'red.500'
+                                    }
                                     url={`/${role}/account-management/cancel-subscription`}
                                 />
                             </VStack>
@@ -185,7 +216,7 @@ export const LicenseHome = ({
                                         selected?.annualBilling
                                             ? `Yearly `
                                             : 'Monthly'
-                                    } ${CAD(selected?.totalAmount)}`}
+                                    } ${CAD(selected?.totalAmount || 0)}`}
                                     sub="Edit billing frequency"
                                     url={`/${role}/account-management/billing-information`}
                                 />

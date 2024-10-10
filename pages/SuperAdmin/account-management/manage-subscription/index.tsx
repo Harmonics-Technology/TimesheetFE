@@ -5,13 +5,14 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import { UserService } from 'src/services';
 
-const manageSubscription = ({ data, subs, users, superAdminId }) => {
+const manageSubscription = ({ data, subs, users, superAdminId, subId }) => {
     return (
         <LicenseHome
             data={data}
             subs={subs}
             users={users}
             superAdminId={superAdminId}
+            subId={subId}
         />
     );
 };
@@ -31,7 +32,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             const subs = await UserService.getClientSubScriptions(superAdminId);
             const subId =
-                pagingOptions.subId || (subs as any)?.data[0].subscriptionId;
+                pagingOptions.subId ||
+                (subs as any)?.data[0].subscriptionId ||
+                '';
             const users = await UserService.listUsers(
                 //@ts-ignore
                 undefined,
@@ -49,6 +52,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     subs: subs.data,
                     users: users,
                     superAdminId,
+                    subId,
                     // data: [],
                 },
             };

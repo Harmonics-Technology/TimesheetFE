@@ -133,6 +133,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
+                        display={activeSub}
                         // display={
                         //     (subType == 'standard' && activeSub) ||
                         //     (subType == 'premium' && activeSub)
@@ -321,6 +322,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
+                        display={activeSub}
                         // display={
                         //     (subType == 'standard' && activeSub) ||
                         //     (subType == 'premium' && activeSub)
@@ -485,7 +487,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={[]}
                         role={role}
-                        display={true}
+                        display={activeSub}
                     />
                     <MenuItem
                         change={change}
@@ -918,6 +920,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
+                        display={activeSub}
                         // display={
                         //     (subType == 'standard' && activeSub) ||
                         //     (subType == 'premium' && activeSub)
