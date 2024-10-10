@@ -34,26 +34,29 @@ export const InactiveUser = () => {
                     >
                         Hi there! there is currently no data to show you. This
                         may happen due to an inactive subscription or due
-                        invoice. Kindly reactivate your subscription to resume
-                        using TIMBA.
+                        invoice. If you are an admin, Kindly reactivate your
+                        subscription to resume using TIMBA or contact your admin
+                        if you're not.
                     </Text>
                 </VStack>
-                <Button
-                    borderRadius="55px"
-                    bgColor="brand.400"
-                    color="white"
-                    px="3rem"
-                    h="4rem"
-                    onClick={() =>
-                        router.push(
-                            role == 'SuperAdmin'
-                                ? `/${role}/account-management/manage-subscription`
-                                : `/${role}/dashboard`,
-                        )
-                    }
-                >
-                    Manage Subscription
-                </Button>
+                {role == 'SuperAdmin' && (
+                    <Button
+                        borderRadius="55px"
+                        bgColor="brand.400"
+                        color="white"
+                        px="3rem"
+                        h="4rem"
+                        onClick={() =>
+                            router.push(
+                                role == 'SuperAdmin'
+                                    ? `/${role}/account-management/manage-subscription`
+                                    : `/${role}/dashboard`,
+                            )
+                        }
+                    >
+                        Manage Subscription
+                    </Button>
+                )}
             </VStack>
         </Box>
     );
