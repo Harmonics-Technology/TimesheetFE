@@ -55,8 +55,9 @@ const Leaveform = ({
     const [oneDay, setOneDay] = useState(false);
     const leaveDaysLeft =
         user?.numberOfDaysEligible != null && user?.numberOfDaysEligible != 0
-            ? user?.numberOfDaysEligible - user?.numberOfLeaveDaysTaken
+            ? user?.numberOfDaysEligible
             : 0;
+
     const {
         register,
         handleSubmit,
