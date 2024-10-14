@@ -1313,14 +1313,7 @@ function TeamProfile({
                                     defaultValue=""
                                     readonly={true}
                                     disableLabel={true}
-                                    value={`${
-                                        (userProfile?.employeeInformation
-                                            ?.numberOfDaysEligible as number) +
-                                        (userProfile?.employeeInformation
-                                            ?.rolledOverLeave as number) -
-                                        (userProfile?.employeeInformation
-                                            ?.utilizedLeave as number)
-                                    } hours`}
+                                    value={`${userProfile?.employeeInformation?.numberOfDaysEligible} hours`}
                                 />
                             </Box>
                         </Box>

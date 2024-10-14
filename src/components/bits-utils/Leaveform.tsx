@@ -159,7 +159,7 @@ const Leaveform = ({
                     <HStack justify="flex-end" mt="5px">
                         <LeaveTextBox
                             title="Leave Balance"
-                            value={leaveDaysLeft}
+                            value={Math.floor(leaveDaysLeft)}
                             suffix="Hours"
                         />
                     </HStack>
