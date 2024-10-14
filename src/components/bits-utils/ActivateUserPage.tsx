@@ -103,8 +103,6 @@ function ActivateUserPage({
                 userProfile?.employeeInformation?.isEligibleForLeave,
             numberOfDaysEligible:
                 userProfile?.employeeInformation?.numberOfDaysEligible,
-            numberOfHoursEligible:
-                userProfile?.employeeInformation?.numberOfHoursEligible,
         },
     });
     const router = useRouter();
@@ -800,7 +798,7 @@ function ActivateUserPage({
                                         register={register}
                                     />
                                 ))}
-                            {(isEligibleForLeave as unknown as string) ==
+                            {/* {(isEligibleForLeave as unknown as string) ==
                                 'No' ||
                                 (eligible == true && (
                                     <PrimaryInput<TeamMemberModel>
@@ -814,7 +812,7 @@ function ActivateUserPage({
                                         }
                                         register={register}
                                     />
-                                ))}
+                                ))} */}
                         </Grid>
                     </Box>
                     <ContractTable userProfile={userProfile} />
