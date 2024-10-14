@@ -127,20 +127,20 @@ export const DraftOnboardingModal = ({
         // timeSheetGenerationStartDate: yup.string().required(),
         isEligibleForLeave: yup.string().required(),
         employeeType: yup.string().required(),
-        numberOfDaysEligible: yup
-            .string()
-            .nullable()
-            .when('isEligibleForLeave', {
-                is: 'Yes' || true,
-                then: yup.string().required(),
-            }),
-        numberOfHoursEligible: yup
-            .string()
-            .nullable()
-            .when('isEligibleForLeave', {
-                is: 'Yes' || true,
-                then: yup.string().required(),
-            }),
+        // numberOfDaysEligible: yup
+        //     .string()
+        //     .nullable()
+        //     .when('isEligibleForLeave', {
+        //         is: 'Yes' || true,
+        //         then: yup.string().required(),
+        //     }),
+        // numberOfHoursEligible: yup
+        //     .string()
+        //     .nullable()
+        //     .when('isEligibleForLeave', {
+        //         is: 'Yes' || true,
+        //         then: yup.string().required(),
+        //     }),
         onBoradingFee: yup.string().when('fixedAmount', {
             is: false,
             then: yup.string().required(),
@@ -182,7 +182,7 @@ export const DraftOnboardingModal = ({
             numberOfDaysEligible:
                 userProfile?.numberOfDaysEligible ||
                 leaveSettings?.eligibleLeaveDays,
-            numberOfHoursEligible: userProfile?.numberOfHoursEligible,
+            // numberOfHoursEligible: userProfile?.numberOfHoursEligible,
             employeeType: userProfile?.employeeType,
             invoiceGenerationType: userProfile?.invoiceGenerationType,
             enableFinancials: userProfile?.enableFinancials,
@@ -1024,7 +1024,7 @@ export const DraftOnboardingModal = ({
                             gap="1rem 2rem"
                         >
                             <PrimaryInput<TeamMemberModel>
-                                label="Eligible number of days"
+                                label="Eligible number of hours"
                                 name="numberOfDaysEligible"
                                 error={errors.numberOfDaysEligible}
                                 placeholder=""
@@ -1032,14 +1032,14 @@ export const DraftOnboardingModal = ({
                                 register={register}
                                 readonly={leaveSettings?.isStandardEligibleDays}
                             />
-                            <PrimaryInput<TeamMemberModel>
+                            {/* <PrimaryInput<TeamMemberModel>
                                 label="Eligible number of hours"
                                 name="numberOfHoursEligible"
                                 error={errors.numberOfHoursEligible}
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
-                            />
+                            /> */}
                         </Grid>
                     )}
                 </Box>

@@ -121,8 +121,8 @@ function EditDraft({
                 userProfile?.employeeInformation?.isEligibleForLeave,
             numberOfDaysEligible:
                 userProfile?.employeeInformation?.numberOfDaysEligible,
-            numberOfHoursEligible:
-                userProfile?.employeeInformation?.numberOfHoursEligible,
+            // numberOfHoursEligible:
+            //     userProfile?.employeeInformation?.numberOfHoursEligible,
             employeeType: userProfile?.employeeInformation?.employeeType,
             invoiceGenerationType:
                 userProfile?.employeeInformation?.invoiceGenerationType,
@@ -897,7 +897,7 @@ function EditDraft({
                                     register={register}
                                 />
                             ) : null}
-                            {(isEligibleForLeave as unknown as string) ==
+                            {/* {(isEligibleForLeave as unknown as string) ==
                                 'Yes' || eligible == true ? (
                                 <PrimaryInput<TeamMemberModel>
                                     label="Eligible number of hours"
@@ -910,7 +910,7 @@ function EditDraft({
                                     }
                                     register={register}
                                 />
-                            ) : null}
+                            ) : null} */}
                         </Grid>
                     </Box>
                     <ContractTable

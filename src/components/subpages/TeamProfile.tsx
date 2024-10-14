@@ -124,8 +124,8 @@ function TeamProfile({
                 userProfile?.employeeInformation?.isEligibleForLeave,
             numberOfDaysEligible:
                 userProfile?.employeeInformation?.numberOfDaysEligible,
-            numberOfHoursEligible:
-                userProfile?.employeeInformation?.numberOfHoursEligible,
+            // numberOfHoursEligible:
+            //     userProfile?.employeeInformation?.numberOfHoursEligible,
             employeeType: userProfile?.employeeInformation?.employeeType,
             invoiceGenerationType:
                 userProfile?.employeeInformation?.invoiceGenerationType,
