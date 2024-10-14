@@ -9,6 +9,7 @@ import {
     useDisclosure,
     Heading,
     useToast,
+    InputRightElement,
 } from '@chakra-ui/react';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import React, { useContext, useEffect, useRef, useState } from 'react';
@@ -49,6 +50,7 @@ import ContractTable from '@components/bits-utils/ContractTable';
 import { LicenseRevoke } from '@components/bits-utils/LicenseRevoke';
 import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
 import InputBlank from '@components/bits-utils/InputBlank';
+import { convertYesNo } from '@components/generics/functions/ConvertStringToBool';
 
 const schema = yup.object().shape({});
 interface TeamProfileProps {
@@ -156,6 +158,9 @@ function TeamProfile({
                 userProfile?.employeeInformation?.hasRollOverLeave,
             expiryDateOfRolledOverLeave:
                 userProfile?.employeeInformation?.expiryDateOfRolledOverLeave,
+            hasUtilizeLeaveDaysToDate:
+                userProfile?.employeeInformation?.hasUtilizeLeaveDaysToDate,
+            utilizedLeave: userProfile?.employeeInformation?.utilizedLeave,
         },
     });
     const router = useRouter();
@@ -176,7 +181,7 @@ function TeamProfile({
 
     // console.log({ clients });
 
-    // console.log({ userProfile, payFees });
+    console.log({ userProfile });
     const getPaymentPartnerFees = async (id) => {
         if (id === undefined) {
             return;
@@ -214,6 +219,7 @@ function TeamProfile({
 
     const isEligibleForLeave = watch('isEligibleForLeave');
     const hasRolledOverLeave = watch('hasRollOverLeave');
+    const hasUtilizeLeaveDaysToDate = watch('hasUtilizeLeaveDaysToDate');
 
     const [contract, setContractFile] = useState<any>('');
     const [showLoading, setShowLoading] = useState(false);
@@ -338,18 +344,12 @@ function TeamProfile({
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
-        {
-            (data?.isEligibleForLeave as unknown as string) == 'Yes' ||
-            data.isEligibleForLeave == true
-                ? (data.isEligibleForLeave = true)
-                : (data.isEligibleForLeave = false);
-        }
-        {
-            (data?.hasRollOverLeave as unknown as string) == 'Yes'
-                ? (data.hasRollOverLeave = true)
-                : (data.hasRollOverLeave = false);
-        }
-        data.enableFinancials = (data.enableFinancials as any) === 'true';
+        data.isEligibleForLeave = convertYesNo(data?.isEligibleForLeave);
+        data.enableFinancials = convertYesNo(data?.enableFinancials) as any;
+        data.hasRollOverLeave = convertYesNo(data?.hasRollOverLeave);
+        data.hasUtilizeLeaveDaysToDate = convertYesNo(
+            data?.hasUtilizeLeaveDaysToDate,
+        );
 
         // data.clientId = !clientType ? user?.superAdminId : data.clientId;
         try {
@@ -372,9 +372,9 @@ function TeamProfile({
                 isClosable: true,
                 position: 'top-right',
             });
-        } catch (error) {
+        } catch (err: any) {
             toast({
-                title: `Check your network connection and try again`,
+                title: err?.message || err?.body?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -1149,14 +1149,14 @@ function TeamProfile({
                                     control={control}
                                     error={errors.isEligibleForLeave}
                                     defaultValue={
-                                        eligible == true ? 'Yes' : 'No'
+                                        convertYesNo(isEligibleForLeave) == true
+                                            ? 'Yes'
+                                            : 'No'
                                     }
                                 />
                             </Box>
 
-                            {((isEligibleForLeave as unknown as string) ==
-                                'Yes' ||
-                                eligible == true) && (
+                            {convertYesNo(isEligibleForLeave) && (
                                 <>
                                     {/* <PrimaryInput<TeamMemberModel>
                                         label="Eligible number of days"
@@ -1169,10 +1169,13 @@ function TeamProfile({
 
                                     <PrimaryInput<TeamMemberModel>
                                         label="Eligible number of hours"
-                                        name="numberOfHoursEligible"
-                                        error={errors.numberOfHoursEligible}
+                                        name="numberOfDaysEligible"
+                                        error={errors.numberOfDaysEligible}
                                         placeholder=""
-                                        defaultValue={''}
+                                        defaultValue={
+                                            userProfile?.employeeInformation
+                                                ?.numberOfDaysEligible
+                                        }
                                         register={register}
                                     />
                                     <Box />
@@ -1180,9 +1183,7 @@ function TeamProfile({
                             )}
                         </Grid>
                         <>
-                            {((isEligibleForLeave as unknown as string) ==
-                                'Yes' ||
-                                eligible == true) && (
+                            {convertYesNo(isEligibleForLeave) && (
                                 <>
                                     <Grid
                                         templateColumns={[
@@ -1199,29 +1200,31 @@ function TeamProfile({
                                                 name="hasRollOverLeave"
                                                 control={control}
                                                 error={errors.hasRollOverLeave}
-                                                // defaultValue={
-                                                //     eligible == true ? 'Yes' : 'No'
-                                                // }
+                                                defaultValue={
+                                                    convertYesNo(
+                                                        hasRolledOverLeave,
+                                                    ) == true
+                                                        ? 'Yes'
+                                                        : 'No'
+                                                }
                                             />
                                         </Box>
 
-                                        {(hasRolledOverLeave as unknown as string) ==
-                                            'Yes' && (
+                                        {convertYesNo(hasRolledOverLeave) && (
                                             <PrimaryInput<TeamMemberModel>
                                                 label="Rolled Over Leave"
                                                 name="rolledOverLeave"
                                                 error={errors.rolledOverLeave}
                                                 placeholder=""
                                                 defaultValue={
-                                                    hasRolledOverLeave
-                                                        ? 'Yes'
-                                                        : 'No'
+                                                    userProfile
+                                                        ?.employeeInformation
+                                                        ?.rolledOverLeave
                                                 }
                                                 register={register}
                                             />
                                         )}
-                                        {(hasRolledOverLeave as unknown as string) ==
-                                            'Yes' && (
+                                        {convertYesNo(hasRolledOverLeave) && (
                                             <PrimaryDate<TeamMemberModel>
                                                 label="Expiry date of rolled over leave"
                                                 name="expiryDateOfRolledOverLeave"
@@ -1229,7 +1232,11 @@ function TeamProfile({
                                                     errors.expiryDateOfRolledOverLeave
                                                 }
                                                 placeholder=""
-                                                defaultValue={''}
+                                                defaultValue={moment(
+                                                    userProfile
+                                                        ?.employeeInformation
+                                                        ?.expiryDateOfRolledOverLeave,
+                                                ).format('YYYY/MM/DD')}
                                                 control={control}
                                                 // register={register}
                                             />
@@ -1252,17 +1259,20 @@ function TeamProfile({
                                                     errors.hasUtilizeLeaveDaysToDate
                                                 }
                                                 defaultValue={
-                                                    hasUtlized ? 'Yes' : 'No'
+                                                    convertYesNo(
+                                                        hasUtilizeLeaveDaysToDate,
+                                                    ) == true
+                                                        ? 'Yes'
+                                                        : 'No'
                                                 }
                                             />
                                         </Box>
 
-                                        {((hasUtlized as unknown as string) ==
-                                            'Yes' ||
-                                            userProfile?.employeeInformation
-                                                ?.hasUtilizeLeaveDaysToDate) && (
+                                        {convertYesNo(
+                                            hasUtilizeLeaveDaysToDate,
+                                        ) && (
                                             <PrimaryInput<TeamMemberModel>
-                                                label="Utilized Leave"
+                                                label="Utilized Leave (hours)"
                                                 name="utilizedLeave"
                                                 error={errors.utilizedLeave}
                                                 placeholder=""
@@ -1272,6 +1282,13 @@ function TeamProfile({
                                                         ?.utilizedLeave
                                                 }
                                                 register={register}
+                                                suffix={
+                                                    <InputRightElement right="1rem">
+                                                        <Text fontSize=".8rem">
+                                                            hours
+                                                        </Text>
+                                                    </InputRightElement>
+                                                }
                                             />
                                         )}
                                     </Grid>
@@ -1279,8 +1296,7 @@ function TeamProfile({
                             )}
                         </>
                     </Box>
-                    {((isEligibleForLeave as unknown as string) == 'Yes' ||
-                        eligible == true) && (
+                    {convertYesNo(isEligibleForLeave) && (
                         <Box mt="5">
                             {/* <Heading
                             fontSize={13}
@@ -1297,7 +1313,14 @@ function TeamProfile({
                                     defaultValue=""
                                     readonly={true}
                                     disableLabel={true}
-                                    value={`${userProfile?.employeeInformation?.numberOfDaysEligible} Days`}
+                                    value={`${
+                                        (userProfile?.employeeInformation
+                                            ?.numberOfDaysEligible as number) +
+                                        (userProfile?.employeeInformation
+                                            ?.rolledOverLeave as number) -
+                                        (userProfile?.employeeInformation
+                                            ?.utilizedLeave as number)
+                                    } hours`}
                                 />
                             </Box>
                         </Box>

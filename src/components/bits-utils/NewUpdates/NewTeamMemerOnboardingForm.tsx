@@ -9,6 +9,7 @@ import {
     DrawerFooter,
     FormLabel,
     Icon,
+    InputRightElement,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DateObject } from 'react-multi-date-picker';
@@ -1042,8 +1043,8 @@ export const NewTeamMemerOnboardingForm = ({
                             /> */}
                                 <PrimaryInput<TeamMemberModel>
                                     label="Eligible number of hours"
-                                    name="numberOfHoursEligible"
-                                    error={errors.numberOfHoursEligible}
+                                    name="numberOfDaysEligible"
+                                    error={errors.numberOfDaysEligible}
                                     placeholder=""
                                     defaultValue=""
                                     register={register}
@@ -1112,12 +1113,19 @@ export const NewTeamMemerOnboardingForm = ({
                                     gap="1rem 2rem"
                                 >
                                     <PrimaryInput<TeamMemberModel>
-                                        label="Utilized Leave"
+                                        label="Utilized Leave (hours)"
                                         name="utilizedLeave"
                                         error={errors.utilizedLeave}
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        suffix={
+                                            <InputRightElement right="1rem">
+                                                <Text fontSize=".8rem">
+                                                    hours
+                                                </Text>
+                                            </InputRightElement>
+                                        }
                                         // readonly={leaveSettings?.isStandardEligibleDays}
                                     />
                                 </Grid>

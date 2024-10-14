@@ -929,14 +929,14 @@ const TimesheetTeam = ({
                     w="100%"
                     mr="auto"
                     flexWrap="wrap"
-                    // display={['flex', enableFinancials ? 'grid' : 'flex']}
+                    display={['flex', enableFinancials ? 'grid' : 'flex']}
                     gridTemplateColumns={'repeat(5,1fr)'}
                     gap={['0rem 1rem', '0']}
                     justifyContent={['center', 'flex-end']}
                 >
                     {enableFinancials && (
                         //remove box and display to show it
-                        <Box display="none">
+                        <>
                             <TimeSheetEstimation
                                 label="Expected Total Hours"
                                 data={`${expectedHours} HR`}
@@ -955,21 +955,21 @@ const TimesheetTeam = ({
                                 } HR`}
                                 tip="Number of hours approved by your supervisor"
                             />
-                            <TimeSheetEstimation
+                            {/* <TimeSheetEstimation
                                 label="Expected Payout"
                                 data={` ${getCurrencySymbol(currency)} ${CUR(
                                     Round(expectedPay),
                                 )}`}
                                 tip="Total amount you are expected to be paid this pay period if you work your full hours"
-                            />
-                            <TimeSheetEstimation
+                            /> */}
+                            {/* <TimeSheetEstimation
                                 label="Actual Payout"
                                 data={` ${getCurrencySymbol(currency)} ${CUR(
                                     Round(actualPayout),
                                 )}`}
                                 tip="Number of hours you worked this month x Rate per hour"
-                            />
-                        </Box>
+                            /> */}
+                        </>
                     )}
 
                     <ApproveSelected />
