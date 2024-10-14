@@ -56,8 +56,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.search,
                 pagingOptions.status,
                 pagingOptions.department,
-                pagingOptions.subId
+                pagingOptions.subId ? true : undefined,
             );
+            console.log({ data });
             const users = await UserService.listUsersByRoles(
                 superAdminId,
                 'team member,super admin,admin,supervisor,payroll manager',
