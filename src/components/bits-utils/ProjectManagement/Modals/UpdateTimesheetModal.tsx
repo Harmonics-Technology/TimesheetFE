@@ -82,7 +82,7 @@ const UpdateTimesheetModal = ({
     projectId: any;
     addToTimesheet: any;
     totalHoursSpent: any;
-    ListUserTimesheet: any;
+    ListUserTimesheet?: any;
 }) => {
     // console.log('this is the task', selectedTimesheet);
     const pastDate = moment().diff(moment(data?.endDate), 'days') > 0;
