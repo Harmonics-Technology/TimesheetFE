@@ -50,7 +50,6 @@ export type TeamMemberModel = {
     onBoradingFee?: number;
     isEligibleForLeave?: boolean | null;
     numberOfDaysEligible?: number | null;
-    numberOfHoursEligible?: number | null;
     employeeType?: string | null;
     superAdminId?: string | null;
     invoiceGenerationType?: string | null;

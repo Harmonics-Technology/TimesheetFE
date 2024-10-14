@@ -1135,6 +1135,7 @@ export const TeamSingleTask = ({
                     projectId={project?.id}
                     addToTimesheet={addToTimesheet}
                     totalHoursSpent={task?.hoursSpent}
+                    ListUserTimesheet={ListUserTimesheet}
                 />
             )}
         </Box>

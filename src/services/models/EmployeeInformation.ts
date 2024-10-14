@@ -36,7 +36,6 @@ export type EmployeeInformation = {
     onBoradingFee?: number;
     isEligibleForLeave?: boolean | null;
     numberOfDaysEligible?: number | null;
-    numberOfHoursEligible?: number | null;
     numberOfEligibleLeaveDaysTaken?: number;
     employeeType?: string | null;
     invoiceGenerationType?: string | null;

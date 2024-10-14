@@ -83,7 +83,7 @@ export const LeaveManagement = ({
                   // 'Supervisor',
                   'Start Date',
                   'End Date',
-                  'Total Days',
+                  'Total Hours',
                   'Status',
                   'Action',
               ]
@@ -95,7 +95,7 @@ export const LeaveManagement = ({
                   // 'Supervisor',
                   'Start Date',
                   'End Date',
-                  'Total Days',
+                  'Total Hours',
                   'Status',
                   'Action',
               ]
@@ -106,7 +106,7 @@ export const LeaveManagement = ({
                   'Supervisor',
                   'Start Date',
                   'End Date',
-                  'Total Days',
+                  'Total Hours',
                   'Status',
                   'Action',
               ];
@@ -272,7 +272,8 @@ export const LeaveManagement = ({
                                 <TableState
                                     name={
                                         x.status == 'REJECTED' &&
-                                        (type == 'history' || type == 'teamHistory')
+                                        (type == 'history' ||
+                                            type == 'teamHistory')
                                             ? 'APPROVED'
                                             : x.status
                                     }

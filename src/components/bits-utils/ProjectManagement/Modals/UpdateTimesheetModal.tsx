@@ -63,7 +63,8 @@ const UpdateTimesheetModal = ({
     setSliderValue,
     projectId,
     addToTimesheet,
-    totalHoursSpent
+    totalHoursSpent,
+    ListUserTimesheet,
 }: {
     isOpen: any;
     onClose: any;
@@ -80,9 +81,10 @@ const UpdateTimesheetModal = ({
     setSliderValue: any;
     projectId: any;
     addToTimesheet: any;
-    totalHoursSpent: any,
+    totalHoursSpent: any;
+    ListUserTimesheet: any;
 }) => {
-    console.log('this is the task', task);
+    // console.log('this is the task', selectedTimesheet);
     const pastDate = moment().diff(moment(data?.endDate), 'days') > 0;
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
@@ -100,7 +102,10 @@ const UpdateTimesheetModal = ({
     } = useForm<ProjectManagementTimesheetModel>({
         resolver: yupResolver(schema),
         mode: 'all',
-        defaultValues: {},
+        defaultValues: {
+            startDate: selectedTimesheet?.startDate,
+            endDate: selectedTimesheet?.endDate,
+        },
     });
 
     const updateHours = (type: 'minus' | 'plus') => {
@@ -143,7 +148,7 @@ const UpdateTimesheetModal = ({
                     );
                 if (res?.status === true) {
                     //  setLoading({ id: '' });
-                    router.replace(router.asPath);
+                    // router.replace(router.asPath);
                     toast({
                         title: res.message,
                         status: 'success',
@@ -151,7 +156,8 @@ const UpdateTimesheetModal = ({
                         position: 'top-right',
                     });
                     onClose();
-                    router.reload();
+                    ListUserTimesheet();
+                    // router.reload();
                     reset();
                     return;
                 }
@@ -187,7 +193,7 @@ const UpdateTimesheetModal = ({
                 pb="5"
                 borderRadius="0px"
                 w="88%"
-                overflow="hidden"
+                // overflow="hidden"
                 maxH="100vh"
                 pos="fixed"
             >
@@ -203,7 +209,7 @@ const UpdateTimesheetModal = ({
                                 pb="10px"
                             >
                                 <Heading fontSize={16} fontWeight={600}>
-                                    Update Timesheet
+                                    Edit Hours
                                 </Heading>
                                 <Button
                                     onClick={() => {
@@ -223,8 +229,8 @@ const UpdateTimesheetModal = ({
                     {selectedTimesheet?.addToTimesheet ? (
                         <Box w="100%">
                             <Text mb="7" textAlign="center">
-                                Time was added to timesheet. Kindly make
-                                update from the task calendar view
+                                Time was added to timesheet. Kindly make update
+                                from the task calendar view
                             </Text>
                             <Box
                                 textAlign="center"
@@ -256,22 +262,24 @@ const UpdateTimesheetModal = ({
                                     defaultValue={task?.name as string}
                                     readonly={true}
                                 />
-                                <PrimarySelect<ProjectManagementTimesheetModel>
-                                    register={register}
-                                    error={errors.projectSubTaskId}
-                                    name="projectSubTaskId"
-                                    label="Sub Task Name"
-                                    placeholder="Select a sub Task"
-                                    options={
-                                        <>
-                                            {subTask?.map((x) => (
-                                                <option value={x?.id}>
-                                                    {x.name}
-                                                </option>
-                                            ))}
-                                        </>
-                                    }
-                                />
+                                {subTask?.length > 0 && (
+                                    <PrimarySelect<ProjectManagementTimesheetModel>
+                                        register={register}
+                                        error={errors.projectSubTaskId}
+                                        name="projectSubTaskId"
+                                        label="Sub Task Name"
+                                        placeholder="Select a sub Task"
+                                        options={
+                                            <>
+                                                {subTask?.map((x) => (
+                                                    <option value={x?.id}>
+                                                        {x.name}
+                                                    </option>
+                                                ))}
+                                            </>
+                                        }
+                                    />
+                                )}
                                 <Grid
                                     templateColumns={[
                                         'repeat(1,1fr)',
@@ -445,7 +453,7 @@ const UpdateTimesheetModal = ({
                                             border: '1px solid',
                                             borderColor: 'brand.400',
                                         }}
-                                        isLoading={loading}
+                                        isLoading={isSubmitting}
                                         spinner={
                                             <BeatLoader
                                                 color="white"

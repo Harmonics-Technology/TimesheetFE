@@ -22,4 +22,5 @@ export type LeaveView = {
     status?: string | null;
     leaveDaysEarned?: number;
     isCanceled?: boolean;
+    leaveDuration?: number | null;
 };

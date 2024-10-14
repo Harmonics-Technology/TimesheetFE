@@ -11,4 +11,5 @@ export type LeaveModel = {
     reasonForLeave?: string | null;
     workAssigneeId?: string | null;
     noOfLeaveDaysApplied?: number;
+    leaveDuration?: number | null;
 };
