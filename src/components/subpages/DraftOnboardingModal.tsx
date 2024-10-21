@@ -428,15 +428,16 @@ export const DraftOnboardingModal = ({
         try {
             const result = await UserService.addTeamMember(data);
             if (result.status) {
+                reset();
+                setContractFile({});
+                await DraftService.deleteDraft(data?.id);
                 toast({
                     title: `Invite Sent`,
                     status: 'success',
                     isClosable: true,
                     position: 'top-right',
                 });
-                reset();
-                setContractFile({});
-                closeModal();
+                onClose();
                 router.replace(router.asPath);
                 return;
             }
@@ -1127,7 +1128,9 @@ export const DraftOnboardingModal = ({
                             name="isEligibleForLeave"
                             control={control}
                             error={errors.isEligibleForLeave}
-                            defaultValue={isEligibleForLeave ? 'Yes' : 'No'}
+                            defaultValue={
+                                convertYesNo(isEligibleForLeave) ? 'Yes' : 'No'
+                            }
                         />
                     </Box>
                     {convertYesNo(isEligibleForLeave) && (
@@ -1159,7 +1162,7 @@ export const DraftOnboardingModal = ({
                                 register={register}
                             /> */}
                             </Grid>
-                            <Box pos="relative" mb="1rem">
+                            <Box pos="relative" my="1rem">
                                 <PrimaryRadio<TeamMemberModel>
                                     label="Does this team member have a rolled over leave?"
                                     radios={['No', 'Yes']}

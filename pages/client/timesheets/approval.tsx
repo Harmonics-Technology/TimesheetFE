@@ -27,6 +27,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 await TimeSheetService.getApprovedClientTeamMemberSheet(
                     pagingOptions.offset,
                     pagingOptions.limit,
+                    // superAdminId,
+                    // pagingOptions.search,
+                    // pagingOptions.clientId as unknown as number,
                 );
 
             return {

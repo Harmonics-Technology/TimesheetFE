@@ -4,5 +4,5 @@ export const convertYesNo = (input) => {
     } else if (input === false || input === 'No') {
         return false;
     }
-    return null;
+    return false;
 };

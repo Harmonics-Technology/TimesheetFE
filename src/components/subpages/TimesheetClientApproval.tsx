@@ -15,6 +15,10 @@ import {
 } from 'src/services';
 import FilterSearch from '@components/bits-utils/FilterSearch';
 import { formatDate } from '@components/generics/functions/formatDate';
+import dynamic from 'next/dynamic';
+const Selectrix = dynamic<any>(() => import('react-selectrix'), {
+    ssr: false,
+});
 
 interface adminProps {
     timeSheets: TimeSheetHistoryViewPagedCollectionStandardResponse;
@@ -22,6 +26,19 @@ interface adminProps {
 
 function TimesheetClient({ timeSheets }: adminProps) {
     const router = useRouter();
+    const filterClientsInvoice = (filter: string) => {
+        router.push({
+            query: {
+                clientId: filter,
+            },
+        });
+    };
+
+    const newData = [
+        { id: 1, title: 'Weekly' },
+        { id: 2, title: 'Bi - Weekly' },
+        { id: 3, title: 'Monthly' },
+    ];
 
     return (
         <>
@@ -31,7 +48,23 @@ function TimesheetClient({ timeSheets }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <FilterSearch hide={true} />
+                <FilterSearch
+                    hide={true}
+                    hides
+                    filter={
+                        <Selectrix
+                            options={newData}
+                            searchable
+                            customKeys={{
+                                key: 'id',
+                                label: 'title',
+                            }}
+                            onChange={(value: any) =>
+                                filterClientsInvoice(value.key)
+                            }
+                        />
+                    }
+                />
                 <Tables
                     tableHead={[
                         'Name',
