@@ -587,6 +587,7 @@ export const TeamSingleTask = ({
                                         bg="brand.400"
                                         w="fit-content"
                                         disabled={status == 'completed'}
+                                        h="35px"
                                     />
                                 )}
                             </Flex>

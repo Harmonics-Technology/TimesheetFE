@@ -383,6 +383,7 @@ export const SingleTask = ({
                                     bg="brand.400"
                                     w="fit-content"
                                     disabled={status == 'completed'}
+                                    h="35px"
                                 />
                             </Flex>
 
@@ -791,6 +792,7 @@ export const SingleTask = ({
                     onClose={onClose}
                     data={task}
                     subTask={subTask}
+                    setSubTask={setSubTask}
                 />
             )}
             {isOpened && (

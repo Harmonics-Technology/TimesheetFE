@@ -213,12 +213,27 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                             color="#04040B"
                                                             fontSize="14px"
                                                             fontWeight={500}
+                                                            textTransform="capitalize"
                                                         >
                                                             {x?.isComment
                                                                 ? 'Comment'
                                                                 : !x?.isComment &&
                                                                   !x?.assignee
-                                                                ? 'Task Created'
+                                                                ? `${
+                                                                      x?.comment?.startsWith(
+                                                                          'A subtask',
+                                                                      )
+                                                                          ? 'Sub Task'
+                                                                          : 'Task'
+                                                                  } ${x?.comment
+                                                                      ?.split(
+                                                                          'was',
+                                                                      )
+                                                                      ?.at(1)
+                                                                      ?.split(
+                                                                          ' ',
+                                                                      )
+                                                                      ?.at(1)}`
                                                                 : 'Task Assigned'}
                                                         </Text>
                                                         <HStack gap="1rem">
@@ -231,7 +246,19 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                                     ? 'Comment by'
                                                                     : !x?.isComment &&
                                                                       !x?.assignee
-                                                                    ? 'Created by'
+                                                                    ? `${x?.comment
+                                                                          ?.split(
+                                                                              'was',
+                                                                          )
+                                                                          ?.at(
+                                                                              1,
+                                                                          )
+                                                                          ?.split(
+                                                                              ' ',
+                                                                          )
+                                                                          ?.at(
+                                                                              1,
+                                                                          )} by`
                                                                     : ' Assigned by'}
                                                             </Text>
                                                             <Avatar

@@ -92,7 +92,6 @@ export const EditSubTaskDrawer = ({
     });
 
     console.log({ subTask });
-    
 
     const toast = useToast();
     const router = useRouter();
@@ -101,12 +100,10 @@ export const EditSubTaskDrawer = ({
         (watch('trackedByHours') as unknown as string) == 'Track by hours'
             ? true
             : false;
-    const [selectedUser, setSelecedUser] = useState<any>(
-        {
-            id: subTask?.projectTaskAsigneeId,
-            'user.fullName': subTask?.projectTaskAsignee?.user?.fullName,
-        } || '',
-    );
+    const [selectedUser, setSelecedUser] = useState<any>({
+        id: subTask?.projectTaskAsigneeId,
+        'user.fullName': subTask?.projectTaskAsignee?.user?.fullName,
+    });
     const addUser = (user) => {
         setSelecedUser(user);
     };
@@ -119,9 +116,10 @@ export const EditSubTaskDrawer = ({
         { id: 2, name: 'Medium' },
         { id: 3, name: 'Low' },
     ];
-    const [selectedPriority, setSelectedPriority] = useState<any>(
-        { id: formattedPriority, name: subTask?.taskPriority } || '',
-    );
+    const [selectedPriority, setSelectedPriority] = useState<any>({
+        id: formattedPriority,
+        name: subTask?.taskPriority,
+    });
     const selectPriority = (user) => {
         setSelectedPriority(user);
     };
@@ -129,7 +127,7 @@ export const EditSubTaskDrawer = ({
         //
         data.trackedByHours = isHours;
         try {
-            const result = await ProjectManagementService.updateSubTask(data)
+            const result = await ProjectManagementService.updateSubTask(data);
             if (result.status) {
                 toast({
                     title: result.message,

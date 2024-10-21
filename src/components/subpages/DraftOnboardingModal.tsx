@@ -7,6 +7,9 @@ import {
     HStack,
     Button,
     DrawerFooter,
+    FormLabel,
+    Icon,
+    InputRightElement,
 } from '@chakra-ui/react';
 import React, { useContext, useRef, useState } from 'react';
 import { DateObject } from 'react-multi-date-picker';
@@ -42,6 +45,10 @@ import { SectionTitle } from '@components/bits-utils/NewUpdates/SectionTitle';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import moment from 'moment';
 import { useNonInitialEffect } from '@components/generics/useNonInitialEffect';
+import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
+import { UserContext } from '@components/context/UserContext';
+import { BsFillInfoSquareFill } from 'react-icons/bs';
+import { convertYesNo } from '@components/generics/functions/ConvertStringToBool';
 
 export const DraftOnboardingModal = ({
     userProfile,
@@ -65,6 +72,7 @@ export const DraftOnboardingModal = ({
     const [payFees, setPayFees] = useState<any>(fees);
     const [loading, setLoading] = useState<any>();
     const toast = useToast();
+    const { subType } = useContext(UserContext);
 
     const schema = yup.object().shape({
         lastName: yup.string().required(),
@@ -148,7 +156,7 @@ export const DraftOnboardingModal = ({
     });
     const draftSchema = yup.object().shape({});
 
-    console.log({ userProfile });
+    // console.log({ userProfile });
 
     const {
         register,
@@ -165,42 +173,62 @@ export const DraftOnboardingModal = ({
             id: userProfile?.id,
             firstName: userProfile?.firstName,
             lastName: userProfile?.lastName,
-            hoursPerDay: userProfile?.hoursPerDay,
+            hoursPerDay: userProfile?.employeeInformation?.hoursPerDay,
             role: userProfile?.role as unknown as string,
             isActive: userProfile?.isActive,
             phoneNumber: userProfile?.phoneNumber,
             email: userProfile?.email,
             dateOfBirth: userProfile?.dateOfBirth,
-            clientId: userProfile?.clientId,
-            supervisorId: userProfile?.supervisorId,
-            paymentPartnerId: userProfile?.paymentPartnerId,
-            currency: userProfile?.currency,
+            clientId: userProfile?.employeeInformation?.clientId,
+            supervisorId: userProfile?.employeeInformation?.supervisorId,
+            paymentPartnerId:
+                userProfile?.employeeInformation?.paymentPartnerId || undefined,
+            currency: userProfile?.employeeInformation?.currency,
 
-            paymentFrequency: userProfile?.paymentFrequency,
-            payrollGroupId: userProfile?.payrollGroupId,
-            isEligibleForLeave: userProfile?.isEligibleForLeave,
+            paymentFrequency:
+                userProfile?.employeeInformation?.paymentFrequency,
+            payrollGroupId: userProfile?.employeeInformation?.payrollGroupId,
+            isEligibleForLeave:
+                userProfile?.employeeInformation?.isEligibleForLeave,
             numberOfDaysEligible:
-                userProfile?.numberOfDaysEligible ||
-                leaveSettings?.eligibleLeaveDays,
-            // numberOfHoursEligible: userProfile?.numberOfHoursEligible,
-            employeeType: userProfile?.employeeType,
-            invoiceGenerationType: userProfile?.invoiceGenerationType,
-            enableFinancials: userProfile?.enableFinancials,
-            department: userProfile?.department,
+                userProfile?.employeeInformation?.numberOfDaysEligible,
+            // numberOfHoursEligible:
+            //     userProfile?.employeeInformation?.numberOfHoursEligible,
+            employeeType: userProfile?.employeeInformation?.employeeType,
+            invoiceGenerationType:
+                userProfile?.employeeInformation?.invoiceGenerationType,
+            enableFinancials:
+                userProfile?.employeeInformation?.enableFinancials,
+            departments: userProfile?.userDepartments as any,
             address: userProfile?.address,
             clientSubscriptionId: userProfile?.clientSubscriptionId,
-            employmentContractType: userProfile?.employmentContractType,
-            jobTitle: userProfile?.jobTitle,
-            paymentProcessingFee: userProfile?.paymentProcessingFee,
-            paymentProcessingFeeType: userProfile?.paymentProcessingFeeType,
-            payrollProcessingType: userProfile?.payrollProcessingType,
-            rate: userProfile?.rate,
-            rateType: userProfile?.rateType,
-            ratePerHour: userProfile?.ratePerHour,
-            tax: userProfile?.tax,
-            taxType: userProfile?.taxType,
-            timesheetFrequency: userProfile?.timesheetFrequency,
-            payrollStructure: userProfile?.payrollStructure,
+            employmentContractType:
+                userProfile?.employeeInformation?.employmentContractType,
+            jobTitle: userProfile?.employeeInformation?.jobTitle,
+            paymentProcessingFee:
+                userProfile?.employeeInformation?.paymentProcessingFee,
+            paymentProcessingFeeType:
+                userProfile?.employeeInformation?.paymentProcessingFeeType ||
+                undefined,
+            payrollProcessingType:
+                userProfile?.employeeInformation?.payrollProcessingType,
+            rate: userProfile?.employeeInformation?.rate,
+            rateType: userProfile?.employeeInformation?.rateType,
+            ratePerHour: userProfile?.employeeInformation?.ratePerHour,
+            tax: userProfile?.employeeInformation?.tax,
+            taxType: userProfile?.employeeInformation?.taxType,
+            timesheetFrequency:
+                userProfile?.employeeInformation?.timesheetFrequency,
+            payrollStructure:
+                userProfile?.employeeInformation?.payrollStructure,
+            rolledOverLeave: userProfile?.employeeInformation?.rolledOverLeave,
+            hasRollOverLeave:
+                userProfile?.employeeInformation?.hasRollOverLeave,
+            expiryDateOfRolledOverLeave:
+                userProfile?.employeeInformation?.expiryDateOfRolledOverLeave,
+            hasUtilizeLeaveDaysToDate:
+                userProfile?.employeeInformation?.hasUtilizeLeaveDaysToDate,
+            utilizedLeave: userProfile?.employeeInformation?.utilizedLeave,
         },
     });
 
@@ -213,6 +241,26 @@ export const DraftOnboardingModal = ({
     };
     const removeLicense = (id) => {
         setSelectedLicense(undefined);
+    };
+
+    const [selectedDepartment, setSelectedDepartment] = useState<any>(
+        userProfile?.userDepartments?.map((obj) => ({
+            id: obj?.department?.id,
+            name: obj?.department?.name,
+        })) || [],
+    );
+
+    // console.log({ selectedDepartment });
+    //
+    const addDepartment = (user) => {
+        const filtered = selectedDepartment?.find((x) => x.id === user.id);
+        if (filtered) return;
+        setSelectedDepartment([...selectedDepartment, user]);
+    };
+    //
+    const removeDepartment = (id) => {
+        const filtered = selectedDepartment?.filter((x) => x.id !== id);
+        setSelectedDepartment(filtered);
     };
 
     const clientId = watch('clientId') || user?.superAdminId;
@@ -280,11 +328,15 @@ export const DraftOnboardingModal = ({
 
     const taxType = watch('taxType');
     const uniqueItems = getUniqueListBy(currencies, 'currency');
-    const isEligibleForLeave =
-        watch('isEligibleForLeave') == true ||
-        (watch('isEligibleForLeave') as any) == 'Yes'
-            ? true
-            : false;
+    // const isEligibleForLeave =
+    //     watch('isEligibleForLeave') == true ||
+    //     (watch('isEligibleForLeave') as any) == 'Yes'
+    //         ? true
+    //         : false;
+
+    const isEligibleForLeave = watch('isEligibleForLeave');
+    const hasRolledOverLeave = watch('hasRollOverLeave');
+    const hasUtilizeLeaveDaysToDate = watch('hasUtilizeLeaveDaysToDate');
 
     const forMe = userProfile?.clientId == user?.superAdminId;
     const [clientType, setClientType] = useState(!forMe);
@@ -353,16 +405,15 @@ export const DraftOnboardingModal = ({
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
-        {
-            (data?.isEligibleForLeave as unknown as string) == 'Yes'
-                ? (data.isEligibleForLeave = true)
-                : (data.isEligibleForLeave = false);
-        }
-        {
-            (data?.enableFinancials as unknown as string) == 'Yes'
-                ? (data.enableFinancials = true)
-                : (data.enableFinancials = false);
-        }
+        data.dateOfBirth = data.dateOfBirth
+            ? data.dateOfBirth
+            : moment().format('YYYY-MM-DD');
+        data.isEligibleForLeave = convertYesNo(data?.isEligibleForLeave);
+        data.enableFinancials = convertYesNo(data?.enableFinancials) as any;
+        data.hasRollOverLeave = convertYesNo(data?.hasRollOverLeave);
+        data.hasUtilizeLeaveDaysToDate = convertYesNo(
+            data?.hasUtilizeLeaveDaysToDate,
+        );
         data.clientId = !clientType ? user?.superAdminId : data.clientId;
         if (data.supervisorId === undefined || '') {
             toast({
@@ -413,16 +464,13 @@ export const DraftOnboardingModal = ({
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
-        {
-            (data?.isEligibleForLeave as unknown as string) == 'Yes'
-                ? (data.isEligibleForLeave = true)
-                : (data.isEligibleForLeave = false);
-        }
-        {
-            (data?.enableFinancials as unknown as string) == 'Yes'
-                ? (data.enableFinancials = true)
-                : (data.enableFinancials = false);
-        }
+        data.isEligibleForLeave = convertYesNo(data?.isEligibleForLeave);
+        data.enableFinancials = convertYesNo(data?.enableFinancials) as any;
+        data.hasRollOverLeave = convertYesNo(data?.hasRollOverLeave);
+        data.hasUtilizeLeaveDaysToDate = convertYesNo(
+            data?.hasUtilizeLeaveDaysToDate,
+        );
+
         data.clientId = !clientType ? user?.superAdminId : data.clientId;
         try {
             const result = await DraftService.updateDraft(
@@ -508,12 +556,13 @@ export const DraftOnboardingModal = ({
                     <PrimaryDate<TeamMemberModel>
                         control={control}
                         name="dateOfBirth"
-                        label="Date of Birth"
+                        label="Date of Birth (Optional)"
                         error={errors.dateOfBirth}
                         defaultValue={moment(userProfile?.dateOfBirth).format(
                             'YYYY/MM/DD',
                         )}
                         max={new DateObject().subtract(1, 'days')}
+                        required={false}
                     />
                     <PrimaryInput<TeamMemberModel>
                         label="Address"
@@ -526,24 +575,30 @@ export const DraftOnboardingModal = ({
                 </Grid>
                 <Box w="full">
                     <SectionTitle text="Work Data" />
-                    <Box mb="1.5rem">
-                        <Text fontWeight="500" mb=".5rem" fontSize=".9rem">
-                            Is this team member for you or for a client you
-                            manage?
-                        </Text>
-                        <HStack
-                            w="full"
-                            {...groups}
-                            defaultValue={forMe ? 'For me' : 'For my client'}
-                        >
-                            {radious.map((value) => {
-                                const radio = radioProps({
-                                    value,
-                                });
-                                return <RadioBtn {...radio}>{value}</RadioBtn>;
-                            })}
-                        </HStack>
-                    </Box>
+                    {subType == 'premium' && (
+                        <Box mb="1.5rem">
+                            <Text fontWeight="500" mb=".5rem" fontSize=".9rem">
+                                Is this team member for you or for a client you
+                                manage?
+                            </Text>
+                            <HStack
+                                w="full"
+                                {...groups}
+                                defaultValue={
+                                    forMe ? 'For me' : 'For my client'
+                                }
+                            >
+                                {radious.map((value) => {
+                                    const radio = radioProps({
+                                        value,
+                                    });
+                                    return (
+                                        <RadioBtn {...radio}>{value}</RadioBtn>
+                                    );
+                                })}
+                            </HStack>
+                        </Box>
+                    )}
                     <Grid
                         templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                         gap="1rem 2rem"
@@ -557,7 +612,31 @@ export const DraftOnboardingModal = ({
                             defaultValue=""
                             register={register}
                         />
-                        <PrimarySelect<TeamMemberModel>
+                        <Box w="full">
+                            <FormLabel
+                                textTransform="capitalize"
+                                width="fit-content"
+                                fontSize=".8rem"
+                            >
+                                Department
+                            </FormLabel>
+
+                            <CustomSelectBox
+                                data={department}
+                                updateFunction={addDepartment}
+                                items={selectedDepartment}
+                                customKeys={{
+                                    key: 'id',
+                                    label: 'name',
+                                }}
+                                checkbox={true}
+                                id="users"
+                                error={errors?.departments}
+                                removeFn={removeDepartment}
+                                // single
+                            />
+                        </Box>
+                        {/* <PrimarySelect<TeamMemberModel>
                             register={register}
                             error={errors.department}
                             name="department"
@@ -572,7 +651,7 @@ export const DraftOnboardingModal = ({
                                     ))}
                                 </>
                             }
-                        />
+                        /> */}
                         {clientType && (
                             <PrimarySelect<TeamMemberModel>
                                 register={register}
@@ -584,7 +663,7 @@ export const DraftOnboardingModal = ({
                                     <>
                                         {client.map((x) => (
                                             <option value={x?.id}>
-                                                {x.fullName}
+                                                {x.organizationName}
                                             </option>
                                         ))}
                                     </>
@@ -1001,13 +1080,46 @@ export const DraftOnboardingModal = ({
                                             </>
                                         }
                                     />
+                                    {clientType && (
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="Client Rate"
+                                            name="clientRate"
+                                            error={errors.clientRate}
+                                            placeholder=""
+                                            defaultValue=""
+                                            type="string"
+                                            register={register}
+                                        />
+                                    )}
                                 </Grid>
                             </>
                         </Box>
                     )}
                 </Box>
                 <Box w="full">
-                    <SectionTitle text="Leave Management" />
+                    <SectionTitle
+                        text="Leave Management"
+                        sub={
+                            <HStack
+                                bgColor="#f1f4f8"
+                                p="6px 11px"
+                                gap="8px"
+                                color="#6A7F9D"
+                                align="flex-start"
+                            >
+                                <Icon
+                                    as={BsFillInfoSquareFill}
+                                    fontSize="13px"
+                                    mt="3px"
+                                />
+                                <Text fontSize="11px" fontWeight={400}>
+                                    You can setup leave for your team member in
+                                    the team members profile, it is not
+                                    compulsory at onboarding stage
+                                </Text>
+                            </HStack>
+                        }
+                    />
                     <Box pos="relative" mb="1rem">
                         <PrimaryRadio<TeamMemberModel>
                             label="Is this team member eligible for leave?"
@@ -1018,21 +1130,27 @@ export const DraftOnboardingModal = ({
                             defaultValue={isEligibleForLeave ? 'Yes' : 'No'}
                         />
                     </Box>
-                    {isEligibleForLeave && (
-                        <Grid
-                            templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
-                            gap="1rem 2rem"
-                        >
-                            <PrimaryInput<TeamMemberModel>
-                                label="Eligible number of hours"
-                                name="numberOfDaysEligible"
-                                error={errors.numberOfDaysEligible}
-                                placeholder=""
-                                defaultValue=""
-                                register={register}
-                                readonly={leaveSettings?.isStandardEligibleDays}
-                            />
-                            {/* <PrimaryInput<TeamMemberModel>
+                    {convertYesNo(isEligibleForLeave) && (
+                        <>
+                            <Grid
+                                templateColumns={[
+                                    'repeat(1,1fr)',
+                                    'repeat(3,1fr)',
+                                ]}
+                                gap="1rem 2rem"
+                            >
+                                <PrimaryInput<TeamMemberModel>
+                                    label="Eligible number of hours"
+                                    name="numberOfDaysEligible"
+                                    error={errors.numberOfDaysEligible}
+                                    placeholder=""
+                                    defaultValue=""
+                                    register={register}
+                                    readonly={
+                                        leaveSettings?.isStandardEligibleDays
+                                    }
+                                />
+                                {/* <PrimaryInput<TeamMemberModel>
                                 label="Eligible number of hours"
                                 name="numberOfHoursEligible"
                                 error={errors.numberOfHoursEligible}
@@ -1040,7 +1158,95 @@ export const DraftOnboardingModal = ({
                                 defaultValue=""
                                 register={register}
                             /> */}
-                        </Grid>
+                            </Grid>
+                            <Box pos="relative" mb="1rem">
+                                <PrimaryRadio<TeamMemberModel>
+                                    label="Does this team member have a rolled over leave?"
+                                    radios={['No', 'Yes']}
+                                    name="hasRollOverLeave"
+                                    control={control}
+                                    error={errors.hasRollOverLeave}
+                                    defaultValue={
+                                        convertYesNo(hasRolledOverLeave) == true
+                                            ? 'Yes'
+                                            : 'No'
+                                    }
+                                />
+                            </Box>
+                            {convertYesNo(hasRolledOverLeave) && (
+                                <Grid
+                                    templateColumns={[
+                                        'repeat(1,1fr)',
+                                        'repeat(2,1fr)',
+                                    ]}
+                                    gap="1rem 2rem"
+                                    mb="1rem"
+                                >
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Rolled Over Leave"
+                                        name="rolledOverLeave"
+                                        error={errors.rolledOverLeave}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                        // readonly={leaveSettings?.isStandardEligibleDays}
+                                    />
+                                    <PrimaryDate<TeamMemberModel>
+                                        label="Expiry date of rolled over leave"
+                                        name="expiryDateOfRolledOverLeave"
+                                        error={
+                                            errors.expiryDateOfRolledOverLeave
+                                        }
+                                        placeholder=""
+                                        defaultValue=""
+                                        control={control}
+                                        // register={register}
+                                    />
+                                </Grid>
+                            )}
+                            <Box pos="relative" mb="1rem">
+                                <PrimaryRadio<TeamMemberModel>
+                                    label="Has this team member utilized any leave Hours to date?"
+                                    radios={['No', 'Yes']}
+                                    name="hasUtilizeLeaveDaysToDate"
+                                    control={control}
+                                    error={errors.hasUtilizeLeaveDaysToDate}
+                                    defaultValue={
+                                        convertYesNo(
+                                            hasUtilizeLeaveDaysToDate,
+                                        ) == true
+                                            ? 'Yes'
+                                            : 'No'
+                                    }
+                                />
+                            </Box>
+                            {convertYesNo(hasUtilizeLeaveDaysToDate) && (
+                                <Grid
+                                    templateColumns={[
+                                        'repeat(1,1fr)',
+                                        'repeat(2,1fr)',
+                                    ]}
+                                    gap="1rem 2rem"
+                                >
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Utilized Leave (hours)"
+                                        name="utilizedLeave"
+                                        error={errors.utilizedLeave}
+                                        placeholder=""
+                                        defaultValue=""
+                                        register={register}
+                                        suffix={
+                                            <InputRightElement right="1rem">
+                                                <Text fontSize=".8rem">
+                                                    hours
+                                                </Text>
+                                            </InputRightElement>
+                                        }
+                                        // readonly={leaveSettings?.isStandardEligibleDays}
+                                    />
+                                </Grid>
+                            )}
+                        </>
                     )}
                 </Box>
                 <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">

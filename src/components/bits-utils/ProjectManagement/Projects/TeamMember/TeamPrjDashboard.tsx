@@ -41,7 +41,9 @@ export const TeamPrjDashboard = ({
 }) => {
     const projectSummary = ['Task Name', 'Deadline', 'Status', 'Workload'];
     const { user } = useContext(UserContext);
-    const isProjectPm = projects?.projectManagerId == user?.id;
+    const isProjectPm = projects?.projectManagers?.find(
+        (x) => x?.user?.id == user?.id,
+    );
 
     const isPm = user?.isOrganizationProjectManager;
 

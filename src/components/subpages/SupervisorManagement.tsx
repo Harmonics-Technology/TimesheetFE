@@ -103,6 +103,9 @@ function SupervisorManagement({
         data.superAdminId = user?.superAdminId;
         data.clientId = !data.clientId ? user?.superAdminId : data.clientId;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
+        data.dateOfBirth = data.dateOfBirth
+            ? data.dateOfBirth
+            : new Date().toLocaleDateString();
         try {
             const result = await UserService.create(data);
             if (result.status) {

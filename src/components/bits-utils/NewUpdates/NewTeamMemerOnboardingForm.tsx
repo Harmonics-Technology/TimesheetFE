@@ -43,6 +43,8 @@ import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import { CustomSelectBox } from '../ProjectManagement/Generics/CustomSelectBox';
 import { BsFillInfoSquareFill } from 'react-icons/bs';
 import { UserContext } from '@components/context/UserContext';
+import { convertYesNo } from '@components/generics/functions/ConvertStringToBool';
+import moment from 'moment';
 
 export const NewTeamMemerOnboardingForm = ({
     isOpen,
@@ -323,14 +325,15 @@ export const NewTeamMemerOnboardingForm = ({
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
-        data.isEligibleForLeave =
-            (data?.isEligibleForLeave as any) == 'Yes' ? true : false;
-        data.enableFinancials =
-            (data?.enableFinancials as any) == 'Yes' ? true : false;
-        data.hasRollOverLeave =
-            (data?.hasRollOverLeave as any) == 'Yes' ? true : false;
-        data.hasUtilizeLeaveDaysToDate =
-            (data?.hasUtilizeLeaveDaysToDate as any) == 'Yes' ? true : false;
+        data.dateOfBirth = data.dateOfBirth
+            ? data.dateOfBirth
+            : moment().format('YYYY-MM-DD');
+        data.isEligibleForLeave = convertYesNo(data?.isEligibleForLeave);
+        data.enableFinancials = convertYesNo(data?.enableFinancials) as any;
+        data.hasRollOverLeave = convertYesNo(data?.hasRollOverLeave);
+        data.hasUtilizeLeaveDaysToDate = convertYesNo(
+            data?.hasUtilizeLeaveDaysToDate,
+        );
 
         data.clientId = !clientType ? user?.superAdminId : data.clientId;
         if (data.supervisorId === undefined || '') {
@@ -380,18 +383,19 @@ export const NewTeamMemerOnboardingForm = ({
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
+        data.dateOfBirth = data.dateOfBirth
+            ? data.dateOfBirth
+            : moment().format('YYYY-MM-DD');
 
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
-        data.isEligibleForLeave =
-            (data?.isEligibleForLeave as any) == 'Yes' ? true : false;
-        data.enableFinancials =
-            (data?.enableFinancials as any) == 'Yes' ? true : false;
-        data.hasRollOverLeave =
-            (data?.hasRollOverLeave as any) == 'Yes' ? true : false;
-        data.hasUtilizeLeaveDaysToDate =
-            (data?.hasUtilizeLeaveDaysToDate as any) == 'Yes' ? true : false;
+        data.isEligibleForLeave = convertYesNo(data?.isEligibleForLeave);
+        data.enableFinancials = convertYesNo(data?.enableFinancials) as any;
+        data.hasRollOverLeave = convertYesNo(data?.hasRollOverLeave);
+        data.hasUtilizeLeaveDaysToDate = convertYesNo(
+            data?.hasUtilizeLeaveDaysToDate,
+        );
 
         data.clientId = !clientType ? user?.superAdminId : data.clientId;
         try {
@@ -1065,6 +1069,9 @@ export const NewTeamMemerOnboardingForm = ({
                                     placeholder=""
                                     defaultValue=""
                                     register={register}
+                                    readonly={
+                                        leaveSettings?.isStandardEligibleDays
+                                    }
                                 />
                             </Grid>
 

@@ -39,8 +39,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await UserService.getUserById(id);
-            const paymentSchedule =
-                await FinancialService.getEmployeePaymentSchedule(employeeId);
+            // const paymentSchedule =
+            //     await FinancialService.getEmployeePaymentSchedule(employeeId);
             const controls = await UserService.getControlSettingById(
                 superAdminId,
             );
@@ -48,11 +48,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             return {
                 props: {
                     user: data.data,
-                    paymentSchedule,
+                    // paymentSchedule,
                     controls: controls.data,
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     data: [],

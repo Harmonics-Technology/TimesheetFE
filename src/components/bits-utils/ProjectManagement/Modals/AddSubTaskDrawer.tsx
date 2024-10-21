@@ -53,16 +53,18 @@ export const AddSubTaskDrawer = ({
     isOpen,
     data,
     subTask,
+    setSubTask,
 }: {
     onClose: any;
     isOpen: boolean;
-    data: ProjectTaskView;
+    data?: ProjectTaskView;
     subTask: ProjectSubTaskView | any;
+    setSubTask?: any;
 }) => {
     const formattedPriority =
-        subTask.taskPriority == 'High'
+        subTask?.taskPriority == 'High'
             ? 1
-            : data.taskPriority == 'Medium'
+            : data?.taskPriority == 'Medium'
             ? 2
             : 3;
     const {
@@ -78,13 +80,13 @@ export const AddSubTaskDrawer = ({
         mode: 'all',
         defaultValues: {
             projectTaskId: data?.id,
-            name: subTask.name,
-            duration: subTask.duration,
-            startDate: subTask.startDate,
-            endDate: subTask.endDate,
-            id: subTask.id,
-            note: subTask.note,
-            projectTaskAsigneeId: subTask.projectTaskAsigneeId,
+            name: subTask?.name,
+            duration: subTask?.duration,
+            startDate: subTask?.startDate,
+            endDate: subTask?.endDate,
+            id: subTask?.id,
+            note: subTask?.note,
+            projectTaskAsigneeId: subTask?.projectTaskAsigneeId,
             taskPriority: formattedPriority as any,
 
             // trackedByHours: false,
@@ -93,17 +95,19 @@ export const AddSubTaskDrawer = ({
 
     const toast = useToast();
     const router = useRouter();
+    const closeModal = () => {
+        setSubTask({});
+        onClose();
+    };
 
     const isHours =
         (watch('trackedByHours') as unknown as string) == 'Track by hours'
             ? true
             : false;
-    const [selectedUser, setSelecedUser] = useState<any>(
-        {
-            id: subTask?.projectTaskAsigneeId,
-            'user.fullName': subTask?.projectTaskAsignee?.user?.fullName,
-        } || '',
-    );
+    const [selectedUser, setSelecedUser] = useState<any>({
+        id: subTask?.projectTaskAsigneeId,
+        'user.fullName': subTask?.assignee,
+    });
     const addUser = (user) => {
         setSelecedUser(user);
     };
@@ -116,9 +120,10 @@ export const AddSubTaskDrawer = ({
         { id: 2, name: 'Medium' },
         { id: 3, name: 'Low' },
     ];
-    const [selectedPriority, setSelectedPriority] = useState<any>(
-        { id: formattedPriority, name: subTask?.taskPriority } || '',
-    );
+    const [selectedPriority, setSelectedPriority] = useState<any>({
+        id: formattedPriority,
+        name: subTask?.taskPriority,
+    });
     const selectPriority = (user) => {
         setSelectedPriority(user);
     };
@@ -138,7 +143,7 @@ export const AddSubTaskDrawer = ({
                 });
                 router.replace(router.asPath);
                 reset();
-                onClose();
+                closeModal();
                 return;
             }
             toast({
@@ -175,12 +180,9 @@ export const AddSubTaskDrawer = ({
 
     return (
         <DrawerWrapper
-            onClose={onClose}
+            onClose={closeModal}
             isOpen={isOpen}
-            title={
-                // isEdit ? 'Edit Sub-Task':
-                'Add New Sub-Task'
-            }
+            title={subTask?.isEdit ? 'Edit Sub-Task' : 'Add New Sub-Task'}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <VStack align="flex-start" spacing="1.5rem">
@@ -350,7 +352,7 @@ export const AddSubTaskDrawer = ({
                                 height="3rem"
                                 fontSize="14px"
                                 boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                onClick={() => onClose()}
+                                onClick={() => closeModal()}
                             >
                                 Cancel
                             </Button>

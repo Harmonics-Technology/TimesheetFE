@@ -112,6 +112,9 @@ function ProfileManagementAdmin({
     const onSubmit = async (data: RegisterModel) => {
         data.superAdminId = user?.superAdminId;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
+        data.dateOfBirth = data.dateOfBirth
+            ? data.dateOfBirth
+            : new Date().toLocaleDateString();
         try {
             const result = await UserService.create(data);
             if (result.status) {
