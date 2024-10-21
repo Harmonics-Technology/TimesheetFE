@@ -80,6 +80,8 @@ function TeamProfile({
 }: TeamProfileProps) {
     const { user, opens, subType } = useContext(UserContext);
 
+    console.log({ clients });
+
     clients =
         clients?.length <= 0
             ? [{ id: user?.superAdminId, fullName: user?.fullName }]
@@ -322,7 +324,7 @@ function TeamProfile({
         })) || [],
     );
 
-    console.log({ selectedDepartment });
+    // console.log({ selectedDepartment });
     //
     const addDepartment = (user) => {
         const filtered = selectedDepartment?.find((x) => x.id === user.id);
@@ -430,6 +432,8 @@ function TeamProfile({
             selectedDepartment.map((x) => x.id),
         );
     }, [selectedDepartment]);
+
+    console.log({ userProfile, clients });
 
     // console.log({ fee: watch('dateOfBirth'), fin: watch('enableFinancials') });
     return (

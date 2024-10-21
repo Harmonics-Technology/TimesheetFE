@@ -104,6 +104,7 @@ export const AddOpTaskDrawer = ({
         //         clientId: value,
         //     },
         // });
+        setSelecedUser([]);
         setDepartment(value);
         try {
             setIsLoading(true);
@@ -124,6 +125,7 @@ export const AddOpTaskDrawer = ({
     };
 
     const configureTaskType = (value) => {
+        setSelecedUser([]);
         if (role == 'Team Member') {
             setTaskType(value);
             value == 'Departmental' && fetchUsersInDept(user.department);
@@ -233,7 +235,7 @@ export const AddOpTaskDrawer = ({
                             ))}
                         />
                     )}
-                    {department && (
+                    {taskType == 'Departmental' && department && (
                         <Box w="full">
                             <FormLabel
                                 textTransform="capitalize"

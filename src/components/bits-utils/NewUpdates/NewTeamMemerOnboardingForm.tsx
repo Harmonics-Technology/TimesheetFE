@@ -42,6 +42,7 @@ import UploadCareWidget from '../UploadCareWidget';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import { CustomSelectBox } from '../ProjectManagement/Generics/CustomSelectBox';
 import { BsFillInfoSquareFill } from 'react-icons/bs';
+import { UserContext } from '@components/context/UserContext';
 
 export const NewTeamMemerOnboardingForm = ({
     isOpen,
@@ -63,6 +64,7 @@ export const NewTeamMemerOnboardingForm = ({
     const [loading, setLoading] = useState<any>();
     const toast = useToast();
     const { hstAmount } = useContext(OnboardingFeeContext);
+    const { subType } = useContext(UserContext);
 
     // const schema = yup.object().shape({
     //     lastName: yup.string().required(),
@@ -496,24 +498,28 @@ export const NewTeamMemerOnboardingForm = ({
                 </Grid>
                 <Box w="full">
                     <SectionTitle text="Work Data" />
-                    <Box mb="1.5rem">
-                        <Text fontWeight="500" mb=".5rem" fontSize=".9rem">
-                            Is this team member for you or for a client you
-                            manage?
-                        </Text>
-                        <HStack
-                            w="full"
-                            {...groups}
-                            defaultValue={'For my client'}
-                        >
-                            {radious.map((value) => {
-                                const radio = radioProps({
-                                    value,
-                                });
-                                return <RadioBtn {...radio}>{value}</RadioBtn>;
-                            })}
-                        </HStack>
-                    </Box>
+                    {subType == 'premium' && (
+                        <Box mb="1.5rem">
+                            <Text fontWeight="500" mb=".5rem" fontSize=".9rem">
+                                Is this team member for you or for a client you
+                                manage?
+                            </Text>
+                            <HStack
+                                w="full"
+                                {...groups}
+                                defaultValue={'For my client'}
+                            >
+                                {radious.map((value) => {
+                                    const radio = radioProps({
+                                        value,
+                                    });
+                                    return (
+                                        <RadioBtn {...radio}>{value}</RadioBtn>
+                                    );
+                                })}
+                            </HStack>
+                        </Box>
+                    )}
                     <Grid
                         templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
                         gap="1rem 2rem"
@@ -576,7 +582,7 @@ export const NewTeamMemerOnboardingForm = ({
                                 placeholder="Client"
                                 options={
                                     <>
-                                        {client.map((x) => (
+                                        {client?.map((x) => (
                                             <option value={x?.id}>
                                                 {x.organizationName}
                                             </option>
@@ -983,6 +989,17 @@ export const NewTeamMemerOnboardingForm = ({
                                             </>
                                         }
                                     />
+                                    {clientType && (
+                                        <PrimaryInput<TeamMemberModel>
+                                            label="Client Rate"
+                                            name="clientRate"
+                                            error={errors.clientRate}
+                                            placeholder=""
+                                            defaultValue=""
+                                            type="string"
+                                            register={register}
+                                        />
+                                    )}
                                 </Grid>
                             </>
                         </Box>

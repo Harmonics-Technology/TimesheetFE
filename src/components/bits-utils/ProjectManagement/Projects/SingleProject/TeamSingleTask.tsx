@@ -140,10 +140,10 @@ export const TeamSingleTask = ({
         setOpenEditTimeSheetModal(true);
     };
 
-    const progressModal = (item: any) => {
-        setSubTask(item);
-        onOpener();
-    };
+    // const progressModal = (item: any) => {
+    //     setSubTask(item);
+    //     onOpener();
+    // };
 
     const pastDate = moment().diff(moment(task?.endDate), 'days') > 0;
     const [taskStatus, setTaskStatus] = useState();
@@ -568,7 +568,8 @@ export const TeamSingleTask = ({
                                     }
                                 />
                             </Box>
-                            <Box mb="7px" textAlign="right">
+                            {/* <Box mb="7px" textAlign="right"> */}
+                            <Flex mb="7px" justify="space-between">
                                 <ManageBtn
                                     onClick={onOpened}
                                     isLoading={loading.id == task?.id}
@@ -578,7 +579,18 @@ export const TeamSingleTask = ({
                                     disabled={status == 'completed'}
                                     h="35px"
                                 />
-                            </Box>
+                                {(isPm || isOrgPm) && (
+                                    <ManageBtn
+                                        onClick={onOpener}
+                                        isLoading={loading.id == task?.id}
+                                        btn="Mark Task as Complete"
+                                        bg="brand.400"
+                                        w="fit-content"
+                                        disabled={status == 'completed'}
+                                    />
+                                )}
+                            </Flex>
+                            {/* </Box> */}
 
                             <InputBlank
                                 label="Total Hours Spent"
@@ -635,7 +647,7 @@ export const TeamSingleTask = ({
                             title="Status:"
                             text={task?.status}
                         />
-                    </VSta ck> */}
+                    </VStack> */}
                     <Box
                         borderRadius=".2rem"
                         border="1px solid #efefef"
@@ -1136,6 +1148,24 @@ export const TeamSingleTask = ({
                     addToTimesheet={addToTimesheet}
                     totalHoursSpent={task?.hoursSpent}
                     ListUserTimesheet={ListUserTimesheet}
+                />
+            )}
+            {isOpener && (
+                <ShowPrompt
+                    isOpen={isOpener}
+                    onClose={onCloser}
+                    onSubmit={() =>
+                        markAsCompleted(
+                            { type: 2, taskId: task.id },
+                            setLoading,
+                            toast,
+                            setStatus,
+                            router,
+                            onCloser,
+                        )
+                    }
+                    loading={loading?.id == task.id}
+                    text={`Marking this task as complete will prevent any further timesheet submissions for this task.<br/> Are you sure you want to proceed?`}
                 />
             )}
         </Box>

@@ -106,7 +106,6 @@ export const OperationDashboard = ({
         if (value == '2' && role == 'TeamMember') {
             router.push({
                 query: {
-                    ...router.query,
                     department: user?.department,
                     status: 2,
                 },
@@ -116,7 +115,6 @@ export const OperationDashboard = ({
         }
         router.push({
             query: {
-                ...router.query,
                 status: value,
             },
         });

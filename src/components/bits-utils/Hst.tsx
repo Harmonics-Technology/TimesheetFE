@@ -10,6 +10,17 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { UserContext } from '@components/context/UserContext';
 import { useRouter } from 'next/router';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+const schema = yup.object().shape({
+    fee: yup
+        .number()
+        .required()
+        .min(1, 'The minimum number is 1%')
+        .max(99, 'The maximum number is 99%')
+        .typeError('Only numbers are allowed'),
+});
 
 export const Hst = ({ data }: { data: OnboardingFeeView }) => {
     const { user } = useContext(UserContext);
@@ -18,8 +29,9 @@ export const Hst = ({ data }: { data: OnboardingFeeView }) => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isValid },
     } = useForm<OnboardingFeeModel>({
+        resolver: yupResolver(schema),
         mode: 'all',
         defaultValues: {
             onboardingType: 'hst',
@@ -117,6 +129,7 @@ export const Hst = ({ data }: { data: OnboardingFeeView }) => {
                     textTransform="uppercase"
                     mt=".8rem"
                     type="submit"
+                    isDisabled={!isValid}
                     isLoading={isSubmitting}
                 >
                     Save

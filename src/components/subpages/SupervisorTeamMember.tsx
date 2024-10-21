@@ -272,6 +272,8 @@ function SupervisorTeamMember({
         }
     };
 
+    console.log({ adminList });
+
     return (
         <>
             <Box
@@ -298,7 +300,7 @@ function SupervisorTeamMember({
                         'Job Title',
                         'Client Name',
                         // 'Phone No',
-                        'Payroll Type',
+                        'Departments',
                         'Role',
                         'Status',
                         '',
@@ -314,8 +316,13 @@ function SupervisorTeamMember({
                                 <TableData name={x.clientName} />
                                 {/* <TableData name={x.phoneNumber} /> */}
                                 <TableData
-                                    name={x.employeeInformation?.payrollType}
+                                    name={x?.userDepartments
+                                        ?.map((x) => x?.department?.name)
+                                        .join(',')}
                                 />
+                                {/* <TableData
+                                    name={x.employeeInformation?.payrollType}
+                                /> */}
                                 <TableData name={x.role} />
                                 <TableStatus name={x.isActive} />
                                 <TableActions

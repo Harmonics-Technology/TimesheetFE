@@ -64,7 +64,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { UserContext } from '@components/context/UserContext';
 import UpdateTimesheetModal from '../../Modals/UpdateTimesheetModal';
 
-
 const schema = yup.object().shape({});
 
 export const SingleTask = ({
@@ -98,14 +97,19 @@ export const SingleTask = ({
         onOpen: onOpened,
         onClose: onClosed,
     } = useDisclosure();
+    const {
+        isOpen: isOpener,
+        onOpen: onOpener,
+        onClose: onCloser,
+    } = useDisclosure();
     const { user } = useContext(UserContext);
     const [loading, setLoading] = useState({ id: '' });
     const toast = useToast();
     const router = useRouter();
 
-     const ProjectTimesheetAssigneeId = task?.assignees?.find(
-         (x) => x.userId === user?.id,
-     )?.user?.id;
+    const ProjectTimesheetAssigneeId = task?.assignees?.find(
+        (x) => x.userId === user?.id,
+    )?.user?.id;
 
     const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
     const [status, setStatus] = useState(task?.status?.toLowerCase());
@@ -117,15 +121,15 @@ export const SingleTask = ({
         useState<boolean>(false);
     const [addToTimesheet, setAddToTimesheet] = useState<boolean>();
     const [userProjectManagementTimesheet, setUserProjectManagementTimesheet] =
-         useState<any>([]);
+        useState<any>([]);
     const [selectedTimesheet, setSelectedTimesheet] = useState<any>([]);
-     const [editTimesheetSliderValue, setEditTimesheetSliderValue] =
-         useState<number>(selectedTimesheet?.percentageOfCompletion ?? 0);
-     const taskPriorityList = [
-         { id: 1, label: 'High' },
-         { id: 2, label: 'Medium' },
-         { id: 3, label: 'Low' },
-     ];
+    const [editTimesheetSliderValue, setEditTimesheetSliderValue] =
+        useState<number>(selectedTimesheet?.percentageOfCompletion ?? 0);
+    const taskPriorityList = [
+        { id: 1, label: 'High' },
+        { id: 2, label: 'Medium' },
+        { id: 3, label: 'Low' },
+    ];
 
     const {
         isOpen: isOpens,
@@ -203,31 +207,30 @@ export const SingleTask = ({
         setOpenEditTimeSheetModal(true);
     };
 
-     const ListUserTimesheet = async () => {
-         try {
-             const res =
-                 await ProjectManagementService.listUserProjectManagementTimesheet(
-                     task?.id,
-                 );
-             if (res.status === true) {
-                 setUserProjectManagementTimesheet(res.data);
-                 return;
-             }
-         } catch (error: any) {
-             toast({
-                 title: error?.body?.message || error.message,
-                 status: 'error',
-                 isClosable: true,
-                 position: 'top-right',
-             });
-         }
-     };
+    const ListUserTimesheet = async () => {
+        try {
+            const res =
+                await ProjectManagementService.listUserProjectManagementTimesheet(
+                    task?.id,
+                );
+            if (res.status === true) {
+                setUserProjectManagementTimesheet(res.data);
+                return;
+            }
+        } catch (error: any) {
+            toast({
+                title: error?.body?.message || error.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
 
-     useEffect(() => {
-         getProjectAssigneeDetails();
-         ListUserTimesheet();
-     }, []);
-
+    useEffect(() => {
+        getProjectAssigneeDetails();
+        ListUserTimesheet();
+    }, []);
 
     return (
         <Box>
@@ -363,7 +366,7 @@ export const SingleTask = ({
                                     }
                                 />
                             </Box>
-                            <Box mb="7px" textAlign="right">
+                            <Flex justify="space-between" mb="7px">
                                 <ManageBtn
                                     onClick={onOpened}
                                     isLoading={loading.id == task?.id}
@@ -373,7 +376,15 @@ export const SingleTask = ({
                                     disabled={status == 'completed'}
                                     h="35px"
                                 />
-                            </Box>
+                                <ManageBtn
+                                    onClick={onOpener}
+                                    isLoading={loading.id == task?.id}
+                                    btn="Mark Task as Complete"
+                                    bg="brand.400"
+                                    w="fit-content"
+                                    disabled={status == 'completed'}
+                                />
+                            </Flex>
 
                             <InputBlank
                                 label="Total Hours Spent"
@@ -814,6 +825,24 @@ export const SingleTask = ({
                     projectId={project?.id}
                     addToTimesheet={addToTimesheet}
                     totalHoursSpent={task?.hoursSpent}
+                />
+            )}
+            {isOpener && (
+                <ShowPrompt
+                    isOpen={isOpener}
+                    onClose={onCloser}
+                    onSubmit={() =>
+                        markAsCompleted(
+                            { type: 2, taskId: task.id },
+                            setLoading,
+                            toast,
+                            setStatus,
+                            router,
+                            onCloser,
+                        )
+                    }
+                    loading={loading?.id == task.id}
+                    text={`Marking this task as complete will prevent any further timesheet submissions for this task.<br/> Are you sure you want to proceed?`}
                 />
             )}
         </Box>

@@ -28,13 +28,17 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         //
         try {
-            const teamMembers = await UserService.getClientTeamMembers(
-                pagingOptions.offset,
-                100,
-                pagingOptions.search,
-                clientId,
-                pagingOptions.from,
-                pagingOptions.to,
+            // const teamMembers = await UserService.getClientTeamMembers(
+            //     pagingOptions.offset,
+            //     100,
+            //     pagingOptions.search,
+            //     clientId,
+            //     pagingOptions.from,
+            //     pagingOptions.to,
+            // );
+            const users = await UserService.listUsersByRoles(
+                superAdminId,
+                'team member,super admin,admin,supervisor',
             );
             // const supervisor = await UserService.getClientSupervisors(
             //     pagingOptions.offset,
@@ -67,7 +71,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
 
             return {
                 props: {
-                    teamMembers,
+                    teamMembers: { data: { value: users?.data } },
                     id: id,
                     // supervisor: supervisor.data,
                     leavelist,
