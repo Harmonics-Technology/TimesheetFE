@@ -180,13 +180,16 @@ export const NewTeamMemerOnboardingForm = ({
     const clientId = watch('clientId') || user?.superAdminId;
     const paymentPartnerId = watch('paymentPartnerId');
     const getSupervisor = async (id) => {
+        const isAdmin = id == user?.superAdminId;
         if (id === undefined) {
             return;
         }
         setLoading(true);
 
         try {
-            const data = await UserService.listSupervisorsAndAdmins(id);
+            const data = isAdmin
+                ? await UserService.listSupervisorsAndAdmins(id)
+                : await UserService.listClentAndSupervisors(id);
             setLoading(false);
 
             if (data.status) {

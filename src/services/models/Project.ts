@@ -4,6 +4,7 @@
 
 import type { ProjectManager } from './ProjectManager';
 import type { ProjectTaskAsignee } from './ProjectTaskAsignee';
+import type { User } from './User';
 
 export type Project = {
     id?: string;
@@ -23,6 +24,8 @@ export type Project = {
     budgetThreshold?: number | null;
     projectManagerId?: string | null;
     currency?: string | null;
+    createdByUserId?: string | null;
+    createdByUser?: User;
     assignees?: Array<ProjectTaskAsignee> | null;
     projectManagers?: Array<ProjectManager> | null;
 };
