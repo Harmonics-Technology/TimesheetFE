@@ -41,12 +41,14 @@ export const TeamProjectTask = ({
     tasks,
     users,
     access,
+    isOrgPm,
 }: {
     id: any;
     project: ProjectView;
     tasks: any;
     users: any;
     access: ProjectManagementSettingView;
+    isOrgPm?: boolean;
 }) => {
     const tableHead = [
         'Task Name',
@@ -69,12 +71,14 @@ export const TeamProjectTask = ({
         onOpen();
     };
 
-    const isPm = project?.projectManagerId == user?.id;
+    const isPm = project?.projectManagers?.find((x) => x?.user?.id == user?.id);
     const hasAccess =
         access?.projectMembersTaskCreation ||
-        (access.assignedPMTaskCreation && isPm);
+        (access.assignedPMTaskCreation && isPm) ||
+        isOrgPm;
     const editAccess =
         (access?.pmTaskEditing && isPm) ||
+        isOrgPm ||
         access.projectMembersTaskEditing ||
         access.taskMembersTaskEditing;
 

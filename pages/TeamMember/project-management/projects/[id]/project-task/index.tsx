@@ -5,7 +5,7 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import { ProjectManagementService, UserService } from 'src/services';
 
-const index = ({ id, project, tasks, users, access }) => {
+const index = ({ id, project, tasks, users, access, isOrgPm }) => {
     return (
         <TeamProjectTask
             id={id}
@@ -13,6 +13,7 @@ const index = ({ id, project, tasks, users, access }) => {
             tasks={tasks}
             users={users}
             access={access}
+            isOrgPm={isOrgPm}
         />
     );
 };
@@ -25,6 +26,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const superAdminId = user.superAdminId;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const userId = user.id;
+        const isOrgPm = user.isOrganizationProjectManager;
         const { id } = ctx.query;
         try {
             const data = await ProjectManagementService.getProject(id);
@@ -57,6 +59,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     tasks: tasks.data,
                     users: users.data,
                     access: access.data,
+                    isOrgPm,
                 },
             };
         } catch (error: any) {
