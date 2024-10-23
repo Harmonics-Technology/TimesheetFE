@@ -112,6 +112,8 @@ export const SingleTask = ({
         (x) => x.userId === user?.id,
     )?.user?.id;
 
+    console.log({ ProjectTimesheetAssigneeId, task, user });
+
     const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
     const [status, setStatus] = useState(task?.status?.toLowerCase());
     const [hours, setHours] = useState<number>(0);
