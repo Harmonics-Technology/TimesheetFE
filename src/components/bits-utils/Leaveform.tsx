@@ -106,7 +106,8 @@ const Leaveform = ({
         data.leaveTypeId =
             leavetypes.value?.filter((x) => x.name == data.leaveTypeId)[0]
                 ?.id || data.leaveTypeId;
-        data.noOfLeaveDaysApplied = leaveDuration;
+        data.noOfLeaveDaysApplied = leaveDays;
+        data.leaveDuration = leaveDuration;
         // console.log({data})
 
         try {

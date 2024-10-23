@@ -22,15 +22,17 @@ export default approval;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
+        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const id = JSON.parse(ctx.req.cookies.user).id;
         try {
-            const data =
-                await TimeSheetService.getApprovedClientTeamMemberSheet(
-                    pagingOptions.offset,
-                    pagingOptions.limit,
-                    // superAdminId,
-                    // pagingOptions.search,
-                    // pagingOptions.clientId as unknown as number,
-                );
+            const data = await TimeSheetService.listApprovedTimeSheet(
+                pagingOptions.offset,
+                pagingOptions.limit,
+                superAdminId,
+                id,
+                pagingOptions.search,
+                pagingOptions.clientId as unknown as number,
+            );
 
             return {
                 props: {

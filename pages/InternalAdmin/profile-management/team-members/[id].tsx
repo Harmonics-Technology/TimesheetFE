@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     ?.client?.id;
             const paymentId = data.data?.employeeInformation?.paymentPartnerId;
             //
-            const supervisor = await UserService.listSupervisorsAndAdmins(
+            const supervisor = await UserService.listClentAndSupervisors(
                 clientId as string,
             );
             const department = await DepartmentService.listDepartments(

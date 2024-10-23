@@ -962,13 +962,13 @@ const TimesheetTeam = ({
                                 )}`}
                                 tip="Total amount you are expected to be paid this pay period if you work your full hours"
                             /> */}
-                            {/* <TimeSheetEstimation
+                            <TimeSheetEstimation
                                 label="Actual Payout"
                                 data={` ${getCurrencySymbol(currency)} ${CUR(
                                     Round(actualPayout),
                                 )}`}
                                 tip="Number of hours you worked this month x Rate per hour"
-                            /> */}
+                            />
                         </>
                     )}
 

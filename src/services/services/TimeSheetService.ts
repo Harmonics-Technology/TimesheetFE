@@ -21,6 +21,7 @@ export class TimeSheetService {
      * @param offset 
      * @param limit 
      * @param superAdminId 
+     * @param clientId 
      * @param search 
      * @param startDate 
      * @param endDate 
@@ -32,6 +33,7 @@ export class TimeSheetService {
 offset?: number,
 limit?: number,
 superAdminId?: string,
+clientId?: string,
 search?: string,
 startDate?: string,
 endDate?: string,
@@ -44,6 +46,7 @@ userFilter?: TimesheetFilterByUserPayrollType,
                 'Offset': offset,
                 'Limit': limit,
                 'superAdminId': superAdminId,
+                'clientId': clientId,
                 'search': search,
                 'StartDate': startDate,
                 'EndDate': endDate,
@@ -190,6 +193,7 @@ requestBody?: Array<TimesheetHoursAdditionModel>,
      * @param offset 
      * @param limit 
      * @param superAdminId 
+     * @param clientId 
      * @param search 
      * @param userFilter 
      * @returns TimeSheetApprovedViewPagedCollectionStandardResponse Success
@@ -199,6 +203,7 @@ requestBody?: Array<TimesheetHoursAdditionModel>,
 offset?: number,
 limit?: number,
 superAdminId?: string,
+clientId?: string,
 search?: string,
 userFilter?: TimesheetFilterByUserPayrollType,
 ): CancelablePromise<TimeSheetApprovedViewPagedCollectionStandardResponse> {
@@ -209,6 +214,7 @@ userFilter?: TimesheetFilterByUserPayrollType,
                 'Offset': offset,
                 'Limit': limit,
                 'superAdminId': superAdminId,
+                'clientId': clientId,
                 'search': search,
                 'userFilter': userFilter,
             },

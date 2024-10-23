@@ -73,6 +73,8 @@ export const LeaveManagement = ({
     const [data, setDate] = useState<any>();
     const [isEdit, setIsEdit] = useState(false);
 
+    console.log({ leavelist });
+
     const route = router.asPath;
     const role = user?.role.replaceAll(' ', '');
     const thead =
@@ -260,14 +262,7 @@ export const LeaveManagement = ({
                                               } days`
                                     }
                                 /> */}
-                                <TableData
-                                    name={getBusinessDateCount(
-                                        new Date(
-                                            x?.startDate as unknown as Date,
-                                        ),
-                                        new Date(x?.endDate as unknown as Date),
-                                    )}
-                                />
+                                <TableData name={x?.leaveDuration} />
 
                                 <TableState
                                     name={

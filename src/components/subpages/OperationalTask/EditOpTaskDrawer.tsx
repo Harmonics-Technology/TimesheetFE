@@ -12,7 +12,7 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -34,6 +34,7 @@ import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generi
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import Loading from '@components/bits-utils/Loading';
+import { UserContext } from '@components/context/UserContext';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -86,7 +87,9 @@ export const EditOpTaskDrawer = ({
 
     const toast = useToast();
     const router = useRouter();
-    console.log({ data });
+    const { user } = useContext(UserContext);
+    const role = user?.role;
+    // console.log({ data });
     const [selectedUser, setSelecedUser] = useState<any>(
         data?.assignees
             ?.filter((x) => !x?.disabled)
@@ -118,8 +121,13 @@ export const EditOpTaskDrawer = ({
     );
 
     const changeTaskType = (value: string) => {
-        setTaskType(value);
         setSelecedUser([]);
+        if (role == 'Team Member') {
+            setTaskType(value);
+            value == 'Departmental' && fetchUsersInDept(user.department);
+            return;
+        }
+        setTaskType(value);
     };
     const isAssignedToMe =
         String(taskType) === 'Private' || data?.isAssignedToMe ? true : false;
@@ -133,8 +141,8 @@ export const EditOpTaskDrawer = ({
         //         clientId: value,
         //     },
         // });
+        // setSelecedUser([]);
         setDepartment(value);
-
         try {
             setIsLoading(true);
             const data = await UserService.listUsersByDepartment(
@@ -251,7 +259,7 @@ export const EditOpTaskDrawer = ({
                             ))}
                         />
                     )}
-                    {department && (
+                    {taskType == 'Departmental' && department && (
                         <Box w="full">
                             <FormLabel
                                 textTransform="capitalize"

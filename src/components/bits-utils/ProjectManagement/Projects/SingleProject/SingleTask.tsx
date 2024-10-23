@@ -63,6 +63,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { UserContext } from '@components/context/UserContext';
 import UpdateTimesheetModal from '../../Modals/UpdateTimesheetModal';
+import UpdateTaskModal from '../../Modals/UpdateTaskModal';
 
 const schema = yup.object().shape({});
 
@@ -207,6 +208,9 @@ export const SingleTask = ({
         setOpenEditTimeSheetModal(true);
     };
 
+    const [openAddToTimesheetModal, setOpenAddToTimesheetModal] =
+        useState(false);
+
     const ListUserTimesheet = async () => {
         try {
             const res =
@@ -231,6 +235,67 @@ export const SingleTask = ({
         getProjectAssigneeDetails();
         ListUserTimesheet();
     }, []);
+
+    const AddHoursToTask = async (data: ProjectManagementTimesheetModel) => {
+        if (addToTimesheet) {
+            setOpenAddToTimesheetModal(true);
+            onClosed();
+        } else {
+            data.projectTaskId = task.id;
+            data.projectId = project.id;
+            data.percentageOfCompletion = sliderValue;
+            data.projectTaskAsigneeId = ProjectTimesheetAssigneeId;
+            try {
+                if (
+                    (tasks?.value?.length > 0 &&
+                        data?.projectSubTaskId === '') ||
+                    data?.projectSubTaskId === null
+                ) {
+                    toast({
+                        title: 'Please select a SubTask to continue',
+                        status: 'error',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                } else {
+                    const res =
+                        await ProjectManagementService.fillProjectManagementTimesheetForProject(
+                            data,
+                        );
+                    if (res?.status === true) {
+                        setLoading({ id: '' });
+                        ListUserTimesheet();
+                        router.replace(router.asPath);
+                        toast({
+                            title: res.message,
+                            status: 'success',
+                            isClosable: true,
+                            position: 'top-right',
+                        });
+                        onClosed();
+                        router.reload();
+                        reset();
+                        return;
+                    }
+                    setLoading({ id: '' });
+                    toast({
+                        title: res.message,
+                        status: 'error',
+                        isClosable: true,
+                        position: 'top-right',
+                    });
+                }
+            } catch (err: any) {
+                setLoading({ id: '' });
+                toast({
+                    title: err?.body?.message || err.message,
+                    status: 'error',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+            }
+        }
+    };
 
     return (
         <Box>
@@ -373,7 +438,7 @@ export const SingleTask = ({
                                     btn="Update"
                                     bg="brand.400"
                                     w="fit-content"
-                                    disabled={status == 'completed'}
+                                    // disabled={status == 'completed'}
                                     h="35px"
                                 />
                                 <ManageBtn
@@ -796,21 +861,22 @@ export const SingleTask = ({
                 />
             )}
             {isOpened && (
-                <ShowPrompt
+                <UpdateTaskModal
+                    task={task}
+                    subTask={tasks?.value}
                     isOpen={isOpened}
                     onClose={onClosed}
-                    onSubmit={() =>
-                        markAsCompleted(
-                            { type: 2, taskId: task.id, status: task?.status },
-                            setLoading,
-                            toast,
-                            setStatus,
-                            router,
-                            onClosed,
-                        )
-                    }
-                    loading={loading?.id == task.id}
-                    text={`Marking this task as complete will prevent any further timesheet submissions for this task.<br/> Are you sure you want to proceed?`}
+                    register={register}
+                    control={control}
+                    errors={errors}
+                    sliderValue={sliderValue}
+                    setSliderValue={setSliderValue}
+                    updateHours={updateHours}
+                    addToTimesheet={addToTimesheet}
+                    setOpenAddToTimesheetModal={setOpenAddToTimesheetModal}
+                    totalHoursSpent={task?.hoursSpent}
+                    onSubmit={() => handleSubmit(AddHoursToTask)()}
+                    loading={isSubmitting}
                 />
             )}
             {openEditTimesheetModal && (
