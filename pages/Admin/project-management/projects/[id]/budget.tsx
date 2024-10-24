@@ -36,12 +36,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     pagingOptions.limit,
                     id,
                 );
-            const users = await UserService.listUsers(
-                'Team Member',
+            const users = await UserService.listUsersByRoles(
                 superAdminId,
-                pagingOptions.offset,
-                80,
-                pagingOptions.search,
+                'team member,super admin,admin',
             );
             const currencies = await UtilityService.listCountries();
             return {

@@ -47,6 +47,8 @@ export const CreateProjectDrawer = ({
     const [currentBudget, setCurrenntBudget] = useState(0);
     const [nonApplicable, setNonApplicable] = useState(false);
 
+    console.log({ users });
+
     const uniqueItems = getUniqueListBy(currencies, 'currency');
 
     const schema = yup.object().shape({

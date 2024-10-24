@@ -32,12 +32,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         try {
             const data = await ProjectManagementService.getProject(id);
             const metrics = await DashboardService.getProjectDashboard(id);
-            const users = await UserService.listUsers(
-                'Team Member',
+            const users = await UserService.listUsersByRoles(
                 superAdminId,
-                pagingOptions.offset,
-                80,
-                pagingOptions.search,
+                'team member,super admin,admin',
             );
             const currencies = await UtilityService.listCountries();
             return {
