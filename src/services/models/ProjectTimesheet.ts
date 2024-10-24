@@ -7,12 +7,13 @@ import type { ProjectSubTask } from './ProjectSubTask';
 import type { ProjectTask } from './ProjectTask';
 import type { ProjectTaskAsignee } from './ProjectTaskAsignee';
 import type { Status } from './Status';
+import type { User } from './User';
 
 export type ProjectTimesheet = {
     id?: string;
     dateCreated?: string;
     dateModified?: string;
-    projectTaskAsigneeId?: string;
+    projectTaskAsigneeId?: string | null;
     projectTaskAsignee?: ProjectTaskAsignee;
     projectId?: string | null;
     project?: Project;
@@ -33,4 +34,6 @@ export type ProjectTimesheet = {
     isEdited?: boolean;
     isProjectManagementTimesheet?: boolean;
     addToTimesheet?: boolean;
+    createdByUserId?: string | null;
+    createdByUser?: User;
 };

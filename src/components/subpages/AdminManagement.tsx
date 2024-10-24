@@ -140,7 +140,7 @@ function ProfileManagementAdmin({
             }
         } catch (err: any) {
             toast({
-                title: err.message || err.body.message,
+                title: err.body.message || err.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
