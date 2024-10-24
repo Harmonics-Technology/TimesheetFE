@@ -110,7 +110,7 @@ function SupervisorManagement({
             const result = await UserService.create(data);
             if (result.status) {
                 toast({
-                    title: `Invite Sent`,
+                    title: `Invite Sent!`,
                     status: 'success',
                     isClosable: true,
                     position: 'top-right',
