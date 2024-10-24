@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const team = await UserService.listUsers('Team Member');
+            const team = await UserService.listUsers({ role: 'Team Member' });
             const expenseType = await SettingsService.listExpenseTypes();
             const data = await FinancialService.listReviewedExpenses(
                 pagingOptions.offset,

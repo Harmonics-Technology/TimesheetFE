@@ -30,15 +30,15 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await DashboardService.getAdminMetrics(superAdminId);
-            const team = await UserService.listUsers(
-                'Team Member',
+            const team = await UserService.listUsers({
+                role: 'Team Member',
                 superAdminId,
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-            );
+                offset: pagingOptions.offset,
+                limit: pagingOptions.limit,
+                role: pagingOptions.search,
+                search: pagingOptions.from,
+                startDate: pagingOptions.to,
+            });
             const paymentPartner =
                 await FinancialService.listPaymentPartnerInvoicesForPayrollManagers(
                     pagingOptions.offset,

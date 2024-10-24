@@ -39,13 +39,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const isManager = JSON.parse(ctx.req.cookies.user)?.isTrainingManager;
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
-            const users = await UserService.listUsers(
-                'Team Member',
+            const users = await UserService.listUsers({
+                role: 'Team Member',
                 superAdminId,
-                pagingOptions.offset,
-                80,
-                pagingOptions.search,
-            );
+                offset: pagingOptions.offset,
+                limit: 80,
+                role: pagingOptions.search,
+            });
             const trainings = await TrainingService.listTraining(
                 pagingOptions.offset,
                 pagingOptions.limit,

@@ -38,13 +38,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.status,
                 pagingOptions.search,
             );
-            const users = await UserService.listUsers(
-                'Team Member',
+            const users = await UserService.listUsers({
+                role: 'Team Member',
                 superAdminId,
-                pagingOptions.offset,
-                pagingOptions.limit || 50,
-                pagingOptions.search,
-            );
+                offset: pagingOptions.offset,
+                limit: pagingOptions.limit || 50,
+                role: pagingOptions.search,
+            });
 
             return {
                 props: {

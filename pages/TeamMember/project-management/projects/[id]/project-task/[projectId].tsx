@@ -52,18 +52,18 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 await UserService.getSuperAdminProjectManagementSettings(
                     superAdminId,
                 );
-            const pm = await UserService.listUsers(
+            const pm = await UserService.listUsers({
                 //@ts-ignore
-                undefined,
+                role: undefined,
                 superAdminId,
-                pagingOptions.offset,
-                50,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-                undefined,
-                true,
-            );
+                offset: pagingOptions.offset,
+                limit: 50,
+                role: pagingOptions.search,
+                search: pagingOptions.from,
+                startDate: pagingOptions.to,
+                endDate: undefined,
+                subscriptionId: true,
+            });
 
             return {
                 props: {

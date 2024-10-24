@@ -5,7 +5,13 @@ import { GetServerSideProps } from 'next';
 import React from 'react';
 import { FinancialService, UserService } from 'src/services';
 
-function index({ payrolls, clients, clientId, superAdminId,paymentPartnerCurrency }) {
+function index({
+    payrolls,
+    clients,
+    clientId,
+    superAdminId,
+    paymentPartnerCurrency,
+}) {
     return (
         <PaymentPartnerPayroll
             payrolls={payrolls}
@@ -24,7 +30,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         const clientId = pagingOptions?.clientId;
-        const paymentPartnerCurrency = JSON.parse(ctx.req.cookies.user).currency
+        const paymentPartnerCurrency = JSON.parse(
+            ctx.req.cookies.user,
+        ).currency;
         // console.log({ clientId });
         try {
             const data = await FinancialService.listPayrollGroupInvoices(
@@ -36,14 +44,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
-            const clients = await UserService.listUsers(
-                'client',
+            const clients = await UserService.listUsers({
+                role: 'client',
                 superAdminId,
-                pagingOptions.offset,
-                40,
-                pagingOptions.search,
-            );
-            
+                offset: pagingOptions.offset,
+                limit: 40,
+                role: pagingOptions.search,
+            });
 
             return {
                 props: {
@@ -51,7 +58,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     clientId: clientId || superAdminId,
                     clients: clients?.data?.value,
                     superAdminId,
-                    paymentPartnerCurrency
+                    paymentPartnerCurrency,
                 },
             };
         } catch (error: any) {

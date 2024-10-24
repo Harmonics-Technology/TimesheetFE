@@ -10,13 +10,13 @@ export const fetchAllUser = async ({
 }) => {
     setLoading({ id: 'fetching user' });
     try {
-        const res = await UserService.listUsers(
+        const res = await UserService.listUsers({
             role,
             superAdminId,
-            0,
+            offset: 0,
             limit,
-            search,
-        );
+            role: search,
+        });
         if (res?.status) {
             setLoading({ id: '' });
             setUsers(res?.data);
