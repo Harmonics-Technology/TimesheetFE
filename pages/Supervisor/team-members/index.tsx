@@ -30,10 +30,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const id = JSON.parse(ctx.req.cookies.user).id;
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const paymentPartner = await UserService.listUsers(
-                'payment partner',
+            const paymentPartner = await UserService.listUsers({
+                role: 'payment partner',
                 superAdminId,
-            );
+            });
             const data = await UserService.getSupervisees(
                 pagingOptions.offset,
                 pagingOptions.limit,

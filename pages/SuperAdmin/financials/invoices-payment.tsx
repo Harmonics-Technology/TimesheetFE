@@ -51,15 +51,15 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     pagingOptions.from,
                     pagingOptions.to,
                 );
-            const clients = await UserService.listUsers(
-                'client',
+            const clients = await UserService.listUsers({
+                role: 'client',
                 superAdminId,
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-            );
+                offset: pagingOptions.offset,
+                limit: pagingOptions.limit,
+                role: pagingOptions.search,
+                search: pagingOptions.from,
+                startDate: pagingOptions.to,
+            });
 
             return {
                 props: {

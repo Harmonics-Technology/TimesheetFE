@@ -56,11 +56,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await UserService.getUserById(id);
-            const clients = await UserService.listUsers('client', superAdminId);
-            const paymentPartner = await UserService.listUsers(
-                'payment partner',
+            const clients = await UserService.listUsers({
+                role: 'client',
                 superAdminId,
-            );
+            });
+            const paymentPartner = await UserService.listUsers({
+                role: 'payment partner',
+                superAdminId,
+            });
             const clientId =
                 data?.data?.employeeInformation?.client?.id ||
                 data?.data?.employeeInformation?.supervisor?.employeeInformation

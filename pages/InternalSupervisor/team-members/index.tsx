@@ -70,12 +70,15 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
-            const clients = await UserService.listUsers('client', superAdminId);
-            const subs = await UserService.getClientSubScriptions(superAdminId);
-            const paymentPartner = await UserService.listUsers(
-                'payment partner',
+            const clients = await UserService.listUsers({
+                role: 'client',
                 superAdminId,
-            );
+            });
+            const subs = await UserService.getClientSubScriptions(superAdminId);
+            const paymentPartner = await UserService.listUsers({
+                role: 'payment partner',
+                superAdminId,
+            });
             const leaveSettings = await LeaveService.getLeaveConfiguration(
                 superAdminId,
             );
