@@ -77,6 +77,7 @@ function MyProfile({
     paymentSchedule?: PaymentScheduleListStandardResponse;
     controls?: ControlSettingView;
 }) {
+    // console.log({ user });
     //
     const isTfa = controls?.twoFactorEnabled;
     const {
@@ -542,7 +543,9 @@ function MyProfile({
                             <InputBlank
                                 label="Company Name"
                                 placeholder=""
-                                defaultValue={user?.clientName as string}
+                                defaultValue={
+                                    user?.clientName || user?.organizationName
+                                }
                                 disableLabel={true}
                             />
                             <InputBlank
