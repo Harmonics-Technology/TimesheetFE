@@ -18,27 +18,27 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         // const subId = JSON.parse(ctx.req.cookies.user).subscriptiobDetails.data.id;
         // console.log({subId})
         try {
-            const data = await UserService.listUsers(
-                'Team Member',
+            const data = await UserService.listUsers({
+                role: 'Team Member',
                 superAdminId,
-                pagingOptions.offset,
-                50,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-            );
-            const pm = await UserService.listUsers(
+                offset: pagingOptions.offset,
+                limit: 50,
+                role: pagingOptions.search,
+                search: pagingOptions.from,
+                startDate: pagingOptions.to,
+            });
+            const pm = await UserService.listUsers({
                 //@ts-ignore
-                undefined,
+                role: undefined,
                 superAdminId,
-                pagingOptions.offset,
-                pagingOptions.limit || 50,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-                undefined,
-                true,
-            );
+                offset: pagingOptions.offset,
+                limit: pagingOptions.limit || 50,
+                role: pagingOptions.search,
+                search: pagingOptions.from,
+                startDate: pagingOptions.to,
+                endDate: undefined,
+                subscriptionId: true,
+            });
 
             return {
                 props: {

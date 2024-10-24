@@ -33,7 +33,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const client = await UserService.listUsers('client', superAdminId);
+            const client = await UserService.listUsers({
+                role: 'client',
+                superAdminId,
+            });
             const data = await UserService.listUsers(
                 'supervisor',
                 superAdminId,

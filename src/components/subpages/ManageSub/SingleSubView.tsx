@@ -29,17 +29,17 @@ export const SingleSubView = ({
     const fetchPageDataPaginated = async (offset) => {
         setLoading(true);
         try {
-            const getUsers = await UserService.listUsers(
+            const getUsers = await UserService.listUsers({
                 //@ts-ignore
-                undefined,
+                role: undefined,
                 superAdminId,
                 offset,
                 limit,
-                '',
-                undefined,
-                undefined,
-                subId,
-            );
+                role: '',
+                search: undefined,
+                startDate: undefined,
+                endDate: subId,
+            });
             if (getUsers.status) {
                 setLoading(false);
                 setPageData(getUsers);

@@ -19,12 +19,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
             const data = await DashboardService.getAdminMetrics();
-            const team = await UserService.listUsers(
-                'Team Member',
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-            );
+            const team = await UserService.listUsers({
+                role: 'Team Member',
+                superAdminId: pagingOptions.offset,
+                offset: pagingOptions.limit,
+                limit: pagingOptions.search,
+            });
             //
             return {
                 props: {

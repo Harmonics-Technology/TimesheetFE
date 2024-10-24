@@ -53,21 +53,24 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const data = await UserService.listUsers(
-                'Team Member',
+            const data = await UserService.listUsers({
+                role: 'Team Member',
                 superAdminId,
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-            );
-            const clients = await UserService.listUsers('client', superAdminId);
+                offset: pagingOptions.offset,
+                limit: pagingOptions.limit,
+                role: pagingOptions.search,
+                search: pagingOptions.from,
+                startDate: pagingOptions.to,
+            });
+            const clients = await UserService.listUsers({
+                role: 'client',
+                superAdminId,
+            });
             const subs = await UserService.getClientSubScriptions(superAdminId);
-            const paymentPartner = await UserService.listUsers(
-                'payment partner',
+            const paymentPartner = await UserService.listUsers({
+                role: 'payment partner',
                 superAdminId,
-            );
+            });
             const leaveSettings = await LeaveService.getLeaveConfiguration(
                 superAdminId,
             );

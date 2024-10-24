@@ -40,12 +40,12 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 undefined,
                 userId,
             );
-            const users = await UserService.listUsers(
-                'Team Member',
+            const users = await UserService.listUsers({
+                role: 'Team Member',
                 superAdminId,
-                0,
-                80,
-            );
+                offset: 0,
+                limit: 80,
+            });
 
             return {
                 props: {

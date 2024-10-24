@@ -24,15 +24,15 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const data = await UserService.listUsers(
-                'client',
+            const data = await UserService.listUsers({
+                role: 'client',
                 superAdminId,
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-            );
+                offset: pagingOptions.offset,
+                limit: pagingOptions.limit,
+                role: pagingOptions.search,
+                search: pagingOptions.from,
+                startDate: pagingOptions.to,
+            });
             const subs = await UserService.getClientSubScriptions(superAdminId);
 
             return {

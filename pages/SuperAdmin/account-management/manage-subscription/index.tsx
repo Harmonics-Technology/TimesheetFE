@@ -35,17 +35,17 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.subId ||
                 (subs as any)?.data[0].subscriptionId ||
                 '';
-            const users = await UserService.listUsers(
+            const users = await UserService.listUsers({
                 //@ts-ignore
-                undefined,
+                role: undefined,
                 superAdminId,
-                pagingOptions.offset,
-                pagingOptions.limit || 50,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-                subId,
-            );
+                offset: pagingOptions.offset,
+                limit: pagingOptions.limit || 50,
+                role: pagingOptions.search,
+                search: pagingOptions.from,
+                startDate: pagingOptions.to,
+                endDate: subId,
+            });
             return {
                 props: {
                     data: data.data?.data,

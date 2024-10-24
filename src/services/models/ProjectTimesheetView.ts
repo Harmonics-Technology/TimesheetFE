@@ -5,6 +5,7 @@
 import type { ProjectSubTask } from './ProjectSubTask';
 import type { ProjectTask } from './ProjectTask';
 import type { ProjectView } from './ProjectView';
+import type { UserView } from './UserView';
 
 export type ProjectTimesheetView = {
     id?: string;
@@ -27,4 +28,6 @@ export type ProjectTimesheetView = {
     isEdited?: boolean;
     isProjectManagementTimesheet?: boolean;
     addToTimesheet?: boolean;
+    createdByUserId?: string | null;
+    createdByUser?: UserView;
 };

@@ -38,13 +38,13 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const clients = await UserService.listUsers(
-                'client',
+            const clients = await UserService.listUsers({
+                role: 'client',
                 superAdminId,
-                pagingOptions.offset,
-                40,
-                pagingOptions.search,
-            );
+                offset: pagingOptions.offset,
+                limit: 40,
+                role: pagingOptions.search,
+            });
             const data = await UserService.getPaymentPartnerTeamMembers(
                 pagingOptions.offset,
                 40,

@@ -60,11 +60,14 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 'Team Member',
             );
             const subs = await UserService.getClientSubScriptions(superAdminId);
-            const clients = await UserService.listUsers('client', superAdminId);
-            const paymentPartner = await UserService.listUsers(
-                'payment partner',
+            const clients = await UserService.listUsers({
+                role: 'client',
                 superAdminId,
-            );
+            });
+            const paymentPartner = await UserService.listUsers({
+                role: 'payment partner',
+                superAdminId,
+            });
             const leaveSettings = await LeaveService.getLeaveConfiguration(
                 superAdminId,
             );
@@ -72,7 +75,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 superAdminId,
             );
             const currencies = await UtilityService.listCountries();
-           
 
             return {
                 props: {

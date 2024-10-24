@@ -29,9 +29,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const { id } = ctx.query;
         try {
             const data = await UserService.getUserById(id);
-            const paymentPartner = await UserService.listUsers(
-                'payment partner',
-            );
+            const paymentPartner = await UserService.listUsers({
+                role: 'payment partner',
+            });
             const clientId =
                 data?.data?.employeeInformation?.supervisor?.client?.id;
 

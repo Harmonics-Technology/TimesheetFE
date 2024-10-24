@@ -41,10 +41,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const pagingOptions = filterPagingSearchOptions(ctx);
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
-            const team = await UserService.listUsers(
-                'Team Member',
+            const team = await UserService.listUsers({
+                role: 'Team Member',
                 superAdminId,
-            );
+            });
             const expenseType = await SettingsService.listExpenseTypes(
                 superAdminId,
             );
