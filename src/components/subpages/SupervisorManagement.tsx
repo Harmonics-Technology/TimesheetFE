@@ -127,9 +127,9 @@ function SupervisorManagement({
                 position: 'top-right',
             });
             return;
-        } catch (err) {
+        } catch (err: any) {
             toast({
-                title: 'An error occurred',
+                title: err?.body?.message || err?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',

@@ -112,7 +112,7 @@ export const SingleTask = ({
         (x) => x.userId === user?.id,
     )?.user?.id;
 
-    console.log({ ProjectTimesheetAssigneeId, task, user });
+    // console.log({ ProjectTimesheetAssigneeId, task, user });
 
     const [subTask, setSubTask] = useState<ProjectSubTaskView>({});
     const [status, setStatus] = useState(task?.status?.toLowerCase());
@@ -125,6 +125,8 @@ export const SingleTask = ({
     const [addToTimesheet, setAddToTimesheet] = useState<boolean>();
     const [userProjectManagementTimesheet, setUserProjectManagementTimesheet] =
         useState<any>([]);
+
+    // console.log({ userProjectManagementTimesheet });
     const [selectedTimesheet, setSelectedTimesheet] = useState<any>([]);
     const [editTimesheetSliderValue, setEditTimesheetSliderValue] =
         useState<number>(selectedTimesheet?.percentageOfCompletion ?? 0);
@@ -275,7 +277,7 @@ export const SingleTask = ({
                             position: 'top-right',
                         });
                         onClosed();
-                        router.reload();
+                        // router.reload();
                         reset();
                         return;
                     }
@@ -782,7 +784,10 @@ export const SingleTask = ({
                                                     <TableData
                                                         name={
                                                             projectTaskAssigneeName
-                                                                ?.user?.fullName
+                                                                ?.user
+                                                                ?.fullName ||
+                                                            x?.createdByUser
+                                                                ?.fullName
                                                         }
                                                         fontWeight="500"
                                                     />
@@ -895,6 +900,7 @@ export const SingleTask = ({
                     projectId={project?.id}
                     addToTimesheet={addToTimesheet}
                     totalHoursSpent={task?.hoursSpent}
+                    ListUserTimesheet={ListUserTimesheet}
                 />
             )}
             {isOpener && (
