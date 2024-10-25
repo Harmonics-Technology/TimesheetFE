@@ -1001,7 +1001,10 @@ export const TeamSingleTask = ({
                                                     <TableData
                                                         name={
                                                             projectTaskAssigneeName
-                                                                ?.user?.fullName
+                                                                ?.user
+                                                                ?.fullName ||
+                                                            task?.createdByUser
+                                                                ?.fullName
                                                         }
                                                         fontWeight="500"
                                                     />

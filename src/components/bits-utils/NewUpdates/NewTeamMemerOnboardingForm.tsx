@@ -1029,9 +1029,10 @@ export const NewTeamMemerOnboardingForm = ({
                                     mt="3px"
                                 />
                                 <Text fontSize="11px" fontWeight={400}>
-                                    You can setup leave for your team member in
-                                    the team members profile, it is not
-                                    compulsory at onboarding stage
+                                    Leave setup for your team member can be
+                                    completed anytime through their profile.
+                                    This is not a mandatory step during
+                                    onboarding.
                                 </Text>
                             </HStack>
                         }

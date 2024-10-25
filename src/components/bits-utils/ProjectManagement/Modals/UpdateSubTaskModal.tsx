@@ -61,7 +61,7 @@ const UpdateSubTaskModal = ({
     task,
     subTask,
     projectTaskAssigneeId,
-    totalHoursSpent
+    totalHoursSpent,
 }: {
     isOpen: any;
     onClose: any;
@@ -112,6 +112,8 @@ const UpdateSubTaskModal = ({
         }
     };
 
+    console.log({ subTask });
+
     const UpdateSubTask = async (data: ProjectManagementTimesheetModel) => {
         data.id = subTask?.id as string;
         data.projectTaskId = task?.id;
@@ -119,7 +121,10 @@ const UpdateSubTaskModal = ({
         data.projectTaskAsigneeId = subTask?.projectTaskAsigneeId;
         data.percentageOfCompletion = sliderValue;
         try {
-            const res = await ProjectManagementService.fillProjectManagementTimesheetForProject(data);
+            const res =
+                await ProjectManagementService.fillProjectManagementTimesheetForProject(
+                    data,
+                );
             if (res?.status === true) {
                 //   setLoading({ id: '' });
                 router.replace(router.asPath);
@@ -154,8 +159,7 @@ const UpdateSubTaskModal = ({
     };
 
     console.log(subTask);
-    
-    
+
     return (
         <Modal
             isOpen={isOpen}
