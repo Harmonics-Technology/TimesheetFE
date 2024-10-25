@@ -1078,6 +1078,7 @@ export const TeamSingleTask = ({
                     onClose={onClose}
                     data={task}
                     subTask={subTask}
+                    setSubTask={setSubTask}
                 />
             )}
             {openEditSubtaskDrawer && (

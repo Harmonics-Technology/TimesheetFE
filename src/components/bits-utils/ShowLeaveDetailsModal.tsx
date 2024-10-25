@@ -34,7 +34,7 @@ export const ShowLeaveDetailsModal = ({
     isOpen,
     onClose,
     data,
-    type
+    type,
 }: ExportProps) => {
     const status = data?.status;
 
@@ -141,14 +141,7 @@ export const ShowLeaveDetailsModal = ({
                                 />
                                 <SingleDetailsInfo
                                     label="Duration"
-                                    content={getBusinessDateCount(
-                                        new Date(
-                                            data?.startDate as unknown as Date,
-                                        ),
-                                        new Date(
-                                            data?.endDate as unknown as Date,
-                                        ),
-                                    )}
+                                    content={data?.leaveDuration}
                                 />
                                 <SingleDetailsInfo
                                     label="Supervisor"
@@ -171,7 +164,7 @@ export const ShowLeaveDetailsModal = ({
                                             ?.numberOfLeaveDaysTaken || 0
                                     }
                                 />
-                                <SingleDetailsInfo
+                                {/* <SingleDetailsInfo
                                     label="Current eligible leave balance"
                                     content={
                                         (data?.employeeInformation
@@ -184,7 +177,7 @@ export const ShowLeaveDetailsModal = ({
                                 <SingleDetailsInfo
                                     label="Number of Leave Days Earned"
                                     content={data?.leaveDaysEarned || 0}
-                                />
+                                /> */}
                             </VStack>
 
                             {/* <Grid

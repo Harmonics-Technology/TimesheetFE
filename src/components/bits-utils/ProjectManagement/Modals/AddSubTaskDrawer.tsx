@@ -59,7 +59,7 @@ export const AddSubTaskDrawer = ({
     isOpen: boolean;
     data?: ProjectTaskView;
     subTask: ProjectSubTaskView | any;
-    setSubTask?: any;
+    setSubTask: any;
 }) => {
     const formattedPriority =
         subTask?.taskPriority == 'High'
