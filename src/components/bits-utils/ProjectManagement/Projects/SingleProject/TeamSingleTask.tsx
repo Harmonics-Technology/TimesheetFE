@@ -472,7 +472,7 @@ export const TeamSingleTask = ({
                                 name="startDate"
                                 label="Start Date"
                                 error={errors.startDate}
-                                defaultValue={new Date(task.startDate)}
+                                defaultValue={new Date(task?.startDate)}
                                 // max={new DateObject().subtract(1, 'days')}
                                 // disabled={tasks?.value?.length < 1}
                             />
@@ -481,7 +481,7 @@ export const TeamSingleTask = ({
                                 name="endDate"
                                 label="End Date"
                                 error={errors.endDate}
-                                defaultValue={new Date(task.endDate)}
+                                defaultValue={new Date(task?.endDate)}
                                 // max={new DateObject().subtract(1, 'days')}
                                 // disabled={tasks?.value?.length < 1}
                             />

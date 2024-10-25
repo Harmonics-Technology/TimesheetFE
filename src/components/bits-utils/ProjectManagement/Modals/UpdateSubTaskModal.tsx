@@ -8,7 +8,6 @@ import {
     HStack,
     Button,
     Box,
-    Text,
     useToast,
     Heading,
     Stack,
@@ -24,22 +23,16 @@ import {
     RedMinusIcon,
 } from '@components/icons/Icons';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { DateObject } from 'react-multi-date-picker';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaInfoCircle, FaTimesCircle } from 'react-icons/fa';
-import BeatLoader from 'react-spinners/BeatLoader';
 import {
     ProjectManagementService,
     ProjectManagementTimesheetModel,
 } from 'src/services';
-import { ProjectTaskModel } from 'src/services';
 import * as yup from 'yup';
 import moment from 'moment';
 import InputBlank from '@components/bits-utils/InputBlank';
-import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
-import { ProjectSubTaskModel } from 'src/services';
 
 const schema = yup.object().shape({
     startDate: yup.string().required('Start Date is required'),
@@ -75,10 +68,8 @@ const UpdateSubTaskModal = ({
     totalHoursSpent?: any;
 }) => {
     const pastDate = moment().diff(moment(data?.endDate), 'days') > 0;
-    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     const toast = useToast();
-    const [hours, setHours] = useState<number>(0);
     const [sliderValue, setSliderValue] = useState(
         subTask?.percentageOfCompletion,
     );
@@ -90,11 +81,15 @@ const UpdateSubTaskModal = ({
         watch,
         setValue,
         reset,
-        formState: { errors, isSubmitting, isDirty },
+        formState: { errors, isSubmitting },
     } = useForm<ProjectManagementTimesheetModel>({
         resolver: yupResolver(schema),
         mode: 'all',
-        defaultValues: {},
+        defaultValues: {
+            startDate: subTask?.startDate,
+            endDate: subTask?.endDate,
+            hours: subTask?.hoursSpent,
+        },
     });
 
     const updateHours = (type: 'minus' | 'plus') => {
@@ -112,13 +107,12 @@ const UpdateSubTaskModal = ({
         }
     };
 
-    console.log({ subTask });
-
     const UpdateSubTask = async (data: ProjectManagementTimesheetModel) => {
-        data.id = subTask?.id as string;
+        data.projectSubTaskId = subTask?.id as string;
+        data.projectId = task?.projectId;
         data.projectTaskId = task?.id;
-        // data.projectTaskAsigneeId = projectTaskAssigneeId;
-        data.projectTaskAsigneeId = subTask?.projectTaskAsigneeId;
+        data.projectTaskAsigneeId = projectTaskAssigneeId;
+        // data.projectTaskAsigneeId = subTask?.projectTaskAsigneeId;
         data.percentageOfCompletion = sliderValue;
         try {
             const res =
@@ -158,8 +152,6 @@ const UpdateSubTaskModal = ({
         }
     };
 
-    console.log(subTask);
-
     return (
         <Modal
             isOpen={isOpen}
@@ -173,7 +165,7 @@ const UpdateSubTaskModal = ({
                 pb="5"
                 borderRadius="0px"
                 w="88%"
-                overflow="hidden"
+                overflow="auto"
                 maxH="100vh"
                 pos="fixed"
             >
@@ -248,7 +240,9 @@ const UpdateSubTaskModal = ({
                                     label="Start Date"
                                     error={errors.startDate}
                                     // min={new DateObject()}
-                                    defaultValue={new Date(subTask?.startDate)}
+                                    placeholder={moment(
+                                        subTask?.startDate,
+                                    ).format('YYYY/MM/DD')}
                                     // placeholder={
                                     //     new Date(subTask?.startDate)
                                     //         .toISOString()
@@ -261,12 +255,10 @@ const UpdateSubTaskModal = ({
                                     label="End Date"
                                     error={errors.endDate}
                                     // min={new DateObject().add(1, 'days')}
-                                    defaultValue={new Date(subTask?.endDate)}
-                                    // placeholder={
-                                    //     new Date(subTask?.endDate)
-                                    //         .toISOString()
-                                    //         .split('T')[0]
-                                    // }
+                                    // defaultValue={new Date(subTask?.endDate)}
+                                    placeholder={moment(
+                                        subTask?.endDate,
+                                    ).format('YYYY/MM/DD')}
                                 />
                             </Grid>
                             <Grid
@@ -284,7 +276,6 @@ const UpdateSubTaskModal = ({
                                             name="hours"
                                             error={errors.hours}
                                             placeholder=""
-                                            defaultValue={subTask?.duration}
                                             register={register}
                                         />
                                         <Box>
@@ -383,7 +374,7 @@ const UpdateSubTaskModal = ({
                                         border: '1px solid',
                                         borderColor: 'brand.400',
                                     }}
-                                    // isLoading={loading}
+                                    isLoading={isSubmitting}
                                     // spinner={
                                     //     <BeatLoader color="white" size={10} />
                                     // }
