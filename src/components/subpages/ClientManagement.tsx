@@ -112,9 +112,7 @@ function ClientManagement({ adminList, isSuperAdmin, subs }: adminProps) {
         }
         data.superAdminId = user?.superAdminId;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
-        data.dateOfBirth = data.dateOfBirth
-            ? data.dateOfBirth
-            : new Date().toLocaleDateString();
+        data.dateOfBirth = moment().format('YYYY-MM-DD');
         try {
             const result = await UserService.create(data);
             if (result.status) {

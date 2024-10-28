@@ -50,6 +50,7 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '@components/context/UserContext';
 import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
 import { LicenseSelection } from './ManageSub/LicenseSelection';
+import moment from 'moment';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -103,9 +104,7 @@ function SupervisorManagement({
         data.superAdminId = user?.superAdminId;
         data.clientId = !data.clientId ? user?.superAdminId : data.clientId;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
-        data.dateOfBirth = data.dateOfBirth
-            ? data.dateOfBirth
-            : new Date().toLocaleDateString();
+        data.dateOfBirth = moment().format('YYYY-MM-DD');
         try {
             const result = await UserService.create(data);
             if (result.status) {
