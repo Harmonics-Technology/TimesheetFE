@@ -47,7 +47,13 @@ export const Dashboard = ({
             )
             ?.at(0),
     );
-    const projectSummary = ['Project Name', 'Due Date', 'Status', 'Progress'];
+    const projectSummary = [
+        'Project Name',
+        'Start Date',
+        'Due Date',
+        'Status',
+        'Progress',
+    ];
     const overdue = ['Project Name', 'Deadline', 'Overdue'];
     const uniqueItems = getUniqueListBy(
         (metrics?.totalBudgetSpent as any)?.filter((x) => x.currency !== null),
@@ -177,6 +183,11 @@ export const Dashboard = ({
                             return (
                                 <TableRow key={x.id}>
                                     <TableData name={x.name} />
+                                    <TableData
+                                        name={moment(x.startDate).format(
+                                            'DD/MM/YYYY',
+                                        )}
+                                    />
                                     <TableData
                                         name={moment(x.endDate).format(
                                             'DD/MM/YYYY',

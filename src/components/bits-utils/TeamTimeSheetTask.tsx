@@ -332,12 +332,12 @@ const TeamTimeSheetTask = ({
                     <HStack>
                         {[
                             {
-                                bill: allShift?.data.billable,
+                                bill: allShift?.data?.billable,
                                 color: '#2eafa3',
                                 title: 'Billable Hours',
                             },
                             {
-                                bill: allShift?.data.nonBillable,
+                                bill: allShift?.data?.nonBillable,
                                 color: '#5dc6e7',
                                 title: 'Non Billable',
                             },

@@ -39,7 +39,13 @@ export const SingleProjectPage = ({
     users: any;
     currencies: any;
 }) => {
-    const projectSummary = ['Task Name', 'Deadline', 'Status', 'Workload'];
+    const projectSummary = [
+        'Task Name',
+        'Start Date',
+        'Deadline',
+        'Status',
+        'Workload',
+    ];
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
     return (
@@ -101,6 +107,11 @@ export const SingleProjectPage = ({
                         return (
                             <TableRow key={x.id}>
                                 <TableData name={x.name} />
+                                <TableData
+                                    name={moment(x.startDate).format(
+                                        'DD/MM/YYYY',
+                                    )}
+                                />
                                 <TableData
                                     name={moment(x.endDate).format(
                                         'DD/MM/YYYY',
