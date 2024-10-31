@@ -62,4 +62,5 @@ export type UserDraftModel = {
     payrollProcessingType?: string | null;
     paymentProcessingFeeType?: string | null;
     paymentProcessingFee?: number | null;
+    incorpName?: string | null;
 };

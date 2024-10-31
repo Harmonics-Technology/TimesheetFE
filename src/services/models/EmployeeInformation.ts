@@ -60,4 +60,5 @@ export type EmployeeInformation = {
     hasRollOverLeave?: boolean | null;
     rolledOverLeave?: number | null;
     expiryDateOfRolledOverLeave?: string | null;
+    incorpName?: string | null;
 };

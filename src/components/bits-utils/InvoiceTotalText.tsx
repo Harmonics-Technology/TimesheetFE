@@ -13,9 +13,9 @@ function InvoiceTotalText({
     hst?: any;
 }) {
     return (
-        <Flex fontSize=".9rem" gap="1rem">
+        <Flex fontSize=".85rem" gap="1rem">
             <Text
-                color="gray.400"
+                color="#212121"
                 textTransform="uppercase"
                 fontWeight="600"
                 w="120px"
@@ -23,7 +23,7 @@ function InvoiceTotalText({
             >
                 {label} {hst && `(${hst}%)`}
             </Text>
-            <Text color="black" fontWeight="600" w="115px" textAlign="left">
+            <Text color="#212121" fontWeight="400" w="115px" textAlign="left">
                 {cur}
                 {value}
             </Text>

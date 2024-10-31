@@ -750,6 +750,17 @@ export const NewTeamMemerOnboardingForm = ({
                                     }
                                 />
                             </Box>
+                            {isIncSelected && (
+                                <Box mb="1rem">
+                                    <PrimaryInput<TeamMemberModel>
+                                        register={register}
+                                        error={errors.incorpName}
+                                        name="incorpName"
+                                        label="Incoporation Name"
+                                        placeholder=""
+                                    />
+                                </Box>
+                            )}
                             <>
                                 <Grid
                                     templateColumns={[

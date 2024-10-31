@@ -80,7 +80,7 @@ function TeamProfile({
 }: TeamProfileProps) {
     const { user, opens, subType } = useContext(UserContext);
 
-    console.log({ clients });
+    // console.log({ clients });
 
     clients =
         clients?.length <= 0
@@ -91,6 +91,10 @@ function TeamProfile({
               ];
     //
     const eligible = userProfile?.employeeInformation?.isEligibleForLeave;
+
+    const isClient =
+        userProfile?.employeeInformation?.clientId !==
+        userProfile?.superAdminId;
 
     const {
         register,
@@ -114,6 +118,7 @@ function TeamProfile({
             email: userProfile?.email,
             dateOfBirth: userProfile?.dateOfBirth,
             clientId: userProfile?.employeeInformation?.clientId,
+            clientRate: userProfile?.employeeInformation?.clientRate,
             supervisorId: userProfile?.employeeInformation?.supervisorId,
             paymentPartnerId:
                 userProfile?.employeeInformation?.paymentPartnerId || undefined,
@@ -155,6 +160,7 @@ function TeamProfile({
                 userProfile?.employeeInformation?.timesheetFrequency,
             payrollStructure:
                 userProfile?.employeeInformation?.payrollStructure,
+            incorpName: userProfile?.employeeInformation?.incorpName,
             rolledOverLeave: userProfile?.employeeInformation?.rolledOverLeave,
             hasRollOverLeave:
                 userProfile?.employeeInformation?.hasRollOverLeave,
@@ -433,7 +439,7 @@ function TeamProfile({
         );
     }, [selectedDepartment]);
 
-    console.log({ userProfile, clients });
+    // console.log({ userProfile, clients });
 
     // console.log({ fee: watch('dateOfBirth'), fin: watch('enableFinancials') });
     return (
@@ -880,6 +886,17 @@ function TeamProfile({
                                         </>
                                     }
                                 />
+                                {isIncSelected && (
+                                    <Box mb="1rem">
+                                        <PrimaryInput<TeamMemberModel>
+                                            register={register}
+                                            error={errors.incorpName}
+                                            name="incorpName"
+                                            label="Incoporation Name"
+                                            placeholder=""
+                                        />
+                                    </Box>
+                                )}
                                 {isFlatFeeSelected && (
                                     <PrimaryInput<TeamMemberModel>
                                         label="Salary"
@@ -1119,6 +1136,17 @@ function TeamProfile({
                                         </>
                                     }
                                 />
+                                {isClient && (
+                                    <PrimaryInput<TeamMemberModel>
+                                        label="Client Rate"
+                                        name="clientRate"
+                                        error={errors.clientRate}
+                                        placeholder=""
+                                        defaultValue=""
+                                        type="string"
+                                        register={register}
+                                    />
+                                )}
                             </Grid>
                         </Box>
                     )}
