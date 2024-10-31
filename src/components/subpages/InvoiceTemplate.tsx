@@ -237,7 +237,7 @@ function InvoiceTemplate({
                                             <TableData
                                                 name={
                                                     clicked?.employeeInformation
-                                                        ?.ratePerHour
+                                                        ?.rate
                                                 }
                                             />
                                             {/* <TableData
