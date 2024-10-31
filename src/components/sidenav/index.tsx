@@ -377,7 +377,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             user?.invoiceGenerationType?.toLowerCase() ==
                             'payroll'
                                 ? ['my expenses', 'my payslips']
-                                : ['my expenses', 'my payslips', 'my invoices']
+                                : ['my expenses', 'my invoices']
                         }
                         display={activeSub}
                     />
