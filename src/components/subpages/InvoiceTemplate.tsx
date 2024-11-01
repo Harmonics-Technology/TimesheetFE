@@ -58,6 +58,8 @@ function InvoiceTemplate({
 
     const incorpName = clicked?.employeeInformation?.incorpName;
 
+    // console.log({ clicked });
+
     return (
         <>
             <Modal
@@ -140,16 +142,8 @@ function InvoiceTemplate({
                                             Billed To
                                         </Text>
                                         <Text fontSize=".9rem" fontWeight="600">
-                                            {
-                                                clicked?.employeeInformation
-                                                    ?.client?.organizationName
-                                            }{' '}
-                                            <br />
-                                            {
-                                                clicked?.employeeInformation
-                                                    ?.client
-                                                    ?.organizationAddress
-                                            }
+                                            {clicked?.organizationName} <br />
+                                            {clicked?.organizationAddress}
                                         </Text>
                                         {/* <Text fontSize=".9rem" fontWeight="600">
                                     Address

@@ -118,7 +118,8 @@ function TeamProfile({
             email: userProfile?.email,
             dateOfBirth: userProfile?.dateOfBirth,
             clientId: userProfile?.employeeInformation?.clientId,
-            clientRate: userProfile?.employeeInformation?.clientRate,
+            clientRate:
+                userProfile?.employeeInformation?.clientRate || undefined,
             supervisorId: userProfile?.employeeInformation?.supervisorId,
             paymentPartnerId:
                 userProfile?.employeeInformation?.paymentPartnerId || undefined,
@@ -161,14 +162,17 @@ function TeamProfile({
             payrollStructure:
                 userProfile?.employeeInformation?.payrollStructure,
             incorpName: userProfile?.employeeInformation?.incorpName,
-            rolledOverLeave: userProfile?.employeeInformation?.rolledOverLeave,
+            rolledOverLeave:
+                userProfile?.employeeInformation?.rolledOverLeave || undefined,
             hasRollOverLeave:
                 userProfile?.employeeInformation?.hasRollOverLeave,
             expiryDateOfRolledOverLeave:
-                userProfile?.employeeInformation?.expiryDateOfRolledOverLeave,
+                userProfile?.employeeInformation?.expiryDateOfRolledOverLeave ||
+                undefined,
             hasUtilizeLeaveDaysToDate:
                 userProfile?.employeeInformation?.hasUtilizeLeaveDaysToDate,
-            utilizedLeave: userProfile?.employeeInformation?.utilizedLeave,
+            utilizedLeave:
+                userProfile?.employeeInformation?.utilizedLeave || undefined,
         },
     });
     const router = useRouter();
@@ -309,8 +313,10 @@ function TeamProfile({
     };
 
     const curentLicense = subs?.find(
-        (x) => x.subscriptionId === userProfile?.clientSubscriptionId,
+        (x) => x.subscriptionId === userProfile?.client?.clientSubscriptionId,
     );
+
+    // console.log({ subs, userProfile });
     const [selectedLicense, setSelectedLicense] = useState<any>(curentLicense);
     const addLicense = (license) => {
         setSelectedLicense(license);

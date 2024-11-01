@@ -107,6 +107,8 @@ function Login() {
                     twoFactorCode: result.data?.twoFactorCode,
                     isTrainingManager: result.data?.isTrainingManager,
                     clientId: result.data?.clientId,
+                    payrollStructure:
+                        result.data?.employeeInformation?.payrollStructure,
                 };
                 const subDetails = result.data?.subscriptiobDetails;
                 Cookies.set('user', JSON.stringify(strippedData));

@@ -36,4 +36,6 @@ export type InvoiceView = {
     totalPay?: number;
     rateForConvertedIvoice?: number | null;
     convertedAmount?: number | null;
+    organizationName?: string | null;
+    organizationAddress?: string | null;
 };

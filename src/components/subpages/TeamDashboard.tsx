@@ -352,81 +352,91 @@ function TeamDashboard() {
                     w="full"
                     // display="none"
                 >
-                    <TableCards
-                        title={
-                            role == 'client'
-                                ? 'Recent Invoices'
-                                : 'Recent Payslips'
-                        }
-                        url={'financials/invoices'}
-                        data={
-                            role == 'client'
-                                ? dashData?.recentPayslips
-                                      ?.slice(0, 4)
-                                      .map((x: InvoiceView) => (
-                                          <Tr key={x.id}>
-                                              <TableData
-                                                  name={formatDate(x.startDate)}
-                                              />
-                                              <TableData
-                                                  name={formatDate(x.endDate)}
-                                              />
-                                              <TableData
-                                                  name={formatDate(
-                                                      x.paymentDate,
-                                                  )}
-                                              />
-                                              <TableData
-                                                  name={
-                                                      x.employeeInformation
-                                                          ?.paymentRate
-                                                  }
-                                              />
-                                              <TableData name={x.totalHours} />
-                                              <TableData
-                                                  name={`${
-                                                      x.employeeInformation
-                                                          ?.currency
-                                                  }${CUR(
-                                                      x.totalAmount as unknown as string,
-                                                  )}`}
-                                              />
-                                          </Tr>
-                                      ))
-                                : dashData?.recentPayslips
-                                      ?.slice(0, 4)
-                                      .map((x: PaySlipView) => (
-                                          <Tr key={x.id}>
-                                              <TableData
-                                                  name={formatDate(
-                                                      x?.invoice?.startDate,
-                                                  )}
-                                              />
-                                              <TableData
-                                                  name={formatDate(
-                                                      x?.invoice?.endDate,
-                                                  )}
-                                              />
-                                              <TableData
-                                                  name={formatDate(
-                                                      x?.invoice?.paymentDate,
-                                                  )}
-                                              />
+                    {(user?.payrollStructure !== 'inc' || role == 'client') && (
+                        <TableCards
+                            title={
+                                role == 'client'
+                                    ? 'Recent Invoices'
+                                    : 'Recent Payslips'
+                            }
+                            url={'financials/invoices'}
+                            data={
+                                role == 'client'
+                                    ? dashData?.recentPayslips
+                                          ?.slice(0, 4)
+                                          .map((x: InvoiceView) => (
+                                              <Tr key={x.id}>
+                                                  <TableData
+                                                      name={formatDate(
+                                                          x.startDate,
+                                                      )}
+                                                  />
+                                                  <TableData
+                                                      name={formatDate(
+                                                          x.endDate,
+                                                      )}
+                                                  />
+                                                  <TableData
+                                                      name={formatDate(
+                                                          x.paymentDate,
+                                                      )}
+                                                  />
+                                                  <TableData
+                                                      name={
+                                                          x.employeeInformation
+                                                              ?.paymentRate
+                                                      }
+                                                  />
+                                                  <TableData
+                                                      name={x.totalHours}
+                                                  />
+                                                  <TableData
+                                                      name={`${
+                                                          x.employeeInformation
+                                                              ?.currency
+                                                      }${CUR(
+                                                          x.totalAmount as unknown as string,
+                                                      )}`}
+                                                  />
+                                              </Tr>
+                                          ))
+                                    : dashData?.recentPayslips
+                                          ?.slice(0, 4)
+                                          .map((x: PaySlipView) => (
+                                              <Tr key={x.id}>
+                                                  <TableData
+                                                      name={formatDate(
+                                                          x?.invoice?.startDate,
+                                                      )}
+                                                  />
+                                                  <TableData
+                                                      name={formatDate(
+                                                          x?.invoice?.endDate,
+                                                      )}
+                                                  />
+                                                  <TableData
+                                                      name={formatDate(
+                                                          x?.invoice
+                                                              ?.paymentDate,
+                                                      )}
+                                                  />
 
-                                              <TableData
-                                                  name={x?.invoice?.totalHours}
-                                              />
-                                              <TableData
-                                                  name={`${
-                                                      x.invoice
-                                                          ?.employeeInformation
-                                                          ?.currency
-                                                  }${CUR(
-                                                      x.invoice
-                                                          ?.totalAmount as unknown as string,
-                                                  )}`}
-                                              />
-                                              {/* <TableData
+                                                  <TableData
+                                                      name={
+                                                          x?.invoice?.totalHours
+                                                      }
+                                                  />
+                                                  <TableData
+                                                      name={`${
+                                                          x.invoice
+                                                              ?.employeeInformation
+                                                              ?.currency
+                                                      }${CUR(
+                                                          x.invoice
+                                                              ?.totalAmount as unknown as string,
+                                                      )}`}
+                                                  />
+                                                  {/* <TableData
                                                   name={
                                                       (x?.invoice
                                                           ?.totalAmount as number) +
@@ -441,18 +451,19 @@ function TeamDashboard() {
                                                       )
                                                   }
                                               /> */}
-                                          </Tr>
-                                      ))
-                        }
-                        thead={[
-                            'Start Date',
-                            'End Date',
-                            'Processed Date',
-                            'Total Hours',
-                            'Total Amount',
-                        ]}
-                        link={'/'}
-                    />
+                                              </Tr>
+                                          ))
+                            }
+                            thead={[
+                                'Start Date',
+                                'End Date',
+                                'Processed Date',
+                                'Total Hours',
+                                'Total Amount',
+                            ]}
+                            link={'/'}
+                        />
+                    )}
                 </Grid>
             </VStack>
             <NotificationBox
