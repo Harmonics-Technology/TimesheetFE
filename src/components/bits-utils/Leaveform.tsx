@@ -251,7 +251,7 @@ const Leaveform = ({
                             // min={new DateObject().add(0, 'days')}
                             disableWeekend
                             placeholder={moment(data?.startDate).format(
-                                'YYYY-MM-DD',
+                                'YYYY/MM/DD',
                             )}
                         />
                         <InputBlank
@@ -286,7 +286,7 @@ const Leaveform = ({
                             ).add(0, 'days')}
                             disableWeekend
                             placeholder={moment(data?.endDate).format(
-                                'YYYY-MM-DD',
+                                'YYYY/MM/DD',
                             )}
                         />
                     )}
