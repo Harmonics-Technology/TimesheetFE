@@ -14,7 +14,7 @@ import {
 import { UserContext } from '@components/context/UserContext';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { DateObject } from 'react-multi-date-picker';
 import BeatLoader from 'react-spinners/BeatLoader';
@@ -50,8 +50,9 @@ const Leaveform = ({
     id,
     leavetypes,
     teamMembers,
+    user,
 }) => {
-    let { user } = useContext(UserContext);
+    // const { user } = useContext(UserContext);
     const router = useRouter();
     const toast = useToast();
     const [oneDay, setOneDay] = useState(false);
@@ -135,13 +136,8 @@ const Leaveform = ({
                 ? await LeaveService.updateLeave(data)
                 : await LeaveService.createLeave(data);
             if (result.status) {
-                const userData = await UserService.getUserById(user?.id);
-                const updatedData = {
-                    ...user,
-                    numberOfDaysEligible: userData?.data?.numberOfDaysEligible,
-                };
-                Cookies.set('user', JSON.stringify(updatedData));
-                user = updatedData;
+                // const userData = await UserService.getUserById(user?.id);
+
                 toast({
                     title: result.message,
                     status: 'success',

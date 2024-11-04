@@ -193,7 +193,7 @@ function TeamProfile({
 
     // console.log({ clients });
 
-    // console.log({ userProfile });
+    console.log({ userProfile });
     const getPaymentPartnerFees = async (id) => {
         if (id === undefined) {
             return;

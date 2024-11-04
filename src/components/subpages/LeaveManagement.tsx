@@ -28,7 +28,7 @@ import Tables from '@components/bits-utils/Tables';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Icon } from 'icon-picker-react';
 import { useRouter } from 'next/router';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { IconPickerItem } from 'react-icons-picker';
@@ -37,6 +37,7 @@ import {
     LeaveModel,
     LeaveService,
     LeaveView,
+    UserService,
 } from 'src/services';
 import * as yup from 'yup';
 import moment from 'moment';
@@ -48,6 +49,7 @@ import { ActivateUserAlert } from '@components/bits-utils/ActivateUserAlert';
 import { DateObject } from 'react-multi-date-picker';
 import getBusinessDateCount from '@components/bits-utils/GetBusinessDays';
 import Leaveform from '@components/bits-utils/Leaveform';
+import Cookies from 'js-cookie';
 
 interface leaveProps {
     leavelist: any;
@@ -72,6 +74,7 @@ export const LeaveManagement = ({
     const router = useRouter();
     const [data, setData] = useState<any>();
     const [isEdit, setIsEdit] = useState(false);
+    const [userData, setUserData] = useState();
 
     // console.log({ leavelist });
 
@@ -122,6 +125,25 @@ export const LeaveManagement = ({
         setIsEdit(true);
         onOpen();
     };
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const res = await UserService.getUserById(user?.id);
+                const updatedData = {
+                    ...user,
+                    numberOfDaysEligible: res?.data?.numberOfDaysEligible,
+                };
+                Cookies.set('user', JSON.stringify(updatedData));
+                setUserData(updatedData);
+            } catch (error) {
+                console.log({ error });
+            }
+        };
+        if (user?.id) {
+            fetchUserData();
+        }
+    }, []);
 
     return (
         <>
@@ -298,6 +320,7 @@ export const LeaveManagement = ({
                     id={id}
                     leavetypes={leavetypes}
                     teamMembers={teamMembers}
+                    user={userData}
                 />
             )}
             {open && (
