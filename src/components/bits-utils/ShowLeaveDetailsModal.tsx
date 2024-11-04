@@ -27,6 +27,7 @@ interface ExportProps {
     isOpen: any;
     onClose: any;
     data: LeaveView;
+    setData: (data: LeaveView | null) => void;
     type: any;
 }
 
@@ -34,14 +35,20 @@ export const ShowLeaveDetailsModal = ({
     isOpen,
     onClose,
     data,
+    setData,
     type,
 }: ExportProps) => {
     const status = data?.status;
 
+    const closeModal = () => {
+        setData(null);
+        onClose();
+    };
+
     return (
         <Modal
             isOpen={isOpen}
-            onClose={onClose}
+            onClose={closeModal}
             motionPreset="slideInBottom"
             isCentered
         >
@@ -73,7 +80,11 @@ export const ShowLeaveDetailsModal = ({
                         >
                             Leave Details
                         </Text>
-                        <Icon as={GrClose} onClick={onClose} cursor="pointer" />
+                        <Icon
+                            as={GrClose}
+                            onClick={closeModal}
+                            cursor="pointer"
+                        />
                     </Flex>
                 </ModalHeader>
 

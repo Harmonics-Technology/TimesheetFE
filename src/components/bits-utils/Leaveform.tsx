@@ -18,7 +18,7 @@ import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { DateObject } from 'react-multi-date-picker';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { LeaveModel, LeaveService } from 'src/services';
+import { LeaveModel, LeaveService, UserService } from 'src/services';
 import { ActivateUserAlert } from './ActivateUserAlert';
 import DrawerWrapper from './Drawer';
 import getBusinessDateCount from './GetBusinessDays';
@@ -31,6 +31,7 @@ import { LeaveTextBox } from './LeaveTextBox';
 import { PrimaryInput } from './PrimaryInput';
 import moment from 'moment';
 import InputBlank from './InputBlank';
+import Cookies from 'js-cookie';
 
 const schema = yup.object().shape({
     // endDate: yup.string().required(),
@@ -42,6 +43,7 @@ const schema = yup.object().shape({
 
 const Leaveform = ({
     data,
+    setData,
     isEdit,
     isOpen,
     onClose,
@@ -49,7 +51,7 @@ const Leaveform = ({
     leavetypes,
     teamMembers,
 }) => {
-    const { user } = useContext(UserContext);
+    let { user } = useContext(UserContext);
     const router = useRouter();
     const toast = useToast();
     const [oneDay, setOneDay] = useState(false);
@@ -76,19 +78,37 @@ const Leaveform = ({
             leaveTypeId: data?.leaveTypeId,
             reasonForLeave: data?.reasonForLeave,
             workAssigneeId: data?.workAssigneeId,
+            leaveDuration: data?.leaveDuration,
         },
     });
 
-    const [duration, setDuration] = useState();
+    const [duration, setDuration] = useState(data?.leaveDuration);
 
     const leaveDays = getBusinessDateCount(
         new Date(watch('startDate') as unknown as Date),
-        new Date(watch('endDate') as unknown as Date),
+        watch('endDate')
+            ? new Date(watch('endDate') as unknown as Date)
+            : new Date(),
     );
     const leaveDuration = oneDay
         ? Number(duration)
         : leaveDays * Number(duration);
     const [showBalance, setShowBalance] = useState(false);
+
+    const closeForm = () => {
+        reset({
+            employeeInformationId: '',
+            endDate: '',
+            startDate: '',
+            id: '',
+            leaveTypeId: '',
+            reasonForLeave: '',
+            workAssigneeId: '',
+            leaveDuration: null,
+        });
+        setData(null);
+        onClose();
+    };
 
     // console.log({ user });
 
@@ -115,6 +135,13 @@ const Leaveform = ({
                 ? await LeaveService.updateLeave(data)
                 : await LeaveService.createLeave(data);
             if (result.status) {
+                const userData = await UserService.getUserById(user?.id);
+                const updatedData = {
+                    ...user,
+                    numberOfDaysEligible: userData?.data?.numberOfDaysEligible,
+                };
+                Cookies.set('user', JSON.stringify(updatedData));
+                user = updatedData;
                 toast({
                     title: result.message,
                     status: 'success',
@@ -122,8 +149,7 @@ const Leaveform = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                reset();
-                onClose();
+                closeForm();
                 return;
             }
             toast({
@@ -147,7 +173,7 @@ const Leaveform = ({
 
     return (
         <DrawerWrapper
-            onClose={onClose}
+            onClose={closeForm}
             isOpen={isOpen}
             sub={
                 <Box>
@@ -224,7 +250,9 @@ const Leaveform = ({
                             error={errors.startDate}
                             // min={new DateObject().add(0, 'days')}
                             disableWeekend
-                            placeholder={data?.startDate}
+                            placeholder={moment(data?.startDate).format(
+                                'YYYY-MM-DD',
+                            )}
                         />
                         <InputBlank
                             label="Duration"
@@ -257,7 +285,9 @@ const Leaveform = ({
                                 watch('startDate') as string,
                             ).add(0, 'days')}
                             disableWeekend
-                            placeholder={data?.endDate}
+                            placeholder={moment(data?.endDate).format(
+                                'YYYY-MM-DD',
+                            )}
                         />
                     )}
                 </Grid>
@@ -343,7 +373,7 @@ const Leaveform = ({
                             fontSize="14px"
                             px="2rem"
                             boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            onClick={() => onClose()}
+                            onClick={() => closeForm()}
                         >
                             Close
                         </Button>

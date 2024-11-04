@@ -211,7 +211,7 @@ function InvoiceTemplate({
                                                     clicked?.employeeInformation
                                                         ?.payrollStructure ==
                                                     'inc'
-                                                        ? 'Incoporation'
+                                                        ? 'Incoporated'
                                                         : 'Flat Fee'
                                                 }
                                             />

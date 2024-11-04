@@ -70,10 +70,10 @@ export const LeaveManagement = ({
     const { isOpen: open, onOpen: onOpens, onClose: close } = useDisclosure();
     const { user } = useContext(UserContext);
     const router = useRouter();
-    const [data, setDate] = useState<any>();
+    const [data, setData] = useState<any>();
     const [isEdit, setIsEdit] = useState(false);
 
-    console.log({ leavelist });
+    // console.log({ leavelist });
 
     const route = router.asPath;
     const role = user?.role.replaceAll(' ', '');
@@ -114,11 +114,11 @@ export const LeaveManagement = ({
               ];
 
     const openModal = (x) => {
-        setDate(x);
+        setData(x);
         onOpens();
     };
     const openModals = (x) => {
-        setDate(x);
+        setData(x);
         setIsEdit(true);
         onOpen();
     };
@@ -294,6 +294,7 @@ export const LeaveManagement = ({
                     isEdit={isEdit}
                     onClose={onClose}
                     data={data}
+                    setData={setData}
                     id={id}
                     leavetypes={leavetypes}
                     teamMembers={teamMembers}
@@ -304,6 +305,7 @@ export const LeaveManagement = ({
                     isOpen={open}
                     onClose={close}
                     data={data}
+                    setData={setData}
                     type={type}
                 />
             )}
