@@ -1,4 +1,4 @@
-import { GantChart } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/GantChart';
+import { TeamGantChart } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/TeamGantChart';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
@@ -11,7 +11,7 @@ import {
 
 const index = ({ id, project, tasks, users, currencies }) => {
     return (
-        <GantChart
+        <TeamGantChart
             id={id}
             project={project}
             tasks={tasks}

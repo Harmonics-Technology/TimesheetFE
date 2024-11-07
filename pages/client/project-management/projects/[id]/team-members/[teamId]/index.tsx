@@ -1,4 +1,5 @@
 import { SingleTeamMember } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/SingleTeamMember';
+import { TeamSingleTeamPage } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/TeamSingleTeamPage';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
@@ -11,7 +12,7 @@ import {
 
 const index = ({ id, teams, users, currencies, teamId }) => {
     return (
-        <SingleTeamMember
+        <TeamSingleTeamPage
             id={id}
             teams={teams}
             users={users}

@@ -1,4 +1,5 @@
 import { TeamMembersView } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/TeamMembersView';
+import { TeamMemberAllView } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/TeamMemberAllView';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
@@ -11,7 +12,7 @@ import {
 
 const index = ({ id, teams, users, currencies }) => {
     return (
-        <TeamMembersView
+        <TeamMemberAllView
             id={id}
             teams={teams}
             users={users}
@@ -24,7 +25,7 @@ export default index;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const { id } = ctx.query;
         try {

@@ -1,4 +1,4 @@
-import { SingleProjectPage } from '@components/bits-utils/ProjectManagement/Projects/SingleProject';
+import { TeamPrjDashboard } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/TeamPrjDashboard';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
@@ -12,7 +12,7 @@ import {
 
 const projectDashboard = ({ id, projects, metrics, users, currencies }) => {
     return (
-        <SingleProjectPage
+        <TeamPrjDashboard
             id={id}
             projects={projects}
             metrics={metrics}
@@ -26,7 +26,7 @@ export default projectDashboard;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const { id } = ctx.query;
         try {

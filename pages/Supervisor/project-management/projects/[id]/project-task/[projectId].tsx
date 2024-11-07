@@ -1,32 +1,21 @@
 import { SingleTask } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/SingleTask';
+import { TeamSingleTask } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/TeamSingleTask';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { id } from 'date-fns/locale';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import {
-    ProjectManagementService,
-    UserService,
-    UtilityService,
-} from 'src/services';
+import { ProjectManagementService, UserService } from 'src/services';
 
-const ProjectSingleTask = ({
-    projectId,
-    task,
-    tasks,
-    project,
-    users,
-    id,
-    currencies,
-}) => {
+const ProjectSingleTask = ({ id, project, tasks, task, access, pm }) => {
     return (
-        <SingleTask
+        <TeamSingleTask
             id={id}
             project={project}
             tasks={tasks}
             task={task}
-            users={users}
-            currencies={currencies}
+            access={access}
+            pm={pm}
         />
     );
 };
@@ -36,11 +25,21 @@ export default ProjectSingleTask;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const userId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const { projectId } = ctx.query;
         const { id } = ctx.query;
         try {
             const data = await ProjectManagementService.getProject(id);
+            // const tasks = await ProjectManagementService.listTasks(
+            //     pagingOptions.offset,
+            //     pagingOptions.limit,
+            //     superAdminId,
+            //     projectId,
+            //     pagingOptions.status,
+            //     userId,
+            //     pagingOptions.search,
+            // );
             const task = await ProjectManagementService.getTask(projectId);
             const tasks = await ProjectManagementService.listSubTasks(
                 pagingOptions.offset,
@@ -49,21 +48,31 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.status,
                 pagingOptions.search,
             );
-            const users = await UserService.listUsersByRoles(
+            const access =
+                await UserService.getSuperAdminProjectManagementSettings(
+                    superAdminId,
+                );
+            const pm = await UserService.listUsers(
+                //@ts-ignore
+                undefined,
                 superAdminId,
-                'team member,super admin,admin,client,supervisor',
+                pagingOptions.offset,
+                50,
+                pagingOptions.search,
+                pagingOptions.from,
+                pagingOptions.to,
+                undefined,
+                true,
             );
-            const currencies = await UtilityService.listCountries();
 
             return {
                 props: {
                     project: data.data,
-                    task: task.data,
-                    projectId,
                     id,
                     tasks: tasks.data,
-                    users: users.data,
-                    currencies: currencies.data,
+                    task: task.data,
+                    access: access.data,
+                    pm: pm.data,
                 },
             };
         } catch (error: any) {

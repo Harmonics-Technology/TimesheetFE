@@ -1,4 +1,5 @@
 import { Budgets } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/Budgets';
+import { TeamBudgets } from '@components/bits-utils/ProjectManagement/Projects/TeamMember/TeamBudgetPage';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
@@ -11,7 +12,7 @@ import {
 
 const budget = ({ id, project, budgets, users, currencies }) => {
     return (
-        <Budgets
+        <TeamBudgets
             id={id}
             project={project}
             budgets={budgets}
@@ -25,7 +26,7 @@ export default budget;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
-        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+        const superAdminId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const { id } = ctx.query;
         try {

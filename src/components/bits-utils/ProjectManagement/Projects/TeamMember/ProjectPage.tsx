@@ -42,7 +42,10 @@ export const TeamProjectPage = ({
         (counts.inProgress as number) +
         (counts.completed as number);
 
-    const hasAccess = access?.allProjectCreation;
+    const hasAccess =
+        access?.allProjectCreation ||
+        (access?.clientProjectCreation && user?.role == 'client') ||
+        (access?.supervisorProjectCreation && user?.role == 'Supervisor');
     const projectSize = projects?.size;
 
     // console.log({ projects });

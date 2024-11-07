@@ -75,7 +75,9 @@ export const TeamProjectTask = ({
     const hasAccess =
         access?.projectMembersTaskCreation ||
         (access.assignedPMTaskCreation && isPm) ||
-        isOrgPm;
+        isOrgPm ||
+        (access?.clientProjectCreation && user?.role == 'client') ||
+        (access?.supervisorProjectCreation && user?.role == 'Supervisor');
     const editAccess =
         (access?.pmTaskEditing && isPm) ||
         isOrgPm ||
