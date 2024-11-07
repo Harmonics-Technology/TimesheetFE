@@ -60,8 +60,10 @@ export const ProjectPage = ({
 
     // console.log({ projects });
     const hasAccess =
-        (access?.adminProjectCreation && user?.role !== 'Team Member') ||
-        (access?.pmProjectCreation && isPm);
+        (access?.adminProjectCreation && user?.role.contains('Admin')) ||
+        (access?.pmProjectCreation && isPm) ||
+        (access?.clientProjectCreation && user?.role == 'client') ||
+        (access?.supervisorProjectCreation && user?.role == 'Supervisor');
 
     const projectSize = projects?.size;
 

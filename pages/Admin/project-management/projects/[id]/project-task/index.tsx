@@ -9,7 +9,7 @@ import {
     UtilityService,
 } from 'src/services';
 
-const index = ({ id, project, tasks, users, currencies }) => {
+const index = ({ id, project, tasks, users, currencies, access }) => {
     return (
         <ProjectTask
             id={id}
@@ -17,6 +17,7 @@ const index = ({ id, project, tasks, users, currencies }) => {
             tasks={tasks}
             users={users}
             currencies={currencies}
+            access={access}
         />
     );
 };
@@ -39,6 +40,10 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 undefined,
                 pagingOptions.search,
             );
+            const access =
+                await UserService.getSuperAdminProjectManagementSettings(
+                    superAdminId,
+                );
             const users = await UserService.listUsersByRoles(
                 superAdminId,
                 'team member,super admin,admin',
@@ -52,6 +57,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     tasks: tasks.data,
                     users: users.data,
                     currencies: currencies.data,
+                    access: access.data,
                 },
             };
         } catch (error: any) {

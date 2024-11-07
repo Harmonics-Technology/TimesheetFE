@@ -30,6 +30,8 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
 import { AiOutlineDownload } from 'react-icons/ai';
+import { SubscriptionInvoice } from '@components/bits-utils/NewUpdates/SubscriptionInvoice';
+import { FaEye } from 'react-icons/fa';
 
 export const LicenseHome = ({
     data,
@@ -74,6 +76,18 @@ export const LicenseHome = ({
                 subId: id,
             },
         });
+    };
+
+    const [invoiceData, setInvoiceData] = useState();
+    const {
+        isOpen: invoiceOpen,
+        onOpen: onInvoiceOpen,
+        onClose: onInvoiceClose,
+    } = useDisclosure();
+
+    const openInvoice = (item) => {
+        setInvoiceData(item);
+        onInvoiceOpen();
     };
 
     // console.log({ data });
@@ -303,7 +317,16 @@ export const LicenseHome = ({
                                                 }
                                             />
                                             <td>
-                                                <Link
+                                                <HStack
+                                                    cursor="pointer"
+                                                    onClick={() =>
+                                                        openInvoice(x)
+                                                    }
+                                                >
+                                                    <FaEye />
+                                                    <Text>View</Text>
+                                                </HStack>
+                                                {/* <Link
                                                     href={
                                                         x?.invoicePDFURL as string
                                                     }
@@ -311,7 +334,7 @@ export const LicenseHome = ({
                                                     target="_blank"
                                                 >
                                                     <AiOutlineDownload />
-                                                </Link>
+                                                </Link> */}
                                             </td>
                                         </Tr>
                                     ),
@@ -331,6 +354,13 @@ export const LicenseHome = ({
                                 isOpen={isOpens}
                                 onClose={onCloses}
                                 sub={selected}
+                            />
+                        )}
+                        {invoiceOpen && (
+                            <SubscriptionInvoice
+                                isOpen={invoiceOpen}
+                                onClose={onInvoiceClose}
+                                data={invoiceData}
                             />
                         )}
                     </Box>

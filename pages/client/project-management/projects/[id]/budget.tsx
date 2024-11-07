@@ -1,4 +1,4 @@
-import { ProjectTask } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/ProjectTask';
+import { Budgets } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/Budgets';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
@@ -9,63 +9,45 @@ import {
     UtilityService,
 } from 'src/services';
 
-const index = ({ id, project, tasks, users, currencies, access }) => {
+const budget = ({ id, project, budgets, users, currencies }) => {
     return (
-        <ProjectTask
+        <Budgets
             id={id}
             project={project}
-            tasks={tasks}
+            budgets={budgets}
             users={users}
             currencies={currencies}
-            access={access}
         />
     );
 };
 
-export default index;
+export default budget;
 
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
-        const userId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         const { id } = ctx.query;
         try {
             const data = await ProjectManagementService.getProject(id);
-            const tasks = await ProjectManagementService.listTasks(
-                pagingOptions.offset,
-                pagingOptions.limit,
-                superAdminId,
-                id,
-                pagingOptions.status,
-                undefined,
-                pagingOptions.search,
-            );
-            const access =
-                await UserService.getSuperAdminProjectManagementSettings(
-                    superAdminId,
+            const budgets =
+                await ProjectManagementService.listProjectAssigneeDetail(
+                    pagingOptions.offset,
+                    pagingOptions.limit,
+                    id,
                 );
-            // const users = await UserService.listUsers(
-            //     'Team Member',
-            //     superAdminId,
-            //     pagingOptions.offset,
-            //     80,
-            //     pagingOptions.search,
-            // );
             const users = await UserService.listUsersByRoles(
                 superAdminId,
                 'team member,super admin,admin',
             );
             const currencies = await UtilityService.listCountries();
-
             return {
                 props: {
                     project: data.data,
-                    id,
-                    tasks: tasks.data,
+                    budgets: budgets.data,
                     users: users.data,
+                    id,
                     currencies: currencies.data,
-                    access: access.data,
                 },
             };
         } catch (error: any) {

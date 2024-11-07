@@ -17,7 +17,11 @@ export const ProjectMgtAccess = ({
     const router = useRouter();
     const [access, setAccess] = useState<ProjectManagementSettingModel>({
         adminProjectCreation: controls?.adminProjectCreation,
+        clientProjectCreation: controls?.clientProjectCreation,
+        supervisorProjectCreation: controls?.supervisorProjectCreation,
         adminTaskCreation: controls?.adminTaskCreation,
+        clientTaskCreation: controls?.clientTaskCreation,
+        supervisorTaskCreation: controls?.supervisorTaskCreation,
         adminTaskViewing: controls?.adminTaskViewing,
         allProjectCreation: controls?.allProjectCreation,
         assignedPMTaskCreation: controls?.assignedPMTaskCreation,
@@ -115,6 +119,34 @@ export const ProjectMgtAccess = ({
                             checked={access.adminProjectCreation}
                         />
                         <Checkbox
+                            label="Clients"
+                            dir="rtl"
+                            color="#696969"
+                            disabled
+                            onChange={() =>
+                                setAccess({
+                                    ...access,
+                                    clientProjectCreation:
+                                        !access.clientProjectCreation,
+                                })
+                            }
+                            checked={access.clientProjectCreation}
+                        />
+                        <Checkbox
+                            label="Supervisors"
+                            dir="rtl"
+                            color="#696969"
+                            disabled
+                            onChange={() =>
+                                setAccess({
+                                    ...access,
+                                    supervisorProjectCreation:
+                                        !access.supervisorProjectCreation,
+                                })
+                            }
+                            checked={access.supervisorProjectCreation}
+                        />
+                        <Checkbox
                             label="Organization Project Managers"
                             dir="rtl"
                             color="#696969"
@@ -171,6 +203,34 @@ export const ProjectMgtAccess = ({
                                 })
                             }
                             checked={access.adminTaskCreation}
+                        />
+                        <Checkbox
+                            label="Clients"
+                            dir="rtl"
+                            color="#696969"
+                            disabled
+                            onChange={() =>
+                                setAccess({
+                                    ...access,
+                                    clientTaskCreation:
+                                        !access.clientTaskCreation,
+                                })
+                            }
+                            checked={access.clientTaskCreation}
+                        />
+                        <Checkbox
+                            label="Supervisors"
+                            dir="rtl"
+                            color="#696969"
+                            disabled
+                            onChange={() =>
+                                setAccess({
+                                    ...access,
+                                    supervisorTaskCreation:
+                                        !access.supervisorTaskCreation,
+                                })
+                            }
+                            checked={access.supervisorTaskCreation}
                         />
                         <Checkbox
                             label="Assigned Project Manager"

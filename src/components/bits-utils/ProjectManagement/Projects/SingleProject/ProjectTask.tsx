@@ -34,6 +34,7 @@ import {
     ProjectView,
     ProjectTaskView,
     ProjectManagementService,
+    ProjectManagementSettingView,
 } from 'src/services';
 import { Round } from '@components/generics/functions/Round';
 import Pagination from '@components/bits-utils/Pagination';
@@ -45,12 +46,14 @@ export const ProjectTask = ({
     tasks,
     users,
     currencies,
+    access,
 }: {
     id: any;
     project: ProjectView;
     tasks: any;
     users: any;
     currencies: any;
+    access: ProjectManagementSettingView;
 }) => {
     const tableHead = [
         'Task Name',
@@ -130,6 +133,11 @@ export const ProjectTask = ({
         }
     };
 
+    const hasAccess =
+        (access?.adminTaskCreation && role.contains('Admin')) ||
+        (access?.clientTaskCreation && user?.role == 'client') ||
+        (access?.supervisorTaskCreation && user?.role == 'Supervisor');
+
     return (
         <Box>
             <TopBar
@@ -164,16 +172,18 @@ export const ProjectTask = ({
                 </HStack>
 
                 <HStack>
-                    <Button
-                        onClick={onOpen}
-                        bgColor="brand.400"
-                        color="white"
-                        h="2rem"
-                        borderRadius=".3rem"
-                        fontSize=".8rem"
-                    >
-                        Add new task
-                    </Button>
+                    {hasAccess && (
+                        <Button
+                            onClick={onOpen}
+                            bgColor="brand.400"
+                            color="white"
+                            h="2rem"
+                            borderRadius=".3rem"
+                            fontSize=".8rem"
+                        >
+                            Add new task
+                        </Button>
+                    )}
                     <SubSearchComponent />
                 </HStack>
             </HStack>

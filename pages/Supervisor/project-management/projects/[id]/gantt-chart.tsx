@@ -1,4 +1,4 @@
-import { ProjectTask } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/ProjectTask';
+import { GantChart } from '@components/bits-utils/ProjectManagement/Projects/SingleProject/GantChart';
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
@@ -9,15 +9,14 @@ import {
     UtilityService,
 } from 'src/services';
 
-const index = ({ id, project, tasks, users, currencies, access }) => {
+const index = ({ id, project, tasks, users, currencies }) => {
     return (
-        <ProjectTask
+        <GantChart
             id={id}
             project={project}
             tasks={tasks}
             users={users}
             currencies={currencies}
-            access={access}
         />
     );
 };
@@ -41,17 +40,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 undefined,
                 pagingOptions.search,
             );
-            const access =
-                await UserService.getSuperAdminProjectManagementSettings(
-                    superAdminId,
-                );
-            // const users = await UserService.listUsers(
-            //     'Team Member',
-            //     superAdminId,
-            //     pagingOptions.offset,
-            //     80,
-            //     pagingOptions.search,
-            // );
             const users = await UserService.listUsersByRoles(
                 superAdminId,
                 'team member,super admin,admin',
@@ -65,7 +53,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     tasks: tasks.data,
                     users: users.data,
                     currencies: currencies.data,
-                    access: access.data,
                 },
             };
         } catch (error: any) {

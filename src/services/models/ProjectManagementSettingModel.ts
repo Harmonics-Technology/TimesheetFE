@@ -7,10 +7,14 @@ export type ProjectManagementSettingModel = {
     superAdminId?: string;
     adminProjectCreation?: boolean | null;
     pmProjectCreation?: boolean | null;
+    clientProjectCreation?: boolean | null;
+    supervisorProjectCreation?: boolean | null;
     allProjectCreation?: boolean | null;
     adminTaskCreation?: boolean | null;
     assignedPMTaskCreation?: boolean | null;
     projectMembersTaskCreation?: boolean | null;
+    clientTaskCreation?: boolean | null;
+    supervisorTaskCreation?: boolean | null;
     adminTaskViewing?: boolean | null;
     assignedPMTaskViewing?: boolean | null;
     projectMembersTaskViewing?: boolean | null;
