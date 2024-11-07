@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const metrics = await DashboardService.getProjectDashboard(id);
             const users = await UserService.listUsersByRoles(
                 superAdminId,
-                'team member,super admin,admin',
+                'team member,super admin,admin,client,supervisor',
             );
             const currencies = await UtilityService.listCountries();
             return {
