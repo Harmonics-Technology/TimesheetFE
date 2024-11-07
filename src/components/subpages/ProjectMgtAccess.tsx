@@ -122,7 +122,6 @@ export const ProjectMgtAccess = ({
                             label="Clients"
                             dir="rtl"
                             color="#696969"
-                            disabled
                             onChange={() =>
                                 setAccess({
                                     ...access,
@@ -136,7 +135,6 @@ export const ProjectMgtAccess = ({
                             label="Supervisors"
                             dir="rtl"
                             color="#696969"
-                            disabled
                             onChange={() =>
                                 setAccess({
                                     ...access,
@@ -208,7 +206,6 @@ export const ProjectMgtAccess = ({
                             label="Clients"
                             dir="rtl"
                             color="#696969"
-                            disabled
                             onChange={() =>
                                 setAccess({
                                     ...access,
@@ -222,7 +219,6 @@ export const ProjectMgtAccess = ({
                             label="Supervisors"
                             dir="rtl"
                             color="#696969"
-                            disabled
                             onChange={() =>
                                 setAccess({
                                     ...access,

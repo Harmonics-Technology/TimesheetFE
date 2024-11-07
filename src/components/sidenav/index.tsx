@@ -458,6 +458,23 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
+                        linkName="project-management"
+                        menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
+                        // display={
+                        //     (subType == 'standard' && activeSub) ||
+                        //     (subType == 'premium' && activeSub)
+                        //         ? true
+                        //         : false
+                        // }
+                    />
+                    <MenuItem
+                        change={change}
                         linkName="timesheets"
                         menuTitle="Timesheets"
                         icon={<FaCalendar opacity=".8" />}
@@ -1211,6 +1228,23 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="project-management"
+                        menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
+                        // display={
+                        //     (subType == 'standard' && activeSub) ||
+                        //     (subType == 'premium' && activeSub)
+                        //         ? true
+                        //         : false
+                        // }
                     />
                     <MenuItem
                         change={change}

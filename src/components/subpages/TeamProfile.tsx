@@ -1351,7 +1351,9 @@ function TeamProfile({
                                     defaultValue=""
                                     readonly={true}
                                     disableLabel={true}
-                                    value={`${userProfile?.employeeInformation?.numberOfDaysEligible} hours`}
+                                    value={`${
+                                        userProfile?.numberOfDaysEligible || 0
+                                    } hours`}
                                 />
                             </Box>
                         </Box>
