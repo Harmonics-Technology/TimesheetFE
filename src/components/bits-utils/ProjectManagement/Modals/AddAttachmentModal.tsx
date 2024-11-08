@@ -10,6 +10,7 @@ import {
     Text,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
+import { formatFileSize } from '@components/generics/functions/getFileSize';
 import { Widget } from '@uploadcare/react-widget';
 import React, { useRef, useState } from 'react';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
@@ -31,8 +32,10 @@ export const AddAttachmentModal = ({
         });
         file.done((info) => {
             setFileDoc(info);
+            setLoading({ id: '' });
         });
     };
+
     return (
         <DrawerWrapper
             onClose={onClose}
@@ -63,13 +66,44 @@ export const AddAttachmentModal = ({
                             fontWeight="600"
                             onClick={() => widgetApi.current.openDialog()}
                         >
-                            <Icon as={AiOutlineCloudUpload} fontSize="2rem" />
-                            <Text noOfLines={1} mb="0">
-                                Upload
-                            </Text>
-                            <Text noOfLines={1} mb="0">
-                                Drag and drop or Browse
-                            </Text>
+                            {fileDoc ? (
+                                <>
+                                    {/* <Icon
+                                        as={AiOutlineCloudUpload}
+                                        fontSize="2rem"
+                                    /> */}
+                                    <Text noOfLines={1} mb="0">
+                                        {fileDoc?.name}
+                                    </Text>
+                                    <Text noOfLines={1} mb="0">
+                                        Size: {formatFileSize(fileDoc?.size)}
+                                    </Text>
+                                    <Text
+                                        noOfLines={1}
+                                        mb="0"
+                                        bgColor="gray.600"
+                                        p=".3rem .5rem"
+                                        borderRadius="5px"
+                                        fontWeight={500}
+                                        color="white"
+                                    >
+                                        Click to change
+                                    </Text>
+                                </>
+                            ) : (
+                                <>
+                                    <Icon
+                                        as={AiOutlineCloudUpload}
+                                        fontSize="2rem"
+                                    />
+                                    <Text noOfLines={1} mb="0">
+                                        Upload
+                                    </Text>
+                                    <Text noOfLines={1} mb="0">
+                                        Drag and drop or Browse
+                                    </Text>
+                                </>
+                            )}
                         </VStack>
                         <Box display="none">
                             <Widget
@@ -94,13 +128,12 @@ export const AddAttachmentModal = ({
                     justify="center"
                     align="center"
                     w="fit-content"
+                    mt="1rem"
                 >
                     {isLoading.id == 'uploading' ? (
                         <Spinner size="sm" />
-                    ) : isLoading.id !== 'uploading' && fileDoc?.url !== '' ? (
-                        fileDoc?.url?.name
                     ) : (
-                        ' PDF DOC'
+                        'DOC'
                     )}
                 </Flex>
             </Box>

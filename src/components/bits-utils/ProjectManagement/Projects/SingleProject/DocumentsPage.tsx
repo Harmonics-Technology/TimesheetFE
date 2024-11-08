@@ -3,6 +3,8 @@ import {
     Button,
     HStack,
     Icon,
+    Spinner,
+    Text,
     useDisclosure,
     useToast,
 } from '@chakra-ui/react';
@@ -15,7 +17,6 @@ import {
     ProjectView,
 } from 'src/services';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
-import { GrDocumentCloud, GrDownload } from 'react-icons/gr';
 // import Pagination from '@components/bits-utils/Pagination';
 import { TableRow, TableData } from '@components/bits-utils/TableData';
 import moment from 'moment';
@@ -27,6 +28,8 @@ import fileDownload from 'js-file-download';
 import { ShowPrompt } from '../../Modals/ShowPrompt';
 import { AddAttachmentModal } from '../../Modals/AddAttachmentModal';
 import { AttachmentDetailModal } from '../../Modals/AttachmentDetailModal';
+import { IoDocumentAttach } from 'react-icons/io5';
+import { BsDownload } from 'react-icons/bs';
 
 export const DocumentsPage = ({
     id,
@@ -91,6 +94,7 @@ export const DocumentsPage = ({
             const res = await ProjectManagementService.addAttachment(data);
             if (res?.status) {
                 router.replace(router?.asPath);
+                onUploadClose();
                 setLoading({ id: '' });
             }
         } catch (err: any) {
@@ -104,6 +108,7 @@ export const DocumentsPage = ({
         }
     };
     const deleteAttachement = async () => {
+        setLoading({ id: 'deleting' });
         try {
             const res = await ProjectManagementService.deleteAttachment(
                 fileData?.id,
@@ -150,9 +155,10 @@ export const DocumentsPage = ({
                     h="2rem"
                     borderRadius=".3rem"
                     fontSize=".8rem"
+                    gap=".4rem"
                 >
-                    <Icon as={GrDocumentCloud} pr=".4rem" />
-                    Upload Document
+                    <Icon as={IoDocumentAttach} />
+                    <Text> Upload Document</Text>
                 </Button>
                 <SubSearchComponent />
             </HStack>
@@ -170,7 +176,7 @@ export const DocumentsPage = ({
                                 />
                                 <TableData
                                     name={moment(x?.dateCreated).format(
-                                        'DD/MM/YY hh:mm A',
+                                        'DD/MM/YYYY hh:mm A',
                                     )}
                                     fontWeight="500"
                                     onClick={() => setDataFile(x)}
@@ -187,11 +193,19 @@ export const DocumentsPage = ({
                                 />
 
                                 <td>
-                                    <HStack color="#c2cfe0">
-                                        <Icon
-                                            as={GrDownload}
-                                            onClick={() => downloadFile(x)}
-                                        />
+                                    <HStack
+                                        color="gray.600"
+                                        fontSize="1rem"
+                                        cursor="pointer"
+                                    >
+                                        {loading?.id === x?.fileUrl ? (
+                                            <Spinner />
+                                        ) : (
+                                            <Icon
+                                                as={BsDownload}
+                                                onClick={() => downloadFile(x)}
+                                            />
+                                        )}
                                         <Icon
                                             as={TbTrash}
                                             onClick={() =>
@@ -211,7 +225,7 @@ export const DocumentsPage = ({
                         isOpen={openDelete}
                         onClose={onCloseDelete}
                         onSubmit={deleteAttachement}
-                        loading={loading}
+                        loading={loading.id === 'deleting'}
                         text={`Are you sure you want to delete this attachement? <br/> This action cannot be undone`}
                     />
                 )}

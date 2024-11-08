@@ -24,13 +24,9 @@ interface ExportProps {
 
 export const SingleData = ({ label, value }) => {
     return (
-        <HStack gap=".1rem">
-            <Text fontSize="1.1rem" fontWeight="400" mb="0rem">
-                {label}:
-            </Text>
-            <Text fontSize="1.1rem" fontWeight="400" mb="0rem">
-                {value}
-            </Text>
+        <HStack gap=".1rem" fontSize=".9rem" fontWeight="400">
+            <Text mb="0rem">{label}:</Text>
+            <Text mb="0rem">{value}</Text>
         </HStack>
     );
 };
@@ -63,15 +59,15 @@ export const AttachmentDetailModal = ({
                 <ModalHeader textAlign="center">
                     <Flex
                         justify="space-between"
-                        mx="1rem"
                         borderBottom="2px solid"
                         borderColor="gray.300"
+                        pb=".3rem"
                     >
                         <Text
                             color="black"
                             fontSize="1.1rem"
                             textAlign="left"
-                            fontWeight="bold"
+                            fontWeight="600"
                         >
                             Document Information
                         </Text>

@@ -3,6 +3,8 @@ import {
     Button,
     HStack,
     Icon,
+    Spinner,
+    Text,
     useDisclosure,
     useToast,
 } from '@chakra-ui/react';
@@ -14,7 +16,6 @@ import {
     ProjectView,
 } from 'src/services';
 import { SubSearchComponent } from '@components/bits-utils/SubSearchComponent';
-import { GrDocumentCloud, GrDownload } from 'react-icons/gr';
 import { TableRow, TableData } from '@components/bits-utils/TableData';
 import moment from 'moment';
 import { TableCard } from '../../Generics/TableCard';
@@ -26,6 +27,8 @@ import { ShowPrompt } from '../../Modals/ShowPrompt';
 import { AddAttachmentModal } from '../../Modals/AddAttachmentModal';
 import { AttachmentDetailModal } from '../../Modals/AttachmentDetailModal';
 import { TeamTopBar } from './TeamTopBar';
+import { IoDocumentAttach } from 'react-icons/io5';
+import { BsDownload } from 'react-icons/bs';
 
 export const TeamDocumentsPage = ({
     id,
@@ -140,8 +143,8 @@ export const TeamDocumentsPage = ({
                     borderRadius=".3rem"
                     fontSize=".8rem"
                 >
-                    <Icon as={GrDocumentCloud} pr=".4rem" />
-                    Upload Document
+                    <Icon as={IoDocumentAttach} />
+                    <Text> Upload Document</Text>
                 </Button>
                 <SubSearchComponent />
             </HStack>
@@ -159,7 +162,7 @@ export const TeamDocumentsPage = ({
                                 />
                                 <TableData
                                     name={moment(x?.dateCreated).format(
-                                        'DD/MM/YY hh:mm A',
+                                        'DD/MM/YYYY hh:mm A',
                                     )}
                                     fontWeight="500"
                                     onClick={() => setDataFile(x)}
@@ -176,11 +179,19 @@ export const TeamDocumentsPage = ({
                                 />
 
                                 <td>
-                                    <HStack color="#c2cfe0">
-                                        <Icon
-                                            as={GrDownload}
-                                            onClick={() => downloadFile(x)}
-                                        />
+                                    <HStack
+                                        color="gray.600"
+                                        fontSize="1rem"
+                                        cursor="pointer"
+                                    >
+                                        {loading?.id === x?.fileUrl ? (
+                                            <Spinner />
+                                        ) : (
+                                            <Icon
+                                                as={BsDownload}
+                                                onClick={() => downloadFile(x)}
+                                            />
+                                        )}
                                         <Icon
                                             as={TbTrash}
                                             onClick={() =>
