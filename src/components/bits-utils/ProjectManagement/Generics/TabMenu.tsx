@@ -22,6 +22,7 @@ export const SubTabMenu = (subType) => {
                   { show: false, name: 'gantt-chart' },
                   { show: true, name: 'team-members' },
                   { show: true, name: 'budget' },
+                  { show: true, name: 'documents' },
               ]
             : [
                   { show: true, name: 'dashboard' },
@@ -29,6 +30,7 @@ export const SubTabMenu = (subType) => {
                   { show: true, name: 'gantt-chart' },
                   { show: true, name: 'team-members' },
                   { show: true, name: 'budget' },
+                  { show: true, name: 'documents' },
               ];
     return tabMenu;
 };
@@ -43,6 +45,7 @@ export const TeamTabMenu = (subType, isPm, isProjectPm) => {
                       { show: false, name: 'gantt-chart' },
                       { show: true, name: 'team-members' },
                       { show: true, name: 'budget' },
+                      { show: true, name: 'documents' },
                   ]
                 : [
                       { show: true, name: 'dashboard' },
@@ -50,6 +53,7 @@ export const TeamTabMenu = (subType, isPm, isProjectPm) => {
                       { show: true, name: 'gantt-chart' },
                       { show: true, name: 'team-members' },
                       { show: true, name: 'budget' },
+                      { show: true, name: 'documents' },
                   ]
             : subType == 'basic'
             ? [
@@ -57,12 +61,14 @@ export const TeamTabMenu = (subType, isPm, isProjectPm) => {
                   { show: true, name: 'project-task' },
                   { show: false, name: 'gantt-chart' },
                   { show: true, name: 'team-members' },
+                  { show: true, name: 'documents' },
               ]
             : [
                   { show: true, name: 'dashboard' },
                   { show: true, name: 'project-task' },
                   { show: true, name: 'gantt-chart' },
                   { show: true, name: 'team-members' },
+                  { show: true, name: 'documents' },
               ];
     return menuItems;
 };

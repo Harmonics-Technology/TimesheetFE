@@ -134,7 +134,7 @@ export const ProjectTask = ({
     };
 
     const hasAccess =
-        (access?.adminTaskCreation && role.includes('Admin')) ||
+        (access?.adminTaskCreation && role?.includes('Admin')) ||
         (access?.clientTaskCreation && user?.role == 'client') ||
         (access?.supervisorTaskCreation && user?.role == 'Supervisor');
 

@@ -45,6 +45,10 @@ export const ShowLeaveDetailsModal = ({
         onClose();
     };
 
+    const leaveBalance =
+        Number(data?.employeeInformation?.numberOfDaysEligible) -
+        Number((data as any)?.numberOfDaysEligible);
+
     return (
         <Modal
             isOpen={isOpen}
@@ -170,10 +174,7 @@ export const ShowLeaveDetailsModal = ({
                                 />
                                 <SingleDetailsInfo
                                     label="Number of eligible leave used"
-                                    content={
-                                        data?.employeeInformation
-                                            ?.numberOfLeaveDaysTaken || 0
-                                    }
+                                    content={leaveBalance || 0}
                                 />
                                 {/* <SingleDetailsInfo
                                     label="Current eligible leave balance"

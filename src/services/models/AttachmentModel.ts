@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 export type AttachmentModel = {
+    projectId?: string | null;
     projectTaskId?: string | null;
     fileUrl?: string | null;
     title?: string | null;

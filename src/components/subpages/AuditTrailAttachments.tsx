@@ -68,7 +68,10 @@ export const AuditTrailAttachments = ({ taskId }: { taskId: string }) => {
     const fetchAuditData = async () => {
         setLoading({ id: 'fetching' });
         try {
-            const res = await ProjectManagementService.listAttachments(taskId);
+            const res = await ProjectManagementService.listAttachments(
+                undefined,
+                taskId,
+            );
             if (res?.status) {
                 setLoading({ id: '' });
                 setActivities(res?.data as AttachmentView[]);
@@ -94,6 +97,7 @@ export const AuditTrailAttachments = ({ taskId }: { taskId: string }) => {
 
     const uploadAttachement = async (info) => {
         const data: AttachmentModel = {
+            // projectId: projectId,
             projectTaskId: taskId,
             fileUrl: info?.cdnUrl,
             title: info?.name,

@@ -60,7 +60,7 @@ export const ProjectPage = ({
 
     // console.log({ projects });
     const hasAccess =
-        (access?.adminProjectCreation && user?.role.includes('Admin')) ||
+        (access?.adminProjectCreation && user?.role?.includes('Admin')) ||
         (access?.pmProjectCreation && isPm) ||
         (access?.clientProjectCreation && user?.role == 'client') ||
         (access?.supervisorProjectCreation && user?.role == 'Supervisor');

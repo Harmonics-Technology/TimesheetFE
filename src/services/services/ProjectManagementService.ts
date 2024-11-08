@@ -830,17 +830,20 @@ attachmentId?: string,
     }
 
     /**
+     * @param projectId 
      * @param taskId 
      * @returns AttachmentViewListStandardResponse Success
      * @throws ApiError
      */
     public static listAttachments(
+projectId?: string,
 taskId?: string,
 ): CancelablePromise<AttachmentViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/ProjectManagement/task-attachments',
             query: {
+                'projectId': projectId,
                 'taskId': taskId,
             },
         });
