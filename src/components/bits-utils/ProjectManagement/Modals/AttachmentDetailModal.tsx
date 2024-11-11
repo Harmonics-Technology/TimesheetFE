@@ -86,7 +86,7 @@ export const AttachmentDetailModal = ({
                                 )}
                             />
                             <SingleData label="File" value={data?.extension} />
-                            <SingleData label="Size" value={data?.extension} />
+                            <SingleData label="Size" value={data?.fileSize} />
                             <SingleData
                                 label="Project"
                                 value={data?.project?.name}
