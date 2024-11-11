@@ -106,6 +106,7 @@ export const AuditTrailAttachments = ({
             projectId: projectId,
             projectTaskId: taskId,
             fileUrl: info?.cdnUrl,
+            fileSize: info?.size,
             title: info?.name,
             extension: info?.mimeType?.split('/')[1],
         };

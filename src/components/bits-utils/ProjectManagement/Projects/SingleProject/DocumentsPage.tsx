@@ -140,6 +140,8 @@ export const DocumentsPage = ({
         onOpenDelete();
     };
 
+    // console.log({ files });
+
     return (
         <Box>
             <TopBar
