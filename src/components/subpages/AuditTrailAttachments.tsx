@@ -43,7 +43,13 @@ moment.updateLocale('en', {
     },
 });
 
-export const AuditTrailAttachments = ({ taskId }: { taskId: string }) => {
+export const AuditTrailAttachments = ({
+    taskId,
+    projectId,
+}: {
+    taskId: string;
+    projectId: string;
+}) => {
     const [activities, setActivities] = useState<AttachmentView[]>([]);
     const [refetch, setRefetch] = useState(false);
     const [loading, setLoading] = useState({ id: '' });
@@ -97,7 +103,7 @@ export const AuditTrailAttachments = ({ taskId }: { taskId: string }) => {
 
     const uploadAttachement = async (info) => {
         const data: AttachmentModel = {
-            // projectId: projectId,
+            projectId: projectId,
             projectTaskId: taskId,
             fileUrl: info?.cdnUrl,
             title: info?.name,

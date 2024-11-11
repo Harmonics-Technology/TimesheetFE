@@ -8,4 +8,5 @@ export type AttachmentModel = {
     fileUrl?: string | null;
     title?: string | null;
     extension?: string | null;
+    fileSize?: string | null;
 };

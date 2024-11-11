@@ -72,10 +72,15 @@ const AddCommentModal = ({ isOpen, onClose, taskId, setTrigger }: Props) => {
         return htmlContent;
     };
 
+    const regex = /<a [^>]*href="([^"]*)"[^>]*data-mention[^>]*>/g;
+    const matches = [...getHtmlContent().matchAll(regex)];
+    const results = Array.from(new Set(matches.map((match) => match[1])));
+
     const postAComment = async () => {
         const data: TaskComment = {
             projectTaskId: taskId,
             comment: getHtmlContent() as string,
+            assignees: results,
         };
         setIsLoading({ id: 'posting' });
         try {
@@ -184,7 +189,7 @@ const AddCommentModal = ({ isOpen, onClose, taskId, setTrigger }: Props) => {
                                             (x: UserView) => ({
                                                 text: x.fullName,
                                                 value: x.fullName,
-                                                url: x.fullName,
+                                                url: x.id,
                                             }),
                                         ),
                                     }}

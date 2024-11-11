@@ -17,5 +17,6 @@ export type AttachmentView = {
     createdByUser?: StrippedUserView;
     title?: string | null;
     extension?: string | null;
+    fileSize?: string | null;
     dateCreated?: string;
 };

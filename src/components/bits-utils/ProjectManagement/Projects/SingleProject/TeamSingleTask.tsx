@@ -970,6 +970,7 @@ export const TeamSingleTask = ({
                             <Box py="1rem">
                                 <AuditTrailAttachments
                                     taskId={task?.id as string}
+                                    projectId={project?.id as string}
                                 />
                             </Box>
                         )}

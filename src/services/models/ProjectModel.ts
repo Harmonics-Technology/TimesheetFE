@@ -18,4 +18,7 @@ export type ProjectModel = {
     projectManagerId?: string | null;
     currency?: string | null;
     assignedProjectManagers?: Array<string> | null;
+    fileTitle?: string | null;
+    fileExtension?: string | null;
+    fileSize?: string | null;
 };

@@ -30,6 +30,7 @@ import { AddAttachmentModal } from '../../Modals/AddAttachmentModal';
 import { AttachmentDetailModal } from '../../Modals/AttachmentDetailModal';
 import { IoDocumentAttach } from 'react-icons/io5';
 import { BsDownload } from 'react-icons/bs';
+import { formatFileSize } from '@components/generics/functions/getFileSize';
 
 export const DocumentsPage = ({
     id,
@@ -89,6 +90,7 @@ export const DocumentsPage = ({
             fileUrl: info?.cdnUrl,
             title: info?.name,
             extension: info?.mimeType?.split('/')[1],
+            fileSize: info?.size,
         };
         try {
             const res = await ProjectManagementService.addAttachment(data);
@@ -187,7 +189,7 @@ export const DocumentsPage = ({
                                     onClick={() => setDataFile(x)}
                                 />
                                 <TableData
-                                    name={x?.extension}
+                                    name={formatFileSize(x?.fileSize)}
                                     fontWeight="500"
                                     onClick={() => setDataFile(x)}
                                 />

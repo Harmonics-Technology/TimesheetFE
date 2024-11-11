@@ -139,6 +139,9 @@ export const CreateProjectDrawer = ({
     //
 
     const onSubmit = async (data: ProjectModel) => {
+        data.fileExtension = fileDoc?.url?.mimeType?.split('/')[1];
+        data.fileSize = fileDoc?.url?.fileSize;
+        data.fileTitle = fileDoc?.url?.name;
         try {
             const result = await ProjectManagementService.createProject(data);
             if (result.status) {

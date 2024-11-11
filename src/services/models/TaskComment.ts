@@ -6,4 +6,5 @@ export type TaskComment = {
     id?: string | null;
     projectTaskId?: string;
     comment?: string | null;
+    assignees?: Array<string> | null;
 };
