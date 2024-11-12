@@ -74,7 +74,9 @@ const AddCommentModal = ({ isOpen, onClose, taskId, setTrigger }: Props) => {
 
     const regex = /<a [^>]*href="([^"]*)"[^>]*data-mention[^>]*>/g;
     const matches = [...getHtmlContent().matchAll(regex)];
-    const results = Array.from(new Set(matches.map((match) => match[1])));
+    const results = Array.from(
+        new Set(matches.map((match) => match[1].replace(/^single\//, ''))),
+    );
 
     const postAComment = async () => {
         const data: TaskComment = {
@@ -189,7 +191,7 @@ const AddCommentModal = ({ isOpen, onClose, taskId, setTrigger }: Props) => {
                                             (x: UserView) => ({
                                                 text: x.fullName,
                                                 value: x.fullName,
-                                                url: x.id,
+                                                url: `single/${x.id}`,
                                             }),
                                         ),
                                     }}

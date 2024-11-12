@@ -15,6 +15,7 @@ import moment from 'moment';
 import React from 'react';
 import { GrClose } from 'react-icons/gr';
 import { AttachmentView } from 'src/services';
+import { formatFileSize } from '@components/generics/functions/getFileSize';
 
 interface ExportProps {
     isOpen: any;
@@ -86,7 +87,7 @@ export const AttachmentDetailModal = ({
                                 )}
                             />
                             <SingleData label="File" value={data?.extension} />
-                            <SingleData label="Size" value={data?.fileSize} />
+                            <SingleData label="Size" value={formatFileSize(data?.fileSize)} />
                             <SingleData
                                 label="Project"
                                 value={data?.project?.name}

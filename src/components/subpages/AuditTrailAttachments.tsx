@@ -7,16 +7,20 @@ import {
     Image,
     Spinner,
     Text,
+    useDisclosure,
     useToast,
     VStack,
 } from '@chakra-ui/react';
+import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/ShowPrompt';
 import { Widget } from '@uploadcare/react-widget';
 import axios from 'axios';
 import fileDownload from 'js-file-download';
 import moment from 'moment';
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { BsDownload, BsEye } from 'react-icons/bs';
 import { GrAttachment } from 'react-icons/gr';
+import { TbTrash } from 'react-icons/tb';
 import Skeleton from 'react-loading-skeleton';
 import {
     AttachmentModel,
@@ -55,6 +59,7 @@ export const AuditTrailAttachments = ({
     const [loading, setLoading] = useState({ id: '' });
     const toast = useToast();
     const widgetApi = useRef<any>(null);
+    const router = useRouter();
 
     const downloadFile = (file: AttachmentView) => {
         setLoading({ id: file?.fileUrl as string });
@@ -142,6 +147,40 @@ export const AuditTrailAttachments = ({
         }
     }, [refetch]);
 
+    const [fileData, setFileData] = useState<AttachmentView | null>();
+    const {
+        isOpen: openDelete,
+        onOpen: onOpenDelete,
+        onClose: onCloseDelete,
+    } = useDisclosure();
+
+    const deleteAttachement = async () => {
+        setLoading({ id: 'deleting' });
+        try {
+            const res = await ProjectManagementService.deleteAttachment(
+                fileData?.id,
+            );
+            if (res?.status) {
+                router.replace(router?.asPath);
+                onCloseDelete();
+                setLoading({ id: '' });
+            }
+        } catch (err: any) {
+            setLoading({ id: '' });
+            toast({
+                title: err?.body?.message || err.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
+    const triggerDeleteModal = (value: AttachmentView) => {
+        setFileData(value);
+        onOpenDelete();
+    };
+
     return (
         <HStack py="1rem" justify="space-between" align="flex-start">
             <>
@@ -207,6 +246,12 @@ export const AuditTrailAttachments = ({
                                                     as={BsEye}
                                                     onClick={() =>
                                                         viewDoc(x?.fileUrl)
+                                                    }
+                                                />
+                                                <Icon
+                                                    as={TbTrash}
+                                                    onClick={() =>
+                                                        triggerDeleteModal(x)
                                                     }
                                                 />
                                             </HStack>
@@ -311,6 +356,16 @@ export const AuditTrailAttachments = ({
                     />
                 </Box>
             </HStack>
+
+            {openDelete && (
+                <ShowPrompt
+                    isOpen={openDelete}
+                    onClose={onCloseDelete}
+                    onSubmit={deleteAttachement}
+                    loading={loading.id === 'deleting'}
+                    text={`Are you sure you want to delete this attachement? <br/> This action cannot be undone`}
+                />
+            )}
         </HStack>
     );
 };
