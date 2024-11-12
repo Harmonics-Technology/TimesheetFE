@@ -13,13 +13,18 @@ import {
 import { IoCloseOutline } from 'react-icons/io5';
 import { ProjectManagementService, TaskComment, UserView } from 'src/services';
 import { ShiftBtn } from './bits-utils/ShiftBtn';
-import { EditorState, convertToRaw, Modifier, ContentState, convertFromHTML } from 'draft-js';
+import {
+    EditorState,
+    convertToRaw,
+    Modifier,
+    ContentState,
+    convertFromHTML,
+} from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import dynamic from 'next/dynamic';
 import { useContext, useEffect, useState } from 'react';
 import { fetchAllUserRoles } from './generics/functions/FetchAllUsers';
 import { UserContext } from './context/UserContext';
-
 
 const Editor = dynamic(
     () => import('react-draft-wysiwyg').then((mod) => mod.Editor),
@@ -33,7 +38,7 @@ type Props = {
     onClose?: any;
     taskId: any;
     setTrigger: any;
-    defaultComment: any
+    defaultComment: any;
 };
 
 const CustomButton = ({ addAtSymbol }) => (
@@ -41,7 +46,13 @@ const CustomButton = ({ addAtSymbol }) => (
         @
     </div>
 );
-const EditCommentModal = ({ isOpen, onClose, taskId, setTrigger, defaultComment }: Props) => {
+const EditCommentModal = ({
+    isOpen,
+    onClose,
+    taskId,
+    setTrigger,
+    defaultComment,
+}: Props) => {
     const toast = useToast();
     const [isLoading, setIsLoading] = useState({ id: '' });
     const [users, setUsers] = useState([]);
@@ -81,16 +92,26 @@ const EditCommentModal = ({ isOpen, onClose, taskId, setTrigger, defaultComment 
         return htmlContent;
     };
 
+    const regex = /<a [^>]*href="([^"]*)"[^>]*data-mention[^>]*>/g;
+    const matches = [...getHtmlContent().matchAll(regex)];
+    const results = Array.from(
+        new Set(matches.map((match) => match[1].replace(/^single\//, ''))),
+    );
+
     const postAComment = async () => {
         const data: TaskComment = {
             id: defaultComment?.id,
             projectTaskId: taskId,
             comment: getHtmlContent() as string,
+            assignees: results,
         };
         setIsLoading({ id: 'posting' });
         try {
-        const result = await ProjectManagementService.updateComment(false, data);
-        
+            const result = await ProjectManagementService.updateComment(
+                false,
+                data,
+            );
+
             if (result.status) {
                 toast({
                     title: 'Comment Edited Successfully',
@@ -194,7 +215,7 @@ const EditCommentModal = ({ isOpen, onClose, taskId, setTrigger, defaultComment 
                                             (x: UserView) => ({
                                                 text: x.fullName,
                                                 value: x.fullName,
-                                                url: x.fullName,
+                                                url: `single/${x.id}`,
                                             }),
                                         ),
                                     }}
