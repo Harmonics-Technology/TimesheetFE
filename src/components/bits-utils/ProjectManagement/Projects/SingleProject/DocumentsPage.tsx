@@ -89,7 +89,7 @@ export const DocumentsPage = ({
             // projectTaskId: taskId,
             fileUrl: info?.cdnUrl,
             title: info?.name,
-            extension: info?.mimeType?.split('/')[1],
+            extension: info?.name?.split('.')?.at(-1),
             fileSize: info?.size,
         };
         try {

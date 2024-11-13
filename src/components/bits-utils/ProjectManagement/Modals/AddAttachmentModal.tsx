@@ -36,6 +36,8 @@ export const AddAttachmentModal = ({
         });
     };
 
+    // console.log({ fileDoc });
+
     return (
         <DrawerWrapper
             onClose={onClose}
