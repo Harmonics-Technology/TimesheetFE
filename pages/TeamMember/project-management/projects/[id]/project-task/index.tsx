@@ -34,7 +34,9 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 await UserService.getSuperAdminProjectManagementSettings(
                     superAdminId,
                 );
-            const isAssignedPm = data.data?.projectManagerId == userId;
+            const isAssignedPm = data.data?.projectManagers?.find(
+                (x) => x.user?.id == userId,
+            );
             const hasAccess =
                 (access.data?.assignedPMTaskViewing && isAssignedPm) ||
                 access.data?.projectMembersTaskViewing;

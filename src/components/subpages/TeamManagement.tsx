@@ -104,7 +104,7 @@ function TeamManagement({
     const thead = [
         'Name',
         'Job Title',
-        'Client Name',
+        'Organization Name',
         'Employment Type',
         'Role',
         'Status',

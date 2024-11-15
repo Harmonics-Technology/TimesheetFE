@@ -11,7 +11,9 @@ import { TeamTabMenu } from '../../Generics/TabMenu';
 export const TeamTopBar = ({ data, id }) => {
     const { user, subType } = useContext(UserContext);
     const isPm = user?.isOrganizationProjectManager;
-    const isProjectPm = data?.projectManagerId == user?.id;
+    const isProjectPm = data?.projectManagers?.find(
+        (x) => x.user?.id == user?.id,
+    );
 
     const menuItems =
         isPm && isProjectPm

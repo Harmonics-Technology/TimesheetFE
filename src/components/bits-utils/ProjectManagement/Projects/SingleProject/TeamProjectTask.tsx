@@ -8,6 +8,12 @@ import {
     useDisclosure,
     Icon,
     Flex,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Spinner,
+    useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
 import { TopBar } from './TopBar';
@@ -21,7 +27,7 @@ import {
 import moment from 'moment';
 import colorSwatch from '@components/generics/colorSwatch';
 import { BiSolidPencil } from 'react-icons/bi';
-import { FaEye } from 'react-icons/fa';
+import { FaEllipsisH, FaEye } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { UserContext } from '@components/context/UserContext';
 import { AddNewTaskDrawer } from '../../Modals/AddNewTaskDrawer';
@@ -30,10 +36,13 @@ import {
     ProjectView,
     ProjectTaskView,
     ProjectManagementSettingView,
+    ProjectManagementService,
 } from 'src/services';
 import { Round } from '@components/generics/functions/Round';
 import { TeamTopBar } from './TeamTopBar';
 import Pagination from '@components/bits-utils/Pagination';
+import { MdDeleteOutline } from 'react-icons/md';
+import { ShowPrompt } from '../../Modals/ShowPrompt';
 
 export const TeamProjectTask = ({
     id,
@@ -76,13 +85,61 @@ export const TeamProjectTask = ({
         access?.projectMembersTaskCreation ||
         (access.assignedPMTaskCreation && isPm) ||
         isOrgPm ||
-        (access?.clientProjectCreation && user?.role == 'client') ||
-        (access?.supervisorProjectCreation && user?.role == 'Supervisor');
+        (access?.clientTaskCreation && user?.role == 'client') ||
+        (access?.supervisorTaskCreation && user?.role == 'Supervisor');
     const editAccess =
         (access?.pmTaskEditing && isPm) ||
         isOrgPm ||
         access.projectMembersTaskEditing ||
         access.taskMembersTaskEditing;
+
+    const [loading, setLoading] = useState(false);
+    const toast = useToast();
+    const {
+        isOpen: isOpened,
+        onOpen: onOpened,
+        onClose: onClosed,
+    } = useDisclosure();
+    const {
+        isOpen: isOpens,
+        onOpen: onOpens,
+        onClose: onCloses,
+    } = useDisclosure();
+
+    const openPrompt = (item: any) => {
+        setData({ isEdit: false, raw: item });
+        onOpened();
+    };
+
+    const deleteTask = async () => {
+        setLoading(true);
+        const taskId = data.raw as any;
+        try {
+            const res = await ProjectManagementService.deleteProjectTask(
+                taskId.id,
+            );
+            if (res.status) {
+                setLoading(false);
+                toast({
+                    title: res.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.replace(router.asPath);
+                onCloses();
+                return;
+            }
+        } catch (err: any) {
+            setLoading(false);
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
 
     return (
         <Box>
@@ -187,7 +244,50 @@ export const TeamProjectTask = ({
                                     color={colorSwatch(x?.status)}
                                 />
                                 <td>
-                                    <HStack color="#c2cfe0">
+                                    <Menu>
+                                        <MenuButton>
+                                            <Box
+                                                fontSize="1rem"
+                                                pl="1rem"
+                                                fontWeight="bold"
+                                                cursor="pointer"
+                                                color="brand.300"
+                                            >
+                                                {loading ? (
+                                                    <Spinner size="sm" />
+                                                ) : (
+                                                    <FaEllipsisH />
+                                                )}
+                                            </Box>
+                                        </MenuButton>
+                                        <MenuList w="full" fontSize=".7rem">
+                                            <MenuItem
+                                                onClick={() => viewTask()}
+                                                w="full"
+                                            >
+                                                View Task
+                                            </MenuItem>
+                                            {editAccess && (
+                                                <MenuItem
+                                                    onClick={() => openModal(x)}
+                                                    w="full"
+                                                >
+                                                    Edit Task
+                                                </MenuItem>
+                                            )}
+                                            {hasAccess && (
+                                                <MenuItem
+                                                    onClick={() =>
+                                                        openPrompt(x)
+                                                    }
+                                                    w="full"
+                                                >
+                                                    Delete
+                                                </MenuItem>
+                                            )}
+                                        </MenuList>
+                                    </Menu>
+                                    {/* <HStack color="#333333">
                                         <Icon as={FaEye} onClick={viewTask} />
                                         {editAccess && (
                                             <Icon
@@ -195,7 +295,13 @@ export const TeamProjectTask = ({
                                                 onClick={() => openModal(x)}
                                             />
                                         )}
-                                    </HStack>
+                                        {hasAccess && (
+                                            <Icon
+                                                as={MdDeleteOutline}
+                                                onClick={() => openModal(x)}
+                                            />
+                                        )}
+                                    </HStack> */}
                                 </td>
                             </TableRow>
                         );
@@ -211,6 +317,27 @@ export const TeamProjectTask = ({
                     project={project}
                     isEdit={data.isEdit}
                     setData={setData}
+                />
+            )}
+            {isOpened && (
+                <ShowPrompt
+                    isOpen={isOpened}
+                    onClose={onClosed}
+                    onSubmit={() => {
+                        onClosed();
+                        onOpens();
+                    }}
+                    loading={loading}
+                    text={`Are you sure you want to delete this task?`}
+                />
+            )}
+            {isOpens && (
+                <ShowPrompt
+                    isOpen={isOpens}
+                    onClose={onCloses}
+                    onSubmit={deleteTask}
+                    loading={loading}
+                    text={`Are you sure you want to delete this task? <br/> This action cannot be undone`}
                 />
             )}
         </Box>

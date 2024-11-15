@@ -23,6 +23,7 @@ import { NotificationContext } from '@components/context/NotificationContext';
 import { UserContext } from '@components/context/UserContext';
 import Naira, { CAD, CUR } from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
+import calculatePercentage from '@components/generics/functions/calculatePercentage';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 import axios from 'axios';
@@ -125,25 +126,67 @@ function PaymentPartnerDashboard({
                         url={'invoices'}
                         data={metrics?.data?.recentInvoicedInvoice
                             ?.slice(0, 5)
-                            .map((x: InvoiceView, i: any) => (
-                                <Tr key={i}>
-                                    <TableData
-                                        name={
-                                            x.payrollGroupName ||
-                                            x.paymentPartnerName ||
-                                            x.name
-                                        }
-                                    />
-                                    <TableData name={x.invoiceReference} />
-                                    <TableData
-                                        name={formatDate(x.dateCreated)}
-                                    />
-                                    <TableData
-                                        name={`${getCurrencySymbol(
-                                            user?.currency,
-                                        )}${CUR(Round(x.totalAmount))}`}
-                                    />
-                                    {/* <TableData
+                            .map((x: InvoiceView, i: any) => {
+                                const allFeesTotal = Number(
+                                    x?.children?.reduce(
+                                        (a, x) =>
+                                            a +
+                                            (x.employeeInformation
+                                                ?.paymentProcessingFeeType ==
+                                            'percentage'
+                                                ? calculatePercentage(
+                                                      (x?.convertedAmount as number) +
+                                                          calculatePercentage(
+                                                              x.convertedAmount,
+                                                              x
+                                                                  ?.employeeInformation
+                                                                  ?.tax,
+                                                          ),
+                                                      x?.employeeInformation
+                                                          ?.paymentProcessingFee as number,
+                                                  )
+                                                : (x?.employeeInformation
+                                                      ?.paymentProcessingFee as number)),
+                                        0,
+                                    ),
+                                );
+                                const allTaxTotal = Number(
+                                    x?.children?.reduce(
+                                        (a, x) =>
+                                            a +
+                                            calculatePercentage(
+                                                x.convertedAmount,
+                                                x?.employeeInformation?.tax,
+                                            ),
+                                        0,
+                                    ),
+                                );
+                                return (
+                                    <Tr key={i}>
+                                        <TableData
+                                            name={
+                                                x.payrollGroupName ||
+                                                x.paymentPartnerName ||
+                                                x.name
+                                            }
+                                        />
+                                        <TableData name={x.invoiceReference} />
+                                        <TableData
+                                            name={formatDate(x.dateCreated)}
+                                        />
+                                        <TableData
+                                            name={`${getCurrencySymbol(
+                                                user?.currency,
+                                            )} ${CUR(
+                                                Round(
+                                                    (x.convertedAmount as number) +
+                                                        allTaxTotal +
+                                                        allFeesTotal,
+                                                ),
+                                            )}`}
+                                            full
+                                        />
+                                        {/* <TableData
                                         name={Naira(
                                             Round(
                                                 (x.totalAmount as number) *
@@ -151,9 +194,10 @@ function PaymentPartnerDashboard({
                                             ),
                                         )}
                                     /> */}
-                                    <TableState name={x.status as string} />
-                                </Tr>
-                            ))}
+                                        <TableState name={x.status as string} />
+                                    </Tr>
+                                );
+                            })}
                         thead={[
                             'Name on Invoice',
                             'Invoice No',

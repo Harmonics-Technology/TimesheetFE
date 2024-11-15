@@ -256,9 +256,19 @@ export function NewTableState({
     );
 }
 export function TableContract({ url, label }: { url: any; label?: any }) {
+    const toast = useToast();
     //
     const [loading, setLoading] = useState(false);
     const downloadFile = (url: string) => {
+        if (!url) {
+            toast({
+                title: 'No file uploaded',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
         setLoading(true);
         axios
             .get(url, {

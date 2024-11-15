@@ -332,6 +332,7 @@ export const TeamGantChart = ({
                         h="2rem"
                         borderRadius=".3rem"
                         fontSize=".8rem"
+                        display="none"
                     >
                         Add new task
                     </Button>
