@@ -173,6 +173,9 @@ function TeamProfile({
                 userProfile?.employeeInformation?.hasUtilizeLeaveDaysToDate,
             utilizedLeave:
                 userProfile?.employeeInformation?.utilizedLeave || undefined,
+            timesheetStartDate:
+                userProfile?.employeeInformation?.timesheetStartDate ||
+                undefined,
         },
     });
     const router = useRouter();
@@ -707,6 +710,14 @@ function TeamProfile({
                                         )}
                                     </>
                                 }
+                            />
+                            <PrimaryDate<TeamMemberModel>
+                                control={control}
+                                name="timesheetStartDate"
+                                label="Timesheet Start Date"
+                                error={errors.timesheetStartDate}
+                                required={false}
+                                // min={new Date()}
                             />
                             <Box w="full">
                                 <FormLabel

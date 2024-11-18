@@ -691,6 +691,14 @@ export const NewTeamMemerOnboardingForm = ({
                                 </>
                             }
                         />
+                        <PrimaryDate<TeamMemberModel>
+                            control={control}
+                            name="timesheetStartDate"
+                            label="Timesheet Start Date"
+                            error={errors.timesheetStartDate}
+                            required={false}
+                            // min={new Date()}
+                        />
                         <LicenseSelection
                             addLicense={addLicense}
                             removeLicense={removeLicense}

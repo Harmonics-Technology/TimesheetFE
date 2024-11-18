@@ -229,6 +229,8 @@ export const DraftOnboardingModal = ({
             hasUtilizeLeaveDaysToDate:
                 userProfile?.employeeInformation?.hasUtilizeLeaveDaysToDate,
             utilizedLeave: userProfile?.employeeInformation?.utilizedLeave,
+            timesheetStartDate:
+                userProfile?.employeeInformation?.timesheetStartDate,
         },
     });
 
@@ -767,6 +769,14 @@ export const DraftOnboardingModal = ({
                                     )}
                                 </>
                             }
+                        />
+                        <PrimaryDate<TeamMemberModel>
+                            control={control}
+                            name="timesheetStartDate"
+                            label="Timesheet Start Date"
+                            error={errors.timesheetStartDate}
+                            required={false}
+                            // min={new Date()}
                         />
                         <LicenseSelection
                             addLicense={addLicense}

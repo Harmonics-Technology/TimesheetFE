@@ -63,4 +63,5 @@ export type EmployeeInformationView = {
     rolledOverLeave?: number | null;
     expiryDateOfRolledOverLeave?: string | null;
     incorpName?: string | null;
+    timesheetStartDate?: string | null;
 };
