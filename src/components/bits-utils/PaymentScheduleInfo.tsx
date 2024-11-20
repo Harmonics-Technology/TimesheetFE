@@ -11,6 +11,7 @@ export const PaymentScheduleInfo = () => {
             color="#6A7F9D"
             align="flex-start"
             my="26px"
+            w="90%"
         >
             <Icon as={BsFillInfoSquareFill} fontSize="13px" mt="3px" />
             <Text fontSize="11px" fontWeight={400}>

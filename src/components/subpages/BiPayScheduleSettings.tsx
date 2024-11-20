@@ -139,6 +139,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                         </Text>
                     </Box> */}
                     </HStack>
+                    <PaymentScheduleInfo />
                     <HStack w="90%" spacing="1rem" align="flex-end">
                         <PrimaryInput<PayScheduleGenerationModel>
                             label="Payment Date Offset (in days)"
@@ -162,7 +163,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                         </Text>
                     </Box> */}
                     </HStack>
-                    <PaymentScheduleInfo />
+
                     <Box mt="32px">
                         <PayscheduleBottomNote />
                     </Box>
