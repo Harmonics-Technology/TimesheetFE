@@ -285,7 +285,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                             'currency settings',
                             'expense type',
                             'hst settings',
-                            'payment schedule settings',
+                            'cycle schedule settings',
                             'leave management settings',
                             // {
                             //     show: subType == 'basic',

@@ -23,6 +23,7 @@ import { useForm } from 'react-hook-form';
 import { FinancialService, PayScheduleGenerationModel } from 'src/services';
 import * as yup from 'yup';
 import PayscheduleBottomNote from '../bits-utils/PayscheduleBottomNote';
+import { PaymentScheduleInfo } from '@components/bits-utils/PaymentScheduleInfo';
 
 const schema = yup.object().shape({
     startDate: yup.string().required(),
@@ -100,7 +101,7 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
                             fontWeight="500"
                             mb="0"
                         >
-                            Weekly Payment Schedule
+                            Weekly Cycle Schedule
                         </Text>
                         <Text color="#002861" fontSize="0.93rem" mb="0">
                             Payment is processed for a Weekly period
@@ -141,6 +142,7 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
                         </Text>
                     </Box> */}
                     </HStack>
+                    <PaymentScheduleInfo />
                     <HStack w="90%" spacing="1rem" align="flex-end">
                         <Box w="full">
                             <PrimaryInput<PayScheduleGenerationModel>

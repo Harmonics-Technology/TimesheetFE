@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { LabelSign } from '@components/bits-utils/LabelSign';
+import { PaymentScheduleInfo } from '@components/bits-utils/PaymentScheduleInfo';
 import PayscheduleBottomNote from '@components/bits-utils/PayscheduleBottomNote';
 import { PayscheduleSidenote } from '@components/bits-utils/PayscheduleSidenote';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
@@ -101,7 +102,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                             fontWeight="500"
                             mb="0"
                         >
-                            Bi-weekly Payment Schedule
+                            Bi-weekly Cycle Schedule
                         </Text>
                         <Text color="#002861" fontSize="0.93rem" mb="0">
                             Payment is processed for a Bi-weekly period
@@ -161,6 +162,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                         </Text>
                     </Box> */}
                     </HStack>
+                    <PaymentScheduleInfo />
                     <Box mt="32px">
                         <PayscheduleBottomNote />
                     </Box>

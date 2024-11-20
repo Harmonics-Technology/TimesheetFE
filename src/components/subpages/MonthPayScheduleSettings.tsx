@@ -30,6 +30,7 @@ import { PayscheduleSidenote } from '@components/bits-utils/PayscheduleSidenote'
 import moment from 'moment';
 import { CustomDateTime } from '@components/bits-utils/CustomDateTime';
 import { CustomDatePick } from '@components/bits-utils/CustomDatePick';
+import { PaymentScheduleInfo } from '@components/bits-utils/PaymentScheduleInfo';
 
 const schema = yup.object().shape({});
 
@@ -119,7 +120,7 @@ export const MonthPayScheduleSettings = ({
                             fontWeight="500"
                             mb="0"
                         >
-                            Monthly Payment Schedule
+                            Monthly Cycle Schedule
                         </Text>
                         <Text color="#002861" fontSize="0.93rem" mb="0">
                             Payment is processed for either a full month or a 4
@@ -206,6 +207,7 @@ export const MonthPayScheduleSettings = ({
                                         readonly={true}
                                     />
                                 </HStack>
+                                <PaymentScheduleInfo />
                                 <HStack w="90%" spacing="1rem" align="flex-end">
                                     <PrimaryInput<PayScheduleGenerationModel>
                                         label="Payment Date Offset (in days)"
