@@ -27,10 +27,10 @@ import { PaymentScheduleInfo } from '@components/bits-utils/PaymentScheduleInfo'
 
 const schema = yup.object().shape({
     startDate: yup.string().required(),
-    paymentDateDays: yup
-        .number()
-        .required()
-        .max(7, 'Select between 1 - 7 days'),
+    // paymentDateDays: yup
+    //     .number()
+    //     .required()
+    //     .max(7, 'Select between 1 - 7 days'),
 });
 
 export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
@@ -45,7 +45,7 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
         mode: 'all',
         defaultValues: {
             startDate: bPeriod,
-            paymentDateDays: payday,
+            paymentDateDays: payday || 0,
         },
     });
     const toast = useToast();

@@ -51,7 +51,7 @@ export const MonthPayScheduleSettings = ({
         mode: 'all',
         defaultValues: {
             startDate: bPeriod,
-            paymentDateDays: payday,
+            paymentDateDays: payday || 0,
         },
     });
     const toast = useToast();

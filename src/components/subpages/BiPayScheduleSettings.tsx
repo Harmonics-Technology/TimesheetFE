@@ -27,10 +27,10 @@ import * as yup from 'yup';
 
 const schema = yup.object().shape({
     startDate: yup.string().required(),
-    paymentDateDays: yup
-        .number()
-        .required()
-        .max(14, 'Select between 1 - 14 days'),
+    // paymentDateDays: yup
+    //     .number()
+    //     .required()
+    //     .max(14, 'Select between 1 - 14 days'),
 });
 
 export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
@@ -45,7 +45,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
         mode: 'all',
         defaultValues: {
             startDate: bPeriod,
-            paymentDateDays: payday,
+            paymentDateDays: payday || 0,
         },
     });
     const toast = useToast();
