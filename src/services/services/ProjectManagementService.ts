@@ -9,6 +9,9 @@ import type { BudgetSummaryReportViewStandardResponse } from '../models/BudgetSu
 import type { ListProjectViewPagedCollectionStandardResponse } from '../models/ListProjectViewPagedCollectionStandardResponse';
 import type { MarkAsCompletedModel } from '../models/MarkAsCompletedModel';
 import type { OperationalTaskFilter } from '../models/OperationalTaskFilter';
+import type { ProjectInvoiceModel } from '../models/ProjectInvoiceModel';
+import type { ProjectInvoiceRecipientViewListStandardResponse } from '../models/ProjectInvoiceRecipientViewListStandardResponse';
+import type { ProjectInvoiceViewPagedCollectionStandardResponse } from '../models/ProjectInvoiceViewPagedCollectionStandardResponse';
 import type { ProjectManagementTimesheetModel } from '../models/ProjectManagementTimesheetModel';
 import type { ProjectModel } from '../models/ProjectModel';
 import type { ProjectProgressCountViewStandardResponse } from '../models/ProjectProgressCountViewStandardResponse';
@@ -31,6 +34,7 @@ import type { ResourceCapacityDetailViewStandardResponse } from '../models/Resou
 import type { ResourceCapacityViewStandardResponse } from '../models/ResourceCapacityViewStandardResponse';
 import type { StrippedProjectAssigneeStandardResponse } from '../models/StrippedProjectAssigneeStandardResponse';
 import type { TaskComment } from '../models/TaskComment';
+import type { UpdateInvoiceStatusModel } from '../models/UpdateInvoiceStatusModel';
 import type { UpdateProjectTimesheet } from '../models/UpdateProjectTimesheet';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -956,6 +960,112 @@ taskId?: string,
             query: {
                 'userId': userId,
                 'taskId': taskId,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static createInvoice(
+requestBody?: ProjectInvoiceModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/create-project-invoice',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateInvoice(
+requestBody?: ProjectInvoiceModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-project-invoice',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateInvoiceStatus(
+requestBody?: UpdateInvoiceStatusModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/update-project-invoice-status',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param superAdminId 
+     * @param invoiceId 
+     * @returns ProjectInvoiceRecipientViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static listEmailRecipient(
+superAdminId?: string,
+invoiceId?: string,
+): CancelablePromise<ProjectInvoiceRecipientViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/invoice-recipients',
+            query: {
+                'superAdminId': superAdminId,
+                'invoiceId': invoiceId,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param superAdminId 
+     * @param status 
+     * @param recipient 
+     * @param startDate 
+     * @param endDate 
+     * @param invoiceRef 
+     * @returns ProjectInvoiceViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listProjectInvoices(
+offset?: number,
+limit?: number,
+superAdminId?: string,
+status?: string,
+recipient?: string,
+startDate?: string,
+endDate?: string,
+invoiceRef?: string,
+): CancelablePromise<ProjectInvoiceViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/invoices',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'superAdminId': superAdminId,
+                'status': status,
+                'recipient': recipient,
+                'StartDate': startDate,
+                'EndDate': endDate,
+                'invoiceRef': invoiceRef,
             },
         });
     }

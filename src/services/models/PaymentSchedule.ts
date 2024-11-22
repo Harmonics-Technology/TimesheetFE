@@ -13,4 +13,5 @@ export type PaymentSchedule = {
     paymentDate?: string;
     cycleType?: string | null;
     superAdminId?: string | null;
+    isPaymentDate?: boolean;
 };

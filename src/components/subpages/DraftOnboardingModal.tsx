@@ -399,7 +399,7 @@ export const DraftOnboardingModal = ({
     }, [paymentPartnerId]);
 
     const onSubmit = async (data: TeamMemberModel) => {
-        data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax;
+        data.tax = data.taxType == 'hst' ? hstAmount?.fee || 0 : data?.tax;
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
         data.role = 'Team member';
