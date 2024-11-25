@@ -28,12 +28,14 @@ import { UserContext } from '@components/context/UserContext';
 
 export const TopBar = ({
     noTitle = false,
+    noTop = false,
     id,
     data,
     users,
     currencies,
 }: {
     noTitle?: boolean;
+    noTop?: boolean;
     id?: any;
     data?: ProjectView;
     users: any;
@@ -53,46 +55,55 @@ export const TopBar = ({
 
     return (
         <Box borderBottom={noTitle ? 'none' : '1px solid #e5e5e5'} pb="0rem">
-            <Box mb="1.5rem">
+            <Box pb="1.5rem" bgColor="#f6f7f8">
                 <ProjectTabs name={TabMenu(subType)} />
             </Box>
-            <Flex justify="space-between" align="center">
-                <HStack
-                    fontSize=".875rem"
-                    cursor="pointer"
-                    onClick={() => router.back()}
-                >
-                    <Button bgColor="#f0f0f0" h="1.5rem" w="1.5rem" minW="0">
-                        <Icon as={MdOutlineArrowBackIosNew} fontSize=".8rem" />
-                    </Button>
-                    <Text color="brand.400" fontWeight={500}>
-                        Back
-                    </Text>
-                </HStack>
+            {!noTop && (
+                <>
+                    <Flex justify="space-between" align="center">
+                        <HStack
+                            fontSize=".875rem"
+                            cursor="pointer"
+                            onClick={() => router.back()}
+                        >
+                            <Button
+                                bgColor="#f0f0f0"
+                                h="1.5rem"
+                                w="1.5rem"
+                                minW="0"
+                            >
+                                <Icon
+                                    as={MdOutlineArrowBackIosNew}
+                                    fontSize=".8rem"
+                                />
+                            </Button>
+                            <Text color="brand.400" fontWeight={500}>
+                                Back
+                            </Text>
+                        </HStack>
 
-                <HStack gap="1rem">
-                    <ManageBtn
-                        onClick={onOpened}
-                        isLoading={loading.id == data?.id}
-                        btn="Mark Project as Complete"
-                        bg="brand.400"
-                        w="fit-content"
-                        disabled={status == 'completed'}
-                        h="2rem"
-                    />
-                    <ManageBtn
-                        onClick={() => onOpen()}
-                        btn="Edit Project"
-                        bg="brand.400"
-                        w="fit-content"
-                        h="2rem"
-                    />
-                </HStack>
-            </Flex>
-            <TaskMenu
-                name={SubTabMenu(subType)}
-                id={id}
-            />
+                        <HStack gap="1rem">
+                            <ManageBtn
+                                onClick={onOpened}
+                                isLoading={loading.id == data?.id}
+                                btn="Mark Project as Complete"
+                                bg="brand.400"
+                                w="fit-content"
+                                disabled={status == 'completed'}
+                                h="2rem"
+                            />
+                            <ManageBtn
+                                onClick={() => onOpen()}
+                                btn="Edit Project"
+                                bg="brand.400"
+                                w="fit-content"
+                                h="2rem"
+                            />
+                        </HStack>
+                    </Flex>
+                    <TaskMenu name={SubTabMenu(subType)} id={id} />
+                </>
+            )}
             {!noTitle && (
                 <HStack justify="space-between" my="2rem" align="flex-start">
                     <Box>

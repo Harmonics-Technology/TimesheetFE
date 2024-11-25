@@ -12,6 +12,7 @@ import type { OperationalTaskFilter } from '../models/OperationalTaskFilter';
 import type { ProjectInvoiceModel } from '../models/ProjectInvoiceModel';
 import type { ProjectInvoiceRecipientViewListStandardResponse } from '../models/ProjectInvoiceRecipientViewListStandardResponse';
 import type { ProjectInvoiceViewPagedCollectionStandardResponse } from '../models/ProjectInvoiceViewPagedCollectionStandardResponse';
+import type { ProjectInvoiceViewStandardResponse } from '../models/ProjectInvoiceViewStandardResponse';
 import type { ProjectManagementTimesheetModel } from '../models/ProjectManagementTimesheetModel';
 import type { ProjectModel } from '../models/ProjectModel';
 import type { ProjectProgressCountViewStandardResponse } from '../models/ProjectProgressCountViewStandardResponse';
@@ -966,12 +967,12 @@ taskId?: string,
 
     /**
      * @param requestBody 
-     * @returns BooleanStandardResponse Success
+     * @returns ProjectInvoiceViewStandardResponse Success
      * @throws ApiError
      */
     public static createInvoice(
 requestBody?: ProjectInvoiceModel,
-): CancelablePromise<BooleanStandardResponse> {
+): CancelablePromise<ProjectInvoiceViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/ProjectManagement/create-project-invoice',
@@ -982,12 +983,12 @@ requestBody?: ProjectInvoiceModel,
 
     /**
      * @param requestBody 
-     * @returns BooleanStandardResponse Success
+     * @returns ProjectInvoiceViewStandardResponse Success
      * @throws ApiError
      */
     public static updateInvoice(
 requestBody?: ProjectInvoiceModel,
-): CancelablePromise<BooleanStandardResponse> {
+): CancelablePromise<ProjectInvoiceViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/ProjectManagement/update-project-invoice',
@@ -1066,6 +1067,40 @@ invoiceRef?: string,
                 'StartDate': startDate,
                 'EndDate': endDate,
                 'invoiceRef': invoiceRef,
+            },
+        });
+    }
+
+    /**
+     * @param id 
+     * @returns ProjectInvoiceViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getInvoiceById(
+id: string,
+): CancelablePromise<ProjectInvoiceViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/project-invoice/{id}',
+            path: {
+                'id': id,
+            },
+        });
+    }
+
+    /**
+     * @param id 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static deleteInvoice(
+id: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/delete-project-invoice/{id}',
+            path: {
+                'id': id,
             },
         });
     }

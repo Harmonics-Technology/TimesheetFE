@@ -41,6 +41,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     h?: string;
     readonly?: boolean;
     suffix?: JSX.Element;
+    prefix?: JSX.Element;
 }
 export const PrimaryInput = <TFormValues extends Record<string, any>>({
     name,
@@ -63,6 +64,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
     w = 'full',
     readonly = false,
     suffix,
+    prefix,
 }: FormInputProps<TFormValues>) => {
     return (
         <FormControl
@@ -82,6 +84,7 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                 </FormLabel>
             )}
             <InputGroup>
+                {prefix && prefix}
                 <Input
                     type={type}
                     placeholder={placeholder}

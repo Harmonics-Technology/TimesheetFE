@@ -43,21 +43,23 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
 
         const title = 'Payment Schedule';
         const headers = [
-            [
-                'S/N',
-                'FIRST WORK DAY',
-                'LAST WORK DAY',
-                'APPROVAL DATE',
-                'PAYMENT DATE',
-            ],
+            paymentSchedule?.data?.at(0)?.isPaymentDate
+                ? [
+                      'S/N',
+                      'FIRST WORK DAY',
+                      'LAST WORK DAY',
+                      'APPROVAL DATE',
+                      'PAYMENT DATE',
+                  ]
+                : ['S/N', 'FIRST WORK DAY', 'LAST WORK DAY'],
         ];
 
         const data = paymentSchedule?.data?.map((x: PaymentSchedule, i) => [
             ++i,
             moment(x.weekDate),
             moment(x.lastWorkDayOfCycle),
-            moment(x.approvalDate),
-            moment(x.paymentDate),
+            x?.isPaymentDate && moment(x.approvalDate),
+            x?.isPaymentDate && moment(x.paymentDate),
         ]);
 
         const content = {

@@ -18,14 +18,16 @@ export const TableCard = ({
     children,
     bg,
     color,
+    overflow,
 }: {
     tableHead: any[];
     children: any;
     bg?: string;
     color?: string;
+    overflow?: any;
 }) => {
     return (
-        <TableContainer h="auto">
+        <TableContainer h="auto" overflowX={overflow} overflowY={overflow}>
             <Table
                 fontSize="11px"
                 style={{ borderCollapse: 'separate', borderSpacing: '0 10px' }}

@@ -2,12 +2,14 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { ProjectView } from './ProjectView';
+import type { ProjectInvoiceItemView } from './ProjectInvoiceItemView';
+import type { ProjectInvoiceRecipientView } from './ProjectInvoiceRecipientView';
 
 export type ProjectInvoiceView = {
+    id?: string;
     superAdminId?: string;
     projectId?: string;
-    project?: ProjectView;
+    projectName?: string | null;
     invoiceReference?: string | null;
     subtotal?: number;
     hst?: number;
@@ -17,4 +19,7 @@ export type ProjectInvoiceView = {
     dueDate?: string;
     status?: string | null;
     organization?: string | null;
+    recipientId?: string | null;
+    recipient?: ProjectInvoiceRecipientView;
+    projectInvoiceItems?: Array<ProjectInvoiceItemView> | null;
 };

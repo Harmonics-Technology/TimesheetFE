@@ -30,6 +30,7 @@ export const CustomSelectBox = ({
     single,
     searchable,
     extraField,
+    extra,
 }: {
     h?: string;
     fontSize?: string;
@@ -45,6 +46,7 @@ export const CustomSelectBox = ({
     single?: boolean;
     searchable?: boolean;
     extraField?: any;
+    extra?: any;
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState<any>();
@@ -63,6 +65,7 @@ export const CustomSelectBox = ({
                   key: x[customKeys.key],
                   used: x[customKeys?.used],
                   total: x[customKeys.total],
+                  phone: x[customKeys.phone],
               };
           })
         : dataAsFiltered?.map((x: any) => {
@@ -71,6 +74,7 @@ export const CustomSelectBox = ({
                   key: x[customKeys.key],
                   used: x[customKeys?.used],
                   total: x[customKeys.total],
+                  phone: x[customKeys.phone],
               };
           });
 
@@ -95,7 +99,11 @@ export const CustomSelectBox = ({
             checkBoxFn(x);
         }
         setSelected(x);
-        updateFunction({ [customKeys.key]: x.id, [customKeys.label]: x.label });
+        updateFunction({
+            [customKeys.key]: x.id,
+            [customKeys.label]: x.label,
+            ...x,
+        });
         // setIsOpen(false);
     };
 
@@ -181,8 +189,19 @@ export const CustomSelectBox = ({
                                         _hover={{
                                             bgColor: '#faf7f7',
                                         }}
+                                        borderBottom="1px solid #e6e7e7"
+                                        cursor="pointer"
                                         onClick={() =>
-                                            extraField && x.used == x.total
+                                            extra
+                                                ? selectData({
+                                                      id: x.key,
+                                                      label: x.label,
+                                                      phone: x.phone,
+                                                      email: x.total,
+                                                      address: x.used,
+                                                  })
+                                                : extraField &&
+                                                  x.used == x.total
                                                 ? void 0
                                                 : selectData({
                                                       id: x.key,
@@ -227,7 +246,11 @@ export const CustomSelectBox = ({
                                                 <Text
                                                     color="#696969"
                                                     fontSize="13px"
-                                                >{`${x.used} of ${x.total} ${extraField}`}</Text>
+                                                >
+                                                    {extra
+                                                        ? x?.used
+                                                        : `${x.used} of ${x.total} ${extraField}`}
+                                                </Text>
                                             )}
                                         </VStack>
                                     </HStack>

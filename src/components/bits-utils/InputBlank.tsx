@@ -5,6 +5,7 @@ import {
     InputGroup,
     InputRightElement,
     Text,
+    Textarea,
 } from '@chakra-ui/react';
 import React from 'react';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
@@ -23,8 +24,11 @@ interface InputProps {
     value?: any;
     readonly?: any;
     w?: any;
+    h?: any;
     suffix?: JSX.Element;
+    prefix?: JSX.Element;
     variant?: any;
+    isTextArea?: boolean;
 }
 function InputBlank({
     type,
@@ -40,8 +44,11 @@ function InputBlank({
     value,
     readonly,
     w = 'full',
+    h = '2.6rem',
     suffix,
+    prefix,
     variant = 'filled',
+    isTextArea,
 }: InputProps) {
     return (
         <FormControl w={w}>
@@ -53,21 +60,37 @@ function InputBlank({
                 {label}
             </FormLabel>
             <InputGroup>
-                <Input
-                    type={type}
-                    placeholder={placeholder}
-                    variant={variant}
-                    disabled={disableLabel}
-                    onChange={onChange}
-                    defaultValue={defaultValue}
-                    value={value}
-                    // borderColor="gray.400"
-                    borderRadius="0"
-                    h="2.6rem"
-                    readOnly={readonly}
-                    userSelect={readonly ? 'none' : 'all'}
-                    fontSize={fontSize}
-                />
+                {prefix && prefix}
+                {isTextArea ? (
+                    <Textarea
+                        placeholder={placeholder}
+                        variant={variant}
+                        onChange={onChange}
+                        defaultValue={defaultValue}
+                        value={value}
+                        borderRadius="0"
+                        h={h}
+                        readOnly={readonly}
+                        userSelect={readonly ? 'none' : 'all'}
+                        fontSize={fontSize}
+                    ></Textarea>
+                ) : (
+                    <Input
+                        type={type}
+                        placeholder={placeholder}
+                        variant={variant}
+                        disabled={disableLabel}
+                        onChange={onChange}
+                        defaultValue={defaultValue}
+                        value={value}
+                        // borderColor="gray.400"
+                        borderRadius="0"
+                        h={h}
+                        readOnly={readonly}
+                        userSelect={readonly ? 'none' : 'all'}
+                        fontSize={fontSize}
+                    />
+                )}
                 {icon && (
                     <InputRightElement
                         onClick={() => changeVisibility()}

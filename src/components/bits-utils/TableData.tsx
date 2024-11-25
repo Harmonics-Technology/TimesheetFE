@@ -13,6 +13,8 @@ import {
     Icon,
     Text,
     Tr,
+    HStack,
+    VStack,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import NextLink from 'next/link';
@@ -27,6 +29,7 @@ import {
     InitiateResetModel,
     InvoiceView,
     LeaveService,
+    ProjectManagementService,
     SettingsService,
     ShiftService,
     TrainingService,
@@ -36,10 +39,11 @@ import fileDownload from 'js-file-download';
 import { UserContext } from '@components/context/UserContext';
 import { BiTrash } from 'react-icons/bi';
 import { MdVerified, MdCancel } from 'react-icons/md';
-import { BsEye, BsPencil } from 'react-icons/bs';
+import { BsCaretDownFill, BsEye, BsPencil } from 'react-icons/bs';
 import { RiInboxArchiveFill } from 'react-icons/ri';
 import shadeColor from '@components/generics/functions/shadeColor';
 import validateEmail from '@components/generics/functions/validateEmail';
+import useComponentVisible from '@components/generics/useComponentVisible';
 
 export function TableHead({
     name,
@@ -1481,6 +1485,145 @@ export function TrainingActions({
                             Delete
                         </MenuItem>
                     )}
+                </MenuList>
+            </Menu>
+        </td>
+    );
+}
+
+export function ProjectStatusAction({
+    id,
+    status,
+}: {
+    id: string;
+    status: any;
+}) {
+    // const [selected, setSelected] = useState(status);
+    const [loading, setLoading] = useState(false);
+    const toast = useToast();
+    const router = useRouter();
+    const options = [
+        { id: 1, label: 'paid' },
+        { id: 2, label: 'sent' },
+        { id: 3, label: 'draft' },
+        { id: 4, label: 'overdue' },
+    ];
+    const { ref, isComponentVisible, setIsComponentVisible } =
+        useComponentVisible(false);
+
+    const updateStatus = async (value) => {
+        setLoading(true);
+        try {
+            const res = await ProjectManagementService.updateInvoiceStatus({
+                invoiceId: id,
+                status: value.id,
+            });
+            if (res.status) {
+                router.replace(router.asPath);
+            }
+        } catch (error: any) {
+            toast({
+                title: error?.message || error?.body?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <td>
+            <Box ref={ref} pos="relative">
+                <HStack
+                    bgColor="#F5F5F5"
+                    minW="122px"
+                    borderRadius="7px"
+                    h="37px"
+                    justify="space-between"
+                    px="14px"
+                    onClick={() => setIsComponentVisible(!isComponentVisible)}
+                >
+                    <Text
+                        fontSize="14px"
+                        fontWeight={500}
+                        textTransform="capitalize"
+                        color={
+                            status == 'paid'
+                                ? 'brand.400'
+                                : status == 'sent'
+                                ? 'brand.500'
+                                : status == 'overdue'
+                                ? '#FF5B79'
+                                : '#808080'
+                        }
+                    >
+                        {status}
+                    </Text>
+                    {loading ? <Spinner size="sm" /> : <BsCaretDownFill />}
+                </HStack>
+                {isComponentVisible && (
+                    <VStack
+                        align="flex-start"
+                        bgColor="#f5f5f5"
+                        pos="absolute"
+                        w="full"
+                        borderRadius="7px"
+                        mt=".2rem"
+                        gap="0"
+                    >
+                        {options?.map((x) => (
+                            <Box
+                                onClick={() => updateStatus(x)}
+                                textTransform="capitalize"
+                                p=".4rem 1rem"
+                                cursor="pointer"
+                                w="full"
+                                _hover={{
+                                    bgColor: 'brand.400',
+                                }}
+                            >
+                                {x.label}
+                            </Box>
+                        ))}
+                    </VStack>
+                )}
+            </Box>
+        </td>
+    );
+}
+export function ProjectInvoiceAction({
+    showDelete,
+    route,
+    data,
+}: {
+    showDelete: any;
+    route: any;
+    data: any;
+}) {
+    const router = useRouter();
+    return (
+        <td>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        <FaEllipsisH />
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    <MenuItem onClick={() => router.push(route)} w="full">
+                        View
+                    </MenuItem>
+                    <MenuItem onClick={() => showDelete(data)} w="full">
+                        Delete
+                    </MenuItem>
                 </MenuList>
             </Menu>
         </td>

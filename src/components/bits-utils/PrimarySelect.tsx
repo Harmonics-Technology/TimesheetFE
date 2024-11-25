@@ -20,6 +20,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     id?: any;
     disabled?: any;
     onChange?: any;
+    w?: any;
 }
 export const PrimarySelect = <TFormValues extends Record<string, any>>({
     name,
@@ -35,6 +36,7 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
     id,
     disabled,
     onChange,
+    w = 'full',
 }: FormInputProps<TFormValues>) => {
     // console.log({ options });
     return (
@@ -42,6 +44,7 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
             isInvalid={
                 error?.type === 'required' || error?.message !== undefined
             }
+            w={w}
         >
             <FormLabel
                 htmlFor={label}
@@ -52,7 +55,7 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
             </FormLabel>
             <Select
                 {...register(name, { required, ...validate })}
-                w="full"
+                w={'full'}
                 border="1px solid"
                 borderColor="gray.400"
                 borderRadius="0px"

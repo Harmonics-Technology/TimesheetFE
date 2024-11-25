@@ -1,5 +1,5 @@
 import { Box, Grid, HStack } from '@chakra-ui/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { BiTask } from 'react-icons/bi';
 import { PiMoneyBold } from 'react-icons/pi';
 import { RiBriefcase2Line, RiTimeLine } from 'react-icons/ri';
@@ -12,6 +12,9 @@ import moment from 'moment';
 import { TableCard } from '../../Generics/TableCard';
 import { ProjectMetrics } from 'src/services';
 import { Round } from '@components/generics/functions/Round';
+import { ManageBtn } from '@components/bits-utils/ManageBtn';
+import { useRouter } from 'next/router';
+import { UserContext } from '@components/context/UserContext';
 
 export const Budgets = ({
     id,
@@ -38,6 +41,9 @@ export const Budgets = ({
     ];
 
     const projectMetrics: ProjectMetrics = project.projectMetrics;
+    const router = useRouter();
+    const { user } = useContext(UserContext);
+    const role = user?.role.replaceAll(' ', '');
 
     return (
         <Box>
@@ -80,6 +86,20 @@ export const Budgets = ({
                     color="#F8C200"
                 />
             </Grid>
+
+            <HStack justify="flex-end" my="2rem">
+                <ManageBtn
+                    onClick={() =>
+                        router.push(
+                            `/${role}/project-management/projects/${id}/invoices`,
+                        )
+                    }
+                    btn="Invoice"
+                    bg="brand.400"
+                    w="fit-content"
+                    h="2rem"
+                />
+            </HStack>
             <HStack justify="flex-end" my="2rem">
                 <SubSearchComponent />
             </HStack>

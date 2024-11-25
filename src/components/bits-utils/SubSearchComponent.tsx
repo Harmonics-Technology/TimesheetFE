@@ -4,7 +4,7 @@ import React from 'react';
 import { BsSearch } from 'react-icons/bs';
 import { useDebouncedCallback } from 'use-debounce';
 
-export const SubSearchComponent = () => {
+export const SubSearchComponent = ({ w = '320px' }: { w?: any }) => {
     const router = useRouter();
     const debounced = useDebouncedCallback(
         // function
@@ -20,7 +20,7 @@ export const SubSearchComponent = () => {
         800,
     );
     return (
-        <InputGroup w="320px">
+        <InputGroup w={w}>
             <Input
                 type="search"
                 placeholder="Search"

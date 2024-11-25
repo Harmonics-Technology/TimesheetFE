@@ -137,6 +137,7 @@ export type { PaySlipViewPagedCollectionStandardResponse } from './models/PaySli
 export type { ProblemDetails } from './models/ProblemDetails';
 export type { Project } from './models/Project';
 export type { ProjectInvoiceItemModel } from './models/ProjectInvoiceItemModel';
+export type { ProjectInvoiceItemView } from './models/ProjectInvoiceItemView';
 export type { ProjectInvoiceModel } from './models/ProjectInvoiceModel';
 export type { ProjectInvoiceRecipientModel } from './models/ProjectInvoiceRecipientModel';
 export type { ProjectInvoiceRecipientView } from './models/ProjectInvoiceRecipientView';
@@ -145,6 +146,7 @@ export { ProjectInvoiceStatus } from './models/ProjectInvoiceStatus';
 export type { ProjectInvoiceView } from './models/ProjectInvoiceView';
 export type { ProjectInvoiceViewPagedCollection } from './models/ProjectInvoiceViewPagedCollection';
 export type { ProjectInvoiceViewPagedCollectionStandardResponse } from './models/ProjectInvoiceViewPagedCollectionStandardResponse';
+export type { ProjectInvoiceViewStandardResponse } from './models/ProjectInvoiceViewStandardResponse';
 export type { ProjectManagementDashboardMetric } from './models/ProjectManagementDashboardMetric';
 export type { ProjectManagementSettingModel } from './models/ProjectManagementSettingModel';
 export type { ProjectManagementSettingView } from './models/ProjectManagementSettingView';

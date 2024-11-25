@@ -18,13 +18,20 @@ interface TablesProps {
     children: ReactNode;
     bg?: string;
     color?: string;
+    variant?: any;
 }
 
-function Tables({ tableHead, children, bg, color = 'brand.200' }: TablesProps) {
+function Tables({
+    tableHead,
+    children,
+    bg,
+    color = 'brand.200',
+    variant = 'striped',
+}: TablesProps) {
     //
     return (
         <TableContainer h="auto">
-            <Table variant="striped" fontSize="11px">
+            <Table variant={variant} fontSize="11px">
                 <Thead>
                     <Tr
                         w="full"
