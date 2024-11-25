@@ -24,7 +24,6 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const data = await ProjectManagementService.getInvoiceById(
                 invoiceId,
             );
-            console.log({ data });
 
             return {
                 props: {
