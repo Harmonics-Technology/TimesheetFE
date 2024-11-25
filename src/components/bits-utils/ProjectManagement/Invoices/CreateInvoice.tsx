@@ -128,7 +128,7 @@ export const CreateInvoice = ({
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [invoiceItems, setInvoiceItems] = useState<TInvoiceItems[]>(
-        invoice?.projectInvoiceItems as any,
+        (invoice?.projectInvoiceItems as any) || [],
     );
     const [showForm, setShowForm] = useState(false);
     const toast = useToast();
@@ -173,7 +173,8 @@ export const CreateInvoice = ({
         0,
     );
     const convertedTax = Round(calculatePercentage(subtotal, Number(hst)));
-    const finalTotal = Number(subtotal as number) + Number(convertedTax);
+    const finalTotal =
+        Number((subtotal as number) || 0) + Number(convertedTax || 0);
 
     const AddItemToList = (value: TInvoiceItems) => {
         value.projectTaskName = tasks?.value?.find(

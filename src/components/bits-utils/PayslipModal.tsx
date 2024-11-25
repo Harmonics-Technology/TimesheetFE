@@ -22,7 +22,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { PayslipInfoTag } from './PayslipInfoTag';
 import Naira, { CUR } from '@components/generics/functions/Naira';
-import {  useRef } from 'react';
+import { useRef } from 'react';
 import { PDFExport } from '@progress/kendo-react-pdf';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { Round } from '@components/generics/functions/Round';
@@ -37,7 +37,6 @@ type Props = {
 };
 
 export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
-
     const allExpenseTotal = paySlip?.invoice?.expenses?.reduce(
         (a, b) => a + (b?.amount as number),
         0,
@@ -61,7 +60,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
     const currency = paySlip?.invoice?.employeeInformation?.currency;
     // const numWords = toWords?.convert(finalTotal || 0, { currency: true });
 
-    const numWords = numberToWordsWithCurrency(finalTotal, currency);
+    const numWords = numberToWordsWithCurrency(Round(finalTotal), currency);
 
     return (
         <Modal
@@ -241,7 +240,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                             />
                                             <TableData
                                                 name={`${currency}
-                                                    ${CUR(netPay)}`}
+                                                    ${CUR(Round(netPay))}`}
                                                 full
                                             />
                                         </Tr>
@@ -254,7 +253,9 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                             />
                                             <TableData
                                                 name={`${currency}
-                                                    ${CUR(allExpenseTotal)}`}
+                                                    ${CUR(
+                                                        Round(allExpenseTotal),
+                                                    )}`}
                                                 full
                                             />
                                         </Tr>
@@ -267,7 +268,9 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                             />
                                             <TableData
                                                 name={`${currency}
-                                                    ${CUR(hstCalculated)}`}
+                                                    ${CUR(
+                                                        Round(hstCalculated),
+                                                    )}`}
                                                 full
                                             />
                                         </Tr>
@@ -293,7 +296,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                             />
                                             <TableData
                                                 name={`${currency}
-                                                    ${CUR(payTotal)}`}
+                                                    ${CUR(Round(payTotal))}`}
                                                 full
                                             />
                                         </Tr>
@@ -326,7 +329,8 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                 mt="2rem"
                             >
                                 <Text mb="0">
-                                    Net Pay: {`${currency} ${CUR(finalTotal)}`}
+                                    Net Pay:{' '}
+                                    {`${currency} ${CUR(Round(finalTotal))}`}
                                 </Text>
                                 <Box
                                     border="1px solid"
