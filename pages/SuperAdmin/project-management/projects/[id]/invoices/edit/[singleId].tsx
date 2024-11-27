@@ -4,6 +4,7 @@ import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
+    ProjectInvoiceRecipientView,
     ProjectInvoiceView,
     ProjectManagementService,
     ProjectTaskViewPagedCollection,
@@ -18,12 +19,14 @@ const SingleId = ({
     tasks,
     users,
     invoice,
+    superAdminId,
 }: {
     id: string;
     project: ProjectView;
     tasks: ProjectTaskViewPagedCollection;
     invoice: ProjectInvoiceView;
-    users: UserView[];
+    users: ProjectInvoiceRecipientView[];
+    superAdminId: string;
 }) => {
     return (
         <CreateInvoice
@@ -32,6 +35,7 @@ const SingleId = ({
             tasks={tasks}
             users={users}
             invoice={invoice}
+            superAdminId={superAdminId}
         />
     );
 };
@@ -54,18 +58,17 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 superAdminId,
                 id,
             );
-            const users = await UserService.listUsersByRoles(
-                superAdminId,
-                'client',
-            );
+            const recipients =
+                await ProjectManagementService.listEmailRecipient(superAdminId);
 
             return {
                 props: {
                     invoice: invoice.data,
                     project: data.data,
                     tasks: tasks.data,
-                    users: users.data,
+                    users: recipients.data,
                     id,
+                    superAdminId,
                 },
             };
         } catch (error: any) {
