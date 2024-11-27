@@ -20,6 +20,8 @@ export type ProjectInvoiceView = {
     status?: string | null;
     organization?: string | null;
     recipientId?: string | null;
+    posNumber?: string | null;
+    attachmentUrl?: string | null;
     recipient?: ProjectInvoiceRecipientView;
     projectInvoiceItems?: Array<ProjectInvoiceItemView> | null;
 };

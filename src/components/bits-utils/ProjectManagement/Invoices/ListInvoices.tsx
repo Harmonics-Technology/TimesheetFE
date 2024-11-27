@@ -32,6 +32,7 @@ import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { CustomDatePick } from '@components/bits-utils/CustomDatePick';
 import Pagination from '@components/bits-utils/Pagination';
 import { ShowPrompt } from '../Modals/ShowPrompt';
+import { Round } from '@components/generics/functions/Round';
 
 export const ListInvoices = ({
     id,
@@ -96,6 +97,8 @@ export const ListInvoices = ({
             setLoading(false);
         }
     };
+
+    console.log({ invoices });
 
     return (
         <Box>
@@ -198,11 +201,14 @@ export const ListInvoices = ({
                                 fontWeight="500"
                             />
                             <TableData
-                                name={x?.organization}
+                                name={x?.recipient?.organizationName}
                                 fontWeight="500"
                             />
 
-                            <TableData name={CAD(x?.total)} fontWeight="500" />
+                            <TableData
+                                name={CAD(Round(x?.total))}
+                                fontWeight="500"
+                            />
 
                             <ProjectStatusAction
                                 id={x?.id as string}

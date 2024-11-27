@@ -9,7 +9,9 @@ import type { BudgetSummaryReportViewStandardResponse } from '../models/BudgetSu
 import type { ListProjectViewPagedCollectionStandardResponse } from '../models/ListProjectViewPagedCollectionStandardResponse';
 import type { MarkAsCompletedModel } from '../models/MarkAsCompletedModel';
 import type { OperationalTaskFilter } from '../models/OperationalTaskFilter';
+import type { ProjectInvoiceAttachmentModel } from '../models/ProjectInvoiceAttachmentModel';
 import type { ProjectInvoiceModel } from '../models/ProjectInvoiceModel';
+import type { ProjectInvoiceRecipientModel } from '../models/ProjectInvoiceRecipientModel';
 import type { ProjectInvoiceRecipientViewListStandardResponse } from '../models/ProjectInvoiceRecipientViewListStandardResponse';
 import type { ProjectInvoiceViewPagedCollectionStandardResponse } from '../models/ProjectInvoiceViewPagedCollectionStandardResponse';
 import type { ProjectInvoiceViewStandardResponse } from '../models/ProjectInvoiceViewStandardResponse';
@@ -1014,6 +1016,38 @@ requestBody?: UpdateInvoiceStatusModel,
     }
 
     /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static addInvoiceAttachment(
+requestBody?: ProjectInvoiceAttachmentModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/add-invoice-attachment',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param requestBody 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static addRecipient(
+requestBody?: ProjectInvoiceRecipientModel,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/add-invoice-recipient',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
      * @param superAdminId 
      * @param invoiceId 
      * @returns ProjectInvoiceRecipientViewListStandardResponse Success
@@ -1037,6 +1071,7 @@ invoiceId?: string,
      * @param offset 
      * @param limit 
      * @param superAdminId 
+     * @param projectId 
      * @param status 
      * @param recipient 
      * @param startDate 
@@ -1049,6 +1084,7 @@ invoiceId?: string,
 offset?: number,
 limit?: number,
 superAdminId?: string,
+projectId?: string,
 status?: string,
 recipient?: string,
 startDate?: string,
@@ -1062,6 +1098,7 @@ invoiceRef?: string,
                 'Offset': offset,
                 'Limit': limit,
                 'superAdminId': superAdminId,
+                'projectId': projectId,
                 'status': status,
                 'recipient': recipient,
                 'StartDate': startDate,

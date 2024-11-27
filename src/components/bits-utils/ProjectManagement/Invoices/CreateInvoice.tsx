@@ -7,6 +7,7 @@ import {
     Icon,
     Text,
     Tr,
+    useDisclosure,
     useToast,
     VStack,
 } from '@chakra-ui/react';
@@ -18,11 +19,11 @@ import InputBlank from '@components/bits-utils/InputBlank';
 import {
     ProjectView,
     ProjectTaskViewPagedCollection,
-    UserView,
     ProjectManagementService,
     ProjectInvoiceModel,
     ProjectInvoiceRecipientModel,
     ProjectInvoiceView,
+    ProjectInvoiceRecipientView,
 } from 'src/services';
 import { ManageBtn } from '@components/bits-utils/ManageBtn';
 import { CUR } from '@components/generics/functions/Naira';
@@ -31,11 +32,9 @@ import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import Tables from '@components/bits-utils/Tables';
 import { TableData } from '@components/bits-utils/TableData';
 import { BsPenFill, BsTrash3Fill } from 'react-icons/bs';
-import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { UserContext } from '@components/context/UserContext';
 import shadeColor from '@components/generics/functions/shadeColor';
@@ -43,6 +42,10 @@ import { CustomDatePick } from '@components/bits-utils/CustomDatePick';
 import { CustomSelectBox } from '../Generics/CustomSelectBox';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
 import moment from 'moment';
+import { AddRecipientModal } from '../Modals/AddRecipientModal';
+import generateRandomUUID from '@components/generics/generateRandomUUID';
+import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
+import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
 
 export const SummaryBox = ({
     label,
@@ -74,6 +77,7 @@ export const SummaryBox = ({
                     variant="outline"
                     w="115px"
                     defaultValue="0"
+                    value={value}
                     suffix={
                         <Text pos="absolute" right="15px" top="20%">
                             %
@@ -105,11 +109,18 @@ interface TInvoiceItems {
     totalCost?: number;
 }
 const schema = yup.object().shape({
-    projectTaskId: yup.string().required(),
+    projectTaskId: yup.string(),
     projectTaskName: yup.string(),
     quantity: yup.string().required(),
     cost: yup.string().required(),
     totalCost: yup.string(),
+});
+const mainSchema = yup.object().shape({
+    notes: yup.string().required(),
+    dueDate: yup.string().required(),
+    issuedDate: yup.string().required(),
+    recipientId: yup.string().required(),
+    posNumber: yup.string().required(),
 });
 
 export const CreateInvoice = ({
@@ -118,12 +129,14 @@ export const CreateInvoice = ({
     tasks,
     users,
     invoice,
+    superAdminId,
 }: {
     id: string;
     project: ProjectView;
     tasks: ProjectTaskViewPagedCollection;
-    users: UserView[];
+    users: ProjectInvoiceRecipientView[];
     invoice?: ProjectInvoiceView;
+    superAdminId: string;
 }) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -135,16 +148,7 @@ export const CreateInvoice = ({
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const [hst, setHst] = useState(invoice?.hst);
-    const [notes, setNotes] = useState(invoice?.notes);
-    const [issuedDate, setIssuedDate] = useState(
-        new Date(invoice?.issuedDate as string),
-    );
-    const [dueDate, setDueDate] = useState(
-        new Date(invoice?.dueDate as string),
-    );
     const [isExternal, setIsExternal] = useState(invoice ? true : false);
-    const [recipientData, setRecepientData] =
-        useState<ProjectInvoiceRecipientModel>(invoice?.recipient as any);
 
     const {
         handleSubmit,
@@ -152,6 +156,7 @@ export const CreateInvoice = ({
         reset,
         watch,
         setValue,
+        trigger: triggerItem,
         formState: { errors },
     } = useForm<TInvoiceItems>({
         resolver: yupResolver(schema),
@@ -164,7 +169,26 @@ export const CreateInvoice = ({
             totalCost: 0,
         },
     });
+    const {
+        handleSubmit: submitInvoice,
+        register: registerInvoice,
+        setValue: setInvoiceValue,
+        trigger,
+        control,
+        formState: { errors: invoiceErrors, isSubmitting, isValid },
+    } = useForm<ProjectInvoiceModel>({
+        resolver: yupResolver(mainSchema),
+        mode: 'all',
+        defaultValues: {
+            dueDate: invoice?.dueDate,
+            notes: invoice?.notes,
+            issuedDate: invoice?.issuedDate,
+            posNumber: invoice?.posNumber,
+            recipientId: invoice?.recipientId as string,
+        },
+    });
 
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const totalCostPerItem =
         Number(watch('quantity') || 0) * Number(watch('cost') || 0);
 
@@ -176,16 +200,27 @@ export const CreateInvoice = ({
     const finalTotal =
         Number((subtotal as number) || 0) + Number(convertedTax || 0);
 
-    const AddItemToList = (value: TInvoiceItems) => {
-        value.projectTaskName = tasks?.value?.find(
-            (x) => x?.id === value.projectTaskId,
-        )?.name as string;
-        value.totalCost = totalCostPerItem;
-        setInvoiceItems([...invoiceItems, value]);
-        reset();
-        setShowForm(false);
+    const [selectedTask, setSelectedTask] = useState<any>();
+    const addTask = (task) => {
+        setSelectedTask(task);
+        setValue('projectTaskId', task?.id);
+        triggerItem('projectTaskId');
     };
 
+    const AddItemToList = (value: TInvoiceItems) => {
+        console.log({ value });
+        value.projectTaskId = value?.projectTaskId || generateRandomUUID();
+        value.projectTaskName =
+            value?.projectTaskName ||
+            (tasks?.value?.find((x) => x?.id === value.projectTaskId)
+                ?.name as string);
+        value.totalCost = totalCostPerItem;
+        setInvoiceItems([...invoiceItems, value]);
+        reset({});
+        setSelectedTask('');
+        setIsExternal(false);
+        setShowForm(false);
+    };
     const toggleEdit = (value: TInvoiceItems) => {
         setValue('cost', value.cost);
         setValue('totalCost', value.totalCost);
@@ -206,10 +241,12 @@ export const CreateInvoice = ({
         );
     };
 
-    const [selectedUser, setSelecedUser] = useState<any>();
-    const addUser = (user) => {
-        setSelecedUser(user);
-        setRecepientData(user);
+    const [selectedUser, setSelecedUser] = useState<any>(invoice?.recipient);
+    const addUser = (rec) => {
+        setSelecedUser(rec);
+        setInvoiceValue('recipientId', rec?.id);
+        trigger('recipientId');
+        // setRecepientData(user?.key);
     };
 
     const filteredTasks = tasks?.value?.filter((task) => {
@@ -219,21 +256,30 @@ export const CreateInvoice = ({
         return !matchingItem;
     });
 
-    const CreateAnInvoice = async () => {
+    const CreateAnInvoice = async (value: ProjectInvoiceModel) => {
         setLoading(true);
+        if (invoiceItems?.length < 1) {
+            toast({
+                title: 'You must add atleast one task item to create an invoice',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
         const requestBody: ProjectInvoiceModel = {
             invoiceItems,
-            hst,
+            hst: hst,
             subtotal,
             total: finalTotal,
-            dueDate: moment(dueDate).format('YYYY-MM-DD'),
-            issuedDate: moment(issuedDate).format('YYYY-MM-DD'),
-            notes,
-            organization: recipientData?.organizationName,
+            dueDate: value.dueDate,
+            issuedDate: value.issuedDate,
+            notes: value.notes,
             projectId: id,
-            recipients: [recipientData as ProjectInvoiceRecipientModel],
-            superAdminId: user?.superAdminId,
+            recipientId: value.recipientId,
+            superAdminId: superAdminId,
             id: invoice?.id,
+            posNumber: value.posNumber,
         };
         try {
             const res = invoice
@@ -324,10 +370,12 @@ export const CreateInvoice = ({
                                 fontSize="14px"
                                 label="Project"
                             />
-                            <InputBlank
+                            <PrimaryInput<ProjectInvoiceModel>
                                 fontSize="14px"
                                 label="P.O/S.O Number"
-                                onChange={void 0}
+                                register={registerInvoice}
+                                error={invoiceErrors.posNumber}
+                                name="posNumber"
                                 variant="outline"
                             />
                         </Grid>
@@ -377,16 +425,61 @@ export const CreateInvoice = ({
 
                         {showForm && (
                             <HStack gap="17px" mt="2rem" align="flex-start">
-                                <PrimarySelect<TInvoiceItems>
-                                    options={filteredTasks?.map((x) => (
-                                        <option value={x?.id}>{x?.name}</option>
-                                    ))}
-                                    label="Task Name"
-                                    error={errors?.projectTaskId}
-                                    register={register}
-                                    name="projectTaskId"
-                                    w="40%"
-                                />
+                                {isExternal ? (
+                                    <PrimaryInput<TInvoiceItems>
+                                        label="Task Name"
+                                        error={errors.projectTaskName}
+                                        register={register}
+                                        name="projectTaskName"
+                                        variant="outline"
+                                        w="40%"
+                                    />
+                                ) : (
+                                    <Box w="40%">
+                                        <FormLabel
+                                            textTransform="capitalize"
+                                            width="fit-content"
+                                            fontSize=".8rem"
+                                        >
+                                            Task Name
+                                        </FormLabel>
+
+                                        <CustomSelectBox
+                                            data={filteredTasks}
+                                            updateFunction={addTask}
+                                            items={selectedTask}
+                                            error={errors?.projectTaskId}
+                                            customKeys={{
+                                                key: 'id',
+                                                label: 'name',
+                                            }}
+                                            single
+                                            id="tasks"
+                                            extension={
+                                                <HStack
+                                                    justify="center"
+                                                    color="brand.400"
+                                                    p=".5rem .7rem"
+                                                    bgColor={shadeColor(
+                                                        '#2EAFA3',
+                                                        0.06,
+                                                    )}
+                                                    cursor="pointer"
+                                                    onClick={() =>
+                                                        setIsExternal(true)
+                                                    }
+                                                >
+                                                    <Icon
+                                                        as={AiOutlinePlusCircle}
+                                                    />
+                                                    <Text fontSize="13px">
+                                                        Add a new Task
+                                                    </Text>
+                                                </HStack>
+                                            }
+                                        />
+                                    </Box>
+                                )}
                                 <PrimaryInput<TInvoiceItems>
                                     label="Qty"
                                     error={errors.quantity}
@@ -480,7 +573,7 @@ export const CreateInvoice = ({
                             <SummaryBox
                                 label="HST"
                                 cur={'$'}
-                                value="1600"
+                                value={hst as number}
                                 hst
                                 onChange={setHst}
                             />
@@ -490,13 +583,13 @@ export const CreateInvoice = ({
                                 value={finalTotal}
                             />
                         </VStack>
-                        <InputBlank
+                        <PrimaryTextarea<ProjectInvoiceModel>
                             fontSize="14px"
                             label="Notes/Terms"
-                            onChange={(e) => setNotes(e.target.value)}
-                            value={notes}
+                            register={registerInvoice}
+                            error={invoiceErrors.notes}
+                            name="notes"
                             variant="outline"
-                            isTextArea
                             h="90px"
                         />
                     </Box>
@@ -510,8 +603,9 @@ export const CreateInvoice = ({
                         }
                         h="40px"
                         w="fit-content"
-                        isLoading={loading}
-                        onClick={CreateAnInvoice}
+                        isLoading={isSubmitting}
+                        // disabled={!isValid}
+                        onClick={submitInvoice(CreateAnInvoice)}
                         fontSize="1rem"
                     />
                 </Box>
@@ -533,7 +627,7 @@ export const CreateInvoice = ({
                     </Text>
 
                     <Box mt="23px">
-                        {isExternal ? (
+                        {/* {isExternal ? (
                             <Box>
                                 <InputBlank
                                     fontSize="14px"
@@ -594,36 +688,50 @@ export const CreateInvoice = ({
                                     placeholder="Enter full address"
                                 />
                             </Box>
-                        ) : (
-                            <Box w="full">
-                                <FormLabel
-                                    textTransform="capitalize"
-                                    width="fit-content"
-                                    fontSize=".8rem"
-                                >
-                                    Bill To
-                                </FormLabel>
+                        ) : ( */}
+                        <Box w="full">
+                            <FormLabel
+                                textTransform="capitalize"
+                                width="fit-content"
+                                fontSize=".8rem"
+                            >
+                                Bill To
+                            </FormLabel>
 
-                                <CustomSelectBox
-                                    data={users}
-                                    updateFunction={addUser}
-                                    items={selectedUser}
-                                    customKeys={{
-                                        key: 'id',
-                                        label: 'organizationName',
-                                        used: 'organizationAddress',
-                                        total: 'email',
-                                        phone: 'phoneNumber',
-                                    }}
-                                    single
-                                    id="tasks"
-                                    extraField
-                                    extra
-                                    searchable
-                                />
-                            </Box>
-                        )}
-                        <HStack justify="flex-end" mt=".2rem">
+                            <CustomSelectBox
+                                data={users}
+                                updateFunction={addUser}
+                                items={selectedUser}
+                                error={invoiceErrors?.recipientId}
+                                customKeys={{
+                                    key: 'id',
+                                    label: 'organizationName',
+                                    used: 'organizationAddress',
+                                    total: 'email',
+                                    phone: 'phoneNumber',
+                                }}
+                                single
+                                id="Recipient"
+                                extraField
+                                extra
+                                searchable
+                                extension={
+                                    <HStack
+                                        justify="center"
+                                        color="brand.400"
+                                        p=".5rem .7rem"
+                                        bgColor={shadeColor('#2EAFA3', 0.06)}
+                                        cursor="pointer"
+                                        onClick={onOpen}
+                                    >
+                                        <Icon as={AiOutlinePlusCircle} />
+                                        <Text fontSize="13px">Add</Text>
+                                    </HStack>
+                                }
+                            />
+                        </Box>
+                        {/* )} */}
+                        {/* <HStack justify="flex-end" mt=".2rem">
                             <Text
                                 fontSize="13px"
                                 color="brand.400"
@@ -636,14 +744,42 @@ export const CreateInvoice = ({
                                     ? 'Not on the list? Add a new client'
                                     : 'Select from Existing clients'}
                             </Text>
-                        </HStack>
+                        </HStack> */}
 
                         <Grid
                             mt="19px"
                             gap="10px"
                             templateColumns="repeat(2, 1fr)"
                         >
-                            <CustomDatePick
+                            <PrimaryDate<ProjectInvoiceModel>
+                                label="Issued Date"
+                                name="issuedDate"
+                                error={invoiceErrors.issuedDate}
+                                placeholder=""
+                                defaultValue={
+                                    invoice
+                                        ? moment(invoice?.issuedDate).format(
+                                              'YYYY/MM/DD',
+                                          )
+                                        : ''
+                                }
+                                control={control}
+                            />
+                            <PrimaryDate<ProjectInvoiceModel>
+                                label="Due Date"
+                                name="dueDate"
+                                error={invoiceErrors.dueDate}
+                                placeholder=""
+                                defaultValue={
+                                    invoice
+                                        ? moment(invoice?.dueDate).format(
+                                              'YYYY/MM/DD',
+                                          )
+                                        : ''
+                                }
+                                control={control}
+                            />
+                            {/* <CustomDatePick
                                 setDate={setIssuedDate}
                                 date={issuedDate}
                                 label="Issued Date"
@@ -654,11 +790,18 @@ export const CreateInvoice = ({
                                 date={dueDate}
                                 label="Due Date"
                                 format="DD/MM/YYYY"
-                            />
+                            /> */}
                         </Grid>
                     </Box>
                 </Box>
             </Box>
+            {isOpen && (
+                <AddRecipientModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    superAdminId={superAdminId}
+                />
+            )}
         </Box>
     );
 };

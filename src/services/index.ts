@@ -136,6 +136,7 @@ export type { PaySlipViewPagedCollection } from './models/PaySlipViewPagedCollec
 export type { PaySlipViewPagedCollectionStandardResponse } from './models/PaySlipViewPagedCollectionStandardResponse';
 export type { ProblemDetails } from './models/ProblemDetails';
 export type { Project } from './models/Project';
+export type { ProjectInvoiceAttachmentModel } from './models/ProjectInvoiceAttachmentModel';
 export type { ProjectInvoiceItemModel } from './models/ProjectInvoiceItemModel';
 export type { ProjectInvoiceItemView } from './models/ProjectInvoiceItemView';
 export type { ProjectInvoiceModel } from './models/ProjectInvoiceModel';

@@ -3,7 +3,6 @@
 /* eslint-disable */
 
 import type { ProjectInvoiceItemModel } from './ProjectInvoiceItemModel';
-import type { ProjectInvoiceRecipientModel } from './ProjectInvoiceRecipientModel';
 
 export type ProjectInvoiceModel = {
     id?: string | null;
@@ -17,6 +16,7 @@ export type ProjectInvoiceModel = {
     issuedDate?: string;
     dueDate?: string;
     organization?: string | null;
+    posNumber?: string | null;
     invoiceItems?: Array<ProjectInvoiceItemModel> | null;
-    recipients?: Array<ProjectInvoiceRecipientModel> | null;
+    recipientId?: string;
 };

@@ -6,9 +6,10 @@ import {
     Icon,
     Text,
     Tr,
+    useToast,
     VStack,
 } from '@chakra-ui/react';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { TopBar } from '../Projects/SingleProject/TopBar';
 import { useRouter } from 'next/router';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
@@ -20,14 +21,10 @@ import { TableData } from '@components/bits-utils/TableData';
 import { SummaryBox } from './CreateInvoice';
 import { Round } from '@components/generics/functions/Round';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
-import { ProjectInvoiceView } from 'src/services';
+import { ProjectInvoiceView, ProjectManagementService } from 'src/services';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { CUR } from '@components/generics/functions/Naira';
-// import dynamic from 'next/dynamic';
-// import { UploadClient } from '@uploadcare/upload-client';
-// const html2pdf = dynamic(() => import('html2pdf.js'), {
-//     ssr: false,
-// });
+import { UploadClient } from '@uploadcare/upload-client';
 
 export const SingleItem = ({ label, value }) => {
     return (
@@ -69,6 +66,29 @@ export const ProjectInvoice = ({
     );
     const invoiceRef = useRef<any>();
     const [loading, setLoading] = useState('');
+    const toast = useToast();
+
+    const updateStatus = async () => {
+        setLoading('send');
+        try {
+            const res = await ProjectManagementService.updateInvoiceStatus({
+                invoiceId: invoice.id,
+                status: 3,
+            });
+            if (res.status) {
+                router.replace(router.asPath);
+            }
+        } catch (error: any) {
+            toast({
+                title: error?.message || error?.body?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } finally {
+            setLoading('');
+        }
+    };
 
     console.log({ invoice });
 
@@ -80,38 +100,45 @@ export const ProjectInvoice = ({
     };
 
     const uploadDocument = async (url: string, name: string) => {
-        // try {
-        //     await InvestmentService.uploadInvestmentDocument({
-        //         requestBody: {
-        //             name,
-        //             url,
-        //             investmentId: data?.data?.id,
-        //         },
-        //     });
-        // } catch (err: any) {
-        //     console.log({ err });
-        // }
+        try {
+            await ProjectManagementService.addInvoiceAttachment({
+                attachmentUrl: url,
+                invoiceId: invoice?.id,
+            });
+        } catch (err: any) {
+            console.log({ err });
+        }
     };
 
-    // const client = new UploadClient({
-    //     publicKey: process.env.NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY as string,
-    //   });
+    const client = new UploadClient({
+        publicKey: 'fda3a71102659f95625f',
+    });
 
     const generatePDF = async (content: any, name: string) => {
         if (typeof window !== 'undefined') {
             const html2pdf = require('html2pdf.js');
             await html2pdf().set(opt).from(content).toPdf().save();
-            // await html2pdf().set(opt).from(content).toPdf().output('blob');
-            // .then((pdf: any) => {
-            //     client
-            //         .uploadFile(pdf)
-            //         .then((file: any) => {
-            //             uploadDocument(file?.cdnUrl, name);
-            //         })
-            //         .catch((error: any) => {
-            //             console.error('Error uploading file:', error);
-            //         });
-            // });
+            return true;
+        }
+    };
+    const generatePDFForApi = async (content: any, name: string) => {
+        if (typeof window !== 'undefined') {
+            const html2pdf = require('html2pdf.js');
+            await html2pdf()
+                .set(opt)
+                .from(content)
+                .toPdf()
+                .output('blob')
+                .then((pdf: any) => {
+                    client
+                        .uploadFile(pdf)
+                        .then((file: any) => {
+                            uploadDocument(file?.cdnUrl, name);
+                        })
+                        .catch((error: any) => {
+                            console.error('Error uploading file:', error);
+                        });
+                });
             return true;
         }
     };
@@ -128,6 +155,18 @@ export const ProjectInvoice = ({
         }
         setLoading('');
     };
+
+    useEffect(() => {
+        const uploadInvoice = async () => {
+            await generatePDFForApi(
+                invoiceRef.current,
+                invoice?.invoiceReference as string,
+            );
+        };
+        if (invoice?.attachmentUrl == null) {
+            uploadInvoice();
+        }
+    }, []);
 
     return (
         <Box>
@@ -271,7 +310,7 @@ export const ProjectInvoice = ({
                                     />
                                     <SingleItem
                                         label="P.O/S.O Number"
-                                        value={invoice?.invoiceReference}
+                                        value={invoice?.posNumber}
                                     />
                                     <SingleItem
                                         label="Invoice Date"
@@ -387,8 +426,8 @@ export const ProjectInvoice = ({
                                 btn="Send Invoice"
                                 h="40px"
                                 w="full"
-                                // isLoading={loading}
-                                // onClick={CreateAnInvoice}
+                                isLoading={loading == 'send'}
+                                onClick={updateStatus}
                             />
                             <ManageBtn
                                 bg="brand.400"

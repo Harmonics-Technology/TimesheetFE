@@ -1504,9 +1504,9 @@ export function ProjectStatusAction({
     const router = useRouter();
     const options = [
         { id: 1, label: 'paid' },
-        { id: 2, label: 'sent' },
-        { id: 3, label: 'draft' },
-        { id: 4, label: 'overdue' },
+        { id: 2, label: 'draft' },
+        { id: 3, label: 'sent' },
+        // { id: 4, label: 'overdue' },
     ];
     const { ref, isComponentVisible, setIsComponentVisible } =
         useComponentVisible(false);
@@ -1572,6 +1572,7 @@ export function ProjectStatusAction({
                         borderRadius="7px"
                         mt=".2rem"
                         gap="0"
+                        zIndex={200}
                     >
                         {options?.map((x) => (
                             <Box

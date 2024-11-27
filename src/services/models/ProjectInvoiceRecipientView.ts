@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 export type ProjectInvoiceRecipientView = {
+    id?: string;
     superAdminId?: string;
     organizationName?: string | null;
     email?: string | null;

@@ -23,7 +23,10 @@ function Pagination({ data, shift, client, func, loadMore }: pageOptions) {
     const total = data?.size;
     // const pageSize = data?.value?.length;
     const current = data?.offset + 1;
-    const pageSize = data?.nextOffset;
+    const pageSize =
+        data?.nextOffset > data?.value?.length
+            ? data?.value?.length
+            : data?.nextOffset;
 
     const router = useRouter();
     const dashboard = router.pathname.includes('/dashboard');

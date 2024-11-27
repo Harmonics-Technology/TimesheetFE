@@ -31,6 +31,7 @@ export const CustomSelectBox = ({
     searchable,
     extraField,
     extra,
+    extension,
 }: {
     h?: string;
     fontSize?: string;
@@ -47,6 +48,7 @@ export const CustomSelectBox = ({
     searchable?: boolean;
     extraField?: any;
     extra?: any;
+    extension?: JSX.Element;
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState<any>();
@@ -255,6 +257,7 @@ export const CustomSelectBox = ({
                                         </VStack>
                                     </HStack>
                                 ))}
+                                {extension}
                             </>
                         ) : (
                             <Text
