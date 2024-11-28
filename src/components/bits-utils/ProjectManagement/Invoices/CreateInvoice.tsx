@@ -11,7 +11,7 @@ import {
     useToast,
     VStack,
 } from '@chakra-ui/react';
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { TopBar } from '../Projects/SingleProject/TopBar';
 import { MdOutlineArrowBackIosNew } from 'react-icons/md';
 import { useRouter } from 'next/router';
@@ -46,6 +46,7 @@ import { AddRecipientModal } from '../Modals/AddRecipientModal';
 import generateRandomUUID from '@components/generics/generateRandomUUID';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
+import useOnClickOutside from '@components/generics/useClickOutside';
 
 export const SummaryBox = ({
     label,
@@ -116,11 +117,11 @@ const schema = yup.object().shape({
     totalCost: yup.string(),
 });
 const mainSchema = yup.object().shape({
-    notes: yup.string().required(),
+    // notes: yup.string().required(),
     dueDate: yup.string().required(),
     issuedDate: yup.string().required(),
     recipientId: yup.string().required(),
-    posNumber: yup.string().required(),
+    // posNumber: yup.string().required(),
 });
 
 export const CreateInvoice = ({
@@ -174,6 +175,7 @@ export const CreateInvoice = ({
         register: registerInvoice,
         setValue: setInvoiceValue,
         trigger,
+        watch: watchInvoice,
         control,
         formState: { errors: invoiceErrors, isSubmitting, isValid },
     } = useForm<ProjectInvoiceModel>({
@@ -189,6 +191,7 @@ export const CreateInvoice = ({
     });
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+
     const totalCostPerItem =
         Number(watch('quantity') || 0) * Number(watch('cost') || 0);
 
@@ -208,7 +211,7 @@ export const CreateInvoice = ({
     };
 
     const AddItemToList = (value: TInvoiceItems) => {
-        console.log({ value });
+        triggerItem();
         value.projectTaskId = value?.projectTaskId || generateRandomUUID();
         value.projectTaskName =
             value?.projectTaskName ||
@@ -240,6 +243,12 @@ export const CreateInvoice = ({
             ),
         );
     };
+
+    const clickRef = useRef<any>();
+    const handleClickOutside = useCallback(() => {
+        handleSubmit(AddItemToList)();
+    }, [clickRef]);
+    useOnClickOutside(clickRef, handleClickOutside);
 
     const [selectedUser, setSelecedUser] = useState<any>(invoice?.recipient);
     const addUser = (rec) => {
@@ -391,6 +400,7 @@ export const CreateInvoice = ({
                                 ]}
                                 bg="#E8F2F1"
                                 variant="unset"
+                                content='Start adding invoice item by clicking the "+ Add item" button'
                             >
                                 {invoiceItems?.map((x) => (
                                     <Tr key={x?.projectTaskId}>
@@ -424,7 +434,12 @@ export const CreateInvoice = ({
                         </Box>
 
                         {showForm && (
-                            <HStack gap="17px" mt="2rem" align="flex-start">
+                            <HStack
+                                gap="17px"
+                                mt="2rem"
+                                align="flex-start"
+                                ref={clickRef}
+                            >
                                 {isExternal ? (
                                     <PrimaryInput<TInvoiceItems>
                                         label="Task Name"
@@ -535,7 +550,7 @@ export const CreateInvoice = ({
                                         handleSubmit(AddItemToList)()
                                     }
                                 >
-                                    + Add
+                                    ✔ Add
                                 </Text>
                             </HStack>
                         )}
@@ -699,7 +714,11 @@ export const CreateInvoice = ({
                             </FormLabel>
 
                             <CustomSelectBox
-                                data={users}
+                                data={users?.sort((a, b) =>
+                                    (a.organizationName as any)?.localeCompare(
+                                        b.organizationName as any,
+                                    ),
+                                )}
                                 updateFunction={addUser}
                                 items={selectedUser}
                                 error={invoiceErrors?.recipientId}
@@ -770,6 +789,9 @@ export const CreateInvoice = ({
                                 name="dueDate"
                                 error={invoiceErrors.dueDate}
                                 placeholder=""
+                                min={
+                                    new Date(watchInvoice('issuedDate') as any)
+                                }
                                 defaultValue={
                                     invoice
                                         ? moment(invoice?.dueDate).format(

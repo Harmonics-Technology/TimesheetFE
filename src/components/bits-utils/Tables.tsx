@@ -19,6 +19,7 @@ interface TablesProps {
     bg?: string;
     color?: string;
     variant?: any;
+    content?: any;
 }
 
 function Tables({
@@ -27,6 +28,7 @@ function Tables({
     bg,
     color = 'brand.200',
     variant = 'striped',
+    content = "There's currently no data available. Check back later",
 }: TablesProps) {
     //
     return (
@@ -70,10 +72,7 @@ function Tables({
                                     gap=".5rem"
                                 >
                                     <Icon as={BsFillInfoCircleFill} />
-                                    <Text mb="0">
-                                        There's currently no data available.
-                                        Check back later
-                                    </Text>
+                                    <Text mb="0">{content}</Text>
                                 </Flex>
                             }
                         />
