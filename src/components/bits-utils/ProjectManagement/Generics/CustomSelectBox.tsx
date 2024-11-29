@@ -167,111 +167,119 @@ export const CustomSelectBox = ({
                         bgColor="white"
                         zIndex="600"
                     >
-                        {newData?.length > 0 ? (
-                            <>
-                                {searchable && (
-                                    <Input
-                                        placeholder="Search"
-                                        fontSize=".7rem"
-                                        border="1px solid #e5e5e5"
-                                        borderRadius="0"
-                                        pos="sticky"
-                                        top="0"
-                                        onChange={(e) => search(e)}
-                                        bgColor="white"
-                                        w="full"
-                                        zIndex="9"
-                                    />
-                                )}
-                                {newData?.map((x, i) => (
-                                    <HStack
-                                        p="11px 20px"
-                                        key={i}
-                                        w="full"
-                                        _hover={{
-                                            bgColor: '#faf7f7',
-                                        }}
-                                        borderBottom="1px solid #e6e7e7"
-                                        cursor="pointer"
-                                        onClick={() =>
-                                            extra
-                                                ? selectData({
-                                                      id: x.key,
-                                                      label: x.label,
-                                                      phone: x.phone,
-                                                      email: x.total,
-                                                      address: x.used,
-                                                  })
-                                                : extraField &&
-                                                  x.used == x.total
-                                                ? void 0
-                                                : selectData({
-                                                      id: x.key,
-                                                      label: x.label,
-                                                  })
-                                        }
-                                        align="center"
-                                    >
-                                        {checkbox && (
-                                            <Checkbox
-                                                id={id}
-                                                isChecked={
-                                                    single
-                                                        ? items?.[
-                                                              customKeys.key
-                                                          ] == x.key
-                                                        : items?.some(
-                                                              (e) =>
-                                                                  e?.[
-                                                                      customKeys
-                                                                          .key
-                                                                  ] == x.key,
-                                                          )
-                                                }
-                                                colorScheme="brand"
-                                                pointerEvents="none"
-                                            />
-                                        )}
-                                        <VStack align="flex-start" gap="0rem">
-                                            <FormLabel
-                                                noOfLines={1}
-                                                color="#6a7f9d"
-                                                fontSize={fontSize || '14px'}
-                                                cursor="pointer"
-                                                htmlFor={id || 'label'}
-                                                mb="0"
-                                                pointerEvents="none"
-                                            >
-                                                {x.label}
-                                            </FormLabel>
-                                            {extraField && (
-                                                <Text
-                                                    color="#696969"
-                                                    fontSize="13px"
-                                                >
-                                                    {extra
-                                                        ? x?.used
-                                                        : `${x.used} of ${x.total} ${extraField}`}
-                                                </Text>
+                        <>
+                            {newData?.length > 0 ? (
+                                <>
+                                    {searchable && (
+                                        <Input
+                                            placeholder="Search"
+                                            fontSize=".7rem"
+                                            border="1px solid #e5e5e5"
+                                            borderRadius="0"
+                                            pos="sticky"
+                                            top="0"
+                                            onChange={(e) => search(e)}
+                                            bgColor="white"
+                                            w="full"
+                                            zIndex="9"
+                                        />
+                                    )}
+                                    {newData?.map((x, i) => (
+                                        <HStack
+                                            p="11px 20px"
+                                            key={i}
+                                            w="full"
+                                            _hover={{
+                                                bgColor: '#faf7f7',
+                                            }}
+                                            borderBottom="1px solid #e6e7e7"
+                                            cursor="pointer"
+                                            onClick={() =>
+                                                extra
+                                                    ? selectData({
+                                                          id: x.key,
+                                                          label: x.label,
+                                                          phone: x.phone,
+                                                          email: x.total,
+                                                          address: x.used,
+                                                      })
+                                                    : extraField &&
+                                                      x.used == x.total
+                                                    ? void 0
+                                                    : selectData({
+                                                          id: x.key,
+                                                          label: x.label,
+                                                      })
+                                            }
+                                            align="center"
+                                        >
+                                            {checkbox && (
+                                                <Checkbox
+                                                    id={id}
+                                                    isChecked={
+                                                        single
+                                                            ? items?.[
+                                                                  customKeys.key
+                                                              ] == x.key
+                                                            : items?.some(
+                                                                  (e) =>
+                                                                      e?.[
+                                                                          customKeys
+                                                                              .key
+                                                                      ] ==
+                                                                      x.key,
+                                                              )
+                                                    }
+                                                    colorScheme="brand"
+                                                    pointerEvents="none"
+                                                />
                                             )}
-                                        </VStack>
-                                    </HStack>
-                                ))}
-                                {extension}
-                            </>
-                        ) : (
-                            <Text
-                                noOfLines={1}
-                                p="11px 20px"
-                                color="#6a7f9d"
-                                fontSize={fontSize || '14px'}
-                                _hover={{
-                                    bgColor: '#faf7f7',
-                                }}
-                            >
-                                No data available
-                            </Text>
-                        )}
+                                            <VStack
+                                                align="flex-start"
+                                                gap="0rem"
+                                            >
+                                                <FormLabel
+                                                    noOfLines={1}
+                                                    color="#6a7f9d"
+                                                    fontSize={
+                                                        fontSize || '14px'
+                                                    }
+                                                    cursor="pointer"
+                                                    htmlFor={id || 'label'}
+                                                    mb="0"
+                                                    pointerEvents="none"
+                                                >
+                                                    {x.label}
+                                                </FormLabel>
+                                                {extraField && (
+                                                    <Text
+                                                        color="#696969"
+                                                        fontSize="13px"
+                                                    >
+                                                        {extra
+                                                            ? x?.used
+                                                            : `${x.used} of ${x.total} ${extraField}`}
+                                                    </Text>
+                                                )}
+                                            </VStack>
+                                        </HStack>
+                                    ))}
+                                </>
+                            ) : (
+                                <Text
+                                    noOfLines={1}
+                                    p="11px 20px"
+                                    color="#6a7f9d"
+                                    fontSize={fontSize || '14px'}
+                                    _hover={{
+                                        bgColor: '#faf7f7',
+                                    }}
+                                >
+                                    No data available
+                                </Text>
+                            )}
+                            {extension}
+                        </>
                     </Box>
                 )}
             </Box>

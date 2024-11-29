@@ -123,8 +123,7 @@ export const MonthPayScheduleSettings = ({
                             Monthly Cycle Schedule
                         </Text>
                         <Text color="#002861" fontSize="0.93rem" mb="0">
-                            Payment is processed for either a full month or a 4
-                            weeks period
+                            This schedule is set for a monthly timesheet cycle
                         </Text>
                     </VStack>
                     {/* <LabelSign

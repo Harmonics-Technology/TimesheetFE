@@ -104,7 +104,7 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
                             Weekly Cycle Schedule
                         </Text>
                         <Text color="#002861" fontSize="0.93rem" mb="0">
-                            Payment is processed for a Weekly period
+                            This schedule is set for a weekly timesheet cycle
                         </Text>
                     </VStack>
                     {/* <LabelSign
@@ -146,7 +146,7 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
                     <HStack w="90%" spacing="1rem" align="flex-end">
                         <Box w="full">
                             <PrimaryInput<PayScheduleGenerationModel>
-                                label="Payment Date Offset (in days)"
+                                label="Payment Date Offset"
                                 name="paymentDateDays"
                                 error={errors.paymentDateDays}
                                 defaultValue=""
@@ -158,7 +158,7 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
                         </Box>
                         <Box w="full">
                             <InputBlank
-                                label="Day"
+                                label="Payment Day"
                                 defaultValue=""
                                 placeholder={moment(endDate)
                                     .add(watch('paymentDateDays'), 'days')

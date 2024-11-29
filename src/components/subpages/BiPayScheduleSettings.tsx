@@ -105,7 +105,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                             Bi-weekly Cycle Schedule
                         </Text>
                         <Text color="#002861" fontSize="0.93rem" mb="0">
-                            Payment is processed for a Bi-weekly period
+                            This schedule is set for a bi-weekly timesheet cycle
                         </Text>
                     </VStack>
                     {/* <LabelSign
@@ -142,7 +142,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                     <PaymentScheduleInfo />
                     <HStack w="90%" spacing="1rem" align="flex-end">
                         <PrimaryInput<PayScheduleGenerationModel>
-                            label="Payment Date Offset (in days)"
+                            label="Payment Date Offset"
                             name="paymentDateDays"
                             error={errors.paymentDateDays}
                             defaultValue=""
@@ -150,7 +150,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                             placeholder={payday || 'Enter the number of days'}
                         />
                         <InputBlank
-                            label="Day"
+                            label="Payment Day"
                             defaultValue=""
                             placeholder={moment(endDate)
                                 .add(watch('paymentDateDays'), 'days')
