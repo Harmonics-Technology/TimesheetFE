@@ -162,13 +162,7 @@ export const CreateInvoice = ({
     } = useForm<TInvoiceItems>({
         resolver: yupResolver(schema),
         mode: 'all',
-        defaultValues: {
-            cost: 0,
-            projectTaskId: '',
-            projectTaskName: '',
-            quantity: 0,
-            totalCost: 0,
-        },
+        defaultValues: {},
     });
     const {
         handleSubmit: submitInvoice,
