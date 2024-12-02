@@ -89,13 +89,27 @@ const Leaveform = ({
         new Date(watch('startDate') as unknown as Date),
         watch('endDate')
             ? new Date(watch('endDate') as unknown as Date)
-            : new Date(),
+            : new Date(watch('startDate') as unknown as Date),
     );
+
     const leaveDuration = oneDay
         ? Number(duration)
         : leaveDays * Number(duration);
     const [showBalance, setShowBalance] = useState(false);
 
+    const setTimeDuration = (value) => {
+        // const eligibleHours = leaveDays * 24;
+        if (value > 24) {
+            toast({
+                title: `The Duration entered is longer than the number of hours in ${leaveDays} days`,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
+        setDuration(value);
+    };
     const closeForm = () => {
         reset({
             employeeInformationId: '',
@@ -253,7 +267,7 @@ const Leaveform = ({
                         <InputBlank
                             label="Duration"
                             variant="outline"
-                            onChange={(e) => setDuration(e.target.value)}
+                            onChange={(e) => setTimeDuration(e.target.value)}
                             value={duration}
                             suffix={
                                 <InputRightElement right="3%">

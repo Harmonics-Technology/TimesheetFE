@@ -46,7 +46,7 @@ import { Round } from '@components/generics/functions/Round';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import markAsCompleted from '@components/generics/functions/markAsCompleted';
 import { ManageBtn } from '@components/bits-utils/ManageBtn';
-import { MdVerified } from 'react-icons/md';
+import { MdDeleteOutline, MdVerified } from 'react-icons/md';
 import { BsPenFill } from 'react-icons/bs';
 import { ShowPrompt } from '../../Modals/ShowPrompt';
 import { useRouter } from 'next/router';
@@ -298,6 +298,54 @@ export const SingleTask = ({
                     position: 'top-right',
                 });
             }
+        }
+    };
+
+    const [data, setData] = useState({ isEdit: false, raw: {} });
+
+    const {
+        isOpen: isDeleteOpen,
+        onOpen: onDeleteOpen,
+        onClose: onDeleteClosed,
+    } = useDisclosure();
+    const {
+        isOpen: isDeleteOpens,
+        onOpen: onDeleteOpens,
+        onClose: onDeleteCloses,
+    } = useDisclosure();
+
+    const openPrompt = (item: any) => {
+        setData({ isEdit: false, raw: item });
+        onDeleteOpen();
+    };
+
+    const deleteSubTask = async () => {
+        setLoading({ id: 'delete' });
+        const taskId = data.raw as any;
+        try {
+            const res = await ProjectManagementService.deleteProjectTask(
+                taskId.id,
+            );
+            if (res.status) {
+                setLoading({ id: '' });
+                toast({
+                    title: res.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.replace(router.asPath);
+                onCloses();
+                return;
+            }
+        } catch (err: any) {
+            setLoading({ id: '' });
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
         }
     };
 
@@ -690,6 +738,19 @@ export const SingleTask = ({
                                                         />
                                                         Edit Sub-task
                                                     </MenuItem>
+                                                    <MenuItem
+                                                        onClick={() =>
+                                                            openPrompt(x?.id)
+                                                        }
+                                                        w="full"
+                                                    >
+                                                        <Icon
+                                                            as={MdDeleteOutline}
+                                                            mr=".5rem"
+                                                            color="brand.400"
+                                                        />
+                                                        Delete Subtask
+                                                    </MenuItem>
                                                 </MenuList>
                                             </Menu>
                                         </td>
@@ -920,6 +981,28 @@ export const SingleTask = ({
                     }
                     loading={loading?.id == task.id}
                     text={`Marking this task as complete will prevent any further timesheet submissions for this task.<br/> Are you sure you want to proceed?`}
+                />
+            )}
+
+            {isDeleteOpen && (
+                <ShowPrompt
+                    isOpen={isDeleteOpen}
+                    onClose={onDeleteClosed}
+                    onSubmit={() => {
+                        onDeleteClosed();
+                        onDeleteOpens();
+                    }}
+                    loading={loading.id == 'delete'}
+                    text={`Are you sure you want to delete this subtask?`}
+                />
+            )}
+            {isDeleteOpens && (
+                <ShowPrompt
+                    isOpen={isDeleteOpens}
+                    onClose={onDeleteCloses}
+                    onSubmit={deleteSubTask}
+                    loading={loading.id == 'delete'}
+                    text={`Are you sure you want to delete this subtask? <br/> This action cannot be undone`}
                 />
             )}
         </Box>

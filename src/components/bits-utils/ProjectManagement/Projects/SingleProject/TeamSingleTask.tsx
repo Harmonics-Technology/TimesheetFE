@@ -49,7 +49,7 @@ import {
 } from 'src/services';
 import { Round } from '@components/generics/functions/Round';
 import { TeamTopBar } from './TeamTopBar';
-import { MdVerified } from 'react-icons/md';
+import { MdDeleteOutline, MdVerified } from 'react-icons/md';
 import { BsPenFill } from 'react-icons/bs';
 import { UserContext } from '@components/context/UserContext';
 import { ManageBtn } from '@components/bits-utils/ManageBtn';
@@ -441,6 +441,54 @@ export const TeamSingleTask = ({
     const OpenEditSubtaskDrawer = (item: any) => {
         setSelectedSubtask(item);
         setOpenEditSubtaskDrawer(true);
+    };
+
+    const [data, setData] = useState({ isEdit: false, raw: {} });
+
+    const {
+        isOpen: isDeleteOpen,
+        onOpen: onDeleteOpen,
+        onClose: onDeleteClosed,
+    } = useDisclosure();
+    const {
+        isOpen: isDeleteOpens,
+        onOpen: onDeleteOpens,
+        onClose: onDeleteCloses,
+    } = useDisclosure();
+
+    const openPrompt = (item: any) => {
+        setData({ isEdit: false, raw: item });
+        onDeleteOpen();
+    };
+
+    const deleteSubTask = async () => {
+        setLoading({ id: 'delete' });
+        const taskId = data.raw as any;
+        try {
+            const res = await ProjectManagementService.deleteProjectTask(
+                taskId.id,
+            );
+            if (res.status) {
+                setLoading({ id: '' });
+                toast({
+                    title: res.message,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.replace(router.asPath);
+                onCloses();
+                return;
+            }
+        } catch (err: any) {
+            setLoading({ id: '' });
+            toast({
+                title: err?.body?.message || err?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
     };
 
     return (
@@ -929,6 +977,19 @@ export const TeamSingleTask = ({
                                                         />
                                                         Update Progress
                                                     </MenuItem>
+                                                    <MenuItem
+                                                        onClick={() =>
+                                                            openPrompt(x.id)
+                                                        }
+                                                        w="full"
+                                                    >
+                                                        <Icon
+                                                            as={MdDeleteOutline}
+                                                            mr=".5rem"
+                                                            color="brand.400"
+                                                        />
+                                                        Delete Subtask
+                                                    </MenuItem>
                                                 </MenuList>
                                             </Menu>
                                         </td>
@@ -1172,6 +1233,27 @@ export const TeamSingleTask = ({
                     }
                     loading={loading?.id == task.id}
                     text={`Marking this task as complete will prevent any further timesheet submissions for this task.<br/> Are you sure you want to proceed?`}
+                />
+            )}
+            {isDeleteOpen && (
+                <ShowPrompt
+                    isOpen={isDeleteOpen}
+                    onClose={onDeleteClosed}
+                    onSubmit={() => {
+                        onDeleteClosed();
+                        onDeleteOpens();
+                    }}
+                    loading={loading.id == 'delete'}
+                    text={`Are you sure you want to delete this subtask?`}
+                />
+            )}
+            {isDeleteOpens && (
+                <ShowPrompt
+                    isOpen={isDeleteOpens}
+                    onClose={onDeleteCloses}
+                    onSubmit={deleteSubTask}
+                    loading={loading.id == 'delete'}
+                    text={`Are you sure you want to delete this subtask? <br/> This action cannot be undone`}
                 />
             )}
         </Box>

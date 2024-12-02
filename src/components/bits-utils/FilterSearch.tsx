@@ -32,6 +32,8 @@ function FilterSearch({
     filter,
     noFilter,
     filterTitle = 'Filter By',
+    noLabel,
+    noSearch,
 }: {
     hide?: boolean;
     hides?: boolean;
@@ -40,6 +42,8 @@ function FilterSearch({
     filter?: any;
     noFilter?: any;
     filterTitle?: string;
+    noLabel?: boolean;
+    noSearch?: boolean;
 }) {
     const [search, setSearch] = useState('');
     const router = useRouter();
@@ -87,7 +91,7 @@ function FilterSearch({
         });
     }
     function clearfilter() {
-        router.push({ query: { date: '' } });
+        router.replace(router.asPath?.split('?')?.at(0) as string);
     }
 
     return (
@@ -155,14 +159,16 @@ function FilterSearch({
                     <Flex align="center" display={hide ? 'none' : 'flex'}>
                         <HStack spacing={['0', '.5rem']}>
                             <HStack>
-                                <Text
-                                    mb="0"
-                                    fontSize=".8rem"
-                                    fontWeight="600"
-                                    display={['none', 'block']}
-                                >
-                                    From
-                                </Text>
+                                {!noLabel && (
+                                    <Text
+                                        mb="0"
+                                        fontSize=".8rem"
+                                        fontWeight="600"
+                                        display={['none', 'block']}
+                                    >
+                                        From
+                                    </Text>
+                                )}
 
                                 <Box
                                     marginInlineStart={[
@@ -209,14 +215,16 @@ function FilterSearch({
                                 </Box>
                             </HStack>
                             <HStack>
-                                <Text
-                                    mb="0"
-                                    fontSize=".8rem"
-                                    fontWeight="600"
-                                    display={['none', 'block']}
-                                >
-                                    To
-                                </Text>
+                                {!noLabel && (
+                                    <Text
+                                        mb="0"
+                                        fontSize=".8rem"
+                                        fontWeight="600"
+                                        display={['none', 'block']}
+                                    >
+                                        To
+                                    </Text>
+                                )}
                                 <Text
                                     mb="0"
                                     fontSize=".8rem"
@@ -329,14 +337,20 @@ function FilterSearch({
                         {/* </Tooltip> */}
                     </Flex>
 
-                    <Tooltip label={searchOptions} hasArrow fontSize=".8rem">
-                        <Input
-                            type="search"
-                            placeholder="search"
-                            onChange={(e) => debounced(e.target.value)}
-                            borderRadius="0"
-                        />
-                    </Tooltip>
+                    {!noSearch && (
+                        <Tooltip
+                            label={searchOptions}
+                            hasArrow
+                            fontSize=".8rem"
+                        >
+                            <Input
+                                type="search"
+                                placeholder="search"
+                                onChange={(e) => debounced(e.target.value)}
+                                borderRadius="0"
+                            />
+                        </Tooltip>
+                    )}
                 </HStack>
             </Flex>
         </>

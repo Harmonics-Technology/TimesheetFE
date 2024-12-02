@@ -193,7 +193,7 @@ function ClientManagement({ adminList, isSuperAdmin, subs }: adminProps) {
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
                             <Tr key={x.id}>
-                                <TableData name={x.firstName} />
+                                <TableData name={x.organizationName} />
                                 <TableData name={x.email} />
                                 <TableData name={x.role} />
                                 <TableData name={x.organizationPhone} />

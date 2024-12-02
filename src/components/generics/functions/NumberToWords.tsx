@@ -14,7 +14,6 @@ export function numberToWords(number) {
         'nine',
     ];
     const teens = [
-        '',
         'eleven',
         'twelve',
         'thirteen',
@@ -42,29 +41,36 @@ export function numberToWords(number) {
     const numToString = (num) => {
         if (num === 0) return '';
         if (num < 10) return ones[num];
-        if (num < 20) return teens[num - 10];
-        if (num < 100) return tens[Math.floor(num / 10)] + ' ' + ones[num % 10];
+        if (num < 20 && num > 10) return teens[num - 11]; // Corrected indexing for teens
+        if (num < 100)
+            return (
+                tens[Math.floor(num / 10)] +
+                (num % 10 !== 0 ? ' ' + ones[num % 10] : '')
+            );
         if (num < 1000)
             return (
                 ones[Math.floor(num / 100)] +
-                ' hundred and ' +
-                numToString(num % 100)
+                ' hundred' +
+                (num % 100 !== 0 ? ' and ' + numToString(num % 100) : '')
             );
-        for (let i = 1; i < thousands.length; i++) {
-            if (num < Math.pow(1000, i + 1)) {
+        for (let i = thousands.length - 1; i >= 0; i--) {
+            const divisor = Math.pow(1000, i);
+            if (num >= divisor) {
                 return (
-                    numToString(Math.floor(num / Math.pow(1000, i))) +
+                    numToString(Math.floor(num / divisor)) +
                     ' ' +
                     thousands[i] +
-                    ' ' +
-                    numToString(num % Math.pow(1000, i))
+                    (num % divisor !== 0
+                        ? ' ' + numToString(num % divisor)
+                        : '')
                 );
             }
         }
     };
 
-    return numToString(number);
+    return numToString(number).trim();
 }
+
 export function numberToWordsWithCurrency(number, currency) {
     const words = numberToWords(number);
     return `${words} ${getCurrencyName(currency)} only`;

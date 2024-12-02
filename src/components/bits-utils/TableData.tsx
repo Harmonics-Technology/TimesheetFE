@@ -15,6 +15,7 @@ import {
     Tr,
     HStack,
     VStack,
+    TableCellProps,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import NextLink from 'next/link';
@@ -82,6 +83,7 @@ export function TableData({
     customColor,
     breakWord,
     onClick,
+    ...props
 }: {
     name: any;
     border?: boolean | undefined;
@@ -93,7 +95,7 @@ export function TableData({
     customColor?: any;
     breakWord?: any;
     onClick?: any;
-}) {
+} & any) {
     return (
         <Td
             borderColor={borderColor}
@@ -106,6 +108,7 @@ export function TableData({
             textTransform={validateEmail(name) ? 'lowercase' : 'capitalize'}
             onClick={onClick}
             cursor="pointer"
+            {...props}
             // textOverflow=""
             // overflow="hidden"
             // noOfLines={1}
@@ -1502,12 +1505,12 @@ export function ProjectStatusAction({
     const [loading, setLoading] = useState(false);
     const toast = useToast();
     const router = useRouter();
-    const options = [
-        { id: 1, label: 'paid' },
-        { id: 2, label: 'draft' },
-        { id: 3, label: 'sent' },
-        // { id: 4, label: 'overdue' },
-    ];
+    const options =
+        status == 'sent'
+            ? [{ id: 1, label: 'paid' }]
+            : status == 'paid'
+            ? []
+            : [{ id: 3, label: 'sent' }];
     const { ref, isComponentVisible, setIsComponentVisible } =
         useComponentVisible(false);
 

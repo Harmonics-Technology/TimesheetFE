@@ -52,13 +52,15 @@ function InputBlank({
 }: InputProps) {
     return (
         <FormControl w={w}>
-            <FormLabel
-                textTransform="capitalize"
-                width="fit-content"
-                fontSize={fontSize}
-            >
-                {label}
-            </FormLabel>
+            {label && (
+                <FormLabel
+                    textTransform="capitalize"
+                    width="fit-content"
+                    fontSize={fontSize}
+                >
+                    {label}
+                </FormLabel>
+            )}
             <InputGroup>
                 {prefix && prefix}
                 {isTextArea ? (

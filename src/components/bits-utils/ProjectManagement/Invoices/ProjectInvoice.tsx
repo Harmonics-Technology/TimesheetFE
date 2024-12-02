@@ -23,7 +23,7 @@ import { Round } from '@components/generics/functions/Round';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
 import { ProjectInvoiceView, ProjectManagementService } from 'src/services';
 import { formatDate } from '@components/generics/functions/formatDate';
-import { CUR } from '@components/generics/functions/Naira';
+import { CAD, CUR } from '@components/generics/functions/Naira';
 import { UploadClient } from '@uploadcare/upload-client';
 
 export const SingleItem = ({ label, value }) => {
@@ -308,10 +308,12 @@ export const ProjectInvoice = ({
                                         label="Invoice Number"
                                         value={invoice?.invoiceReference}
                                     />
-                                    <SingleItem
-                                        label="P.O/S.O Number"
-                                        value={invoice?.posNumber}
-                                    />
+                                    {invoice?.posNumber && (
+                                        <SingleItem
+                                            label="P.O/S.O Number"
+                                            value={invoice?.posNumber}
+                                        />
+                                    )}
                                     <SingleItem
                                         label="Invoice Date"
                                         value={formatDate(invoice?.issuedDate)}
@@ -348,20 +350,23 @@ export const ProjectInvoice = ({
                                                 <TableData name={x?.quantity} />
                                                 <TableData name={x?.cost} />
                                                 <TableData
-                                                    name={x?.totalCost}
+                                                    name={CAD(
+                                                        Round(x?.totalCost),
+                                                    )}
+                                                    w="120px"
                                                 />
                                             </Tr>
                                         ),
                                     )}
                                 </Tables>
-                                <VStack align="flex-end" my="13px">
+                                <VStack align="flex-end" my="13px" mr="-1.2%">
                                     <SummaryBox
                                         label="Subtotal"
                                         cur={'$'}
                                         value={invoice?.subtotal as number}
                                     />
                                     <SummaryBox
-                                        label={`HST ${invoice?.hst}`}
+                                        label={`HST ${invoice?.hst}%`}
                                         cur={'$'}
                                         value={hstValue}
                                     />
@@ -379,19 +384,21 @@ export const ProjectInvoice = ({
                                     />
                                 </VStack>
                             </Box>
-                            <Box my="17px" w="70%">
-                                <Text
-                                    color="#2D3748"
-                                    fontSize="14px"
-                                    fontWeight={500}
-                                    mb="8px"
-                                >
-                                    Notes/Terms
-                                </Text>
-                                <Text color="#2D3748" fontSize="13px">
-                                    {invoice?.notes}
-                                </Text>
-                            </Box>
+                            {invoice?.notes && (
+                                <Box my="17px" w="70%">
+                                    <Text
+                                        color="#2D3748"
+                                        fontSize="14px"
+                                        fontWeight={500}
+                                        mb="8px"
+                                    >
+                                        Notes/Terms
+                                    </Text>
+                                    <Text color="#2D3748" fontSize="13px">
+                                        {invoice?.notes}
+                                    </Text>
+                                </Box>
+                            )}
                         </Box>
                     </Box>
                 </Box>

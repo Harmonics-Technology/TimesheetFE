@@ -11,7 +11,7 @@ import {
     Icon,
     InputRightElement,
 } from '@chakra-ui/react';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DateObject } from 'react-multi-date-picker';
 import {
     DraftService,
@@ -156,7 +156,7 @@ export const DraftOnboardingModal = ({
     });
     const draftSchema = yup.object().shape({});
 
-    // console.log({ userProfile });
+    // console.log({ userProfile, client });
 
     const {
         register,
@@ -180,6 +180,8 @@ export const DraftOnboardingModal = ({
             email: userProfile?.email,
             dateOfBirth: userProfile?.dateOfBirth,
             clientId: userProfile?.employeeInformation?.clientId,
+            clientRate:
+                userProfile?.employeeInformation?.clientRate || undefined,
             supervisorId: userProfile?.employeeInformation?.supervisorId,
             paymentPartnerId:
                 userProfile?.employeeInformation?.paymentPartnerId || undefined,
@@ -221,16 +223,21 @@ export const DraftOnboardingModal = ({
                 userProfile?.employeeInformation?.timesheetFrequency,
             payrollStructure:
                 userProfile?.employeeInformation?.payrollStructure,
-            rolledOverLeave: userProfile?.employeeInformation?.rolledOverLeave,
+            incorpName: userProfile?.employeeInformation?.incorpName,
+            rolledOverLeave:
+                userProfile?.employeeInformation?.rolledOverLeave || undefined,
             hasRollOverLeave:
                 userProfile?.employeeInformation?.hasRollOverLeave,
             expiryDateOfRolledOverLeave:
-                userProfile?.employeeInformation?.expiryDateOfRolledOverLeave,
+                userProfile?.employeeInformation?.expiryDateOfRolledOverLeave ||
+                undefined,
             hasUtilizeLeaveDaysToDate:
                 userProfile?.employeeInformation?.hasUtilizeLeaveDaysToDate,
-            utilizedLeave: userProfile?.employeeInformation?.utilizedLeave,
+            utilizedLeave:
+                userProfile?.employeeInformation?.utilizedLeave || undefined,
             timesheetStartDate:
-                userProfile?.employeeInformation?.timesheetStartDate,
+                userProfile?.employeeInformation?.timesheetStartDate ||
+                undefined,
         },
     });
 
@@ -513,6 +520,10 @@ export const DraftOnboardingModal = ({
         closeDraft();
     };
 
+    useEffect(() => {
+        reset(userProfile);
+    }, []);
+
     return (
         <DrawerWrapper
             onClose={closeModal}
@@ -666,7 +677,8 @@ export const DraftOnboardingModal = ({
                                     <>
                                         {client.map((x) => (
                                             <option value={x?.id}>
-                                                {x.organizationName}
+                                                {x.organizationName ||
+                                                    x?.fullName}
                                             </option>
                                         ))}
                                     </>

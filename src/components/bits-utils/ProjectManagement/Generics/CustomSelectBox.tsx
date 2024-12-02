@@ -101,11 +101,14 @@ export const CustomSelectBox = ({
             checkBoxFn(x);
         }
         setSelected(x);
-        updateFunction({
-            [customKeys.key]: x.id,
-            [customKeys.label]: x.label,
-            ...x,
-        });
+        updateFunction(
+            {
+                [customKeys.key]: x.id,
+                [customKeys.label]: x.label,
+                ...x,
+            },
+            extra || 0,
+        );
         // setIsOpen(false);
     };
 
@@ -195,7 +198,7 @@ export const CustomSelectBox = ({
                                             borderBottom="1px solid #e6e7e7"
                                             cursor="pointer"
                                             onClick={() =>
-                                                extra
+                                                extra !== undefined
                                                     ? selectData({
                                                           id: x.key,
                                                           label: x.label,

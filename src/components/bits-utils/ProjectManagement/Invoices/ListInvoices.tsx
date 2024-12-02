@@ -33,6 +33,7 @@ import { CustomDatePick } from '@components/bits-utils/CustomDatePick';
 import Pagination from '@components/bits-utils/Pagination';
 import { ShowPrompt } from '../Modals/ShowPrompt';
 import { Round } from '@components/generics/functions/Round';
+import FilterSearch from '@components/bits-utils/FilterSearch';
 
 export const ListInvoices = ({
     id,
@@ -98,7 +99,7 @@ export const ListInvoices = ({
         }
     };
 
-    console.log({ invoices });
+    // console.log({ invoices });
 
     return (
         <Box>
@@ -162,9 +163,18 @@ export const ListInvoices = ({
                         <option value="1">Paid</option>
                         <option value="2">Draft</option>
                         <option value="3">Sent</option>
-                        <option value="4">Overdue</option>
+                        {/* <option value="4">Overdue</option> */}
                     </Select>
-                    <CustomDatePick
+                    <Box w="full">
+                        <FilterSearch
+                            searchOptions="Search by: Client Name"
+                            noFilter={true}
+                            // noLabel
+                            noSearch
+                        />
+                    </Box>
+
+                    {/* <CustomDatePick
                         setDate={(e) =>
                             filterBox('from', moment(e).format('YYYY-MM-DD'))
                         }
@@ -180,7 +190,7 @@ export const ListInvoices = ({
                         date={new Date(to as any)}
                         w="full"
                     />
-                    <SubSearchComponent w="full" />
+                    <SubSearchComponent w="full" /> */}
                 </HStack>
                 <TableCard tableHead={tableHead} overflow="unset">
                     {invoices?.value?.map((x) => (

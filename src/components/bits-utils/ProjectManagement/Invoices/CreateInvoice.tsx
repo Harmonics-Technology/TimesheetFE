@@ -5,6 +5,7 @@ import {
     Grid,
     HStack,
     Icon,
+    Td,
     Text,
     Tr,
     useDisclosure,
@@ -62,7 +63,7 @@ export const SummaryBox = ({
     onChange?: any;
 }) => {
     return (
-        <HStack gap="1rem">
+        <HStack gap="1rem" py=".3rem">
             <Text
                 color="#263238"
                 textTransform="capitalize"
@@ -149,7 +150,7 @@ export const CreateInvoice = ({
     const { user } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const [hst, setHst] = useState(invoice?.hst);
-    const [isExternal, setIsExternal] = useState(invoice ? true : false);
+    const [isExternal, setIsExternal] = useState({ id: '' });
 
     const {
         handleSubmit,
@@ -189,21 +190,6 @@ export const CreateInvoice = ({
     const totalCostPerItem =
         Number(watch('quantity') || 0) * Number(watch('cost') || 0);
 
-    const subtotal = invoiceItems?.reduce(
-        (a, b) => a + (b?.totalCost as number),
-        0,
-    );
-    const convertedTax = Round(calculatePercentage(subtotal, Number(hst)));
-    const finalTotal =
-        Number((subtotal as number) || 0) + Number(convertedTax || 0);
-
-    const [selectedTask, setSelectedTask] = useState<any>();
-    const addTask = (task) => {
-        setSelectedTask(task);
-        setValue('projectTaskId', task?.id);
-        triggerItem('projectTaskId');
-    };
-
     const AddItemToList = (value: TInvoiceItems) => {
         triggerItem();
         value.projectTaskId = value?.projectTaskId || generateRandomUUID();
@@ -215,7 +201,7 @@ export const CreateInvoice = ({
         setInvoiceItems([...invoiceItems, value]);
         reset({});
         setSelectedTask('');
-        setIsExternal(false);
+        setIsExternal({ id: '' });
         setShowForm(false);
     };
     const toggleEdit = (value: TInvoiceItems) => {
@@ -239,9 +225,9 @@ export const CreateInvoice = ({
     };
 
     const clickRef = useRef<any>();
-    const handleClickOutside = useCallback(() => {
+    const handleClickOutside = () => {
         handleSubmit(AddItemToList)();
-    }, [clickRef]);
+    };
     useOnClickOutside(clickRef, handleClickOutside);
 
     const [selectedUser, setSelecedUser] = useState<any>(invoice?.recipient);
@@ -252,8 +238,80 @@ export const CreateInvoice = ({
         // setRecepientData(user?.key);
     };
 
+    const [lineItems, setLineItems] = useState<any>(
+        (invoice?.projectInvoiceItems as any) || [
+            {
+                projectTaskId: '',
+                projectTaskName: '',
+                quantity: 0,
+                cost: 0,
+                totalCost: 0,
+            },
+        ],
+    );
+
+    const subtotal = lineItems?.reduce(
+        (a, b) => a + (b?.totalCost as number),
+        0,
+    );
+    const convertedTax = Round(calculatePercentage(subtotal, Number(hst)));
+    const finalTotal =
+        Number((subtotal as number) || 0) + Number(convertedTax || 0);
+
+    const handleAddLineItem = () => {
+        setLineItems([
+            ...lineItems,
+            {
+                projectTaskName: '',
+                projectTaskId: '',
+                quantity: 0,
+                cost: 0,
+                totalCost: 0,
+            },
+        ]);
+    };
+
+    const handleFieldChange = (
+        index: number,
+        updates: Partial<{ [field: string]: string | number }>,
+    ) => {
+        const updatedItems = [...lineItems];
+        updatedItems[index] = {
+            ...updatedItems[index],
+            ...updates,
+        };
+
+        // Recalculate the amount if quantity or cost changes
+        if ('quantity' in updates || 'cost' in updates) {
+            updatedItems[index].totalCost =
+                updatedItems[index].quantity * updatedItems[index].cost;
+        }
+
+        setLineItems(updatedItems);
+    };
+
+    const handleDeleteLineItem = (index: number) => {
+        const updatedItems = lineItems.filter((_, i) => i !== index);
+        setLineItems(updatedItems);
+    };
+
+    const [selectedTask, setSelectedTask] = useState<any>();
+    const addTask = (task, index) => {
+        // console.log({ index, task });
+        setSelectedTask(task);
+        const projectName = tasks?.value?.find((x) => x?.id === task?.id)?.name;
+
+        handleFieldChange(index, {
+            projectTaskId: task?.id,
+            projectTaskName: projectName as string,
+            quantity: task?.email,
+        });
+        // setValue('projectTaskId', task?.id);
+        // triggerItem('projectTaskId');
+    };
+
     const filteredTasks = tasks?.value?.filter((task) => {
-        const matchingItem = invoiceItems?.find(
+        const matchingItem = lineItems?.find(
             (item) => item.projectTaskId === task.id,
         );
         return !matchingItem;
@@ -261,7 +319,7 @@ export const CreateInvoice = ({
 
     const CreateAnInvoice = async (value: ProjectInvoiceModel) => {
         setLoading(true);
-        if (invoiceItems?.length < 1) {
+        if (lineItems?.length < 1) {
             toast({
                 title: 'You must add atleast one task item to create an invoice',
                 status: 'error',
@@ -271,7 +329,7 @@ export const CreateInvoice = ({
             return;
         }
         const requestBody: ProjectInvoiceModel = {
-            invoiceItems,
+            invoiceItems: lineItems,
             hst: hst,
             subtotal,
             total: finalTotal,
@@ -304,6 +362,8 @@ export const CreateInvoice = ({
             setLoading(false);
         }
     };
+
+    // console.log({ lineItems });
 
     return (
         <Box>
@@ -394,15 +454,16 @@ export const CreateInvoice = ({
                                 ]}
                                 bg="#E8F2F1"
                                 variant="unset"
+                                overflow="unset"
                                 content='Start adding invoice item by clicking the "+ Add item" button'
                             >
-                                {invoiceItems?.map((x) => (
+                                {/* {invoiceItems?.map((x) => (
                                     <Tr key={x?.projectTaskId}>
                                         <TableData name={x.projectTaskName} />
                                         <TableData name={x?.quantity} />
                                         <TableData name={x?.cost} />
                                         <TableData name={x?.totalCost} />
-                                        <td>
+                                        <td style={{ width: '20px' }}>
                                             <HStack>
                                                 <Icon
                                                     as={BsPenFill}
@@ -423,11 +484,154 @@ export const CreateInvoice = ({
                                             </HStack>
                                         </td>
                                     </Tr>
+                                ))} */}
+                                {lineItems.map((item, index) => (
+                                    <Tr key={index} gap="17px">
+                                        {/* Task Name */}
+                                        <Td w="45%" paddingInlineStart="0rem">
+                                            {item.index === index ? (
+                                                <InputBlank
+                                                    value={item.taskName}
+                                                    placeholder="Enter task name"
+                                                    variant="outline"
+                                                    onChange={(e) =>
+                                                        handleFieldChange(
+                                                            index,
+                                                            {
+                                                                taskName:
+                                                                    e.target
+                                                                        .value,
+                                                            },
+                                                        )
+                                                    }
+                                                />
+                                            ) : (
+                                                <CustomSelectBox
+                                                    data={filteredTasks}
+                                                    updateFunction={addTask}
+                                                    items={{
+                                                        id: item.projectTaskId,
+                                                        name: item.projectTaskName,
+                                                    }}
+                                                    customKeys={{
+                                                        key: 'id',
+                                                        label: 'name',
+                                                        total: 'hoursSpent',
+                                                    }}
+                                                    single
+                                                    id="tasks"
+                                                    extra={index}
+                                                    extension={
+                                                        <HStack
+                                                            justify="center"
+                                                            color="brand.400"
+                                                            p=".5rem .7rem"
+                                                            bgColor={shadeColor(
+                                                                '#2EAFA3',
+                                                                0.06,
+                                                            )}
+                                                            cursor="pointer"
+                                                            onClick={() =>
+                                                                handleFieldChange(
+                                                                    index,
+                                                                    {
+                                                                        index,
+                                                                    },
+                                                                )
+                                                            }
+                                                        >
+                                                            <Icon
+                                                                as={
+                                                                    AiOutlinePlusCircle
+                                                                }
+                                                            />
+                                                            <Text fontSize="13px">
+                                                                Add a new Task
+                                                            </Text>
+                                                        </HStack>
+                                                    }
+                                                />
+                                            )}
+                                        </Td>
+
+                                        {/* Quantity */}
+                                        <Td w="15%" paddingInlineStart="1rem">
+                                            <InputBlank
+                                                type="number"
+                                                value={item.quantity}
+                                                placeholder="0"
+                                                variant="outline"
+                                                onChange={(e) =>
+                                                    handleFieldChange(index, {
+                                                        quantity:
+                                                            e.target.value,
+                                                    })
+                                                }
+                                            />
+                                        </Td>
+
+                                        {/* Cost */}
+                                        <Td w="15%" paddingInlineStart="1rem">
+                                            <InputBlank
+                                                type="number"
+                                                value={item.cost}
+                                                placeholder="0"
+                                                variant="outline"
+                                                onChange={(e) =>
+                                                    handleFieldChange(index, {
+                                                        cost: e.target.value,
+                                                    })
+                                                }
+                                                prefix={
+                                                    <Text
+                                                        pos="absolute"
+                                                        top="28%"
+                                                        left="5px"
+                                                        fontSize="13px"
+                                                        zIndex={10}
+                                                    >
+                                                        $
+                                                    </Text>
+                                                }
+                                            />
+                                        </Td>
+
+                                        {/* Amount */}
+                                        <Td w="15%" paddingInlineStart="1rem">
+                                            <InputBlank
+                                                value={item.totalCost}
+                                                readonly={true}
+                                                placeholder="0"
+                                                variant="filled"
+                                                prefix={
+                                                    <Text
+                                                        pos="absolute"
+                                                        top="28%"
+                                                        left="5px"
+                                                        fontSize="13px"
+                                                        zIndex={10}
+                                                    >
+                                                        $
+                                                    </Text>
+                                                }
+                                            />
+                                        </Td>
+                                        <Td w="6%" p="0rem">
+                                            <Icon
+                                                as={BsTrash3Fill}
+                                                mr=".5rem"
+                                                color="#FF5B79"
+                                                onClick={() =>
+                                                    handleDeleteLineItem(index)
+                                                }
+                                            />
+                                        </Td>
+                                    </Tr>
                                 ))}
                             </Tables>
                         </Box>
 
-                        {showForm && (
+                        {/* {showForm && (
                             <HStack
                                 gap="17px"
                                 mt="2rem"
@@ -547,7 +751,7 @@ export const CreateInvoice = ({
                                     ✔ Add
                                 </Text>
                             </HStack>
-                        )}
+                        )} */}
 
                         <Box
                             pb="10px"
@@ -558,7 +762,8 @@ export const CreateInvoice = ({
                             <HStack
                                 color="brand.400"
                                 cursor="pointer"
-                                onClick={() => setShowForm((prev) => !prev)}
+                                // onClick={() => setShowForm((prev) => !prev)}
+                                onClick={() => handleAddLineItem()}
                             >
                                 <Icon
                                     as={
@@ -573,7 +778,7 @@ export const CreateInvoice = ({
                             </HStack>
                         </Box>
 
-                        <VStack align="flex-end" my="13px">
+                        <VStack align="flex-end" my="13px" mr="5%">
                             <SummaryBox
                                 label="Subtotal"
                                 cur={'$'}

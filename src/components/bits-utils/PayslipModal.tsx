@@ -49,7 +49,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
         paySlip?.invoice?.employeeInformation?.tax,
     );
 
-    const finalTotal = payTotal + hstCalculated;
+    const finalTotal = Round(payTotal + hstCalculated, true);
 
     const ref = useRef<any>(null);
     function downloadInvoice() {
@@ -60,7 +60,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
     const currency = paySlip?.invoice?.employeeInformation?.currency;
     // const numWords = toWords?.convert(finalTotal || 0, { currency: true });
 
-    const numWords = numberToWordsWithCurrency(Round(finalTotal), currency);
+    const numWords = numberToWordsWithCurrency(finalTotal, currency);
 
     return (
         <Modal

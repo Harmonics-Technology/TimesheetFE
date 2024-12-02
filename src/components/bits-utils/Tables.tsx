@@ -20,6 +20,7 @@ interface TablesProps {
     color?: string;
     variant?: any;
     content?: any;
+    overflow?: any;
 }
 
 function Tables({
@@ -28,11 +29,12 @@ function Tables({
     bg,
     color = 'brand.200',
     variant = 'striped',
+    overflow = 'auto',
     content = "There's currently no data available. Check back later",
 }: TablesProps) {
     //
     return (
-        <TableContainer h="auto">
+        <TableContainer h="auto" overflowX={overflow} overflowY={overflow}>
             <Table variant={variant} fontSize="11px">
                 <Thead>
                     <Tr
