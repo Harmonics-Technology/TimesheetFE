@@ -498,7 +498,7 @@ export const CreateInvoice = ({
                                                         handleFieldChange(
                                                             index,
                                                             {
-                                                                taskName:
+                                                                projectTaskName:
                                                                     e.target
                                                                         .value,
                                                             },

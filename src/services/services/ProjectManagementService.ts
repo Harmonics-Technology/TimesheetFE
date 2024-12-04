@@ -874,6 +874,23 @@ taskId?: string,
     }
 
     /**
+     * @param subtaskId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static deleteSubtask(
+subtaskId?: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/ProjectManagement/delete-subtask',
+            query: {
+                'subtaskId': subtaskId,
+            },
+        });
+    }
+
+    /**
      * @param taskId 
      * @returns BooleanStandardResponse Success
      * @throws ApiError

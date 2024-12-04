@@ -83,49 +83,52 @@ function Login() {
                     Cookies.remove('details');
                 }
 
+                const user = result.data;
+
                 const strippedData = {
-                    clientSubscriptionId: result.data?.clientSubscriptionId,
-                    email: result.data?.email,
-                    firstName: result.data?.firstName,
-                    lastName: result.data?.lastName,
-                    fullName: result.data?.fullName,
-                    role: result.data?.role,
-                    isActive: result.data?.isActive,
-                    isAnniversaryToday: result.data?.isAnniversaryToday,
-                    isBirthDayToday: result.data?.isBirthDayToday,
+                    clientSubscriptionId: user?.clientSubscriptionId,
+                    email: user?.email,
+                    firstName: user?.firstName,
+                    lastName: user?.lastName,
+                    fullName: user?.fullName,
+                    role: user?.role,
+                    isActive: user?.isActive,
+                    isAnniversaryToday: user?.isAnniversaryToday,
+                    isBirthDayToday: user?.isBirthDayToday,
                     isOrganizationProjectManager:
-                        result.data?.isOrganizationProjectManager,
-                    organizationName: result.data?.organizationName,
-                    superAdminId: result.data?.superAdminId,
-                    twoFactorEnabled: result.data?.twoFactorEnabled,
-                    currency: result.data?.currency,
-                    department: result.data?.department,
-                    employeeInformationId: result.data?.employeeInformationId,
-                    id: result.data?.id,
-                    numberOfDaysEligible: result.data?.numberOfDaysEligible,
-                    numberOfLeaveDaysTaken: result.data?.numberOfLeaveDaysTaken,
-                    twoFactorCode: result.data?.twoFactorCode,
-                    isTrainingManager: result.data?.isTrainingManager,
-                    clientId: result.data?.clientId,
+                        user?.isOrganizationProjectManager,
+                    organizationName: user?.organizationName,
+                    superAdminId: user?.superAdminId,
+                    twoFactorEnabled: user?.twoFactorEnabled,
+                    currency: user?.currency,
+                    department: user?.department,
+                    employeeInformationId: user?.employeeInformationId,
+                    id: user?.id,
+                    numberOfDaysEligible: user?.numberOfDaysEligible,
+                    numberOfLeaveDaysTaken: user?.numberOfLeaveDaysTaken,
+                    twoFactorCode: user?.twoFactorCode,
+                    isTrainingManager: user?.isTrainingManager,
+                    clientId: user?.clientId,
                     payrollStructure:
-                        result.data?.employeeInformation?.payrollStructure,
+                        user?.employeeInformation?.payrollStructure,
+                    invoiceGenerationType: user?.invoiceGenerationType,
                 };
-                const subDetails = result.data?.subscriptiobDetails;
+                const subDetails = user?.subscriptiobDetails;
                 Cookies.set('user', JSON.stringify(strippedData));
                 Cookies.set('subDetails', JSON.stringify(subDetails));
-                result.data &&
-                    Cookies.set('token', result.data.token as string, {
+                user &&
+                    Cookies.set('token', user.token as string, {
                         expires: expiresIn,
                     });
                 OpenAPI.TOKEN = result?.data?.token as string;
 
-                if (result.data?.twoFactorEnabled) {
+                if (user?.twoFactorEnabled) {
                     router.push('/login/twofalogin');
                     return;
                 }
                 const getControlSettings =
                     await UserService.getControlSettingById(
-                        result.data?.superAdminId as string,
+                        user?.superAdminId as string,
                     );
                 if (getControlSettings.status) {
                     Cookies.set(
@@ -185,14 +188,15 @@ function Login() {
                         res.idTokenClaims,
                     )) as UserViewStandardResponse;
                     if (result.status) {
-                        Cookies.set('user', JSON.stringify(result.data));
-                        OpenAPI.TOKEN = result?.data?.token as string;
-                        result.data &&
-                            Cookies.set('token', result.data.token as string, {
+                        const user = result.data;
+                        Cookies.set('user', JSON.stringify(user));
+                        OpenAPI.TOKEN = user?.token as string;
+                        user &&
+                            Cookies.set('token', user.token as string, {
                                 expires: expiresIn,
                             });
                         setLoading(false);
-                        if (result.data?.twoFactorEnabled) {
+                        if (user?.twoFactorEnabled) {
                             router.push('/login/twofalogin');
                             return;
                         }

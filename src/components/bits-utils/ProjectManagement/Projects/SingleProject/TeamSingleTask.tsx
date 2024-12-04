@@ -465,9 +465,7 @@ export const TeamSingleTask = ({
         setLoading({ id: 'delete' });
         const taskId = data.raw as any;
         try {
-            const res = await ProjectManagementService.deleteProjectTask(
-                taskId.id,
-            );
+            const res = await ProjectManagementService.deleteSubtask(taskId);
             if (res.status) {
                 setLoading({ id: '' });
                 toast({

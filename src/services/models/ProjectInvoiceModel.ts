@@ -8,7 +8,6 @@ export type ProjectInvoiceModel = {
     id?: string | null;
     superAdminId?: string;
     projectId?: string;
-    invoiceReference?: string | null;
     subtotal?: number;
     hst?: number;
     total?: number;
