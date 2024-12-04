@@ -475,7 +475,7 @@ export const TeamSingleTask = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                onCloses();
+                onDeleteCloses();
                 return;
             }
         } catch (err: any) {

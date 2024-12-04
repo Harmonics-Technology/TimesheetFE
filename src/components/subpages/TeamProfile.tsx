@@ -196,7 +196,7 @@ function TeamProfile({
 
     // console.log({ clients });
 
-    console.log({ userProfile });
+    // console.log({ userProfile });
     const getPaymentPartnerFees = async (id) => {
         if (id === undefined) {
             return;
@@ -717,6 +717,10 @@ function TeamProfile({
                                 label="Timesheet Start Date"
                                 error={errors.timesheetStartDate}
                                 required={false}
+                                defaultValue={moment(
+                                    userProfile?.employeeInformation
+                                        ?.timesheetStartDate,
+                                ).format('YYYY/MM/DD')}
                                 // min={new Date()}
                             />
                             <Box w="full">

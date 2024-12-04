@@ -333,7 +333,7 @@ export const SingleTask = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                onCloses();
+                onDeleteCloses();
                 return;
             }
         } catch (err: any) {
