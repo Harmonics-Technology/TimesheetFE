@@ -37,6 +37,8 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             const currencies = await UtilityService.listCountries();
 
+            console.log({ id });
+
             return {
                 props: {
                     project: data.data,
@@ -47,9 +49,11 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     data: [],
+                    id,
                 },
             };
         }

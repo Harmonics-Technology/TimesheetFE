@@ -443,6 +443,10 @@ export const NewTeamMemerOnboardingForm = ({
         );
     }, [selectedDepartment]);
 
+    const paymentPartnerCurrency = paymentPartner?.find(
+        (x) => x.id === watch('paymentPartnerId'),
+    )?.currency;
+
     return (
         <DrawerWrapper
             onClose={closeModal}
@@ -965,36 +969,50 @@ export const NewTeamMemerOnboardingForm = ({
                                                     </>
                                                 }
                                             />
-                                            <PrimarySelect<TeamMemberModel>
-                                                register={register}
-                                                error={
-                                                    errors.paymentProcessingFee
-                                                }
-                                                name="paymentProcessingFee"
-                                                label="Processing fee"
-                                                placeholder="Please Select"
-                                                options={
-                                                    <>
-                                                        {payFees
-                                                            ?.filter(
-                                                                (x) =>
-                                                                    x.onboardingFeeType ==
-                                                                    watch(
-                                                                        'paymentProcessingFeeType',
-                                                                    ),
-                                                            )
-                                                            .map((x) => (
-                                                                <option
-                                                                    value={
-                                                                        x.fee
-                                                                    }
-                                                                >
-                                                                    {x.fee}
-                                                                </option>
-                                                            ))}
-                                                    </>
-                                                }
-                                            />
+                                            {watch('paymentPartnerId') && (
+                                                <PrimarySelect<TeamMemberModel>
+                                                    register={register}
+                                                    error={
+                                                        errors.paymentProcessingFee
+                                                    }
+                                                    name="paymentProcessingFee"
+                                                    label={`Processing fee ${
+                                                        watch(
+                                                            'paymentProcessingFeeType',
+                                                        ) == 'percentage'
+                                                            ? '(%)'
+                                                            : `(${paymentPartnerCurrency})`
+                                                    }`}
+                                                    placeholder="Please Select"
+                                                    options={
+                                                        <>
+                                                            {payFees
+                                                                ?.filter(
+                                                                    (x) =>
+                                                                        x.onboardingFeeType ==
+                                                                        watch(
+                                                                            'paymentProcessingFeeType',
+                                                                        ),
+                                                                )
+                                                                .map((x) => (
+                                                                    <option
+                                                                        value={
+                                                                            x.fee
+                                                                        }
+                                                                    >
+                                                                        {x.fee}{' '}
+                                                                        {watch(
+                                                                            'paymentProcessingFeeType',
+                                                                        ) ==
+                                                                        'percentage'
+                                                                            ? '%'
+                                                                            : `${paymentPartnerCurrency}`}
+                                                                    </option>
+                                                                ))}
+                                                        </>
+                                                    }
+                                                />
+                                            )}
                                         </>
                                     )}
                                     <PrimarySelect<TeamMemberModel>

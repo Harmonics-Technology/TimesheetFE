@@ -61,7 +61,7 @@ export const MiniCards = ({
                                       } ${CUR(Round(value))}`
                                     : isPrice
                                     ? CUR(Round(value))
-                                    : value}
+                                    : Round(value)}
                             </Text>
                             {/* {hasBudget && <Icon as={LiaAngleDownSolid} />} */}
                         </HStack>

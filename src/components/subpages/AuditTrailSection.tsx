@@ -179,6 +179,7 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                         <Flex
                                             justifyContent="space-between"
                                             alignItems="flex-start"
+                                            key={x?.id}
                                         >
                                             <ListItem
                                                 key={x?.id}
@@ -223,7 +224,7 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                                       x?.comment?.startsWith(
                                                                           'A subtask',
                                                                       )
-                                                                          ? 'Sub Task'
+                                                                          ? 'Sub-Task'
                                                                           : 'Task'
                                                                   } ${x?.comment
                                                                       ?.split(
@@ -234,6 +235,10 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                                           ' ',
                                                                       )
                                                                       ?.at(1)}`
+                                                                : x?.comment?.startsWith(
+                                                                      'This subtask',
+                                                                  )
+                                                                ? 'Sub-Task'
                                                                 : 'Task Assigned'}
                                                         </Text>
                                                         <HStack gap="1rem">
@@ -316,8 +321,11 @@ export const AuditTrailSection = ({ taskId }: { taskId: string }) => {
                                                                 fontSize="13px"
                                                                 fontWeight={400}
                                                             >
-                                                                This task was
-                                                                assigned to
+                                                                {x?.comment?.startsWith(
+                                                                    'This subtask',
+                                                                )
+                                                                    ? 'This subtask was assigned to'
+                                                                    : 'This task was assigned to'}
                                                             </Text>
                                                             <Avatar
                                                                 size={'sm'}

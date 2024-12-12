@@ -1135,7 +1135,13 @@ function TeamProfile({
                                                             <option
                                                                 value={x.fee}
                                                             >
-                                                                {x.fee}
+                                                                {x.fee}{' '}
+                                                                {watch(
+                                                                    'paymentProcessingFeeType',
+                                                                ) ==
+                                                                'percentage'
+                                                                    ? '%'
+                                                                    : `${paymentPartnerCurrency}`}
                                                             </option>
                                                         ))}
                                                 </>
