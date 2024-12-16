@@ -119,7 +119,6 @@ export const ProjectTask = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                onCloses();
                 return;
             }
         } catch (err: any) {
@@ -130,6 +129,8 @@ export const ProjectTask = ({
                 isClosable: true,
                 position: 'top-right',
             });
+        } finally {
+            onCloses();
         }
     };
 

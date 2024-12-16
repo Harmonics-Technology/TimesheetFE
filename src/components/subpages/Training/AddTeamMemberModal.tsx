@@ -102,6 +102,7 @@ export const AddTeamMemberModal = ({
                         <SelectBlank
                             label="Team Members"
                             onChange={(e) => setUserId(e.target.value)}
+                            placeholder="Select Team Member"
                             options={users?.value
                                 ?.filter(
                                     (user) =>

@@ -180,7 +180,7 @@ function TeamProfile({
     });
     const router = useRouter();
     const toast = useToast();
-    const includePayroll = watch('enableFinancials');
+    const includePayroll = convertYesNo(watch('enableFinancials'));
     const hasUtlized = watch('hasUtilizeLeaveDaysToDate');
 
     // console.log({ userProfile, rle: watch('role') });
@@ -391,7 +391,7 @@ function TeamProfile({
             });
         } catch (err: any) {
             toast({
-                title: err?.message || err?.body?.message,
+                title: err?.body?.title || err?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -767,7 +767,7 @@ function TeamProfile({
                                 register={register}
                                 error={errors.enableFinancials}
                                 name="enableFinancials"
-                                label="Is Payroll Required"
+                                label="Is Payment Information Required?"
                                 placeholder={'Please select'}
                                 options={
                                     <>
@@ -853,8 +853,7 @@ function TeamProfile({
                             />
                         </Box>
                     )}
-                    {(includePayroll ||
-                        (includePayroll as unknown as string) == 'Yes') && (
+                    {includePayroll && (
                         <Box w="full">
                             <Flex
                                 justify="space-between"

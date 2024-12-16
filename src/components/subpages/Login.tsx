@@ -118,7 +118,7 @@ function Login() {
                 Cookies.set('subDetails', JSON.stringify(subDetails));
                 user &&
                     Cookies.set('token', user.token as string, {
-                        expires: expiresIn,
+                        expires: 1,
                     });
                 OpenAPI.TOKEN = result?.data?.token as string;
 

@@ -267,7 +267,7 @@ export const SubscriptionInvoice = ({ isOpen, onClose, data }: Props) => {
                                                 color="#333333"
                                                 fontWeight={500}
                                             >
-                                                Web: www.proinsight.ca
+                                                info@timba.ca
                                             </Text>
                                         </Box>
                                     </HStack>

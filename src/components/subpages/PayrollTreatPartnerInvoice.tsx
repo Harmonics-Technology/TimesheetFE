@@ -44,6 +44,7 @@ import NoAccess from '@components/bits-utils/NoAccess';
 import asyncForEach from '@components/generics/functions/AsyncForEach';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -171,7 +172,7 @@ function PayrollTreatPartnerInvoice({
         'Action',
     ];
 
-    // console.log({ invoiceData });
+    // console.log({ invoiceData, user });
 
     return (
         <>
@@ -369,7 +370,10 @@ function PayrollTreatPartnerInvoice({
                                                 )}
                                             /> */}
                                                 <TableData
-                                                    name={CUR(
+                                                    name={`${getCurrencySymbol(
+                                                        x?.createdByUser
+                                                            ?.currency,
+                                                    )}${CUR(
                                                         Round(
                                                             (x.convertedAmount as number) +
                                                                 allTaxTotal +
@@ -377,7 +381,7 @@ function PayrollTreatPartnerInvoice({
                                                             // *
                                                             //     (x.rate as unknown as number),
                                                         ),
-                                                    )}
+                                                    )}`}
                                                 />
                                                 <TableState
                                                     name={x.status as string}

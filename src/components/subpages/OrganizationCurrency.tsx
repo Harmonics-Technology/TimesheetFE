@@ -18,6 +18,7 @@ export const OrganizationCurrency = ({
 }) => {
     const toast = useToast();
     const router = useRouter();
+    countries = countries?.filter((x) => x?.currency !== null);
     const foundCountry = countries?.find(
         (x) => x.currency === data?.organizationDefaultCurrency,
     );

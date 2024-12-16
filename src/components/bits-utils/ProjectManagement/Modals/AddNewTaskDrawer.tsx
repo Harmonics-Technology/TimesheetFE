@@ -106,6 +106,7 @@ export const AddNewTaskDrawer = ({
     const assignees = project?.assignees?.filter(
         (x) => x.projectTaskId == null,
     );
+
     //
 
     const [selectedUser, setSelecedUser] = useState<any>(
@@ -130,9 +131,10 @@ export const AddNewTaskDrawer = ({
         { id: 2, name: 'Medium' },
         { id: 3, name: 'Low' },
     ];
-    const [selectedPriority, setSelectedPriority] = useState<any>(
-        { id: formattedPriority, name: data?.taskPriority } || '',
-    );
+    const [selectedPriority, setSelectedPriority] = useState<any>({
+        id: formattedPriority,
+        name: data?.taskPriority,
+    });
     const selectPriority = (user) => {
         setSelectedPriority(user);
     };
@@ -252,7 +254,7 @@ export const AddNewTaskDrawer = ({
                     </FormLabel>
 
                     <CustomSelectBox
-                        data={assignees}
+                        data={assignees?.filter((x) => x?.user?.isActive)}
                         updateFunction={addUser}
                         items={selectedUser}
                         customKeys={{

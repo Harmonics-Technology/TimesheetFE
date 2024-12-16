@@ -116,7 +116,7 @@ export const AddOpTaskDrawer = ({
             );
             if (data.status) {
                 setIsLoading(false);
-                setDeptUser(data.data?.value);
+                setDeptUser(data.data?.value?.filter((x) => x?.isActive));
             }
         } catch (error) {
             setIsLoading(false);
@@ -305,7 +305,7 @@ export const AddOpTaskDrawer = ({
                             </FormLabel>
 
                             <CustomSelectBox
-                                data={users}
+                                data={users?.filter((x) => x?.isActive)}
                                 updateFunction={addUser}
                                 items={selectedUser}
                                 customKeys={{ key: 'id', label: 'fullName' }}

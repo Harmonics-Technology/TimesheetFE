@@ -41,6 +41,7 @@ export const ProjectPage = ({
     isPm: boolean;
     currencies: any;
 }) => {
+    // console.log({ users });
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: open, onOpen: opens, onClose: close } = useDisclosure();
     const { user, subType } = useContext(UserContext);

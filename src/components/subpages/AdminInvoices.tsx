@@ -390,125 +390,141 @@ function AdminInvoices({
                         <Tables tableHead={thead}>
                             <>
                                 {invoiceData?.data?.value?.map(
-                                    (x: InvoiceView) => (
-                                        <Tr key={x.id}>
-                                            {!converted && (
+                                    (x: InvoiceView) => {
+                                        const allExpenseTotal =
+                                            x?.expenses?.reduce(
+                                                (a, b) =>
+                                                    a + (b?.amount as number),
+                                                0,
+                                            );
+                                        return (
+                                            <Tr key={x.id}>
+                                                {!converted && (
+                                                    <TableData
+                                                        name={
+                                                            hideCheckbox || pays
+                                                                ? x
+                                                                      .employeeInformation
+                                                                      ?.client
+                                                                      ?.organizationName
+                                                                : x.invoiceReference
+                                                        }
+                                                    />
+                                                )}
                                                 <TableData
                                                     name={
-                                                        hideCheckbox || pays
-                                                            ? x
-                                                                  .employeeInformation
-                                                                  ?.client
-                                                                  ?.organizationName
-                                                            : x.invoiceReference
+                                                        x.payrollGroupName ||
+                                                        x.paymentPartnerName ||
+                                                        x.name
                                                     }
                                                 />
-                                            )}
-                                            <TableData
-                                                name={
-                                                    x.payrollGroupName ||
-                                                    x.paymentPartnerName ||
-                                                    x.name
-                                                }
-                                            />
-                                            <TableData
-                                                name={formatDate(x.dateCreated)}
-                                            />
-                                            <TableData
-                                                name={formatDate(x.startDate)}
-                                            />
-                                            <TableData
-                                                name={formatDate(x.endDate)}
-                                            />
-                                            {converted ? (
-                                                <>
-                                                    <TableData
-                                                        name={`${getCurrencySymbol(
-                                                            organizationCurrency,
-                                                        )}${CUR(
-                                                            Round(
-                                                                (x?.convertedAmount as number) +
-                                                                    calculatePercentage(
-                                                                        x.totalAmount,
-                                                                        x
-                                                                            ?.employeeInformation
-                                                                            ?.tax,
-                                                                    ) *
-                                                                        (x?.rateForConvertedIvoice as number),
-                                                            ),
-                                                        )}`}
-                                                        full
-                                                    />
-                                                    <TableData
-                                                        name={`${getCurrencySymbol(
-                                                            organizationCurrency,
-                                                        )}${CUR(
-                                                            x.rateForConvertedIvoice,
-                                                        )}`}
-                                                        full
-                                                    />
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <TableData
-                                                        name={`${getCurrencySymbol(
-                                                            x
-                                                                ?.employeeInformation
-                                                                ?.currency,
-                                                        )}${CUR(
-                                                            Round(
-                                                                (x?.totalAmount as number) +
-                                                                    calculatePercentage(
-                                                                        x?.totalAmount,
-                                                                        x
-                                                                            ?.employeeInformation
-                                                                            ?.tax,
-                                                                    ),
-                                                            ),
-                                                        )}`}
-                                                        full
-                                                    />
-                                                    <TableState
-                                                        name={
-                                                            x.status ==
-                                                                'REVIEWING' ||
-                                                            x.status ==
-                                                                'REVIEWED'
-                                                                ? 'APPROVED'
-                                                                : (x.status as string)
-                                                        }
-                                                    />
-                                                </>
-                                            )}
+                                                <TableData
+                                                    name={formatDate(
+                                                        x.dateCreated,
+                                                    )}
+                                                />
+                                                <TableData
+                                                    name={formatDate(
+                                                        x.startDate,
+                                                    )}
+                                                />
+                                                <TableData
+                                                    name={formatDate(x.endDate)}
+                                                />
+                                                {converted ? (
+                                                    <>
+                                                        <TableData
+                                                            name={`${getCurrencySymbol(
+                                                                organizationCurrency,
+                                                            )}${CUR(
+                                                                Round(
+                                                                    (x?.convertedAmount as number) +
+                                                                        calculatePercentage(
+                                                                            x.totalAmount,
+                                                                            x
+                                                                                ?.employeeInformation
+                                                                                ?.tax,
+                                                                        ) *
+                                                                            (x?.rateForConvertedIvoice as number),
+                                                                ),
+                                                            )}`}
+                                                            full
+                                                        />
+                                                        <TableData
+                                                            name={`${getCurrencySymbol(
+                                                                organizationCurrency,
+                                                            )}${CUR(
+                                                                x.rateForConvertedIvoice,
+                                                            )}`}
+                                                            full
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <TableData
+                                                            name={`${getCurrencySymbol(
+                                                                x
+                                                                    ?.employeeInformation
+                                                                    ?.currency,
+                                                            )}${CUR(
+                                                                Round(
+                                                                    (x?.totalAmount as number) +
+                                                                        (allExpenseTotal ||
+                                                                            0) +
+                                                                        calculatePercentage(
+                                                                            x?.totalAmount,
+                                                                            x
+                                                                                ?.employeeInformation
+                                                                                ?.tax,
+                                                                        ),
+                                                                ),
+                                                            )}`}
+                                                            full
+                                                        />
+                                                        <TableState
+                                                            name={
+                                                                x.status ==
+                                                                    'REVIEWING' ||
+                                                                x.status ==
+                                                                    'REVIEWED'
+                                                                    ? 'APPROVED'
+                                                                    : (x.status as string)
+                                                            }
+                                                        />
+                                                    </>
+                                                )}
 
-                                            <InvoiceAction
-                                                data={x}
-                                                onOpen={onOpen}
-                                                clicked={setClicked}
-                                            />
+                                                <InvoiceAction
+                                                    data={x}
+                                                    onOpen={onOpen}
+                                                    clicked={setClicked}
+                                                />
 
-                                            {!hideCheckbox && (
-                                                <td>
-                                                    <Checkbox
-                                                        checked={
-                                                            selectedId.find(
-                                                                (e) =>
-                                                                    e.id ===
-                                                                    x.id,
-                                                            ) || ''
-                                                        }
-                                                        onChange={(e) =>
-                                                            toggleSelected(x)
-                                                        }
-                                                        disabled={
-                                                            x.status ===
-                                                            'PROCESSED'
-                                                        }
-                                                    />
-                                                </td>
-                                            )}
-                                        </Tr>
-                                    ),
+                                                {!hideCheckbox && (
+                                                    <td>
+                                                        <Checkbox
+                                                            checked={
+                                                                selectedId.find(
+                                                                    (e) =>
+                                                                        e.id ===
+                                                                        x.id,
+                                                                ) || ''
+                                                            }
+                                                            onChange={(e) =>
+                                                                toggleSelected(
+                                                                    x,
+                                                                )
+                                                            }
+                                                            disabled={
+                                                                x.status ===
+                                                                'PROCESSED'
+                                                            }
+                                                        />
+                                                    </td>
+                                                )}
+                                            </Tr>
+                                        );
+                                    },
                                 )}
                             </>
                         </Tables>

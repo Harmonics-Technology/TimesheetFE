@@ -459,7 +459,7 @@ export const DraftOnboardingModal = ({
             return;
         } catch (err: any) {
             toast({
-                title: err?.message || err?.body?.message,
+                title: err?.body?.title || err?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -817,7 +817,7 @@ export const DraftOnboardingModal = ({
                     <SectionTitle text="Work Data" />
                     <Box mb="1.5rem">
                         <PrimaryRadio<TeamMemberModel>
-                            label="Do you want to include Payroll data"
+                            label="Is Payment Information Required?"
                             radios={['Yes', 'No']}
                             name="enableFinancials"
                             control={control}

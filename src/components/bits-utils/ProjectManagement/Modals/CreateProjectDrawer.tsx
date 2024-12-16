@@ -47,7 +47,7 @@ export const CreateProjectDrawer = ({
     const [currentBudget, setCurrenntBudget] = useState(0);
     const [nonApplicable, setNonApplicable] = useState(false);
 
-    console.log({ users });
+    // console.log({ users });
 
     const uniqueItems = getUniqueListBy(currencies, 'currency');
 
@@ -140,7 +140,7 @@ export const CreateProjectDrawer = ({
 
     const onSubmit = async (data: ProjectModel) => {
         data.fileExtension = fileDoc?.url.name?.split('.')?.at(-1);
-        data.fileSize = fileDoc?.url?.size ;
+        data.fileSize = fileDoc?.url?.size;
         data.fileTitle = fileDoc?.url?.name;
         try {
             const result = await ProjectManagementService.createProject(data);
@@ -308,7 +308,7 @@ export const CreateProjectDrawer = ({
                         </FormLabel>
 
                         <CustomSelectBox
-                            data={users}
+                            data={users?.filter((x) => x.isActive)}
                             updateFunction={addUser}
                             items={selectedUser}
                             customKeys={{ key: 'id', label: 'fullName' }}
@@ -383,7 +383,9 @@ export const CreateProjectDrawer = ({
                         {!nonApplicable && (
                             <>
                                 <CustomSelectBox
-                                    data={projectMangers}
+                                    data={projectMangers?.filter((x) =>
+                                        selectedUser?.some((b) => b.id == x.id),
+                                    )}
                                     updateFunction={addManager}
                                     items={selectedManager}
                                     customKeys={{

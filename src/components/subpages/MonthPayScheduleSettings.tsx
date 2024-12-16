@@ -148,35 +148,42 @@ export const MonthPayScheduleSettings = ({
                             }
                         />
                         {(payType as any) == 1 && (
-                            <HStack w="full" spacing="1rem" align="flex-end">
-                                <PrimaryInput<PayScheduleGenerationModel>
-                                    label="Payment Day"
-                                    name="paymentDateDays"
-                                    error={errors.paymentDateDays}
-                                    placeholder={
-                                        payday || 'Enter the number of days'
-                                    }
-                                    defaultValue=""
-                                    register={register}
-                                />
-                                <Box w="full">
-                                    <FormLabel
-                                        htmlFor={'Select Year'}
-                                        textTransform="capitalize"
-                                        fontSize={'.8rem'}
-                                    >
-                                        {'Select Year'}
-                                    </FormLabel>
-                                    <Box w="100%">
-                                        <CustomDatePick
-                                            date={year}
-                                            setDate={setYear}
-                                            onlyYear={true}
-                                            format="YYYY"
-                                        />
+                            <>
+                                <PaymentScheduleInfo />
+                                <HStack
+                                    w="full"
+                                    spacing="1rem"
+                                    align="flex-end"
+                                >
+                                    <PrimaryInput<PayScheduleGenerationModel>
+                                        label="Payment Date Offset (in days)"
+                                        name="paymentDateDays"
+                                        error={errors.paymentDateDays}
+                                        placeholder={
+                                            payday || 'Enter the number of days'
+                                        }
+                                        defaultValue=""
+                                        register={register}
+                                    />
+                                    <Box w="full">
+                                        <FormLabel
+                                            htmlFor={'Select Year'}
+                                            textTransform="capitalize"
+                                            fontSize={'.8rem'}
+                                        >
+                                            {'Select Year'}
+                                        </FormLabel>
+                                        <Box w="100%">
+                                            <CustomDatePick
+                                                date={year}
+                                                setDate={setYear}
+                                                onlyYear={true}
+                                                format="YYYY"
+                                            />
+                                        </Box>
                                     </Box>
-                                </Box>
-                            </HStack>
+                                </HStack>
+                            </>
                         )}
                         {(payType as any) == 2 && (
                             <>

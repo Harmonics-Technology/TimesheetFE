@@ -336,7 +336,9 @@ function Paymentinvoices({
                                                             )}
                                                         /> */}
                                                         <TableData
-                                                            name={CUR(
+                                                            name={`${
+                                                                user?.currency
+                                                            }${CUR(
                                                                 Round(
                                                                     x
                                                                         .employeeInformation
@@ -358,7 +360,7 @@ function Paymentinvoices({
                                                                               ?.employeeInformation
                                                                               ?.paymentProcessingFee,
                                                                 ),
-                                                            )}
+                                                            )}`}
                                                         />
                                                     </Tr>
                                                 </>

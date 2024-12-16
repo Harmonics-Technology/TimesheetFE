@@ -138,6 +138,8 @@ export const TeamProjectTask = ({
                 isClosable: true,
                 position: 'top-right',
             });
+        } finally {
+            onCloses();
         }
     };
 

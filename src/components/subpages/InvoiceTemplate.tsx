@@ -45,20 +45,22 @@ function InvoiceTemplate({
     );
     const exchangeRate = clicked?.rate as unknown as number;
 
-    const amountMinusExpense =
-        (clicked?.totalAmount as number) - (allExpenseTotal as number);
+    // const amountMinusExpense =
+    //     (clicked?.totalAmount as number) - (allExpenseTotal as number);
 
     const taxCalculated = clicked?.employeeInformation?.tax;
     const convertedTax = Round(
-        calculatePercentage(amountMinusExpense, taxCalculated),
+        calculatePercentage(clicked?.totalAmount, taxCalculated),
     );
 
-    const finalTotal =
-        Number(clicked?.totalAmount as number) + Number(convertedTax);
+    const total =
+        Number(clicked?.totalAmount as number) + (allExpenseTotal || 0);
+
+    const finalTotal = total + Number(convertedTax);
 
     const incorpName = clicked?.employeeInformation?.incorpName;
 
-    // console.log({ clicked });
+    console.log({ clicked });
 
     return (
         <>
@@ -355,11 +357,7 @@ function InvoiceTemplate({
                                                 clicked?.employeeInformation
                                                     ?.currency
                                             }
-                                            value={CUR(
-                                                Round(
-                                                    clicked?.totalAmount as number,
-                                                ),
-                                            )}
+                                            value={CUR(Round(total))}
                                         />
                                         <InvoiceTotalText
                                             label={`${clicked?.employeeInformation?.taxType} ${clicked?.employeeInformation?.tax}%`}

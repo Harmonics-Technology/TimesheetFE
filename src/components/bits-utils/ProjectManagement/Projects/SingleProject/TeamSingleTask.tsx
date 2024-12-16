@@ -178,7 +178,10 @@ export const TeamSingleTask = ({
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
 
-    const isPm = project?.projectManagerId == user?.id;
+    const isPm = project?.projectManagers?.find((x) => x?.user?.id == user?.id);
+
+    console.log({ project });
+
     const hasAccess =
         access?.projectMembersTaskCreation ||
         (access?.assignedPMTaskCreation && isPm);
@@ -475,7 +478,6 @@ export const TeamSingleTask = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                onDeleteCloses();
                 return;
             }
         } catch (err: any) {
@@ -486,6 +488,8 @@ export const TeamSingleTask = ({
                 isClosable: true,
                 position: 'top-right',
             });
+        } finally {
+            onDeleteCloses();
         }
     };
 

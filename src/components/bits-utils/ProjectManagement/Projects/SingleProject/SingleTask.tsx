@@ -333,7 +333,6 @@ export const SingleTask = ({
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                onDeleteCloses();
                 return;
             }
         } catch (err: any) {
@@ -344,6 +343,8 @@ export const SingleTask = ({
                 isClosable: true,
                 position: 'top-right',
             });
+        } finally {
+            onDeleteCloses();
         }
     };
 
@@ -507,7 +508,7 @@ export const SingleTask = ({
                                 // defaultValue={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
                                 disableLabel={true}
                                 readonly={true}
-                                value={`${task?.hoursSpent} Hours`}
+                                value={`${Round(task?.hoursSpent)} Hours`}
                             />
                         </Stack>
 
@@ -714,6 +715,10 @@ export const SingleTask = ({
                                                 <MenuList>
                                                     <MenuItem
                                                         onClick={onOpens}
+                                                        isDisabled={
+                                                            x?.status ==
+                                                            'Completed'
+                                                        }
                                                         w="full"
                                                     >
                                                         <Icon

@@ -61,6 +61,8 @@ const Leaveform = ({
             ? user?.numberOfDaysEligible
             : 0;
 
+    console.log({ teamMembers });
+
     const {
         register,
         handleSubmit,
@@ -355,7 +357,8 @@ const Leaveform = ({
                         keyLabel="fullName"
                         label="Work Assignee"
                         options={teamMembers?.data?.value.filter(
-                            (x) => x.employeeInformationId !== id,
+                            (x) =>
+                                x.employeeInformationId !== id && x?.isActive,
                         )}
                         searchable
                         placeholder={data?.workAssignee?.fullName}

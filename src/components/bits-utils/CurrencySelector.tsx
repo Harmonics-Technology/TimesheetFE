@@ -27,6 +27,7 @@ export const CurrencySelector = ({
 
         setNewData(filteredData);
     };
+    console.log({ selectedCountry });
     return (
         <Box w="full">
             <Flex
@@ -43,7 +44,7 @@ export const CurrencySelector = ({
                     cursor="pointer"
                     onClick={() => setIsOpen((prev) => !prev)}
                 >
-                    {selectedCountry ? (
+                    {selectedCountry && selectedCountry !== null ? (
                         <HStack gap="1rem">
                             <Box w="24px" h="24px">
                                 <Image
