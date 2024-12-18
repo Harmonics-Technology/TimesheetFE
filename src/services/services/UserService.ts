@@ -25,6 +25,8 @@ import type { ShiftUsersListViewPagedCollectionStandardResponse } from '../model
 import type { SubscriptionHistoryViewModelStandardResponse } from '../models/SubscriptionHistoryViewModelStandardResponse';
 import type { SubscriptionTypesModelCommandCenterResponseModelStandardResponse } from '../models/SubscriptionTypesModelCommandCenterResponseModelStandardResponse';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
+import type { TeamMemberSettingModel } from '../models/TeamMemberSettingModel';
+import type { TeamMemberSettingViewStandardResponse } from '../models/TeamMemberSettingViewStandardResponse';
 import type { UpdateCardDetailsModel } from '../models/UpdateCardDetailsModel';
 import type { UpdateClientStripeSubscriptionModel } from '../models/UpdateClientStripeSubscriptionModel';
 import type { UpdateClientSubscriptionModel } from '../models/UpdateClientSubscriptionModel';
@@ -1121,6 +1123,68 @@ export class UserService {
             url: '/api/User/add-to-list',
             errors: {
                 401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param userId
+     * @returns TeamMemberSettingViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static getTeamMemberSettingById(
+        userId?: string,
+    ): CancelablePromise<TeamMemberSettingViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/team-member-setting',
+            query: {
+                userId: userId,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateTeamMemberSettings(
+        requestBody?: TeamMemberSettingModel,
+    ): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/update-team-member-setting',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+        });
+    }
+
+    /**
+     * @param offset
+     * @param limit
+     * @param clientId
+     * @param startDate
+     * @param endDate
+     * @returns ShiftUsersListViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static licenseUpdatesAuditLogs(
+        offset?: number,
+        limit?: number,
+        clientId?: string,
+        startDate?: string,
+        endDate?: string,
+    ): CancelablePromise<ShiftUsersListViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/license-update-logs',
+            query: {
+                Offset: offset,
+                Limit: limit,
+                clientId: clientId,
+                startDate: startDate,
+                endDate: endDate,
             },
         });
     }

@@ -63,13 +63,37 @@ export const NotificationProvider = ({ children }: { children: any }) => {
             });
         }
     };
+    const markAllAsRead = async (id) => {
+        try {
+            setLoading({ id: 'marking' });
+            const data = await NotificationService.markAllAsRead(id);
+            //
+            if (data.status) {
+                await getNotifications();
+                setLoading({ id: '' });
+            }
+        } catch (error: any) {
+            setLoading({ id: '' });
+            toast({
+                title: error?.body?.message || error?.message,
+                position: 'top-right',
+                status: 'error',
+            });
+        }
+    };
 
     //Getting Notification on Page load
     useEffect(() => {
         getNotifications();
     }, [limit]);
 
-    const contextValues = { messages, markAsRead, loading, setLimit };
+    const contextValues = {
+        messages,
+        markAsRead,
+        markAllAsRead,
+        loading,
+        setLimit,
+    };
     return (
         <NotificationContext.Provider value={contextValues}>
             {children}

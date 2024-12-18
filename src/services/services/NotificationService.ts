@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { NotificationViewPagedCollectionStandardResponse } from '../models/NotificationViewPagedCollectionStandardResponse';
 import type { NotificationViewStandardResponse } from '../models/NotificationViewStandardResponse';
 
@@ -67,6 +68,26 @@ id: string,
             url: '/api/Notification/{id}/mark-as-read',
             path: {
                 'id': id,
+            },
+            errors: {
+                400: `Bad Request`,
+            },
+        });
+    }
+
+    /**
+     * @param userId 
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static markAllAsRead(
+userId: string,
+): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Notification/mark-all-as-read/{userId}',
+            path: {
+                'userId': userId,
             },
             errors: {
                 400: `Bad Request`,
