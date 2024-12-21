@@ -418,7 +418,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         />
                     )}
 
-                    <MenuItem
+                    {/* <MenuItem
                         change={change}
                         linkName="my-profile"
                         menuTitle="My Profile"
@@ -427,6 +427,17 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
+                    /> */}
+                    <MenuItem
+                        change={change}
+                        linkName="account-management"
+                        menuTitle="Account settings"
+                        icon={<MdSettings opacity=".8" />}
+                        option={true}
+                        dropDown={['my profile', 'notification configuration']}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
                     />
                 </VStack>
             ) : role == 'Supervisor' ? (

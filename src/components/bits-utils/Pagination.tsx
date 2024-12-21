@@ -41,7 +41,7 @@ function Pagination({ data, shift, client, func, loadMore }: pageOptions) {
         if (direction == 'previous' && previous != null) {
             link = previous?.split('?')[1] ?? false;
             client
-                ? func(data.previousOffset)
+                ? func(data.previousOffset || 0)
                 : shift
                 ? (window.location.href = `?limit=${data.limit}&offset=${
                       data.previousOffset || 0

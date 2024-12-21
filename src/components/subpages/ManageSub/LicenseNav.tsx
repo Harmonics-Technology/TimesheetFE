@@ -29,6 +29,7 @@ export const LicenseNav = () => {
                         url: `/account-management/purchase-license-plan`,
                     },
                 ]}
+                useStartWith
             />
         </Box>
     );

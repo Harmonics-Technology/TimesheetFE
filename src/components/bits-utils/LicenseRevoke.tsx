@@ -11,6 +11,7 @@ export const LicenseRevoke = ({
     h,
     disabled,
     setSelectedLicense,
+    fetchPageDataPaginated,
 }: {
     text: any;
     userId: any;
@@ -18,6 +19,7 @@ export const LicenseRevoke = ({
     w?: any;
     disabled?: any;
     setSelectedLicense?: any;
+    fetchPageDataPaginated?: any;
 }) => {
     const toast = useToast();
     const router = useRouter();
@@ -30,6 +32,7 @@ export const LicenseRevoke = ({
                 setLoading(false);
                 router.replace(router.asPath);
                 setSelectedLicense && setSelectedLicense({});
+                fetchPageDataPaginated && fetchPageDataPaginated(0);
                 toast({
                     title: 'Action successful',
                     status: 'success',

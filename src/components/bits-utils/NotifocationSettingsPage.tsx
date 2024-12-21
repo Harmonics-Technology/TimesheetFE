@@ -23,6 +23,7 @@ import {
 } from 'src/services';
 import { NotText } from './NotText';
 import Checkbox from './Checkbox';
+import { LeaveTab } from './LeaveTab';
 
 const schema = yup.object().shape({
     timesheetFillingReminderDay: yup.string().required(),
@@ -30,8 +31,10 @@ const schema = yup.object().shape({
 });
 export const NotifocationSettingsPage = ({
     controls,
+    isAdmin = true,
 }: {
     controls: ControlSettingView;
+    isAdmin?: boolean;
 }) => {
     const {
         register,
@@ -146,7 +149,21 @@ export const NotifocationSettingsPage = ({
             px="1rem"
             borderRadius="10px"
         >
-            <Box mb="3rem">
+            {isAdmin && (
+                <LeaveTab
+                    tabValue={[
+                        {
+                            text: 'Notification Settings',
+                            url: `/account-management/notification-settings`,
+                        },
+                        {
+                            text: 'Notification Configuration',
+                            url: `/account-management/notification-configuration`,
+                        },
+                    ]}
+                />
+            )}
+            <Box mb="3rem" mt="1rem">
                 <NotText
                     title="Timesheet Reminder Notification"
                     sub="Set notification reminder frequency"

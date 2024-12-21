@@ -13,6 +13,7 @@ import type { ControlSettingModel } from '../models/ControlSettingModel';
 import type { ControlSettingViewStandardResponse } from '../models/ControlSettingViewStandardResponse';
 import type { Enable2FAViewStandardResponse } from '../models/Enable2FAViewStandardResponse';
 import type { InitiateResetModel } from '../models/InitiateResetModel';
+import type { LicenseUpdateAuditLogViewPagedCollectionStandardResponse } from '../models/LicenseUpdateAuditLogViewPagedCollectionStandardResponse';
 import type { LicenseUpdateModel } from '../models/LicenseUpdateModel';
 import type { LoginModel } from '../models/LoginModel';
 import type { MicrosoftIdTokenDetailsModel } from '../models/MicrosoftIdTokenDetailsModel';
@@ -1163,25 +1164,60 @@ export class UserService {
     /**
      * @param offset
      * @param limit
+     * @param superAdminId
      * @param clientId
      * @param startDate
      * @param endDate
-     * @returns ShiftUsersListViewPagedCollectionStandardResponse Success
+     * @returns LicenseUpdateAuditLogViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static licenseUpdatesAuditLogs(
         offset?: number,
         limit?: number,
+        superAdminId?: string,
         clientId?: string,
         startDate?: string,
         endDate?: string,
-    ): CancelablePromise<ShiftUsersListViewPagedCollectionStandardResponse> {
+    ): CancelablePromise<LicenseUpdateAuditLogViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/license-update-logs',
             query: {
                 Offset: offset,
                 Limit: limit,
+                superAdminId: superAdminId,
+                clientId: clientId,
+                startDate: startDate,
+                endDate: endDate,
+            },
+        });
+    }
+
+    /**
+     * @param offset
+     * @param limit
+     * @param superAdminId
+     * @param clientId
+     * @param startDate
+     * @param endDate
+     * @returns LicenseUpdateAuditLogViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static userLicenseUpdatesAuditLogs(
+        offset?: number,
+        limit?: number,
+        superAdminId?: string,
+        clientId?: string,
+        startDate?: string,
+        endDate?: string,
+    ): CancelablePromise<LicenseUpdateAuditLogViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/user-license-update-logs',
+            query: {
+                Offset: offset,
+                Limit: limit,
+                superAdminId: superAdminId,
                 clientId: clientId,
                 startDate: startDate,
                 endDate: endDate,

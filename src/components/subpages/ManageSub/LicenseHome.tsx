@@ -246,6 +246,11 @@ export const LicenseHome = ({
                                     top="Subscription Date"
                                     title={formatDate(selected?.startDate)}
                                 />
+                                <LicenseTopBtmText
+                                    top="Subscription Activity"
+                                    sub="View subscription activity"
+                                    url={`/${role}/account-management/manage-subscription/activity`}
+                                />
                             </VStack>
                         </HStack>
                         <Box pos="absolute" bottom="10%" right="2%">

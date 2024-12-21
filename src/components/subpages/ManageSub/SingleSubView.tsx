@@ -150,6 +150,9 @@ export const SingleSubView = ({
                                                 disabled={
                                                     !x?.clientSubscriptionId
                                                 }
+                                                fetchPageDataPaginated={
+                                                    fetchPageDataPaginated
+                                                }
                                             />
                                         </td>
                                     </Tr>
