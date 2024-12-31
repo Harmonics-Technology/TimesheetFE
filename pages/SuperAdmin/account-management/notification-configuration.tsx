@@ -1,11 +1,11 @@
-import { NotificationConfiguration } from '@components/bits-utils/NotificationConfiguration';
+import { AdminNotificationConfiguration } from '@components/bits-utils/NotificationConfigurations/SuperAdmin';
 import { withPageAuth } from '@components/generics/withPageAuth';
 import { GetServerSideProps } from 'next';
 import React from 'react';
-import { UserService } from 'src/services';
+import { UserSettingService } from 'src/services';
 
 const NotificationSettings = ({ data }: { data: any }) => {
-    return <NotificationConfiguration controls={data} isAdmin={true} />;
+    return <AdminNotificationConfiguration controls={data} isAdmin={true} />;
 };
 
 export default NotificationSettings;
@@ -14,7 +14,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const userId = JSON.parse(ctx.req.cookies.user).id;
         try {
-            const data = await UserService.getTeamMemberSettingById(userId);
+            const data = await UserSettingService.getAdminSettingById(userId);
             return {
                 props: {
                     data: { ...data.data, userId },

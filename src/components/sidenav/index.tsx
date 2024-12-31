@@ -532,13 +532,14 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
-                        linkName="my-profile"
-                        menuTitle="My Profile"
-                        icon={<FaUser opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
+                        linkName="account-management"
+                        menuTitle="Account settings"
+                        icon={<MdSettings opacity=".8" />}
+                        option={true}
+                        dropDown={['my profile', 'notification configuration']}
                         setOpenSidenav={setOpenSidenav}
                         role={role}
+                        display={activeSub}
                     />
                 </VStack>
             ) : role == 'InternalSupervisor' ? (
@@ -701,15 +702,17 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         setOpenSidenav={setOpenSidenav}
                     />
+
                     <MenuItem
                         change={change}
-                        linkName="profile"
-                        menuTitle="Profile"
-                        icon={<FaUser opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        role={role}
+                        linkName="account-management"
+                        menuTitle="Account settings"
+                        icon={<MdSettings opacity=".8" />}
+                        option={true}
+                        dropDown={['profile', 'notification configuration']}
                         setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
                     />
                 </VStack>
             ) : role == 'PayrollManager' ? (
@@ -779,13 +782,14 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     />
                     <MenuItem
                         change={change}
-                        linkName="my-profile"
-                        menuTitle="My Profile"
-                        icon={<FaUser opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        role={role}
+                        linkName="account-management"
+                        menuTitle="Account settings"
+                        icon={<MdSettings opacity=".8" />}
+                        option={true}
+                        dropDown={['my profile', 'notification configuration']}
                         setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
                     />
                 </VStack>
             ) : role == 'InternalPayrollManager' ? (
@@ -1077,13 +1081,14 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                     )}
                     <MenuItem
                         change={change}
-                        linkName="my-profile"
-                        menuTitle="My Profile"
-                        icon={<FaUser opacity=".8" />}
-                        option={false}
-                        dropDown={[]}
-                        role={role}
+                        linkName="account-management"
+                        menuTitle="Account settings"
+                        icon={<MdSettings opacity=".8" />}
+                        option={true}
+                        dropDown={['my profile', 'notification configuration']}
                         setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
                     />
                 </VStack>
             ) : role == 'InternalAdmin' ? (

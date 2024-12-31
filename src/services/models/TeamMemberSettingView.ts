@@ -11,4 +11,6 @@ export type TeamMemberSettingView = {
     expenseNotification?: boolean;
     operationalTaskAssignmentNotification?: boolean;
     trainingAssignmentNotification?: boolean;
+    leaveRequestNotification?: boolean;
+    leaveApprovalAndRejectionNotification?: boolean;
 };

@@ -1,23 +1,20 @@
 import { Box, Flex, useToast, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { NotText } from './NotText';
-import ToggleSwitch from './ToggleSwitch';
 import {
     TeamMemberSettingModel,
     TeamMemberSettingView,
-    UserService,
+    UserSettingService,
 } from 'src/services';
 import { useRouter } from 'next/router';
-import { TitleDesc, TitleLabel } from './TitleText';
-import { ShiftBtn } from './ShiftBtn';
-import { LeaveTab } from './LeaveTab';
+import { NotText } from '../NotText';
+import { ShiftBtn } from '../ShiftBtn';
+import { TitleLabel, TitleDesc } from '../TitleText';
+import ToggleSwitch from '../ToggleSwitch';
 
-export const NotificationConfiguration = ({
+export const TeamNotificationConfiguration = ({
     controls,
-    isAdmin,
 }: {
     controls: TeamMemberSettingView;
-    isAdmin: boolean;
 }) => {
     const [access, setAccess] = useState<TeamMemberSettingModel>({
         awaitingInvoiceNotification: controls?.awaitingInvoiceNotification,
@@ -29,6 +26,9 @@ export const NotificationConfiguration = ({
             controls?.timesheetRejectionNotification,
         timesheetSubmissionNotification:
             controls?.timesheetSubmissionNotification,
+        leaveRequestNotification: controls?.leaveRequestNotification,
+        leaveApprovalAndRejectionNotification:
+            controls?.leaveApprovalAndRejectionNotification,
         trainingAssignmentNotification:
             controls?.trainingAssignmentNotification,
         userId: controls?.userId,
@@ -41,7 +41,9 @@ export const NotificationConfiguration = ({
     const updateControl = async (data: TeamMemberSettingModel) => {
         setLoading(true);
         try {
-            const result = await UserService.updateTeamMemberSettings(data);
+            const result = await UserSettingService.updateTeamMemberSettings(
+                data,
+            );
             if (result.status) {
                 setLoading(false);
                 toast({
@@ -80,20 +82,6 @@ export const NotificationConfiguration = ({
             px="1rem"
             borderRadius="10px"
         >
-            {isAdmin && (
-                <LeaveTab
-                    tabValue={[
-                        {
-                            text: 'Notification Settings',
-                            url: `/account-management/notification-settings`,
-                        },
-                        {
-                            text: 'Notification Configuration',
-                            url: `/account-management/notification-configuration`,
-                        },
-                    ]}
-                />
-            )}
             <Box mb="1rem" mt="1rem" w={['100%', '70%']}>
                 <NotText
                     title="Notification Control"
@@ -191,6 +179,49 @@ export const NotificationConfiguration = ({
                                 })
                             }
                             checked={access.expenseNotification}
+                        />
+                    </Flex>
+                </VStack>
+            </Box>
+            <Box w="full" p="1rem 0 2rem" borderBottom="1px solid #C2CFE0">
+                <TitleLabel label="Leave" />
+                <VStack gap="13px" align="flex-start">
+                    <Flex justify="space-between" w={['100%', '40%']}>
+                        <TitleDesc
+                            title="Leave Request"
+                            active={access.leaveRequestNotification}
+                        />
+                        <ToggleSwitch
+                            label="lvr"
+                            onChange={() =>
+                                setAccess({
+                                    ...access,
+                                    leaveRequestNotification:
+                                        !access.leaveRequestNotification,
+                                })
+                            }
+                            checked={access.leaveRequestNotification}
+                        />
+                    </Flex>
+                    <Flex justify="space-between" w={['100%', '40%']}>
+                        <TitleDesc
+                            title="Leave Approval & Rejection"
+                            active={
+                                access.leaveApprovalAndRejectionNotification
+                            }
+                        />
+                        <ToggleSwitch
+                            label="lva"
+                            onChange={() =>
+                                setAccess({
+                                    ...access,
+                                    leaveApprovalAndRejectionNotification:
+                                        !access.leaveApprovalAndRejectionNotification,
+                                })
+                            }
+                            checked={
+                                access.leaveApprovalAndRejectionNotification
+                            }
                         />
                     </Flex>
                 </VStack>

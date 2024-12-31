@@ -11,4 +11,6 @@ export type TeamMemberSettingModel = {
     expenseNotification?: boolean | null;
     operationalTaskAssignmentNotification?: boolean | null;
     trainingAssignmentNotification?: boolean | null;
+    leaveRequestNotification?: boolean | null;
+    leaveApprovalAndRejectionNotification?: boolean | null;
 };
