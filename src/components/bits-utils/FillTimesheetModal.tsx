@@ -339,6 +339,15 @@ export const FillTimesheetModal = ({
     const group = getRootProps();
 
     const changeDuration = (e: any) => {
+        if (Number(e) > 24) {
+            toast({
+                title: 'Duration should not be more than 24 hours',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
         setDuration(e);
         const endDate = moment(startDate)
             .add(e, 'hours')
@@ -347,7 +356,7 @@ export const FillTimesheetModal = ({
             ...projectTimesheets,
             endDate,
         });
-    };
+        };
 
     const selectedTask = tasks?.find(
         (task) => task?.id === watch('projectTaskId'),

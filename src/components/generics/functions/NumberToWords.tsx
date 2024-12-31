@@ -68,7 +68,7 @@ export function numberToWords(number) {
         }
     };
 
-    return numToString(number).trim();
+    return numToString(number)?.trim();
 }
 
 export function numberToWordsWithCurrency(number, currency) {

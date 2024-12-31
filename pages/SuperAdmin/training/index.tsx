@@ -9,7 +9,7 @@ const index = ({ users, trainings, superAdminId }) => {
     const tabs = [
         {
             text: 'Training Materials',
-            url: `/training/material`,
+            url: `/training`,
         },
         {
             text: 'Training Status',

@@ -80,9 +80,9 @@ export const CustomSelectBox = ({
               };
           });
 
-    let newData = newFormattedData;
+    // let newData = newFormattedData;
 
-    // const [newData, setNewData] = useState(newFormattedData);
+    const [newData, setNewData] = useState(newFormattedData);
     // console.log({ data, dataAsFiltered, newData });
     const checkBoxFn = (x) => {
         const exist = single
@@ -116,18 +116,25 @@ export const CustomSelectBox = ({
         ? items?.[customKeys.label]
         : items.map((x) => x[customKeys.label]).join(', ');
 
+    const [searchWord, setSearchWord] = useState('');
     const search = (e: any) => {
+        const searchKey = e.target.value.toLowerCase();
+        setSearchWord(searchKey);
         const filteredData = newFormattedData.filter((x: any) => {
-            return x.label.toLowerCase().includes(e.target.value.toLowerCase());
+            return x.label.toLowerCase().includes(searchKey);
         });
-        newData = filteredData;
+        setNewData(filteredData);
     };
 
     useEffect(() => {
         if (!checkbox) {
-            newData = newFormattedData;
+            setNewData(newFormattedData);
         }
     }, [selected]);
+
+    useEffect(() => {
+        setNewData(newFormattedData);
+    }, []);
 
     return (
         <FormControl
@@ -171,22 +178,23 @@ export const CustomSelectBox = ({
                         zIndex="600"
                     >
                         <>
+                            {searchable && (
+                                <Input
+                                    placeholder="Search"
+                                    fontSize=".7rem"
+                                    border="1px solid #e5e5e5"
+                                    borderRadius="0"
+                                    pos="sticky"
+                                    top="0"
+                                    value={searchWord}
+                                    onChange={(e) => search(e)}
+                                    bgColor="white"
+                                    w="full"
+                                    zIndex="9"
+                                />
+                            )}
                             {newData?.length > 0 ? (
                                 <>
-                                    {searchable && (
-                                        <Input
-                                            placeholder="Search"
-                                            fontSize=".7rem"
-                                            border="1px solid #e5e5e5"
-                                            borderRadius="0"
-                                            pos="sticky"
-                                            top="0"
-                                            onChange={(e) => search(e)}
-                                            bgColor="white"
-                                            w="full"
-                                            zIndex="9"
-                                        />
-                                    )}
                                     {newData?.map((x, i) => (
                                         <HStack
                                             p="11px 20px"

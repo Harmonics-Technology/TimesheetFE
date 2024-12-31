@@ -8,7 +8,7 @@ const index = ({ data, id, users }) => {
     const tabs = [
         {
             text: 'Training Materials',
-            url: `/training/material`,
+            url: `/training`,
         },
         {
             text: 'Training Status',

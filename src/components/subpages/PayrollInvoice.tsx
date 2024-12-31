@@ -327,7 +327,9 @@ function PayrollInvoice({
                                                                     )}
                                                                 /> */}
                                                                 <TableData
-                                                                    name={`${CUR(
+                                                                    name={`${
+                                                                        user?.currency
+                                                                    }${CUR(
                                                                         Round(
                                                                             x
                                                                                 .employeeInformation

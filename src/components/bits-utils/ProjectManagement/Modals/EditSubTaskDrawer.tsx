@@ -190,7 +190,7 @@ export const EditSubTaskDrawer = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
-                        readonly={true}
+                        // readonly={true}
                     />
                     <Box w="full">
                         <FormLabel

@@ -1059,7 +1059,11 @@ export const TeamSingleTask = ({
                                             return (
                                                 <TableRow key={x.id}>
                                                     <TableData
-                                                        name={task?.name}
+                                                        name={
+                                                            x?.projectSubTask
+                                                                ?.name ||
+                                                            task?.name
+                                                        }
                                                         fontWeight="500"
                                                     />
                                                     <TableData

@@ -194,7 +194,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
                             </FormLabel>
 
                             <CustomSelectBox
-                                data={users?.value}
+                                data={users?.value?.filter((x) => x?.isActive)}
                                 updateFunction={addUser}
                                 items={selectedUser}
                                 customKeys={{ key: 'id', label: 'fullName' }}

@@ -269,7 +269,6 @@ const TimesheetTeam = ({
                 );
 
                 if (data.status) {
-                    setLoading(false);
                     toast({
                         status: 'success',
                         title: 'Successful',
@@ -283,13 +282,14 @@ const TimesheetTeam = ({
                     title: data.message,
                     position: 'top-right',
                 });
-                return;
             } catch (error: any) {
                 toast({
                     status: 'error',
                     title: error?.body?.message || error?.message,
                     position: 'top-right',
                 });
+            } finally {
+                setLoading(false);
             }
         };
         // const updateSelected = async () => {
