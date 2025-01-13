@@ -88,7 +88,7 @@ export const PayrollNotificationConfiguration = ({
                 <VStack gap="13px" align="flex-start">
                     <Flex justify="space-between" w={['100%', '40%']}>
                         <TitleDesc
-                            title="Awaiting Payroll for submission"
+                            title="Awaiting Payroll"
                             active={access.awaitingPayrollNotification}
                         />
                         <ToggleSwitch
@@ -105,7 +105,7 @@ export const PayrollNotificationConfiguration = ({
                     </Flex>
                     <Flex justify="space-between" w={['100%', '40%']}>
                         <TitleDesc
-                            title="Awaiting Team Member Invoice for submission"
+                            title="Awaiting Team Member Invoice"
                             active={
                                 access.awaitingTeamMemberInvoiceNotification
                             }

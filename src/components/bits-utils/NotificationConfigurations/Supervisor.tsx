@@ -109,7 +109,7 @@ export const SupervisorNotificationConfiguration = ({
                 <VStack gap="13px" align="flex-start">
                     <Flex justify="space-between" w={['100%', '40%']}>
                         <TitleDesc
-                            title="Awaiting Invoice for submission"
+                            title="Awaiting Invoice"
                             active={access.awaitingInvoiceNotification}
                         />
                         <ToggleSwitch
@@ -139,6 +139,45 @@ export const SupervisorNotificationConfiguration = ({
                                 })
                             }
                             checked={access.awaitingExpenseNotification}
+                        />
+                    </Flex>
+                </VStack>
+            </Box>
+            <Box w="full" p="1rem 0 2rem" borderBottom="1px solid #C2CFE0">
+                <TitleLabel label="Leave Request" />
+                <VStack gap="13px" align="flex-start">
+                    {/* <Flex justify="space-between" w={['100%', '40%']}>
+                        <TitleDesc
+                            title="Leave Request"
+                            active={access.leaveRequestNotification}
+                        />
+                        <ToggleSwitch
+                            label="lvr"
+                            onChange={() =>
+                                setAccess({
+                                    ...access,
+                                    leaveRequestNotification:
+                                        !access.leaveRequestNotification,
+                                })
+                            }
+                            checked={access.leaveRequestNotification}
+                        />
+                    </Flex> */}
+                    <Flex justify="space-between" w={['100%', '40%']}>
+                        <TitleDesc
+                            title="Leave Awaiting Review"
+                            active={access.leaveAwaitingReviewNotification}
+                        />
+                        <ToggleSwitch
+                            label="lva"
+                            onChange={() =>
+                                setAccess({
+                                    ...access,
+                                    leaveAwaitingReviewNotification:
+                                        !access.leaveAwaitingReviewNotification,
+                                })
+                            }
+                            checked={access.leaveAwaitingReviewNotification}
                         />
                     </Flex>
                 </VStack>

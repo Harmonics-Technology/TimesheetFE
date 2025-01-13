@@ -107,7 +107,7 @@ export const AdminNotificationConfiguration = ({
                 <VStack gap="13px" align="flex-start">
                     <Flex justify="space-between" w={['100%', '40%']}>
                         <TitleDesc
-                            title="Timesheet Submission reminder "
+                            title="Awaiting Timesheet for Approval "
                             active={
                                 access.timesheetAwaitingApprovalNotification
                             }
@@ -133,7 +133,7 @@ export const AdminNotificationConfiguration = ({
                 <VStack gap="13px" align="flex-start">
                     <Flex justify="space-between" w={['100%', '40%']}>
                         <TitleDesc
-                            title="Awaiting Payroll for submission"
+                            title="Awaiting Payroll"
                             active={access.awaitingPayrollNotification}
                         />
                         <ToggleSwitch
@@ -150,7 +150,7 @@ export const AdminNotificationConfiguration = ({
                     </Flex>
                     <Flex justify="space-between" w={['100%', '40%']}>
                         <TitleDesc
-                            title="Awaiting Invoice for submission"
+                            title="Awaiting Invoice"
                             active={access.awaitingInvoiceNotification}
                         />
                         <ToggleSwitch
