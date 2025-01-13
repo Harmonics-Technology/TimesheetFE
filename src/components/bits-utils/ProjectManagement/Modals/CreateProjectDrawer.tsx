@@ -135,7 +135,6 @@ export const CreateProjectDrawer = ({
             return;
         }
     };
-
     //
 
     const onSubmit = async (data: ProjectModel) => {
@@ -207,6 +206,10 @@ export const CreateProjectDrawer = ({
     // useEffect(() => {
     //     setValue('projectManagerId', selectedManager?.id);
     // }, [selectedManager]);
+
+    const validProjectManagers = users?.filter((x) =>
+        selectedUser?.some((b) => b.id == x.id),
+    );
 
     //
     return (
@@ -315,6 +318,7 @@ export const CreateProjectDrawer = ({
                             removeFn={removeUser}
                             id="Assign user"
                             error={errors.assignedUsers}
+                            searchable
                         />
                         <HStack justify="flex-end" mt=".5rem">
                             <Link
@@ -383,9 +387,7 @@ export const CreateProjectDrawer = ({
                         {!nonApplicable && (
                             <>
                                 <CustomSelectBox
-                                    data={projectMangers?.filter((x) =>
-                                        selectedUser?.some((b) => b.id == x.id),
-                                    )}
+                                    data={validProjectManagers}
                                     updateFunction={addManager}
                                     items={selectedManager}
                                     customKeys={{
@@ -395,6 +397,7 @@ export const CreateProjectDrawer = ({
                                     removeFn={removeManager}
                                     id="AssignProjectManager"
                                     error={errors.assignedProjectManagers}
+                                    searchable
                                 />
                                 <Box
                                     mt="1rem"

@@ -80,7 +80,7 @@ export const AuditTrailAttachments = ({
         setLoading({ id: 'fetching' });
         try {
             const res = await ProjectManagementService.listAttachments(
-                undefined,
+                projectId,
                 taskId,
             );
             if (res?.status) {

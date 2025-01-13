@@ -73,7 +73,10 @@ export const TeamProjectTask = ({
 
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
-    const [data, setData] = useState({ isEdit: false, raw: {} });
+    const [data, setData] = useState({
+        isEdit: false,
+        raw: {} as ProjectTaskView,
+    });
 
     const openModal = (item: any) => {
         setData({ isEdit: true, raw: item });
@@ -141,6 +144,21 @@ export const TeamProjectTask = ({
         } finally {
             onCloses();
         }
+    };
+
+    const checkPossibleDeletion = () => {
+        if (data?.raw?.createdByUserId != user?.id) {
+            toast({
+                title: 'You do not have the permission to to delete this task. Kindly contact your admin',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            onClosed();
+            return;
+        }
+        onClosed();
+        onOpens();
     };
 
     return (
@@ -325,10 +343,7 @@ export const TeamProjectTask = ({
                 <ShowPrompt
                     isOpen={isOpened}
                     onClose={onClosed}
-                    onSubmit={() => {
-                        onClosed();
-                        onOpens();
-                    }}
+                    onSubmit={() => checkPossibleDeletion()}
                     loading={loading}
                     text={`Are you sure you want to delete this task?`}
                 />

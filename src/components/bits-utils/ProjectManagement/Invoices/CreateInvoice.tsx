@@ -281,14 +281,20 @@ export const CreateInvoice = ({
             ...updates,
         };
 
+        if ('quantity' in updates) {
+            updatedItems[index].quantity = Round(updatedItems[index].quantity);
+        }
+
         // Recalculate the amount if quantity or cost changes
         if ('quantity' in updates || 'cost' in updates) {
             updatedItems[index].totalCost =
-                updatedItems[index].quantity * updatedItems[index].cost;
+                Round(updatedItems[index].quantity) * updatedItems[index].cost;
         }
 
         setLineItems(updatedItems);
     };
+
+    // console.log({ lineItems });
 
     const handleDeleteLineItem = (index: number) => {
         const updatedItems = lineItems.filter((_, i) => i !== index);
@@ -341,6 +347,7 @@ export const CreateInvoice = ({
             superAdminId: superAdminId,
             id: invoice?.id,
             posNumber: value.posNumber,
+            organization: selectedUser?.organizationName,
         };
         try {
             const res = invoice
@@ -353,7 +360,7 @@ export const CreateInvoice = ({
             }
         } catch (error: any) {
             toast({
-                title: error?.message || error?.body?.message,
+                title: error?.body?.title || error?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -363,7 +370,7 @@ export const CreateInvoice = ({
         }
     };
 
-    // console.log({ lineItems });
+    // console.log({ selectedUser });
 
     return (
         <Box>
@@ -558,13 +565,14 @@ export const CreateInvoice = ({
                                         <Td w="15%" paddingInlineStart="1rem">
                                             <InputBlank
                                                 type="number"
-                                                value={item.quantity}
+                                                value={Round(item.quantity)}
                                                 placeholder="0"
                                                 variant="outline"
                                                 onChange={(e) =>
                                                     handleFieldChange(index, {
-                                                        quantity:
+                                                        quantity: Round(
                                                             e.target.value,
+                                                        ),
                                                     })
                                                 }
                                             />
@@ -599,7 +607,7 @@ export const CreateInvoice = ({
                                         {/* Amount */}
                                         <Td w="15%" paddingInlineStart="1rem">
                                             <InputBlank
-                                                value={item.totalCost}
+                                                value={Round(item.totalCost)}
                                                 readonly={true}
                                                 placeholder="0"
                                                 variant="filled"

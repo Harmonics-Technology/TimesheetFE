@@ -60,7 +60,7 @@ function InvoiceTemplate({
 
     const incorpName = clicked?.employeeInformation?.incorpName;
 
-    console.log({ clicked });
+    // console.log({ clicked });
 
     return (
         <>
@@ -245,11 +245,14 @@ function InvoiceTemplate({
                                                 )}`}
                                             /> */}
                                             <TableData
-                                                name={CUR(
+                                                name={`${
+                                                    clicked?.employeeInformation
+                                                        ?.currency
+                                                } ${CUR(
                                                     Round(
                                                         clicked?.totalAmount as number,
                                                     ),
-                                                )}
+                                                )}`}
                                             />
                                             {/* (${CUR(
                                                     Round(

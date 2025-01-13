@@ -185,9 +185,9 @@ export const AdminNotificationConfiguration = ({
                 </VStack>
             </Box>
             <Box w="full" p="1rem 0 2rem" borderBottom="1px solid #C2CFE0">
-                <TitleLabel label="Leave" />
+                <TitleLabel label="Leave Request" />
                 <VStack gap="13px" align="flex-start">
-                    <Flex justify="space-between" w={['100%', '40%']}>
+                    {/* <Flex justify="space-between" w={['100%', '40%']}>
                         <TitleDesc
                             title="Leave Request"
                             active={access.leaveRequestNotification}
@@ -203,7 +203,7 @@ export const AdminNotificationConfiguration = ({
                             }
                             checked={access.leaveRequestNotification}
                         />
-                    </Flex>
+                    </Flex> */}
                     <Flex justify="space-between" w={['100%', '40%']}>
                         <TitleDesc
                             title="Leave Awaiting Review"

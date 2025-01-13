@@ -79,6 +79,22 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
             });
         }
     };
+
+    const checkPossibleDeletion = () => {
+        if (data?.createdByUserId != user?.id && user?.role !== 'Super Admin') {
+            toast({
+                title: 'You do not have the permission to delete this project. Kindly contact your admin',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            onClose();
+            return;
+        }
+        onClose();
+        onOpens();
+    };
+
     return (
         <Box
             borderRadius=".6rem"
@@ -216,10 +232,7 @@ export const ProjectCard = ({ data }: { data: ProjectView }) => {
                 <ShowPrompt
                     isOpen={isOpen}
                     onClose={onClose}
-                    onSubmit={() => {
-                        onClose();
-                        onOpens();
-                    }}
+                    onSubmit={() => checkPossibleDeletion()}
                     loading={loading}
                     text={`Are you sure you want to delete this project?`}
                 />

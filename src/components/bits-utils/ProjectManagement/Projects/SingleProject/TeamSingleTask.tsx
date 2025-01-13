@@ -88,7 +88,7 @@ export const TeamSingleTask = ({
     id: any;
     project: any;
     tasks: any;
-    task: any;
+    task: ProjectTaskView;
     access: any;
     pm: any;
 }) => {
@@ -493,6 +493,21 @@ export const TeamSingleTask = ({
         }
     };
 
+    const checkPossibleDeletion = () => {
+        if (task?.createdByUserId != user?.id) {
+            toast({
+                title: 'You do not have the permission to to delete this sub task. Kindly contact your admin',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            onDeleteClosed();
+            return;
+        }
+        onDeleteClosed();
+        onDeleteOpens();
+    };
+
     return (
         <Box>
             <TeamTopBar data={project} id={id} />
@@ -522,7 +537,7 @@ export const TeamSingleTask = ({
                                 name="startDate"
                                 label="Start Date"
                                 error={errors.startDate}
-                                defaultValue={new Date(task?.startDate)}
+                                defaultValue={new Date(task?.startDate as any)}
                                 // max={new DateObject().subtract(1, 'days')}
                                 // disabled={tasks?.value?.length < 1}
                             />
@@ -531,7 +546,7 @@ export const TeamSingleTask = ({
                                 name="endDate"
                                 label="End Date"
                                 error={errors.endDate}
-                                defaultValue={new Date(task?.endDate)}
+                                defaultValue={new Date(task?.endDate as any)}
                                 // max={new DateObject().subtract(1, 'days')}
                                 // disabled={tasks?.value?.length < 1}
                             />
@@ -648,7 +663,7 @@ export const TeamSingleTask = ({
                                 // defaultValue={`${projectAssigneeDetails?.projectManagementTimesheetHours} Hours`}
                                 disableLabel={true}
                                 readonly={true}
-                                value={`${task?.hoursSpent} Hours`}
+                                value={`${Round(task?.hoursSpent)} Hours`}
                             />
                         </Stack>
 
@@ -1245,10 +1260,7 @@ export const TeamSingleTask = ({
                 <ShowPrompt
                     isOpen={isDeleteOpen}
                     onClose={onDeleteClosed}
-                    onSubmit={() => {
-                        onDeleteClosed();
-                        onDeleteOpens();
-                    }}
+                    onSubmit={() => checkPossibleDeletion()}
                     loading={loading.id == 'delete'}
                     text={`Are you sure you want to delete this subtask?`}
                 />

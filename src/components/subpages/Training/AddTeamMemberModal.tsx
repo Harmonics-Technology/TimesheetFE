@@ -104,6 +104,7 @@ export const AddTeamMemberModal = ({
                             onChange={(e) => setUserId(e.target.value)}
                             placeholder="Select Team Member"
                             options={users?.value
+                                ?.filter((x) => x?.isActive)
                                 ?.filter(
                                     (user) =>
                                         !training?.assignees?.some(

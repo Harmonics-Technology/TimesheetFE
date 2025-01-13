@@ -19,6 +19,7 @@ export type ListProjectView = {
     budgetThreshold?: number;
     projectManagerId?: string | null;
     currency?: string | null;
+    createdByUserId?: string | null;
     assignees?: Array<StrippedProjectAssignee> | null;
     projectManagers?: Array<StrippedProjectManager> | null;
 };

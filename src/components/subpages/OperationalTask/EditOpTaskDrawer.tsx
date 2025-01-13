@@ -154,7 +154,7 @@ export const EditOpTaskDrawer = ({
             if (data.status) {
                 setIsLoading(false);
                 trigger && setSelecedUser([]);
-                setDeptUser(data.data?.value);
+                setDeptUser(data.data?.value?.filter((x) => x?.isActive));
             }
         } catch (error) {
             setIsLoading(false);
@@ -329,7 +329,7 @@ export const EditOpTaskDrawer = ({
                             </FormLabel>
 
                             <CustomSelectBox
-                                data={users}
+                                data={users?.filter((x) => x?.isActive)}
                                 updateFunction={addUser}
                                 items={selectedUser}
                                 customKeys={{ key: 'id', label: 'fullName' }}

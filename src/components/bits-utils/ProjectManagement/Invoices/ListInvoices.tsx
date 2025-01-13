@@ -160,9 +160,9 @@ export const ListInvoices = ({
                         value={status}
                     >
                         <option value="">Status</option>
-                        <option value="1">Paid</option>
-                        <option value="2">Draft</option>
-                        <option value="3">Sent</option>
+                        <option value="paid">Paid</option>
+                        <option value="draft">Draft</option>
+                        <option value="sent">Sent</option>
                         {/* <option value="4">Overdue</option> */}
                     </Select>
                     <Box w="full">

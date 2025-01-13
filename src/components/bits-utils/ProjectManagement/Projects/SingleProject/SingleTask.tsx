@@ -348,6 +348,21 @@ export const SingleTask = ({
         }
     };
 
+    const checkPossibleDeletion = () => {
+        if (task?.createdByUserId != user?.id && user?.role !== 'Super Admin') {
+            toast({
+                title: 'You do not have the permission to to delete this sub task. Kindly contact your admin',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            onDeleteClosed();
+            return;
+        }
+        onDeleteClosed();
+        onDeleteOpens();
+    };
+
     return (
         <Box>
             <TopBar
@@ -991,10 +1006,7 @@ export const SingleTask = ({
                 <ShowPrompt
                     isOpen={isDeleteOpen}
                     onClose={onDeleteClosed}
-                    onSubmit={() => {
-                        onDeleteClosed();
-                        onDeleteOpens();
-                    }}
+                    onSubmit={() => checkPossibleDeletion()}
                     loading={loading.id == 'delete'}
                     text={`Are you sure you want to delete this subtask?`}
                 />

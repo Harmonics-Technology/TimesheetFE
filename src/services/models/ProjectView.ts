@@ -23,6 +23,7 @@ export type ProjectView = {
     budgetThreshold?: number;
     projectManagerId?: string | null;
     currency?: string | null;
+    createdByUserId?: string | null;
     assignees?: Array<ProjectTaskAsigneeView> | null;
     projectManagers?: Array<ProjectManagerView> | null;
 };

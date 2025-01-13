@@ -134,7 +134,7 @@ export const CustomSelectBox = ({
 
     useEffect(() => {
         setNewData(newFormattedData);
-    }, []);
+    }, [data]);
 
     return (
         <FormControl

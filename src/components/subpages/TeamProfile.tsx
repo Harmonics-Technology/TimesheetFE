@@ -180,6 +180,7 @@ function TeamProfile({
     });
     const router = useRouter();
     const toast = useToast();
+    console.log(typeof watch('enableFinancials'));
     const includePayroll = convertYesNo(watch('enableFinancials'));
     const hasUtlized = watch('hasUtilizeLeaveDaysToDate');
 
@@ -448,7 +449,7 @@ function TeamProfile({
         );
     }, [selectedDepartment]);
 
-    // console.log({ userProfile, clients });
+    console.log({ userProfile });
 
     // console.log({ fee: watch('dateOfBirth'), fin: watch('enableFinancials') });
     return (

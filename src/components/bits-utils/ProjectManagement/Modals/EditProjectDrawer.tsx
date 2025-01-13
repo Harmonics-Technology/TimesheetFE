@@ -226,7 +226,9 @@ export const EditProjectDrawer = ({
         );
     }, [selectedManager]);
 
-    console.log({ selectedManager, pm: watch('projectManagerId'), data });
+    const validProjectManagers = users?.filter((x) =>
+        selectedUser?.some((b) => b.id == x.id),
+    );
 
     //
     return (
@@ -333,7 +335,7 @@ export const EditProjectDrawer = ({
                         </FormLabel>
 
                         <CustomSelectBox
-                            data={users}
+                            data={users?.filter((x) => x.isActive)}
                             updateFunction={addUser}
                             items={selectedUser}
                             customKeys={{ key: 'id', label: 'fullName' }}
@@ -391,7 +393,7 @@ export const EditProjectDrawer = ({
                                     Assign Project Manager
                                 </FormLabel>
                                 <CustomSelectBox
-                                    data={projectMangers}
+                                    data={validProjectManagers}
                                     updateFunction={addManager}
                                     items={selectedManager}
                                     customKeys={{
