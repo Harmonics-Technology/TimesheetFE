@@ -68,88 +68,115 @@ export const NewTeamMemerOnboardingForm = ({
     const { hstAmount } = useContext(OnboardingFeeContext);
     const { subType } = useContext(UserContext);
 
-    // const schema = yup.object().shape({
-    //     lastName: yup.string().required(),
-    //     firstName: yup.string().required(),
-    //     email: yup.string().email().required(),
-    //     phoneNumber: yup.string().required(),
-    //     jobTitle: yup.string().required(),
-    //     // clientId: yup.string().required(),
-    //     supervisorId: yup.string().required(),
-    //     isActive: yup.boolean().required(),
-    //     hoursPerDay: yup.number().required(),
-    //     payRollTypeId: yup.number().when('enableFinancials', {
-    //         is: true,
-    //         then: yup.number().required(),
-    //     }),
-    //     paymentPartnerId: yup.string().when('enableFinancials', {
-    //         is: true,
-    //         then: yup.string().nullable().when('payRollTypeId', {
-    //             is: 2,
-    //             then: yup.string().required(),
-    //         }),
-    //     }),
-    //     ratePerHour: yup.string().when('enableFinancials', {
-    //         is: true,
-    //         then: yup.string().nullable().when('payRollTypeId', {
-    //             is: 1,
-    //             then: yup.string().required(),
-    //         }),
-    //     }),
-    //     hstNumber: yup.number().when('enableFinancials', {
-    //         is: true,
-    //         then: yup.number().nullable().when('payRollTypeId', {
-    //             is: 1,
-    //             then: yup.number().required(),
-    //         }),
-    //     }),
-    //     monthlyPayoutRate: yup.string().when('enableFinancials', {
-    //         is: true,
-    //         then: yup.string().nullable().when('payRollTypeId', {
-    //             is: 2,
-    //             then: yup.string().required(),
-    //         }),
-    //     }),
-    //     currency: yup.string().required(),
-    //     // paymentRate: yup.string().required(),
-    //     fixedAmount: yup.boolean().when('enableFinancials', {
-    //         is: true,
-    //         then: yup.boolean().required(),
-    //     }),
-    //     title: yup.string().required(),
-    //     startDate: yup.string().required(),
-    //     endDate: yup.string().required(),
-    //     dateOfBirth: yup.string().required(),
-    //     paymentFrequency: yup.string().required(),
-    //     address: yup.string().required(),
-    //     clientRate: yup.string().when('enableFinancials', {
-    //         is: true,
-    //         then: yup.string().required(),
-    //     }),
-    //     // timeSheetGenerationStartDate: yup.string().required(),
-    //     isEligibleForLeave: yup.string().required(),
-    //     employeeType: yup.string().required(),
-    //     numberOfDaysEligible: yup
-    //         .string()
-    //         .nullable()
-    //         .when('isEligibleForLeave', {
-    //             is: 'Yes' || true,
-    //             then: yup.string().required(),
-    //         }),
-    //     numberOfHoursEligible: yup
-    //         .string()
-    //         .nullable()
-    //         .when('isEligibleForLeave', {
-    //             is: 'Yes' || true,
-    //             then: yup.string().required(),
-    //         }),
-    //     onBoradingFee: yup.string().when('fixedAmount', {
-    //         is: false,
-    //         then: yup.string().required(),
-    //     }),
-    //     hasRolledOverLeave: yup.string().required('Please select an option'),
-
-    // });
+    const schema = yup.object().shape({
+        firstName: yup.string().required(),
+        lastName: yup.string().required(),
+        email: yup.string().email().required(),
+        phoneNumber: yup.string().required(),
+        address: yup.string().required(),
+        jobTitle: yup.string().required(),
+        departments: yup
+            .array()
+            .of(yup.string().required('Department name is required'))
+            .min(1, 'At least one department is required')
+            .required('Departments field is required'),
+        // clientId: yup.string().required(),
+        supervisorId: yup.string().required(),
+        startDate: yup.string().required(),
+        endDate: yup.string().required(),
+        employmentContractType: yup.string().required(),
+        hoursPerDay: yup
+            .number()
+            .typeError('Hours per day must be a valid number')
+            .required(),
+        timesheetFrequency: yup.string().required(),
+        timesheetStartDate: yup.string().required(),
+        clientSubscriptionId: yup.string().required(),
+        enableFinancials: yup.string().required(),
+        payrollStructure: yup.string().when('enableFinancials', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        incorpName: yup.string().when('payrollStructure', {
+            is: 'inc',
+            then: yup.string().required(),
+        }),
+        rate: yup.number().when('enableFinancials', {
+            is: 'Yes',
+            then: yup
+                .number()
+                .typeError('Value must be a valid number')
+                .required(),
+        }),
+        rateType: yup.string().when('payrollStructure', {
+            is: 'inc',
+            then: yup.string().required(),
+        }),
+        paymentFrequency: yup.string().when('enableFinancials', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        currency: yup.string().when('enableFinancials', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        taxType: yup.string().when('enableFinancials', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        tax: yup.string().when('taxType', {
+            is: 'custom',
+            then: yup.string().required(),
+        }),
+        payrollProcessingType: yup.string().when('enableFinancials', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        paymentPartnerId: yup.string().when('payrollProcessingType', {
+            is: 'payment partner',
+            then: yup.string().required(),
+        }),
+        paymentProcessingFeeType: yup.string().when('payrollProcessingType', {
+            is: 'payment partner',
+            then: yup.string().required(),
+        }),
+        paymentProcessingFee: yup.string().when('payrollProcessingType', {
+            is: 'payment partner',
+            then: yup.string().required(),
+        }),
+        invoiceGenerationType: yup.string().when('enableFinancials', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        isEligibleForLeave: yup.string().required(),
+        employeeType: yup.string().required(),
+        numberOfDaysEligible: yup.string().when('isEligibleForLeave', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        hasRollOverLeave: yup.string().required(),
+        rolledOverLeave: yup.number().when('hasRollOverLeave', {
+            is: 'Yes',
+            then: yup
+                .number()
+                .typeError('Value must be a valid number')
+                .required(),
+        }),
+        expiryDateOfRolledOverLeave: yup.string().when('hasRollOverLeave', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        hasUtilizeLeaveDaysToDate: yup
+            .string()
+            .required('Please select an option'),
+        utilizedLeave: yup.number().when('hasUtilizeLeaveDaysToDate', {
+            is: 'Yes',
+            then: yup
+                .number()
+                .typeError('Value must be a valid number')
+                .required(),
+        }),
+    });
     const draftSchema = yup.object().shape({});
 
     const {
@@ -161,13 +188,19 @@ export const NewTeamMemerOnboardingForm = ({
         reset,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
-        // resolver: yupResolver(openDraft ? draftSchema : schema),
+        resolver: yupResolver(openDraft ? draftSchema : schema),
         mode: 'all',
         defaultValues: {
             numberOfDaysEligible: leaveSettings?.eligibleLeaveDays || '',
+            enableFinancials: false,
+            isEligibleForLeave: false,
+            hasRollOverLeave: false,
+            hasUtilizeLeaveDaysToDate: false,
             role: 'Team Member',
         },
     });
+
+    console.log({ errors });
 
     const [selectedLicense, setSelectedLicense] = useState<any>();
     const addLicense = (license) => {
@@ -715,7 +748,7 @@ export const NewTeamMemerOnboardingForm = ({
                     <Box mt="1rem">
                         <UploadCareWidget
                             refs={widgetApi}
-                            label="Attach Document"
+                            label="Attach Contract Document"
                             filename={contract?.name}
                             loading={showLoading}
                             uploadFunction={showLoadingState}
@@ -1144,6 +1177,7 @@ export const NewTeamMemerOnboardingForm = ({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        type="number"
                                         // readonly={leaveSettings?.isStandardEligibleDays}
                                     />
                                     <PrimaryDate<TeamMemberModel>
@@ -1185,6 +1219,7 @@ export const NewTeamMemerOnboardingForm = ({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        type="number"
                                         suffix={
                                             <InputRightElement right="1rem">
                                                 <Text fontSize=".8rem">

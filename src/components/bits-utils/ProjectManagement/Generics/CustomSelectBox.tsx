@@ -136,6 +136,7 @@ export const CustomSelectBox = ({
         setNewData(newFormattedData);
     }, [data]);
 
+
     return (
         <FormControl
             isInvalid={

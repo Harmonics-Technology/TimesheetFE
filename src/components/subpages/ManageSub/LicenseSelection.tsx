@@ -35,7 +35,7 @@ export const LicenseSelection = ({
                     total: 'noOfLicensePurchased',
                 }}
                 removeFn={removeLicense}
-                id="assignLicense"
+                id="A License"
                 extraField={'users in total assigned to this license'}
                 checkbox
                 single
