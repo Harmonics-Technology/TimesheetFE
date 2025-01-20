@@ -1174,7 +1174,6 @@ function TeamProfile({
                                         error={errors.clientRate}
                                         placeholder=""
                                         defaultValue=""
-                                        type="string"
                                         register={register}
                                         type="number"
                                     />
