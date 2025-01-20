@@ -16,6 +16,7 @@ import { Card, UserService } from 'src/services';
 import { LicenseNav } from './ManageSub/LicenseNav';
 import { EditBilling } from './ManageSub/EditBilling';
 import { useRouter } from 'next/router';
+import { BillingUpdateSubscription } from '@components/bits-utils/NewUpdates/BillingUpdateSubscription';
 
 export const BillingInfo = ({
     data,
@@ -29,6 +30,7 @@ export const BillingInfo = ({
     const toast = useToast();
     const [isEditing, setIsEditing] = useState(false);
     const [editData, setIsEditData] = useState();
+    const [isExpired, setIsExpired] = useState(true);
     const router = useRouter();
 
     const getEditData = (data: any) => {
@@ -64,7 +66,7 @@ export const BillingInfo = ({
         }
     };
     return (
-        <Box>
+        <Box h={isExpired ? '75vh' : 'auto'} overflow="hidden">
             {/* <LeaveTab
                 tabValue={[
                     {
@@ -78,6 +80,12 @@ export const BillingInfo = ({
                 ]}
             /> */}
             <LicenseNav />
+            {isExpired && (
+                <BillingUpdateSubscription
+                    addCard={getClientSecret}
+                    loading={loading}
+                />
+            )}
             {isEditing ? (
                 <EditBilling
                     data={editData}
@@ -85,7 +93,16 @@ export const BillingInfo = ({
                     countries={countries}
                 />
             ) : (
-                <>
+                <Box pos="relative">
+                    <Box
+                        bgColor="rgb(206,207,213,.8)"
+                        w="full"
+                        h="full"
+                        pos="absolute"
+                        zIndex={999}
+                        cursor="not-allowed"
+                        borderRadius="5px"
+                    />
                     <Box
                         my="1rem"
                         borderRadius=".75rem"
@@ -151,7 +168,7 @@ export const BillingInfo = ({
                                 ))}
                         </VStack>
                     </Box>
-                </>
+                </Box>
             )}
         </Box>
     );

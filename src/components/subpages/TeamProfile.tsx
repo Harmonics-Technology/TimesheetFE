@@ -86,7 +86,7 @@ function TeamProfile({
         clients?.length <= 0
             ? [{ id: user?.superAdminId, fullName: user?.fullName }]
             : [
-                  ...clients,
+                  ...(clients || []),
                   { id: user?.superAdminId, fullName: user?.fullName },
               ];
     //
@@ -449,7 +449,7 @@ function TeamProfile({
         );
     }, [selectedDepartment]);
 
-    console.log({ userProfile });
+    // console.log({ userProfile });
 
     // console.log({ fee: watch('dateOfBirth'), fin: watch('enableFinancials') });
     return (
@@ -625,7 +625,7 @@ function TeamProfile({
                                 placeholder={'Please select'}
                                 options={
                                     <>
-                                        {supervisor.map((x) => (
+                                        {supervisor?.map((x) => (
                                             <option value={x.id}>
                                                 {x.fullName}
                                             </option>
@@ -694,6 +694,7 @@ function TeamProfile({
                                 placeholder=""
                                 defaultValue={''}
                                 register={register}
+                                type="number"
                             />
 
                             <PrimarySelect<TeamMemberModel>
@@ -926,6 +927,7 @@ function TeamProfile({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        type="number"
                                     />
                                 )}
                                 {isIncSelected && (
@@ -937,6 +939,7 @@ function TeamProfile({
                                             placeholder=""
                                             defaultValue=""
                                             register={register}
+                                            type="number"
                                         />
                                         <PrimarySelect<TeamMemberModel>
                                             register={register}
@@ -1030,6 +1033,7 @@ function TeamProfile({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        type="number"
                                     />
                                 )}
 
@@ -1172,6 +1176,7 @@ function TeamProfile({
                                         defaultValue=""
                                         type="string"
                                         register={register}
+                                        type="number"
                                     />
                                 )}
                             </Grid>
@@ -1236,6 +1241,7 @@ function TeamProfile({
                                                 ?.numberOfDaysEligible
                                         }
                                         register={register}
+                                        type="number"
                                     />
                                     <Box />
                                 </>
@@ -1281,6 +1287,7 @@ function TeamProfile({
                                                         ?.rolledOverLeave
                                                 }
                                                 register={register}
+                                                type="number"
                                             />
                                         )}
                                         {convertYesNo(hasRolledOverLeave) && (
@@ -1340,6 +1347,7 @@ function TeamProfile({
                                                         ?.employeeInformation
                                                         ?.utilizedLeave
                                                 }
+                                                type="number"
                                                 register={register}
                                                 suffix={
                                                     <InputRightElement right="1rem">

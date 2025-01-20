@@ -56,6 +56,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
         try {
             const data = await UserService.getUserById(id);
+            console.log({ data, id });
             const clients = await UserService.listUsers('client', superAdminId);
             const paymentPartner = await UserService.listUsers(
                 'payment partner',
@@ -95,6 +96,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 },
             };
         } catch (error: any) {
+            console.log({ error });
             return {
                 props: {
                     data: [],

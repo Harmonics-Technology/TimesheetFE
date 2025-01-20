@@ -50,6 +50,7 @@ import handleCatchErrors from '@components/generics/functions/handleCatchErrors'
 import { NewMiniCard } from '@components/bits-utils/NewUpdates/NewMiniCard';
 import Skeleton from 'react-loading-skeleton';
 import { calculatePer } from '@components/generics/functions/calculatePer';
+import { SubscriptionPromptModal } from '@components/bits-utils/ProjectManagement/Modals/SubscriptionPromptModal';
 
 interface DashboardProps {
     isSuperAdmin?: boolean;
@@ -57,8 +58,10 @@ interface DashboardProps {
 }
 
 function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
-    const { user, subType } = useContext(UserContext);
+    const { user, subType, activeSub } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
+    const [openSubInfo, setOpenSubInfo] = useState(false);
+    const triggerSubInfo = () => setOpenSubInfo(!openSubInfo);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const {
         isOpen: isOpened,
@@ -100,6 +103,7 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
         try {
             const res = await DashboardService.getAdminMetrics(superAdminId);
             if (res.status) {
+                setOpenSubInfo(true);
                 setDashData(res?.data as SuperAdminDashboardView);
                 setLoading(false);
                 return;
@@ -706,21 +710,27 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                 loading={loading}
                 setLimit={setLimit}
             />
-            <PayrollInvoice
-                isOpen={isOpen}
-                onClose={onClose}
-                clicked={clicked}
-            />
-            <InvoiceTemplate
-                isOpen={isOpened}
-                onClose={onClosed}
-                clicked={clicked}
-            />
-            <ClientInvoicedInvoice
-                isOpen={isOpens}
-                onClose={onCloses}
-                clicked={clicked}
-            />
+            {isOpen && (
+                <PayrollInvoice
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    clicked={clicked}
+                />
+            )}
+            {isOpened && (
+                <InvoiceTemplate
+                    isOpen={isOpened}
+                    onClose={onClosed}
+                    clicked={clicked}
+                />
+            )}
+            {isOpens && (
+                <ClientInvoicedInvoice
+                    isOpen={isOpens}
+                    onClose={onCloses}
+                    clicked={clicked}
+                />
+            )}
             {exportOpen && (
                 <ExportReportModal
                     isOpen={exportOpen}
@@ -729,6 +739,13 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                     record={1}
                     fileName={'Summary Report'}
                     model="summary-report"
+                />
+            )}
+            {openSubInfo && (
+                <SubscriptionPromptModal
+                    isOpen={openSubInfo}
+                    onClose={triggerSubInfo}
+                    isAdminAllowed={activeSub}
                 />
             )}
         </Box>
