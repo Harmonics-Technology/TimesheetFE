@@ -196,7 +196,7 @@ export const OnboardingPercent = ({ data }: { data: OnboardingFeeView[] }) => {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
-                                schema={schema}
+                                // schema={schema}
                             />
                         </Box>
                         <Button

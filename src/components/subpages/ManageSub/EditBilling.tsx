@@ -90,7 +90,7 @@ export const EditBilling = ({ data, setEditCard, countries }) => {
                                 placeholder="Company Name"
                                 defaultValue=""
                                 register={register}
-                                schema={schema}
+                                // schema={schema}
                                 label="Company Name"
                             />
                             <SelectBlank

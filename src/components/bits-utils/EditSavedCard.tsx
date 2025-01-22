@@ -72,7 +72,7 @@ export const EditSavedCard = ({ data, setEditCard }) => {
                     placeholder="Company Name"
                     defaultValue=""
                     register={register}
-                    schema={schema}
+                    // schema={schema}
                     label="Company Name"
                 />
                 <PrimaryInput<UpdateCardDetailsModel>
@@ -81,7 +81,7 @@ export const EditSavedCard = ({ data, setEditCard }) => {
                     placeholder="Company Email"
                     defaultValue=""
                     register={register}
-                    schema={schema}
+                    // schema={schema}
                     label="Company Email"
                 />
                 <ShiftBtn
