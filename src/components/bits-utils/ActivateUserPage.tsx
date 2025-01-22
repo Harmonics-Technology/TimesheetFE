@@ -277,7 +277,7 @@ function ActivateUserPage({
                             placeholder=""
                             defaultValue={userProfile?.firstName as string}
                             register={register}
-schema={schema}
+                            schema={schema}
                         />
                         <PrimaryInput<TeamMemberModel>
                             label="Last Name"
@@ -286,7 +286,7 @@ schema={schema}
                             placeholder=""
                             defaultValue={userProfile?.lastName as string}
                             register={register}
-schema={schema}
+                            schema={schema}
                         />
                         <InputBlank
                             label="Email"
@@ -337,7 +337,7 @@ schema={schema}
                             placeholder=""
                             defaultValue={userProfile?.address as string}
                             register={register}
-schema={schema}
+                            schema={schema}
                         />
                     </Box>
                     <Box w="full">
@@ -372,7 +372,7 @@ schema={schema}
                                         ?.jobTitle as string
                                 }
                                 register={register}
-schema={schema}
+                                schema={schema}
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -466,7 +466,7 @@ schema={schema}
                                                 ?.ratePerHour as unknown as string
                                         }
                                         register={register}
-schema={schema}
+                                        schema={schema}
                                     />
                                     <PrimaryInput<TeamMemberModel>
                                         label="Hr/Day"
@@ -478,7 +478,7 @@ schema={schema}
                                                 ?.hoursPerDay as unknown as string
                                         }
                                         register={register}
-schema={schema}
+                                        schema={schema}
                                     />
                                     <Box>
                                         <Flex>
@@ -584,7 +584,7 @@ schema={schema}
                                                 ?.hstNumber as unknown as string
                                         }
                                         register={register}
-schema={schema}
+                                        schema={schema}
                                     />
                                 </>
                             ) : (
@@ -599,7 +599,7 @@ schema={schema}
                                                 ?.monthlyPayoutRate as unknown as string
                                         }
                                         register={register}
-schema={schema}
+                                        schema={schema}
                                     />
                                     <PrimaryInput<TeamMemberModel>
                                         label="Hr/Day"
@@ -611,7 +611,7 @@ schema={schema}
                                                 ?.hoursPerDay as unknown as string
                                         }
                                         register={register}
-schema={schema}
+                                        schema={schema}
                                     />
                                     <SelectrixBox<TeamMemberModel>
                                         control={control}
@@ -663,7 +663,7 @@ schema={schema}
                                         ?.ratePerHour as unknown as string
                                 }
                                 register={register}
-schema={schema}
+                                schema={schema}
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -743,7 +743,6 @@ schema={schema}
                                 //             placeholder=""
                                 //             value={fixedAmount}
                                 //             register={register}
-schema={schema}
                                 //             readonly
                                 //         />
                                 //         <Text
@@ -807,7 +806,7 @@ schema={schema}
                                                 ?.numberOfDaysEligible
                                         }
                                         register={register}
-schema={schema}
+                                        schema={schema}
                                     />
                                 ))}
                             {/* {(isEligibleForLeave as unknown as string) ==
