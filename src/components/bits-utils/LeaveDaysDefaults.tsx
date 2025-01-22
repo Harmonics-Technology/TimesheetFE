@@ -92,6 +92,7 @@ export const LeaveDaysDefaults = ({ leaveConfiguration }: leavesProps) => {
                     placeholder=""
                     defaultValue=""
                     register={register}
+                    schema={schema}
                     w="20%"
                 />
                 <PrimaryRadio<LeaveConfigurationModel>

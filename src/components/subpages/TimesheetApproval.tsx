@@ -107,6 +107,7 @@ function TimeSheetApproval({ timeSheets, paymentSchedule }: adminProps) {
                         </Flex>
                         <FilterSearch
                             hide={true}
+                            data={timeSheets}
                             hides
                             filter={
                                 <Selectrix

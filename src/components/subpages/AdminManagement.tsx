@@ -67,6 +67,7 @@ import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { UserContext } from '@components/context/UserContext';
 import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
 import { LicenseSelection } from './ManageSub/LicenseSelection';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -239,33 +240,32 @@ function ProfileManagementAdmin({
             >
                 <Flex justify="space-between" mb="1rem">
                     {(userAccess?.adminOBoarding || isSuperAdmin) && (
-                        <Button
-                            bgColor="brand.400"
-                            color="white"
-                            p=".5rem 1.5rem"
-                            height="fit-content"
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            onClick={onOpen}
-                            display={admin ? 'none' : 'flex'}
-                            borderRadius="0"
-                        >
-                            +Admin
-                        </Button>
+                        <>
+                            {!admin && (
+                                <ShiftBtn
+                                    text="Add Admin"
+                                    onClick={onOpen}
+                                    px="1rem"
+                                    loading={loading}
+                                />
+                            )}
+                        </>
                     )}
 
-                    <Button
-                        bgColor="brand.600"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
+                    <ShiftBtn
+                        text="Download"
+                        outline
+                        suffix={<Icon as={BsDownload} ml=".5rem" />}
+                        border="1px solid "
+                        px="1rem"
                         onClick={onOpens}
-                        borderRadius="25px"
-                    >
-                        Download <Icon as={BsDownload} ml=".5rem" />
-                    </Button>
+                    />
                 </Flex>
 
-                <FilterSearch searchOptions="Search by: Name, Email, Role, or Status " />
+                <FilterSearch
+                    searchOptions="Search by: Name, Email, Role, or Status "
+                    data={adminList}
+                />
                 <Tables tableHead={thead}>
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
@@ -305,6 +305,7 @@ function ProfileManagementAdmin({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryInput<RegisterModel>
                                 label="Last Name"
@@ -313,6 +314,7 @@ function ProfileManagementAdmin({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryInput<RegisterModel>
                                 label="Email"
@@ -321,6 +323,7 @@ function ProfileManagementAdmin({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <SelectrixBox<RegisterModel>
                                 control={control}
@@ -354,33 +357,25 @@ function ProfileManagementAdmin({
                                 my="2rem"
                                 w="full"
                             >
-                                <Button
-                                    bgColor="gray.500"
-                                    color="white"
-                                    height="3rem"
-                                    fontSize="14px"
-                                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                    onClick={() => onClose()}
-                                >
-                                    Close
-                                </Button>
-                                <Button
-                                    bgColor="brand.400"
-                                    color="white"
-                                    height="3rem"
-                                    fontSize="14px"
+                                <ShiftBtn
+                                    text="Close"
+                                    onClick={onClose}
+                                    px="1rem"
+                                    bg="gray.500"
+                                    w="full"
+                                    h="2.8rem"
+                                />
+                                <ShiftBtn
+                                    text="Send Invite"
+                                    px="1rem"
+                                    w="full"
                                     type="submit"
-                                    isLoading={isSubmitting}
-                                    spinner={
-                                        <BeatLoader color="white" size="10" />
+                                    loading={isSubmitting}
+                                    h="2.8rem"
+                                    prefix={
+                                        <Icon as={RiMailSendFill} mr=".5rem" />
                                     }
-                                    boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                >
-                                    <Box pr=".5rem">
-                                        <RiMailSendFill />
-                                    </Box>
-                                    <Box>Send Invite</Box>
-                                </Button>
+                                />
                             </Grid>
                         </DrawerFooter>
                     ) : null}
@@ -478,31 +473,28 @@ function ProfileManagementAdmin({
                                         my="2rem"
                                         w="full"
                                     >
-                                        <Button
-                                            bgColor="gray.500"
-                                            color="white"
-                                            height="3rem"
-                                            fontSize="14px"
-                                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                            onClick={() => onClose()}
-                                        >
-                                            Close
-                                        </Button>
-                                        <Button
-                                            bgColor="brand.400"
-                                            color="white"
-                                            height="3rem"
-                                            fontSize="14px"
+                                        <ShiftBtn
+                                            text="Close"
+                                            onClick={onClose}
+                                            px="1rem"
+                                            bg="gray.500"
+                                            w="full"
+                                            h="2.8rem"
+                                        />
+                                        <ShiftBtn
+                                            text="Send Invite"
+                                            px="1rem"
+                                            w="full"
                                             onClick={(e) => createFromTeam(e)}
-                                            type="submit"
-                                            isLoading={isLoading}
-                                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                        >
-                                            <Box pr=".5rem">
-                                                <RiMailSendFill />
-                                            </Box>
-                                            <Box>Send Invite</Box>
-                                        </Button>
+                                            loading={isLoading}
+                                            h="2.8rem"
+                                            prefix={
+                                                <Icon
+                                                    as={RiMailSendFill}
+                                                    mr=".5rem"
+                                                />
+                                            }
+                                        />
                                     </Grid>
                                 </DrawerFooter>
                             </>

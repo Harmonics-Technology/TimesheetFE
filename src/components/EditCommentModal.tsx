@@ -190,6 +190,7 @@ const EditCommentModal = ({
                         <form>
                             {/* <PrimaryTextarea<TaskComment>
                                 register={register}
+schema={schema}
                                 error={errors?.comment}
                                 name="comment"
                                 defaultValue=""

@@ -25,6 +25,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     disabled?: boolean;
     defaultValue?: any;
     disableWeekend?: boolean;
+    schema?: any;
 }
 
 interface Size {
@@ -45,6 +46,7 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
     defaultValue,
     disableWeekend,
     required,
+    schema,
 }: FormInputProps<TFormValues>) => {
     //
     const size: Size = useWindowSize();
@@ -57,6 +59,10 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
     useOnClickOutside(dateRef, handleDatePickerClose);
 
     const format = 'YYYY/MM/DD';
+    const fieldDescription = schema?.fields[name]?.describe();
+    const isRequired = fieldDescription?.tests.some(
+        (test: any) => test.name === 'required',
+    );
 
     return (
         <FormControl
@@ -70,7 +76,8 @@ export const PrimaryDate = <TFormValues extends Record<string, any>>({
                 width="fit-content"
                 fontSize={fontSize}
             >
-                {label}
+                {label}{' '}
+                <span style={{ color: 'red' }}>{isRequired && '*'}</span>
             </FormLabel>
             <Controller
                 control={control}

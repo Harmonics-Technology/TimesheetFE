@@ -164,6 +164,7 @@ export const MonthPayScheduleSettings = ({
                                         }
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                     />
                                     <Box w="full">
                                         <FormLabel
@@ -221,6 +222,7 @@ export const MonthPayScheduleSettings = ({
                                         error={errors.paymentDateDays}
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                         placeholder={
                                             payday || 'Enter the number of days'
                                         }

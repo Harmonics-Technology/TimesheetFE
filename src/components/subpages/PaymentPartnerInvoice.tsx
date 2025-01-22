@@ -206,6 +206,7 @@ function PaymentPartnerInvoice({
                 )}
                 <FilterSearch
                     hides
+                    data={invoiceData}
                     options={newData}
                     filter={
                         <Selectrix

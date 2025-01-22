@@ -104,6 +104,7 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                         placeholder=""
                         defaultValue={userProfile?.firstName as string}
                         register={register}
+                        schema={schema}
                         readonly={true}
                     />
                     <PrimaryInput<UpdateUserModel>
@@ -113,6 +114,7 @@ function AdminProfile({ userProfile }: AdminProfileProps) {
                         placeholder=""
                         defaultValue={userProfile?.lastName as string}
                         register={register}
+                        schema={schema}
                         readonly={true}
                     />
                     <InputBlank

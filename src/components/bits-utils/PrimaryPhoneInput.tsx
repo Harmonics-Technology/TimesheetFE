@@ -13,6 +13,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     fontSize?: string;
     placeholder?: string;
     defaultCountry?: any;
+    schema?: any;
 }
 export const PrimaryPhoneInput = <TFormValues extends Record<string, any>>({
     name,
@@ -22,9 +23,14 @@ export const PrimaryPhoneInput = <TFormValues extends Record<string, any>>({
     fontSize = '.8rem',
     placeholder,
     defaultCountry = 'ca',
+    schema,
 }: FormInputProps<TFormValues>) => {
     // const value = control._formValues[name];
     //
+    const fieldDescription = schema?.fields[name]?.describe();
+    const isRequired = fieldDescription?.tests.some(
+        (test: any) => test.name === 'required',
+    );
     return (
         <>
             <FormControl>
@@ -34,7 +40,8 @@ export const PrimaryPhoneInput = <TFormValues extends Record<string, any>>({
                     width="fit-content"
                     fontSize={fontSize}
                 >
-                    {label}
+                    {label}{' '}
+                    <span style={{ color: 'red' }}>{isRequired && '*'}</span>
                 </FormLabel>
                 <Controller
                     render={({ field: { onChange, value } }) => (

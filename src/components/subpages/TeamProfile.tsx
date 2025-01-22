@@ -500,6 +500,7 @@ function TeamProfile({
                             placeholder=""
                             defaultValue={''}
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<TeamMemberModel>
                             label="Last Name"
@@ -508,6 +509,7 @@ function TeamProfile({
                             placeholder=""
                             defaultValue={''}
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<TeamMemberModel>
                             label="Email"
@@ -517,6 +519,7 @@ function TeamProfile({
                             defaultValue={''}
                             disableLabel={true}
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryPhoneInput<TeamMemberModel>
                             label="Phone Number"
@@ -538,6 +541,7 @@ function TeamProfile({
                         />
                         <PrimarySelect<TeamMemberModel>
                             register={register}
+                            schema={schema}
                             error={errors.isActive}
                             name="isActive"
                             label="Profile Status"
@@ -564,6 +568,7 @@ function TeamProfile({
                             placeholder=""
                             defaultValue={''}
                             register={register}
+                            schema={schema}
                         />
                     </Box>
                     <Box w="full">
@@ -598,9 +603,11 @@ function TeamProfile({
                                         ?.jobTitle as string
                                 }
                                 register={register}
+                                schema={schema}
                             />
                             <PrimarySelect<TeamMemberModel>
                                 register={register}
+                                schema={schema}
                                 error={errors.clientId}
                                 name="clientId"
                                 label="Current Client"
@@ -619,6 +626,7 @@ function TeamProfile({
                             />
                             <PrimarySelect<TeamMemberModel>
                                 register={register}
+                                schema={schema}
                                 error={errors.supervisorId}
                                 name="supervisorId"
                                 label="Supervisor"
@@ -658,6 +666,7 @@ function TeamProfile({
                             <Box pos="relative">
                                 <PrimarySelect<TeamMemberModel>
                                     register={register}
+                                    schema={schema}
                                     error={errors.employeeType}
                                     name="employeeType"
                                     label="Employee Category"
@@ -694,11 +703,13 @@ function TeamProfile({
                                 placeholder=""
                                 defaultValue={''}
                                 register={register}
+                                schema={schema}
                                 type="number"
                             />
 
                             <PrimarySelect<TeamMemberModel>
                                 register={register}
+                                schema={schema}
                                 error={errors.timesheetFrequency}
                                 name="timesheetFrequency"
                                 label="Timesheet Frequency"
@@ -751,6 +762,7 @@ function TeamProfile({
                             </Box>
                             {/* <PrimarySelect<TeamMemberModel>
                                 register={register}
+schema={schema}
                                 error={errors.department}
                                 name="department"
                                 label="Department"
@@ -767,6 +779,7 @@ function TeamProfile({
                             /> */}
                             <PrimarySelect<TeamMemberModel>
                                 register={register}
+                                schema={schema}
                                 error={errors.enableFinancials}
                                 name="enableFinancials"
                                 label="Is Payment Information Required?"
@@ -786,6 +799,7 @@ function TeamProfile({
                             />
                             <PrimarySelect<TeamMemberModel>
                                 register={register}
+                                schema={schema}
                                 error={errors.employmentContractType}
                                 name="employmentContractType"
                                 label="Employment Type"
@@ -885,6 +899,7 @@ function TeamProfile({
                             >
                                 <PrimarySelect<TeamMemberModel>
                                     register={register}
+                                    schema={schema}
                                     error={errors.payrollStructure}
                                     name="payrollStructure"
                                     label="Payroll Structure "
@@ -912,6 +927,7 @@ function TeamProfile({
                                     <Box mb="1rem">
                                         <PrimaryInput<TeamMemberModel>
                                             register={register}
+                                            schema={schema}
                                             error={errors.incorpName}
                                             name="incorpName"
                                             label="Incoporation Name"
@@ -927,6 +943,7 @@ function TeamProfile({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                         type="number"
                                     />
                                 )}
@@ -939,10 +956,12 @@ function TeamProfile({
                                             placeholder=""
                                             defaultValue=""
                                             register={register}
+                                            schema={schema}
                                             type="number"
                                         />
                                         <PrimarySelect<TeamMemberModel>
                                             register={register}
+                                            schema={schema}
                                             error={errors.rateType}
                                             name="rateType"
                                             label="Rate Type"
@@ -965,6 +984,7 @@ function TeamProfile({
                                 )}
                                 <PrimarySelect<TeamMemberModel>
                                     register={register}
+                                    schema={schema}
                                     error={errors.paymentFrequency}
                                     name="paymentFrequency"
                                     label="Payroll Frequency "
@@ -983,6 +1003,7 @@ function TeamProfile({
                                 />
                                 <PrimarySelect<TeamMemberModel>
                                     register={register}
+                                    schema={schema}
                                     error={errors.currency}
                                     name="currency"
                                     label="Currency"
@@ -1009,6 +1030,7 @@ function TeamProfile({
                                 />
                                 <PrimarySelect<TeamMemberModel>
                                     register={register}
+                                    schema={schema}
                                     error={errors.taxType}
                                     name="taxType"
                                     label="Tax %"
@@ -1033,12 +1055,14 @@ function TeamProfile({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                         type="number"
                                     />
                                 )}
 
                                 <PrimarySelect<TeamMemberModel>
                                     register={register}
+                                    schema={schema}
                                     error={errors.payrollProcessingType}
                                     name="payrollProcessingType"
                                     label="Payroll Processing"
@@ -1058,6 +1082,7 @@ function TeamProfile({
                                     <>
                                         <PrimarySelect<TeamMemberModel>
                                             register={register}
+                                            schema={schema}
                                             error={errors.paymentPartnerId}
                                             name="paymentPartnerId"
                                             label="Choose payment partner"
@@ -1074,6 +1099,7 @@ function TeamProfile({
                                         />
                                         <PrimarySelect<TeamMemberModel>
                                             register={register}
+                                            schema={schema}
                                             error={
                                                 errors.paymentProcessingFeeType
                                             }
@@ -1110,6 +1136,7 @@ function TeamProfile({
                                         />
                                         <PrimarySelect<TeamMemberModel>
                                             register={register}
+                                            schema={schema}
                                             error={errors.paymentProcessingFee}
                                             name="paymentProcessingFee"
                                             label={`Processing fee ${
@@ -1155,6 +1182,7 @@ function TeamProfile({
                                 )}
                                 <PrimarySelect<TeamMemberModel>
                                     register={register}
+                                    schema={schema}
                                     error={errors.invoiceGenerationType}
                                     name="invoiceGenerationType"
                                     label="Payment Type"
@@ -1175,6 +1203,7 @@ function TeamProfile({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                         type="number"
                                     />
                                 )}
@@ -1228,6 +1257,7 @@ function TeamProfile({
                                         placeholder=""
                                         defaultValue={''}
                                         register={register}
+schema={schema}
                                     /> */}
 
                                     <PrimaryInput<TeamMemberModel>
@@ -1240,6 +1270,7 @@ function TeamProfile({
                                                 ?.numberOfDaysEligible
                                         }
                                         register={register}
+                                        schema={schema}
                                         type="number"
                                     />
                                     <Box />
@@ -1286,6 +1317,7 @@ function TeamProfile({
                                                         ?.rolledOverLeave
                                                 }
                                                 register={register}
+                                                schema={schema}
                                                 type="number"
                                             />
                                         )}
@@ -1304,6 +1336,7 @@ function TeamProfile({
                                                 ).format('YYYY/MM/DD')}
                                                 control={control}
                                                 // register={register}
+                                                schema={schema}
                                             />
                                         )}
                                     </Grid>
@@ -1348,6 +1381,7 @@ function TeamProfile({
                                                 }
                                                 type="number"
                                                 register={register}
+                                                schema={schema}
                                                 suffix={
                                                     <InputRightElement right="1rem">
                                                         <Text fontSize=".8rem">

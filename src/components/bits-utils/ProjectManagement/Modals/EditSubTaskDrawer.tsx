@@ -190,6 +190,7 @@ export const EditSubTaskDrawer = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                         // readonly={true}
                     />
                     <Box w="full">
@@ -288,6 +289,7 @@ export const EditSubTaskDrawer = ({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                             readonly={true}
                         />
                     </Grid>
@@ -311,6 +313,7 @@ export const EditSubTaskDrawer = ({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                             // readonly={readonly}
                         />
                     )}
@@ -342,6 +345,7 @@ export const EditSubTaskDrawer = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
 
                     <DrawerFooter my="2rem" p="0" w="full">

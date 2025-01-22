@@ -147,7 +147,7 @@ export const LeaveType = ({ leaves }: leaveProps) => {
                     position: 'top-right',
                 });
                 onClose();
-                reset()
+                reset();
                 router.replace(router.asPath);
                 return;
             }
@@ -186,7 +186,7 @@ export const LeaveType = ({ leaves }: leaveProps) => {
                 >
                     +Leave Type
                 </Button>
-                <FilterSearch />
+                <FilterSearch data={leaves} />
                 <Tables
                     tableHead={['Leave Type', 'Status', 'Modify', 'Delete']}
                 >
@@ -243,6 +243,7 @@ export const LeaveType = ({ leaves }: leaveProps) => {
                         placeholder="Leave Type"
                         defaultValue={data?.name || ''}
                         register={register}
+                        schema={schema}
                     />
                     <Button
                         mt="1rem"

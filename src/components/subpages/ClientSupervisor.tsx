@@ -117,7 +117,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                 >
                     +Supervisor
                 </Button> */}
-                <FilterSearch />
+                <FilterSearch data={adminList} />
                 <Tables
                     tableHead={['Name', 'Email', 'Role', 'Status', 'Action']}
                 >
@@ -153,6 +153,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <Grid
                         templateColumns={['repeat(1,1fr)', 'repeat(2,1fr)']}
@@ -175,6 +176,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<RegisterModel>
                             label="Last Name"
@@ -183,6 +185,7 @@ function SupervisorManagement({ adminList, clientId }: adminProps) {
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
 
                         <Button

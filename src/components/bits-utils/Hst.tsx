@@ -118,6 +118,7 @@ export const Hst = ({ data }: { data: OnboardingFeeView }) => {
                         placeholder=""
                         defaultValue={data?.fee}
                         register={register}
+                        schema={schema}
                     />
                 </Box>
                 <Button

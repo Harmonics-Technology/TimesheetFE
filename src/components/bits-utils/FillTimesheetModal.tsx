@@ -356,7 +356,7 @@ export const FillTimesheetModal = ({
             ...projectTimesheets,
             endDate,
         });
-        };
+    };
 
     const selectedTask = tasks?.find(
         (task) => task?.id === watch('projectTaskId'),
@@ -491,6 +491,7 @@ export const FillTimesheetModal = ({
                             >
                                 <PrimarySelect<ProjectTimesheetModel>
                                     register={register}
+                                    schema={schema}
                                     error={errors.projectId}
                                     name="projectId"
                                     label="Project"
@@ -508,6 +509,7 @@ export const FillTimesheetModal = ({
                                 {tasks?.length > 0 && (
                                     <PrimarySelect<ProjectTimesheetModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.projectTaskId}
                                         name="projectTaskId"
                                         label="Project Task"
@@ -556,6 +558,7 @@ export const FillTimesheetModal = ({
                                     // />
                                     <PrimarySelect<ProjectTimesheetModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.projectSubTaskId}
                                         name="projectSubTaskId"
                                         label="Sub Task"
@@ -584,6 +587,7 @@ export const FillTimesheetModal = ({
                                     // />
                                     <PrimarySelect<ProjectTimesheetModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.projectTaskId}
                                         name="projectTaskId"
                                         label="Operational Task"

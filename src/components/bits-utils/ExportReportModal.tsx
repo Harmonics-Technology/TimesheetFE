@@ -23,6 +23,7 @@ import { FaRegCalendarAlt } from 'react-icons/fa';
 import DatePicker from 'react-multi-date-picker';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { UserContext } from '@components/context/UserContext';
+import { ShiftBtn } from './ShiftBtn';
 
 interface ExportProps {
     isOpen: any;
@@ -346,31 +347,26 @@ export const ExportReportModal = ({
                                 ))}
                         </VStack>
                         <HStack
-                            gap={['1rem', '2rem']}
+                            gap={['1rem', '1rem']}
                             spacing="0"
                             flexDir={['column', 'row']}
                             mb="1rem"
                         >
-                            <Button
-                                bgColor="#EF516D"
+                            <ShiftBtn
+                                text="Cancel Report"
                                 onClick={closeModal}
-                                color="white"
+                                px="1rem"
+                                bg="gray.500"
                                 w="full"
-                            >
-                                <Icon as={MdCancel} mr=".5rem" />
-                                Cancel Report
-                            </Button>
-                            <Button
-                                bgColor="brand.400"
+                                prefix={<Icon as={MdCancel} mr=".5rem" />}
+                            />
+                            <ShiftBtn
+                                text="Add Team Member"
                                 onClick={exportData}
-                                color="white"
+                                px="1rem"
                                 w="full"
-                                isLoading={loading}
-                                spinner={<BeatLoader color="white" size={10} />}
-                            >
-                                <Icon as={CgNotes} mr=".5rem" />
-                                Export Report
-                            </Button>
+                                prefix={<Icon as={CgNotes} mr=".5rem" />}
+                            />
                         </HStack>
                     </Box>
                 </ModalBody>

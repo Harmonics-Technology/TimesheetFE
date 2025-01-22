@@ -24,6 +24,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     flexDir?: any;
     gap?: any;
     bg?: any;
+    schema?: any;
 }
 
 export const PrimaryRadio = <TFormValues extends Record<string, any>>({
@@ -37,6 +38,7 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
     flexDir = 'row',
     gap = '1rem',
     bg,
+    schema,
 }: FormInputProps<TFormValues>) => {
     const { getRootProps, getRadioProps } = useRadioGroup({
         name: 'framework',
@@ -45,6 +47,11 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
     });
 
     const group = getRootProps();
+    const fieldDescription = schema?.fields[name]?.describe();
+    const isRequired = fieldDescription?.tests.some(
+        (test: any) => test.name === 'required',
+    );
+
     return (
         <>
             <FormControl
@@ -53,7 +60,8 @@ export const PrimaryRadio = <TFormValues extends Record<string, any>>({
                 }
             >
                 <Text fontSize=".8rem" fontWeight="500" mb=".7rem">
-                    {label}
+                    {label}{' '}
+                    <span style={{ color: 'red' }}>{isRequired && '*'}</span>
                 </Text>
                 <Controller
                     render={({ field }) => (

@@ -32,6 +32,7 @@ import { PrimaryInput } from './PrimaryInput';
 import moment from 'moment';
 import InputBlank from './InputBlank';
 import Cookies from 'js-cookie';
+import { ShiftBtn } from './ShiftBtn';
 
 const schema = yup.object().shape({
     // endDate: yup.string().required(),
@@ -347,6 +348,7 @@ const Leaveform = ({
                         placeholder=""
                         defaultValue={''}
                         register={register}
+                        schema={schema}
                         color="#323232"
                     />
                     <SelectrixBox<LeaveModel>
@@ -379,30 +381,22 @@ const Leaveform = ({
 
                 <DrawerFooter mt="2rem" p="0">
                     <Flex justify="space-between" w="full">
-                        <Button
-                            bgColor="#FF5B79"
-                            color="white"
-                            height="3rem"
-                            fontSize="14px"
-                            px="2rem"
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            onClick={() => closeForm()}
-                        >
-                            Close
-                        </Button>
-                        <Button
-                            bgColor="brand.400"
-                            color="white"
-                            height="3rem"
-                            fontSize="14px"
-                            px="2rem"
+                        <ShiftBtn
+                            text="Close"
+                            onClick={closeForm}
+                            px="1rem"
+                            bg="gray.500"
+                            w="full"
+                            h="2.8rem"
+                        />
+                        <ShiftBtn
+                            text="Save"
+                            px="1rem"
+                            w="full"
                             type="submit"
-                            isLoading={isSubmitting}
-                            spinner={<BeatLoader color="white" size={10} />}
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        >
-                            <Box>Apply</Box>
-                        </Button>
+                            loading={isSubmitting}
+                            h="2.8rem"
+                        />
                     </Flex>
                 </DrawerFooter>
             </form>

@@ -171,6 +171,7 @@ export const ListInvoices = ({
                             noFilter={true}
                             // noLabel
                             noSearch
+                            data={invoices}
                         />
                     </Box>
 

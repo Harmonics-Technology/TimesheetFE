@@ -35,6 +35,7 @@ import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
 import getBusinessDateCount from '@components/bits-utils/GetBusinessDays';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 export const CreateProjectDrawer = ({
     onClose,
@@ -227,6 +228,7 @@ export const CreateProjectDrawer = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <Grid
                         templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
@@ -255,10 +257,12 @@ export const CreateProjectDrawer = ({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                             readonly={true}
                         />
                         <PrimarySelect<ProjectModel>
                             register={register}
+                            schema={schema}
                             error={errors.currency}
                             name="currency"
                             label="Currency"
@@ -290,6 +294,7 @@ export const CreateProjectDrawer = ({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<ProjectModel>
                             label="Budget Threshold"
@@ -298,6 +303,7 @@ export const CreateProjectDrawer = ({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                     </Grid>
 
@@ -467,6 +473,7 @@ export const CreateProjectDrawer = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <Box w="full">
                         <FormLabel
@@ -557,28 +564,22 @@ export const CreateProjectDrawer = ({
 
                     <DrawerFooter my="2rem" p="0" w="full">
                         <Flex justify="space-between" w="full">
-                            <Button
-                                bgColor="#FF5B79"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                onClick={() => onClose()}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                bgColor="brand.400"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
+                            <ShiftBtn
+                                text="Cancel"
+                                onClick={onClose}
+                                px="1rem"
+                                bg="gray.500"
+                                w="full"
+                                h="2.8rem"
+                            />
+                            <ShiftBtn
+                                text="Create"
+                                px="1rem"
+                                w="full"
                                 type="submit"
-                                isLoading={isSubmitting}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                Save
-                            </Button>
+                                loading={isSubmitting}
+                                h="2.8rem"
+                            />
                         </Flex>
                     </DrawerFooter>
                 </VStack>

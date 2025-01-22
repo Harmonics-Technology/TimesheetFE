@@ -560,6 +560,7 @@ export const TeamSingleTask = ({
                                             defaultValue={hours}
                                             value={hours}
                                             register={register}
+                                            schema={schema}
                                         />
                                     </Box>
                                     <Box>
@@ -1193,6 +1194,7 @@ export const TeamSingleTask = ({
                     isOpen={isOpened}
                     onClose={onClosed}
                     register={register}
+                    schema={schema}
                     control={control}
                     errors={errors}
                     sliderValue={sliderValue}

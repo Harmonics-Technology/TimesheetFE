@@ -112,6 +112,7 @@ export const OnboardingFee = ({ data }: { data: OnboardingFeeView[] }) => {
                         placeholder=""
                         defaultValue={''}
                         register={register}
+                        schema={schema}
                     />
                 </Box>
                 <Button

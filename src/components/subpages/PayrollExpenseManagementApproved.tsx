@@ -49,6 +49,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { BsDownload } from 'react-icons/bs';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -228,18 +229,13 @@ function PayrollExpenseManagementApproved({
                             +Expense
                         </Button> */}
                         {selectedId.length > 0 && (
-                            <Button
-                                bgColor="brand.600"
-                                color="white"
-                                p=".5rem 1.5rem"
-                                height="fit-content"
+                            <ShiftBtn
+                                text="Generate Invoice"
                                 onClick={() => generateInvoice()}
-                                isLoading={loading}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                Generate Invoice
-                            </Button>
+                                px="1rem"
+                                outline
+                                loading={loading}
+                            />
                         )}
                     </HStack>
                     {/* <Checkbox
@@ -265,7 +261,7 @@ function PayrollExpenseManagementApproved({
                         </Button>
                     </HStack>
                 </Flex>
-                <FilterSearch />
+                <FilterSearch data={expenses} />
                 <Tables tableHead={thead}>
                     <>
                         {expensesList?.map((x: ExpenseView) => (
@@ -335,6 +331,7 @@ function PayrollExpenseManagementApproved({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<ExpenseModel>
                             label="Amount"
@@ -344,6 +341,7 @@ function PayrollExpenseManagementApproved({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <SelectrixBox<ExpenseModel>
                             control={control}
@@ -366,31 +364,23 @@ function PayrollExpenseManagementApproved({
                             my="2rem"
                             w="full"
                         >
-                            <Button
-                                bgColor="gray.500"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                onClick={() => onClose()}
-                            >
-                                Close
-                            </Button>
-                            <Button
-                                bgColor="brand.400"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
+                            <ShiftBtn
+                                text="Close"
+                                onClick={onClose}
+                                px="1rem"
+                                bg="gray.500"
+                                w="full"
+                                h="2.8rem"
+                            />
+                            <ShiftBtn
+                                text="Send Invite"
+                                px="1rem"
+                                w="full"
                                 type="submit"
-                                isLoading={isSubmitting}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                <Box pr=".5rem">
-                                    <RiMailSendFill />
-                                </Box>
-                                <Box>Save</Box>
-                            </Button>
+                                loading={isSubmitting}
+                                h="2.8rem"
+                                prefix={<Icon as={RiMailSendFill} mr=".5rem" />}
+                            />
                         </Grid>
                     </DrawerFooter>
                 </form>

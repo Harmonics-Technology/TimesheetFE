@@ -54,6 +54,7 @@ import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { LeaveTab } from '@components/bits-utils/LeaveTab';
 import { UserContext } from '@components/context/UserContext';
 import asyncForEach from '@components/generics/functions/AsyncForEach';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -238,29 +239,19 @@ function PayrollExpenseManagement({
                     gap=".5rem"
                 >
                     <HStack gap="1rem">
-                        <Button
-                            bgColor="brand.400"
-                            color="white"
-                            p=".5rem 1.5rem"
-                            height="fit-content"
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                        <ShiftBtn
+                            text="Add Expense"
                             onClick={onOpen}
-                        >
-                            +Expense
-                        </Button>
+                            px="1rem"
+                        />
                         {selectedId.length > 0 && (
-                            <Button
-                                bgColor="brand.600"
-                                color="white"
-                                p=".5rem 1.5rem"
-                                height="fit-content"
+                            <ShiftBtn
+                                text="Approve Expenses"
                                 onClick={() => approveExpenseItems()}
-                                isLoading={loading}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                Approve Expenses
-                            </Button>
+                                loading={loading}
+                                px="1rem"
+                                outline
+                            />
                         )}
                     </HStack>
                     <HStack ml="auto">
@@ -284,7 +275,7 @@ function PayrollExpenseManagement({
                         </Button>
                     </HStack>
                 </Flex>
-                <FilterSearch />
+                <FilterSearch data={expenses} />
                 <Tables tableHead={thead}>
                     <>
                         {expensesList?.map((x: ExpenseView) => (
@@ -361,6 +352,7 @@ function PayrollExpenseManagement({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                     </Box>
                     <Grid
@@ -375,6 +367,7 @@ function PayrollExpenseManagement({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <SelectrixBox<ExpenseModel>
                             control={control}
@@ -403,31 +396,23 @@ function PayrollExpenseManagement({
                             my="2rem"
                             w="full"
                         >
-                            <Button
-                                bgColor="gray.500"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                onClick={() => onClose()}
-                            >
-                                Close
-                            </Button>
-                            <Button
-                                bgColor="brand.400"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
+                            <ShiftBtn
+                                text="Close"
+                                onClick={onClose}
+                                px="1rem"
+                                bg="gray.500"
+                                w="full"
+                                h="2.8rem"
+                            />
+                            <ShiftBtn
+                                text="Send Invite"
+                                px="1rem"
+                                w="full"
                                 type="submit"
-                                isLoading={isSubmitting}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                <Box pr=".5rem">
-                                    <RiMailSendFill />
-                                </Box>
-                                <Box>Save</Box>
-                            </Button>
+                                loading={isSubmitting}
+                                h="2.8rem"
+                                prefix={<Icon as={RiMailSendFill} mr=".5rem" />}
+                            />
                         </Grid>
                     </DrawerFooter>
                 </form>

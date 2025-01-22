@@ -35,6 +35,7 @@ import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import Loading from '@components/bits-utils/Loading';
 import { UserContext } from '@components/context/UserContext';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -212,6 +213,7 @@ export const AddOpTaskDrawer = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <SelectBlank
                         label="Task Type"
@@ -386,32 +388,27 @@ export const AddOpTaskDrawer = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
 
                     <DrawerFooter my="2rem" p="0" w="full">
                         <Flex justify="space-between" w="full">
-                            <Button
-                                bgColor="#FF5B79"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                onClick={() => onClose()}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                bgColor="brand.400"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
+                            <ShiftBtn
+                                text="Cancel"
+                                onClick={onClose}
+                                px="1rem"
+                                bg="gray.500"
+                                w="full"
+                                h="2.8rem"
+                            />
+                            <ShiftBtn
+                                text="Save"
+                                px="1rem"
+                                w="full"
                                 type="submit"
-                                isLoading={isSubmitting}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                Save
-                            </Button>
+                                loading={isSubmitting}
+                                h="2.8rem"
+                            />
                         </Flex>
                     </DrawerFooter>
                 </VStack>

@@ -543,6 +543,7 @@ export const DraftOnboardingModal = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <PrimaryInput<TeamMemberModel>
                         label="Last Name"
@@ -551,6 +552,7 @@ export const DraftOnboardingModal = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <PrimaryInput<TeamMemberModel>
                         label="Email"
@@ -559,6 +561,7 @@ export const DraftOnboardingModal = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <PrimaryPhoneInput<TeamMemberModel>
                         label="Phone Number"
@@ -585,6 +588,7 @@ export const DraftOnboardingModal = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                 </Grid>
                 <Box w="full">
@@ -625,6 +629,7 @@ export const DraftOnboardingModal = ({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <Box w="full">
                             <FormLabel
@@ -652,6 +657,7 @@ export const DraftOnboardingModal = ({
                         </Box>
                         {/* <PrimarySelect<TeamMemberModel>
                             register={register}
+schema={schema}
                             error={errors.department}
                             name="department"
                             label="Department"
@@ -669,6 +675,7 @@ export const DraftOnboardingModal = ({
                         {clientType && (
                             <PrimarySelect<TeamMemberModel>
                                 register={register}
+                                schema={schema}
                                 error={errors.clientId}
                                 name="clientId"
                                 label="Client"
@@ -687,6 +694,7 @@ export const DraftOnboardingModal = ({
                         )}
                         <PrimarySelect<TeamMemberModel>
                             register={register}
+                            schema={schema}
                             error={errors.supervisorId}
                             name="supervisorId"
                             label="Supervisor"
@@ -729,6 +737,7 @@ export const DraftOnboardingModal = ({
                         />
                         <PrimarySelect<TeamMemberModel>
                             register={register}
+                            schema={schema}
                             error={errors.employmentContractType}
                             name="employmentContractType"
                             label="Employment Type"
@@ -745,6 +754,7 @@ export const DraftOnboardingModal = ({
                         />
                         <PrimarySelect<TeamMemberModel>
                             register={register}
+                            schema={schema}
                             error={errors.employeeType}
                             name="employeeType"
                             label="Employment Category"
@@ -765,9 +775,11 @@ export const DraftOnboardingModal = ({
                             defaultValue=""
                             type="number"
                             register={register}
+                            schema={schema}
                         />
                         <PrimarySelect<TeamMemberModel>
                             register={register}
+                            schema={schema}
                             error={errors.timesheetFrequency}
                             name="timesheetFrequency"
                             label="Timesheet Frequency"
@@ -830,6 +842,7 @@ export const DraftOnboardingModal = ({
                             <Box mb="1rem">
                                 <PrimarySelect<TeamMemberModel>
                                     register={register}
+                                    schema={schema}
                                     error={errors.payrollStructure}
                                     name="payrollStructure"
                                     label="Payroll Structure "
@@ -858,6 +871,7 @@ export const DraftOnboardingModal = ({
                                 <Box mb="1rem">
                                     <PrimaryInput<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.incorpName}
                                         name="incorpName"
                                         label="Incoporation Name"
@@ -882,6 +896,7 @@ export const DraftOnboardingModal = ({
                                             placeholder=""
                                             defaultValue=""
                                             register={register}
+                                            schema={schema}
                                         />
                                     )}
                                     {isIncSelected && (
@@ -893,9 +908,11 @@ export const DraftOnboardingModal = ({
                                                 placeholder=""
                                                 defaultValue=""
                                                 register={register}
+                                                schema={schema}
                                             />
                                             <PrimarySelect<TeamMemberModel>
                                                 register={register}
+                                                schema={schema}
                                                 error={errors.rateType}
                                                 name="rateType"
                                                 label="Rate Type"
@@ -918,6 +935,7 @@ export const DraftOnboardingModal = ({
                                     )}
                                     <PrimarySelect<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.paymentFrequency}
                                         name="paymentFrequency"
                                         label="Payroll Frequency "
@@ -938,6 +956,7 @@ export const DraftOnboardingModal = ({
                                     />
                                     <PrimarySelect<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.currency}
                                         name="currency"
                                         label="Currency"
@@ -966,6 +985,7 @@ export const DraftOnboardingModal = ({
                                     />
                                     <PrimarySelect<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.taxType}
                                         name="taxType"
                                         label="Tax %"
@@ -992,11 +1012,13 @@ export const DraftOnboardingModal = ({
                                             placeholder=""
                                             defaultValue=""
                                             register={register}
+                                            schema={schema}
                                         />
                                     )}
 
                                     <PrimarySelect<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.payrollProcessingType}
                                         name="payrollProcessingType"
                                         label="Payroll Processing"
@@ -1018,6 +1040,7 @@ export const DraftOnboardingModal = ({
                                         <>
                                             <PrimarySelect<TeamMemberModel>
                                                 register={register}
+                                                schema={schema}
                                                 error={errors.paymentPartnerId}
                                                 name="paymentPartnerId"
                                                 label="Choose payment partner"
@@ -1038,6 +1061,7 @@ export const DraftOnboardingModal = ({
                                             />
                                             <PrimarySelect<TeamMemberModel>
                                                 register={register}
+                                                schema={schema}
                                                 error={
                                                     errors.paymentProcessingFeeType
                                                 }
@@ -1066,6 +1090,7 @@ export const DraftOnboardingModal = ({
                                             />
                                             <PrimarySelect<TeamMemberModel>
                                                 register={register}
+                                                schema={schema}
                                                 error={
                                                     errors.paymentProcessingFee
                                                 }
@@ -1098,6 +1123,7 @@ export const DraftOnboardingModal = ({
                                     )}
                                     <PrimarySelect<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.invoiceGenerationType}
                                         name="invoiceGenerationType"
                                         label="Payment Type"
@@ -1123,6 +1149,7 @@ export const DraftOnboardingModal = ({
                                             defaultValue=""
                                             type="string"
                                             register={register}
+                                            schema={schema}
                                         />
                                     )}
                                 </Grid>
@@ -1182,6 +1209,7 @@ export const DraftOnboardingModal = ({
                                     placeholder=""
                                     defaultValue=""
                                     register={register}
+                                    schema={schema}
                                     readonly={
                                         leaveSettings?.isStandardEligibleDays
                                     }
@@ -1193,6 +1221,7 @@ export const DraftOnboardingModal = ({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+schema={schema}
                             /> */}
                             </Grid>
                             <Box pos="relative" my="1rem">
@@ -1225,6 +1254,7 @@ export const DraftOnboardingModal = ({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                         // readonly={leaveSettings?.isStandardEligibleDays}
                                     />
                                     <PrimaryDate<TeamMemberModel>
@@ -1237,6 +1267,7 @@ export const DraftOnboardingModal = ({
                                         defaultValue=""
                                         control={control}
                                         // register={register}
+                                        schema={schema}
                                     />
                                 </Grid>
                             )}
@@ -1271,6 +1302,7 @@ export const DraftOnboardingModal = ({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                         suffix={
                                             <InputRightElement right="1rem">
                                                 <Text fontSize=".8rem">

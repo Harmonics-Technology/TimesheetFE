@@ -91,7 +91,7 @@ export const AllTraning = ({ users, superAdminId, trainings, tabs }) => {
                 >
                     Add Training
                 </Button>
-                <FilterSearch noFilter />
+                <FilterSearch noFilter data={trainings} />
             </Flex>
             <Box>
                 <Tables tableHead={['Name', 'Date', 'Action']}>

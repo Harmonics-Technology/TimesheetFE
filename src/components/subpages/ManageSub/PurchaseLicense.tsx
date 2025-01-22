@@ -247,6 +247,7 @@ export const PurchaseLicense = ({
                                             placeholder="10"
                                             defaultValue=""
                                             register={register}
+                                            schema={schema}
                                         />
                                         <InputBlank
                                             label="Total Value Of License Purchased"

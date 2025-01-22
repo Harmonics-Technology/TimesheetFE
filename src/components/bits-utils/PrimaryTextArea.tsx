@@ -37,12 +37,13 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     h?: string;
     padding?: string;
     fontSize?: string;
+    schema?: any;
 }
 
 export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
     name,
     required = false,
-    border ,
+    border,
     label = '',
     register,
     validate = {},
@@ -62,12 +63,22 @@ export const PrimaryTextarea = <TFormValues extends Record<string, any>>({
     h,
     fontSize = '.8rem',
     padding,
+    schema,
 }: FormInputProps<TFormValues>) => {
+    const fieldDescription = schema?.fields[name]?.describe();
+    const isRequired = fieldDescription?.tests.some(
+        (test: any) => test.name === 'required',
+    );
     return (
         <>
             <FormControl isInvalid={!!error}>
-                <FormLabel color={color || '#33333'}  mt="1rem"  fontSize={fontSize}>
-                    {label}
+                <FormLabel
+                    color={color || '#33333'}
+                    mt="1rem"
+                    fontSize={fontSize}
+                >
+                    {label}{' '}
+                    <span style={{ color: 'red' }}>{isRequired && '*'}</span>
                 </FormLabel>
                 <Textarea
                     placeholder={placeholder}

@@ -242,6 +242,7 @@ export const EditProjectDrawer = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <Grid
                         templateColumns={['repeat(1,1fr)', 'repeat(3,1fr)']}
@@ -276,10 +277,12 @@ export const EditProjectDrawer = ({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                             readonly={true}
                         />
                         <PrimarySelect<ProjectModel>
                             register={register}
+                            schema={schema}
                             error={errors.currency}
                             name="currency"
                             label="Currency"
@@ -315,6 +318,7 @@ export const EditProjectDrawer = ({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<ProjectModel>
                             label="Budget Threshold"
@@ -323,6 +327,7 @@ export const EditProjectDrawer = ({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                     </Grid>
                     <Box w="full">
@@ -473,6 +478,7 @@ export const EditProjectDrawer = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <Box w="full">
                         <FormLabel

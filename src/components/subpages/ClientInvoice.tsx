@@ -153,7 +153,7 @@ function ClientInvoice({ invoiceData }: adminProps) {
                         )}
                     </Flex>
                 )} */}
-                <FilterSearch />
+                <FilterSearch data={invoiceData} />
                 <Tables
                     tableHead={[
                         'Invoice No',

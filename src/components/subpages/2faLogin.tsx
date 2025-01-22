@@ -150,6 +150,7 @@ function TwofaLogin() {
                                 <Box w={['80%', '60%']}>
                                     <PrimaryInput<TwoFaModel>
                                         register={register}
+                                        schema={schema}
                                         name="code"
                                         error={errors.code}
                                         defaultValue=""

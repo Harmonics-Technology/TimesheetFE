@@ -16,7 +16,7 @@ export const LicenseActivity = ({ data }) => {
                     <Text fontWeight="500" color="#2d3748">
                         Subscription Activities
                     </Text>
-                    <FilterSearch noSearch noFilter />
+                    <FilterSearch noSearch noFilter data={data} />
                 </Flex>
 
                 {(data?.value as any)?.length > 0 ? (

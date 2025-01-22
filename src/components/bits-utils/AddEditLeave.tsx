@@ -111,6 +111,7 @@ export const AddEditLeave = ({ data }: { data?: any }) => {
                     placeholder="Leave Type"
                     defaultValue={data?.name || ''}
                     register={register}
+                    schema={schema}
                 />
                 <ShiftBtn
                     text="Save"

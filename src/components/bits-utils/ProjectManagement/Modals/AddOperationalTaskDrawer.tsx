@@ -156,6 +156,7 @@ export const AddOperationalTaskDrawer = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     {/* <Box w="full">
                         <FormLabel
@@ -247,6 +248,7 @@ export const AddOperationalTaskDrawer = ({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                             readonly={true}
                         />
                     </Grid>
@@ -278,6 +280,7 @@ export const AddOperationalTaskDrawer = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+schema={schema}
                     /> */}
 
                     <DrawerFooter my="2rem" p="0" w="full">

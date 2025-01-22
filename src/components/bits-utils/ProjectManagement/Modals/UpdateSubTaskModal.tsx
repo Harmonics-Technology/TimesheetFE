@@ -212,6 +212,7 @@ const UpdateSubTaskModal = ({
                             />
                             {/* <PrimarySelect<ProjectSubTaskModel>
                                 register={register}
+schema={schema}
                                 error={errors.taskPriority}
                                 name="taskPriority"
                                 label="Sub Task Priority"
@@ -277,6 +278,7 @@ const UpdateSubTaskModal = ({
                                             error={errors.hours}
                                             placeholder=""
                                             register={register}
+                                            schema={schema}
                                         />
                                         <Box>
                                             <Stack spacing="12px">

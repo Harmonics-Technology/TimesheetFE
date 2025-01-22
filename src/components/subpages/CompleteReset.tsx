@@ -170,6 +170,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                             <VStack w="full" spacing="1rem">
                                 <PrimaryInput<PasswordReset>
                                     register={register}
+                                    schema={schema}
                                     name="newPassword"
                                     error={errors.newPassword}
                                     defaultValue=""

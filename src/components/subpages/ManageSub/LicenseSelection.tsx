@@ -8,6 +8,14 @@ export const LicenseSelection = ({
     removeLicense,
     errors,
     subs,
+    isRequired,
+}: {
+    addLicense: any;
+    selectedLicense: any;
+    removeLicense: any;
+    errors: any;
+    subs: any;
+    isRequired?: any;
 }) => {
     return (
         <Box
@@ -22,7 +30,8 @@ export const LicenseSelection = ({
                 width="fit-content"
                 fontSize=".8rem"
             >
-                Assign License
+                Assign License{' '}
+                <span style={{ color: 'red' }}>{isRequired && '*'}</span>
             </FormLabel>
             <CustomSelectBox
                 data={subs}

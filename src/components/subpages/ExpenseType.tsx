@@ -129,7 +129,7 @@ function ExpenseType({ expenses }: expenseProps) {
                 >
                     +Expense Type
                 </Button>
-                <FilterSearch />
+                <FilterSearch data={expenses} />
                 <Tables tableHead={['Expense Type', 'Status', 'Action']}>
                     <>
                         {expenses?.map((x: ExpenseTypeView) => (
@@ -159,6 +159,7 @@ function ExpenseType({ expenses }: expenseProps) {
                         placeholder="Expense Type"
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
 
                     <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">

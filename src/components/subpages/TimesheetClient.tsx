@@ -655,6 +655,7 @@ const TimesheetSupervisor = ({
                                                 defaultValue=""
                                                 h="3.5rem"
                                                 register={register}
+                                                schema={schema}
                                             />
                                             <Button
                                                 isLoading={isSubmitting}
@@ -818,7 +819,7 @@ const TimesheetSupervisor = ({
                     fontSize={['.6rem', '.9rem']}
                     border={['0', '1px solid #e5e5e5']}
                 >
-                      {Round(sumOfHours)}
+                    {Round(sumOfHours)}
                 </Flex>
             </>
         );

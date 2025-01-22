@@ -268,6 +268,7 @@ function ContractTable({ userProfile, isSuperAdmin }: adminProps) {
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryDate<ContractModel>
                                 control={control}

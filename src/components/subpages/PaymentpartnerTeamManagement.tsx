@@ -339,7 +339,7 @@ function PaymentPartnerTeamManagement({
                 >
                     +Team Member
                 </Button> */}
-                <FilterSearch />
+                <FilterSearch data={adminList} />
                 <Tables
                     tableHead={[
                         'Name',
@@ -395,6 +395,7 @@ function PaymentPartnerTeamManagement({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<TeamMemberModel>
                             label="Last Name"
@@ -403,6 +404,7 @@ function PaymentPartnerTeamManagement({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<TeamMemberModel>
                             label="Email"
@@ -411,6 +413,7 @@ function PaymentPartnerTeamManagement({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryPhoneInput<TeamMemberModel>
                             label="Phone Number"
@@ -447,6 +450,7 @@ function PaymentPartnerTeamManagement({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                     </Box>
                     <Box w="full">
@@ -478,6 +482,7 @@ function PaymentPartnerTeamManagement({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -527,6 +532,7 @@ function PaymentPartnerTeamManagement({
                                         type="number"
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                     />
                                     <PrimaryInput<TeamMemberModel>
                                         label="Hr/Day"
@@ -536,6 +542,7 @@ function PaymentPartnerTeamManagement({
                                         defaultValue=""
                                         type="number"
                                         register={register}
+                                        schema={schema}
                                     />
                                     <UploadCareWidget
                                         refs={widgetApiB}
@@ -566,6 +573,7 @@ function PaymentPartnerTeamManagement({
                                         defaultValue=""
                                         type="number"
                                         register={register}
+                                        schema={schema}
                                     />
                                 </>
                             ) : payroll == 2 ? (
@@ -578,6 +586,7 @@ function PaymentPartnerTeamManagement({
                                         defaultValue=""
                                         type="number"
                                         register={register}
+                                        schema={schema}
                                     />
                                     <PrimaryInput<TeamMemberModel>
                                         label="Hr/Day"
@@ -586,6 +595,7 @@ function PaymentPartnerTeamManagement({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                     />
                                     {/* <SelectrixBox<TeamMemberModel>
                                         control={control}
@@ -606,6 +616,7 @@ function PaymentPartnerTeamManagement({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -665,6 +676,7 @@ function PaymentPartnerTeamManagement({
                                 //             placeholder=""
                                 //             value={fixedAmount}
                                 //             register={register}
+
                                 //             readonly
                                 //         />
                                 //         <Text
@@ -719,6 +731,7 @@ function PaymentPartnerTeamManagement({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryDate<TeamMemberModel>
                                 control={control}

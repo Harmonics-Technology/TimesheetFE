@@ -65,6 +65,7 @@ import InputBlank from '@components/bits-utils/InputBlank';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import { LiaTimesSolid } from 'react-icons/lia';
 import { getUniqueListBy } from '@components/generics/functions/getUniqueList';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 const schema = yup.object().shape({
     // lastName: yup.string().required(),
@@ -217,31 +218,31 @@ function PaymentPartnerManagement({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between" mb="1rem">
+                <Flex justify="space-between" my="1rem">
                     {(userAccess?.adminOBoarding || isSuperAdmin) && (
-                        <Button
-                            bgColor="brand.400"
-                            color="white"
-                            p=".5rem 1.5rem"
-                            height="fit-content"
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            onClick={onOpen}
-                        >
-                            +Payment Partner
-                        </Button>
+                        <>
+                            <ShiftBtn
+                                text="Add Payment Partner"
+                                onClick={onOpen}
+                                px="1rem"
+                            />
+                        </>
                     )}
-                    <Button
-                        bgColor="brand.600"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
-                        onClick={onOpens}
-                        borderRadius="25px"
-                    >
-                        Download <Icon as={BsDownload} ml=".5rem" />
-                    </Button>
+                    <>
+                        <ShiftBtn
+                            text="Export"
+                            outline
+                            suffix={<Icon as={BsDownload} ml=".5rem" />}
+                            border="1px solid "
+                            px="1rem"
+                            onClick={onOpens}
+                        />
+                    </>
                 </Flex>
-                <FilterSearch searchOptions="Search by: Name, Email, Role, or Status " />
+                <FilterSearch
+                    searchOptions="Search by: Name, Email, Role, or Status "
+                    data={adminList}
+                />
                 <Tables tableHead={thead}>
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (
@@ -274,6 +275,7 @@ function PaymentPartnerManagement({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <Grid
                         templateColumns={['1fr', 'repeat(2,1fr)']}
@@ -287,6 +289,7 @@ function PaymentPartnerManagement({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryPhoneInput<RegisterModel>
                             label="Phone Number"
@@ -303,6 +306,7 @@ function PaymentPartnerManagement({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <Grid
                         templateColumns={['1fr', 'repeat(2,1fr)']}
@@ -311,6 +315,7 @@ function PaymentPartnerManagement({
                     >
                         <PrimarySelect<RegisterModel>
                             register={register}
+                            schema={schema}
                             error={errors.currency}
                             name="currency"
                             label="Currency"
@@ -496,6 +501,7 @@ function PaymentPartnerManagement({
                                 placeholder=""
                                 defaultValue={''}
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryInput<RegisterModel>
                                 label="Contact Last Name"
@@ -504,6 +510,7 @@ function PaymentPartnerManagement({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryInput<RegisterModel>
                                 label="Contact Email"
@@ -512,6 +519,7 @@ function PaymentPartnerManagement({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryPhoneInput<RegisterModel>
                                 label="Contact Phone No."
@@ -530,31 +538,23 @@ function PaymentPartnerManagement({
                             my="2rem"
                             w="full"
                         >
-                            <Button
-                                bgColor="gray.500"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                onClick={() => onClose()}
-                            >
-                                Close
-                            </Button>
-                            <Button
-                                bgColor="brand.400"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
+                            <ShiftBtn
+                                text="Close"
+                                onClick={onClose}
+                                px="1rem"
+                                bg="gray.500"
+                                w="full"
+                                h="2.8rem"
+                            />
+                            <ShiftBtn
+                                text="Send Invite"
+                                px="1rem"
+                                w="full"
                                 type="submit"
-                                isLoading={isSubmitting}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                <Box pr=".5rem">
-                                    <RiMailSendFill />
-                                </Box>
-                                <Box>Send Invite</Box>
-                            </Button>
+                                loading={isSubmitting}
+                                h="2.8rem"
+                                prefix={<Icon as={RiMailSendFill} mr=".5rem" />}
+                            />
                         </Grid>
                     </DrawerFooter>
                 </form>

@@ -27,7 +27,6 @@ import { endOfWeek, startOfWeek } from 'date-fns';
 import { PrimarySelect } from './PrimarySelect';
 import Loading from './Loading';
 
-
 interface ExportProps {
     isOpen: any;
     onClose: any;
@@ -188,6 +187,7 @@ export const SwapRequestModal = ({
                             >
                                 <PrimarySelect
                                     register={register}
+                                    schema={schema}
                                     error={errors.shiftSwapId}
                                     name="shiftSwapId"
                                     label="My Shift"
@@ -220,6 +220,7 @@ export const SwapRequestModal = ({
                                 >
                                     <PrimarySelect
                                         register={register}
+                                        schema={schema}
                                         name="employeeId"
                                         label="Employee"
                                         error={errors.employeeId}
@@ -240,6 +241,7 @@ export const SwapRequestModal = ({
                                     />
                                     <PrimarySelect
                                         register={register}
+                                        schema={schema}
                                         name="shiftId"
                                         label="Employee Shift"
                                         error={errors.shiftId}

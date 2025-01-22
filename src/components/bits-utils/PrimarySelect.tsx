@@ -21,6 +21,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     disabled?: any;
     onChange?: any;
     w?: any;
+    schema?: any;
 }
 export const PrimarySelect = <TFormValues extends Record<string, any>>({
     name,
@@ -37,7 +38,12 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
     disabled,
     onChange,
     w = 'full',
+    schema,
 }: FormInputProps<TFormValues>) => {
+    const fieldDescription = schema?.fields[name]?.describe();
+    const isRequired = fieldDescription?.tests.some(
+        (test: any) => test.name === 'required',
+    );
     // console.log({ options });
     return (
         <FormControl
@@ -51,7 +57,8 @@ export const PrimarySelect = <TFormValues extends Record<string, any>>({
                 textTransform="capitalize"
                 fontSize={fontSize}
             >
-                {label}
+                {label}{' '}
+                <span style={{ color: 'red' }}>{isRequired && '*'}</span>
             </FormLabel>
             <Select
                 {...register(name, { required, ...validate })}

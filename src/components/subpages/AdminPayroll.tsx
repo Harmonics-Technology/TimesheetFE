@@ -134,7 +134,7 @@ function AdminPayroll({ payrolls }: expenseProps) {
                         />
                     </Box>
                 </Flex>
-                <FilterSearch />
+                <FilterSearch data={payrolls} />
                 <Tables
                     tableHead={[
                         'Name',

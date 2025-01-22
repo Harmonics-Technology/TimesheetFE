@@ -284,6 +284,7 @@ function Login() {
                     <VStack w="full" spacing=".7rem">
                         <PrimaryInput<LoginModel>
                             register={register}
+                            schema={schema}
                             name="email"
                             error={errors.email}
                             defaultValue={''}
@@ -294,6 +295,7 @@ function Login() {
                         />
                         <PrimaryInput<LoginModel>
                             register={register}
+                            schema={schema}
                             name="password"
                             error={errors.password}
                             defaultValue={''}

@@ -97,7 +97,7 @@ function PaymentPayrollHistory({ payrolls, id }: expenseProps) {
                         label="Select All"
                     /> */}
                 </Flex>
-                <FilterSearch />
+                <FilterSearch data={payrolls} />
                 <Tables
                     tableHead={[
                         'Name',

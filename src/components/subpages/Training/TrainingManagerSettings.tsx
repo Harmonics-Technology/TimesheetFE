@@ -177,6 +177,7 @@ export const TrainingManagerSettings = ({
                     <VStack align="flex-start" gap="1.1rem" w="100%">
                         <PrimarySelect<TrainingManagerModel>
                             register={register}
+                            schema={schema}
                             error={errors.userId}
                             name="userId"
                             label="Training Manager"

@@ -116,6 +116,7 @@ function SuperadminProfile({ userProfile, subs }: SuperadminProfileProps) {
                         placeholder=""
                         defaultValue={userProfile?.firstName as string}
                         register={register}
+                        schema={schema}
                     />
                     <PrimaryInput<UpdateUserModel>
                         label="Last Name"
@@ -124,6 +125,7 @@ function SuperadminProfile({ userProfile, subs }: SuperadminProfileProps) {
                         placeholder=""
                         defaultValue={userProfile?.lastName as string}
                         register={register}
+                        schema={schema}
                     />
                     <InputBlank
                         label="Email"

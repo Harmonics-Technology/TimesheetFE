@@ -32,6 +32,7 @@ import { BiPlus } from 'react-icons/bi';
 import generateRandomUUID from '@components/generics/generateRandomUUID';
 import { UserContext } from '@components/context/UserContext';
 import { useRouter } from 'next/router';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
     const schema = yup.object().shape({
@@ -174,6 +175,7 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <PrimaryRadio<TrainingModel>
                         label="Who should participate in this training ?"
@@ -461,34 +463,27 @@ export const AddTrainingModal = ({ onClose, isOpen, users, superAdminId }) => {
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                 </VStack>
                 <DrawerFooter my="2rem" p="0" w="full">
                     <Flex justify="space-between" w="full" gap="2rem">
-                        <Button
-                            bgColor="#FF5B79"
-                            color="white"
-                            height="3rem"
-                            fontSize="14px"
-                            onClick={() => onClose()}
+                        <ShiftBtn
+                            text="Close"
+                            onClick={onClose}
+                            px="1rem"
+                            bg="gray.500"
                             w="full"
-                            borderRadius="8px"
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            bgColor="brand.400"
-                            color="white"
-                            height="3rem"
-                            fontSize="14px"
+                            h="2.8rem"
+                        />
+                        <ShiftBtn
+                            text="Create Training"
+                            px="1rem"
+                            w="full"
                             type="submit"
-                            isLoading={isSubmitting}
-                            spinner={<BeatLoader color="white" size={10} />}
-                            w="full"
-                            borderRadius="8px"
-                        >
-                            Create Training
-                        </Button>
+                            loading={isSubmitting}
+                            h="2.8rem"
+                        />
                     </Flex>
                 </DrawerFooter>
             </form>

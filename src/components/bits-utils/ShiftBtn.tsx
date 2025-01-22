@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/react';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import BeatLoader from 'react-spinners/BeatLoader';
 
 interface shiftBtnProps {
@@ -15,6 +15,10 @@ interface shiftBtnProps {
     px?: any;
     disabled?: any;
     type?: 'button' | 'submit' | 'reset' | undefined;
+    prefix?: ReactNode;
+    suffix?: ReactNode;
+    outline?: boolean;
+    cursor?: any;
 }
 
 export const ShiftBtn = ({
@@ -24,17 +28,21 @@ export const ShiftBtn = ({
     text,
     onClick,
     loading,
-    h,
+    h = '2.1rem',
     fontSize = '.9rem',
     w,
     px = '2rem',
     disabled,
     type = 'button',
+    prefix,
+    suffix,
+    outline,
+    cursor,
 }: shiftBtnProps) => {
     return (
         <Button
-            color={color}
-            bgColor={bg}
+            color={outline ? bg : color}
+            bgColor={outline ? color : bg}
             borderRadius="5px"
             fontSize={fontSize}
             onClick={onClick}
@@ -47,8 +55,9 @@ export const ShiftBtn = ({
             isDisabled={disabled}
             type={type}
             spinner={<BeatLoader color="white" size={10} />}
+            cursor={cursor}
         >
-            {text}
+            {prefix && prefix} {text} {suffix && suffix}
         </Button>
     );
 };

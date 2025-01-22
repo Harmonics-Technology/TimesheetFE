@@ -51,6 +51,7 @@ function TimesheetClient({ timeSheets }: adminProps) {
                 <FilterSearch
                     hide={true}
                     hides
+                    data={timeSheets}
                     filter={
                         <Selectrix
                             options={newData}

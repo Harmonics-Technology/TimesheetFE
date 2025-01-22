@@ -265,6 +265,7 @@ const UpdateTimesheetModal = ({
                                 {subTask?.length > 0 && (
                                     <PrimarySelect<ProjectManagementTimesheetModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.projectSubTaskId}
                                         name="projectSubTaskId"
                                         label="Sub Task Name"
@@ -340,6 +341,7 @@ const UpdateTimesheetModal = ({
                                                     selectedTimesheet?.totalHours
                                                 }
                                                 register={register}
+                                                schema={schema}
                                             />
                                             <Box>
                                                 <Stack spacing="12px">
@@ -388,6 +390,7 @@ const UpdateTimesheetModal = ({
                                 </Grid>
                                 {/* <PrimarySelect<ProjectManagementTimesheetModel>
                                 register={register}
+schema={schema}
                                 error={errors.taskPriority}
                                 name="taskPriority"
                                 label="Sub Task Priority"

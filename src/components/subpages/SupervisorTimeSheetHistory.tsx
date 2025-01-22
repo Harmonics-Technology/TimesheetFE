@@ -32,7 +32,7 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <FilterSearch />
+                <FilterSearch data={timeSheets} />
                 <Tables
                     tableHead={[
                         'Name',

@@ -142,7 +142,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                         Generate Invoice
                     </Button> */}
                 </Flex>
-                <FilterSearch />
+                <FilterSearch data={expensesList} />
                 <Tables
                     tableHead={[
                         'Name',
@@ -220,6 +220,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <Grid
                         templateColumns={['1fr', 'repeat(2, 1fr)']}
@@ -233,6 +234,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <SelectrixBox<ExpenseModel>
                             control={control}

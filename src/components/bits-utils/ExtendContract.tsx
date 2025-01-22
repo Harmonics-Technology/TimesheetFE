@@ -162,6 +162,7 @@ function ExtendContract({ extend, setExtend, clickedItem }: contractProps) {
                             placeholder=""
                             defaultValue={clickedItem?.title as string}
                             register={register}
+                            schema={schema}
                             disableLabel={true}
                         />
                         <PrimaryDate<ContractModel>

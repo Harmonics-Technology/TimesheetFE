@@ -73,6 +73,7 @@ import { ShowPrompt } from '@components/bits-utils/ProjectManagement/Modals/Show
 import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
 import { LicenseSelection } from './ManageSub/LicenseSelection';
 import { NewTeamMemerOnboardingForm } from '@components/bits-utils/NewUpdates/NewTeamMemerOnboardingForm';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 function TeamManagement({
     adminList,
@@ -133,30 +134,29 @@ function TeamManagement({
                 />
                 <Flex justify="space-between" my="1rem">
                     {(userAccess?.adminOBoarding || isSuperAdmin) && (
-                        <Button
-                            bgColor="brand.400"
-                            color="white"
-                            p=".5rem 1.5rem"
-                            height="fit-content"
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            onClick={onOpen}
-                        >
-                            +Team Member
-                        </Button>
+                        <>
+                            <ShiftBtn
+                                text="Add Team Member"
+                                onClick={onOpen}
+                                px="1rem"
+                            />
+                        </>
                     )}
-                    <Button
-                        bgColor="brand.600"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
-                        // boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        onClick={onOpens}
-                        borderRadius="25px"
-                    >
-                        Download <Icon as={BsDownload} ml=".5rem" />
-                    </Button>
+                    <>
+                        <ShiftBtn
+                            text="Export"
+                            outline
+                            suffix={<Icon as={BsDownload} ml=".5rem" />}
+                            border="1px solid "
+                            px="1rem"
+                            onClick={onOpens}
+                        />
+                    </>
                 </Flex>
-                <FilterSearch searchOptions="Search by: Full Name, Job Title, Role, Payroll Type or Status" />
+                <FilterSearch
+                    searchOptions="Search by: Full Name, Job Title, Role, Payroll Type or Status"
+                    data={adminList}
+                />
                 <Tables tableHead={thead}>
                     <>
                         {adminList?.data?.value?.map((x: UserView) => (

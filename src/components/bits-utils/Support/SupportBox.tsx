@@ -143,6 +143,7 @@ export const SupportBox = () => {
                                         placeholder="Full Name Or Company Name"
                                         error={errors.fullName}
                                         register={register}
+                                        schema={schema}
                                         borderRadius=".1875rem"
                                         border="1px solid #C4C4C4"
                                         fontSize=".81rem"
@@ -152,6 +153,7 @@ export const SupportBox = () => {
                                         placeholder="Email Address"
                                         error={errors.email}
                                         register={register}
+                                        schema={schema}
                                         borderRadius=".1875rem"
                                         border="1px solid #C4C4C4"
                                         fontSize=".81rem"
@@ -161,6 +163,7 @@ export const SupportBox = () => {
                                         placeholder="Subject"
                                         error={errors.subject}
                                         register={register}
+                                        schema={schema}
                                         borderRadius=".1875rem"
                                         border="1px solid #C4C4C4"
                                         fontSize=".81rem"
@@ -170,6 +173,7 @@ export const SupportBox = () => {
                                         placeholder="Message"
                                         error={errors.message}
                                         register={register}
+                                        schema={schema}
                                         borderRadius=".1875rem"
                                         border="1px solid #C4C4C4"
                                         fontSize=".81rem"

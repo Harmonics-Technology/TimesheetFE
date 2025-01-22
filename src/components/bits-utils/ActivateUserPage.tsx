@@ -277,6 +277,7 @@ function ActivateUserPage({
                             placeholder=""
                             defaultValue={userProfile?.firstName as string}
                             register={register}
+schema={schema}
                         />
                         <PrimaryInput<TeamMemberModel>
                             label="Last Name"
@@ -285,6 +286,7 @@ function ActivateUserPage({
                             placeholder=""
                             defaultValue={userProfile?.lastName as string}
                             register={register}
+schema={schema}
                         />
                         <InputBlank
                             label="Email"
@@ -335,6 +337,7 @@ function ActivateUserPage({
                             placeholder=""
                             defaultValue={userProfile?.address as string}
                             register={register}
+schema={schema}
                         />
                     </Box>
                     <Box w="full">
@@ -369,6 +372,7 @@ function ActivateUserPage({
                                         ?.jobTitle as string
                                 }
                                 register={register}
+schema={schema}
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -462,6 +466,7 @@ function ActivateUserPage({
                                                 ?.ratePerHour as unknown as string
                                         }
                                         register={register}
+schema={schema}
                                     />
                                     <PrimaryInput<TeamMemberModel>
                                         label="Hr/Day"
@@ -473,6 +478,7 @@ function ActivateUserPage({
                                                 ?.hoursPerDay as unknown as string
                                         }
                                         register={register}
+schema={schema}
                                     />
                                     <Box>
                                         <Flex>
@@ -578,6 +584,7 @@ function ActivateUserPage({
                                                 ?.hstNumber as unknown as string
                                         }
                                         register={register}
+schema={schema}
                                     />
                                 </>
                             ) : (
@@ -592,6 +599,7 @@ function ActivateUserPage({
                                                 ?.monthlyPayoutRate as unknown as string
                                         }
                                         register={register}
+schema={schema}
                                     />
                                     <PrimaryInput<TeamMemberModel>
                                         label="Hr/Day"
@@ -603,6 +611,7 @@ function ActivateUserPage({
                                                 ?.hoursPerDay as unknown as string
                                         }
                                         register={register}
+schema={schema}
                                     />
                                     <SelectrixBox<TeamMemberModel>
                                         control={control}
@@ -654,6 +663,7 @@ function ActivateUserPage({
                                         ?.ratePerHour as unknown as string
                                 }
                                 register={register}
+schema={schema}
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -733,6 +743,7 @@ function ActivateUserPage({
                                 //             placeholder=""
                                 //             value={fixedAmount}
                                 //             register={register}
+schema={schema}
                                 //             readonly
                                 //         />
                                 //         <Text
@@ -796,6 +807,7 @@ function ActivateUserPage({
                                                 ?.numberOfDaysEligible
                                         }
                                         register={register}
+schema={schema}
                                     />
                                 ))}
                             {/* {(isEligibleForLeave as unknown as string) ==
@@ -811,6 +823,7 @@ function ActivateUserPage({
                                                 ?.numberOfHoursEligible
                                         }
                                         register={register}
+schema={schema}
                                     />
                                 ))} */}
                         </Grid>

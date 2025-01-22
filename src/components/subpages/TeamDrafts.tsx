@@ -107,7 +107,10 @@ function TeamDraft({
                     />
                 </Box>
 
-                <FilterSearch searchOptions="Search by: Full Name, Job Title, Role, Payroll Type or Status" />
+                <FilterSearch
+                    searchOptions="Search by: Full Name, Job Title, Role, Payroll Type or Status"
+                    data={drafts}
+                />
                 <Tables tableHead={thead}>
                     <>
                         {drafts?.data?.value?.map((x: UserDraftView) => (

@@ -53,7 +53,7 @@ function TeamPayslips({ payrolls, paymentSchedule }: expenseProps) {
                 >
                     View Payment Schedule
                 </Button>
-                <FilterSearch hide={false} />
+                <FilterSearch hide={false} data={payrollsList} />
                 <Tables
                     tableHead={[
                         'Name',

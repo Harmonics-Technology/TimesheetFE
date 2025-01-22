@@ -165,6 +165,7 @@ function ClientProfile({
                                     userProfile?.organizationName as string
                                 }
                                 register={register}
+                                schema={schema}
                             />
                             <InputBlank
                                 label="Organisation Email"
@@ -211,6 +212,7 @@ function ClientProfile({
                                     userProfile?.organizationAddress || ''
                                 }
                                 register={register}
+                                schema={schema}
                             />
                         </Box>
                     </Box>
@@ -235,6 +237,7 @@ function ClientProfile({
                                 placeholder=""
                                 defaultValue={userProfile?.firstName as string}
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryInput<UpdateUserModel>
                                 label="Contact Last Name"
@@ -243,6 +246,7 @@ function ClientProfile({
                                 placeholder=""
                                 defaultValue={userProfile?.lastName as string}
                                 register={register}
+                                schema={schema}
                             />
                             <InputBlank
                                 label="Contact Email"
@@ -279,6 +283,7 @@ function ClientProfile({
                                 placeholder=""
                                 defaultValue={userProfile?.term as number}
                                 register={register}
+                                schema={schema}
                             />
                         </Grid>
                     </Box>

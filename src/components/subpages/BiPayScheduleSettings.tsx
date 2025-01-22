@@ -147,6 +147,7 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                             error={errors.paymentDateDays}
                             defaultValue=""
                             register={register}
+                            schema={schema}
                             placeholder={payday || 'Enter the number of days'}
                         />
                         <InputBlank

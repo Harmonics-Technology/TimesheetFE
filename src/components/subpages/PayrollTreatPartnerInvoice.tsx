@@ -45,6 +45,7 @@ import asyncForEach from '@components/generics/functions/AsyncForEach';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import { getCurrencySymbol } from '@components/generics/functions/getCurrencyName';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -252,24 +253,12 @@ function PayrollTreatPartnerInvoice({
                         >
                             {selectedId.length > 0 && (
                                 <HStack gap="1rem">
-                                    <Button
-                                        bgColor="brand.600"
-                                        color="white"
-                                        p=".5rem 1.5rem"
-                                        height="fit-content"
+                                    <ShiftBtn
+                                        text="Approve"
                                         onClick={() => approveInvoiceItems()}
-                                        isLoading={loading}
-                                        borderRadius="0"
-                                        spinner={
-                                            <BeatLoader
-                                                color="white"
-                                                size={10}
-                                            />
-                                        }
-                                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                    >
-                                        Approve
-                                    </Button>
+                                        px="1rem"
+                                        loading={loading}
+                                    />
                                 </HStack>
                             )}
                             <HStack>
@@ -287,21 +276,20 @@ function PayrollTreatPartnerInvoice({
                                     label="Select All"
                                 />
                                 {record !== undefined && (
-                                    <Button
-                                        bgColor="brand.600"
-                                        color="white"
-                                        p=".5rem 1.5rem"
-                                        height="fit-content"
+                                    <ShiftBtn
+                                        text="Download"
+                                        outline
+                                        suffix={
+                                            <Icon as={BsDownload} ml=".5rem" />
+                                        }
+                                        border="1px solid "
+                                        px="1rem"
                                         onClick={onOpens}
-                                        borderRadius="25px"
-                                    >
-                                        Download{' '}
-                                        <Icon as={BsDownload} ml=".5rem" />
-                                    </Button>
+                                    />
                                 )}
                             </HStack>
                         </Flex>
-                        <FilterSearch />
+                        <FilterSearch data={invoiceData} />
                         <Tables tableHead={thead}>
                             <>
                                 {invoiceData?.data?.value?.map(

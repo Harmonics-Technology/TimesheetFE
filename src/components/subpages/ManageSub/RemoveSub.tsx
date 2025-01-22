@@ -220,6 +220,7 @@ export const RemoveSub = ({
                                                     placeholder="10"
                                                     defaultValue=""
                                                     register={register}
+                                                    schema={schema}
                                                     w="120px"
                                                 />
                                                 <HStack

@@ -153,7 +153,7 @@ function TeamInvoices({ invoiceList }: invoiceProps) {
                         )}
                     </Flex>
                 )}
-                <FilterSearch />
+                <FilterSearch data={invoiceList} />
                 <Tables
                     tableHead={
                         sub

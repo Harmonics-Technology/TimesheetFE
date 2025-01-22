@@ -171,6 +171,7 @@ export const AddShiftPreference = ({ isOpen, onClose }: ExportProps) => {
                                     placeholder="Enter shift name"
                                     defaultValue=""
                                     register={register}
+                                    schema={schema}
                                     label="Shift Name"
                                 />
                                 <HStack gap="1rem" w="full">
@@ -215,6 +216,7 @@ export const AddShiftPreference = ({ isOpen, onClose }: ExportProps) => {
                                         label="Duration"
                                         readonly
                                         register={register}
+                                        schema={schema}
                                     />
 
                                     <VStack

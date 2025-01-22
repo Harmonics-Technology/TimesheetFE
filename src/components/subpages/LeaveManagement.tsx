@@ -232,7 +232,10 @@ export const LeaveManagement = ({
                         Download <Icon as={BsDownload} ml=".5rem" />
                     </Button> */}
                 </Flex>
-                <FilterSearch searchOptions="Search by: Name" />
+                <FilterSearch
+                    searchOptions="Search by: Name"
+                    data={leavelist}
+                />
                 <Tables tableHead={thead}>
                     <>
                         {leavelist?.data?.value?.map((x: LeaveView) => (

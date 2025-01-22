@@ -234,6 +234,7 @@ export const NotifocationSettingsPage = ({
                             error={errors.timesheetOverdueReminderDay}
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
 
                         <Box my="0rem">

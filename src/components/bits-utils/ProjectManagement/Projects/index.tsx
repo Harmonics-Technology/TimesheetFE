@@ -21,6 +21,7 @@ import { UserContext } from '@components/context/UserContext';
 import Pagination from '@components/bits-utils/Pagination';
 import { TabMenu } from '../Generics/TabMenu';
 import UpgradePromptModal from '@components/bits-utils/UpgradePromptModal';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 export const ProjectPage = ({
     projects,
@@ -76,13 +77,18 @@ export const ProjectPage = ({
             <Flex justify="flex-end" gap="1rem">
                 <SubSearchComponent />
                 {hasAccess && (
-                    <Button
+                    <ShiftBtn
+                        text="Create New Project"
+                        px="1rem"
+                        w="full"
+                        type="submit"
+                        h="2.5rem"
                         onClick={() =>
                             subType == 'basic' && projectSize >= 2
                                 ? opens()
                                 : onOpen()
                         }
-                        bgColor={
+                        bg={
                             subType == 'basic' && projectSize >= 2
                                 ? 'gray.300'
                                 : 'brand.400'
@@ -92,17 +98,7 @@ export const ProjectPage = ({
                                 ? 'not-allowed'
                                 : 'pointer'
                         }
-                        color="white"
-                        h="2.5rem"
-                        borderRadius=".3rem"
-                        // isDisabled={
-                        //     subType == 'basic' && projectSize >= 2
-                        //         ? true
-                        //         : false
-                        // }
-                    >
-                        Create New Project
-                    </Button>
+                    />
                 )}
             </Flex>
             <Box my="2rem">

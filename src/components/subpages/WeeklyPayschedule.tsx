@@ -151,6 +151,7 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
                                 error={errors.paymentDateDays}
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                                 placeholder={
                                     payday || 'Enter the number of days'
                                 }

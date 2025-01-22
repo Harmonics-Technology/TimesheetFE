@@ -87,6 +87,7 @@ function ForgotPassword() {
                     <VStack w="full" spacing=".7rem">
                         <PrimaryInput<InitiateResetModel>
                             register={register}
+                            schema={schema}
                             name="email"
                             error={errors.email}
                             defaultValue=""

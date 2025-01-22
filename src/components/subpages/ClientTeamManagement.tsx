@@ -283,7 +283,10 @@ function ClientTeamManagement({
                 >
                     +Team Member
                 </Button> */}
-                <FilterSearch searchOptions="Search by: Name, Email, Role, or Status " />
+                <FilterSearch
+                    searchOptions="Search by: Name, Email, Role, or Status "
+                    data={adminList}
+                />
                 <Tables
                     tableHead={[
                         'Name',
@@ -341,6 +344,7 @@ function ClientTeamManagement({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<TeamMemberModel>
                             label="Last Name"
@@ -349,6 +353,7 @@ function ClientTeamManagement({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<TeamMemberModel>
                             label="Email"
@@ -357,6 +362,7 @@ function ClientTeamManagement({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryPhoneInput<TeamMemberModel>
                             label="Phone Number"
@@ -372,6 +378,7 @@ function ClientTeamManagement({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryDate<TeamMemberModel>
                             control={control}
@@ -453,6 +460,7 @@ function ClientTeamManagement({
                                         type="number"
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                     />
                                     <PrimaryInput<TeamMemberModel>
                                         label="Hr/Day"
@@ -462,6 +470,7 @@ function ClientTeamManagement({
                                         defaultValue=""
                                         type="number"
                                         register={register}
+                                        schema={schema}
                                     />
                                     <Box>
                                         <FormLabel
@@ -685,6 +694,7 @@ function ClientTeamManagement({
                                         defaultValue=""
                                         type="number"
                                         register={register}
+                                        schema={schema}
                                     />
                                     <SelectrixBox<TeamMemberModel>
                                         control={control}
@@ -706,6 +716,7 @@ function ClientTeamManagement({
                                         defaultValue=""
                                         type="number"
                                         register={register}
+                                        schema={schema}
                                     />
                                     <PrimaryInput<TeamMemberModel>
                                         label="Hr/Day"
@@ -714,6 +725,7 @@ function ClientTeamManagement({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                     />
                                 </>
                             ) : null}
@@ -725,6 +737,7 @@ function ClientTeamManagement({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -793,6 +806,7 @@ function ClientTeamManagement({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryDate<TeamMemberModel>
                                 control={control}

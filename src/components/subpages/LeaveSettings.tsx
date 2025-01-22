@@ -230,6 +230,7 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                                         placeholder="Enter number of period in months"
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                     />
                                 ) : (
                                     <PrimarySelect<LeaveConfigurationModel>
@@ -239,6 +240,7 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                                         placeholder="3 Months"
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                         options={
                                             <>
                                                 {[

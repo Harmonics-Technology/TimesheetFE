@@ -295,6 +295,7 @@ export const GenerateInvoiceModal = ({
                                 <Box w="30%">
                                     <PrimaryInput<PaymentPartnerInvoiceModel>
                                         register={register}
+                                        schema={schema}
                                         name="rate"
                                         error={errors.rate}
                                         defaultValue="0"

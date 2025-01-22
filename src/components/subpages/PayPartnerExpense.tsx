@@ -126,7 +126,7 @@ function PayPartnerExpense({ listExpenses }: expenseProps) {
                         label="Select All"
                     /> */}
                 </Flex>
-                <FilterSearch />
+                <FilterSearch data={listExpenses} />
                 <Tables
                     tableHead={[
                         'Name',

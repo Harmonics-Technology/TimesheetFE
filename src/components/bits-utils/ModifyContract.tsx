@@ -107,7 +107,7 @@ function modifyContract({ modify, setmodify, clickedItem }: contractProps) {
                     position: 'top-right',
                 });
                 router.replace(router.asPath);
-                reset()
+                reset();
                 setmodify(!modify);
                 return;
             }
@@ -161,6 +161,7 @@ function modifyContract({ modify, setmodify, clickedItem }: contractProps) {
                             placeholder=""
                             defaultValue={clickedItem?.title as string}
                             register={register}
+                            schema={schema}
                             disableLabel={true}
                         />
                         <PrimaryDate<ContractModel>

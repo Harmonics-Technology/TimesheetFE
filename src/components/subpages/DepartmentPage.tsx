@@ -136,6 +136,7 @@ export const DepartmentPage = ({
                 <VStack align="flex-start" gap="2rem" w="30%">
                     <PrimaryInput<DepartmentModel>
                         register={register}
+                        schema={schema}
                         error={errors.name}
                         name="name"
                         label="Department"

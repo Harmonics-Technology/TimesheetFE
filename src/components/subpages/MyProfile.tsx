@@ -456,6 +456,7 @@ function MyProfile({
                                 placeholder=""
                                 defaultValue={user?.firstName as string}
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryInput<UpdateUserModel>
                                 label="Last Name"
@@ -464,6 +465,7 @@ function MyProfile({
                                 placeholder=""
                                 defaultValue={user?.lastName as string}
                                 register={register}
+                                schema={schema}
                             />
                             {/* <PrimaryInput<UpdateUserModel>
                                 label="Preferred Name"
@@ -472,6 +474,7 @@ function MyProfile({
                                 placeholder=""
                                 defaultValue={'Adelowomi'}
                                 register={register}
+schema={schema}
                             /> */}
                             <PrimaryDate<UpdateUserModel>
                                 control={control}
@@ -514,6 +517,7 @@ function MyProfile({
                                 placeholder=""
                                 defaultValue={user?.address as string}
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryPhoneInput<UpdateUserModel>
                                 label="Phone No."
@@ -637,6 +641,7 @@ function MyProfile({
                                     placeholder=""
                                     defaultValue={user?.email as string}
                                     register={register}
+schema={schema}
                                     // disableLabel={true}
                                 />
                                 <Text

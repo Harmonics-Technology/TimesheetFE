@@ -41,7 +41,7 @@ export const ProjectManagementSettings = ({
     const toast = useToast();
     const router = useRouter();
     const [loading, setLoading] = useState<any>({ id: '' });
-   
+
     const newOptions = removeItemsFromArray(options, pm?.data.value);
 
     const onSubmit = async (data: setAsPM) => {
@@ -118,6 +118,7 @@ export const ProjectManagementSettings = ({
                     /> */}
                     <PrimarySelect<setAsPM>
                         register={register}
+                        schema={schema}
                         error={errors.id}
                         name="id"
                         label="Project Manager"

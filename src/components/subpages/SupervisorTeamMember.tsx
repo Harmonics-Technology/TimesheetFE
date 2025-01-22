@@ -293,7 +293,7 @@ function SupervisorTeamMember({
                 >
                     +Team Member
                 </Button> */}
-                <FilterSearch />
+                <FilterSearch data={adminList} />
                 <Tables
                     tableHead={[
                         'Name',
@@ -354,6 +354,7 @@ function SupervisorTeamMember({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<TeamMemberModel>
                             label="Last Name"
@@ -362,6 +363,7 @@ function SupervisorTeamMember({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<TeamMemberModel>
                             label="Email"
@@ -370,6 +372,7 @@ function SupervisorTeamMember({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryPhoneInput<TeamMemberModel>
                             label="Phone Number"
@@ -416,6 +419,7 @@ function SupervisorTeamMember({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                     </Box>
                     <Box w="full">
@@ -447,6 +451,7 @@ function SupervisorTeamMember({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -476,6 +481,7 @@ function SupervisorTeamMember({
                                         type="number"
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                     />
                                     <PrimaryInput<TeamMemberModel>
                                         label="Hr/Day"
@@ -485,6 +491,7 @@ function SupervisorTeamMember({
                                         defaultValue=""
                                         type="number"
                                         register={register}
+                                        schema={schema}
                                     />
                                     <UploadCareWidget
                                         refs={widgetApiB}
@@ -515,6 +522,7 @@ function SupervisorTeamMember({
                                         defaultValue=""
                                         type="number"
                                         register={register}
+                                        schema={schema}
                                     />
                                 </>
                             ) : payroll == 2 ? (
@@ -527,6 +535,7 @@ function SupervisorTeamMember({
                                         defaultValue=""
                                         type="number"
                                         register={register}
+                                        schema={schema}
                                     />
                                     <PrimaryInput<TeamMemberModel>
                                         label="Hr/Day"
@@ -535,6 +544,7 @@ function SupervisorTeamMember({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                     />
                                     <SelectrixBox<TeamMemberModel>
                                         control={control}
@@ -573,6 +583,7 @@ function SupervisorTeamMember({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -679,6 +690,7 @@ function SupervisorTeamMember({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryDate<TeamMemberModel>
                                 control={control}

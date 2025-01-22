@@ -336,6 +336,7 @@ function EditDraft({
                             placeholder=""
                             defaultValue={userProfile?.firstName as string}
                             register={register}
+                            schema={schema}
                         />
                         <PrimaryInput<TeamMemberModel>
                             label="Last Name"
@@ -344,6 +345,7 @@ function EditDraft({
                             placeholder=""
                             defaultValue={userProfile?.lastName as string}
                             register={register}
+                            schema={schema}
                         />
                         <InputBlank
                             label="Email"
@@ -394,6 +396,7 @@ function EditDraft({
                             placeholder=""
                             defaultValue={userProfile?.address as string}
                             register={register}
+                            schema={schema}
                         />
                     </Box>
                     <Box w="full">
@@ -428,6 +431,7 @@ function EditDraft({
                                         ?.jobTitle as string
                                 }
                                 register={register}
+                                schema={schema}
                             />
                             <SelectrixBox<TeamMemberModel>
                                 control={control}
@@ -527,6 +531,7 @@ function EditDraft({
                                         ?.hoursPerDay as unknown as string
                                 }
                                 register={register}
+                                schema={schema}
                             />
 
                             <SelectrixBox<TeamMemberModel>
@@ -619,6 +624,7 @@ function EditDraft({
                                                     ?.ratePerHour as unknown as string
                                             }
                                             register={register}
+                                            schema={schema}
                                         />
 
                                         <Box>
@@ -731,6 +737,7 @@ function EditDraft({
                                                     ?.hstNumber as unknown as string
                                             }
                                             register={register}
+                                            schema={schema}
                                         />
                                     </>
                                 ) : (
@@ -745,6 +752,7 @@ function EditDraft({
                                                     ?.monthlyPayoutRate as unknown as string
                                             }
                                             register={register}
+                                            schema={schema}
                                         />
                                         <SelectrixBox<TeamMemberModel>
                                             control={control}
@@ -772,6 +780,7 @@ function EditDraft({
                                             ?.clientRate as unknown as string
                                     }
                                     register={register}
+                                    schema={schema}
                                 />
                                 <SelectrixBox<TeamMemberModel>
                                     control={control}
@@ -895,6 +904,7 @@ function EditDraft({
                                             ?.numberOfDaysEligible
                                     }
                                     register={register}
+                                    schema={schema}
                                 />
                             ) : null}
                             {/* {(isEligibleForLeave as unknown as string) ==
@@ -909,6 +919,7 @@ function EditDraft({
                                             ?.numberOfHoursEligible
                                     }
                                     register={register}
+schema={schema}
                                 />
                             ) : null} */}
                         </Grid>

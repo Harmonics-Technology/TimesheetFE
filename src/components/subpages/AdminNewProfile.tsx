@@ -181,6 +181,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                                     placeholder=""
                                     defaultValue={''}
                                     register={register}
+                                    schema={schema}
                                 />
                                 <PrimaryInput<UpdateUserModel>
                                     label="Last Name"
@@ -189,6 +190,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                                     placeholder=""
                                     defaultValue={''}
                                     register={register}
+                                    schema={schema}
                                 />
                             </Grid>
                             <PrimaryInput<UpdateUserModel>
@@ -198,6 +200,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                                 placeholder=""
                                 defaultValue={''}
                                 register={register}
+                                schema={schema}
                             />
                             <Grid
                                 gap="1rem"
@@ -232,6 +235,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                                 placeholder=""
                                 defaultValue={''}
                                 register={register}
+                                schema={schema}
                             />
                         </VStack>
                     </Box>
@@ -255,6 +259,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                                     placeholder=""
                                     defaultValue={''}
                                     register={register}
+                                    schema={schema}
                                 />
                                 <PrimaryInput<UpdateUserModel>
                                     label="Contact Person Last Name"
@@ -263,6 +268,7 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                                     placeholder=""
                                     defaultValue={''}
                                     register={register}
+                                    schema={schema}
                                 />
                                 <InputBlank
                                     label="Email"

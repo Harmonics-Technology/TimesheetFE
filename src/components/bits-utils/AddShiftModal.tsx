@@ -110,7 +110,7 @@ export const AddShiftModal = ({
         },
     });
 
-    const newStartDate = moment(data?.start).format("DD/MM/YYYY");
+    const newStartDate = moment(data?.start).format('DD/MM/YYYY');
     // console.log({ data: data?.start, newStartDate });
     const closeModal = () => {
         setData({});
@@ -434,6 +434,7 @@ export const AddShiftModal = ({
                                             placeholder=""
                                             defaultValue=""
                                             register={register}
+                                            schema={schema}
                                         />
                                     </HStack>
                                 </Box>

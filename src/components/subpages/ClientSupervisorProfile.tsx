@@ -102,6 +102,7 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
                         placeholder=""
                         defaultValue={userProfile?.firstName as string}
                         register={register}
+                        schema={schema}
                     />
                     <PrimaryInput<UpdateUserModel>
                         label="Last Name"
@@ -110,6 +111,7 @@ function SupervisorProfile({ userProfile }: SupervisorProfileProps) {
                         placeholder=""
                         defaultValue={userProfile?.lastName as string}
                         register={register}
+                        schema={schema}
                     />
                     <InputBlank
                         label="Email"

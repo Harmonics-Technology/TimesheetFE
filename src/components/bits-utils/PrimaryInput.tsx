@@ -42,6 +42,7 @@ interface FormInputProps<TFormValues extends Record<string, unknown>> {
     readonly?: boolean;
     suffix?: JSX.Element;
     prefix?: JSX.Element;
+    schema?: any;
 }
 export const PrimaryInput = <TFormValues extends Record<string, any>>({
     name,
@@ -65,7 +66,12 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
     readonly = false,
     suffix,
     prefix,
+    schema,
 }: FormInputProps<TFormValues>) => {
+    const fieldDescription = schema?.fields[name]?.describe();
+    const isRequired = fieldDescription?.tests.some(
+        (test: any) => test.name === 'required',
+    );
     return (
         <FormControl
             isInvalid={
@@ -80,7 +86,8 @@ export const PrimaryInput = <TFormValues extends Record<string, any>>({
                     width="fit-content"
                     fontSize={fontSize}
                 >
-                    {label}
+                    {label}{' '}
+                    <span style={{ color: 'red' }}>{isRequired && '*'}</span>
                 </FormLabel>
             )}
             <InputGroup>

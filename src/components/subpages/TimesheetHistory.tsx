@@ -91,6 +91,7 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                 <FilterSearch
                     filterTitle="Timesheet Frequency"
                     hides
+                    data={timeSheets}
                     filter={
                         <Selectrix
                             options={newData}

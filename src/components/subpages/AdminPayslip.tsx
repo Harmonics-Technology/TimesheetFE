@@ -23,6 +23,7 @@ import { Round } from '@components/generics/functions/Round';
 import { getCurrencyName } from '@components/generics/functions/getCurrencyName';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 interface expenseProps {
     payrolls: PaySlipViewPagedCollectionStandardResponse;
@@ -72,36 +73,26 @@ function AdminPayslip({
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex justify="space-between">
-                    <Button
-                        bgColor="brand.600"
-                        color="white"
-                        display={
-                            paymentSchedule == undefined ? 'none' : 'block'
-                        }
-                        fontSize=".8rem"
-                        h="2.5rem"
-                        borderRadius="0"
-                        border="2px solid"
-                        onClick={onOpened}
-                        w={['auto', 'inherit']}
-                        mb="1rem"
-                    >
-                        View Payment Schedule
-                    </Button>
+                    {paymentSchedule != undefined && (
+                        <ShiftBtn
+                            text="View Payment Schedule"
+                            border="1px solid "
+                            px="1rem"
+                            onClick={onOpened}
+                        />
+                    )}
                     {record !== undefined && (
-                        <Button
-                            bgColor="brand.600"
-                            color="white"
-                            p=".5rem 1.5rem"
-                            height="fit-content"
+                        <ShiftBtn
+                            text="Download"
+                            outline
+                            suffix={<Icon as={BsDownload} ml=".5rem" />}
+                            border="1px solid "
+                            px="1rem"
                             onClick={onOpens}
-                            borderRadius="25px"
-                        >
-                            Download <Icon as={BsDownload} ml=".5rem" />
-                        </Button>
+                        />
                     )}
                 </Flex>
-                <FilterSearch hides={true} />
+                <FilterSearch hides={true} data={payrolls} />
                 <Tables tableHead={thead}>
                     <>
                         {payrollsList?.map((x: PaySlipView, i) => (
@@ -133,7 +124,7 @@ function AdminPayslip({
                                                         ?.employeeInformation
                                                         ?.tax,
                                                 ),
-                                                true
+                                            true,
                                         ),
                                     )}`}
                                 />

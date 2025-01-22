@@ -260,6 +260,7 @@ function PaymentPartnerPayroll({
                 {/* )} */}
                 <FilterSearch
                     hides
+                    data={payrollsList}
                     options={newData}
                     filter={
                         <Selectrix

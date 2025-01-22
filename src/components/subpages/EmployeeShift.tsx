@@ -59,7 +59,10 @@ export const EmployeeShift = ({ allShift }: employeeShiftProps) => {
                     Export <Icon as={BsDownload} ml=".5rem" />
                 </Button>
             </Flex>
-            <FilterSearch searchOptions="Search by: Full Name, Job Title, Role, Payroll Type or Status" />
+            <FilterSearch
+                searchOptions="Search by: Full Name, Job Title, Role, Payroll Type or Status"
+                data={allShift}
+            />
             <Tables tableHead={thead}>
                 <>
                     {allShift?.data?.value?.map((x: any) => (

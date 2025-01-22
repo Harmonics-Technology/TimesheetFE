@@ -116,6 +116,7 @@ function RejectInvoiceModal({
                                 defaultValue=""
                                 h="5.5rem"
                                 register={register}
+                                schema={schema}
                             />
                             <Button
                                 isLoading={isSubmitting}

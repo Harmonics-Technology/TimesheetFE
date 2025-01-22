@@ -34,6 +34,7 @@ function FilterSearch({
     filterTitle = 'Filter By',
     noLabel,
     noSearch,
+    data,
 }: {
     hide?: boolean;
     hides?: boolean;
@@ -44,6 +45,7 @@ function FilterSearch({
     filterTitle?: string;
     noLabel?: boolean;
     noSearch?: boolean;
+    data?: any;
 }) {
     const [search, setSearch] = useState('');
     const router = useRouter();
@@ -93,6 +95,7 @@ function FilterSearch({
     function clearfilter() {
         router.replace(router.asPath?.split('?')?.at(0) as string);
     }
+    data = data?.data || data;
 
     return (
         <>
@@ -140,10 +143,18 @@ function FilterSearch({
                                 onChange={(e) => setFilter(e.target.value)}
                                 borderRadius="0"
                                 fontSize=".8rem"
+                                defaultValue={data?.limit}
                             >
                                 <option value="10">10</option>
                                 <option value="20">20</option>
                                 <option value="30">30</option>
+                                <option value="40">40</option>
+                                <option value="50">50</option>
+                                <option value="60">60</option>
+                                <option value="70">70</option>
+                                <option value="80">80</option>
+                                <option value="90">90</option>
+                                <option value="100">100</option>
                             </Select>
 
                             <Text noOfLines={1}>entries per page</Text>

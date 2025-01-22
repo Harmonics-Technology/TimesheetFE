@@ -45,6 +45,7 @@ import { BsFillInfoSquareFill } from 'react-icons/bs';
 import { UserContext } from '@components/context/UserContext';
 import { convertYesNo } from '@components/generics/functions/ConvertStringToBool';
 import moment from 'moment';
+import { ShiftBtn } from '../ShiftBtn';
 
 export const NewTeamMemerOnboardingForm = ({
     isOpen,
@@ -196,6 +197,7 @@ export const NewTeamMemerOnboardingForm = ({
             isEligibleForLeave: false,
             hasRollOverLeave: false,
             hasUtilizeLeaveDaysToDate: false,
+            utilizedLeave: 0,
             role: 'Team Member',
         },
     });
@@ -357,7 +359,6 @@ export const NewTeamMemerOnboardingForm = ({
         data.tax = data.taxType == 'hst' ? hstAmount?.fee || 0 : data.tax;
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
-        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
@@ -419,7 +420,6 @@ export const NewTeamMemerOnboardingForm = ({
         // data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax || 0;
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
-        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         data.dateOfBirth = data.dateOfBirth
             ? data.dateOfBirth
             : moment().format('YYYY-MM-DD');
@@ -477,6 +477,10 @@ export const NewTeamMemerOnboardingForm = ({
         );
     }, [selectedDepartment]);
 
+    useEffect(() => {
+        setValue('clientSubscriptionId', selectedLicense.subscriptionId);
+    }, [selectedLicense]);
+
     const paymentPartnerCurrency = paymentPartner?.find(
         (x) => x.id === watch('paymentPartnerId'),
     )?.currency;
@@ -500,6 +504,7 @@ export const NewTeamMemerOnboardingForm = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <PrimaryInput<TeamMemberModel>
                         label="Last Name"
@@ -508,6 +513,7 @@ export const NewTeamMemerOnboardingForm = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <PrimaryInput<TeamMemberModel>
                         label="Email"
@@ -516,6 +522,7 @@ export const NewTeamMemerOnboardingForm = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                     <PrimaryPhoneInput<TeamMemberModel>
                         label="Phone Number"
@@ -523,6 +530,7 @@ export const NewTeamMemerOnboardingForm = ({
                         error={errors.phoneNumber}
                         placeholder="Phone No."
                         control={control}
+                        schema={schema}
                     />
                     <PrimaryDate<TeamMemberModel>
                         control={control}
@@ -531,6 +539,7 @@ export const NewTeamMemerOnboardingForm = ({
                         error={errors.dateOfBirth}
                         max={new DateObject().subtract(1, 'days')}
                         required={false}
+                        schema={schema}
                     />
                     <PrimaryInput<TeamMemberModel>
                         label="Address"
@@ -539,6 +548,7 @@ export const NewTeamMemerOnboardingForm = ({
                         placeholder=""
                         defaultValue=""
                         register={register}
+                        schema={schema}
                     />
                 </Grid>
                 <Box w="full">
@@ -577,6 +587,7 @@ export const NewTeamMemerOnboardingForm = ({
                             placeholder=""
                             defaultValue=""
                             register={register}
+                            schema={schema}
                         />
                         <Box w="full">
                             <FormLabel
@@ -584,7 +595,8 @@ export const NewTeamMemerOnboardingForm = ({
                                 width="fit-content"
                                 fontSize=".8rem"
                             >
-                                Department
+                                Department{' '}
+                                <span style={{ color: 'red' }}>*</span>
                             </FormLabel>
 
                             <CustomSelectBox
@@ -604,6 +616,7 @@ export const NewTeamMemerOnboardingForm = ({
                         </Box>
                         {/* <PrimarySelect<TeamMemberModel>
                             register={register}
+schema={schema}
                             error={errors.department}
                             name="department"
                             label="Department"
@@ -621,6 +634,7 @@ export const NewTeamMemerOnboardingForm = ({
                         {clientType && (
                             <PrimarySelect<TeamMemberModel>
                                 register={register}
+                                schema={schema}
                                 error={errors.clientId}
                                 name="clientId"
                                 label="Client"
@@ -638,6 +652,7 @@ export const NewTeamMemerOnboardingForm = ({
                         )}
                         <PrimarySelect<TeamMemberModel>
                             register={register}
+                            schema={schema}
                             error={errors.supervisorId}
                             name="supervisorId"
                             label="Supervisor"
@@ -664,6 +679,7 @@ export const NewTeamMemerOnboardingForm = ({
                             label="Start Date"
                             error={errors.startDate}
                             required={false}
+                            schema={schema}
                             // min={new Date()}
                         />
                         <PrimaryDate<TeamMemberModel>
@@ -673,9 +689,11 @@ export const NewTeamMemerOnboardingForm = ({
                             error={errors.endDate}
                             min={new DateObject().add(3, 'days')}
                             required={false}
+                            schema={schema}
                         />
                         <PrimarySelect<TeamMemberModel>
                             register={register}
+                            schema={schema}
                             error={errors.employmentContractType}
                             name="employmentContractType"
                             label="Employment Type"
@@ -692,6 +710,7 @@ export const NewTeamMemerOnboardingForm = ({
                         />
                         <PrimarySelect<TeamMemberModel>
                             register={register}
+                            schema={schema}
                             error={errors.employeeType}
                             name="employeeType"
                             label="Employment Category"
@@ -712,9 +731,11 @@ export const NewTeamMemerOnboardingForm = ({
                             defaultValue=""
                             type="number"
                             register={register}
+                            schema={schema}
                         />
                         <PrimarySelect<TeamMemberModel>
                             register={register}
+                            schema={schema}
                             error={errors.timesheetFrequency}
                             name="timesheetFrequency"
                             label="Timesheet Frequency"
@@ -735,6 +756,7 @@ export const NewTeamMemerOnboardingForm = ({
                             label="Timesheet Start Date"
                             error={errors.timesheetStartDate}
                             required={false}
+                            schema={schema}
                             // min={new Date()}
                         />
                         <LicenseSelection
@@ -743,6 +765,7 @@ export const NewTeamMemerOnboardingForm = ({
                             errors={errors}
                             selectedLicense={selectedLicense}
                             subs={subs}
+                            isRequired={true}
                         />
                     </Grid>
                     <Box mt="1rem">
@@ -765,6 +788,7 @@ export const NewTeamMemerOnboardingForm = ({
                             control={control}
                             error={errors.enableFinancials}
                             defaultValue={'No'}
+                            schema={schema}
                         />
                     </Box>
                     {payData && (payData as unknown as string) == 'Yes' && (
@@ -772,6 +796,7 @@ export const NewTeamMemerOnboardingForm = ({
                             <Box mb="1rem">
                                 <PrimarySelect<TeamMemberModel>
                                     register={register}
+                                    schema={schema}
                                     error={errors.payrollStructure}
                                     name="payrollStructure"
                                     label="Payroll Structure "
@@ -800,6 +825,7 @@ export const NewTeamMemerOnboardingForm = ({
                                 <Box mb="1rem">
                                     <PrimaryInput<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.incorpName}
                                         name="incorpName"
                                         label="Incoporation Name"
@@ -824,6 +850,7 @@ export const NewTeamMemerOnboardingForm = ({
                                             placeholder=""
                                             defaultValue=""
                                             register={register}
+                                            schema={schema}
                                         />
                                     )}
                                     {isIncSelected && (
@@ -835,9 +862,11 @@ export const NewTeamMemerOnboardingForm = ({
                                                 placeholder=""
                                                 defaultValue=""
                                                 register={register}
+                                                schema={schema}
                                             />
                                             <PrimarySelect<TeamMemberModel>
                                                 register={register}
+                                                schema={schema}
                                                 error={errors.rateType}
                                                 name="rateType"
                                                 label="Rate Type"
@@ -860,6 +889,7 @@ export const NewTeamMemerOnboardingForm = ({
                                     )}
                                     <PrimarySelect<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.paymentFrequency}
                                         name="paymentFrequency"
                                         label="Payroll Frequency "
@@ -880,6 +910,7 @@ export const NewTeamMemerOnboardingForm = ({
                                     />
                                     <PrimarySelect<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.currency}
                                         name="currency"
                                         label="Currency"
@@ -909,6 +940,7 @@ export const NewTeamMemerOnboardingForm = ({
                                     />
                                     <PrimarySelect<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.taxType}
                                         name="taxType"
                                         label="Tax %"
@@ -931,11 +963,13 @@ export const NewTeamMemerOnboardingForm = ({
                                             placeholder=""
                                             defaultValue=""
                                             register={register}
+                                            schema={schema}
                                         />
                                     )}
 
                                     <PrimarySelect<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.payrollProcessingType}
                                         name="payrollProcessingType"
                                         label="Payroll Processing"
@@ -957,6 +991,7 @@ export const NewTeamMemerOnboardingForm = ({
                                         <>
                                             <PrimarySelect<TeamMemberModel>
                                                 register={register}
+                                                schema={schema}
                                                 error={errors.paymentPartnerId}
                                                 name="paymentPartnerId"
                                                 label="Choose payment partner"
@@ -977,6 +1012,7 @@ export const NewTeamMemerOnboardingForm = ({
                                             />
                                             <PrimarySelect<TeamMemberModel>
                                                 register={register}
+                                                schema={schema}
                                                 error={
                                                     errors.paymentProcessingFeeType
                                                 }
@@ -1006,6 +1042,7 @@ export const NewTeamMemerOnboardingForm = ({
                                             {watch('paymentPartnerId') && (
                                                 <PrimarySelect<TeamMemberModel>
                                                     register={register}
+                                                    schema={schema}
                                                     error={
                                                         errors.paymentProcessingFee
                                                     }
@@ -1051,6 +1088,7 @@ export const NewTeamMemerOnboardingForm = ({
                                     )}
                                     <PrimarySelect<TeamMemberModel>
                                         register={register}
+                                        schema={schema}
                                         error={errors.invoiceGenerationType}
                                         name="invoiceGenerationType"
                                         label="Payment Type"
@@ -1076,6 +1114,7 @@ export const NewTeamMemerOnboardingForm = ({
                                             defaultValue=""
                                             type="string"
                                             register={register}
+                                            schema={schema}
                                         />
                                     )}
                                 </Grid>
@@ -1116,6 +1155,7 @@ export const NewTeamMemerOnboardingForm = ({
                             control={control}
                             error={errors.isEligibleForLeave}
                             defaultValue={'No'}
+                            schema={schema}
                         />
                     </Box>
                     {(isEligibleForLeave as unknown as string) == 'Yes' && (
@@ -1135,6 +1175,7 @@ export const NewTeamMemerOnboardingForm = ({
                                 placeholder=""
                                 defaultValue=""
                                 register={register}
+schema={schema}
                                 readonly={leaveSettings?.isStandardEligibleDays}
                             /> */}
                                 <PrimaryInput<TeamMemberModel>
@@ -1144,6 +1185,7 @@ export const NewTeamMemerOnboardingForm = ({
                                     placeholder=""
                                     defaultValue=""
                                     register={register}
+                                    schema={schema}
                                     readonly={
                                         leaveSettings?.isStandardEligibleDays
                                     }
@@ -1158,6 +1200,7 @@ export const NewTeamMemerOnboardingForm = ({
                                     control={control}
                                     error={errors.hasRollOverLeave}
                                     defaultValue={'No'}
+                                    schema={schema}
                                 />
                             </Box>
                             {(hasRolledOverLeave as unknown as string) ==
@@ -1177,6 +1220,7 @@ export const NewTeamMemerOnboardingForm = ({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                         type="number"
                                         // readonly={leaveSettings?.isStandardEligibleDays}
                                     />
@@ -1189,6 +1233,7 @@ export const NewTeamMemerOnboardingForm = ({
                                         placeholder=""
                                         defaultValue=""
                                         control={control}
+                                        schema={schema}
                                         // register={register}
                                     />
                                 </Grid>
@@ -1201,6 +1246,7 @@ export const NewTeamMemerOnboardingForm = ({
                                     control={control}
                                     error={errors.hasUtilizeLeaveDaysToDate}
                                     defaultValue={'No'}
+                                    schema={schema}
                                 />
                             </Box>
                             {(hasUtilizeLeaveDaysToDate as unknown as string) ==
@@ -1219,6 +1265,7 @@ export const NewTeamMemerOnboardingForm = ({
                                         placeholder=""
                                         defaultValue=""
                                         register={register}
+                                        schema={schema}
                                         type="number"
                                         suffix={
                                             <InputRightElement right="1rem">
@@ -1241,31 +1288,23 @@ export const NewTeamMemerOnboardingForm = ({
                         my="2rem"
                         w="full"
                     >
-                        <Button
-                            bgColor="gray.500"
-                            color="white"
-                            height="3rem"
-                            fontSize="14px"
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            onClick={() => closeModal()}
-                        >
-                            Close
-                        </Button>
-                        <Button
-                            bgColor="brand.400"
-                            color="white"
-                            height="3rem"
-                            fontSize="14px"
+                        <ShiftBtn
+                            text="Close"
+                            onClick={closeModal}
+                            px="1rem"
+                            bg="gray.500"
+                            w="full"
+                            h="2.8rem"
+                        />
+                        <ShiftBtn
+                            text="Send Invite"
+                            px="1rem"
+                            w="full"
                             type="submit"
-                            isLoading={isSubmitting}
-                            spinner={<BeatLoader color="white" size={10} />}
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        >
-                            <Box pr=".5rem">
-                                <RiMailSendFill />
-                            </Box>
-                            <Box>Send Invite</Box>
-                        </Button>
+                            loading={isSubmitting}
+                            h="2.8rem"
+                            prefix={<Icon as={RiMailSendFill} mr=".5rem" />}
+                        />
                     </Grid>
                 </DrawerFooter>
             </form>

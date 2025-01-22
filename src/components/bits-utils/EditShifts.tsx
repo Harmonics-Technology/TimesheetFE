@@ -129,6 +129,7 @@ export const EditShifts = ({ setShowEdit, showEdit }) => {
                     placeholder="Enter shift name"
                     defaultValue=""
                     register={register}
+                    schema={schema}
                     label="Shift Name"
                 />
                 <HStack gap="1rem" w="full">
@@ -162,6 +163,7 @@ export const EditShifts = ({ setShowEdit, showEdit }) => {
                         label="Duration"
                         // readonly
                         register={register}
+                        schema={schema}
                     />
 
                     <VStack w="full" align="flex-start" spacing="0">

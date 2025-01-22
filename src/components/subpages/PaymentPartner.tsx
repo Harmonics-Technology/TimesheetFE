@@ -208,6 +208,7 @@ function PaymentPartner({
                                     userProfile?.organizationName as string
                                 }
                                 register={register}
+                                schema={schema}
                             />
                             <InputBlank
                                 label="Organisation Email"
@@ -226,6 +227,7 @@ function PaymentPartner({
                                     userProfile?.organizationPhone as string
                                 }
                                 register={register}
+                                schema={schema}
                             />
                             {/* <SelectrixBox<UpdateUserModel>
                                 control={control}
@@ -253,6 +255,7 @@ function PaymentPartner({
                         >
                             <PrimarySelect<UpdateUserModel>
                                 register={register}
+                                schema={schema}
                                 error={errors.currency}
                                 name="currency"
                                 label="Currency"
@@ -288,6 +291,7 @@ function PaymentPartner({
                                     userProfile?.organizationAddress || ''
                                 }
                                 register={register}
+                                schema={schema}
                             />
                         </Grid>
                     </Box>
@@ -312,6 +316,7 @@ function PaymentPartner({
                                 placeholder=""
                                 defaultValue={userProfile?.firstName as string}
                                 register={register}
+                                schema={schema}
                             />
                             <PrimaryInput<UpdateUserModel>
                                 label="Contact Last Name"
@@ -320,6 +325,7 @@ function PaymentPartner({
                                 placeholder=""
                                 defaultValue={userProfile?.lastName as string}
                                 register={register}
+                                schema={schema}
                             />
                             <InputBlank
                                 label="Conatct Email"
@@ -336,6 +342,7 @@ function PaymentPartner({
                                     userProfile?.phoneNumber as string
                                 }
                                 register={register}
+                                schema={schema}
                             />
                         </Grid>
                     </Box>

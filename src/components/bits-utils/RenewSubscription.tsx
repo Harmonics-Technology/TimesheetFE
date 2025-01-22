@@ -137,6 +137,7 @@
 //                                         placeholder=""
 //                                         defaultValue=""
 //                                         register={register}
+schema = { schema };
 //                                     />
 //                                     <Button
 //                                         w="full"

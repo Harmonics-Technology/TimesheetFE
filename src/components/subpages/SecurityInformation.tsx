@@ -152,6 +152,7 @@ export const SecurityInformation = ({
                         <VStack spacing="1.5rem" align="flex-start" w="80%">
                             <PrimaryInput<PasswordReset>
                                 register={register}
+                                schema={schema}
                                 name="oldPassword"
                                 error={errors.oldPassword}
                                 defaultValue=""
@@ -167,6 +168,7 @@ export const SecurityInformation = ({
                             />
                             <PrimaryInput<PasswordReset>
                                 register={register}
+                                schema={schema}
                                 name="newPassword"
                                 error={errors.newPassword}
                                 defaultValue=""
@@ -182,6 +184,7 @@ export const SecurityInformation = ({
                             />
                             <PrimaryInput<PasswordReset>
                                 register={register}
+                                schema={schema}
                                 name="confirmPassword"
                                 error={errors.confirmPassword}
                                 defaultValue=""

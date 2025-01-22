@@ -821,6 +821,7 @@ const TimesheetAdmin = ({
                                                 defaultValue=""
                                                 h="3.5rem"
                                                 register={register}
+                                                schema={schema}
                                             />
                                             <Button
                                                 isLoading={isSubmitting}

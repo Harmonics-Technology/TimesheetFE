@@ -47,6 +47,7 @@ import { CurrencyTag } from '@components/bits-utils/NewUpdates/CurrencyTag';
 import { CUR } from '@components/generics/functions/Naira';
 import calculatePercentage from '@components/generics/functions/calculatePercentage';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -313,32 +314,14 @@ function AdminInvoices({
                                 <HStack gap="1rem">
                                     {(userAccess?.adminCanApprovePayrolls ||
                                         isSuperAdmin) && (
-                                        <Button
-                                            bgColor="brand.400"
-                                            color="white"
-                                            p=".5rem 1.5rem"
-                                            height="fit-content"
-                                            borderRadius="6px"
-                                            fontSize=".8rem"
+                                        <ShiftBtn
+                                            text="Process"
                                             onClick={() =>
-                                                //    selectedId?.employeeInformation
-                                                //         ?.payrollType == 'ONSHORE'
-                                                //         ? onOpened()
-                                                //         :
                                                 checkInvoicesBeforeProcess()
                                             }
-                                            isLoading={loading}
-                                            spinner={
-                                                <BeatLoader
-                                                    color="white"
-                                                    size={10}
-                                                />
-                                            }
-                                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                            isDisabled={selectedId.length < 1}
-                                        >
-                                            Process
-                                        </Button>
+                                            px="1rem"
+                                            loading={loading}
+                                        />
                                     )}
                                 </HStack>
                             ) : (
@@ -371,22 +354,20 @@ function AdminInvoices({
                                     />
                                 )}
                                 {record !== undefined && (
-                                    <Button
-                                        bgColor="brand.600"
-                                        color="white"
-                                        p=".5rem 1.5rem"
-                                        height="fit-content"
+                                    <ShiftBtn
+                                        text="Download"
+                                        outline
+                                        suffix={
+                                            <Icon as={BsDownload} ml=".5rem" />
+                                        }
+                                        border="1px solid "
+                                        px="1rem"
                                         onClick={onOpens}
-                                        borderRadius="6px"
-                                        fontSize=".8rem"
-                                    >
-                                        Download{' '}
-                                        <Icon as={BsDownload} ml=".5rem" />
-                                    </Button>
+                                    />
                                 )}
                             </HStack>
                         </Flex>
-                        <FilterSearch />
+                        <FilterSearch data={invoiceData} />
                         <Tables tableHead={thead}>
                             <>
                                 {invoiceData?.data?.value?.map(

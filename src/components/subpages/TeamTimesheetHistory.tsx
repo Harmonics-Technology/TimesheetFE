@@ -56,7 +56,7 @@ function TeamTimesheetHistory({
                         Export <Icon as={BsDownload} ml=".5rem" />
                     </Button>
                 </Flex>
-                <FilterSearch />
+                <FilterSearch data={timeSheets} />
                 <Tables
                     tableHead={[
                         'Name',

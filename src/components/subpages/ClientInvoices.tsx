@@ -39,6 +39,7 @@ import { UserContext } from '@components/context/UserContext';
 import NoAccess from '@components/bits-utils/NoAccess';
 import { CUR } from '@components/generics/functions/Naira';
 import { Round } from '@components/generics/functions/Round';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 interface adminProps {
     invoiceData: InvoiceViewPagedCollectionStandardResponse;
@@ -172,25 +173,16 @@ function ClientInvoices({
                         <Flex justify="space-between" my="1rem">
                             <HStack gap="1rem">
                                 {selectedId.length > 0 && (
-                                    <Button
-                                        bgColor="brand.600"
-                                        color="white"
-                                        p=".5rem 1.5rem"
-                                        height="fit-content"
-                                        onClick={() => approveInvoiceItems()}
-                                        isLoading={loading}
-                                        spinner={
-                                            <BeatLoader
-                                                color="white"
-                                                size={10}
-                                            />
+                                    <ShiftBtn
+                                        text={
+                                            offshore || payment
+                                                ? 'Approve'
+                                                : 'Mark as Paid'
                                         }
-                                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                    >
-                                        {offshore || payment
-                                            ? 'Approve'
-                                            : 'Mark as Paid'}
-                                    </Button>
+                                        onClick={() => approveInvoiceItems()}
+                                        px="1rem"
+                                        loading={loading}
+                                    />
                                 )}
                             </HStack>
                             {/* <Checkbox
@@ -204,21 +196,20 @@ function ClientInvoices({
         /> */}
                             <HStack>
                                 {record !== undefined && (
-                                    <Button
-                                        bgColor="brand.600"
-                                        color="white"
-                                        p=".5rem 1.5rem"
-                                        height="fit-content"
+                                    <ShiftBtn
+                                        text="Download"
+                                        outline
+                                        suffix={
+                                            <Icon as={BsDownload} ml=".5rem" />
+                                        }
+                                        border="1px solid "
+                                        px="1rem"
                                         onClick={onOpens}
-                                        borderRadius="25px"
-                                    >
-                                        Download{' '}
-                                        <Icon as={BsDownload} ml=".5rem" />
-                                    </Button>
+                                    />
                                 )}
                             </HStack>
                         </Flex>
-                        <FilterSearch />
+                        <FilterSearch data={invoiceData} />
                         <Tables tableHead={thead}>
                             <>
                                 {invoiceData?.data?.value?.map(
