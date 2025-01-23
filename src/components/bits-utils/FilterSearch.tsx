@@ -329,6 +329,7 @@ function FilterSearch({
                                         color="brand.200"
                                         mb="0"
                                         onClick={filterByDate}
+                                        w="full"
                                     >
                                         Apply filter
                                     </Text>
@@ -339,6 +340,7 @@ function FilterSearch({
                                         color="brand.200"
                                         mb="0"
                                         onClick={clearfilter}
+                                        w="full"
                                     >
                                         Clear filter
                                     </Text>
