@@ -481,7 +481,7 @@ export const SingleTask = ({
                                 <ProgressSlider
                                     sliderValue={sliderValue}
                                     setSliderValue={setSliderValue}
-                                    leftText="Percntage of Completion"
+                                    leftText="Percentage of Completion"
                                     showProgress
                                     rightText={`${Round(sliderValue)}%`}
                                     // readonly={tasks?.value?.length < 1}

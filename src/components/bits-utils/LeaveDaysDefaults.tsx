@@ -86,7 +86,7 @@ export const LeaveDaysDefaults = ({ leaveConfiguration }: leavesProps) => {
         <form>
             <VStack spacing="1rem" align="flex-start">
                 <PrimaryInput<LeaveConfigurationModel>
-                    label="Standard Leave Eligible Days"
+                    label="Standard Leave Eligible Hours"
                     name="eligibleLeaveDays"
                     error={errors.eligibleLeaveDays}
                     placeholder=""

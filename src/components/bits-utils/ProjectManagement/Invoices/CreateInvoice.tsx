@@ -282,13 +282,16 @@ export const CreateInvoice = ({
         };
 
         if ('quantity' in updates) {
-            updatedItems[index].quantity = Round(updatedItems[index].quantity);
+            updatedItems[index].quantity = Round(
+                Number(updatedItems[index].quantity),
+            );
         }
 
         // Recalculate the amount if quantity or cost changes
         if ('quantity' in updates || 'cost' in updates) {
             updatedItems[index].totalCost =
-                Round(updatedItems[index].quantity) * updatedItems[index].cost;
+                Round(Number(updatedItems[index].quantity)) *
+                Number(updatedItems[index].cost);
         }
 
         setLineItems(updatedItems);
@@ -565,14 +568,13 @@ export const CreateInvoice = ({
                                         <Td w="15%" paddingInlineStart="1rem">
                                             <InputBlank
                                                 type="number"
-                                                value={Round(item.quantity)}
+                                                value={item.quantity}
                                                 placeholder="0"
                                                 variant="outline"
                                                 onChange={(e) =>
                                                     handleFieldChange(index, {
-                                                        quantity: Round(
+                                                        quantity:
                                                             e.target.value,
-                                                        ),
                                                     })
                                                 }
                                             />

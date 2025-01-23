@@ -504,7 +504,7 @@ schema={schema}
                     />
 
                     <DrawerFooter my="2rem" p="0" w="full">
-                        <Flex justify="space-between" w="full">
+                        <Flex justify="space-between" w="full gap='2rem">
                             <ShiftBtn
                                 text="Cancel"
                                 onClick={onClose}

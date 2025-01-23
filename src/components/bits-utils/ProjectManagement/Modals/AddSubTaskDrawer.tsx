@@ -33,6 +33,7 @@ import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 import moment from 'moment';
 import { useRouter } from 'next/router';
 import getBusinessDateCount from '@components/bits-utils/GetBusinessDays';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -349,29 +350,23 @@ export const AddSubTaskDrawer = ({
                     />
 
                     <DrawerFooter my="2rem" p="0" w="full">
-                        <Flex justify="space-between" w="full">
-                            <Button
-                                bgColor="#FF5B79"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                                onClick={() => closeModal()}
-                            >
-                                Cancel
-                            </Button>
-                            <Button
-                                bgColor="brand.400"
-                                color="white"
-                                height="3rem"
-                                fontSize="14px"
+                        <Flex justify="space-between" w="full" gap="2rem">
+                            <ShiftBtn
+                                text="Cancel"
+                                onClick={closeModal}
+                                px="1rem"
+                                bg="gray.500"
+                                w="full"
+                                h="2.8rem"
+                            />
+                            <ShiftBtn
+                                text="Save"
+                                px="1rem"
+                                w="full"
                                 type="submit"
-                                isLoading={isSubmitting}
-                                spinner={<BeatLoader color="white" size={10} />}
-                                boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            >
-                                Save
-                            </Button>
+                                loading={isSubmitting}
+                                h="2.8rem"
+                            />
                         </Flex>
                     </DrawerFooter>
                 </VStack>
