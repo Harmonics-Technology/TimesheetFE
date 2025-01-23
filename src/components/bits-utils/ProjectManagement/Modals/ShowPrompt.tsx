@@ -12,6 +12,7 @@ import {
     useToast,
 } from '@chakra-ui/react';
 import { ProgressSlider } from '@components/bits-utils/ProgressSlider';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import { Round } from '@components/generics/functions/Round';
 import moment from 'moment';
 import { useRouter } from 'next/router';
@@ -143,46 +144,24 @@ export const ShowPrompt = ({
                         )}
                         {!isProgress ? (
                             <HStack px=".8rem" spacing={4} w="full">
-                                <Button
-                                    variant="outline"
-                                    height="2.6rem"
-                                    width="full"
-                                    borderColor="black"
-                                    // bgColor="black"
-                                    // _hover={{
-                                    //   bgColor: 'white',
-                                    //   color: 'black',
-                                    //   border: '1px solid',
-                                    //   borderColor: 'black',
-                                    // }}
-                                    onClick={() => {
-                                        onClose();
-                                    }}
-                                >
-                                    No
-                                </Button>
-                                <Button
-                                    variant="solid"
-                                    height="2.6rem"
-                                    width="full"
-                                    bgColor="brand.400"
-                                    color="white"
-                                    _hover={{
-                                        bgColor: 'white',
-                                        color: 'brand.400',
-                                        border: '1px solid',
-                                        borderColor: 'brand.400',
-                                    }}
-                                    isLoading={loading}
-                                    spinner={
-                                        <BeatLoader color="white" size={10} />
-                                    }
+                                <ShiftBtn
+                                    text="No"
+                                    onClick={onClose}
+                                    px="1rem"
+                                    bg="gray.500"
+                                    w="full"
+                                    h="2.8rem"
+                                />
+                                <ShiftBtn
+                                    text="Yes"
+                                    px="1rem"
+                                    w="full"
+                                    loading={loading}
+                                    h="2.8rem"
                                     onClick={() => {
                                         onSubmit();
                                     }}
-                                >
-                                    Yes
-                                </Button>
+                                />
                             </HStack>
                         ) : (
                             <Button

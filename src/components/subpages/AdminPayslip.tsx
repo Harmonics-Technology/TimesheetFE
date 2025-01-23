@@ -72,7 +72,7 @@ function AdminPayslip({
                 padding="1.5rem"
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
-                <Flex justify="space-between">
+                <Flex justify="space-between" mb="1rem">
                     {paymentSchedule != undefined && (
                         <ShiftBtn
                             text="View Payment Schedule"

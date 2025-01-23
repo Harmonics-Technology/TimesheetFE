@@ -39,6 +39,7 @@ import * as yup from 'yup';
 import moment from 'moment';
 import InputBlank from '@components/bits-utils/InputBlank';
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -343,43 +344,25 @@ const UpdateTaskModal = ({
                                 w="full"
                                 justifyContent="space-between"
                             >
-                                <Button
-                                    borderRadius="5px"
-                                    height="2.6rem"
-                                    width="70px"
-                                    color="#ffffff"
-                                    bg="#FF5B79"
-                                    fontWeight={500}
-                                    onClick={() => {
-                                        onClose();
-                                    }}
-                                >
-                                    Cancel
-                                </Button>
-                                <Button
-                                    variant="solid"
-                                    height="2.6rem"
-                                    width="75px"
-                                    bgColor="brand.400"
-                                    color="white"
-                                    borderRadius="5px"
-                                    fontWeight={500}
-                                    _hover={{
-                                        bgColor: 'white',
-                                        color: 'brand.400',
-                                        border: '1px solid',
-                                        borderColor: 'brand.400',
-                                    }}
-                                    isLoading={loading}
-                                    spinner={
-                                        <BeatLoader color="white" size={10} />
-                                    }
+                                <ShiftBtn
+                                    text="Cancel"
+                                    onClick={onClose}
+                                    px="1rem"
+                                    bg="gray.500"
+                                    w="full"
+                                    h="2.8rem"
+                                />
+                                <ShiftBtn
+                                    text="Update"
+                                    px="1rem"
+                                    w="full"
+                                    type="submit"
+                                    loading={isLoading}
+                                    h="2.8rem"
                                     onClick={() => {
                                         onSubmit();
                                     }}
-                                >
-                                    Update
-                                </Button>
+                                />
                             </HStack>
                         </Stack>
                     </Box>
