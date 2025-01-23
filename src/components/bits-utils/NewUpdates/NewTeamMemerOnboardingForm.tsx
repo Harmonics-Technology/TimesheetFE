@@ -478,7 +478,7 @@ export const NewTeamMemerOnboardingForm = ({
     }, [selectedDepartment]);
 
     useEffect(() => {
-        setValue('clientSubscriptionId', selectedLicense.subscriptionId);
+        setValue('clientSubscriptionId', selectedLicense?.subscriptionId);
     }, [selectedLicense]);
 
     const paymentPartnerCurrency = paymentPartner?.find(

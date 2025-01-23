@@ -2,6 +2,7 @@ import {
     Box,
     Button,
     Flex,
+    FormLabel,
     HStack,
     Modal,
     ModalBody,
@@ -11,6 +12,7 @@ import {
     Text,
     useToast,
 } from '@chakra-ui/react';
+import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generics/CustomSelectBox';
 import { SelectBlank } from '@components/bits-utils/SelectBlank';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -24,15 +26,18 @@ export const AddTeamMemberModal = ({
     users,
     training,
 }) => {
-    const [userId, setUserId] = useState();
     const toast = useToast();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<any>([]);
+    const selectUser = (user) => {
+        setSelectedUser(user);
+    };
     const addUser = async () => {
         setLoading(true);
         try {
             const result = await TrainingService.assignNewUser(
-                userId,
+                selectedUser?.id,
                 trainingId,
             );
             if (result.status) {
@@ -64,6 +69,15 @@ export const AddTeamMemberModal = ({
             });
         }
     };
+
+    const filteredUsers = users?.value
+        ?.filter((x) => x?.isActive)
+        ?.filter(
+            (user) =>
+                !training?.assignees?.some(
+                    (assignee) => assignee.userId === user.id,
+                ),
+        );
     return (
         <Modal
             isOpen={isOpen}
@@ -99,23 +113,27 @@ export const AddTeamMemberModal = ({
 
                 <ModalBody>
                     <Box maxH="77vh" overflowY="auto" px={5}>
-                        <SelectBlank
-                            label="Team Members"
-                            onChange={(e) => setUserId(e.target.value)}
-                            placeholder="Select Team Member"
-                            options={users?.value
-                                ?.filter((x) => x?.isActive)
-                                ?.filter(
-                                    (user) =>
-                                        !training?.assignees?.some(
-                                            (assignee) =>
-                                                assignee.userId === user.id,
-                                        ),
-                                )
-                                .map((x: UserView) => (
-                                    <option value={x.id}>{x.fullName}</option>
-                                ))}
-                        />
+                        <Box w="full">
+                            <FormLabel
+                                textTransform="capitalize"
+                                width="fit-content"
+                                fontSize=".8rem"
+                            >
+                                Team Members
+                            </FormLabel>
+                            <CustomSelectBox
+                                data={filteredUsers}
+                                updateFunction={selectUser}
+                                items={selectedUser}
+                                customKeys={{ key: 'id', label: 'fullName' }}
+                                checkbox={false}
+                                id="team members"
+                                removeFn={void 0}
+                                searchable
+                                single
+                            />
+                        </Box>
+
                         <HStack spacing={4} w="full" my="42px">
                             <Button
                                 variant="solid"

@@ -80,7 +80,7 @@ export const ProjectPage = ({
                     <ShiftBtn
                         text="Create New Project"
                         px="1rem"
-                        w="full"
+                        w="fit-content"
                         type="submit"
                         h="2.5rem"
                         onClick={() =>

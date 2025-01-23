@@ -83,7 +83,7 @@ function AdminPayslip({
                     )}
                     {record !== undefined && (
                         <ShiftBtn
-                            text="Download"
+                            text="Export"
                             outline
                             suffix={<Icon as={BsDownload} ml=".5rem" />}
                             border="1px solid "

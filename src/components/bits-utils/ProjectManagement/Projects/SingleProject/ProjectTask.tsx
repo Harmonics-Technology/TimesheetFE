@@ -145,7 +145,7 @@ export const ProjectTask = ({
     const checkPossibleDeletion = () => {
         if (data?.raw?.createdByUserId != user?.id) {
             toast({
-                title: 'You do not have the permission to to delete this task. Kindly contact your admin',
+                title: 'You do not have the permission to delete this task. Kindly contact your admin',
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',

@@ -351,7 +351,7 @@ export const SingleTask = ({
     const checkPossibleDeletion = () => {
         if (task?.createdByUserId != user?.id && user?.role !== 'Super Admin') {
             toast({
-                title: 'You do not have the permission to to delete this sub task. Kindly contact your admin',
+                title: 'You do not have the permission to delete this sub task. Kindly contact your admin',
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
