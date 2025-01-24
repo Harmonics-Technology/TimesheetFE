@@ -30,6 +30,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { ExportReportModal } from '@components/bits-utils/ExportReportModal';
 import { BsDownload } from 'react-icons/bs';
 import dynamic from 'next/dynamic';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 const Selectrix = dynamic<any>(() => import('react-selectrix'), {
     ssr: false,
 });
@@ -76,17 +77,13 @@ function TimesheetHistory({ timeSheets }: adminProps) {
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex justify="flex-end" mb="1rem">
-                    <Button
-                        bgColor="brand.600"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
-                        // boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
+                    <ShiftBtn
+                        text="Export"
                         onClick={onOpen}
-                        borderRadius="25px"
-                    >
-                        Export <Icon as={BsDownload} ml=".5rem" />
-                    </Button>
+                        px="1rem"
+                        suffix={<Icon as={BsDownload} ml=".5rem" />}
+                        outline
+                    />
                 </Flex>
                 <FilterSearch
                     filterTitle="Timesheet Frequency"

@@ -70,6 +70,11 @@ function Login() {
                 data,
             )) as UserViewStandardResponse;
             if (result.status) {
+                const user = result.data;
+                OpenAPI.TOKEN = user?.token as string;
+                const licenseData = await UserService.getClientSubScriptions(
+                    user?.superAdminId as string,
+                );
                 if (rememberMe) {
                     Cookies.set(
                         'details',
@@ -83,7 +88,7 @@ function Login() {
                     Cookies.remove('details');
                 }
 
-                const user = result.data;
+                Cookies.set('license', JSON.stringify(licenseData?.data));
 
                 const strippedData = {
                     clientSubscriptionId: user?.clientSubscriptionId,
@@ -120,7 +125,6 @@ function Login() {
                     Cookies.set('token', user.token as string, {
                         expires: 1,
                     });
-                OpenAPI.TOKEN = result?.data?.token as string;
 
                 if (user?.twoFactorEnabled) {
                     router.push('/login/twofalogin');

@@ -183,7 +183,7 @@ const PaymentScheduleModal = ({ isOpen, onClose, paymentSchedule }: Props) => {
                             color="white"
                             onClick={exportPDF}
                         >
-                            Download
+                            Export
                         </Button>
                     </Flex>
                 </ModalBody>

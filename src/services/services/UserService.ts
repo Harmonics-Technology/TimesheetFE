@@ -902,6 +902,26 @@ export class UserService {
     }
 
     /**
+     * @param userId
+     * @param subscriptionId
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static resumeSubscription(
+        userId?: string,
+        subscriptionId?: string,
+    ): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/subscription/resume',
+            query: {
+                userId: userId,
+                subscriptionId: subscriptionId,
+            },
+        });
+    }
+
+    /**
      * @param requestBody
      * @returns ClientSubscriptionResponseViewModelStandardResponse Success
      * @throws ApiError

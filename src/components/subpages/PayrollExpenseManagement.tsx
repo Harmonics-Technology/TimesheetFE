@@ -250,7 +250,6 @@ function PayrollExpenseManagement({
                                 onClick={() => approveExpenseItems()}
                                 loading={loading}
                                 px="1rem"
-                                outline
                             />
                         )}
                     </HStack>
@@ -263,16 +262,13 @@ function PayrollExpenseManagement({
                             onChange={() => toggleSelected('', true)}
                             label="Select All"
                         />
-                        <Button
-                            bgColor="brand.600"
-                            color="white"
-                            p=".5rem 1.5rem"
-                            height="fit-content"
+                        <ShiftBtn
+                            text="Export"
                             onClick={onOpens}
-                            borderRadius="25px"
-                        >
-                            Download <Icon as={BsDownload} ml=".5rem" />
-                        </Button>
+                            px="1rem"
+                            suffix={<Icon as={BsDownload} ml=".5rem" />}
+                            outline
+                        />
                     </HStack>
                 </Flex>
                 <FilterSearch data={expenses} />

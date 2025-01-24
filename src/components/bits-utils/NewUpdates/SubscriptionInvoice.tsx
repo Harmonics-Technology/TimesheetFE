@@ -114,7 +114,7 @@ export const SubscriptionInvoice = ({ isOpen, onClose, data }: Props) => {
                                     //     bgColor: shadeColor('#2eafa3', 0.8),
                                     // }}
                                 >
-                                    Download Invoice
+                                    Export Invoice
                                 </Button>
                                 <Circle onClick={onClose} cursor="pointer">
                                     <AiOutlineClose />

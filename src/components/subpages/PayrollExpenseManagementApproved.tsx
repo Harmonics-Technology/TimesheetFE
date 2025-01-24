@@ -233,7 +233,6 @@ function PayrollExpenseManagementApproved({
                                 text="Generate Invoice"
                                 onClick={() => generateInvoice()}
                                 px="1rem"
-                                outline
                                 loading={loading}
                             />
                         )}
@@ -249,16 +248,13 @@ function PayrollExpenseManagementApproved({
                         label="Select All"
                     /> */}
                     <HStack>
-                        <Button
-                            bgColor="brand.600"
-                            color="white"
-                            p=".5rem 1.5rem"
-                            height="fit-content"
+                        <ShiftBtn
+                            text="Export"
                             onClick={onOpens}
-                            borderRadius="25px"
-                        >
-                            Download <Icon as={BsDownload} ml=".5rem" />
-                        </Button>
+                            px="1rem"
+                            suffix={<Icon as={BsDownload} ml=".5rem" />}
+                            outline
+                        />
                     </HStack>
                 </Flex>
                 <FilterSearch data={expenses} />

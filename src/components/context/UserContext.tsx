@@ -11,8 +11,10 @@ export const UserProvider = ({ children }: { children: any }) => {
     let activeSub = true;
     let accessControls;
     let subDetails;
+    let licenseData;
     const users = Cookies.get('user') as unknown as string;
     const subs = Cookies.get('subDetails') as unknown as string;
+    const licenses = Cookies.get('license') as unknown as string;
     const isDev = process.env.NEXT_PUBLIC_ENV == 'development';
     // console.log({ isDev });
     if (users !== undefined) {
@@ -38,6 +40,9 @@ export const UserProvider = ({ children }: { children: any }) => {
                 ? true
                 : false;
     }
+    if (licenses != undefined) {
+        licenseData = JSON.parse(licenses);
+    }
 
     const { isOpen, onOpen: opens, onClose } = useDisclosure();
 
@@ -51,6 +56,7 @@ export const UserProvider = ({ children }: { children: any }) => {
                     accessControls,
                     opens,
                     subDetails,
+                    licenseData,
                 }}
             >
                 {children}

@@ -110,7 +110,7 @@ export const PayslipModal = ({ isOpen, onClose, paySlip }: Props) => {
                                     color: 'white',
                                 }}
                             >
-                                Download
+                                Export
                             </Button>
                         </Flex>
                         <PDFExport

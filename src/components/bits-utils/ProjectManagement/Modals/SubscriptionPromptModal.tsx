@@ -23,16 +23,19 @@ type Props = {
     isOpen?: any;
     onClose?: any;
     isAdminAllowed: boolean;
+    expiredSub: any;
 };
 
 export const SubscriptionPromptModal = ({
     isOpen,
     onClose,
     isAdminAllowed,
+    expiredSub,
 }: Props) => {
     const router = useRouter();
     const { user } = useContext(UserContext);
     const role = user?.role?.replaceAll(' ', '');
+
     return (
         <>
             <Modal
@@ -101,10 +104,19 @@ export const SubscriptionPromptModal = ({
                                     color="#696969"
                                     textAlign="center"
                                 >
-                                    It looks like your subscription is currently
-                                    inactive. You have 20 licenses assigned. You
-                                    can reactivate your subscription by clicking
-                                    on the button below
+                                    It looks like your{' '}
+                                    {expiredSub
+                                        ?.map((x) => x?.subscriptionType)
+                                        ?.join(',')}{' '}
+                                    subscription is currently inactive. You have{' '}
+                                    {expiredSub
+                                        ?.map(
+                                            (x) =>
+                                                `${x?.noOfLicenceUsed} ${x?.subscriptionType}`,
+                                        )
+                                        .join(',')}{' '}
+                                    licenses assigned. You can reactivate your
+                                    subscription by clicking on the button below
                                 </Text>
                                 <Button
                                     display="flex"

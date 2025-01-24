@@ -333,7 +333,7 @@ export function TableInvoiceSub({ url }: { url: any }) {
                 {loading ? (
                     <Spinner size="sm" />
                 ) : (
-                    `Download Invoice${(<AiOutlineDownload />)}`
+                    `Export Invoice${(<AiOutlineDownload />)}`
                 )}
             </Box>
         </td>

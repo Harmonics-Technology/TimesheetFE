@@ -2,19 +2,19 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { ProjectTaskView } from './ProjectTaskView';
-import type { ProjectView } from './ProjectView';
-import type { StrippedUserView } from './StrippedUserView';
+import type { StrippedProjectAttachmentView } from './StrippedProjectAttachmentView';
+import type { StrippedTaskAttachmentView } from './StrippedTaskAttachmentView';
+import type { StrippedUserAttachmentView } from './StrippedUserAttachmentView';
 
 export type AttachmentView = {
     id?: string;
     projectId?: string | null;
-    project?: ProjectView;
+    project?: StrippedProjectAttachmentView;
     projectTaskId?: string | null;
-    projectTask?: ProjectTaskView;
+    projectTask?: StrippedTaskAttachmentView;
     fileUrl?: string | null;
     createdByUserId?: string;
-    createdByUser?: StrippedUserView;
+    createdByUser?: StrippedUserAttachmentView;
     title?: string | null;
     extension?: string | null;
     fileSize?: string | null;

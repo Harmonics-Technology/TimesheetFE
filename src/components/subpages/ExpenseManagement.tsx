@@ -49,6 +49,7 @@ import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import { DateObject } from 'react-multi-date-picker';
 import { UserContext } from '@components/context/UserContext';
 import { FaEllipsisH } from 'react-icons/fa';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 const schema = yup.object().shape({
     description: yup.string().required(),
@@ -121,17 +122,7 @@ function ExpenseManagement({ expenses, team, expenseType }: expenseProps) {
                 boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
             >
                 <Flex gap="1rem" display={role == 'client' ? 'none' : 'flex'}>
-                    <Button
-                        bgColor="brand.400"
-                        color="white"
-                        p=".5rem 1.5rem"
-                        height="fit-content"
-                        boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        onClick={onOpen}
-                        mb="1rem"
-                    >
-                        +Expense
-                    </Button>
+                    <ShiftBtn text="Add Expense" onClick={onOpen} />
                     {/* <Button
                         bgColor="brand.600"
                         color="white"

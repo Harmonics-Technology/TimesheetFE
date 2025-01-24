@@ -59,7 +59,7 @@ export const ScheduleTable = ({
                     color="white"
                     onClick={exportPDF}
                 >
-                    Download
+                    Export
                 </Button>
             </Flex>
         </Box>

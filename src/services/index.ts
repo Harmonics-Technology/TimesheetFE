@@ -227,7 +227,10 @@ export type { ShiftViewListStandardResponse } from './models/ShiftViewListStanda
 export type { Status } from './models/Status';
 export type { StrippedProjectAssignee } from './models/StrippedProjectAssignee';
 export type { StrippedProjectAssigneeStandardResponse } from './models/StrippedProjectAssigneeStandardResponse';
+export type { StrippedProjectAttachmentView } from './models/StrippedProjectAttachmentView';
 export type { StrippedProjectManager } from './models/StrippedProjectManager';
+export type { StrippedTaskAttachmentView } from './models/StrippedTaskAttachmentView';
+export type { StrippedUserAttachmentView } from './models/StrippedUserAttachmentView';
 export type { StrippedUserView } from './models/StrippedUserView';
 export type { Subscription } from './models/Subscription';
 export type { SubscriptionClientDetail } from './models/SubscriptionClientDetail';

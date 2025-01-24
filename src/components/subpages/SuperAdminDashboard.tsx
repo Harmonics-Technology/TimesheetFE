@@ -58,7 +58,7 @@ interface DashboardProps {
 }
 
 function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
-    const { user, subType, activeSub } = useContext(UserContext);
+    const { user, subType, activeSub, licenseData } = useContext(UserContext);
     const role = user?.role.replaceAll(' ', '');
     const [openSubInfo, setOpenSubInfo] = useState(false);
     const triggerSubInfo = () => setOpenSubInfo(!openSubInfo);
@@ -103,7 +103,6 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
         try {
             const res = await DashboardService.getAdminMetrics(superAdminId);
             if (res.status) {
-                setOpenSubInfo(true);
                 setDashData(res?.data as SuperAdminDashboardView);
                 setLoading(false);
                 return;
@@ -119,13 +118,18 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
         }
     };
 
+    const expiredSub = licenseData?.filter(
+        (x) => x?.subscriptionStatus == false,
+    );
+
     useEffect(() => {
+        if (expiredSub?.length > 0) {
+            setOpenSubInfo(true);
+        }
         if (superAdminId) {
             fetchDashboardData();
         }
     }, []);
-
-    // console.log({ dashData });
 
     // handleCatchErrors(error);
 
@@ -746,6 +750,7 @@ function SuperAdminDashboard({ isSuperAdmin }: DashboardProps) {
                     isOpen={openSubInfo}
                     onClose={triggerSubInfo}
                     isAdminAllowed={activeSub}
+                    expiredSub={expiredSub}
                 />
             )}
         </Box>
