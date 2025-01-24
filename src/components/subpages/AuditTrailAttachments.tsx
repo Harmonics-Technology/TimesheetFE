@@ -288,7 +288,7 @@ export const AuditTrailAttachments = ({
                                                     }
                                                     src={
                                                         x?.createdByUser
-                                                            ?.profilePicture as string
+                                                            ?.fullName as string
                                                     }
                                                     bgColor="gray.300"
                                                     color="white"
