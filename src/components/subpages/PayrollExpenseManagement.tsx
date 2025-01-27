@@ -268,6 +268,7 @@ function PayrollExpenseManagement({
                             px="1rem"
                             suffix={<Icon as={BsDownload} ml=".5rem" />}
                             outline
+                            border="1px solid"
                         />
                     </HStack>
                 </Flex>

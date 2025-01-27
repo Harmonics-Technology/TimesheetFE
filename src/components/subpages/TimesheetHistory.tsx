@@ -78,12 +78,12 @@ function TimesheetHistory({ timeSheets }: adminProps) {
             >
                 <Flex justify="flex-end" mb="1rem">
                     <ShiftBtn
-                    
                         text="Export"
                         onClick={onOpen}
                         px="1rem"
                         suffix={<Icon as={BsDownload} ml=".5rem" />}
                         outline
+                        border="1px solid"
                     />
                 </Flex>
                 <FilterSearch
