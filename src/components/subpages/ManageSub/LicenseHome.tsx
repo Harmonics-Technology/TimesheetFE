@@ -90,7 +90,7 @@ export const LicenseHome = ({
         onInvoiceOpen();
     };
 
-    // console.log({ data });
+    console.log({ data });
 
     return (
         <>

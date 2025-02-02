@@ -18,6 +18,7 @@ import { LeaveConfigurationView } from 'src/services';
 import { PrimarySelect } from '@components/bits-utils/PrimarySelect';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { useState } from 'react';
+import { convertYesNo } from '@components/generics/functions/ConvertStringToBool';
 
 const schema = yup.object().shape({});
 
@@ -50,7 +51,10 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
     const isProratedLeave = watch('isProrated');
     const allowRollover = watch('allowRollover');
 
-    console.log({ leaveConfiguration });
+    console.log({
+        leaveConfiguration,
+        isBu: convertYesNo(leaveConfiguration?.allowRollover),
+    });
 
     const toast = useToast();
 
@@ -209,13 +213,16 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                             name="allowRollover"
                             control={control}
                             error={errors.allowRollover}
-                            defaultValue={''}
+                            defaultValue={
+                                convertYesNo(leaveConfiguration?.allowRollover)
+                                    ? 'Roll over unused leave days'
+                                    : 'Expire if leave not used'
+                            }
                             flexDir="column"
                             gap="14px"
                         />
                     </Box>
-                    {(allowRollover as unknown as string) ==
-                        'Roll over unused leave days' && (
+                    {convertYesNo(leaveConfiguration?.allowRollover) && (
                         <Box mt=".6rem">
                             <Text fontSize="14px" color="#1b1d21">
                                 Select the period you like for a rolled over
@@ -265,8 +272,7 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                             </Box>
                         </Box>
                     )}
-                    {(allowRollover as unknown as string) ==
-                        'Roll over unused leave days' && (
+                    {convertYesNo(leaveConfiguration?.allowRollover) && (
                         <Box w="150px">
                             <Button
                                 color="#2EAFA3"
@@ -285,21 +291,21 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                             </Button>
                         </Box>
                     )}
-                    {allowRollover && (
-                        <Button
-                            borderRadius="5px"
-                            bg="#2EAFA3"
-                            color="#ffffff"
-                            fontSize={13}
-                            fontWeight={500}
-                            w="100px"
-                            mt="2rem"
-                            isLoading={isSubmitting}
-                            onClick={handleSubmit(onSubmit)}
-                        >
-                            Save
-                        </Button>
-                    )}
+                    {/* {allowRollover && ( */}
+                    <Button
+                        borderRadius="5px"
+                        bg="#2EAFA3"
+                        color="#ffffff"
+                        fontSize={13}
+                        fontWeight={500}
+                        w="100px"
+                        mt="2rem"
+                        isLoading={isSubmitting}
+                        onClick={handleSubmit(onSubmit)}
+                    >
+                        Save
+                    </Button>
+                    {/* )} */}
                 </Stack>
             </Box>
         </Box>

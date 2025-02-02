@@ -61,6 +61,8 @@ export const MiniCards = ({
                                       } ${CUR(Round(value))}`
                                     : isPrice
                                     ? CUR(Round(value))
+                                    : value == 'N/A'
+                                    ? value
                                     : Round(value)}
                             </Text>
                             {/* {hasBudget && <Icon as={LiaAngleDownSolid} />} */}

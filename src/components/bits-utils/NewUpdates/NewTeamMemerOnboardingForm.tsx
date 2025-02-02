@@ -356,9 +356,11 @@ export const NewTeamMemerOnboardingForm = ({
     // console.log({ errors });
 
     const onSubmit = async (data: TeamMemberModel) => {
-        data.tax = data.taxType == 'hst' ? hstAmount?.fee || 0 : data.tax;
+        data.tax = data.taxType == 'hst' ? hstAmount?.fee || 0 : data?.tax;
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
+        data.role = 'Team member';
+        data.clientSubscriptionId = selectedLicense?.subscriptionId;
         if (contract !== '') {
             data.inCorporationDocumentUrl = `${contract.cdnUrl} ${contract.name}`;
         }
@@ -371,7 +373,6 @@ export const NewTeamMemerOnboardingForm = ({
         data.hasUtilizeLeaveDaysToDate = convertYesNo(
             data?.hasUtilizeLeaveDaysToDate,
         );
-
         data.clientId = !clientType ? user?.superAdminId : data.clientId;
         if (data.supervisorId === undefined || '') {
             toast({
@@ -386,14 +387,15 @@ export const NewTeamMemerOnboardingForm = ({
         try {
             const result = await UserService.addTeamMember(data);
             if (result.status) {
+                reset();
+                setContractFile({});
+                await DraftService.deleteDraft(data?.id);
                 toast({
                     title: `Invite Sent`,
                     status: 'success',
                     isClosable: true,
                     position: 'top-right',
                 });
-                reset();
-                setContractFile({});
                 onClose();
                 router.replace(router.asPath);
                 return;
@@ -406,7 +408,6 @@ export const NewTeamMemerOnboardingForm = ({
             });
             return;
         } catch (err: any) {
-            console.log({ err });
             toast({
                 title: err?.body?.title || err?.message,
                 status: 'error',

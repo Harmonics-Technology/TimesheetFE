@@ -261,7 +261,7 @@ export const TeamNotificationConfiguration = ({
                             active={access.trainingAssignmentNotification}
                         />
                         <ToggleSwitch
-                            label="tsn"
+                            label="tryn"
                             onChange={() =>
                                 setAccess({
                                     ...access,

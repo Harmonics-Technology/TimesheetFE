@@ -442,6 +442,15 @@ export const TeamSingleTask = ({
     };
 
     const OpenEditSubtaskDrawer = (item: any) => {
+        if (item?.createdByUserId !== user?.id) {
+            toast({
+                title: 'You do not have the permission to perform this action',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
         setSelectedSubtask(item);
         setOpenEditSubtaskDrawer(true);
     };
@@ -496,7 +505,7 @@ export const TeamSingleTask = ({
     const checkPossibleDeletion = () => {
         if (task?.createdByUserId != user?.id) {
             toast({
-                title: 'You do not have the permission to delete this sub task. Kindly contact your admin',
+                title: 'You do not have the permission to delete this subtask.',
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -1062,6 +1071,7 @@ export const TeamSingleTask = ({
                                         'Hours Spent',
                                         'Start Date',
                                         'End Date',
+                                        'Action',
                                     ]}
                                 >
                                     {userProjectManagementTimesheet?.map(
@@ -1078,7 +1088,7 @@ export const TeamSingleTask = ({
                                                         name={
                                                             x?.projectSubTask
                                                                 ?.name ||
-                                                            task?.name
+                                                            x?.projectTask?.name
                                                         }
                                                         fontWeight="500"
                                                     />

@@ -63,7 +63,9 @@ export const MonthPayScheduleSettings = ({
     const { user } = useContext(UserContext);
     const superAdminId = user?.superAdminId;
     const endDate = moment(watch('startDate')).add(27, 'days');
-    const [year, setYear] = useState();
+    const [year, setYear] = useState(new Date());
+
+    console.log({ data });
 
     const onSubmit = async (data: PayScheduleGenerationModel) => {
         data.superAdminId = superAdminId;
@@ -208,9 +210,9 @@ export const MonthPayScheduleSettings = ({
                                     <InputBlank
                                         label="End Date"
                                         defaultValue=""
-                                        placeholder={endDate?.format(
-                                            'DD/MM/YYYY',
-                                        )}
+                                        placeholder={(
+                                            endDate || new Date()
+                                        )?.format('DD/MM/YYYY')}
                                         readonly={true}
                                     />
                                 </HStack>
@@ -230,7 +232,9 @@ export const MonthPayScheduleSettings = ({
                                     <InputBlank
                                         label="Day"
                                         defaultValue=""
-                                        placeholder={moment(endDate)
+                                        placeholder={moment(
+                                            endDate || new Date(),
+                                        )
                                             .add(
                                                 watch('paymentDateDays'),
                                                 'days',

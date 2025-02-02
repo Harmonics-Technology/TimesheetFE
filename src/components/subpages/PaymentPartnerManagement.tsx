@@ -164,7 +164,7 @@ function PaymentPartnerManagement({
         data.superAdminId = user?.superAdminId;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
         data.onboardingFees = payFees;
-        data.dateOfBirth = new Date().toLocaleDateString();
+        // data.dateOfBirth = new Date().toLocaleDateString();
         if (data.onboardingFees?.length == 0 || !data.onboardingFees) {
             toast({
                 title: 'Kindly set up onboarding fees to continue',

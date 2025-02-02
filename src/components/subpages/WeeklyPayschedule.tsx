@@ -131,7 +131,9 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
                             <InputBlank
                                 label="End Date"
                                 defaultValue=""
-                                placeholder={endDate?.format('DD/MM/YYYY')}
+                                placeholder={(endDate || new Date())?.format(
+                                    'DD/MM/YYYY',
+                                )}
                                 readonly={true}
                             />
                         </Box>
@@ -161,7 +163,7 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
                             <InputBlank
                                 label="Payment Day"
                                 defaultValue=""
-                                placeholder={moment(endDate)
+                                placeholder={moment(endDate || new Date())
                                     .add(watch('paymentDateDays'), 'days')
                                     .format('dddd')}
                             />

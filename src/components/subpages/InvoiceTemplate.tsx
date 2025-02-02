@@ -183,7 +183,10 @@ function InvoiceTemplate({
                                                 'Pay Period',
                                                 'Payroll Type',
                                                 'Hours',
-                                                `Rate`,
+                                                clicked?.employeeInformation
+                                                    ?.payrollStructure == 'inc'
+                                                    ? `Rate`
+                                                    : 'Salary',
                                                 `Amount`,
                                                 // 'Fee',
                                                 // 'Total',
@@ -231,10 +234,10 @@ function InvoiceTemplate({
                                                 />
                                             )} */}
                                             <TableData
-                                                name={
+                                                name={CUR(
                                                     clicked?.employeeInformation
-                                                        ?.rate
-                                                }
+                                                        ?.rate,
+                                                )}
                                             />
                                             {/* <TableData
                                                 name={`${

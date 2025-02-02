@@ -1522,6 +1522,12 @@ export function ProjectStatusAction({
                 status: value.id,
             });
             if (res.status) {
+                toast({
+                    title: 'Your invoice has been successfully sent!',
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
                 router.replace(router.asPath);
             }
         } catch (error: any) {

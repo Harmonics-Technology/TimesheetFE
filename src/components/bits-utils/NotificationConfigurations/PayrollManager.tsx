@@ -212,7 +212,7 @@ export const PayrollNotificationConfiguration = ({
                             active={access.trainingAssignment}
                         />
                         <ToggleSwitch
-                            label="tsn"
+                            label="trsn"
                             onChange={() =>
                                 setAccess({
                                     ...access,

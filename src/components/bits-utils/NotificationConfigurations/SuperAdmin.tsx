@@ -254,7 +254,7 @@ export const AdminNotificationConfiguration = ({
                             active={access.trainingAssignment}
                         />
                         <ToggleSwitch
-                            label="tsn"
+                            label="tysn"
                             onChange={() =>
                                 setAccess({
                                     ...access,
@@ -298,7 +298,7 @@ export const AdminNotificationConfiguration = ({
                             active={access.subscriptionRenewalNotification}
                         />
                         <ToggleSwitch
-                            label="ctr"
+                            label="ctyr"
                             onChange={() =>
                                 setAccess({
                                     ...access,

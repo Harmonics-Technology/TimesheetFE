@@ -126,7 +126,7 @@ export const SingleTask = ({
     const [userProjectManagementTimesheet, setUserProjectManagementTimesheet] =
         useState<any>([]);
 
-    // console.log({ userProjectManagementTimesheet });
+    console.log({ userProjectManagementTimesheet });
     const [selectedTimesheet, setSelectedTimesheet] = useState<any>([]);
     const [editTimesheetSliderValue, setEditTimesheetSliderValue] =
         useState<number>(selectedTimesheet?.percentageOfCompletion ?? 0);
@@ -208,6 +208,15 @@ export const SingleTask = ({
     };
 
     const OpenEditTimesheetModal = (item: any) => {
+        if (item?.createdByUserId !== user?.id) {
+            toast({
+                title: 'You do not have the permission to perform this action',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
         setSelectedTimesheet(item);
         setOpenEditTimeSheetModal(true);
     };
@@ -351,7 +360,7 @@ export const SingleTask = ({
     const checkPossibleDeletion = () => {
         if (task?.createdByUserId != user?.id && user?.role !== 'Super Admin') {
             toast({
-                title: 'You do not have the permission to delete this sub task. Kindly contact your admin',
+                title: 'You do not have the permission to delete this subtask.',
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -846,6 +855,7 @@ export const SingleTask = ({
                                         'Hours Spent',
                                         'Start Date',
                                         'End Date',
+                                        'Action',
                                     ]}
                                 >
                                     {userProjectManagementTimesheet?.map(
@@ -859,7 +869,11 @@ export const SingleTask = ({
                                             return (
                                                 <TableRow key={x.id}>
                                                     <TableData
-                                                        name={task?.name}
+                                                        name={
+                                                            x?.projectSubTask
+                                                                ?.name ||
+                                                            x?.projectTask?.name
+                                                        }
                                                         fontWeight="500"
                                                     />
                                                     <TableData

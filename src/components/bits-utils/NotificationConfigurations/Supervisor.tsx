@@ -213,7 +213,7 @@ export const SupervisorNotificationConfiguration = ({
                             active={access.trainingAssignment}
                         />
                         <ToggleSwitch
-                            label="tsn"
+                            label="tsrn"
                             onChange={() =>
                                 setAccess({
                                     ...access,

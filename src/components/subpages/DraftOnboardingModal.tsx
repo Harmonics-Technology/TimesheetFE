@@ -49,6 +49,7 @@ import { CustomSelectBox } from '@components/bits-utils/ProjectManagement/Generi
 import { UserContext } from '@components/context/UserContext';
 import { BsFillInfoSquareFill } from 'react-icons/bs';
 import { convertYesNo } from '@components/generics/functions/ConvertStringToBool';
+import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 
 export const DraftOnboardingModal = ({
     userProfile,
@@ -75,83 +76,112 @@ export const DraftOnboardingModal = ({
     const { subType } = useContext(UserContext);
 
     const schema = yup.object().shape({
-        lastName: yup.string().required(),
         firstName: yup.string().required(),
+        lastName: yup.string().required(),
         email: yup.string().email().required(),
         phoneNumber: yup.string().required(),
+        address: yup.string().required(),
         jobTitle: yup.string().required(),
+        departments: yup
+            .array()
+            .of(yup.string().required('Department name is required'))
+            .min(1, 'At least one department is required')
+            .required('Departments field is required'),
         // clientId: yup.string().required(),
         supervisorId: yup.string().required(),
-        isActive: yup.boolean().required(),
-        hoursPerDay: yup.number().required(),
-        payRollTypeId: yup.number().when('enableFinancials', {
-            is: true,
-            then: yup.number().required(),
-        }),
-        paymentPartnerId: yup.string().when('enableFinancials', {
-            is: true,
-            then: yup.string().nullable().when('payRollTypeId', {
-                is: 2,
-                then: yup.string().required(),
-            }),
-        }),
-        ratePerHour: yup.string().when('enableFinancials', {
-            is: true,
-            then: yup.string().nullable().when('payRollTypeId', {
-                is: 1,
-                then: yup.string().required(),
-            }),
-        }),
-        hstNumber: yup.number().when('enableFinancials', {
-            is: true,
-            then: yup.number().nullable().when('payRollTypeId', {
-                is: 1,
-                then: yup.number().required(),
-            }),
-        }),
-        monthlyPayoutRate: yup.string().when('enableFinancials', {
-            is: true,
-            then: yup.string().nullable().when('payRollTypeId', {
-                is: 2,
-                then: yup.string().required(),
-            }),
-        }),
-        currency: yup.string().required(),
-        // paymentRate: yup.string().required(),
-        fixedAmount: yup.boolean().when('enableFinancials', {
-            is: true,
-            then: yup.boolean().required(),
-        }),
-        title: yup.string().required(),
         startDate: yup.string().required(),
         endDate: yup.string().required(),
-        dateOfBirth: yup.string().required(),
-        paymentFrequency: yup.string().required(),
-        address: yup.string().required(),
-        clientRate: yup.string().when('enableFinancials', {
-            is: true,
+        employmentContractType: yup.string().required(),
+        hoursPerDay: yup
+            .number()
+            .typeError('Hours per day must be a valid number')
+            .required(),
+        timesheetFrequency: yup.string().required(),
+        timesheetStartDate: yup.string().required(),
+        clientSubscriptionId: yup.string().required(),
+        enableFinancials: yup.string().required(),
+        payrollStructure: yup.string().when('enableFinancials', {
+            is: 'Yes',
             then: yup.string().required(),
         }),
-        // timeSheetGenerationStartDate: yup.string().required(),
+        incorpName: yup.string().when('payrollStructure', {
+            is: 'inc',
+            then: yup.string().required(),
+        }),
+        rate: yup.number().when('enableFinancials', {
+            is: 'Yes',
+            then: yup
+                .number()
+                .typeError('Value must be a valid number')
+                .required(),
+        }),
+        rateType: yup.string().when('payrollStructure', {
+            is: 'inc',
+            then: yup.string().required(),
+        }),
+        paymentFrequency: yup.string().when('enableFinancials', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        currency: yup.string().when('enableFinancials', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        taxType: yup.string().when('enableFinancials', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        tax: yup.string().when('taxType', {
+            is: 'custom',
+            then: yup.string().required(),
+        }),
+        payrollProcessingType: yup.string().when('enableFinancials', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        paymentPartnerId: yup.string().when('payrollProcessingType', {
+            is: 'payment partner',
+            then: yup.string().required(),
+        }),
+        paymentProcessingFeeType: yup.string().when('payrollProcessingType', {
+            is: 'payment partner',
+            then: yup.string().required(),
+        }),
+        paymentProcessingFee: yup.string().when('payrollProcessingType', {
+            is: 'payment partner',
+            then: yup.string().required(),
+        }),
+        invoiceGenerationType: yup.string().when('enableFinancials', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
         isEligibleForLeave: yup.string().required(),
         employeeType: yup.string().required(),
-        // numberOfDaysEligible: yup
-        //     .string()
-        //     .nullable()
-        //     .when('isEligibleForLeave', {
-        //         is: 'Yes' || true,
-        //         then: yup.string().required(),
-        //     }),
-        // numberOfHoursEligible: yup
-        //     .string()
-        //     .nullable()
-        //     .when('isEligibleForLeave', {
-        //         is: 'Yes' || true,
-        //         then: yup.string().required(),
-        //     }),
-        onBoradingFee: yup.string().when('fixedAmount', {
-            is: false,
+        numberOfDaysEligible: yup.string().when('isEligibleForLeave', {
+            is: 'Yes',
             then: yup.string().required(),
+        }),
+        hasRollOverLeave: yup.string().required(),
+        rolledOverLeave: yup.number().when('hasRollOverLeave', {
+            is: 'Yes',
+            then: yup
+                .number()
+                .typeError('Value must be a valid number')
+                .required(),
+        }),
+        expiryDateOfRolledOverLeave: yup.string().when('hasRollOverLeave', {
+            is: 'Yes',
+            then: yup.string().required(),
+        }),
+        hasUtilizeLeaveDaysToDate: yup
+            .string()
+            .required('Please select an option'),
+        utilizedLeave: yup.number().when('hasUtilizeLeaveDaysToDate', {
+            is: 'Yes',
+            then: yup
+                .number()
+                .typeError('Value must be a valid number')
+                .required(),
         }),
     });
     const draftSchema = yup.object().shape({});
@@ -164,10 +194,11 @@ export const DraftOnboardingModal = ({
         control,
         watch,
         reset,
+        setValue,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
         // resolver: yupResolver(openDraft ? draftSchema : schema),
-        resolver: yupResolver(draftSchema),
+        resolver: yupResolver(openDraft ? draftSchema : schema),
         mode: 'all',
         defaultValues: {
             id: userProfile?.id,
@@ -520,6 +551,23 @@ export const DraftOnboardingModal = ({
         closeDraft();
     };
 
+    const taxes = isIncSelected ? ['hst'] : ['hst', 'custom', 'exempt'];
+
+    useEffect(() => {
+        setValue(
+            'departments',
+            selectedDepartment.map((x) => x.id),
+        );
+    }, [selectedDepartment]);
+
+    useEffect(() => {
+        setValue('clientSubscriptionId', selectedLicense?.subscriptionId);
+    }, [selectedLicense]);
+
+    const paymentPartnerCurrency = paymentPartner?.find(
+        (x) => x.id === watch('paymentPartnerId'),
+    )?.currency;
+
     useEffect(() => {
         reset(userProfile);
     }, []);
@@ -569,17 +617,16 @@ export const DraftOnboardingModal = ({
                         error={errors.phoneNumber}
                         placeholder="Phone No."
                         control={control}
+                        schema={schema}
                     />
                     <PrimaryDate<TeamMemberModel>
                         control={control}
                         name="dateOfBirth"
                         label="Date of Birth (Optional)"
                         error={errors.dateOfBirth}
-                        defaultValue={moment(userProfile?.dateOfBirth).format(
-                            'YYYY/MM/DD',
-                        )}
                         max={new DateObject().subtract(1, 'days')}
                         required={false}
+                        schema={schema}
                     />
                     <PrimaryInput<TeamMemberModel>
                         label="Address"
@@ -602,9 +649,7 @@ export const DraftOnboardingModal = ({
                             <HStack
                                 w="full"
                                 {...groups}
-                                defaultValue={
-                                    forMe ? 'For me' : 'For my client'
-                                }
+                                defaultValue={'For my client'}
                             >
                                 {radious.map((value) => {
                                     const radio = radioProps({
@@ -637,7 +682,8 @@ export const DraftOnboardingModal = ({
                                 width="fit-content"
                                 fontSize=".8rem"
                             >
-                                Department
+                                Department{' '}
+                                <span style={{ color: 'red' }}>*</span>
                             </FormLabel>
 
                             <CustomSelectBox
@@ -682,10 +728,9 @@ schema={schema}
                                 placeholder="Client"
                                 options={
                                     <>
-                                        {client.map((x) => (
+                                        {client?.map((x) => (
                                             <option value={x?.id}>
-                                                {x.organizationName ||
-                                                    x?.fullName}
+                                                {x.organizationName}
                                             </option>
                                         ))}
                                     </>
@@ -720,9 +765,8 @@ schema={schema}
                             name="startDate"
                             label="Start Date"
                             error={errors.startDate}
-                            defaultValue={moment(userProfile?.startDate).format(
-                                'YYYY/MM/DD',
-                            )}
+                            required={false}
+                            schema={schema}
                             // min={new Date()}
                         />
                         <PrimaryDate<TeamMemberModel>
@@ -730,10 +774,9 @@ schema={schema}
                             name="endDate"
                             label="End Date"
                             error={errors.endDate}
-                            defaultValue={moment(userProfile?.endDate).format(
-                                'YYYY/MM/DD',
-                            )}
                             min={new DateObject().add(3, 'days')}
+                            required={false}
+                            schema={schema}
                         />
                         <PrimarySelect<TeamMemberModel>
                             register={register}
@@ -800,6 +843,7 @@ schema={schema}
                             label="Timesheet Start Date"
                             error={errors.timesheetStartDate}
                             required={false}
+                            schema={schema}
                             // min={new Date()}
                         />
                         <LicenseSelection
@@ -808,18 +852,14 @@ schema={schema}
                             errors={errors}
                             selectedLicense={selectedLicense}
                             subs={subs}
+                            isRequired={true}
                         />
                     </Grid>
                     <Box mt="1rem">
                         <UploadCareWidget
                             refs={widgetApi}
-                            label="Attach Document"
-                            filename={
-                                contract?.name ||
-                                getFileName(
-                                    userProfile?.inCorporationDocumentUrl,
-                                )
-                            }
+                            label="Attach Contract Document"
+                            filename={contract?.name}
                             loading={showLoading}
                             uploadFunction={showLoadingState}
                         />
@@ -834,10 +874,11 @@ schema={schema}
                             name="enableFinancials"
                             control={control}
                             error={errors.enableFinancials}
-                            defaultValue={payData ? 'Yes' : 'No'}
+                            defaultValue={'No'}
+                            schema={schema}
                         />
                     </Box>
-                    {payData && (
+                    {payData && (payData as unknown as string) == 'Yes' && (
                         <Box>
                             <Box mb="1rem">
                                 <PrimarySelect<TeamMemberModel>
@@ -961,6 +1002,7 @@ schema={schema}
                                         name="currency"
                                         label="Currency"
                                         placeholder="Currency"
+                                        defaultValue={'CAD'}
                                         options={
                                             <>
                                                 {uniqueItems
@@ -992,11 +1034,7 @@ schema={schema}
                                         placeholder="Please Select"
                                         options={
                                             <>
-                                                {[
-                                                    'hst',
-                                                    'custom',
-                                                    'exempt',
-                                                ].map((x) => (
+                                                {taxes.map((x) => (
                                                     <option value={x}>
                                                         {x}
                                                     </option>
@@ -1088,37 +1126,51 @@ schema={schema}
                                                     </>
                                                 }
                                             />
-                                            <PrimarySelect<TeamMemberModel>
-                                                register={register}
-                                                schema={schema}
-                                                error={
-                                                    errors.paymentProcessingFee
-                                                }
-                                                name="paymentProcessingFee"
-                                                label="Processing fee"
-                                                placeholder="Please Select"
-                                                options={
-                                                    <>
-                                                        {payFees
-                                                            ?.filter(
-                                                                (x) =>
-                                                                    x.onboardingFeeType ==
-                                                                    watch(
-                                                                        'paymentProcessingFeeType',
-                                                                    ),
-                                                            )
-                                                            .map((x) => (
-                                                                <option
-                                                                    value={
-                                                                        x.fee
-                                                                    }
-                                                                >
-                                                                    {x.fee}
-                                                                </option>
-                                                            ))}
-                                                    </>
-                                                }
-                                            />
+                                            {watch('paymentPartnerId') && (
+                                                <PrimarySelect<TeamMemberModel>
+                                                    register={register}
+                                                    schema={schema}
+                                                    error={
+                                                        errors.paymentProcessingFee
+                                                    }
+                                                    name="paymentProcessingFee"
+                                                    label={`Processing fee ${
+                                                        watch(
+                                                            'paymentProcessingFeeType',
+                                                        ) == 'percentage'
+                                                            ? '(%)'
+                                                            : `(${paymentPartnerCurrency})`
+                                                    }`}
+                                                    placeholder="Please Select"
+                                                    options={
+                                                        <>
+                                                            {payFees
+                                                                ?.filter(
+                                                                    (x) =>
+                                                                        x.onboardingFeeType ==
+                                                                        watch(
+                                                                            'paymentProcessingFeeType',
+                                                                        ),
+                                                                )
+                                                                .map((x) => (
+                                                                    <option
+                                                                        value={
+                                                                            x.fee
+                                                                        }
+                                                                    >
+                                                                        {x.fee}{' '}
+                                                                        {watch(
+                                                                            'paymentProcessingFeeType',
+                                                                        ) ==
+                                                                        'percentage'
+                                                                            ? '%'
+                                                                            : `${paymentPartnerCurrency}`}
+                                                                    </option>
+                                                                ))}
+                                                        </>
+                                                    }
+                                                />
+                                            )}
                                         </>
                                     )}
                                     <PrimarySelect<TeamMemberModel>
@@ -1174,9 +1226,10 @@ schema={schema}
                                     mt="3px"
                                 />
                                 <Text fontSize="11px" fontWeight={400}>
-                                    You can setup leave for your team member in
-                                    the team members profile, it is not
-                                    compulsory at onboarding stage
+                                    Leave setup for your team member can be
+                                    completed anytime through their profile.
+                                    This is not a mandatory step during
+                                    onboarding.
                                 </Text>
                             </HStack>
                         }
@@ -1188,20 +1241,30 @@ schema={schema}
                             name="isEligibleForLeave"
                             control={control}
                             error={errors.isEligibleForLeave}
-                            defaultValue={
-                                convertYesNo(isEligibleForLeave) ? 'Yes' : 'No'
-                            }
+                            defaultValue={'No'}
+                            schema={schema}
                         />
                     </Box>
-                    {convertYesNo(isEligibleForLeave) && (
+                    {(isEligibleForLeave as unknown as string) == 'Yes' && (
                         <>
                             <Grid
                                 templateColumns={[
                                     'repeat(1,1fr)',
-                                    'repeat(3,1fr)',
+                                    'repeat(2,1fr)',
                                 ]}
                                 gap="1rem 2rem"
+                                mb="1rem"
                             >
+                                {/* <PrimaryInput<TeamMemberModel>
+                                label="Eligible number of days"
+                                name="numberOfDaysEligible"
+                                error={errors.numberOfDaysEligible}
+                                placeholder=""
+                                defaultValue=""
+                                register={register}
+schema={schema}
+                                readonly={leaveSettings?.isStandardEligibleDays}
+                            /> */}
                                 <PrimaryInput<TeamMemberModel>
                                     label="Eligible number of hours"
                                     name="numberOfDaysEligible"
@@ -1214,31 +1277,21 @@ schema={schema}
                                         leaveSettings?.isStandardEligibleDays
                                     }
                                 />
-                                {/* <PrimaryInput<TeamMemberModel>
-                                label="Eligible number of hours"
-                                name="numberOfHoursEligible"
-                                error={errors.numberOfHoursEligible}
-                                placeholder=""
-                                defaultValue=""
-                                register={register}
-schema={schema}
-                            /> */}
                             </Grid>
-                            <Box pos="relative" my="1rem">
+
+                            <Box pos="relative" mb="1rem">
                                 <PrimaryRadio<TeamMemberModel>
                                     label="Does this team member have a rolled over leave?"
                                     radios={['No', 'Yes']}
                                     name="hasRollOverLeave"
                                     control={control}
                                     error={errors.hasRollOverLeave}
-                                    defaultValue={
-                                        convertYesNo(hasRolledOverLeave) == true
-                                            ? 'Yes'
-                                            : 'No'
-                                    }
+                                    defaultValue={'No'}
+                                    schema={schema}
                                 />
                             </Box>
-                            {convertYesNo(hasRolledOverLeave) && (
+                            {(hasRolledOverLeave as unknown as string) ==
+                                'Yes' && (
                                 <Grid
                                     templateColumns={[
                                         'repeat(1,1fr)',
@@ -1255,6 +1308,7 @@ schema={schema}
                                         defaultValue=""
                                         register={register}
                                         schema={schema}
+                                        type="number"
                                         // readonly={leaveSettings?.isStandardEligibleDays}
                                     />
                                     <PrimaryDate<TeamMemberModel>
@@ -1266,8 +1320,8 @@ schema={schema}
                                         placeholder=""
                                         defaultValue=""
                                         control={control}
-                                        // register={register}
                                         schema={schema}
+                                        // register={register}
                                     />
                                 </Grid>
                             )}
@@ -1278,16 +1332,12 @@ schema={schema}
                                     name="hasUtilizeLeaveDaysToDate"
                                     control={control}
                                     error={errors.hasUtilizeLeaveDaysToDate}
-                                    defaultValue={
-                                        convertYesNo(
-                                            hasUtilizeLeaveDaysToDate,
-                                        ) == true
-                                            ? 'Yes'
-                                            : 'No'
-                                    }
+                                    defaultValue={'No'}
+                                    schema={schema}
                                 />
                             </Box>
-                            {convertYesNo(hasUtilizeLeaveDaysToDate) && (
+                            {(hasUtilizeLeaveDaysToDate as unknown as string) ==
+                                'Yes' && (
                                 <Grid
                                     templateColumns={[
                                         'repeat(1,1fr)',
@@ -1303,6 +1353,7 @@ schema={schema}
                                         defaultValue=""
                                         register={register}
                                         schema={schema}
+                                        type="number"
                                         suffix={
                                             <InputRightElement right="1rem">
                                                 <Text fontSize=".8rem">
@@ -1324,31 +1375,23 @@ schema={schema}
                         my="2rem"
                         w="full"
                     >
-                        <Button
-                            bgColor="gray.500"
-                            color="white"
-                            height="3rem"
-                            fontSize="14px"
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                            onClick={() => closeModal()}
-                        >
-                            Close
-                        </Button>
-                        <Button
-                            bgColor="brand.400"
-                            color="white"
-                            height="3rem"
-                            fontSize="14px"
+                        <ShiftBtn
+                            text="Close"
+                            onClick={closeModal}
+                            px="1rem"
+                            bg="gray.500"
+                            w="full"
+                            h="2.8rem"
+                        />
+                        <ShiftBtn
+                            text="Send Invite"
+                            px="1rem"
+                            w="full"
                             type="submit"
-                            isLoading={isSubmitting}
-                            spinner={<BeatLoader color="white" size={10} />}
-                            boxShadow="0 4px 7px -1px rgb(0 0 0 / 11%), 0 2px 4px -1px rgb(0 0 0 / 7%)"
-                        >
-                            <Box pr=".5rem">
-                                <RiMailSendFill />
-                            </Box>
-                            <Box>Send Invite</Box>
-                        </Button>
+                            loading={isSubmitting}
+                            h="2.8rem"
+                            prefix={<Icon as={RiMailSendFill} mr=".5rem" />}
+                        />
                     </Grid>
                 </DrawerFooter>
             </form>
