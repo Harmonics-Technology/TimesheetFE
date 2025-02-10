@@ -170,7 +170,7 @@ export const CreateCollaboratorInvoice = ({
             notes: invoice?.notes,
             issuedDate: invoice?.issuedDate,
             posNumber: invoice?.posNumber,
-            recipientId: invoice?.recipientId as string,
+            // recipientId: invoice?.recipientId as string,
             projectId: invoice?.projectId,
         },
     });
@@ -369,7 +369,7 @@ export const CreateCollaboratorInvoice = ({
             issuedDate: value.issuedDate,
             notes: value.notes,
             projectId,
-            recipientId: value.recipientId,
+            // recipientId: value.recipientId,
             superAdminId: superAdminId,
             id: invoice?.id,
             posNumber: value.posNumber,

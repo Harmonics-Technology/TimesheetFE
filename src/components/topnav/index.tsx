@@ -87,7 +87,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     }, [massiveCheck]);
 
     return (
-        <Box pos="sticky" top="0" zIndex="800" bgColor="#f6f7f8">
+        <Box pos="sticky" top="0" zIndex="900" bgColor="#f6f7f8">
             {/* <Button
                 onClick={() => router.back()}
                 variant="solid"

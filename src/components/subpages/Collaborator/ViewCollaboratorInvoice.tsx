@@ -165,7 +165,7 @@ export const ViewCollaboratorInvoice = ({
 
     return (
         <Box>
-            <Box pos="sticky" top="9.8%" zIndex={900} bgColor="#f6f7f8">
+            <Box pos="sticky" top="8.8%" zIndex={800} bgColor="#f6f7f8">
                 <HStack
                     fontSize=".875rem"
                     cursor="pointer"
