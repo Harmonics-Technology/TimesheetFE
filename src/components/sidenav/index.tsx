@@ -42,6 +42,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                   'admin',
                   'supervisors',
                   'team members',
+                  'collaborator',
                   { show: true, name: 'clients' },
                   { show: true, name: 'payment partners' },
               ]
@@ -50,6 +51,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                   'admin',
                   'supervisors',
                   'team members',
+                  'collaborator',
                   { show: true, name: 'clients' },
                   'payment partners',
               ]
@@ -58,6 +60,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                   'admin',
                   'supervisors',
                   'team members',
+                  'collaborator',
                   { show: false, name: 'clients' },
                   'payment partners',
               ]
@@ -1296,6 +1299,68 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         role={role}
                         setOpenSidenav={setOpenSidenav}
+                    />
+                </VStack>
+            ) : role == 'Collaborator' ? (
+                <VStack
+                    align="left"
+                    gap={change ? '.8rem' : '1.5rem'}
+                    pr="1rem"
+                >
+                    {/* <MenuItem
+                        change={change}
+                        linkName="dashboard"
+                        menuTitle="Dashboard"
+                        icon={<FaHome opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                    /> */}
+                    <MenuItem
+                        change={change}
+                        linkName="project-management"
+                        menuTitle="Project Management"
+                        icon={<TbCalendarTime opacity=".8" />}
+                        option={false}
+                        dropDown={[]}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="invoices"
+                        menuTitle="Invoices"
+                        icon={<RiLineChartFill opacity=".8" />}
+                        option={false}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={[]}
+                        display={activeSub}
+                    />
+                    <MenuItem
+                        change={change}
+                        linkName="timesheets"
+                        menuTitle="Manage Timesheets"
+                        icon={<FaCalendar opacity=".8" />}
+                        option={true}
+                        role={role}
+                        setOpenSidenav={setOpenSidenav}
+                        dropDown={['my timesheet', 'timesheet history']}
+                        display={activeSub}
+                    />
+
+                    <MenuItem
+                        change={change}
+                        linkName="account-management"
+                        menuTitle="Account settings"
+                        icon={<MdSettings opacity=".8" />}
+                        option={true}
+                        dropDown={['my profile']}
+                        setOpenSidenav={setOpenSidenav}
+                        role={role}
+                        display={activeSub}
                     />
                 </VStack>
             ) : null}

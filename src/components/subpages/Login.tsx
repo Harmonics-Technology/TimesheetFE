@@ -117,6 +117,9 @@ function Login() {
                     payrollStructure:
                         user?.employeeInformation?.payrollStructure,
                     invoiceGenerationType: user?.invoiceGenerationType,
+                    organizationEmail: user?.organizationEmail,
+                    organizationPhone: user?.organizationPhone,
+                    address: user?.address,
                 };
                 const subDetails = user?.subscriptiobDetails;
                 Cookies.set('user', JSON.stringify(strippedData));

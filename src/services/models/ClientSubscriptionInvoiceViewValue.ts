@@ -16,4 +16,6 @@ export type ClientSubscriptionInvoiceViewValue = {
     amountInCent?: number;
     invoicePDFURL?: string | null;
     hostedInvoiceURL?: string | null;
+    numberOfLicense?: number | null;
+    unitPrice?: number | null;
 };

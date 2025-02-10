@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             // const cProgress = await fetchProjectByStatus(3);
             const users = await UserService.listUsersByRoles(
                 superAdminId,
-                'team member,super admin,admin,client,supervisor',
+                'team member,super admin,admin,client,supervisor,collaborator',
             );
             const counts =
                 await ProjectManagementService.getStatusCountForProject(

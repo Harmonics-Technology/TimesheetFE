@@ -41,6 +41,7 @@ export type { ClientSubscriptionInvoiceViewStandardResponse } from './models/Cli
 export type { ClientSubscriptionInvoiceViewValue } from './models/ClientSubscriptionInvoiceViewValue';
 export type { ClientSubscriptionResponseViewModel } from './models/ClientSubscriptionResponseViewModel';
 export type { ClientSubscriptionResponseViewModelStandardResponse } from './models/ClientSubscriptionResponseViewModelStandardResponse';
+export type { CollaboratorModel } from './models/CollaboratorModel';
 export type { CommandCenterAddCardResponse } from './models/CommandCenterAddCardResponse';
 export type { CommandCenterAddCardResponseStandardResponse } from './models/CommandCenterAddCardResponseStandardResponse';
 export type { ContactMessageModel } from './models/ContactMessageModel';
@@ -296,6 +297,7 @@ export type { TreatInvoiceModel } from './models/TreatInvoiceModel';
 export type { UpdateCardDetailsModel } from './models/UpdateCardDetailsModel';
 export type { UpdateClientStripeSubscriptionModel } from './models/UpdateClientStripeSubscriptionModel';
 export type { UpdateClientSubscriptionModel } from './models/UpdateClientSubscriptionModel';
+export type { UpdateCollaboratorModel } from './models/UpdateCollaboratorModel';
 export type { UpdateInvoiceStatusModel } from './models/UpdateInvoiceStatusModel';
 export type { UpdateProjectTimesheet } from './models/UpdateProjectTimesheet';
 export type { UpdateUserModel } from './models/UpdateUserModel';

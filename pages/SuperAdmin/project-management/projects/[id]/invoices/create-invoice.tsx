@@ -51,10 +51,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             );
             const recipients =
                 await ProjectManagementService.listEmailRecipient(superAdminId);
-            // const users = await UserService.listUsersByRoles(
-            //     superAdminId,
-            //     'client',
-            // );
+
             return {
                 props: {
                     project: data.data,

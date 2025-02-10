@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             const files = await ProjectManagementService.listAttachments(id);
             const users = await UserService.listUsersByRoles(
                 superAdminId,
-                'team member,super admin,admin,client,supervisor',
+                'team member,super admin,admin,client,supervisor,collaborator',
             );
             const currencies = await UtilityService.listCountries();
 

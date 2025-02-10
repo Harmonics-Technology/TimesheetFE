@@ -61,7 +61,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             // console.log({ data });
             const users = await UserService.listUsersByRoles(
                 superAdminId,
-                'team member,super admin,admin,supervisor,payroll manager',
+                'team member,super admin,admin,supervisor,payroll manager,collaborator',
             );
             const userDepartments = await UserService.listUsersDepartment(
                 userId,

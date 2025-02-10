@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
             // );
             const users = await UserService.listUsersByRoles(
                 superAdminId,
-                'team member,super admin,admin,supervisor,payroll manager,internal admin, internal supervisor, internal payroll manager',
+                'team member,super admin,admin,supervisor,payroll manager,internal admin, internal supervisor, internal payroll manager,collaborator',
             );
             // const supervisor = await UserService.getClientSupervisors(
             //     pagingOptions.offset,

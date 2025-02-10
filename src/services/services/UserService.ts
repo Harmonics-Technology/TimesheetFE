@@ -8,6 +8,7 @@ import type { ChangePasswordModel } from '../models/ChangePasswordModel';
 import type { ClientSubscriptionDetailViewListStandardResponse } from '../models/ClientSubscriptionDetailViewListStandardResponse';
 import type { ClientSubscriptionInvoiceViewStandardResponse } from '../models/ClientSubscriptionInvoiceViewStandardResponse';
 import type { ClientSubscriptionResponseViewModelStandardResponse } from '../models/ClientSubscriptionResponseViewModelStandardResponse';
+import type { CollaboratorModel } from '../models/CollaboratorModel';
 import type { CommandCenterAddCardResponseStandardResponse } from '../models/CommandCenterAddCardResponseStandardResponse';
 import type { ControlSettingModel } from '../models/ControlSettingModel';
 import type { ControlSettingViewStandardResponse } from '../models/ControlSettingViewStandardResponse';
@@ -29,6 +30,7 @@ import type { TeamMemberModel } from '../models/TeamMemberModel';
 import type { UpdateCardDetailsModel } from '../models/UpdateCardDetailsModel';
 import type { UpdateClientStripeSubscriptionModel } from '../models/UpdateClientStripeSubscriptionModel';
 import type { UpdateClientSubscriptionModel } from '../models/UpdateClientSubscriptionModel';
+import type { UpdateCollaboratorModel } from '../models/UpdateCollaboratorModel';
 import type { UpdateUserModel } from '../models/UpdateUserModel';
 import type { UserCountByPayrollTypeViewListStandardResponse } from '../models/UserCountByPayrollTypeViewListStandardResponse';
 import type { UserDepartmentViewListStandardResponse } from '../models/UserDepartmentViewListStandardResponse';
@@ -1206,6 +1208,44 @@ export class UserService {
                 clientId: clientId,
                 startDate: startDate,
                 endDate: endDate,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static addCollaborator(
+        requestBody?: CollaboratorModel,
+    ): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/add-collaborator',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody
+     * @returns UserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static updateCollaborator(
+        requestBody?: UpdateCollaboratorModel,
+    ): CancelablePromise<UserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/update-collaborator',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                401: `Unauthorized`,
             },
         });
     }

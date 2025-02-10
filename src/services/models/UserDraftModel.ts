@@ -64,4 +64,5 @@ export type UserDraftModel = {
     paymentProcessingFee?: number | null;
     incorpName?: string | null;
     timesheetStartDate?: string | null;
+    isSendingInvoice?: boolean;
 };
