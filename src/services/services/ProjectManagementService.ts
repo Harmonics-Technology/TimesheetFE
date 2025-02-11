@@ -1126,6 +1126,50 @@ invoiceRef?: string,
     }
 
     /**
+     * @param offset 
+     * @param limit 
+     * @param superAdminId 
+     * @param userId 
+     * @param projectId 
+     * @param status 
+     * @param recipient 
+     * @param startDate 
+     * @param endDate 
+     * @param invoiceRef 
+     * @returns ProjectInvoiceViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listCollaboratorProjectInvoices(
+offset?: number,
+limit?: number,
+superAdminId?: string,
+userId?: string,
+projectId?: string,
+status?: string,
+recipient?: string,
+startDate?: string,
+endDate?: string,
+invoiceRef?: string,
+): CancelablePromise<ProjectInvoiceViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/ProjectManagement/collaborator-invoices',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'superAdminId': superAdminId,
+                'userId': userId,
+                'projectId': projectId,
+                'status': status,
+                'recipient': recipient,
+                'StartDate': startDate,
+                'EndDate': endDate,
+                'invoiceRef': invoiceRef,
+            },
+        });
+    }
+
+    /**
      * @param id 
      * @returns ProjectInvoiceViewStandardResponse Success
      * @throws ApiError

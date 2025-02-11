@@ -17,5 +17,5 @@ export type ProjectInvoiceModel = {
     organization?: string | null;
     posNumber?: string | null;
     invoiceItems?: Array<ProjectInvoiceItemModel> | null;
-    recipientId?: string;
+    recipientId?: string | null;
 };
