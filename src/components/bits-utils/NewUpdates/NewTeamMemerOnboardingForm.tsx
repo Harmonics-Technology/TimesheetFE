@@ -389,7 +389,6 @@ export const NewTeamMemerOnboardingForm = ({
             if (result.status) {
                 reset();
                 setContractFile({});
-                await DraftService.deleteDraft(data?.id);
                 toast({
                     title: `Invite Sent`,
                     status: 'success',

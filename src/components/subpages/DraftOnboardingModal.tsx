@@ -186,8 +186,6 @@ export const DraftOnboardingModal = ({
     });
     const draftSchema = yup.object().shape({});
 
-    // console.log({ userProfile, client });
-
     const {
         register,
         handleSubmit,
@@ -198,7 +196,7 @@ export const DraftOnboardingModal = ({
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
         // resolver: yupResolver(openDraft ? draftSchema : schema),
-        resolver: yupResolver(openDraft ? draftSchema : schema),
+        resolver: yupResolver(openDraft ? draftSchema : draftSchema),
         mode: 'all',
         defaultValues: {
             id: userProfile?.id,
@@ -271,6 +269,8 @@ export const DraftOnboardingModal = ({
                 undefined,
         },
     });
+
+    // console.log({ errors });
 
     const curentLicense = subs?.find(
         (x) => x.subscriptionId === userProfile?.clientSubscriptionId,
