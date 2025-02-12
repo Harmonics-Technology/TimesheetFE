@@ -143,16 +143,16 @@ export const ProjectTask = ({
         (access?.supervisorTaskCreation && user?.role == 'Supervisor');
 
     const checkPossibleDeletion = () => {
-        if (data?.raw?.createdByUserId != user?.id) {
-            toast({
-                title: 'You do not have the permission to delete this task. Kindly contact your admin',
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            onClosed();
-            return;
-        }
+        // if (data?.raw?.createdByUserId != user?.id) {
+        //     toast({
+        //         title: 'You do not have the permission to delete this task. Kindly contact your admin',
+        //         status: 'error',
+        //         isClosable: true,
+        //         position: 'top-right',
+        //     });
+        //     onClosed();
+        //     return;
+        // }
         onClosed();
         onOpens();
     };

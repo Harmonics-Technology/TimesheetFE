@@ -29,7 +29,7 @@ import { ShowPrompt } from '../../Modals/ShowPrompt';
 import { AddAttachmentModal } from '../../Modals/AddAttachmentModal';
 import { AttachmentDetailModal } from '../../Modals/AttachmentDetailModal';
 import { IoDocumentAttach } from 'react-icons/io5';
-import { BsDownload } from 'react-icons/bs';
+import { BsDownload, BsEye } from 'react-icons/bs';
 import { formatFileSize } from '@components/generics/functions/getFileSize';
 
 export const DocumentsPage = ({
@@ -140,6 +140,9 @@ export const DocumentsPage = ({
         onOpenDelete();
     };
 
+    const viewDoc = (url: any) => {
+        window.open(url, '_blank');
+    };
 
     return (
         <Box>
@@ -209,6 +212,10 @@ export const DocumentsPage = ({
                                                 onClick={() => downloadFile(x)}
                                             />
                                         )}
+                                        <Icon
+                                            as={BsEye}
+                                            onClick={() => viewDoc(x?.fileUrl)}
+                                        />
                                         <Icon
                                             as={TbTrash}
                                             onClick={() =>

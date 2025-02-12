@@ -358,16 +358,16 @@ export const SingleTask = ({
     };
 
     const checkPossibleDeletion = () => {
-        if (task?.createdByUserId != user?.id && user?.role !== 'Super Admin') {
-            toast({
-                title: 'You do not have the permission to delete this subtask.',
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
-            onDeleteClosed();
-            return;
-        }
+        // if (task?.createdByUserId != user?.id && user?.role !== 'Super Admin') {
+        //     toast({
+        //         title: 'You do not have the permission to delete this subtask.',
+        //         status: 'error',
+        //         isClosable: true,
+        //         position: 'top-right',
+        //     });
+        //     onDeleteClosed();
+        //     return;
+        // }
         onDeleteClosed();
         onDeleteOpens();
     };

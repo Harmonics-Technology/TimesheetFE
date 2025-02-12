@@ -353,7 +353,7 @@ export const ExportReportModal = ({
                             mb="1rem"
                         >
                             <ShiftBtn
-                                text="Cancel Report"
+                                text="Cancel"
                                 onClick={closeModal}
                                 px="1rem"
                                 bg="gray.500"
@@ -361,7 +361,7 @@ export const ExportReportModal = ({
                                 prefix={<Icon as={MdCancel} mr=".5rem" />}
                             />
                             <ShiftBtn
-                                text="Add Team Member"
+                                text="Proceed"
                                 onClick={exportData}
                                 px="1rem"
                                 w="full"
