@@ -12,6 +12,7 @@ export type { AdminSettingModel } from './models/AdminSettingModel';
 export type { AdminSettingView } from './models/AdminSettingView';
 export type { AdminSettingViewStandardResponse } from './models/AdminSettingViewStandardResponse';
 export type { ApprovedPayrollInvoices } from './models/ApprovedPayrollInvoices';
+export type { AssignNewUsersToTrainingModel } from './models/AssignNewUsersToTrainingModel';
 export type { AttachmentModel } from './models/AttachmentModel';
 export type { AttachmentView } from './models/AttachmentView';
 export type { AttachmentViewListStandardResponse } from './models/AttachmentViewListStandardResponse';

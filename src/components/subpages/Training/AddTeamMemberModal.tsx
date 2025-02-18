@@ -31,15 +31,21 @@ export const AddTeamMemberModal = ({
     const [loading, setLoading] = useState(false);
     const [selectedUser, setSelectedUser] = useState<any>([]);
     const selectUser = (user) => {
-        setSelectedUser(user);
+        const filtered = selectedUser?.find((x) => x.id === user.id);
+        if (filtered) return;
+        setSelectedUser([...selectedUser, user]);
+    };
+    const removeUser = (id) => {
+        const filtered = selectedUser?.filter((x) => x.id !== id);
+        setSelectedUser(filtered);
     };
     const addUser = async () => {
         setLoading(true);
         try {
-            const result = await TrainingService.assignNewUser(
-                selectedUser?.id,
+            const result = await TrainingService.assignNewUser({
+                userIds: selectedUser?.map((x) => x?.id),
                 trainingId,
-            );
+            });
             if (result.status) {
                 toast({
                     title: result.message,
@@ -126,11 +132,10 @@ export const AddTeamMemberModal = ({
                                 updateFunction={selectUser}
                                 items={selectedUser}
                                 customKeys={{ key: 'id', label: 'fullName' }}
-                                checkbox={false}
                                 id="team members"
-                                removeFn={void 0}
+                                removeFn={removeUser}
                                 searchable
-                                single
+                                checkbox
                             />
                         </Box>
 

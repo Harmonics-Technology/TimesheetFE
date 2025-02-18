@@ -33,7 +33,7 @@ export const ListCollabInvoicesForAdmin = ({
         'Invoice Number',
         'Invoice Date',
         'Due Date',
-        'Recipient',
+        // 'Recipient',
         'Amount',
         'Status',
         'Action',
@@ -153,10 +153,10 @@ export const ListCollabInvoicesForAdmin = ({
                                 name={moment(x?.dueDate).format('DD/MM/YYYY')}
                                 fontWeight="500"
                             />
-                            <TableData
+                            {/* <TableData
                                 name={x?.recipient?.organizationName}
                                 fontWeight="500"
-                            />
+                            /> */}
 
                             <TableData
                                 name={CAD(Round(x?.total))}

@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AssignNewUsersToTrainingModel } from '../models/AssignNewUsersToTrainingModel';
 import type { BooleanStandardResponse } from '../models/BooleanStandardResponse';
 import type { NewTrainingFileModel } from '../models/NewTrainingFileModel';
 import type { TrainingAssigneeViewListStandardResponse } from '../models/TrainingAssigneeViewListStandardResponse';
@@ -166,22 +167,18 @@ trainingId?: string,
     }
 
     /**
-     * @param userId 
-     * @param trainingId 
+     * @param requestBody 
      * @returns BooleanStandardResponse Success
      * @throws ApiError
      */
     public static assignNewUser(
-userId?: string,
-trainingId?: string,
+requestBody?: AssignNewUsersToTrainingModel,
 ): CancelablePromise<BooleanStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/Training/assign-user',
-            query: {
-                'userId': userId,
-                'trainingId': trainingId,
-            },
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
         });
     }
 
