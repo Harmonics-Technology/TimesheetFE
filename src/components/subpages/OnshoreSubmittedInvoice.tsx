@@ -283,6 +283,10 @@ function OnshoreSubmittedInvoice({
                             url: `/financials/invoices-client`,
                             upgrade: subType !== 'premium',
                         },
+                        {
+                            text: 'Collaborators',
+                            url: `/financials/invoices-collaborator`,
+                        },
                     ]}
                 />
 

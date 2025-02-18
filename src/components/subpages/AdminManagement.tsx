@@ -114,6 +114,15 @@ function ProfileManagementAdmin({
         data.superAdminId = user?.superAdminId;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
         data.dateOfBirth = moment().format('YYYY-MM-DD');
+        if (!selectedLicense) {
+            toast({
+                title: 'Select a license to continue',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
         try {
             const result = await UserService.create(data);
             if (result.status) {
@@ -153,6 +162,7 @@ function ProfileManagementAdmin({
         email: '',
         role: '',
         id: '',
+        clientSubscriptionId: '',
     });
     const newUser = watch('firstName');
     const oldMember = userDetail?.email;
@@ -169,6 +179,7 @@ function ProfileManagementAdmin({
                 email: '',
                 role: '',
                 id: '',
+                clientSubscriptionId: '',
             });
             return;
         }
@@ -196,9 +207,31 @@ function ProfileManagementAdmin({
     const createFromTeam = async (e: any) => {
         e.preventDefault();
 
+        if (userDetail?.role == '') {
+            toast({
+                title: 'The role field is empty',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
+        if (!selectedLicense) {
+            toast({
+                title: 'Select a license to continue',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
+
         setIsLoading(true);
         try {
-            const result = await UserService.adminUpdateUser(userDetail);
+            const result = await UserService.adminUpdateUser({
+                ...userDetail,
+                clientSubscriptionId: selectedLicense?.subscriptionId,
+            });
             setIsLoading(false);
             if (result.status) {
                 toast({
@@ -218,9 +251,9 @@ function ProfileManagementAdmin({
                 position: 'top-right',
             });
             return;
-        } catch (err) {
+        } catch (err: any) {
             toast({
-                title: 'An error occurred',
+                title: err?.message || err?.body?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -400,7 +433,7 @@ function ProfileManagementAdmin({
                                 <Grid
                                     templateColumns="repeat(2,1fr)"
                                     gap="1rem 2rem"
-                                    mb=".5rem"
+                                    my=".5rem"
                                 >
                                     <Box>
                                         <Box>
@@ -455,48 +488,52 @@ function ProfileManagementAdmin({
                                     </Box>
                                 </Grid>
 
-                                <LicenseSelection
+                                {/* <LicenseSelection
                                     addLicense={addLicense}
                                     removeLicense={removeLicense}
                                     errors={errors}
                                     selectedLicense={selectedLicense}
                                     subs={subs}
-                                />
-                                <DrawerFooter
-                                    borderTopWidth="1px"
-                                    mt="2rem"
-                                    p="0"
-                                >
-                                    <Grid
-                                        templateColumns="repeat(2,1fr)"
-                                        gap="1rem 2rem"
-                                        my="2rem"
-                                        w="full"
+                                /> */}
+                                {oldMember && (
+                                    <DrawerFooter
+                                        borderTopWidth="1px"
+                                        mt="2rem"
+                                        p="0"
                                     >
-                                        <ShiftBtn
-                                            text="Close"
-                                            onClick={onClose}
-                                            px="1rem"
-                                            bg="gray.500"
+                                        <Grid
+                                            templateColumns="repeat(2,1fr)"
+                                            gap="1rem 2rem"
+                                            my="2rem"
                                             w="full"
-                                            h="2.8rem"
-                                        />
-                                        <ShiftBtn
-                                            text="Send Invite"
-                                            px="1rem"
-                                            w="full"
-                                            onClick={(e) => createFromTeam(e)}
-                                            loading={isLoading}
-                                            h="2.8rem"
-                                            prefix={
-                                                <Icon
-                                                    as={RiMailSendFill}
-                                                    mr=".5rem"
-                                                />
-                                            }
-                                        />
-                                    </Grid>
-                                </DrawerFooter>
+                                        >
+                                            <ShiftBtn
+                                                text="Close"
+                                                onClick={onClose}
+                                                px="1rem"
+                                                bg="gray.500"
+                                                w="full"
+                                                h="2.8rem"
+                                            />
+                                            <ShiftBtn
+                                                text="Send Invite"
+                                                px="1rem"
+                                                w="full"
+                                                onClick={(e) =>
+                                                    createFromTeam(e)
+                                                }
+                                                loading={isLoading}
+                                                h="2.8rem"
+                                                prefix={
+                                                    <Icon
+                                                        as={RiMailSendFill}
+                                                        mr=".5rem"
+                                                    />
+                                                }
+                                            />
+                                        </Grid>
+                                    </DrawerFooter>
+                                )}
                             </>
                         ) : null}
                     </>

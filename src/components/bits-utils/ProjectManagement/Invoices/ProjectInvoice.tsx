@@ -77,10 +77,19 @@ export const ProjectInvoice = ({
             });
             if (res.status) {
                 router.replace(router.asPath);
+                toast({
+                    title: 'Your invoice has been successfully sent!',
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
             }
         } catch (error: any) {
             toast({
-                title: error?.message || error?.body?.message,
+                title:
+                    error?.message ||
+                    error?.body?.message ||
+                    'Invoice failed to send. Please retry',
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
@@ -90,7 +99,7 @@ export const ProjectInvoice = ({
         }
     };
 
-    console.log({ invoice });
+    // console.log({ invoice });
 
     const opt = {
         filename: `${invoice?.invoiceReference}.pdf`,

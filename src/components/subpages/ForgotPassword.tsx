@@ -52,9 +52,9 @@ function ForgotPassword() {
                 isClosable: true,
                 position: 'top-right',
             });
-        } catch (error) {
+        } catch (error: any) {
             toast({
-                title: `check your network connection and try again`,
+                title: error?.message || error?.body?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',

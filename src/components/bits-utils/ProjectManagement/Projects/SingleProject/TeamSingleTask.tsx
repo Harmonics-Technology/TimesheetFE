@@ -180,8 +180,6 @@ export const TeamSingleTask = ({
 
     const isPm = project?.projectManagers?.find((x) => x?.user?.id == user?.id);
 
-    console.log({ project });
-
     const hasAccess =
         access?.projectMembersTaskCreation ||
         (access?.assignedPMTaskCreation && isPm);
@@ -1094,11 +1092,10 @@ export const TeamSingleTask = ({
                                                     />
                                                     <TableData
                                                         name={
-                                                            projectTaskAssigneeName
-                                                                ?.user
+                                                            x?.createdByUser
                                                                 ?.fullName ||
-                                                            task?.createdByUser
-                                                                ?.fullName
+                                                            projectTaskAssigneeName
+                                                                ?.user?.fullName
                                                         }
                                                         fontWeight="500"
                                                     />

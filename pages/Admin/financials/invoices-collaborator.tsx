@@ -1,6 +1,6 @@
 import { filterPagingSearchOptions } from '@components/generics/filterPagingSearchOptions';
 import { withPageAuth } from '@components/generics/withPageAuth';
-import { ListCollaboratorInvoices } from '@components/subpages/Collaborator/ListCollaboratorInvoices';
+import { ListCollabInvoicesForAdmin } from '@components/subpages/Collaborator/ListCollabInvoicesForAdmin';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 import {
@@ -13,7 +13,12 @@ const invoices = ({
 }: {
     invoices: ProjectInvoiceViewPagedCollection;
 }) => {
-    return <ListCollaboratorInvoices invoices={invoices} />;
+    return (
+        <ListCollabInvoicesForAdmin
+            invoices={invoices}
+            teamUrl="/financials/invoices-team"
+        />
+    );
 };
 
 export default invoices;
@@ -21,7 +26,6 @@ export default invoices;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
-        const userId = JSON.parse(ctx.req.cookies.user).id;
         const pagingOptions = filterPagingSearchOptions(ctx);
         try {
             const invoices =
@@ -29,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     pagingOptions.offset,
                     pagingOptions.limit,
                     superAdminId,
-                    userId,
+                    undefined,
                     undefined,
                     pagingOptions.status,
                     pagingOptions.subId,
@@ -38,6 +42,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     pagingOptions.search,
                 );
 
+            console.log({ invoices });
             return {
                 props: {
                     invoices: invoices.data,

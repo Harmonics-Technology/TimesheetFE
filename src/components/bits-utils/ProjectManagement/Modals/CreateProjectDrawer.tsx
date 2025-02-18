@@ -493,6 +493,7 @@ export const CreateProjectDrawer = ({
                             align="center"
                             justify="center"
                             w="full"
+                            pos="relative"
                         >
                             <VStack
                                 color="black"
@@ -513,14 +514,23 @@ export const CreateProjectDrawer = ({
                                     Drag and drop or Browse
                                 </Text>
                             </VStack>
-                            <Box display="none">
+                            <Box
+                                display="block"
+                                pos="absolute"
+                                w="full"
+                                h="full"
+                                top="0"
+                                left="0"
+                                opacity="0"
+                            >
                                 <Widget
                                     publicKey="fda3a71102659f95625f"
                                     clearable
-                                    onFileSelect={uploadFunction}
+                                    onFileSelect={(e) => uploadFunction(e)}
                                     ref={widgetApi}
                                     systemDialog={true}
                                     inputAcceptTypes={'.docx,.pdf, .doc'}
+                                    // multiple
                                 />
                             </Box>
                         </Flex>
@@ -563,7 +573,7 @@ export const CreateProjectDrawer = ({
                     </FormControl>
 
                     <DrawerFooter my="2rem" p="0" w="full">
-                        <Flex justify="space-between" w="full" gap='2rem'>
+                        <Flex justify="space-between" w="full" gap="2rem">
                             <ShiftBtn
                                 text="Cancel"
                                 onClick={onClose}

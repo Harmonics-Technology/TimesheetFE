@@ -74,10 +74,19 @@ export const ViewCollaboratorInvoice = ({
             });
             if (res.status) {
                 router.replace(router.asPath);
+                toast({
+                    title: 'Your invoice has been successfully sent!',
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
             }
         } catch (error: any) {
             toast({
-                title: error?.message || error?.body?.message,
+                title:
+                    error?.message ||
+                    error?.body?.message ||
+                    'Invoice failed to send. Please retry',
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',

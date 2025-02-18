@@ -46,6 +46,7 @@ interface adminProps {
     fileName?: string;
     record?: number;
     isSuperAdmin?: boolean;
+    teamUrl?: string;
 }
 
 function ClientInvoices({
@@ -53,10 +54,11 @@ function ClientInvoices({
     fileName,
     record,
     isSuperAdmin,
+    teamUrl,
 }: adminProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [clicked, setClicked] = useState<InvoiceView>();
-    const { accessControls } = useContext(UserContext);
+    const { accessControls, subType } = useContext(UserContext);
     const userAccess: ControlSettingView = accessControls;
 
     const invoice = invoiceData?.data?.value;
@@ -155,15 +157,21 @@ function ClientInvoices({
                     tabValue={[
                         {
                             text: 'Team Members',
-                            url: `/financials/invoices-team`,
+                            url: teamUrl,
                         },
                         {
                             text: 'Payment Partners',
                             url: `/financials/invoices-payment`,
+                            upgrade: subType == 'basic',
                         },
                         {
                             text: 'Clients',
                             url: `/financials/invoices-client`,
+                            upgrade: subType !== 'premium',
+                        },
+                        {
+                            text: 'Collaborators',
+                            url: `/financials/invoices-collaborator`,
                         },
                     ]}
                 />

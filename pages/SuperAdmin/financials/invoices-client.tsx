@@ -25,6 +25,7 @@ function Invoices({ invoiceData }: invoiceType) {
                 record={6}
                 fileName="Client Invoice"
                 isSuperAdmin
+                teamUrl="/financials/invoices-team"
             />
         </Box>
     );

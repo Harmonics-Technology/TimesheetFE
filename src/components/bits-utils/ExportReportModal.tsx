@@ -93,6 +93,13 @@ export const ExportReportModal = ({
 
     // const payrollGroupId = payPartner && `PayrollGroupId=${paygroupId}`;
 
+    const closeModal = () => {
+        setSelectedId([]);
+        setFromDate(undefined);
+        setToDate(undefined);
+        onClose();
+    };
+
     const exportData = async () => {
         if (startDate == undefined || endDate == undefined) {
             toast({
@@ -151,13 +158,7 @@ export const ExportReportModal = ({
                 type: 'userdetails',
             }),
         );
-    };
-
-    const closeModal = () => {
-        setSelectedId([]);
-        setFromDate(undefined);
-        setToDate(undefined);
-        onClose();
+        closeModal()
     };
 
     return (
@@ -365,6 +366,7 @@ export const ExportReportModal = ({
                                 onClick={exportData}
                                 px="1rem"
                                 w="full"
+                                loading={loading}
                                 prefix={<Icon as={CgNotes} mr=".5rem" />}
                             />
                         </HStack>
