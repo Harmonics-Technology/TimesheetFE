@@ -120,6 +120,7 @@ function Login() {
                     organizationEmail: user?.organizationEmail,
                     organizationPhone: user?.organizationPhone,
                     address: user?.address,
+                    isSendingInvoice: user?.isSendingInvoice,
                 };
                 const subDetails = user?.subscriptiobDetails;
                 Cookies.set('user', JSON.stringify(strippedData));

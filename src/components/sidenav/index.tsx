@@ -1339,7 +1339,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         dropDown={[]}
                         display={activeSub}
                     />
-                    <MenuItem
+                    {/* <MenuItem
                         change={change}
                         linkName="timesheets"
                         menuTitle="Manage Timesheets"
@@ -1349,7 +1349,7 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
                         setOpenSidenav={setOpenSidenav}
                         dropDown={['my timesheet', 'timesheet history']}
                         display={activeSub}
-                    />
+                    /> */}
 
                     <MenuItem
                         change={change}

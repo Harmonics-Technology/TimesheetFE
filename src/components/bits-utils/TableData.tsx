@@ -1508,7 +1508,7 @@ export function ProjectStatusAction({
     const options =
         status == 'sent'
             ? [{ id: 1, label: 'paid' }]
-            : status == 'paid'
+            : status == 'paid' || status == 'draft'
             ? []
             : [{ id: 3, label: 'sent' }];
     const { ref, isComponentVisible, setIsComponentVisible } =

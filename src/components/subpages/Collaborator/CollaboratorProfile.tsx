@@ -41,11 +41,11 @@ export const CollaboratorProfile = ({
             clientSubscriptionId: userProfile?.clientSubscriptionId,
             email: userProfile?.email,
             firstName: userProfile?.firstName,
-            jobTitle: userProfile?.employeeInformation?.jobTitle,
+            jobTitle: (userProfile as any)?.jobTitle,
             lastName: userProfile?.lastName,
             isActive: userProfile?.isActive,
             phoneNumber: userProfile?.phoneNumber,
-            // isSendingInvoice: userProfile?.
+            isSendingInvoice: userProfile?.isSendingInvoice,
         },
     });
 
@@ -180,7 +180,7 @@ export const CollaboratorProfile = ({
                         error={errors.jobTitle}
                         placeholder=""
                         defaultValue={''}
-                        disableLabel={true}
+                        // disableLabel={true}
                         register={register}
                         schema={schema}
                     />
@@ -196,7 +196,7 @@ export const CollaboratorProfile = ({
                         schema={schema}
                     />
                 </Box>
-                <Box mb="1.5rem" pos="relative">
+                <Box my="1.5rem" pos="relative">
                     <PrimaryRadio<UpdateCollaboratorModel>
                         label="Invoice Category"
                         radios={['Receiving invoice', 'Sending invoice']}
@@ -204,9 +204,9 @@ export const CollaboratorProfile = ({
                         control={control}
                         error={errors.isSendingInvoice}
                         defaultValue={
-                            userProfile?.isActive == true
+                            userProfile?.isSendingInvoice
                                 ? 'Sending invoice'
-                                : ' Receiving invoice'
+                                : 'Receiving invoice'
                         }
                         schema={schema}
                     />
@@ -243,31 +243,31 @@ export const CollaboratorProfile = ({
                         setSelectedLicense={setSelectedLicense}
                     />
                 </Box>
-                <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">
-                    <Grid
-                        templateColumns="repeat(2,1fr)"
-                        gap="1rem 2rem"
-                        my="2rem"
+                {/* <DrawerFooter borderTopWidth="1px" mt="2rem" p="0"> */}
+                <Grid
+                    templateColumns="repeat(2,1fr)"
+                    gap="1rem 2rem"
+                    my="2rem"
+                    w="full"
+                >
+                    <ShiftBtn
+                        text="Back"
+                        onClick={() => router.back()}
+                        px="1rem"
+                        bg="gray.500"
                         w="full"
-                    >
-                        <ShiftBtn
-                            text="Back"
-                            onClick={() => router.back()}
-                            px="1rem"
-                            bg="gray.500"
-                            w="full"
-                            h="2.8rem"
-                        />
-                        <ShiftBtn
-                            text="Update Profile"
-                            px="1rem"
-                            w="full"
-                            onClick={handleSubmit(onSubmit)}
-                            loading={isSubmitting}
-                            h="2.8rem"
-                        />
-                    </Grid>
-                </DrawerFooter>
+                        h="2.8rem"
+                    />
+                    <ShiftBtn
+                        text="Update Profile"
+                        px="1rem"
+                        w="full"
+                        onClick={handleSubmit(onSubmit)}
+                        loading={isSubmitting}
+                        h="2.8rem"
+                    />
+                </Grid>
+                {/* </DrawerFooter> */}
             </form>
         </Box>
     );

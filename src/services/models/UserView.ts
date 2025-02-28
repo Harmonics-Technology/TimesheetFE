@@ -53,5 +53,7 @@ export type UserView = {
     contractStartDate?: string | null;
     department?: string | null;
     isTrainingManager?: boolean;
+    isSendingInvoice?: boolean;
+    jobTitle?: string | null;
     userDepartments?: Array<UserDepartmentView> | null;
 };

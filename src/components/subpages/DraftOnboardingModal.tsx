@@ -202,75 +202,57 @@ export const DraftOnboardingModal = ({
             id: userProfile?.id,
             firstName: userProfile?.firstName,
             lastName: userProfile?.lastName,
-            hoursPerDay: userProfile?.employeeInformation?.hoursPerDay,
+            hoursPerDay: userProfile?.hoursPerDay,
             role: userProfile?.role as unknown as string,
             isActive: userProfile?.isActive,
             phoneNumber: userProfile?.phoneNumber,
             email: userProfile?.email,
             dateOfBirth: userProfile?.dateOfBirth,
-            clientId: userProfile?.employeeInformation?.clientId,
-            clientRate:
-                userProfile?.employeeInformation?.clientRate || undefined,
-            supervisorId: userProfile?.employeeInformation?.supervisorId,
-            paymentPartnerId:
-                userProfile?.employeeInformation?.paymentPartnerId || undefined,
-            currency: userProfile?.employeeInformation?.currency,
+            clientId: userProfile?.clientId,
+            clientRate: userProfile?.clientRate || undefined,
+            supervisorId: userProfile?.supervisorId,
+            paymentPartnerId: userProfile?.paymentPartnerId || undefined,
+            currency: userProfile?.currency,
 
-            paymentFrequency:
-                userProfile?.employeeInformation?.paymentFrequency,
-            payrollGroupId: userProfile?.employeeInformation?.payrollGroupId,
-            isEligibleForLeave:
-                userProfile?.employeeInformation?.isEligibleForLeave,
-            numberOfDaysEligible:
-                userProfile?.employeeInformation?.numberOfDaysEligible,
+            paymentFrequency: userProfile?.paymentFrequency,
+            payrollGroupId: userProfile?.payrollGroupId,
+            isEligibleForLeave: userProfile?.isEligibleForLeave,
+            numberOfDaysEligible: userProfile?.numberOfDaysEligible,
             // numberOfHoursEligible:
-            //     userProfile?.employeeInformation?.numberOfHoursEligible,
-            employeeType: userProfile?.employeeInformation?.employeeType,
-            invoiceGenerationType:
-                userProfile?.employeeInformation?.invoiceGenerationType,
-            enableFinancials:
-                userProfile?.employeeInformation?.enableFinancials,
+            //     userProfile?.numberOfHoursEligible,
+            employeeType: userProfile?.employeeType,
+            invoiceGenerationType: userProfile?.invoiceGenerationType,
+            enableFinancials: userProfile?.enableFinancials,
             departments: userProfile?.userDepartments as any,
             address: userProfile?.address,
             clientSubscriptionId: userProfile?.clientSubscriptionId,
-            employmentContractType:
-                userProfile?.employeeInformation?.employmentContractType,
-            jobTitle: userProfile?.employeeInformation?.jobTitle,
-            paymentProcessingFee:
-                userProfile?.employeeInformation?.paymentProcessingFee,
+            employmentContractType: userProfile?.employmentContractType,
+            jobTitle: userProfile?.jobTitle,
+            paymentProcessingFee: userProfile?.paymentProcessingFee,
             paymentProcessingFeeType:
-                userProfile?.employeeInformation?.paymentProcessingFeeType ||
-                undefined,
-            payrollProcessingType:
-                userProfile?.employeeInformation?.payrollProcessingType,
-            rate: userProfile?.employeeInformation?.rate,
-            rateType: userProfile?.employeeInformation?.rateType,
-            ratePerHour: userProfile?.employeeInformation?.ratePerHour,
-            tax: userProfile?.employeeInformation?.tax,
-            taxType: userProfile?.employeeInformation?.taxType,
-            timesheetFrequency:
-                userProfile?.employeeInformation?.timesheetFrequency,
-            payrollStructure:
-                userProfile?.employeeInformation?.payrollStructure,
-            incorpName: userProfile?.employeeInformation?.incorpName,
-            rolledOverLeave:
-                userProfile?.employeeInformation?.rolledOverLeave || undefined,
-            hasRollOverLeave:
-                userProfile?.employeeInformation?.hasRollOverLeave,
+                userProfile?.paymentProcessingFeeType || undefined,
+            payrollProcessingType: userProfile?.payrollProcessingType,
+            rate: userProfile?.rate,
+            rateType: userProfile?.rateType,
+            ratePerHour: userProfile?.ratePerHour,
+            tax: userProfile?.tax,
+            taxType: userProfile?.taxType,
+            timesheetFrequency: userProfile?.timesheetFrequency,
+            payrollStructure: userProfile?.payrollStructure,
+            incorpName: userProfile?.incorpName,
+            rolledOverLeave: userProfile?.rolledOverLeave || undefined,
+            hasRollOverLeave: userProfile?.hasRollOverLeave,
             expiryDateOfRolledOverLeave:
-                userProfile?.employeeInformation?.expiryDateOfRolledOverLeave ||
-                undefined,
-            hasUtilizeLeaveDaysToDate:
-                userProfile?.employeeInformation?.hasUtilizeLeaveDaysToDate,
-            utilizedLeave:
-                userProfile?.employeeInformation?.utilizedLeave || undefined,
-            timesheetStartDate:
-                userProfile?.employeeInformation?.timesheetStartDate ||
-                undefined,
+                userProfile?.expiryDateOfRolledOverLeave || undefined,
+            hasUtilizeLeaveDaysToDate: userProfile?.hasUtilizeLeaveDaysToDate,
+            utilizedLeave: userProfile?.utilizedLeave || undefined,
+            timesheetStartDate: userProfile?.timesheetStartDate || undefined,
+            startDate: userProfile?.startDate || undefined,
+            endDate: userProfile?.endDate || undefined,
         },
     });
 
-    // console.log({ errors });
+    console.log({ userProfile });
 
     const curentLicense = subs?.find(
         (x) => x.subscriptionId === userProfile?.clientSubscriptionId,
@@ -362,7 +344,8 @@ export const DraftOnboardingModal = ({
         watch('payrollProcessingType') == 'payment partner';
     const payData =
         watch('enableFinancials') == true ||
-        (watch('enableFinancials') as any) == 'Yes'
+        (watch('enableFinancials') as any) == 'Yes' ||
+        userProfile?.enableFinancials
             ? true
             : false;
 
@@ -380,7 +363,7 @@ export const DraftOnboardingModal = ({
 
     const forMe = userProfile?.clientId == user?.superAdminId;
     const [clientType, setClientType] = useState(!forMe);
-    const [contract, setContractFile] = useState<any>('');
+    const [contract, setContractFile] = useState<any>();
     const [showLoading, setShowLoading] = useState(false);
     const widgetApi = useRef<any>();
     const { hstAmount } = useContext(OnboardingFeeContext);
@@ -624,6 +607,9 @@ export const DraftOnboardingModal = ({
                         name="dateOfBirth"
                         label="Date of Birth (Optional)"
                         error={errors.dateOfBirth}
+                        defaultValue={moment(userProfile?.dateOfBirth).format(
+                            'YYYY/MM/DD',
+                        )}
                         max={new DateObject().subtract(1, 'days')}
                         required={false}
                         schema={schema}
@@ -767,6 +753,9 @@ schema={schema}
                             error={errors.startDate}
                             required={false}
                             schema={schema}
+                            defaultValue={moment(userProfile?.startDate).format(
+                                'YYYY/MM/DD',
+                            )}
                             // min={new Date()}
                         />
                         <PrimaryDate<TeamMemberModel>
@@ -777,6 +766,9 @@ schema={schema}
                             min={new DateObject().add(3, 'days')}
                             required={false}
                             schema={schema}
+                            defaultValue={moment(userProfile?.endDate).format(
+                                'YYYY/MM/DD',
+                            )}
                         />
                         <PrimarySelect<TeamMemberModel>
                             register={register}
@@ -844,6 +836,9 @@ schema={schema}
                             error={errors.timesheetStartDate}
                             required={false}
                             schema={schema}
+                            defaultValue={moment(
+                                userProfile?.timesheetStartDate,
+                            ).format('YYYY/MM/DD')}
                             // min={new Date()}
                         />
                         <LicenseSelection
@@ -859,7 +854,12 @@ schema={schema}
                         <UploadCareWidget
                             refs={widgetApi}
                             label="Attach Contract Document"
-                            filename={contract?.name}
+                            filename={
+                                contract?.name ||
+                                getFileName(
+                                    userProfile?.inCorporationDocumentUrl,
+                                )
+                            }
                             loading={showLoading}
                             uploadFunction={showLoadingState}
                         />
@@ -874,11 +874,13 @@ schema={schema}
                             name="enableFinancials"
                             control={control}
                             error={errors.enableFinancials}
-                            defaultValue={'No'}
+                            defaultValue={
+                                userProfile?.enableFinancials ? 'Yes' : 'No'
+                            }
                             schema={schema}
                         />
                     </Box>
-                    {payData && (payData as unknown as string) == 'Yes' && (
+                    {payData && (
                         <Box>
                             <Box mb="1rem">
                                 <PrimarySelect<TeamMemberModel>
@@ -1241,7 +1243,9 @@ schema={schema}
                             name="isEligibleForLeave"
                             control={control}
                             error={errors.isEligibleForLeave}
-                            defaultValue={'No'}
+                            defaultValue={
+                                userProfile?.isEligibleForLeave ? 'Yes' : 'No'
+                            }
                             schema={schema}
                         />
                     </Box>

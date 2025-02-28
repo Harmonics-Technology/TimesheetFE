@@ -118,7 +118,7 @@ export const AddTeamMemberModal = ({
                 </ModalHeader>
 
                 <ModalBody>
-                    <Box maxH="77vh" overflowY="auto" px={5}>
+                    <Box maxH="77vh" overflowY="auto" px={5} h='40vh'>
                         <Box w="full">
                             <FormLabel
                                 textTransform="capitalize"

@@ -222,7 +222,11 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                             gap="14px"
                         />
                     </Box>
-                    {convertYesNo(leaveConfiguration?.allowRollover) && (
+                    {convertYesNo(
+                        leaveConfiguration?.allowRollover ||
+                            watch('allowRollover') ==
+                                ('Roll over unused leave days' as any),
+                    ) && (
                         <Box mt=".6rem">
                             <Text fontSize="14px" color="#1b1d21">
                                 Select the period you like for a rolled over
@@ -272,7 +276,11 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                             </Box>
                         </Box>
                     )}
-                    {convertYesNo(leaveConfiguration?.allowRollover) && (
+                    {convertYesNo(
+                        leaveConfiguration?.allowRollover ||
+                            watch('allowRollover') ==
+                                ('Roll over unused leave days' as any),
+                    ) && (
                         <Box w="150px">
                             <Button
                                 color="#2EAFA3"

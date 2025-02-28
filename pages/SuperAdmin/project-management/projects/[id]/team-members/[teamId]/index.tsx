@@ -9,7 +9,7 @@ import {
     UtilityService,
 } from 'src/services';
 
-const index = ({ id, teams, users, currencies, teamId }) => {
+const index = ({ id, teams, users, currencies, teamId, user }) => {
     return (
         <SingleTeamMember
             id={id}
@@ -17,6 +17,7 @@ const index = ({ id, teams, users, currencies, teamId }) => {
             users={users}
             currencies={currencies}
             teamId={teamId}
+            user={user}
         />
     );
 };
@@ -40,6 +41,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 superAdminId,
                 'team member,super admin,admin,client,supervisor,collaborator',
             );
+            const user = await UserService.getUserById(teamId);
             const currencies = await UtilityService.listCountries();
             return {
                 props: {
@@ -48,6 +50,7 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                     id,
                     teamId,
                     currencies: currencies.data,
+                    user: user.data,
                 },
             };
         } catch (error: any) {

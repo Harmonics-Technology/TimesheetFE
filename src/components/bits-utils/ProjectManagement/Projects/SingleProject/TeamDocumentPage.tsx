@@ -28,7 +28,7 @@ import { AddAttachmentModal } from '../../Modals/AddAttachmentModal';
 import { AttachmentDetailModal } from '../../Modals/AttachmentDetailModal';
 import { TeamTopBar } from './TeamTopBar';
 import { IoDocumentAttach } from 'react-icons/io5';
-import { BsDownload } from 'react-icons/bs';
+import { BsDownload, BsEye } from 'react-icons/bs';
 import { formatFileSize } from '@components/generics/functions/getFileSize';
 
 export const TeamDocumentsPage = ({
@@ -132,6 +132,9 @@ export const TeamDocumentsPage = ({
         setFileData(value);
         onOpenDelete();
     };
+    const viewDoc = (url: any) => {
+        window.open(url, '_blank');
+    };
 
     return (
         <Box>
@@ -194,6 +197,10 @@ export const TeamDocumentsPage = ({
                                                 onClick={() => downloadFile(x)}
                                             />
                                         )}
+                                        <Icon
+                                            as={BsEye}
+                                            onClick={() => viewDoc(x?.fileUrl)}
+                                        />
                                         <Icon
                                             as={TbTrash}
                                             onClick={() =>

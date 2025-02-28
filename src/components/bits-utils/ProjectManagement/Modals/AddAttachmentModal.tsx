@@ -107,7 +107,15 @@ export const AddAttachmentModal = ({
                                 </>
                             )}
                         </VStack>
-                        <Box display="none">
+                        <Box
+                            display="block"
+                            pos="absolute"
+                            w="full"
+                            h="full"
+                            top="0"
+                            left="0"
+                            opacity="0"
+                        >
                             <Widget
                                 publicKey="fda3a71102659f95625f"
                                 clearable

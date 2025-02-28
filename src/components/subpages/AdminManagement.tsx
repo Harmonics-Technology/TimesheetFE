@@ -382,36 +382,6 @@ function ProfileManagementAdmin({
                         subs={subs}
                     />
 
-                    {newUser !== '' && newUser !== undefined ? (
-                        <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">
-                            <Grid
-                                templateColumns="repeat(2,1fr)"
-                                gap="1rem 2rem"
-                                my="2rem"
-                                w="full"
-                            >
-                                <ShiftBtn
-                                    text="Close"
-                                    onClick={onClose}
-                                    px="1rem"
-                                    bg="gray.500"
-                                    w="full"
-                                    h="2.8rem"
-                                />
-                                <ShiftBtn
-                                    text="Send Invite"
-                                    px="1rem"
-                                    w="full"
-                                    type="submit"
-                                    loading={isSubmitting}
-                                    h="2.8rem"
-                                    prefix={
-                                        <Icon as={RiMailSendFill} mr=".5rem" />
-                                    }
-                                />
-                            </Grid>
-                        </DrawerFooter>
-                    ) : null}
                     {(oldMember === undefined || oldMember === '') &&
                     (newUser === undefined || newUser === '') ? (
                         <Text
@@ -425,8 +395,6 @@ function ProfileManagementAdmin({
                             OR
                         </Text>
                     ) : null}
-                </form>
-                <form>
                     <>
                         {newUser === undefined || newUser === '' ? (
                             <>
@@ -495,47 +463,50 @@ function ProfileManagementAdmin({
                                     selectedLicense={selectedLicense}
                                     subs={subs}
                                 /> */}
-                                {oldMember && (
-                                    <DrawerFooter
-                                        borderTopWidth="1px"
-                                        mt="2rem"
-                                        p="0"
-                                    >
-                                        <Grid
-                                            templateColumns="repeat(2,1fr)"
-                                            gap="1rem 2rem"
-                                            my="2rem"
-                                            w="full"
-                                        >
-                                            <ShiftBtn
-                                                text="Close"
-                                                onClick={onClose}
-                                                px="1rem"
-                                                bg="gray.500"
-                                                w="full"
-                                                h="2.8rem"
-                                            />
-                                            <ShiftBtn
-                                                text="Send Invite"
-                                                px="1rem"
-                                                w="full"
-                                                onClick={(e) =>
-                                                    createFromTeam(e)
-                                                }
-                                                loading={isLoading}
-                                                h="2.8rem"
-                                                prefix={
-                                                    <Icon
-                                                        as={RiMailSendFill}
-                                                        mr=".5rem"
-                                                    />
-                                                }
-                                            />
-                                        </Grid>
-                                    </DrawerFooter>
-                                )}
+
+                                {/* {oldMember && ( */}
+                                {/* )} */}
                             </>
                         ) : null}
+                        <>
+                            <DrawerFooter borderTopWidth="1px" mt="2rem" p="0">
+                                <Grid
+                                    templateColumns="repeat(2,1fr)"
+                                    gap="1rem 2rem"
+                                    my="2rem"
+                                    w="full"
+                                >
+                                    <ShiftBtn
+                                        text="Close"
+                                        onClick={onClose}
+                                        px="1rem"
+                                        bg="gray.500"
+                                        w="full"
+                                        h="2.8rem"
+                                    />
+                                    <ShiftBtn
+                                        text="Send Invite"
+                                        px="1rem"
+                                        w="full"
+                                        onClick={
+                                            oldMember
+                                                ? (e) => createFromTeam(e)
+                                                : handleSubmit(onSubmit)
+                                        }
+                                        loading={
+                                            oldMember ? isLoading : isSubmitting
+                                        }
+                                        h="2.8rem"
+                                        prefix={
+                                            <Icon
+                                                as={RiMailSendFill}
+                                                mr=".5rem"
+                                            />
+                                        }
+                                    />
+                                </Grid>
+                            </DrawerFooter>
+                        </>
                     </>
                 </form>
             </DrawerWrapper>

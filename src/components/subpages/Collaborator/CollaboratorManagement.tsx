@@ -181,7 +181,7 @@ function CollaboratorManagement({ userList, isSuperAdmin, subs }: adminProps) {
                                 <TableStatus name={x.isActive} />
                                 <TableActions
                                     id={x.id}
-                                    route="admin"
+                                    route="collaborator"
                                     email={x.email}
                                 />
                             </Tr>

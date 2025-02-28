@@ -4,10 +4,12 @@
 
 import type { ProjectInvoiceItemView } from './ProjectInvoiceItemView';
 import type { ProjectInvoiceRecipientView } from './ProjectInvoiceRecipientView';
+import type { UserView } from './UserView';
 
 export type ProjectInvoiceView = {
     id?: string;
     superAdminId?: string;
+    superAdmin?: UserView;
     projectId?: string;
     projectName?: string | null;
     invoiceReference?: string | null;

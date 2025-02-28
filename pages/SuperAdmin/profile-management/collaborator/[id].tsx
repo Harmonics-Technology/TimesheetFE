@@ -1,5 +1,5 @@
 import { withPageAuth } from '@components/generics/withPageAuth';
-import SuperadminProfile from '@components/subpages/SuperAdminManagement';
+import { CollaboratorProfile } from '@components/subpages/Collaborator/CollaboratorProfile';
 import { GetServerSideProps } from 'next';
 import { UserService } from 'src/services';
 interface pageOptions {
@@ -8,7 +8,7 @@ interface pageOptions {
 }
 
 function AdminDetails({ userProfile, subs }: pageOptions) {
-    return <SuperadminProfile userProfile={userProfile} subs={subs} />;
+    return <CollaboratorProfile userProfile={userProfile} subs={subs} />;
 }
 
 export default AdminDetails;

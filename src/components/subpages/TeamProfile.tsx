@@ -80,8 +80,6 @@ function TeamProfile({
 }: TeamProfileProps) {
     const { user, opens, subType } = useContext(UserContext);
 
-    // console.log({ clients });
-
     clients =
         clients?.length <= 0
             ? [{ id: user?.superAdminId, fullName: user?.fullName }]
@@ -180,7 +178,7 @@ function TeamProfile({
     });
     const router = useRouter();
     const toast = useToast();
-    console.log(typeof watch('enableFinancials'));
+    // console.log(typeof watch('enableFinancials'));
     const includePayroll = convertYesNo(watch('enableFinancials'));
     const hasUtlized = watch('hasUtilizeLeaveDaysToDate');
 

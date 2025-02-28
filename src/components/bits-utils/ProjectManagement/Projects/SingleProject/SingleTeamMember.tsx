@@ -15,6 +15,7 @@ import { FaEye } from 'react-icons/fa';
 import { TableCard } from '../../Generics/TableCard';
 import { ProgressBar } from '../../Generics/ProgressBar';
 import { ProjectTaskAsigneeView } from 'src/services';
+import { Round } from '@components/generics/functions/Round';
 
 export const SingleTeamMember = ({
     id,
@@ -22,12 +23,14 @@ export const SingleTeamMember = ({
     users,
     currencies,
     teamId,
+    user,
 }: {
     id: string;
     teams: any;
     users: any;
     currencies: any;
     teamId: any;
+    user: any;
 }) => {
     const tableHead = [
         'Task Assigned',
@@ -42,7 +45,7 @@ export const SingleTeamMember = ({
         (a, b) => a + (b?.hoursLogged as number),
         0,
     );
-    console.log({ users });
+    console.log({ user });
 
     // console.log({ users, teamId });
 
@@ -60,8 +63,8 @@ export const SingleTeamMember = ({
                 borderBottom="1px solid #e5e5e5"
             >
                 <TitleText
-                    title={userDetails?.fullName}
-                    text={userDetails?.email}
+                    title={user?.fullName}
+                    text={user?.email}
                     fontSize="1rem"
                     gap=".1rem"
                 />
@@ -72,8 +75,8 @@ export const SingleTeamMember = ({
                     gap=".1rem"
                 />
                 <TitleText
-                    title={userDetails?.employeeInformation?.jobTitle}
-                    text={userDetails?.employeeInformation?.department}
+                    title={user?.employeeInformation?.jobTitle}
+                    text={user?.userDepartments[0]?.department?.name}
                     fontSize="1rem"
                     gap=".1rem"
                 />
@@ -157,8 +160,10 @@ export const SingleTeamMember = ({
                                         }
                                         leftText={team?.projectTask?.status}
                                         rightText={`${
-                                            team?.projectTask
-                                                ?.percentageOfCompletion || 0
+                                            Round(
+                                                team?.projectTask
+                                                    ?.percentageOfCompletion,
+                                            ) || 0
                                         }%`}
                                     />
                                 </td>

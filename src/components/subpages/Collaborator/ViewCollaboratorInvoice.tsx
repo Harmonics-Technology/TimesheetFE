@@ -65,6 +65,11 @@ export const ViewCollaboratorInvoice = ({
     const [loading, setLoading] = useState('');
     const toast = useToast();
 
+    const route =
+        role == 'Collaborator'
+            ? `/${role}/invoices`
+            : `/${role}/financials/invoices-collaborator`;
+
     const updateStatus = async () => {
         setLoading('send');
         try {
@@ -434,7 +439,7 @@ export const ViewCollaboratorInvoice = ({
                                 h="40px"
                                 w="full"
                                 // isLoading={loading}
-                                onClick={() => router.push(`/${role}/invoices`)}
+                                onClick={() => router.push(route)}
                             />
                             <ManageBtn
                                 bg="white"

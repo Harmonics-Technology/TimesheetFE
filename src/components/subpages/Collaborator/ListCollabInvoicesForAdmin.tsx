@@ -169,7 +169,7 @@ export const ListCollabInvoicesForAdmin = ({
                             />
 
                             <ProjectInvoiceAction
-                                route={`/${role}/invoices/${x?.id}`}
+                                route={`/${role}/financials/invoices-collaborator/${x?.id}`}
                                 showDelete={showDelete}
                                 data={x}
                             />

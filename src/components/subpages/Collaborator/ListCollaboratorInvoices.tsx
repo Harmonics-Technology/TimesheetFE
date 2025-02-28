@@ -85,18 +85,20 @@ export const ListCollaboratorInvoices = ({
 
     return (
         <Box>
-            <HStack justify="space-between" align="flex-start" my="1rem">
-                {/* <Text fontWeight={600}>All Invoices</Text> */}
-                <ManageBtn
-                    onClick={() =>
-                        router.push(`/${role}/invoices/create-invoice`)
-                    }
-                    btn="Create invoice"
-                    bg="brand.400"
-                    w="fit-content"
-                    h="2rem"
-                />
-            </HStack>
+            {user?.isSendingInvoice && (
+                <HStack justify="space-between" align="flex-start" my="1rem">
+                    {/* <Text fontWeight={600}>All Invoices</Text> */}
+                    <ManageBtn
+                        onClick={() =>
+                            router.push(`/${role}/invoices/create-invoice`)
+                        }
+                        btn="Create invoice"
+                        bg="brand.400"
+                        w="fit-content"
+                        h="2rem"
+                    />
+                </HStack>
+            )}
             <Box bgColor="white" borderRadius="6px" p="1rem" mt="2rem">
                 <HStack justify="space-between">
                     <Box w="full">
