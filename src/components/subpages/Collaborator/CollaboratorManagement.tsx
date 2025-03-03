@@ -48,6 +48,7 @@ import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import { LicenseSelection } from '../ManageSub/LicenseSelection';
 import { PrimaryRadio } from '@components/bits-utils/PrimaryRadio';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
+import { convertYesNo } from '@components/generics/functions/ConvertStringToBool';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -90,11 +91,9 @@ function CollaboratorManagement({ userList, isSuperAdmin, subs }: adminProps) {
 
     const onSubmit = async (data: CollaboratorModel) => {
         data.superAdminId = user?.superAdminId;
-        if ((data.isSendingInvoice as any) == 'Sending invoice') {
-            data.isSendingInvoice = true;
-        } else {
-            data.isSendingInvoice = false;
-        }
+        data.isSendingInvoice = convertYesNo(
+            data.isSendingInvoice == ('Sending invoice' as any),
+        );
         // data.clientSubscriptionId = selectedLicense?.subscriptionId;
         try {
             const result = await UserService.addCollaborator(data);

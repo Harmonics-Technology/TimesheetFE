@@ -12,6 +12,7 @@ import { LicenseEditBox } from '@components/bits-utils/LicenseEditBox';
 import { LicenseRevoke } from '@components/bits-utils/LicenseRevoke';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import { useRouter } from 'next/router';
+import { convertYesNo } from '@components/generics/functions/ConvertStringToBool';
 
 const schema = yup.object().shape({
     lastName: yup.string().required(),
@@ -56,7 +57,7 @@ export const CollaboratorProfile = ({
         (x) => x.subscriptionId === userProfile?.clientSubscriptionId,
     );
 
-    console.log({ userProfile });
+    // console.log({ userProfile });
     const [selectedLicense, setSelectedLicense] = useState<any>(curentLicense);
     const addLicense = (license) => {
         setSelectedLicense(license);
@@ -67,6 +68,9 @@ export const CollaboratorProfile = ({
 
     const onSubmit = async (data: UpdateCollaboratorModel) => {
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
+        data.isSendingInvoice = convertYesNo(
+            data.isSendingInvoice == ('Sending invoice' as any),
+        );
         try {
             const result = await UserService.updateCollaborator(data);
             //

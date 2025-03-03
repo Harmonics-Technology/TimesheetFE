@@ -254,16 +254,16 @@ export const ProjectInvoice = ({
                                 </Box>
                                 <Box textAlign="right">
                                     <Text fontWeight="600" color="#2D3748">
-                                        Proinsight Consulting
+                                        {user?.organizationName}
                                     </Text>
                                     <Text fontSize="12px" color="#808080">
-                                        25 Sheppard, North York, ON
+                                        {user?.organizationAddress}
                                     </Text>
                                     <Text fontSize="12px" color="#808080">
-                                        M2N 6S6, Canada
+                                        {user?.email}
                                     </Text>
                                     <Text fontSize="12px" color="#808080">
-                                        ade.adeyemi@sample.com
+                                        {user?.organizationPhone}
                                     </Text>
                                 </Box>
                             </HStack>
@@ -275,7 +275,7 @@ export const ProjectInvoice = ({
                                 p="10px 19px 20px"
                                 mt="15px"
                             >
-                                <Box w="25%">
+                                <Box w="35%">
                                     <Text
                                         fontSize="13px"
                                         fontWeight={500}

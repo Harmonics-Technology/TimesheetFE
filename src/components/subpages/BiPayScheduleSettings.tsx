@@ -129,9 +129,11 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                         <InputBlank
                             label="End Date"
                             defaultValue=""
-                            placeholder={(endDate || new Date())?.format(
-                                'DD/MM/YYYY',
-                            )}
+                            placeholder={
+                                endDate?.isValid()
+                                    ? endDate?.format('DD/MM/YYYY')
+                                    : 'Select Start Date First'
+                            }
                             readonly={true}
                         />
                         {/* <Box w="full">
@@ -155,9 +157,13 @@ export const BiPayScheduleSettings = ({ data, bPeriod, payday }) => {
                         <InputBlank
                             label="Payment Day"
                             defaultValue=""
-                            placeholder={moment(endDate || new Date())
-                                .add(watch('paymentDateDays'), 'days')
-                                .format('dddd')}
+                            placeholder={
+                                endDate?.isValid()
+                                    ? moment(endDate || new Date())
+                                          .add(watch('paymentDateDays'), 'days')
+                                          .format('dddd')
+                                    : 'Select Payment Date Offset First'
+                            }
                         />
                         {/* <Box w="full">
                         <Text fontSize="12px" color="#8C8C8C" w="full" mb="0">

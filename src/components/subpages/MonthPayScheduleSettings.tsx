@@ -210,9 +210,11 @@ export const MonthPayScheduleSettings = ({
                                     <InputBlank
                                         label="End Date"
                                         defaultValue=""
-                                        placeholder={(
-                                            endDate || new Date()
-                                        )?.format('DD/MM/YYYY')}
+                                        placeholder={
+                                            endDate?.isValid()
+                                                ? endDate?.format('DD/MM/YYYY')
+                                                : 'Select Start Date First'
+                                        }
                                         readonly={true}
                                     />
                                 </HStack>
@@ -232,14 +234,18 @@ export const MonthPayScheduleSettings = ({
                                     <InputBlank
                                         label="Day"
                                         defaultValue=""
-                                        placeholder={moment(
-                                            endDate || new Date(),
-                                        )
-                                            .add(
-                                                watch('paymentDateDays'),
-                                                'days',
-                                            )
-                                            .format('dddd')}
+                                        placeholder={
+                                            endDate?.isValid()
+                                                ? moment(endDate || new Date())
+                                                      .add(
+                                                          watch(
+                                                              'paymentDateDays',
+                                                          ),
+                                                          'days',
+                                                      )
+                                                      .format('dddd')
+                                                : 'Select Payment Date Offset First'
+                                        }
                                         readonly={true}
                                     />
                                 </HStack>

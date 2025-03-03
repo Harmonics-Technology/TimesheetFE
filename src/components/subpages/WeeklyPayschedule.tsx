@@ -52,6 +52,7 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
     const router = useRouter();
     const { user } = useContext(UserContext);
     const endDate = moment(watch('startDate')).add(4, 'days');
+    console.log({ endDate });
     const onSubmit = async (data: PayScheduleGenerationModel) => {
         data.superAdminId = user?.superAdminId;
         try {
@@ -131,9 +132,11 @@ export const WeeklyPaySchedule = ({ data, bPeriod, payday }) => {
                             <InputBlank
                                 label="End Date"
                                 defaultValue=""
-                                placeholder={(endDate || new Date())?.format(
-                                    'DD/MM/YYYY',
-                                )}
+                                placeholder={
+                                    endDate?.isValid()
+                                        ? endDate?.format('DD/MM/YYYY')
+                                        : 'Select Start Date First'
+                                }
                                 readonly={true}
                             />
                         </Box>

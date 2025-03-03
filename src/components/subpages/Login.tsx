@@ -119,7 +119,7 @@ function Login() {
                     invoiceGenerationType: user?.invoiceGenerationType,
                     organizationEmail: user?.organizationEmail,
                     organizationPhone: user?.organizationPhone,
-                    address: user?.address,
+                    organizationAddress: user?.organizationAddress,
                     isSendingInvoice: user?.isSendingInvoice,
                 };
                 const subDetails = user?.subscriptiobDetails;

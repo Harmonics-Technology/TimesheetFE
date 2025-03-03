@@ -774,22 +774,28 @@ export const TeamSingleTask = ({
                         <Text color="#2d3748" fontSize=".8rem" fontWeight={600}>
                             My Task
                         </Text>
-                        <Box>
-                            <Flex alignItems="flex-start" gap="9px">
-                                <FormLabel>Add hours to timesheet</FormLabel>
-                                <Switch
-                                    mt="1"
-                                    // isChecked={
-                                    //     projectAssigneeDetails?.addTaskToTimesheet
-                                    // }
-                                    isChecked={addToTimesheet}
-                                    // onChange={() => ToggleAddToTimesheet(addToTimesheet === false ? true : false)}
-                                    onChange={() =>
-                                        ToggleAddToTimesheet(!addToTimesheet)
-                                    }
-                                />
-                            </Flex>
-                        </Box>
+                        {user?.role != 'Collaborator' && (
+                            <Box>
+                                <Flex alignItems="flex-start" gap="9px">
+                                    <FormLabel>
+                                        Add hours to timesheet
+                                    </FormLabel>
+                                    <Switch
+                                        mt="1"
+                                        // isChecked={
+                                        //     projectAssigneeDetails?.addTaskToTimesheet
+                                        // }
+                                        isChecked={addToTimesheet}
+                                        // onChange={() => ToggleAddToTimesheet(addToTimesheet === false ? true : false)}
+                                        onChange={() =>
+                                            ToggleAddToTimesheet(
+                                                !addToTimesheet,
+                                            )
+                                        }
+                                    />
+                                </Flex>
+                            </Box>
+                        )}
                     </Stack>
 
                     <HStack justify="flex-end">
