@@ -64,4 +64,5 @@ export type User = {
     teamMembers?: Array<EmployeeInformation> | null;
     payees?: Array<EmployeeInformation> | null;
     userDepartments?: Array<UserDepartment> | null;
+    timbaId?: string | null;
 };

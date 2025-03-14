@@ -30,12 +30,12 @@ import type { ProjectTaskViewStandardResponse } from '../models/ProjectTaskViewS
 import type { ProjectTimesheetApprovalModel } from '../models/ProjectTimesheetApprovalModel';
 import type { ProjectTimesheetListViewStandardResponse } from '../models/ProjectTimesheetListViewStandardResponse';
 import type { ProjectTimesheetModel } from '../models/ProjectTimesheetModel';
-import type { ProjectTimesheetViewListStandardResponse } from '../models/ProjectTimesheetViewListStandardResponse';
 import type { ProjectViewPagedCollectionStandardResponse } from '../models/ProjectViewPagedCollectionStandardResponse';
 import type { ProjectViewStandardResponse } from '../models/ProjectViewStandardResponse';
 import type { ResourceCapacityDetailViewStandardResponse } from '../models/ResourceCapacityDetailViewStandardResponse';
 import type { ResourceCapacityViewStandardResponse } from '../models/ResourceCapacityViewStandardResponse';
 import type { StrippedProjectAssigneeStandardResponse } from '../models/StrippedProjectAssigneeStandardResponse';
+import type { StrippedProjectTimesheetViewListStandardResponse } from '../models/StrippedProjectTimesheetViewListStandardResponse';
 import type { TaskComment } from '../models/TaskComment';
 import type { UpdateInvoiceStatusModel } from '../models/UpdateInvoiceStatusModel';
 import type { UpdateProjectTimesheet } from '../models/UpdateProjectTimesheet';
@@ -926,12 +926,12 @@ projectId?: string,
 
     /**
      * @param taskId 
-     * @returns ProjectTimesheetViewListStandardResponse Success
+     * @returns StrippedProjectTimesheetViewListStandardResponse Success
      * @throws ApiError
      */
     public static listUserProjectManagementTimesheet(
 taskId?: string,
-): CancelablePromise<ProjectTimesheetViewListStandardResponse> {
+): CancelablePromise<StrippedProjectTimesheetViewListStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/ProjectManagement/users-project-management-timesheets',

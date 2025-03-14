@@ -1,5 +1,5 @@
 import { Box, DrawerFooter, Grid, Text, useToast } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -32,6 +32,7 @@ export const CollaboratorProfile = ({
         register,
         handleSubmit,
         control,
+        setValue,
         formState: { errors, isSubmitting },
     } = useForm<UpdateCollaboratorModel>({
         resolver: yupResolver(schema),
@@ -47,9 +48,9 @@ export const CollaboratorProfile = ({
             isActive: userProfile?.isActive,
             phoneNumber: userProfile?.phoneNumber,
             isSendingInvoice: userProfile?.isSendingInvoice,
+            superAdminId: userProfile?.superAdminId as string,
         },
     });
-
     const router = useRouter();
     const toast = useToast();
 
@@ -57,7 +58,7 @@ export const CollaboratorProfile = ({
         (x) => x.subscriptionId === userProfile?.clientSubscriptionId,
     );
 
-    // console.log({ userProfile });
+    console.log({ userProfile });
     const [selectedLicense, setSelectedLicense] = useState<any>(curentLicense);
     const addLicense = (license) => {
         setSelectedLicense(license);
@@ -67,10 +68,12 @@ export const CollaboratorProfile = ({
     };
 
     const onSubmit = async (data: UpdateCollaboratorModel) => {
-        data.clientSubscriptionId = selectedLicense?.subscriptionId;
+        // data.clientSubscriptionId = selectedLicense?.subscriptionId;
         data.isSendingInvoice = convertYesNo(
             data.isSendingInvoice == ('Sending invoice' as any),
         );
+        data.superAdminId = '08dc53e4-3464-4cc2-8a08-3a3826921066';
+        data.isActive = convertYesNo(data.isActive);
         try {
             const result = await UserService.updateCollaborator(data);
             //
@@ -100,6 +103,10 @@ export const CollaboratorProfile = ({
             });
         }
     };
+
+    useEffect(() => {
+        setValue('clientSubscriptionId', selectedLicense?.subscriptionId);
+    }, [selectedLicense]);
 
     return (
         <Box

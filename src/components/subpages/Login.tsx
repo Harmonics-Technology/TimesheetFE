@@ -11,6 +11,8 @@ import {
     Icon,
     Divider,
     Spinner,
+    HStack,
+    Circle,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -26,11 +28,17 @@ interface LoginModel {
 }
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { UserContext } from '@components/context/UserContext';
-import { OpenAPI, UserService, UserViewStandardResponse } from 'src/services';
+import {
+    OpenAPI,
+    TimbaUserView,
+    UserService,
+    UserViewStandardResponse,
+} from 'src/services';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useIsAuthenticated, useMsal } from '@azure/msal-react';
 import { AuthError, InteractionStatus } from '@azure/msal-browser';
 import { BsMicrosoft } from 'react-icons/bs';
+import { OrgIcon } from '@components/icons/OrgIcon';
 
 const schema = yup.object().shape({
     email: yup.string().required('Email is required'),
@@ -44,6 +52,9 @@ function Login() {
     const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
+    const [organizationDisplay, setOrganizationDisplay] = useState(false);
+    const [orgAvailable, setOrgAvailable] = useState<TimbaUserView[] | null>();
+    const [loadingAuth, setLoadingAuth] = useState('');
     const msal = useMsal();
 
     //
@@ -69,9 +80,26 @@ function Login() {
             const result = (await UserService.loginUser(
                 data,
             )) as UserViewStandardResponse;
+            const user = result.data;
             if (result.status) {
-                const user = result.data;
                 OpenAPI.TOKEN = user?.token as string;
+                user &&
+                    Cookies.set('token', user.token as string, {
+                        expires: 1,
+                    });
+                if (user?.role == 'Collaborator') {
+                    const organizations =
+                        await UserService.listCollaboratorOrganizations(
+                            user?.id as string,
+                        );
+                    const orgs = organizations?.data as TimbaUserView[];
+                    if (orgs?.length > 0) {
+                        setOrganizationDisplay(true);
+                        setOrgAvailable(orgs);
+                        Cookies.set('orgs', JSON.stringify(orgs));
+                    }
+                    return;
+                }
                 const licenseData = await UserService.getClientSubScriptions(
                     user?.superAdminId as string,
                 );
@@ -125,10 +153,6 @@ function Login() {
                 const subDetails = user?.subscriptiobDetails;
                 Cookies.set('user', JSON.stringify(strippedData));
                 Cookies.set('subDetails', JSON.stringify(subDetails));
-                user &&
-                    Cookies.set('token', user.token as string, {
-                        expires: 1,
-                    });
 
                 if (user?.twoFactorEnabled) {
                     router.push('/login/twofalogin');
@@ -143,25 +167,26 @@ function Login() {
                         'access-controls',
                         JSON.stringify(getControlSettings.data),
                     );
-                    toast({
-                        title: `Login Successful`,
-                        status: 'success',
-                        isClosable: true,
-                        position: 'top-right',
-                    });
-                    router.query.from
-                        ? router.push(
-                              decodeURIComponent(
-                                  router.query.from as unknown as string,
-                              ),
-                          )
-                        : router.push(
-                              `/${result?.data?.role?.replaceAll(
-                                  ' ',
-                                  '',
-                              )}/dashboard`,
-                          );
                 }
+
+                toast({
+                    title: `Login Successful`,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.query.from
+                    ? router.push(
+                          decodeURIComponent(
+                              router.query.from as unknown as string,
+                          ),
+                      )
+                    : router.push(
+                          `/${result?.data?.role?.replaceAll(
+                              ' ',
+                              '',
+                          )}/dashboard`,
+                      );
                 return;
             }
             toast({
@@ -254,6 +279,66 @@ function Login() {
         }
     };
 
+    const completeAuthForCollaborator = async (selected) => {
+        setLoadingAuth(selected?.superAdminId);
+        try {
+            const res = await UserService.completeTimbaUserAuthentication({
+                userId: selected?.userId,
+                superAdminId: selected?.superAdminId,
+            });
+            const user = res?.data;
+            if (res?.status) {
+                const strippedData = {
+                    clientSubscriptionId: user?.clientSubscriptionId,
+                    email: user?.user?.email,
+                    firstName: user?.user?.firstName,
+                    lastName: user?.user?.lastName,
+                    fullName: user?.user?.fullName,
+                    role: user?.user?.role,
+                    isActive: user?.isActive,
+                    organizationName: user?.user?.organizationName,
+                    superAdminId: user?.superAdminId,
+                    organizationEmail: user?.user?.organizationEmail,
+                    organizationPhone: user?.user?.organizationPhone,
+                    organizationAddress: user?.user?.organizationAddress,
+                    isSendingInvoice: user?.isSendingInvoice,
+                };
+                Cookies.set('user', JSON.stringify(strippedData));
+                toast({
+                    title: `Login Successful`,
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+                router.query.from
+                    ? router.push(
+                          decodeURIComponent(
+                              router.query.from as unknown as string,
+                          ),
+                      )
+                    : router.push(
+                          `/${user?.user?.role?.replaceAll(' ', '')}/dashboard`,
+                      );
+                return;
+            }
+            toast({
+                title: res?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            toast({
+                title: error?.message || error?.body?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } finally {
+            setLoadingAuth('');
+        }
+    };
+
     useEffect(() => {
         const isUser = Cookies.get('details');
         if (isUser !== undefined) {
@@ -267,7 +352,92 @@ function Login() {
     }, []);
 
     return (
-        <Flex w="full" h="100vh" justify="center" alignItems="center">
+        <Flex
+            w="full"
+            h="100vh"
+            justify="center"
+            alignItems="center"
+            pos="relative"
+        >
+            {organizationDisplay && (
+                <Box
+                    pos="absolute"
+                    zIndex={800}
+                    bgColor="rgba(0,0,0,.8)"
+                    w="full"
+                    h="full"
+                >
+                    <VStack
+                        gap="10px"
+                        align="flex-start"
+                        border="1px solid #C4C4C4"
+                        borderRadius="10px"
+                        p="10px"
+                        w="30%"
+                        bgColor="white"
+                        pos="relative"
+                        top="50%"
+                        left="50%"
+                        transform="translate(-50%,-50%)"
+                    >
+                        {orgAvailable?.map((x) => (
+                            <HStack
+                                justify="space-between"
+                                border="1px solid #C4C4C4"
+                                borderRadius="10px"
+                                h="3.45rem"
+                                w="full"
+                                px="8.5px"
+                                onClick={() => completeAuthForCollaborator(x)}
+                            >
+                                <HStack gap="8px">
+                                    <Circle
+                                        size="28px"
+                                        border="1px solid #A6ACBE"
+                                        overflow="hidden"
+                                    >
+                                        {x?.superAdmin?.profilePicture ? (
+                                            <Image
+                                                src={
+                                                    x?.superAdmin
+                                                        ?.profilePicture
+                                                }
+                                                h="full"
+                                                w="full"
+                                                objectFit="cover"
+                                            />
+                                        ) : (
+                                            <Icon
+                                                as={OrgIcon}
+                                                color="#78A3AD"
+                                                h="14px"
+                                                w="12px"
+                                            />
+                                        )}
+                                    </Circle>
+                                    <Text
+                                        fontSize="13px"
+                                        fontWeight={500}
+                                        color="#2F363A"
+                                    >
+                                        {x?.superAdmin?.organizationName}
+                                    </Text>
+                                </HStack>
+
+                                <Circle border="1px solid #696969" size="18px">
+                                    {loadingAuth == x?.superAdminId && (
+                                        <Spinner
+                                            size="xs"
+                                            colorScheme="brand"
+                                        />
+                                    )}
+                                    {/* <Circle bgColor="brand.400" size="10px" /> */}
+                                </Circle>
+                            </HStack>
+                        ))}
+                    </VStack>
+                </Box>
+            )}
             <Box
                 w={['full', '35%']}
                 mx="auto"

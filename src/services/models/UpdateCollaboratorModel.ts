@@ -13,4 +13,5 @@ export type UpdateCollaboratorModel = {
     isSendingInvoice?: boolean;
     clientSubscriptionId?: string | null;
     isActive?: boolean;
+    superAdminId?: string;
 };

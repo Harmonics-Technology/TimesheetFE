@@ -27,6 +27,10 @@ import type { ShiftUsersListViewPagedCollectionStandardResponse } from '../model
 import type { SubscriptionHistoryViewModelStandardResponse } from '../models/SubscriptionHistoryViewModelStandardResponse';
 import type { SubscriptionTypesModelCommandCenterResponseModelStandardResponse } from '../models/SubscriptionTypesModelCommandCenterResponseModelStandardResponse';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
+import type { TimbaUserActivationModel } from '../models/TimbaUserActivationModel';
+import type { TimbaUserLoginModel } from '../models/TimbaUserLoginModel';
+import type { TimbaUserViewPagedCollectionStandardResponse } from '../models/TimbaUserViewPagedCollectionStandardResponse';
+import type { TimbaUserViewStandardResponse } from '../models/TimbaUserViewStandardResponse';
 import type { UpdateCardDetailsModel } from '../models/UpdateCardDetailsModel';
 import type { UpdateClientStripeSubscriptionModel } from '../models/UpdateClientStripeSubscriptionModel';
 import type { UpdateClientSubscriptionModel } from '../models/UpdateClientSubscriptionModel';
@@ -44,6 +48,41 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class UserService {
+    /**
+     * @param superAdminId
+     * @param offset
+     * @param limit
+     * @param search
+     * @param startDate
+     * @param endDate
+     * @param subscriptionId
+     * @returns TimbaUserViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listCollaborator(
+        superAdminId?: string,
+        offset?: number,
+        limit?: number,
+        search?: string,
+        startDate?: string,
+        endDate?: string,
+        subscriptionId?: string,
+    ): CancelablePromise<TimbaUserViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/timba-users',
+            query: {
+                superAdminId: superAdminId,
+                Offset: offset,
+                Limit: limit,
+                search: search,
+                StartDate: startDate,
+                EndDate: endDate,
+                subscriptionId: subscriptionId,
+            },
+        });
+    }
+
     /**
      * @param requestBody
      * @returns UserViewStandardResponse Success
@@ -1214,12 +1253,12 @@ export class UserService {
 
     /**
      * @param requestBody
-     * @returns UserViewStandardResponse Success
+     * @returns TimbaUserViewStandardResponse Success
      * @throws ApiError
      */
     public static addCollaborator(
         requestBody?: CollaboratorModel,
-    ): CancelablePromise<UserViewStandardResponse> {
+    ): CancelablePromise<TimbaUserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/add-collaborator',
@@ -1233,12 +1272,12 @@ export class UserService {
 
     /**
      * @param requestBody
-     * @returns UserViewStandardResponse Success
+     * @returns TimbaUserViewStandardResponse Success
      * @throws ApiError
      */
     public static updateCollaborator(
         requestBody?: UpdateCollaboratorModel,
-    ): CancelablePromise<UserViewStandardResponse> {
+    ): CancelablePromise<TimbaUserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/update-collaborator',
@@ -1246,6 +1285,66 @@ export class UserService {
             mediaType: 'application/json-patch+json',
             errors: {
                 401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody
+     * @returns BooleanStandardResponse Success
+     * @throws ApiError
+     */
+    public static completeTimbaUserActivation(
+        requestBody?: TimbaUserActivationModel,
+    ): CancelablePromise<BooleanStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/complete-timba-user-activation',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param requestBody
+     * @returns TimbaUserViewStandardResponse Success
+     * @throws ApiError
+     */
+    public static completeTimbaUserAuthentication(
+        requestBody?: TimbaUserLoginModel,
+    ): CancelablePromise<TimbaUserViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/User/complete-timba-user-auth',
+            body: requestBody,
+            mediaType: 'application/json-patch+json',
+            errors: {
+                401: `Unauthorized`,
+            },
+        });
+    }
+
+    /**
+     * @param userId
+     * @param search
+     * @returns UserViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static listCollaboratorOrganizations(
+        userId: string,
+        search?: string,
+    ): CancelablePromise<UserViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/timba-user-organization/{userId}',
+            path: {
+                userId: userId,
+            },
+            query: {
+                search: search,
             },
         });
     }

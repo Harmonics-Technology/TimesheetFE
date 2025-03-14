@@ -56,4 +56,5 @@ export type UserView = {
     isSendingInvoice?: boolean;
     jobTitle?: string | null;
     userDepartments?: Array<UserDepartmentView> | null;
+    timbaId?: string | null;
 };

@@ -3,9 +3,9 @@
 /* eslint-disable */
 
 import type { HttpStatusCode } from './HttpStatusCode';
-import type { ProjectTimesheetView } from './ProjectTimesheetView';
+import type { TimbaUserView } from './TimbaUserView';
 
-export type ProjectTimesheetViewListStandardResponse = {
+export type TimbaUserViewStandardResponse = {
     href?: string | null;
     relations?: Array<string> | null;
     method?: string | null;
@@ -13,7 +13,7 @@ export type ProjectTimesheetViewListStandardResponse = {
     routeValues?: any;
     status?: boolean;
     message?: string | null;
-    data?: Array<ProjectTimesheetView> | null;
+    data?: TimbaUserView;
     statusCode?: HttpStatusCode;
     errors?: any;
 };

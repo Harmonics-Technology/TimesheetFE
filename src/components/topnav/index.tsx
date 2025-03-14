@@ -14,17 +14,19 @@ import {
     Button,
     Icon,
     useDisclosure,
+    useToast,
+    Spinner,
 } from '@chakra-ui/react';
-import { FaUser } from 'react-icons/fa';
+import { FaAngleDown, FaUser } from 'react-icons/fa';
 import { FiLogOut } from 'react-icons/fi';
 import { TfiClose, TfiMenu, TfiMenuAlt } from 'react-icons/tfi';
 import { BsBellFill } from 'react-icons/bs';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { UserContext } from '@components/context/UserContext';
-import { useCallback, useContext, useEffect, useRef } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { MdOutlineArrowBackIos } from 'react-icons/md';
-import { UserView } from 'src/services';
+import { UserService, UserView } from 'src/services';
 import { Logout } from '@components/bits-utils/LogUserOut';
 import { GrShieldSecurity } from 'react-icons/gr';
 import Link from 'next/link';
@@ -34,6 +36,8 @@ import moment from 'moment';
 import { BirthDayModal } from '@components/bits-utils/ProjectManagement/Modals/BirthDayModal';
 import { OnboardingFeeContext } from '@components/context/OnboardingFeeContext';
 import { NotificationContext } from '@components/context/NotificationContext';
+import { OrgIcon } from '@components/icons/OrgIcon';
+import { LiaAngleDownSolid } from 'react-icons/lia';
 interface topnavProps {
     setOpenSidenav: any;
     openSidenav: boolean;
@@ -85,6 +89,62 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
             onOpen();
         }
     }, [massiveCheck]);
+
+    const [loadingAuth, setLoadingAuth] = useState('');
+    const [orgAvailable, setOrgAvailable] = useState();
+    const toast = useToast();
+    const completeAuthForCollaborator = async (selected) => {
+        setLoadingAuth(selected?.superAdminId);
+        try {
+            const res = await UserService.completeTimbaUserAuthentication({
+                userId: selected?.userId,
+                superAdminId: selected?.superAdminId,
+            });
+            const user = res?.data;
+            if (res?.status) {
+                const strippedData = {
+                    clientSubscriptionId: user?.clientSubscriptionId,
+                    email: user?.user?.email,
+                    firstName: user?.user?.firstName,
+                    lastName: user?.user?.lastName,
+                    fullName: user?.user?.fullName,
+                    role: user?.user?.role,
+                    isActive: user?.isActive,
+                    organizationName: user?.user?.organizationName,
+                    superAdminId: user?.superAdminId,
+                    organizationEmail: user?.user?.organizationEmail,
+                    organizationPhone: user?.user?.organizationPhone,
+                    organizationAddress: user?.user?.organizationAddress,
+                    isSendingInvoice: user?.isSendingInvoice,
+                };
+                Cookies.set('user', JSON.stringify(strippedData));
+                router.replace(router?.asPath);
+                return;
+            }
+            toast({
+                title: res?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error: any) {
+            toast({
+                title: error?.message || error?.body?.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } finally {
+            setLoadingAuth('');
+        }
+    };
+
+    useEffect(() => {
+        const orgs = Cookies.get('orgs');
+        if (orgs && orgs !== 'undefined') {
+            setOrgAvailable(JSON.parse(orgs));
+        }
+    }, []);
 
     return (
         <Box pos="sticky" top="0" zIndex="990" bgColor="#f6f7f8">
@@ -207,35 +267,180 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                             color="gray.500"
                             align="center"
                         >
-                            <Menu>
-                                <MenuButton>
-                                    <HStack>
-                                        <Circle size="2rem" overflow="hidden">
-                                            {user?.profilePicture ? (
-                                                <Image
-                                                    src={user?.profilePicture}
+                            {role == 'Collaborator' ? (
+                                <Menu>
+                                    <MenuButton>
+                                        <HStack>
+                                            <Circle
+                                                size="2.5rem"
+                                                overflow="hidden"
+                                                border="1px solid #A6ACBE"
+                                            >
+                                                {user?.profilePicture ? (
+                                                    <Image
+                                                        src={
+                                                            user?.profilePicture
+                                                        }
+                                                        w="full"
+                                                        h="full"
+                                                        objectFit="cover"
+                                                    />
+                                                ) : (
+                                                    <FaUser />
+                                                )}
+                                            </Circle>
+                                            <Box textAlign="left">
+                                                <Text
+                                                    noOfLines={1}
+                                                    textTransform="capitalize"
+                                                    fontSize="14px"
+                                                    color="#2F363A"
+                                                    fontWeight={500}
+                                                >
+                                                    {user?.firstName}
+                                                </Text>
+                                                <Text
+                                                    noOfLines={1}
+                                                    textTransform="capitalize"
+                                                    fontSize="14px"
+                                                    color="#718096"
+                                                >
+                                                    {user?.organizationName}
+                                                </Text>
+                                            </Box>
+                                            <Icon as={FaAngleDown} ml="1rem" />
+                                        </HStack>
+                                    </MenuButton>
+                                    <MenuList>
+                                        {(orgAvailable as any)?.map((x) => (
+                                            <MenuItem
+                                                _hover={{ bgColor: 'unset' }}
+                                            >
+                                                <HStack
+                                                    justify="space-between"
+                                                    border="1px solid #C4C4C4"
+                                                    borderRadius="10px"
+                                                    h="3rem"
                                                     w="full"
-                                                    h="full"
-                                                    objectFit="cover"
-                                                />
-                                            ) : (
-                                                <FaUser />
-                                            )}
-                                        </Circle>
-                                        <Text
-                                            noOfLines={1}
-                                            textTransform="capitalize"
+                                                    px="8.5px"
+                                                    onClick={() =>
+                                                        completeAuthForCollaborator(
+                                                            x,
+                                                        )
+                                                    }
+                                                >
+                                                    <HStack gap="8px">
+                                                        <Circle
+                                                            size="28px"
+                                                            border="1px solid #A6ACBE"
+                                                            overflow="hidden"
+                                                        >
+                                                            {x?.superAdmin
+                                                                ?.profilePicture ? (
+                                                                <Image
+                                                                    src={
+                                                                        x
+                                                                            ?.superAdmin
+                                                                            ?.profilePicture
+                                                                    }
+                                                                    h="full"
+                                                                    w="full"
+                                                                    objectFit="cover"
+                                                                />
+                                                            ) : (
+                                                                <Icon
+                                                                    as={OrgIcon}
+                                                                    color="#78A3AD"
+                                                                    h="14px"
+                                                                    w="12px"
+                                                                />
+                                                            )}
+                                                        </Circle>
+                                                        <Text
+                                                            fontSize="13px"
+                                                            fontWeight={500}
+                                                            color="#2F363A"
+                                                        >
+                                                            {
+                                                                x?.superAdmin
+                                                                    ?.organizationName
+                                                            }
+                                                        </Text>
+                                                    </HStack>
+
+                                                    <Circle
+                                                        border="1px solid #696969"
+                                                        size="18px"
+                                                    >
+                                                        {loadingAuth ==
+                                                            x?.superAdminId && (
+                                                            <Spinner
+                                                                size="xs"
+                                                                colorScheme="brand"
+                                                            />
+                                                        )}
+                                                        {/* <Circle bgColor="brand.400" size="10px" /> */}
+                                                    </Circle>
+                                                </HStack>
+                                            </MenuItem>
+                                        ))}
+                                        <MenuItem
+                                            flexDirection="row"
+                                            _hover={{ bgColor: 'unset' }}
                                         >
-                                            {user?.firstName}
-                                        </Text>
-                                    </HStack>
-                                </MenuButton>
-                                <MenuList>
-                                    <MenuItem
-                                        flexDirection="column"
-                                        _hover={{ bgColor: 'unset' }}
-                                    >
-                                        {/* <Circle
+                                            <Flex
+                                                align="center"
+                                                onClick={() => Logout('/login')}
+                                            >
+                                                <FiLogOut />
+                                                <Text
+                                                    fontWeight="bold"
+                                                    color="brand.200"
+                                                    mb="0"
+                                                    pl="1rem"
+                                                >
+                                                    Sign Out
+                                                </Text>
+                                            </Flex>
+                                        </MenuItem>
+                                    </MenuList>
+                                </Menu>
+                            ) : (
+                                <Menu>
+                                    <MenuButton>
+                                        <HStack>
+                                            <Circle
+                                                size="2.5rem"
+                                                overflow="hidden"
+                                                border="1px solid #A6ACBE"
+                                            >
+                                                {user?.profilePicture ? (
+                                                    <Image
+                                                        src={
+                                                            user?.profilePicture
+                                                        }
+                                                        w="full"
+                                                        h="full"
+                                                        objectFit="cover"
+                                                    />
+                                                ) : (
+                                                    <FaUser />
+                                                )}
+                                            </Circle>
+                                            <Text
+                                                noOfLines={1}
+                                                textTransform="capitalize"
+                                            >
+                                                {user?.firstName}
+                                            </Text>
+                                        </HStack>
+                                    </MenuButton>
+                                    <MenuList>
+                                        <MenuItem
+                                            flexDirection="column"
+                                            _hover={{ bgColor: 'unset' }}
+                                        >
+                                            {/* <Circle
                                 bgColor="brand.600"
                                 size="2.5rem"
                                 fontSize="1rem"
@@ -246,23 +451,24 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                             <Text fontWeight="bold" color="brand.200">
                                 Super Admin Profile
                             </Text> */}
-                                        <Flex
-                                            align="center"
-                                            onClick={() => Logout('/login')}
-                                        >
-                                            <FiLogOut />
-                                            <Text
-                                                fontWeight="bold"
-                                                color="brand.200"
-                                                mb="0"
-                                                pl="1rem"
+                                            <Flex
+                                                align="center"
+                                                onClick={() => Logout('/login')}
                                             >
-                                                Sign Out
-                                            </Text>
-                                        </Flex>
-                                    </MenuItem>
-                                </MenuList>
-                            </Menu>
+                                                <FiLogOut />
+                                                <Text
+                                                    fontWeight="bold"
+                                                    color="brand.200"
+                                                    mb="0"
+                                                    pl="1rem"
+                                                >
+                                                    Sign Out
+                                                </Text>
+                                            </Flex>
+                                        </MenuItem>
+                                    </MenuList>
+                                </Menu>
+                            )}
                             <Box
                                 cursor="pointer"
                                 pos="relative"
