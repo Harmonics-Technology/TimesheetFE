@@ -2,11 +2,23 @@ import CompleteReset from '@components/subpages/CompleteReset';
 import { CompleteResetExtra } from '@components/subpages/CompleteResetExtra';
 import { GetServerSidePropsContext } from 'next';
 
-function index({ code, superAdminId }: { code: string; superAdminId?: any }) {
+function index({
+    code,
+    superAdminId,
+    onboard,
+}: {
+    code: string;
+    superAdminId?: any;
+    onboard: any;
+}) {
     return (
         <>
             {superAdminId ? (
-                <CompleteResetExtra code={code} superAdminId={superAdminId} />
+                <CompleteResetExtra
+                    code={code}
+                    superAdminId={superAdminId}
+                    onboard={onboard}
+                />
             ) : (
                 <CompleteReset code={code} />
             )}
@@ -17,11 +29,12 @@ function index({ code, superAdminId }: { code: string; superAdminId?: any }) {
 export default index;
 
 export const getServerSideProps = (ctx: GetServerSidePropsContext) => {
-    const { id, superAdmin } = ctx.query;
+    const { id, superAdmin, onboard } = ctx.query;
     return {
         props: {
             code: id,
             superAdminId: superAdmin || '',
+            onboard: onboard || '',
         },
     };
 };

@@ -24,4 +24,5 @@ export type StrippedUserView = {
     clientName?: string | null;
     payrollType?: string | null;
     payrollGroup?: string | null;
+    timbaId?: string | null;
 };

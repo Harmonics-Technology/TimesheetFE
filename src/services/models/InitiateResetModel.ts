@@ -5,4 +5,5 @@
 export type InitiateResetModel = {
     email?: string | null;
     superAdminId?: string | null;
+    timbaId?: string | null;
 };

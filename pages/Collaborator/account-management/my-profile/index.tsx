@@ -33,6 +33,7 @@ export default index;
 export const getServerSideProps: GetServerSideProps = withPageAuth(
     async (ctx: any) => {
         const id = JSON.parse(ctx.req.cookies.user).id;
+
         const employeeId = JSON.parse(
             ctx.req.cookies.user,
         ).employeeInformationId;

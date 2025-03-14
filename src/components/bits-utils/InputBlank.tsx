@@ -29,6 +29,7 @@ interface InputProps {
     prefix?: JSX.Element;
     variant?: any;
     isTextArea?: boolean;
+    required?: boolean;
 }
 function InputBlank({
     type,
@@ -49,6 +50,7 @@ function InputBlank({
     prefix,
     variant = 'filled',
     isTextArea,
+    required,
 }: InputProps) {
     return (
         <FormControl w={w}>
@@ -58,7 +60,8 @@ function InputBlank({
                     width="fit-content"
                     fontSize={fontSize}
                 >
-                    {label}
+                    {label}{' '}
+                    <span style={{ color: 'red' }}>{required && '*'}</span>
                 </FormLabel>
             )}
             <InputGroup>

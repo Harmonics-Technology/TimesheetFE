@@ -394,6 +394,11 @@ function MyProfile({
                         </Box>
                     </HStack>
                     <Box>
+                        {user?.role == 'Collaborator' && (
+                            <Text fontSize="13px" color="#718096">
+                                Your Timba ID: <b>{'Timba-018'}</b>
+                            </Text>
+                        )}
                         {/* <Button
                             bgColor="brand.600"
                             color="white"

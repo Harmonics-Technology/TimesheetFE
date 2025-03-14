@@ -96,7 +96,7 @@ function Login() {
                     if (orgs?.length > 0) {
                         setOrganizationDisplay(true);
                         setOrgAvailable(orgs);
-                        Cookies.set('orgs', JSON.stringify(orgs));
+                        // Cookies.set('orgs', JSON.stringify(orgs));
                     }
                     return;
                 }
@@ -296,14 +296,18 @@ function Login() {
                     fullName: user?.user?.fullName,
                     role: user?.user?.role,
                     isActive: user?.isActive,
-                    organizationName: user?.user?.organizationName,
+                    organizationName: user?.superAdmin?.organizationName,
                     superAdminId: user?.superAdminId,
-                    organizationEmail: user?.user?.organizationEmail,
-                    organizationPhone: user?.user?.organizationPhone,
-                    organizationAddress: user?.user?.organizationAddress,
+                    organizationEmail: user?.superAdmin?.organizationEmail,
+                    organizationPhone: user?.superAdmin?.organizationPhone,
+                    organizationAddress: user?.superAdmin?.organizationAddress,
                     isSendingInvoice: user?.isSendingInvoice,
+                    timbaId: user?.user?.timbaId,
+                    isOrganizationProjectManager: false,
+                    id: user?.userId,
                 };
                 Cookies.set('user', JSON.stringify(strippedData));
+                setOrganizationDisplay(false);
                 toast({
                     title: `Login Successful`,
                     status: 'success',
@@ -380,6 +384,16 @@ function Login() {
                         left="50%"
                         transform="translate(-50%,-50%)"
                     >
+                        <Text
+                            fontSize="16px"
+                            fontWeight="bold"
+                            w={['100%', '100%']}
+                            lineHeight="1"
+                            textAlign="center"
+                            my="1rem"
+                        >
+                            Select an organization to continue
+                        </Text>
                         {orgAvailable?.map((x) => (
                             <HStack
                                 justify="space-between"

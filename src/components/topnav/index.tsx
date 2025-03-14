@@ -26,7 +26,7 @@ import Cookies from 'js-cookie';
 import { UserContext } from '@components/context/UserContext';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { MdOutlineArrowBackIos } from 'react-icons/md';
-import { UserService, UserView } from 'src/services';
+import { TimbaUserView, UserService, UserView } from 'src/services';
 import { Logout } from '@components/bits-utils/LogUserOut';
 import { GrShieldSecurity } from 'react-icons/gr';
 import Link from 'next/link';
@@ -91,7 +91,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     }, [massiveCheck]);
 
     const [loadingAuth, setLoadingAuth] = useState('');
-    const [orgAvailable, setOrgAvailable] = useState();
+    const [orgAvailable, setOrgAvailable] = useState<TimbaUserView[] | null>();
     const toast = useToast();
     const completeAuthForCollaborator = async (selected) => {
         setLoadingAuth(selected?.superAdminId);
@@ -105,20 +105,22 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                 const strippedData = {
                     clientSubscriptionId: user?.clientSubscriptionId,
                     email: user?.user?.email,
-                    firstName: user?.user?.firstName,
-                    lastName: user?.user?.lastName,
+                    firstName: user?.firstName,
+                    lastName: user?.lastName,
                     fullName: user?.user?.fullName,
                     role: user?.user?.role,
                     isActive: user?.isActive,
-                    organizationName: user?.user?.organizationName,
+                    organizationName: user?.superAdmin?.organizationName,
                     superAdminId: user?.superAdminId,
-                    organizationEmail: user?.user?.organizationEmail,
-                    organizationPhone: user?.user?.organizationPhone,
-                    organizationAddress: user?.user?.organizationAddress,
+                    organizationEmail: user?.superAdmin?.organizationEmail,
+                    organizationPhone: user?.superAdmin?.organizationPhone,
+                    organizationAddress: user?.superAdmin?.organizationAddress,
                     isSendingInvoice: user?.isSendingInvoice,
+                    isOrganizationProjectManager: false,
+                    id: user?.userId,
                 };
                 Cookies.set('user', JSON.stringify(strippedData));
-                router.replace(router?.asPath);
+                router.replace(router.asPath);
                 return;
             }
             toast({
@@ -140,10 +142,21 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     };
 
     useEffect(() => {
-        const orgs = Cookies.get('orgs');
-        if (orgs && orgs !== 'undefined') {
-            setOrgAvailable(JSON.parse(orgs));
-        }
+        const fetchUserOrgs = async () => {
+            try {
+                const organizations =
+                    await UserService.listCollaboratorOrganizations(
+                        user?.id as string,
+                    );
+                const orgs = organizations?.data as TimbaUserView[];
+                if (orgs?.length > 0) {
+                    setOrgAvailable(orgs);
+                }
+            } catch (error) {
+                console.log({ error });
+            }
+        };
+        fetchUserOrgs();
     }, []);
 
     return (
@@ -290,15 +303,19 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                                 )}
                                             </Circle>
                                             <Box textAlign="left">
-                                                <Text
-                                                    noOfLines={1}
-                                                    textTransform="capitalize"
-                                                    fontSize="14px"
-                                                    color="#2F363A"
-                                                    fontWeight={500}
-                                                >
-                                                    {user?.firstName}
-                                                </Text>
+                                                <HStack>
+                                                    <Text
+                                                        noOfLines={1}
+                                                        textTransform="capitalize"
+                                                        fontSize="14px"
+                                                        color="#2F363A"
+                                                        fontWeight={500}
+                                                    >
+                                                        {user?.firstName +
+                                                            ' ' +
+                                                            user?.lastName}
+                                                    </Text>
+                                                </HStack>
                                                 <Text
                                                     noOfLines={1}
                                                     textTransform="capitalize"
@@ -379,7 +396,13 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                                                 colorScheme="brand"
                                                             />
                                                         )}
-                                                        {/* <Circle bgColor="brand.400" size="10px" /> */}
+                                                        {user?.superAdminId ==
+                                                            x?.superAdminId && (
+                                                            <Circle
+                                                                bgColor="brand.400"
+                                                                size="10px"
+                                                            />
+                                                        )}
                                                     </Circle>
                                                 </HStack>
                                             </MenuItem>
@@ -398,6 +421,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                                     color="brand.200"
                                                     mb="0"
                                                     pl="1rem"
+                                                    fontSize=".9rem"
                                                 >
                                                     Sign Out
                                                 </Text>
@@ -431,7 +455,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                                 noOfLines={1}
                                                 textTransform="capitalize"
                                             >
-                                                {user?.firstName}
+                                                {user?.fullName}
                                             </Text>
                                         </HStack>
                                     </MenuButton>

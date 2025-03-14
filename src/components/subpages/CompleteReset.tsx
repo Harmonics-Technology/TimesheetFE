@@ -25,7 +25,8 @@ const schema = yup.object().shape({
         .minUppercase(1, 'Password must contain atleast one uppercase')
         .min(8, 'Password must contain atleast 8 characters')
         .minNumbers(1, 'Password must contain atleast one number')
-        .minSymbols(1, 'Password must contain atleast one symbol'),
+        .minSymbols(1, 'Password must contain atleast one symbol')
+        .required(),
     code: yup.string(),
 });
 
@@ -109,7 +110,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                         <Image src="/assets/newlogo.png" h="3rem" />
                     </Box>
                     <Text
-                        fontSize="35px"
+                        fontSize="20x`px"
                         fontWeight="bold"
                         w={['100%', '100%']}
                         lineHeight="1"
@@ -187,6 +188,7 @@ const CompleteReset = ({ code }: { code: string }) => {
                                     label="Confirm Password"
                                     placeholder="*********"
                                     fontSize="1rem"
+                                    required
                                     type={
                                         passwordVisibleB ? 'text' : 'password'
                                     }

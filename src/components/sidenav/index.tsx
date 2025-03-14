@@ -1,4 +1,4 @@
-import { Box, HStack, VStack, Divider, Image } from '@chakra-ui/react';
+import { Box, HStack, VStack, Divider, Image, Text } from '@chakra-ui/react';
 import { UserContext } from '@components/context/UserContext';
 import MenuItem from '@components/menu-item';
 import Link from 'next/link';
@@ -80,25 +80,40 @@ function SideNav({ openSidenav, setOpenSidenav, change }: sidenavProps) {
             overflowY="auto"
             boxShadow="sm"
         >
-            <Link href={`/${role}/dashboard`} passHref>
-                <HStack>
-                    <Box h="2rem">
-                        {change ? (
-                            <Image src="/assets/newlogob.png" h="full" />
-                        ) : (
-                            <Image src="/assets/newlogo.png" h="full" />
-                        )}
-                    </Box>
-                    {/* <Text
+            <Box>
+                <Link href={`/${role}/dashboard`} passHref>
+                    <HStack>
+                        <Box h="2rem">
+                            {change ? (
+                                <Image src="/assets/newlogob.png" h="full" />
+                            ) : (
+                                <Image src="/assets/newlogo.png" h="full" />
+                            )}
+                        </Box>
+                        {/* <Text
                         fontWeight="600"
                         fontSize=".875rem"
                         color={change ? 'white' : 'brand.200'}
                     >
                         Admin Timesheet
                     </Text> */}
-                </HStack>
-            </Link>
-            <Divider my="2rem" />
+                    </HStack>
+                </Link>
+                {/* <Text
+                    noOfLines={1}
+                    textTransform="capitalize"
+                    fontSize="12px"
+                    color="#2F363A"
+                    bgColor="white"
+                    p=".2rem .5rem"
+                    w="fit-content"
+                    borderRadius="3px"
+                    mt="1rem"
+                >
+                    Timba ID: {'Timba-018'}
+                </Text> */}
+            </Box>
+            <Divider m="2rem 0 2rem" />
             {role == 'SuperAdmin' ? (
                 <VStack
                     align="left"
