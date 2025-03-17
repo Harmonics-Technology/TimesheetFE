@@ -374,7 +374,7 @@ export const AddOpTaskDrawer = ({
                             label="End Date"
                             error={errors.endDate}
                             min={new DateObject(watch('startDate') as any).add(
-                                1,
+                                0,
                                 'days',
                             )}
                         />
@@ -392,7 +392,7 @@ export const AddOpTaskDrawer = ({
                     />
 
                     <DrawerFooter my="2rem" p="0" w="full">
-                        <Flex justify="space-between" w="full" gap='2rem'>
+                        <Flex justify="space-between" w="full" gap="2rem">
                             <ShiftBtn
                                 text="Cancel"
                                 onClick={onClose}
