@@ -397,6 +397,7 @@ function PaymentPartnerManagement({
                                 label="Processing  Fee"
                                 placeholder=""
                                 defaultValue=""
+                                type="number"
                                 value={feeSetUp.fee}
                                 onChange={(e) =>
                                     setFeeSetUp({
