@@ -178,9 +178,11 @@ export const AddNewTaskDrawer = ({
                     isClosable: true,
                     position: 'top-right',
                 });
-                router.replace(router.asPath);
+                setSelecedUser([]);
+                setSelectedPriority({});
                 reset();
                 onClose();
+                router.replace(router.asPath);
                 return;
             }
             toast({
