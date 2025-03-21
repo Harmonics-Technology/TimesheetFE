@@ -216,7 +216,7 @@ export const DraftOnboardingModal = ({
 
             paymentFrequency: userProfile?.paymentFrequency,
             payrollGroupId: userProfile?.payrollGroupId,
-            isEligibleForLeave: userProfile?.isEligibleForLeave,
+            isEligibleForLeave: userProfile?.isEligibleForLeave || false,
             numberOfDaysEligible: userProfile?.numberOfDaysEligible,
             // numberOfHoursEligible:
             //     userProfile?.numberOfHoursEligible,
@@ -241,10 +241,11 @@ export const DraftOnboardingModal = ({
             payrollStructure: userProfile?.payrollStructure,
             incorpName: userProfile?.incorpName,
             rolledOverLeave: userProfile?.rolledOverLeave || undefined,
-            hasRollOverLeave: userProfile?.hasRollOverLeave,
+            hasRollOverLeave: userProfile?.hasRollOverLeave || false,
             expiryDateOfRolledOverLeave:
                 userProfile?.expiryDateOfRolledOverLeave || undefined,
-            hasUtilizeLeaveDaysToDate: userProfile?.hasUtilizeLeaveDaysToDate,
+            hasUtilizeLeaveDaysToDate:
+                userProfile?.hasUtilizeLeaveDaysToDate || false,
             utilizedLeave: userProfile?.utilizedLeave || undefined,
             timesheetStartDate: userProfile?.timesheetStartDate || undefined,
             startDate: userProfile?.startDate || undefined,
@@ -361,9 +362,14 @@ export const DraftOnboardingModal = ({
     const hasRolledOverLeave = watch('hasRollOverLeave');
     const hasUtilizeLeaveDaysToDate = watch('hasUtilizeLeaveDaysToDate');
 
+    console.log({ hasRolledOverLeave });
+
     const forMe = userProfile?.clientId == user?.superAdminId;
     const [clientType, setClientType] = useState(!forMe);
-    const [contract, setContractFile] = useState<any>();
+    const [contract, setContractFile] = useState<any>({
+        name: getFileName(userProfile?.inCorporationDocumentUrl),
+        cdnUrl: userProfile?.inCorporationDocumentUrl,
+    });
     const [showLoading, setShowLoading] = useState(false);
     const widgetApi = useRef<any>();
     const { hstAmount } = useContext(OnboardingFeeContext);
@@ -551,9 +557,9 @@ export const DraftOnboardingModal = ({
         (x) => x.id === watch('paymentPartnerId'),
     )?.currency;
 
-    useEffect(() => {
-        reset(userProfile);
-    }, []);
+    // useEffect(() => {
+    //     reset(userProfile);
+    // }, []);
 
     return (
         <DrawerWrapper
@@ -854,12 +860,7 @@ schema={schema}
                         <UploadCareWidget
                             refs={widgetApi}
                             label="Attach Contract Document"
-                            filename={
-                                contract?.name ||
-                                getFileName(
-                                    userProfile?.inCorporationDocumentUrl,
-                                )
-                            }
+                            filename={contract?.name}
                             loading={showLoading}
                             uploadFunction={showLoadingState}
                         />
@@ -1244,12 +1245,12 @@ schema={schema}
                             control={control}
                             error={errors.isEligibleForLeave}
                             defaultValue={
-                                userProfile?.isEligibleForLeave ? 'Yes' : 'No'
+                                convertYesNo(isEligibleForLeave) ? 'Yes' : 'No'
                             }
                             schema={schema}
                         />
                     </Box>
-                    {(isEligibleForLeave as unknown as string) == 'Yes' && (
+                    {convertYesNo(isEligibleForLeave) && (
                         <>
                             <Grid
                                 templateColumns={[
@@ -1290,12 +1291,15 @@ schema={schema}
                                     name="hasRollOverLeave"
                                     control={control}
                                     error={errors.hasRollOverLeave}
-                                    defaultValue={'No'}
+                                    defaultValue={
+                                        convertYesNo(hasRolledOverLeave)
+                                            ? 'Yes'
+                                            : 'No'
+                                    }
                                     schema={schema}
                                 />
                             </Box>
-                            {(hasRolledOverLeave as unknown as string) ==
-                                'Yes' && (
+                            {convertYesNo(hasRolledOverLeave) && (
                                 <Grid
                                     templateColumns={[
                                         'repeat(1,1fr)',
@@ -1336,12 +1340,15 @@ schema={schema}
                                     name="hasUtilizeLeaveDaysToDate"
                                     control={control}
                                     error={errors.hasUtilizeLeaveDaysToDate}
-                                    defaultValue={'No'}
+                                    defaultValue={
+                                        convertYesNo(hasUtilizeLeaveDaysToDate)
+                                            ? 'Yes'
+                                            : 'No'
+                                    }
                                     schema={schema}
                                 />
                             </Box>
-                            {(hasUtilizeLeaveDaysToDate as unknown as string) ==
-                                'Yes' && (
+                            {convertYesNo(hasUtilizeLeaveDaysToDate) && (
                                 <Grid
                                     templateColumns={[
                                         'repeat(1,1fr)',

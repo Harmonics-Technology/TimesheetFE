@@ -57,4 +57,7 @@ export type UserView = {
     jobTitle?: string | null;
     userDepartments?: Array<UserDepartmentView> | null;
     timbaId?: string | null;
+    userEmail?: string | null;
+    passwordEmail?: boolean;
+    userRole?: string | null;
 };

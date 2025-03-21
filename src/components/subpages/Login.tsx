@@ -30,8 +30,8 @@ import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { UserContext } from '@components/context/UserContext';
 import {
     OpenAPI,
-    TimbaUserView,
     UserService,
+    UserView,
     UserViewStandardResponse,
 } from 'src/services';
 import BeatLoader from 'react-spinners/BeatLoader';
@@ -53,7 +53,7 @@ function Login() {
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
     const [organizationDisplay, setOrganizationDisplay] = useState(false);
-    const [orgAvailable, setOrgAvailable] = useState<TimbaUserView[] | null>();
+    const [orgAvailable, setOrgAvailable] = useState<UserView[] | null>();
     const [loadingAuth, setLoadingAuth] = useState('');
     const msal = useMsal();
 
@@ -87,19 +87,6 @@ function Login() {
                     Cookies.set('token', user.token as string, {
                         expires: 1,
                     });
-                if (user?.role == 'Collaborator') {
-                    const organizations =
-                        await UserService.listCollaboratorOrganizations(
-                            user?.id as string,
-                        );
-                    const orgs = organizations?.data as TimbaUserView[];
-                    if (orgs?.length > 0) {
-                        setOrganizationDisplay(true);
-                        setOrgAvailable(orgs);
-                        // Cookies.set('orgs', JSON.stringify(orgs));
-                    }
-                    return;
-                }
                 const licenseData = await UserService.getClientSubScriptions(
                     user?.superAdminId as string,
                 );
@@ -117,77 +104,22 @@ function Login() {
                 }
 
                 Cookies.set('license', JSON.stringify(licenseData?.data));
-
-                const strippedData = {
-                    clientSubscriptionId: user?.clientSubscriptionId,
-                    email: user?.email,
-                    firstName: user?.firstName,
-                    lastName: user?.lastName,
-                    fullName: user?.fullName,
-                    role: user?.role,
-                    isActive: user?.isActive,
-                    isAnniversaryToday: user?.isAnniversaryToday,
-                    isBirthDayToday: user?.isBirthDayToday,
-                    isOrganizationProjectManager:
-                        user?.isOrganizationProjectManager,
-                    organizationName: user?.organizationName,
-                    superAdminId: user?.superAdminId,
-                    twoFactorEnabled: user?.twoFactorEnabled,
-                    currency: user?.currency,
-                    department: user?.department,
-                    employeeInformationId: user?.employeeInformationId,
-                    id: user?.id,
-                    numberOfDaysEligible: user?.numberOfDaysEligible,
-                    numberOfLeaveDaysTaken: user?.numberOfLeaveDaysTaken,
-                    twoFactorCode: user?.twoFactorCode,
-                    isTrainingManager: user?.isTrainingManager,
-                    clientId: user?.clientId,
-                    payrollStructure:
-                        user?.employeeInformation?.payrollStructure,
-                    invoiceGenerationType: user?.invoiceGenerationType,
-                    organizationEmail: user?.organizationEmail,
-                    organizationPhone: user?.organizationPhone,
-                    organizationAddress: user?.organizationAddress,
-                    isSendingInvoice: user?.isSendingInvoice,
-                };
-                const subDetails = user?.subscriptiobDetails;
-                Cookies.set('user', JSON.stringify(strippedData));
-                Cookies.set('subDetails', JSON.stringify(subDetails));
-
-                if (user?.twoFactorEnabled) {
-                    router.push('/login/twofalogin');
-                    return;
+                //
+                const organizations = await UserService.listUserOrganizations(
+                    user?.id as string,
+                );
+                const orgs = organizations?.data as UserView[];
+                if (orgs?.length > 1) {
+                    setOrganizationDisplay(true);
+                    setOrgAvailable(orgs);
+                    // Cookies.set('orgs', JSON.stringify(orgs));
+                } else {
+                    completeAuthForUsers(user as UserView);
                 }
-                const getControlSettings =
-                    await UserService.getControlSettingById(
-                        user?.superAdminId as string,
-                    );
-                if (getControlSettings.status) {
-                    Cookies.set(
-                        'access-controls',
-                        JSON.stringify(getControlSettings.data),
-                    );
-                }
-
-                toast({
-                    title: `Login Successful`,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                router.query.from
-                    ? router.push(
-                          decodeURIComponent(
-                              router.query.from as unknown as string,
-                          ),
-                      )
-                    : router.push(
-                          `/${result?.data?.role?.replaceAll(
-                              ' ',
-                              '',
-                          )}/dashboard`,
-                      );
                 return;
+                // if (user?.role == 'Collaborator') {
+                //     return;
+                // }
             }
             toast({
                 title: result.message,
@@ -279,58 +211,81 @@ function Login() {
         }
     };
 
-    const completeAuthForCollaborator = async (selected) => {
-        setLoadingAuth(selected?.superAdminId);
-        try {
-            const res = await UserService.completeTimbaUserAuthentication({
-                userId: selected?.userId,
-                superAdminId: selected?.superAdminId,
-            });
-            const user = res?.data;
-            if (res?.status) {
-                const strippedData = {
-                    clientSubscriptionId: user?.clientSubscriptionId,
-                    email: user?.user?.email,
-                    firstName: user?.user?.firstName,
-                    lastName: user?.user?.lastName,
-                    fullName: user?.user?.fullName,
-                    role: user?.user?.role,
-                    isActive: user?.isActive,
-                    organizationName: user?.superAdmin?.organizationName,
-                    superAdminId: user?.superAdminId,
-                    organizationEmail: user?.superAdmin?.organizationEmail,
-                    organizationPhone: user?.superAdmin?.organizationPhone,
-                    organizationAddress: user?.superAdmin?.organizationAddress,
-                    isSendingInvoice: user?.isSendingInvoice,
-                    timbaId: user?.user?.timbaId,
-                    isOrganizationProjectManager: false,
-                    id: user?.userId,
-                };
-                Cookies.set('user', JSON.stringify(strippedData));
-                setOrganizationDisplay(false);
-                toast({
-                    title: `Login Successful`,
-                    status: 'success',
-                    isClosable: true,
-                    position: 'top-right',
-                });
-                router.query.from
-                    ? router.push(
-                          decodeURIComponent(
-                              router.query.from as unknown as string,
-                          ),
-                      )
-                    : router.push(
-                          `/${user?.user?.role?.replaceAll(' ', '')}/dashboard`,
-                      );
-                return;
-            }
+    const completeAuthForUsers = async (user: UserView) => {
+        setLoadingAuth(user?.superAdminId as string);
+        if (user?.isActive == false) {
             toast({
-                title: res?.message,
+                title: 'Your account is currently not active on this organization',
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
             });
+            return;
+        }
+        try {
+            const strippedData = {
+                clientSubscriptionId: user?.clientSubscriptionId,
+                email: user?.email,
+                firstName: user?.firstName,
+                lastName: user?.lastName,
+                fullName: user?.fullName,
+                role: user?.role,
+                isActive: user?.isActive,
+                isAnniversaryToday: user?.isAnniversaryToday,
+                isBirthDayToday: user?.isBirthDayToday,
+                isOrganizationProjectManager:
+                    user?.isOrganizationProjectManager,
+                organizationName: user?.organizationName,
+                superAdminId: user?.superAdminId,
+                twoFactorEnabled: user?.twoFactorEnabled,
+                currency: user?.currency,
+                department: user?.department,
+                employeeInformationId: user?.employeeInformationId,
+                id: user?.id,
+                numberOfDaysEligible: user?.numberOfDaysEligible,
+                numberOfLeaveDaysTaken: user?.numberOfLeaveDaysTaken,
+                twoFactorCode: user?.twoFactorCode,
+                isTrainingManager: user?.isTrainingManager,
+                clientId: user?.clientId,
+                payrollStructure: user?.employeeInformation?.payrollStructure,
+                invoiceGenerationType: user?.invoiceGenerationType,
+                organizationEmail: user?.organizationEmail,
+                organizationPhone: user?.organizationPhone,
+                organizationAddress: user?.organizationAddress,
+                isSendingInvoice: user?.isSendingInvoice,
+            };
+            const subDetails = user?.subscriptiobDetails;
+            Cookies.set('user', JSON.stringify(strippedData));
+            Cookies.set('subDetails', JSON.stringify(subDetails));
+
+            if (user?.twoFactorEnabled) {
+                router.push('/login/twofalogin');
+                return;
+            }
+            const getControlSettings = await UserService.getControlSettingById(
+                user?.superAdminId as string,
+            );
+            if (getControlSettings.status) {
+                Cookies.set(
+                    'access-controls',
+                    JSON.stringify(getControlSettings.data),
+                );
+            }
+            setOrganizationDisplay(false);
+            toast({
+                title: `Login Successful`,
+                status: 'success',
+                isClosable: true,
+                position: 'top-right',
+            });
+            router.query.from
+                ? router.push(
+                      decodeURIComponent(
+                          router.query.from as unknown as string,
+                      ),
+                  )
+                : router.push(`/${user?.role?.replaceAll(' ', '')}/dashboard`);
+            return;
         } catch (error: any) {
             toast({
                 title: error?.message || error?.body?.message,
@@ -371,9 +326,7 @@ function Login() {
                     w="full"
                     h="full"
                 >
-                    <VStack
-                        gap="10px"
-                        align="flex-start"
+                    <Box
                         border="1px solid #C4C4C4"
                         borderRadius="10px"
                         p="10px"
@@ -383,6 +336,7 @@ function Login() {
                         top="50%"
                         left="50%"
                         transform="translate(-50%,-50%)"
+                        pb="2rem"
                     >
                         <Text
                             fontSize="16px"
@@ -394,62 +348,57 @@ function Login() {
                         >
                             Select an organization to continue
                         </Text>
-                        {orgAvailable?.map((x) => (
-                            <HStack
-                                justify="space-between"
-                                border="1px solid #C4C4C4"
-                                borderRadius="10px"
-                                h="3.45rem"
-                                w="full"
-                                px="8.5px"
-                                onClick={() => completeAuthForCollaborator(x)}
-                            >
-                                <HStack gap="8px">
-                                    <Circle
-                                        size="28px"
-                                        border="1px solid #A6ACBE"
-                                        overflow="hidden"
+                        <Box maxH="20rem" overflow="auto">
+                            <VStack w="full" gap="10px" align="flex-start">
+                                {orgAvailable?.map((x) => (
+                                    <HStack
+                                        justify="space-between"
+                                        border="1px solid #C4C4C4"
+                                        borderRadius="10px"
+                                        h="3.45rem"
+                                        w="full"
+                                        px="8.5px"
+                                        onClick={() => completeAuthForUsers(x)}
                                     >
-                                        {x?.superAdmin?.profilePicture ? (
-                                            <Image
-                                                src={
-                                                    x?.superAdmin
-                                                        ?.profilePicture
-                                                }
-                                                h="full"
-                                                w="full"
-                                                objectFit="cover"
-                                            />
-                                        ) : (
-                                            <Icon
-                                                as={OrgIcon}
-                                                color="#78A3AD"
-                                                h="14px"
-                                                w="12px"
-                                            />
-                                        )}
-                                    </Circle>
-                                    <Text
-                                        fontSize="13px"
-                                        fontWeight={500}
-                                        color="#2F363A"
-                                    >
-                                        {x?.superAdmin?.organizationName}
-                                    </Text>
-                                </HStack>
+                                        <HStack gap="8px">
+                                            <Circle
+                                                size="28px"
+                                                border="1px solid #A6ACBE"
+                                                overflow="hidden"
+                                            >
+                                                <Icon
+                                                    as={OrgIcon}
+                                                    color="#78A3AD"
+                                                    h="14px"
+                                                    w="12px"
+                                                />
+                                            </Circle>
+                                            <Text
+                                                fontSize="13px"
+                                                fontWeight={500}
+                                                color="#2F363A"
+                                            >
+                                                {x?.organizationName}
+                                            </Text>
+                                        </HStack>
 
-                                <Circle border="1px solid #696969" size="18px">
-                                    {loadingAuth == x?.superAdminId && (
-                                        <Spinner
-                                            size="xs"
-                                            colorScheme="brand"
-                                        />
-                                    )}
-                                    {/* <Circle bgColor="brand.400" size="10px" /> */}
-                                </Circle>
-                            </HStack>
-                        ))}
-                    </VStack>
+                                        <Circle
+                                            border="1px solid #696969"
+                                            size="18px"
+                                        >
+                                            {loadingAuth == x?.superAdminId && (
+                                                <Spinner
+                                                    size="xs"
+                                                    colorScheme="brand"
+                                                />
+                                            )}
+                                            {/* <Circle bgColor="brand.400" size="10px" /> */}
+                                        </Circle>
+                                    </HStack>
+                                ))}
+                            </VStack>
+                        </Box>
+                    </Box>
                 </Box>
             )}
             <Box

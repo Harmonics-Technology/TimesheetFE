@@ -26,7 +26,7 @@ import Cookies from 'js-cookie';
 import { UserContext } from '@components/context/UserContext';
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { MdOutlineArrowBackIos } from 'react-icons/md';
-import { TimbaUserView, UserService, UserView } from 'src/services';
+import { UserService, UserView } from 'src/services';
 import { Logout } from '@components/bits-utils/LogUserOut';
 import { GrShieldSecurity } from 'react-icons/gr';
 import Link from 'next/link';
@@ -91,44 +91,61 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     }, [massiveCheck]);
 
     const [loadingAuth, setLoadingAuth] = useState('');
-    const [orgAvailable, setOrgAvailable] = useState<TimbaUserView[] | null>();
+    const [orgAvailable, setOrgAvailable] = useState<UserView[] | null>();
     const toast = useToast();
-    const completeAuthForCollaborator = async (selected) => {
-        setLoadingAuth(selected?.superAdminId);
+    const completeAuthForUsers = async (user) => {
+        setLoadingAuth(user?.superAdminId);
         try {
-            const res = await UserService.completeTimbaUserAuthentication({
-                userId: selected?.userId,
-                superAdminId: selected?.superAdminId,
-            });
-            const user = res?.data;
-            if (res?.status) {
-                const strippedData = {
-                    clientSubscriptionId: user?.clientSubscriptionId,
-                    email: user?.user?.email,
-                    firstName: user?.firstName,
-                    lastName: user?.lastName,
-                    fullName: user?.user?.fullName,
-                    role: user?.user?.role,
-                    isActive: user?.isActive,
-                    organizationName: user?.superAdmin?.organizationName,
-                    superAdminId: user?.superAdminId,
-                    organizationEmail: user?.superAdmin?.organizationEmail,
-                    organizationPhone: user?.superAdmin?.organizationPhone,
-                    organizationAddress: user?.superAdmin?.organizationAddress,
-                    isSendingInvoice: user?.isSendingInvoice,
-                    isOrganizationProjectManager: false,
-                    id: user?.userId,
-                };
-                Cookies.set('user', JSON.stringify(strippedData));
-                router.replace(router.asPath);
+            const strippedData = {
+                clientSubscriptionId: user?.clientSubscriptionId,
+                email: user?.email,
+                firstName: user?.firstName,
+                lastName: user?.lastName,
+                fullName: user?.fullName,
+                role: user?.role,
+                isActive: user?.isActive,
+                isAnniversaryToday: user?.isAnniversaryToday,
+                isBirthDayToday: user?.isBirthDayToday,
+                isOrganizationProjectManager:
+                    user?.isOrganizationProjectManager,
+                organizationName: user?.organizationName,
+                superAdminId: user?.superAdminId,
+                twoFactorEnabled: user?.twoFactorEnabled,
+                currency: user?.currency,
+                department: user?.department,
+                employeeInformationId: user?.employeeInformationId,
+                id: user?.id,
+                numberOfDaysEligible: user?.numberOfDaysEligible,
+                numberOfLeaveDaysTaken: user?.numberOfLeaveDaysTaken,
+                twoFactorCode: user?.twoFactorCode,
+                isTrainingManager: user?.isTrainingManager,
+                clientId: user?.clientId,
+                payrollStructure: user?.employeeInformation?.payrollStructure,
+                invoiceGenerationType: user?.invoiceGenerationType,
+                organizationEmail: user?.organizationEmail,
+                organizationPhone: user?.organizationPhone,
+                organizationAddress: user?.organizationAddress,
+                isSendingInvoice: user?.isSendingInvoice,
+            };
+            const subDetails = user?.subscriptiobDetails;
+            Cookies.set('user', JSON.stringify(strippedData));
+            Cookies.set('subDetails', JSON.stringify(subDetails));
+
+            if (user?.twoFactorEnabled) {
+                router.push('/login/twofalogin');
                 return;
             }
-            toast({
-                title: res?.message,
-                status: 'error',
-                isClosable: true,
-                position: 'top-right',
-            });
+            const getControlSettings = await UserService.getControlSettingById(
+                user?.superAdminId as string,
+            );
+            if (getControlSettings.status) {
+                Cookies.set(
+                    'access-controls',
+                    JSON.stringify(getControlSettings.data),
+                );
+            }
+            router.push(`/${user?.role?.replaceAll(' ', '')}/dashboard`);
+            return;
         } catch (error: any) {
             toast({
                 title: error?.message || error?.body?.message,
@@ -144,11 +161,10 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
     useEffect(() => {
         const fetchUserOrgs = async () => {
             try {
-                const organizations =
-                    await UserService.listCollaboratorOrganizations(
-                        user?.id as string,
-                    );
-                const orgs = organizations?.data as TimbaUserView[];
+                const organizations = await UserService.listUserOrganizations(
+                    user?.id as string,
+                );
+                const orgs = organizations?.data as UserView[];
                 if (orgs?.length > 0) {
                     setOrgAvailable(orgs);
                 }
@@ -280,55 +296,54 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                             color="gray.500"
                             align="center"
                         >
-                            {role == 'Collaborator' ? (
-                                <Menu>
-                                    <MenuButton>
-                                        <HStack>
-                                            <Circle
-                                                size="2.5rem"
-                                                overflow="hidden"
-                                                border="1px solid #A6ACBE"
-                                            >
-                                                {user?.profilePicture ? (
-                                                    <Image
-                                                        src={
-                                                            user?.profilePicture
-                                                        }
-                                                        w="full"
-                                                        h="full"
-                                                        objectFit="cover"
-                                                    />
-                                                ) : (
-                                                    <FaUser />
-                                                )}
-                                            </Circle>
-                                            <Box textAlign="left">
-                                                <HStack>
-                                                    <Text
-                                                        noOfLines={1}
-                                                        textTransform="capitalize"
-                                                        fontSize="14px"
-                                                        color="#2F363A"
-                                                        fontWeight={500}
-                                                    >
-                                                        {user?.firstName +
-                                                            ' ' +
-                                                            user?.lastName}
-                                                    </Text>
-                                                </HStack>
+                            {/* {role == 'Collaborator' ? ( */}
+                            <Menu>
+                                <MenuButton>
+                                    <HStack>
+                                        <Circle
+                                            size="2.5rem"
+                                            overflow="hidden"
+                                            border="1px solid #A6ACBE"
+                                        >
+                                            {user?.profilePicture ? (
+                                                <Image
+                                                    src={user?.profilePicture}
+                                                    w="full"
+                                                    h="full"
+                                                    objectFit="cover"
+                                                />
+                                            ) : (
+                                                <FaUser />
+                                            )}
+                                        </Circle>
+                                        <Box textAlign="left">
+                                            <HStack>
                                                 <Text
                                                     noOfLines={1}
                                                     textTransform="capitalize"
                                                     fontSize="14px"
-                                                    color="#718096"
+                                                    color="#2F363A"
+                                                    fontWeight={500}
                                                 >
-                                                    {user?.organizationName}
+                                                    {user?.firstName +
+                                                        ' ' +
+                                                        user?.lastName}
                                                 </Text>
-                                            </Box>
-                                            <Icon as={FaAngleDown} ml="1rem" />
-                                        </HStack>
-                                    </MenuButton>
-                                    <MenuList>
+                                            </HStack>
+                                            <Text
+                                                noOfLines={1}
+                                                textTransform="capitalize"
+                                                fontSize="14px"
+                                                color="#718096"
+                                            >
+                                                {user?.organizationName}
+                                            </Text>
+                                        </Box>
+                                        <Icon as={FaAngleDown} ml="1rem" />
+                                    </HStack>
+                                </MenuButton>
+                                <MenuList>
+                                    <Box overflow="auto" maxH="15rem">
                                         {(orgAvailable as any)?.map((x) => (
                                             <MenuItem
                                                 _hover={{ bgColor: 'unset' }}
@@ -341,9 +356,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                                     w="full"
                                                     px="8.5px"
                                                     onClick={() =>
-                                                        completeAuthForCollaborator(
-                                                            x,
-                                                        )
+                                                        completeAuthForUsers(x)
                                                     }
                                                 >
                                                     <HStack gap="8px">
@@ -352,26 +365,12 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                                             border="1px solid #A6ACBE"
                                                             overflow="hidden"
                                                         >
-                                                            {x?.superAdmin
-                                                                ?.profilePicture ? (
-                                                                <Image
-                                                                    src={
-                                                                        x
-                                                                            ?.superAdmin
-                                                                            ?.profilePicture
-                                                                    }
-                                                                    h="full"
-                                                                    w="full"
-                                                                    objectFit="cover"
-                                                                />
-                                                            ) : (
-                                                                <Icon
-                                                                    as={OrgIcon}
-                                                                    color="#78A3AD"
-                                                                    h="14px"
-                                                                    w="12px"
-                                                                />
-                                                            )}
+                                                            <Icon
+                                                                as={OrgIcon}
+                                                                color="#78A3AD"
+                                                                h="14px"
+                                                                w="12px"
+                                                            />
                                                         </Circle>
                                                         <Text
                                                             fontSize="13px"
@@ -379,8 +378,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                                             color="#2F363A"
                                                         >
                                                             {
-                                                                x?.superAdmin
-                                                                    ?.organizationName
+                                                                x?.organizationName
                                                             }
                                                         </Text>
                                                     </HStack>
@@ -407,29 +405,30 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                                 </HStack>
                                             </MenuItem>
                                         ))}
-                                        <MenuItem
-                                            flexDirection="row"
-                                            _hover={{ bgColor: 'unset' }}
+                                    </Box>
+                                    <MenuItem
+                                        flexDirection="row"
+                                        _hover={{ bgColor: 'unset' }}
+                                    >
+                                        <Flex
+                                            align="center"
+                                            onClick={() => Logout('/login')}
                                         >
-                                            <Flex
-                                                align="center"
-                                                onClick={() => Logout('/login')}
+                                            <FiLogOut />
+                                            <Text
+                                                fontWeight="bold"
+                                                color="brand.200"
+                                                mb="0"
+                                                pl="1rem"
+                                                fontSize=".9rem"
                                             >
-                                                <FiLogOut />
-                                                <Text
-                                                    fontWeight="bold"
-                                                    color="brand.200"
-                                                    mb="0"
-                                                    pl="1rem"
-                                                    fontSize=".9rem"
-                                                >
-                                                    Sign Out
-                                                </Text>
-                                            </Flex>
-                                        </MenuItem>
-                                    </MenuList>
-                                </Menu>
-                            ) : (
+                                                Sign Out
+                                            </Text>
+                                        </Flex>
+                                    </MenuItem>
+                                </MenuList>
+                            </Menu>
+                            {/* ) : (
                                 <Menu>
                                     <MenuButton>
                                         <HStack>
@@ -464,17 +463,6 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                             flexDirection="column"
                                             _hover={{ bgColor: 'unset' }}
                                         >
-                                            {/* <Circle
-                                bgColor="brand.600"
-                                size="2.5rem"
-                                fontSize="1rem"
-                                color="white"
-                            >
-                                <FaUser />
-                            </Circle>
-                            <Text fontWeight="bold" color="brand.200">
-                                Super Admin Profile
-                            </Text> */}
                                             <Flex
                                                 align="center"
                                                 onClick={() => Logout('/login')}
@@ -492,7 +480,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                         </MenuItem>
                                     </MenuList>
                                 </Menu>
-                            )}
+                            )} */}
                             <Box
                                 cursor="pointer"
                                 pos="relative"

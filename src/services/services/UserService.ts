@@ -28,9 +28,6 @@ import type { SubscriptionHistoryViewModelStandardResponse } from '../models/Sub
 import type { SubscriptionTypesModelCommandCenterResponseModelStandardResponse } from '../models/SubscriptionTypesModelCommandCenterResponseModelStandardResponse';
 import type { TeamMemberModel } from '../models/TeamMemberModel';
 import type { TimbaUserActivationModel } from '../models/TimbaUserActivationModel';
-import type { TimbaUserLoginModel } from '../models/TimbaUserLoginModel';
-import type { TimbaUserViewPagedCollectionStandardResponse } from '../models/TimbaUserViewPagedCollectionStandardResponse';
-import type { TimbaUserViewStandardResponse } from '../models/TimbaUserViewStandardResponse';
 import type { UpdateCardDetailsModel } from '../models/UpdateCardDetailsModel';
 import type { UpdateClientStripeSubscriptionModel } from '../models/UpdateClientStripeSubscriptionModel';
 import type { UpdateClientSubscriptionModel } from '../models/UpdateClientSubscriptionModel';
@@ -56,7 +53,7 @@ export class UserService {
      * @param startDate
      * @param endDate
      * @param subscriptionId
-     * @returns TimbaUserViewPagedCollectionStandardResponse Success
+     * @returns UserViewPagedCollectionStandardResponse Success
      * @throws ApiError
      */
     public static listCollaborator(
@@ -67,7 +64,7 @@ export class UserService {
         startDate?: string,
         endDate?: string,
         subscriptionId?: string,
-    ): CancelablePromise<TimbaUserViewPagedCollectionStandardResponse> {
+    ): CancelablePromise<UserViewPagedCollectionStandardResponse> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/User/timba-users',
@@ -79,6 +76,28 @@ export class UserService {
                 StartDate: startDate,
                 EndDate: endDate,
                 subscriptionId: subscriptionId,
+            },
+        });
+    }
+
+    /**
+     * @param userId
+     * @param search
+     * @returns UserViewListStandardResponse Success
+     * @throws ApiError
+     */
+    public static listUserOrganizations(
+        userId: string,
+        search?: string,
+    ): CancelablePromise<UserViewListStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/User/user-organizations/{userId}',
+            path: {
+                userId: userId,
+            },
+            query: {
+                search: search,
             },
         });
     }
@@ -1253,12 +1272,12 @@ export class UserService {
 
     /**
      * @param requestBody
-     * @returns TimbaUserViewStandardResponse Success
+     * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static addCollaborator(
         requestBody?: CollaboratorModel,
-    ): CancelablePromise<TimbaUserViewStandardResponse> {
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/add-collaborator',
@@ -1272,12 +1291,12 @@ export class UserService {
 
     /**
      * @param requestBody
-     * @returns TimbaUserViewStandardResponse Success
+     * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
     public static updateCollaborator(
         requestBody?: UpdateCollaboratorModel,
-    ): CancelablePromise<TimbaUserViewStandardResponse> {
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/User/update-collaborator',
@@ -1310,15 +1329,15 @@ export class UserService {
 
     /**
      * @param requestBody
-     * @returns TimbaUserViewStandardResponse Success
+     * @returns UserViewStandardResponse Success
      * @throws ApiError
      */
-    public static completeTimbaUserAuthentication(
-        requestBody?: TimbaUserLoginModel,
-    ): CancelablePromise<TimbaUserViewStandardResponse> {
+    public static authenticate(
+        requestBody?: LoginModel,
+    ): CancelablePromise<UserViewStandardResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/User/complete-timba-user-auth',
+            url: '/api/User/timba-user-auth',
             body: requestBody,
             mediaType: 'application/json-patch+json',
             errors: {
