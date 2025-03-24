@@ -253,6 +253,7 @@ function Login() {
                 organizationPhone: user?.organizationPhone,
                 organizationAddress: user?.organizationAddress,
                 isSendingInvoice: user?.isSendingInvoice,
+                timbaId: user?.timbaId,
             };
             const subDetails = user?.subscriptiobDetails;
             Cookies.set('user', JSON.stringify(strippedData));
@@ -330,7 +331,7 @@ function Login() {
                         border="1px solid #C4C4C4"
                         borderRadius="10px"
                         p="10px"
-                        w="30%"
+                        w={['100%', '30%']}
                         bgColor="white"
                         pos="relative"
                         top="50%"

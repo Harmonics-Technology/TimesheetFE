@@ -126,6 +126,7 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                 organizationPhone: user?.organizationPhone,
                 organizationAddress: user?.organizationAddress,
                 isSendingInvoice: user?.isSendingInvoice,
+                timbaId: user?.timbaId,
             };
             const subDetails = user?.subscriptiobDetails;
             Cookies.set('user', JSON.stringify(strippedData));

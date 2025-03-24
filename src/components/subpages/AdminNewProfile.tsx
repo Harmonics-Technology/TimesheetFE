@@ -1,8 +1,16 @@
 import {
     Box,
+    Circle,
+    Flex,
     FormControl,
     FormLabel,
     Grid,
+    HStack,
+    Image,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
     Spinner,
     Text,
     VStack,
@@ -15,14 +23,18 @@ import { Logout } from '@components/bits-utils/LogUserOut';
 import { PrimaryInput } from '@components/bits-utils/PrimaryInput';
 import { PrimaryPhoneInput } from '@components/bits-utils/PrimaryPhoneInput';
 import { PrimaryTextarea } from '@components/bits-utils/PrimaryTextArea';
+import ProfileConfirmModal from '@components/bits-utils/ProfileConfirmModal';
 import { ShiftBtn } from '@components/bits-utils/ShiftBtn';
 import ToggleSwitch from '@components/bits-utils/ToggleSwitch';
 import TwoFaModal from '@components/bits-utils/TwoFaModal';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Widget } from '@uploadcare/react-widget';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { BsCameraFill } from 'react-icons/bs';
+import { FaUser } from 'react-icons/fa';
 import {
     Enable2FAView,
     UpdateUserModel,
@@ -59,6 +71,9 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
     const router = useRouter();
     const [twoFaData, setTwoFaData] = useState<Enable2FAView>();
     const [loading, setLoading] = useState(false);
+    const [showLoading, setShowLoading] = useState(false);
+    const widgetApi = useRef<any>();
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [twofaState, settwofaState] = useState(
         userInfo?.twoFactorEnabled || false,
     );
@@ -67,6 +82,72 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
         onOpen: onOpen2Fa,
         onClose: close2Fa,
     } = useDisclosure();
+
+    const reloadPage = () => {
+        setShowLoading(false);
+        onClose();
+        router.replace(router.asPath);
+    };
+
+    const updatePicture = async (data: UpdateUserModel, info, callback?) => {
+        data.firstName = userInfo?.firstName;
+        data.lastName = userInfo?.lastName;
+        data.isActive = userInfo?.isActive;
+        data.id = userInfo?.id;
+        data.organizationAddress = userInfo?.organizationAddress;
+        data.organizationEmail = userInfo?.organizationEmail;
+        data.organizationPhone = userInfo?.organizationPhone;
+        data.phoneNumber = userInfo?.phoneNumber;
+        data.role = userInfo?.role;
+        data.profilePicture = info?.cdnUrl;
+
+        try {
+            const result = await UserService.updateUser(data);
+
+            if (result.status) {
+                toast({
+                    title: 'Profile Picture Update Success',
+                    status: 'success',
+                    isClosable: true,
+                    position: 'top-right',
+                });
+
+                Cookies.set('user', JSON.stringify(result.data));
+                callback();
+                return;
+            }
+            callback();
+            toast({
+                title: result.message,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        } catch (error) {
+            callback();
+
+            toast({
+                title: `Check your network connection and try again`,
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+        }
+    };
+
+    const showLoadingState = (file) => {
+        if (file) {
+            file.progress((info) => {
+                setShowLoading(true);
+            });
+            file.done((info) => {
+                if (info) {
+                    updatePicture(userInfo, info, reloadPage);
+                    // setShowLoading(false);
+                }
+            });
+        }
+    };
 
     const twoFaSubmitFun = async (value) => {
         setLoading(true);
@@ -159,7 +240,148 @@ export const AdminNewProfile = ({ data }: { data: UserView }) => {
                     },
                 ]}
             />
-            <Box w="full" bgColor="white" p="2rem" borderRadius="8px" mt="2rem">
+            <Box
+                bgColor="white"
+                borderRadius="15px"
+                padding="1.5rem"
+                boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
+                mt="1rem"
+            >
+                <Flex
+                    justify="space-between"
+                    align={['unset', 'center']}
+                    flexDirection={['column', 'row']}
+                >
+                    <HStack gap="1rem" align="center" mb={['1rem', '0']}>
+                        <Circle
+                            size="4rem"
+                            fontSize="2rem"
+                            color="white"
+                            // overflow="hidden"
+                            pos="relative"
+                            role="group"
+                            bgColor={
+                                showLoading ? 'rgba(0,0,0,0.2)' : 'brand.600'
+                            }
+                            _hover={{
+                                bgColor: 'rgba(0,0,0,0.2)',
+                            }}
+                        >
+                            {userInfo?.profilePicture ? (
+                                <Image
+                                    src={userInfo?.profilePicture}
+                                    w="full"
+                                    h="full"
+                                    objectFit="cover"
+                                    borderRadius="50%"
+                                    opacity={showLoading ? 0.3 : 1}
+                                    _groupHover={{
+                                        opacity: '0.3',
+                                    }}
+                                />
+                            ) : (
+                                <FaUser />
+                            )}
+                            <Box
+                                w="full"
+                                h="full"
+                                bgColor="rgba(0,0,0,0.2)"
+                                pos="absolute"
+                                borderRadius="50%"
+                                opacity={showLoading ? 1 : 0}
+                                _groupHover={{
+                                    opacity: 1,
+                                }}
+                            >
+                                <Menu>
+                                    <MenuButton
+                                        pos="absolute"
+                                        top="50%"
+                                        left="50%"
+                                        transform="translate(-50%, -50%)"
+                                    >
+                                        <VStack color="white" fontSize="1rem">
+                                            {showLoading ? (
+                                                <Spinner />
+                                            ) : (
+                                                <BsCameraFill />
+                                            )}
+                                            {/* <Text fontSize=".5rem">
+                                                            Edit Profile Icon
+                                                        </Text> */}
+                                        </VStack>
+                                    </MenuButton>
+                                    <MenuList fontSize=".8rem">
+                                        <MenuItem>
+                                            <Text
+                                                fontWeight="500"
+                                                color="brand.200"
+                                                mb="0"
+                                                onClick={() =>
+                                                    widgetApi.current.openDialog()
+                                                }
+                                            >
+                                                {userInfo?.profilePicture !==
+                                                null
+                                                    ? 'Change Photo'
+                                                    : 'Upload Photo'}
+                                            </Text>
+                                        </MenuItem>
+                                        <MenuItem>
+                                            <Text
+                                                fontWeight="500"
+                                                color="brand.200"
+                                                mb="0"
+                                                onClick={onOpen}
+                                            >
+                                                {userInfo?.profilePicture !==
+                                                null
+                                                    ? 'Remove Photo'
+                                                    : ''}
+                                            </Text>
+                                        </MenuItem>
+                                    </MenuList>
+                                </Menu>
+                            </Box>
+                        </Circle>
+                        <ProfileConfirmModal
+                            isOpen={isOpen}
+                            onClose={onClose}
+                            user={userInfo}
+                        />
+                        <Box>
+                            <Text
+                                fontSize=".8rem"
+                                color="brand.300"
+                                fontWeight="bold"
+                                textTransform="capitalize"
+                            >
+                                {userInfo?.role} Profile
+                            </Text>
+                            <Text fontSize=".8rem" color="brand.300" mb="0">
+                                {userInfo?.fullName}
+                            </Text>
+                        </Box>
+                    </HStack>
+                    <Box>
+                        <Text fontSize="13px" color="#718096">
+                            Your Timba ID: <b>{userInfo?.timbaId}</b>
+                        </Text>
+
+                        <Box display="none">
+                            <Widget
+                                publicKey="fda3a71102659f95625f"
+                                clearable
+                                onFileSelect={(file) => showLoadingState(file)}
+                                ref={widgetApi}
+                                systemDialog={true}
+                                inputAcceptTypes={'.jpg,.jpeg,.png,.gif,.heic'}
+                            />
+                        </Box>
+                    </Box>
+                </Flex>
+            </Box>
+            <Box w="full" bgColor="white" p="2rem" borderRadius="8px" mt="1rem">
                 <form>
                     <Box>
                         <Text fontSize=".875rem" color="#1B1D21" mb="1rem">
