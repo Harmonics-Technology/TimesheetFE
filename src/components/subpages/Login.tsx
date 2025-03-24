@@ -412,7 +412,7 @@ function Login() {
                     <Image src="/assets/newlogo.png" h="3rem" />
                 </Box>
                 <Text
-                    fontSize="35px"
+                    fontSize="25px"
                     fontWeight="bold"
                     w={['100%', '100%']}
                     lineHeight="1"
@@ -422,7 +422,7 @@ function Login() {
                 </Text>
 
                 <form onSubmit={(e) => e.preventDefault()}>
-                    <VStack w="full" spacing=".7rem">
+                    <VStack w="full" spacing=".7rem" mt="1.5rem">
                         <PrimaryInput<LoginModel>
                             register={register}
                             schema={schema}
@@ -431,7 +431,7 @@ function Login() {
                             defaultValue={''}
                             type="email"
                             placeholder="Email"
-                            label="Email Address"
+                            label="Email Address/Timba ID"
                             fontSize="1rem"
                         />
                         <PrimaryInput<LoginModel>

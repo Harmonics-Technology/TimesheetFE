@@ -16,16 +16,16 @@ function index({
 }) {
     return (
         <>
-            {/* {superAdminId ? ( */}
-            <CompleteResetExtra
-                code={code}
-                superAdminId={superAdminId}
-                onboard={onboard}
-                exist={exist}
-            />
-            {/* ) : (
+            {superAdminId ? (
+                <CompleteResetExtra
+                    code={code}
+                    superAdminId={superAdminId}
+                    onboard={onboard}
+                    exist={exist}
+                />
+            ) : (
                 <CompleteReset code={code} />
-            )} */}
+            )}
         </>
     );
 }

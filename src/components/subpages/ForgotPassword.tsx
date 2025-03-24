@@ -74,7 +74,7 @@ function ForgotPassword() {
                     <Image src="/assets/newlogo.png" h="3rem" />
                 </Box>
                 <Text
-                    fontSize="35px"
+                    fontSize="25px"
                     fontWeight="bold"
                     w={['100%', '100%']}
                     lineHeight="1"
@@ -84,7 +84,7 @@ function ForgotPassword() {
                 </Text>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <VStack w="full" spacing=".7rem">
+                    <VStack w="full" spacing=".7rem" mt="1.5rem">
                         <PrimaryInput<InitiateResetModel>
                             register={register}
                             schema={schema}

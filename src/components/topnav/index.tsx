@@ -409,11 +409,9 @@ function TopNav({ setOpenSidenav, openSidenav }: topnavProps) {
                                     <MenuItem
                                         flexDirection="row"
                                         _hover={{ bgColor: 'unset' }}
+                                        onClick={() => Logout('/login')}
                                     >
-                                        <Flex
-                                            align="center"
-                                            onClick={() => Logout('/login')}
-                                        >
+                                        <Flex align="center">
                                             <FiLogOut />
                                             <Text
                                                 fontWeight="bold"

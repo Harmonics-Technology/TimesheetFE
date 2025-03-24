@@ -110,12 +110,12 @@ const CompleteReset = ({ code }: { code: string }) => {
                         <Image src="/assets/newlogo.png" h="3rem" />
                     </Box>
                     <Text
-                        fontSize="20x`px"
+                        fontSize="20px"
                         fontWeight="bold"
                         w={['100%', '100%']}
                         lineHeight="1"
                         textAlign="center"
-                        mb="1rem"
+                        mb="1.5rem"
                     >
                         Reset Password!
                     </Text>
