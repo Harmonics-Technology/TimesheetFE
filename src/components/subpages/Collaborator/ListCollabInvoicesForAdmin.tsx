@@ -33,7 +33,7 @@ export const ListCollabInvoicesForAdmin = ({
         'Invoice Number',
         'Invoice Date',
         'Due Date',
-        // 'Recipient',
+        'Collaborator',
         'Amount',
         'Status',
         'Action',
@@ -100,6 +100,10 @@ export const ListCollabInvoicesForAdmin = ({
                         url: teamUrl,
                     },
                     {
+                        text: 'Collaborators',
+                        url: `/financials/invoices-collaborator`,
+                    },
+                    {
                         text: 'Payment Partners',
                         url: `/financials/invoices-payment`,
                         upgrade: subType == 'basic',
@@ -108,10 +112,6 @@ export const ListCollabInvoicesForAdmin = ({
                         text: 'Clients',
                         url: `/financials/invoices-client`,
                         upgrade: subType !== 'premium',
-                    },
-                    {
-                        text: 'Collaborators',
-                        url: `/financials/invoices-collaborator`,
                     },
                 ]}
             />
@@ -153,10 +153,10 @@ export const ListCollabInvoicesForAdmin = ({
                                 name={moment(x?.dueDate).format('DD/MM/YYYY')}
                                 fontWeight="500"
                             />
-                            {/* <TableData
-                                name={x?.recipient?.organizationName}
+                            <TableData
+                                name={x?.createdBy?.fullName}
                                 fontWeight="500"
-                            /> */}
+                            />
 
                             <TableData
                                 name={CAD(Round(x?.total))}

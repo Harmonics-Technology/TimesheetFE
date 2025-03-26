@@ -4,6 +4,7 @@
 
 import type { ProjectInvoiceItemView } from './ProjectInvoiceItemView';
 import type { ProjectInvoiceRecipientView } from './ProjectInvoiceRecipientView';
+import type { StrippedUserView } from './StrippedUserView';
 import type { UserView } from './UserView';
 
 export type ProjectInvoiceView = {
@@ -24,6 +25,8 @@ export type ProjectInvoiceView = {
     recipientId?: string | null;
     posNumber?: string | null;
     attachmentUrl?: string | null;
+    createdById?: string | null;
+    createdBy?: StrippedUserView;
     recipient?: ProjectInvoiceRecipientView;
     projectInvoiceItems?: Array<ProjectInvoiceItemView> | null;
 };

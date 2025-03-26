@@ -160,6 +160,10 @@ function ClientInvoices({
                             url: teamUrl,
                         },
                         {
+                            text: 'Collaborators',
+                            url: `/financials/invoices-collaborator`,
+                        },
+                        {
                             text: 'Payment Partners',
                             url: `/financials/invoices-payment`,
                             upgrade: subType == 'basic',
@@ -168,10 +172,6 @@ function ClientInvoices({
                             text: 'Clients',
                             url: `/financials/invoices-client`,
                             upgrade: subType !== 'premium',
-                        },
-                        {
-                            text: 'Collaborators',
-                            url: `/financials/invoices-collaborator`,
                         },
                     ]}
                 />

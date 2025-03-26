@@ -190,6 +190,10 @@ function PayrollTreatPartnerInvoice({
                             url: `/financials/invoices-team`,
                         },
                         {
+                            text: 'Collaborators',
+                            url: `/financials/invoices-collaborator`,
+                        },
+                        {
                             text: 'Payment Partners',
                             url: `/financials/invoices-payment`,
                             upgrade: subType == 'basic',

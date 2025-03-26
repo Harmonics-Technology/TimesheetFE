@@ -274,6 +274,10 @@ function OnshoreSubmittedInvoice({
                             url: teamUrl,
                         },
                         {
+                            text: 'Collaborators',
+                            url: `/financials/invoices-collaborator`,
+                        },
+                        {
                             text: 'Payment Partners',
                             url: `/financials/invoices-payment`,
                             upgrade: subType == 'basic',
@@ -282,10 +286,6 @@ function OnshoreSubmittedInvoice({
                             text: 'Clients',
                             url: `/financials/invoices-client`,
                             upgrade: subType !== 'premium',
-                        },
-                        {
-                            text: 'Collaborators',
-                            url: `/financials/invoices-collaborator`,
                         },
                     ]}
                 />
