@@ -189,7 +189,7 @@ export const NewTeamMemerOnboardingForm = ({
         reset,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
-        resolver: yupResolver(openDraft ? draftSchema : schema),
+        // resolver: yupResolver(openDraft ? draftSchema : schema),
         mode: 'all',
         defaultValues: {
             numberOfDaysEligible: leaveSettings?.eligibleLeaveDays || '',
@@ -341,7 +341,11 @@ export const NewTeamMemerOnboardingForm = ({
     }, [paymentPartnerId]);
 
     const [selectedDepartment, setSelectedDepartment] = useState<any>([]);
+    const [primaryDepartment, setPrimaryDepartment] = useState<any>('');
     //
+    const addSingleDepartment = (user) => {
+        setPrimaryDepartment({ ...user, primary: true });
+    };
     const addDepartment = (user) => {
         const filtered = selectedDepartment?.find((x) => x.id === user.id);
         if (filtered) return;
@@ -353,9 +357,18 @@ export const NewTeamMemerOnboardingForm = ({
         setSelectedDepartment(filtered);
     };
 
-    // console.log({ errors });
-
     const onSubmit = async (data: TeamMemberModel) => {
+        const uniqueItems = getUniqueListBy(
+            [
+                ...(data.departments as any),
+                {
+                    departmentId: primaryDepartment.id,
+                    primary: primaryDepartment.primary,
+                },
+            ],
+            'departmentId',
+        );
+        data.departments = uniqueItems;
         data.tax = data.taxType == 'hst' ? hstAmount?.fee || 0 : data?.tax;
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
@@ -418,6 +431,18 @@ export const NewTeamMemerOnboardingForm = ({
 
     const saveToDraft = async (data: TeamMemberModel) => {
         // data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax || 0;
+
+        const uniqueItems = getUniqueListBy(
+            [
+                ...(data.departments as any),
+                {
+                    departmentId: primaryDepartment.id,
+                    primary: primaryDepartment.primary,
+                },
+            ],
+            'departmentId',
+        );
+        data.departments = uniqueItems;
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
         data.dateOfBirth = data.dateOfBirth
@@ -473,7 +498,10 @@ export const NewTeamMemerOnboardingForm = ({
     useEffect(() => {
         setValue(
             'departments',
-            selectedDepartment.map((x) => x.id),
+            selectedDepartment.map((x) => ({
+                departmentId: x.id,
+                primary: false,
+            })),
         );
     }, [selectedDepartment]);
 
@@ -484,6 +512,8 @@ export const NewTeamMemerOnboardingForm = ({
     const paymentPartnerCurrency = paymentPartner?.find(
         (x) => x.id === watch('paymentPartnerId'),
     )?.currency;
+
+    console.log(watch('departments'));
 
     return (
         <DrawerWrapper
@@ -595,12 +625,38 @@ export const NewTeamMemerOnboardingForm = ({
                                 width="fit-content"
                                 fontSize=".8rem"
                             >
-                                Department{' '}
+                                Primary Department
                                 <span style={{ color: 'red' }}>*</span>
                             </FormLabel>
 
                             <CustomSelectBox
                                 data={department}
+                                updateFunction={addSingleDepartment}
+                                items={primaryDepartment}
+                                customKeys={{
+                                    key: 'id',
+                                    label: 'name',
+                                }}
+                                id="usrs"
+                                error={errors?.departments}
+                                removeFn={() => void 0}
+                                single
+                            />
+                        </Box>
+                        <Box w="full">
+                            <FormLabel
+                                textTransform="capitalize"
+                                width="fit-content"
+                                fontSize=".8rem"
+                            >
+                                Other Departments
+                                <span style={{ color: 'red' }}>*</span>
+                            </FormLabel>
+
+                            <CustomSelectBox
+                                data={department?.filter(
+                                    (x) => x?.id !== primaryDepartment?.id,
+                                )}
                                 updateFunction={addDepartment}
                                 items={selectedDepartment}
                                 customKeys={{

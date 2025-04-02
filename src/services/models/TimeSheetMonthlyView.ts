@@ -14,4 +14,5 @@ export type TimeSheetMonthlyView = {
     currency?: string | null;
     startDate?: string;
     endDate?: string;
+    overtimeHours?: number;
 };

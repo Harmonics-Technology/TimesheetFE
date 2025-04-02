@@ -270,11 +270,24 @@ export const DraftOnboardingModal = ({
         userProfile?.userDepartments?.map((obj) => ({
             id: obj?.department?.id,
             name: obj?.department?.name,
+            primary: obj?.primary,
         })) || [],
     );
 
     // console.log({ selectedDepartment });
     //
+    const priDept = userProfile?.userDepartments?.find(
+        (x) => x?.primary == true,
+    );
+    const [primaryDepartment, setPrimaryDepartment] = useState<any>({
+        id: priDept?.department?.id,
+        name: priDept?.department?.name,
+        primary: true,
+    });
+    //
+    const addSingleDepartment = (user) => {
+        setPrimaryDepartment({ ...user, primary: true });
+    };
     const addDepartment = (user) => {
         const filtered = selectedDepartment?.find((x) => x.id === user.id);
         if (filtered) return;
@@ -362,7 +375,7 @@ export const DraftOnboardingModal = ({
     const hasRolledOverLeave = watch('hasRollOverLeave');
     const hasUtilizeLeaveDaysToDate = watch('hasUtilizeLeaveDaysToDate');
 
-    console.log({ hasRolledOverLeave });
+    // console.log({ hasRolledOverLeave });
 
     const forMe = userProfile?.clientId == user?.superAdminId;
     const [clientType, setClientType] = useState(!forMe);
@@ -426,6 +439,17 @@ export const DraftOnboardingModal = ({
     }, [paymentPartnerId]);
 
     const onSubmit = async (data: TeamMemberModel) => {
+        const uniqueItems = getUniqueListBy(
+            [
+                ...(data.departments as any),
+                {
+                    departmentId: primaryDepartment.id,
+                    primary: primaryDepartment.primary,
+                },
+            ],
+            'departmentId',
+        );
+        data.departments = uniqueItems;
         data.tax = data.taxType == 'hst' ? hstAmount?.fee || 0 : data?.tax;
         data.superAdminId = user?.superAdminId;
         data.payRollTypeId = 2;
@@ -487,6 +511,17 @@ export const DraftOnboardingModal = ({
         }
     };
     const saveToDraft = async (data: TeamMemberModel) => {
+        const uniqueItems = getUniqueListBy(
+            [
+                ...(data.departments as any),
+                {
+                    departmentId: primaryDepartment.id,
+                    primary: primaryDepartment.primary,
+                },
+            ],
+            'departmentId',
+        );
+        data.departments = uniqueItems;
         data.superAdminId = user?.superAdminId;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
         data.payRollTypeId = 2;
@@ -545,7 +580,10 @@ export const DraftOnboardingModal = ({
     useEffect(() => {
         setValue(
             'departments',
-            selectedDepartment.map((x) => x.id),
+            selectedDepartment.map((x) => ({
+                departmentId: x.id,
+                primary: false,
+            })),
         );
     }, [selectedDepartment]);
 
@@ -674,12 +712,38 @@ export const DraftOnboardingModal = ({
                                 width="fit-content"
                                 fontSize=".8rem"
                             >
-                                Department{' '}
+                                Primary Department
                                 <span style={{ color: 'red' }}>*</span>
                             </FormLabel>
 
                             <CustomSelectBox
                                 data={department}
+                                updateFunction={addSingleDepartment}
+                                items={primaryDepartment}
+                                customKeys={{
+                                    key: 'id',
+                                    label: 'name',
+                                }}
+                                id="usrs"
+                                error={errors?.departments}
+                                removeFn={() => void 0}
+                                single
+                            />
+                        </Box>
+                        <Box w="full">
+                            <FormLabel
+                                textTransform="capitalize"
+                                width="fit-content"
+                                fontSize=".8rem"
+                            >
+                                Other Departments
+                                <span style={{ color: 'red' }}>*</span>
+                            </FormLabel>
+
+                            <CustomSelectBox
+                                data={department?.filter(
+                                    (x) => x?.id !== primaryDepartment?.id,
+                                )}
                                 updateFunction={addDepartment}
                                 items={selectedDepartment}
                                 customKeys={{

@@ -1,8 +1,4 @@
-import {
-    FormControl,
-    FormErrorMessage,
-    FormLabel,
-} from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react';
 import { Control, Controller, FieldError, Path } from 'react-hook-form';
 interface select {
     options: [];
@@ -106,7 +102,8 @@ export const SelectrixBox = <TFormValues extends Record<string, any>>({
                 )}
             /> */}
             <FormErrorMessage fontSize=".7rem">
-                {(error?.type === 'required' && `${label || 'This field'} is required`) ||
+                {(error?.type === 'required' &&
+                    `${label || 'This field'} is required`) ||
                     error?.message}
             </FormErrorMessage>
         </FormControl>

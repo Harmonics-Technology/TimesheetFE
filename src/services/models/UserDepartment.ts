@@ -13,4 +13,5 @@ export type UserDepartment = {
     user?: User;
     departmentId?: string;
     department?: Department;
+    primaryDepartment?: boolean;
 };

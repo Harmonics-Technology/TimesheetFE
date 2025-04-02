@@ -955,6 +955,11 @@ const TimesheetTeam = ({
                                 } HR`}
                                 tip="Number of hours approved by your supervisor"
                             />
+                            <TimeSheetEstimation
+                                label="Overtime Hours"
+                                data={`${timeSheets?.overtimeHours || 0} HR`}
+                                tip="Number of hours worked overtime"
+                            />
                             {/* <TimeSheetEstimation
                                 label="Expected Payout"
                                 data={` ${getCurrencySymbol(currency)} ${CUR(

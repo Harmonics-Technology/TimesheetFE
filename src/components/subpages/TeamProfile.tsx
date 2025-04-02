@@ -338,6 +338,19 @@ function TeamProfile({
         })) || [],
     );
 
+    const priDept = userProfile?.userDepartments?.find(
+        (x) => x?.primary == true,
+    );
+    const [primaryDepartment, setPrimaryDepartment] = useState<any>({
+        id: priDept?.department?.id,
+        name: priDept?.department?.name,
+        primary: true,
+    });
+    //
+    const addSingleDepartment = (user) => {
+        setPrimaryDepartment({ ...user, primary: true });
+    };
+
     // console.log({ selectedDepartment });
     //
     const addDepartment = (user) => {
@@ -351,10 +364,23 @@ function TeamProfile({
         setSelectedDepartment(filtered);
     };
 
+    // console.log({ userProfile });
+
     const onSubmit = async (data: TeamMemberModel) => {
         // data.isActive = data.isActive === ('true' as unknown as boolean);
 
         // data.clientId = userProfile?.employeeInformation?.client?.id;
+        const uniqueItems = getUniqueListBy(
+            [
+                ...(data.departments as any),
+                {
+                    departmentId: primaryDepartment.id,
+                    primary: primaryDepartment.primary,
+                },
+            ],
+            'departmentId',
+        );
+        data.departments = uniqueItems;
         data.clientSubscriptionId = selectedLicense?.subscriptionId;
         data.tax = data.taxType == 'hst' ? hstAmount.fee : data.tax;
         if (contract !== '') {
@@ -443,7 +469,10 @@ function TeamProfile({
     useEffect(() => {
         setValue(
             'departments',
-            selectedDepartment.map((x) => x.id),
+            selectedDepartment.map((x) => ({
+                departmentId: x.id,
+                primary: false,
+            })),
         );
     }, [selectedDepartment]);
 
@@ -740,11 +769,38 @@ function TeamProfile({
                                     width="fit-content"
                                     fontSize=".8rem"
                                 >
-                                    Department
+                                    Primary Department
+                                    <span style={{ color: 'red' }}>*</span>
                                 </FormLabel>
 
                                 <CustomSelectBox
                                     data={department}
+                                    updateFunction={addSingleDepartment}
+                                    items={primaryDepartment}
+                                    customKeys={{
+                                        key: 'id',
+                                        label: 'name',
+                                    }}
+                                    id="usrs"
+                                    error={errors?.departments}
+                                    removeFn={() => void 0}
+                                    single
+                                />
+                            </Box>
+                            <Box w="full">
+                                <FormLabel
+                                    textTransform="capitalize"
+                                    width="fit-content"
+                                    fontSize=".8rem"
+                                >
+                                    Other Departments
+                                    <span style={{ color: 'red' }}>*</span>
+                                </FormLabel>
+
+                                <CustomSelectBox
+                                    data={department?.filter(
+                                        (x) => x?.id !== primaryDepartment?.id,
+                                    )}
                                     updateFunction={addDepartment}
                                     items={selectedDepartment}
                                     customKeys={{

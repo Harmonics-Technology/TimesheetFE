@@ -20,7 +20,7 @@ import {
 import axios from 'axios';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useContext, useState } from 'react';
+import React, { ReactNode, useContext, useState } from 'react';
 import { AiOutlineDownload } from 'react-icons/ai';
 import { FaAppStore, FaEllipsisH, FaEye } from 'react-icons/fa';
 import {
@@ -83,6 +83,7 @@ export function TableData({
     customColor,
     breakWord,
     onClick,
+    children,
     ...props
 }: {
     name: any;
@@ -95,6 +96,7 @@ export function TableData({
     customColor?: any;
     breakWord?: any;
     onClick?: any;
+    children?: ReactNode;
 } & any) {
     return (
         <Td
@@ -122,11 +124,13 @@ export function TableData({
                     : 'black'
             }
         >
-            <Tooltip label={name} hasArrow>
-                <Text whiteSpace={breakWord ? 'normal' : 'unset'}>
-                    {full ? name : name?.toString()?.substring(0, 20) || ''}
-                </Text>
-            </Tooltip>
+            {children || (
+                <Tooltip label={name} hasArrow>
+                    <Text whiteSpace={breakWord ? 'normal' : 'unset'}>
+                        {full ? name : name?.toString()?.substring(0, 20) || ''}
+                    </Text>
+                </Tooltip>
+            )}
         </Td>
     );
 }
@@ -1637,5 +1641,31 @@ export function ProjectInvoiceAction({
                 </MenuList>
             </Menu>
         </td>
+    );
+}
+export function TableActionComponent({ items }: { items?: any }) {
+    return (
+        <TableData>
+            <Menu>
+                <MenuButton>
+                    <Box
+                        fontSize="1rem"
+                        pl="1rem"
+                        fontWeight="bold"
+                        cursor="pointer"
+                        color="brand.300"
+                    >
+                        <FaEllipsisH />
+                    </Box>
+                </MenuButton>
+                <MenuList w="full">
+                    {items?.map((x) => (
+                        <MenuItem onClick={x?.action} w="full" key={x?.label}>
+                            {x?.label}
+                        </MenuItem>
+                    ))}
+                </MenuList>
+            </Menu>
+        </TableData>
     );
 }

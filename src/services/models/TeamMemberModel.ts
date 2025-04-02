@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 import type { OnboardingFeeRegisterModel } from './OnboardingFeeRegisterModel';
+import type { UserDepartmentModel } from './UserDepartmentModel';
 
 export type TeamMemberModel = {
     firstName?: string | null;
@@ -66,7 +67,7 @@ export type TeamMemberModel = {
     payrollProcessingType?: string | null;
     paymentProcessingFeeType?: string | null;
     paymentProcessingFee?: number | null;
-    departments?: Array<string> | null;
+    departments?: Array<UserDepartmentModel> | null;
     hasUtilizeLeaveDaysToDate?: boolean | null;
     utilizedLeave?: number | null;
     hasRollOverLeave?: boolean | null;

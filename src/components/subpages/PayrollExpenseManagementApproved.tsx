@@ -214,6 +214,10 @@ function PayrollExpenseManagementApproved({
                             text: 'Approved',
                             url: `/financials/expenses-approved`,
                         },
+                        {
+                            text: 'Rejected',
+                            url: `/financials/expenses-rejected`,
+                        },
                     ]}
                 />
                 <Flex justify="space-between" my="1rem">

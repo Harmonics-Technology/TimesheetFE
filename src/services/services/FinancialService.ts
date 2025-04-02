@@ -360,6 +360,27 @@ expenseId: string,
      * @returns ExpenseViewStandardResponse Success
      * @throws ApiError
      */
+    public static rejectExpense(
+expenseId: string,
+): CancelablePromise<ExpenseViewStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/Financial/expense/{expenseId}/reject',
+            path: {
+                'expenseId': expenseId,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param expenseId 
+     * @returns ExpenseViewStandardResponse Success
+     * @throws ApiError
+     */
     public static declineExpense(
 expenseId: string,
 ): CancelablePromise<ExpenseViewStandardResponse> {
@@ -618,6 +639,42 @@ endDate?: string,
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/Financial/expenses/approved/all',
+            query: {
+                'Offset': offset,
+                'Limit': limit,
+                'superAdminId': superAdminId,
+                'search': search,
+                'StartDate': startDate,
+                'EndDate': endDate,
+            },
+            errors: {
+                400: `Bad Request`,
+                500: `Server Error`,
+            },
+        });
+    }
+
+    /**
+     * @param offset 
+     * @param limit 
+     * @param superAdminId 
+     * @param search 
+     * @param startDate 
+     * @param endDate 
+     * @returns ExpenseViewPagedCollectionStandardResponse Success
+     * @throws ApiError
+     */
+    public static listAllRejectedExpenses(
+offset?: number,
+limit?: number,
+superAdminId?: string,
+search?: string,
+startDate?: string,
+endDate?: string,
+): CancelablePromise<ExpenseViewPagedCollectionStandardResponse> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/api/Financial/expenses/rejected/all',
             query: {
                 'Offset': offset,
                 'Limit': limit,

@@ -14,16 +14,18 @@ import {
     useToast,
     Td,
     Icon,
+    Spinner,
 } from '@chakra-ui/react';
 import DrawerWrapper from '@components/bits-utils/Drawer';
 import { PrimaryDate } from '@components/bits-utils/PrimaryDate';
 import {
     ExpenseActions,
+    TableActionComponent,
     TableData,
     TableState,
 } from '@components/bits-utils/TableData';
 import Tables from '@components/bits-utils/Tables';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -77,7 +79,7 @@ function PayrollExpenseManagement({
     isSuperAdmin,
 }: expenseProps) {
     const expensesList = expenses?.data?.value;
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState('');
     const { accessControls } = useContext(UserContext);
     const userAccess: ControlSettingView = accessControls;
 
@@ -105,9 +107,17 @@ function PayrollExpenseManagement({
         setSelectedId([...selectedId, id]);
     };
 
-    const approveSingleExpense = async (item: string) => {
+    const treatSingleExpense = async (
+        item: string,
+        type: 'approve' | 'reject',
+        single?: boolean,
+    ) => {
         try {
-            const result = await FinancialService.approveExpense(item);
+            setLoading(item);
+            const result =
+                type == 'approve'
+                    ? await FinancialService.approveExpense(item)
+                    : await FinancialService.rejectExpense(item);
             if (result.status) {
                 toast({
                     title: `${result.message}`,
@@ -115,9 +125,9 @@ function PayrollExpenseManagement({
                     isClosable: true,
                     position: 'top-right',
                 });
+                single && router.replace(router.asPath);
                 return;
             }
-            setLoading(false);
             toast({
                 title: result.message,
                 status: 'error',
@@ -131,26 +141,29 @@ function PayrollExpenseManagement({
                 isClosable: true,
                 position: 'top-right',
             });
+        } finally {
+            setLoading('');
         }
     };
-    const approveExpenseItems = async () => {
+    const treatExpenseItems = async (type: 'approve' | 'reject') => {
         try {
             await asyncForEach(selectedId, async (select: string) => {
-                setLoading(true);
-                await approveSingleExpense(select);
+                setLoading(type);
+                await treatSingleExpense(select, type);
             });
             setSelectedId([]);
-            setLoading(false);
+
             router.replace(router.asPath);
             return;
         } catch (error: any) {
-            setLoading(false);
             toast({
                 title: error?.body?.message || error?.message,
                 status: 'error',
                 isClosable: true,
                 position: 'top-right',
             });
+        } finally {
+            setLoading('');
         }
     };
 
@@ -158,6 +171,7 @@ function PayrollExpenseManagement({
         register,
         handleSubmit,
         control,
+        watch,
         reset,
         formState: { errors, isSubmitting },
     } = useForm<ExpenseModel>({
@@ -211,6 +225,34 @@ function PayrollExpenseManagement({
         'Status',
         'Action',
     ];
+
+    const ActionItems = ({ id }: { id: string }) => {
+        const actionItems = useMemo(() => {
+            return [
+                {
+                    label: 'Approve',
+                    action: () => id && treatSingleExpense(id, 'approve', true),
+                },
+                {
+                    label: 'Reject',
+                    action: () => id && treatSingleExpense(id, 'reject', true),
+                },
+            ];
+        }, [id]);
+
+        return <TableActionComponent items={actionItems} />;
+    };
+
+    const selectedUser = watch('teamMemberId');
+
+    const departmentOptions =
+        team
+            ?.find((x) => x?.id === selectedUser)
+            ?.userDepartments?.map((dept) => ({
+                id: dept.id,
+                label: dept.department?.name || 'Unknown',
+            })) || [];
+
     return (
         <>
             <Box
@@ -228,6 +270,10 @@ function PayrollExpenseManagement({
                         {
                             text: 'Approved',
                             url: `/financials/expenses-approved`,
+                        },
+                        {
+                            text: 'Rejected',
+                            url: `/financials/expenses-rejected`,
                         },
                     ]}
                 />
@@ -247,9 +293,18 @@ function PayrollExpenseManagement({
                         {selectedId.length > 0 && (
                             <ShiftBtn
                                 text="Approve Expenses"
-                                onClick={() => approveExpenseItems()}
-                                loading={loading}
+                                onClick={() => treatExpenseItems('approve')}
+                                loading={loading == 'approve'}
                                 px="1rem"
+                            />
+                        )}
+                        {selectedId.length > 0 && (
+                            <ShiftBtn
+                                text="Reject Expenses"
+                                onClick={() => treatExpenseItems('reject')}
+                                loading={loading == 'reject'}
+                                px="1rem"
+                                bg="red.600"
                             />
                         )}
                     </HStack>
@@ -275,37 +330,55 @@ function PayrollExpenseManagement({
                 <FilterSearch data={expenses} />
                 <Tables tableHead={thead}>
                     <>
-                        {expensesList?.map((x: ExpenseView) => (
-                            <Tr key={x.id}>
-                                <TableData name={x.teamMember?.fullName} />
-                                <TableData name={x.description} />
-                                <TableData name={x.expenseType} />
-                                <TableData name={formatDate(x?.expenseDate)} />
-                                <TableData name={formatDate(x?.dateCreated)} />
-                                <TableData
-                                    name={`${x.currency}${CUR(
-                                        x.amount as unknown as string,
-                                    )}`}
-                                />
-                                <TableState name={x.status as string} />
-                                <td>
-                                    <Checkbox
-                                        checked={
-                                            selectedId.find(
-                                                (e) => e === x.id,
-                                            ) || ''
-                                        }
-                                        onChange={(e) =>
-                                            toggleSelected(x.id as string)
-                                        }
-                                        disabled={
-                                            !isSuperAdmin &&
-                                            !userAccess?.adminCanApproveExpense
-                                        }
+                        {expensesList?.map((x: ExpenseView) => {
+                            return (
+                                <Tr key={x.id}>
+                                    <TableData>
+                                        <HStack>
+                                            {loading == x?.id ? (
+                                                <Spinner size="sm" />
+                                            ) : (
+                                                <Checkbox
+                                                    checked={
+                                                        selectedId.find(
+                                                            (e) => e === x.id,
+                                                        ) || ''
+                                                    }
+                                                    onChange={(e) =>
+                                                        toggleSelected(
+                                                            x.id as string,
+                                                        )
+                                                    }
+                                                    disabled={
+                                                        !isSuperAdmin &&
+                                                        !userAccess?.adminCanApproveExpense
+                                                    }
+                                                />
+                                            )}
+                                            <Text>
+                                                {x.teamMember?.fullName}
+                                            </Text>
+                                        </HStack>
+                                    </TableData>
+                                    <TableData name={x.description} />
+                                    <TableData name={x.expenseType} />
+                                    <TableData
+                                        name={formatDate(x?.expenseDate)}
                                     />
-                                </td>
-                            </Tr>
-                        ))}
+                                    <TableData
+                                        name={formatDate(x?.dateCreated)}
+                                    />
+                                    <TableData
+                                        name={`${x.currency}${CUR(
+                                            x.amount as unknown as string,
+                                        )}`}
+                                    />
+                                    <TableState name={x.status as string} />
+
+                                    <ActionItems id={x.id as string} />
+                                </Tr>
+                            );
+                        })}
                     </>
                 </Tables>
                 <Pagination data={expenses} />
@@ -329,16 +402,15 @@ function PayrollExpenseManagement({
                             label="Team Member"
                             options={team}
                         />
+
                         <SelectrixBox<ExpenseModel>
                             control={control}
-                            name="expenseTypeId"
-                            error={errors.expenseTypeId}
+                            name="teamMemberId"
+                            error={errors.teamMemberId}
                             keys="id"
-                            keyLabel="name"
-                            label="Expense Type"
-                            options={expenseType?.filter(
-                                (x) => x.status == 'ACTIVE',
-                            )}
+                            keyLabel="label"
+                            label="Department"
+                            options={departmentOptions}
                         />
                     </Grid>
                     <Box my="1rem" w="full">
@@ -356,6 +428,17 @@ function PayrollExpenseManagement({
                         templateColumns={['1fr', 'repeat(2, 1fr)']}
                         gap="1rem 2rem"
                     >
+                        <SelectrixBox<ExpenseModel>
+                            control={control}
+                            name="expenseTypeId"
+                            error={errors.expenseTypeId}
+                            keys="id"
+                            keyLabel="name"
+                            label="Expense Type"
+                            options={expenseType?.filter(
+                                (x) => x.status == 'ACTIVE',
+                            )}
+                        />
                         <PrimaryInput<ExpenseModel>
                             label="Amount"
                             name="amount"
@@ -402,7 +485,7 @@ function PayrollExpenseManagement({
                                 h="2.8rem"
                             />
                             <ShiftBtn
-                                text="Send Invite"
+                                text="Add Expense"
                                 px="1rem"
                                 w="full"
                                 type="submit"
