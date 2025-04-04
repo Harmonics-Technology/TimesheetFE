@@ -249,7 +249,7 @@ function PayrollExpenseManagement({
         team
             ?.find((x) => x?.id === selectedUser)
             ?.userDepartments?.map((dept) => ({
-                id: dept.id,
+                id: dept.department?.id,
                 label: dept.department?.name || 'Unknown',
             })) || [];
 
