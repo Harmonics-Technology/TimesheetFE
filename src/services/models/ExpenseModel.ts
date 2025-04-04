@@ -9,4 +9,5 @@ export type ExpenseModel = {
     amount?: number;
     currency?: string | null;
     expenseDate?: string | null;
+    departmentId?: string | null;
 };

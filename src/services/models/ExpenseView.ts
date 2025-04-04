@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { DepartmentView } from './DepartmentView';
 import type { UserView } from './UserView';
 
 export type ExpenseView = {
@@ -15,4 +16,6 @@ export type ExpenseView = {
     status?: string | null;
     dateCreated?: string;
     expenseDate?: string | null;
+    departmentId?: string | null;
+    department?: DepartmentView;
 };

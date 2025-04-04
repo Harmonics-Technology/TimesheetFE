@@ -405,8 +405,8 @@ function PayrollExpenseManagement({
 
                         <SelectrixBox<ExpenseModel>
                             control={control}
-                            name="teamMemberId"
-                            error={errors.teamMemberId}
+                            name="departmentId"
+                            error={errors.departmentId}
                             keys="id"
                             keyLabel="label"
                             label="Department"
