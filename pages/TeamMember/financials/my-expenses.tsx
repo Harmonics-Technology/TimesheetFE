@@ -16,10 +16,16 @@ interface ExpensesType {
     expenses: ExpenseViewPagedCollectionStandardResponse;
     id: string;
     expenseType: ExpenseTypeView[];
+    dept?: any;
 }
-function expenses({ expenses, id, expenseType }: ExpensesType) {
+function expenses({ expenses, id, expenseType, dept }: ExpensesType) {
     return (
-        <TeamExpenses expenses={expenses} id={id} expenseType={expenseType} />
+        <TeamExpenses
+            expenses={expenses}
+            id={id}
+            expenseType={expenseType}
+            dept={dept}
+        />
     );
 }
 
@@ -46,19 +52,21 @@ export const getServerSideProps: GetServerSideProps = withPageAuth(
                 pagingOptions.from,
                 pagingOptions.to,
             );
-            // const data = await SettingsService.listExpenseTypes();
+            const dept = await UserService.listUsersDepartment(id);
 
             return {
                 props: {
                     expenses: data,
                     expenseType: expenseType.data,
                     id,
+                    dept: dept?.data,
                 },
             };
         } catch (error: any) {
             return {
                 props: {
                     data: [],
+                    dept: [],
                 },
             };
         }

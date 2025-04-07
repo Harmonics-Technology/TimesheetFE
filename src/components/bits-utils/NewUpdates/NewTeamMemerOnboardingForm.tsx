@@ -189,7 +189,7 @@ export const NewTeamMemerOnboardingForm = ({
         reset,
         formState: { errors, isSubmitting },
     } = useForm<TeamMemberModel>({
-        // resolver: yupResolver(openDraft ? draftSchema : schema),
+        resolver: yupResolver(openDraft ? draftSchema : schema),
         mode: 'all',
         defaultValues: {
             numberOfDaysEligible: leaveSettings?.eligibleLeaveDays || '',
@@ -650,7 +650,7 @@ export const NewTeamMemerOnboardingForm = ({
                                 fontSize=".8rem"
                             >
                                 Other Departments
-                                <span style={{ color: 'red' }}>*</span>
+                                {/* <span style={{ color: 'red' }}>*</span> */}
                             </FormLabel>
 
                             <CustomSelectBox
@@ -665,7 +665,7 @@ export const NewTeamMemerOnboardingForm = ({
                                 }}
                                 checkbox={true}
                                 id="users"
-                                error={errors?.departments}
+                                // error={errors?.departments}
                                 removeFn={removeDepartment}
                                 // single
                             />

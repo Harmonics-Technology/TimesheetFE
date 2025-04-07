@@ -1036,6 +1036,11 @@ const TimesheetSupervisor = ({
                         data={`${timeSheets?.totalApprovedHours} HR`}
                         tip="Number of hours approved by you"
                     />
+                    <TimeSheetEstimation
+                        label="Overtime Hours"
+                        data={`${timeSheets?.overtimeHours || 0} HR`}
+                        tip="Number of hours worked overtime"
+                    />
                     {/* <TimeSheetEstimation
                         label="Expected Payout"
                         data={

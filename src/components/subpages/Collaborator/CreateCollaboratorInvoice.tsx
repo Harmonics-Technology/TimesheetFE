@@ -434,10 +434,10 @@ export const CreateCollaboratorInvoice = ({
                         mb="9px"
                     >
                         <Text color="#2D3748" fontWeight={600}>
-                            Proinsight Consulting
+                            {user?.organizationName}
                         </Text>
                         <Text color="#808080" fontWeight={400} fontSize="13px">
-                            25 Sheppard, North York, ON M2N 6S6, Canada
+                            {user?.organizationAddress}
                         </Text>
                     </Box>
                     <Box borderRadius="5px" bgColor="white" p="14px" mb="1rem">

@@ -59,9 +59,10 @@ interface expenseProps {
     expenses: ExpenseViewPagedCollectionStandardResponse;
     id: string;
     expenseType: ExpenseTypeView[];
+    dept?: any;
 }
 
-function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
+function TeamExpenses({ expenses, id, expenseType, dept }: expenseProps) {
     const expensesList = expenses?.data?.value;
     const {
         register,
@@ -111,6 +112,12 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
             });
         }
     };
+    const departmentOptions =
+        dept?.map((dept) => ({
+            id: dept.department?.id,
+            label: dept.department?.name || 'Unknown',
+        })) || [];
+    console.log({ dept });
     return (
         <>
             <Box
@@ -179,6 +186,15 @@ function TeamExpenses({ expenses, id, expenseType }: expenseProps) {
                 title={'Add New Expense'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
+                    <SelectrixBox<ExpenseModel>
+                        control={control}
+                        name="departmentId"
+                        error={errors.departmentId}
+                        keys="id"
+                        keyLabel="label"
+                        label="Department"
+                        options={departmentOptions}
+                    />
                     <Grid
                         templateColumns={['1fr', 'repeat(2, 1fr)']}
                         gap="1rem 2rem"
