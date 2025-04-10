@@ -45,7 +45,7 @@ const schema = yup.object().shape({
     endDate: yup.string().required(),
     duration: yup.number().required(),
     // trackedByHours: yup.boolean().required(),
-    assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
+    // assignedUsers: yup.array().min(1, 'Select atleast one assignee').required(),
     note: yup.string().required(),
     taskPriority: yup.number().required(),
     // durationInHours: yup

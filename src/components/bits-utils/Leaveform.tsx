@@ -131,21 +131,22 @@ const Leaveform = ({
     // console.log({ user });
 
     const onSubmit = async (data: LeaveModel) => {
-        // if (leaveDuration > leaveDaysLeft) {
-        //     toast({
-        //         title: 'You cannot apply for a leave duration greater than your leave balance',
-        //         status: 'error',
-        //         isClosable: true,
-        //         position: 'top-right',
-        //     });
-        //     return;
-        // }
+        if (!leaveDuration) {
+            toast({
+                title: 'Duration is a manadatory field',
+                status: 'error',
+                isClosable: true,
+                position: 'top-right',
+            });
+            return;
+        }
         oneDay == true && (data.endDate = data.startDate);
         data.leaveTypeId =
             leavetypes.value?.filter((x) => x.name == data.leaveTypeId)[0]
                 ?.id || data.leaveTypeId;
         data.noOfLeaveDaysApplied = leaveDays;
         data.leaveDuration = leaveDuration;
+
         // console.log({data})
 
         try {
@@ -268,7 +269,7 @@ const Leaveform = ({
                             )}
                         />
                         <InputBlank
-                            label="Duration"
+                            label="Duration (Hours)"
                             variant="outline"
                             onChange={(e) => setTimeDuration(e.target.value)}
                             value={duration}
