@@ -8,11 +8,17 @@ export const ChartLargeCard = ({
     sub,
     children,
     legend,
+    fs,
+    fsb,
+    isFlex,
 }: {
     title: string;
-    sub: string;
+    sub?: string;
     children: any;
     legend?: any;
+    fs?: any;
+    fsb?: any;
+    isFlex?: boolean;
 }) => {
     return (
         <Flex
@@ -24,24 +30,30 @@ export const ChartLargeCard = ({
             justify="flex-start"
         >
             <Box textAlign="left" w="full">
-                <HStack justify="space-between" align="flex-end">
+                <HStack
+                    justify="space-between"
+                    align={isFlex ? 'flex-start' : 'flex-end'}
+                    flexDir={isFlex ? 'column' : 'row'}
+                >
                     <Box>
                         <Text
-                            fontSize="1.125rem"
+                            fontSize={fs || '1.125rem'}
                             fontWeight="600"
                             color="#2D3748"
                             mb="0"
                         >
                             {title}
                         </Text>
-                        <Text
-                            fontSize=".875rem"
-                            fontWeight="400"
-                            color="#696969"
-                            mb="0"
-                        >
-                            {sub}
-                        </Text>
+                        {sub && (
+                            <Text
+                                fontSize={fsb || '.875rem'}
+                                fontWeight="400"
+                                color="#696969"
+                                mb="0"
+                            >
+                                {sub}
+                            </Text>
+                        )}
                     </Box>
                     <HStack spacing="1rem">
                         {legend &&
@@ -49,13 +61,13 @@ export const ChartLargeCard = ({
                                 <ChartLegend
                                     text={x.text}
                                     color={x.color}
-                                    size='.75rem'
+                                    size=".75rem"
                                     key={i}
                                 />
                             ))}
                     </HStack>
                 </HStack>
-                <Box h="12rem" mt="1rem" w="full">
+                <Box h="15rem" mt="1rem" w="full">
                     {children}
                 </Box>
             </Box>

@@ -7,4 +7,5 @@ export type TopResourceReport = {
     totalHoursAvailable?: number;
     utilizedHours?: number;
     utilizationRate?: number;
+    department?: string | null;
 };

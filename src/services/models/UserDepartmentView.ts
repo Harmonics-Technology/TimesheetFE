@@ -8,5 +8,5 @@ export type UserDepartmentView = {
     id?: string;
     departmentId?: string;
     department?: DepartmentView;
-    primary?: boolean;
+    primaryDepartment?: boolean;
 };

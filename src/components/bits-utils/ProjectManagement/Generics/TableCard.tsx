@@ -53,12 +53,12 @@ export const TableCard = ({
                         ))}
                     </Tr>
                 </Thead>
-
                 {
                     //@ts-ignore
                     children?.props?.children?.length > 0 ||
                     //@ts-ignore
-                    children?.at(0)?.props?.children?.length > 0 ? (
+                    (children?.length > 0 &&
+                        children?.at(0)?.props?.children?.length > 0) ? (
                         <Tbody>{children}</Tbody>
                     ) : (
                         <TableNoContentWrapper

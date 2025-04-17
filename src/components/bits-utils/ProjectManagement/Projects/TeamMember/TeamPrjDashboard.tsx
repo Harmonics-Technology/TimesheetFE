@@ -200,7 +200,18 @@ export const TeamPrjDashboard = ({
                     title="Number of Task completed"
                     sub="Operational Vs Project Task activity Rate"
                 >
-                    <BarChart chart={metrics?.monthlyCompletedTasks} />
+                    <BarChart
+                        chart={metrics?.monthlyCompletedTasks}
+                        datasets={[
+                            {
+                                id: 1,
+                                label: 'Task Created',
+                                obj: 'taskCompleted',
+                                bgColor: '#4FD1C5',
+                                barPerc: '0.5',
+                            },
+                        ]}
+                    />
                 </ChartLargeCard>
             </Grid>
         </Box>

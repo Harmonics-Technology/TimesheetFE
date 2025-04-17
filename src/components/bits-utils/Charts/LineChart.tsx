@@ -149,3 +149,122 @@ export default function LineChart({ chart }: { chart: any }) {
 
     return <Chart options={options} data={data} />;
 }
+
+export function LineChartSingle({
+    chart,
+    label,
+    obj,
+}: {
+    chart: any;
+    label?: string;
+    obj?: any;
+}) {
+    const options = {
+        scales: {
+            x: {
+                grid: {
+                    display: false,
+                    drawBorder: false,
+                },
+                border: {
+                    display: false,
+                },
+                ticks: {
+                    display: true,
+                    font: {
+                        size: 8,
+                        fontFamily: 'Rubik',
+                    },
+                },
+            },
+            y: {
+                beginAtZero: true,
+                grid: {
+                    display: false,
+                    drawBorder: false,
+                },
+                border: {
+                    display: false,
+                },
+                ticks: {
+                    font: {
+                        size: 8,
+                        fontFamily: 'Rubik',
+                    },
+                },
+            },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false,
+                position: 'right' as const,
+            },
+            datalabels: {
+                display: false,
+            },
+
+            tooltip: {
+                backgroundColor: '#2eafa3',
+                titleColor: '#ffd7bd',
+                padding: { x: 20, y: 4 } as unknown as number,
+                titleFont: {
+                    size: 0,
+                },
+                bodyFont: {
+                    size: 8,
+                    fontFamily: 'Rubik',
+                    weight: 'bold',
+                },
+                bodyColor: '#fff',
+                cornerRadius: 2,
+                displayColors: false,
+                caretPadding: 0,
+                bodyAlign: 'center' as const,
+                titleMarginBottom: 0,
+            },
+        },
+    };
+
+    const linearGradient = (context, bg) => {
+        const bgColor = bg;
+        if (!context.chart.chartArea) {
+            return;
+        }
+        const {
+            ctx,
+            data,
+            chartArea: { top, bottom },
+        } = context.chart;
+        const gradientBg = ctx.createLinearGradient(0, top, 0, bottom);
+        const colorTranches = 1 / (bgColor.length - 1);
+        for (let i = 0; i < bgColor.length - 1; i++) {
+            gradientBg.addColorStop(0 + i * colorTranches, bgColor[i]);
+        }
+        return gradientBg;
+    };
+
+    const labels = chart?.map((x) => x.month.substring(0, 3));
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: label,
+                data: chart?.map((x) => x[obj]),
+                fill: true,
+                borderColor: '#5C59E8',
+                tension: 0.4,
+                pointRadius: 0,
+                backgroundColor: (context) =>
+                    linearGradient(context, [
+                        'rgba(125, 122, 237, 1)',
+                        'rgba(255, 255, 255, 0)',
+                    ]),
+            },
+        ],
+    };
+
+    return <Chart options={options} data={data} />;
+}

@@ -55,7 +55,7 @@ export const SingleProjectPage = ({
                 id={id}
                 data={projects}
                 users={users}
-            />
+        />
 
             <Grid
                 mb="1.25rem"
@@ -197,7 +197,18 @@ export const SingleProjectPage = ({
                     title="Number of Task Created"
                     sub="Project Task activity Rate"
                 >
-                    <BarChart chart={metrics?.monthlyCompletedTasks} />
+                    <BarChart
+                        chart={metrics?.monthlyCompletedTasks}
+                        datasets={[
+                            {
+                                id: 1,
+                                label: 'Task Created',
+                                obj: 'taskCompleted',
+                                bgColor: '#4FD1C5',
+                                barPerc: '0.5',
+                            },
+                        ]}
+                    />
                 </ChartLargeCard>
             </Grid>
         </Box>

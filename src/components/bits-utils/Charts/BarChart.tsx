@@ -9,10 +9,6 @@ import {
 } from 'chart.js';
 import { Bar as Chart } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {
-    UserCountByPayrollTypeView,
-    UserCountByPayrollTypeViewListStandardResponse,
-} from 'src/services';
 
 ChartJS.register(
     CategoryScale,
@@ -24,7 +20,7 @@ ChartJS.register(
     ChartDataLabels,
 );
 
-export function BarChart({ chart }: { chart: any }) {
+export function BarChart({ chart, datasets }: { chart: any; datasets: any }) {
     const options = {
         elements: {
             bar: {
@@ -43,7 +39,7 @@ export function BarChart({ chart }: { chart: any }) {
                     display: false,
                 },
                 ticks: {
-                    padding: 8,
+                    padding: 12,
                     color: '#A6ACBE',
                     display: true,
                     font: {
@@ -123,14 +119,12 @@ export function BarChart({ chart }: { chart: any }) {
 
     const data = {
         labels,
-        datasets: [
-            {
-                label: 'Task created',
-                data: chart?.map((x: any) => x.taskCompleted),
-                backgroundColor: '#4FD1C5',
-                barPercentage: 0.5,
-            },
-        ],
+        datasets: datasets?.map((x) => ({
+            label: x?.label,
+            data: chart?.map((b: any) => b[x.obj]),
+            backgroundColor: x?.bgColor,
+            barPercentage: x?.barPerc,
+        })),
     };
 
     return <Chart options={options} data={data} />;

@@ -24,54 +24,66 @@ const index = ({ metrics, team, paymentPartner, chart, summary }) => {
 
 export default index;
 
-export const getServerSideProps: GetServerSideProps = withPageAuth(
-    async (ctx) => {
-        const pagingOptions = filterPagingSearchOptions(ctx);
-        const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
-        try {
-            const data = await DashboardService.getAdminMetrics(superAdminId);
-            const team = await UserService.listUsers(
-                'Team Member',
-                superAdminId,
-                pagingOptions.offset,
-                pagingOptions.limit,
-                pagingOptions.search,
-                pagingOptions.from,
-                pagingOptions.to,
-            );
-            const paymentPartner =
-                await FinancialService.listPaymentPartnerInvoicesForPayrollManagers(
-                    pagingOptions.offset,
-                    pagingOptions.limit,
-                    pagingOptions.search,
-                    pagingOptions.paySlipFilter || superAdminId,
-                    pagingOptions.from,
-                    pagingOptions.to,
-                );
-            const chart = await UserService.getUserCountByPayrolltypePerYear(
-                pagingOptions.chartYear,
-            );
-            const summary = await ProjectManagementService.getSummaryReport(
-                superAdminId,
-                pagingOptions.from,
-                pagingOptions.to,
-            );
-            return {
-                props: {
-                    metrics: data,
-                    team,
-                    paymentPartner,
-                    chart,
-                    summary: summary.data,
-                },
-            };
-        } catch (error: any) {
-            return {
-                props: {
-                    data: [],
-                    team: [],
-                },
-            };
-        }
-    },
-);
+export const getServerSideProps: GetServerSideProps = async (ctx: any) => {
+    const role = JSON.parse(ctx.req.cookies.user).role.replaceAll(' ', '');
+
+    return {
+        redirect: {
+            permanent: false,
+            destination: `/${role}/report/project-management-report`,
+        },
+        props: {},
+    };
+};
+
+// export const getServerSideProps: GetServerSideProps = withPageAuth(
+//     async (ctx) => {
+//         const pagingOptions = filterPagingSearchOptions(ctx);
+//         const superAdminId = JSON.parse(ctx.req.cookies.user).superAdminId;
+//         try {
+//             const data = await DashboardService.getAdminMetrics(superAdminId);
+//             const team = await UserService.listUsers(
+//                 'Team Member',
+//                 superAdminId,
+//                 pagingOptions.offset,
+//                 pagingOptions.limit,
+//                 pagingOptions.search,
+//                 pagingOptions.from,
+//                 pagingOptions.to,
+//             );
+//             const paymentPartner =
+//                 await FinancialService.listPaymentPartnerInvoicesForPayrollManagers(
+//                     pagingOptions.offset,
+//                     pagingOptions.limit,
+//                     pagingOptions.search,
+//                     pagingOptions.paySlipFilter || superAdminId,
+//                     pagingOptions.from,
+//                     pagingOptions.to,
+//                 );
+//             const chart = await UserService.getUserCountByPayrolltypePerYear(
+//                 pagingOptions.chartYear,
+//             );
+//             const summary = await ProjectManagementService.getSummaryReport(
+//                 superAdminId,
+//                 pagingOptions.from,
+//                 pagingOptions.to,
+//             );
+//             return {
+//                 props: {
+//                     metrics: data,
+//                     team,
+//                     paymentPartner,
+//                     chart,
+//                     summary: summary.data,
+//                 },
+//             };
+//         } catch (error: any) {
+//             return {
+//                 props: {
+//                     data: [],
+//                     team: [],
+//                 },
+//             };
+//         }
+//     },
+// );
