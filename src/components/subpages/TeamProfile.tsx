@@ -339,7 +339,7 @@ function TeamProfile({
     );
 
     const priDept = userProfile?.userDepartments?.find(
-        (x) => x?.primary == true,
+        (x) => x?.primaryDepartment == true,
     );
     const [primaryDepartment, setPrimaryDepartment] = useState<any>({
         id: priDept?.department?.id,
