@@ -113,25 +113,35 @@ export const FinancialsReport = () => {
                 </Text>
                 <Grid templateColumns="repeat(6, 1fr)">
                     {items?.map((x) => (
-                        <VStack
-                            align="flex-start"
-                            gap="6px"
-                            borderRight="1px solid #d9d9d9"
-                            px="16px"
-                            _last={{ borderRight: 'none', pr: '0' }}
-                            _first={{ px: '0' }}
-                        >
-                            <Text
-                                fontWeight="500"
-                                color="#2f363a"
-                                fontSize="24px"
-                            >
-                                {x?.value}
-                            </Text>
-                            <Text color="#787486" fontSize="14px">
-                                {x?.label}
-                            </Text>
-                        </VStack>
+                        <>
+                            {loading ? (
+                                <Skeleton
+                                    height="85px"
+                                    count={1}
+                                    style={{ top: '-4px' }}
+                                />
+                            ) : (
+                                <VStack
+                                    align="flex-start"
+                                    gap="6px"
+                                    borderRight="1px solid #d9d9d9"
+                                    px="16px"
+                                    _last={{ borderRight: 'none', pr: '0' }}
+                                    _first={{ px: '0' }}
+                                >
+                                    <Text
+                                        fontWeight="500"
+                                        color="#2f363a"
+                                        fontSize="24px"
+                                    >
+                                        {x?.value}
+                                    </Text>
+                                    <Text color="#787486" fontSize="14px">
+                                        {x?.label}
+                                    </Text>
+                                </VStack>
+                            )}
+                        </>
                     ))}
                 </Grid>
             </Box>
@@ -241,7 +251,7 @@ export const FinancialsReport = () => {
                                             <TableData
                                                 name={x?.status}
                                                 customColor={
-                                                    x?.status == 'overdue'
+                                                    x?.status == 'REJECTED'
                                                         ? '#ff5b79'
                                                         : x?.status ==
                                                           'completed'

@@ -106,25 +106,35 @@ export const TimesheetReport = () => {
                 </Text>
                 <Grid templateColumns="repeat(5, 1fr)">
                     {items?.map((x) => (
-                        <VStack
-                            align="flex-start"
-                            gap="6px"
-                            borderRight="1px solid #d9d9d9"
-                            px="16px"
-                            _last={{ borderRight: 'none', pr: '0' }}
-                            _first={{ px: '0' }}
-                        >
-                            <Text
-                                fontWeight="500"
-                                color="#2f363a"
-                                fontSize="24px"
-                            >
-                                {x?.value}
-                            </Text>
-                            <Text color="#787486" fontSize="14px">
-                                {x?.label}
-                            </Text>
-                        </VStack>
+                        <>
+                            {loading ? (
+                                <Skeleton
+                                    height="85px"
+                                    count={1}
+                                    style={{ top: '-4px' }}
+                                />
+                            ) : (
+                                <VStack
+                                    align="flex-start"
+                                    gap="6px"
+                                    borderRight="1px solid #d9d9d9"
+                                    px="16px"
+                                    _last={{ borderRight: 'none', pr: '0' }}
+                                    _first={{ px: '0' }}
+                                >
+                                    <Text
+                                        fontWeight="500"
+                                        color="#2f363a"
+                                        fontSize="24px"
+                                    >
+                                        {x?.value}
+                                    </Text>
+                                    <Text color="#787486" fontSize="14px">
+                                        {x?.label}
+                                    </Text>
+                                </VStack>
+                            )}
+                        </>
                     ))}
                 </Grid>
             </Box>
@@ -166,9 +176,11 @@ export const TimesheetReport = () => {
                                     return (
                                         <TableRow>
                                             <TableData name={x?.department} />
-                                            <TableData name={x?.totalHours} />
                                             <TableData
-                                                name={x?.approvedHours}
+                                                name={Round(x?.totalHours)}
+                                            />
+                                            <TableData
+                                                name={Round(x?.approvedHours)}
                                             />
                                             <TableData
                                                 name={x?.overtimeHours}
@@ -281,15 +293,22 @@ export const TimesheetReport = () => {
                                         <TableRow>
                                             <TableData name={x?.employee} />
                                             <TableData name={x?.department} />
-                                            <TableData name={x?.totalHours} />
+                                            <TableData
+                                                name={Round(x?.totalHours)}
+                                            />
                                             <TableData
                                                 name={x?.billableHours}
                                             />
                                             <TableData
-                                                name={x?.nonBillableHours}
+                                                name={Round(
+                                                    x?.nonBillableHours,
+                                                )}
                                             />
                                             <TableData
-                                                name={`%${x?.percentageOfBillable}`}
+                                                name={`%${Round(
+                                                    x?.percentageOfBillable ||
+                                                        0,
+                                                )}`}
                                             />
                                         </TableRow>
                                     );
