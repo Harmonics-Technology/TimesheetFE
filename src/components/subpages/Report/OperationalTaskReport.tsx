@@ -85,7 +85,7 @@ export const OperationalTaskReport = () => {
             <ReportNav role={role} />
             <HStack justify="space-between" w="full" p="1rem 0 0rem">
                 <Text fontWeight="500" color="#2f363a">
-                    Leave Management
+                    Operational Task
                 </Text>
             </HStack>
             <Box
