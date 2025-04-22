@@ -81,7 +81,9 @@ export const ProjectManagementReport = () => {
                 gap="1.06rem"
             >
                 <ChartLargeCard
-                    title={`Total number of Projects: ${metrics?.ongoingVsCompletedProject?.length}`}
+                    title={`Total number of Projects: ${
+                        metrics?.ongoingVsCompletedProject?.length || 0
+                    }`}
                     legend={[
                         { text: 'Completed Project', color: '#45DAB6' },
                         { text: 'Ongoing Projects', color: '#28A3EF' },
@@ -156,7 +158,7 @@ export const ProjectManagementReport = () => {
                 p="20px 20px 50px"
             >
                 <HStack justify="space-between">
-                    <Text fontSize="14px" fontWeight={500}>
+                    <Text fontSize="14px" fontWeight={500} mb="1rem">
                         Project Overview
                     </Text>
                 </HStack>
@@ -216,7 +218,7 @@ export const ProjectManagementReport = () => {
                 p="20px 20px 50px"
             >
                 <HStack justify="space-between">
-                    <Text fontSize="14px" fontWeight={500}>
+                    <Text fontSize="14px" fontWeight={500} mb="1rem">
                         Project Progress & Timeline
                     </Text>
                 </HStack>
@@ -275,7 +277,7 @@ export const ProjectManagementReport = () => {
                 p="20px 20px 50px"
             >
                 <HStack justify="space-between">
-                    <Text fontSize="14px" fontWeight={500}>
+                    <Text fontSize="14px" fontWeight={500} mb="1rem">
                         Project Budget Report
                     </Text>
                 </HStack>

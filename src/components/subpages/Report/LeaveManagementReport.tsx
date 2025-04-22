@@ -213,7 +213,7 @@ export const LeaveManagementReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             Leave Departmental Report
                         </Text>
                         <Text fontSize="14px" color="#787486">
@@ -275,7 +275,7 @@ export const LeaveManagementReport = () => {
                 p="20px 20px 50px"
             >
                 <HStack justify="space-between">
-                    <Text fontSize="14px" fontWeight={500}>
+                    <Text fontSize="14px" fontWeight={500} mb="1rem">
                         Employee Leave Report
                     </Text>
                 </HStack>
@@ -336,7 +336,7 @@ export const LeaveManagementReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             Leave Request Approval Report
                         </Text>
                         <Text fontSize="14px" color="#787486">
@@ -395,7 +395,7 @@ export const LeaveManagementReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             Absenteeism & Attendance Report
                         </Text>
                         <Text fontSize="14px" color="#787486">

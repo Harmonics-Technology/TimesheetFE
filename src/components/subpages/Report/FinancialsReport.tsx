@@ -153,7 +153,7 @@ export const FinancialsReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             Expense Management Report
                         </Text>
                         <Text fontSize="14px" color="#787486">
@@ -216,7 +216,7 @@ export const FinancialsReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             All Expense Report
                         </Text>
                         {/* <Text fontSize="14px" color="#787486">
@@ -281,7 +281,7 @@ export const FinancialsReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             Payroll Summary Report
                         </Text>
                     </Box>

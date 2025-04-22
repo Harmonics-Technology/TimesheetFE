@@ -218,7 +218,7 @@ export const OperationalTaskReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             Departmental Task Report
                         </Text>
                         <Text fontSize="14px" color="#787486">
@@ -280,7 +280,7 @@ export const OperationalTaskReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             Resource Utilization Report
                         </Text>
                         <Text fontSize="14px" color="#787486">
@@ -342,7 +342,7 @@ export const OperationalTaskReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             Task efficiency Report
                         </Text>
                         <Text fontSize="14px" color="#787486">
@@ -381,6 +381,7 @@ export const OperationalTaskReport = () => {
                                             <TableData
                                                 name={x?.actualDuration}
                                             />
+                                            <TableData name={x?.delay} />
                                             <TableData
                                                 name={x?.status}
                                                 customColor={

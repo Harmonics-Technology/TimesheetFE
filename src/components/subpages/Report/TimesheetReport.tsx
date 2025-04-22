@@ -146,7 +146,7 @@ export const TimesheetReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             Departmental Timesheet Report Overview
                         </Text>
                         <Text fontSize="14px" color="#787486">
@@ -207,7 +207,7 @@ export const TimesheetReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             Employee Timesheet Summary
                         </Text>
                         {/* <Text fontSize="14px" color="#787486">
@@ -262,7 +262,7 @@ export const TimesheetReport = () => {
             >
                 <HStack justify="space-between">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500}>
+                        <Text fontSize="14px" fontWeight={500} mb="1rem">
                             Billable vs. Non-Billable Hours Report
                         </Text>
                         <Text fontSize="14px" color="#787486">
