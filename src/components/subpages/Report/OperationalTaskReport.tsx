@@ -11,7 +11,6 @@ import {
 import DoughnutChart from '@components/bits-utils/Charts/DoughnutChart';
 import { ChartLargeCard } from '@components/bits-utils/ProjectManagement/Dashboard/ChartLargeCard';
 import { ChartMiniCard } from '@components/bits-utils/ProjectManagement/Dashboard/ChartMiniCard';
-import { TableCard } from '@components/bits-utils/ProjectManagement/Generics/TableCard';
 import { TableData, TableRow } from '@components/bits-utils/TableData';
 import React, { useEffect, useState, useContext } from 'react';
 import { OperationalTaskReportView, ReportService } from 'src/services';
@@ -21,6 +20,7 @@ import Skeleton from 'react-loading-skeleton';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { LineChartSingle } from '@components/bits-utils/Charts/LineChart';
 import { Round } from '@components/generics/functions/Round';
+import Tables from '@components/bits-utils/Tables';
 
 export const OperationalTaskReport = () => {
     const [metrics, setMetrics] = useState<OperationalTaskReportView | null>(
@@ -230,7 +230,7 @@ export const OperationalTaskReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Department',
                             'Total Task Assigned',
@@ -268,7 +268,7 @@ export const OperationalTaskReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -291,7 +291,7 @@ export const OperationalTaskReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Employee Name',
                             'Department',
@@ -330,7 +330,7 @@ export const OperationalTaskReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -354,7 +354,7 @@ export const OperationalTaskReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Task Name',
                             'Department',
@@ -396,7 +396,7 @@ export const OperationalTaskReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
         </Box>

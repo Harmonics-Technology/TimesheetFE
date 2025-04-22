@@ -10,7 +10,6 @@ import {
 import DoughnutChart from '@components/bits-utils/Charts/DoughnutChart';
 import { ChartLargeCard } from '@components/bits-utils/ProjectManagement/Dashboard/ChartLargeCard';
 import { ChartMiniCard } from '@components/bits-utils/ProjectManagement/Dashboard/ChartMiniCard';
-import { TableCard } from '@components/bits-utils/ProjectManagement/Generics/TableCard';
 import { TableData, TableRow } from '@components/bits-utils/TableData';
 import React, { useEffect, useState, useContext } from 'react';
 import { ProjectManagementReportView, ReportService } from 'src/services';
@@ -21,6 +20,7 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { ProgressBar } from '@components/bits-utils/ProjectManagement/Generics/ProgressBar';
 import { Round } from '@components/generics/functions/Round';
 import { BarChart } from '@components/bits-utils/Charts/BarChart';
+import Tables from '@components/bits-utils/Tables';
 
 export const ProjectManagementReport = () => {
     const [metrics, setMetrics] = useState<ProjectManagementReportView | null>(
@@ -62,7 +62,7 @@ export const ProjectManagementReport = () => {
             <ReportNav role={role} />
             <HStack justify="space-between" w="full" p="1rem 0 2rem">
                 <Text fontWeight="500" color="#2f363a">
-                    Resource Utilization
+                    Project Management
                 </Text>
                 <Select
                     borderRadius="10px"
@@ -163,7 +163,7 @@ export const ProjectManagementReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Project',
                             'Projet Manager',
@@ -205,7 +205,7 @@ export const ProjectManagementReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -223,7 +223,7 @@ export const ProjectManagementReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Project',
                             'Total Team Members',
@@ -264,7 +264,7 @@ export const ProjectManagementReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -282,7 +282,7 @@ export const ProjectManagementReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Project',
                             'Hours Spent',
@@ -315,7 +315,7 @@ export const ProjectManagementReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
         </Box>

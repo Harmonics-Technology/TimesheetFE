@@ -11,7 +11,6 @@ import DoughnutChart from '@components/bits-utils/Charts/DoughnutChart';
 import { LineChartSingle } from '@components/bits-utils/Charts/LineChart';
 import { ChartLargeCard } from '@components/bits-utils/ProjectManagement/Dashboard/ChartLargeCard';
 import { ChartMiniCard } from '@components/bits-utils/ProjectManagement/Dashboard/ChartMiniCard';
-import { TableCard } from '@components/bits-utils/ProjectManagement/Generics/TableCard';
 import { TableData, TableRow } from '@components/bits-utils/TableData';
 import React, { useEffect, useState, useContext } from 'react';
 import { ReportService, ResourceUtilizationReportView } from 'src/services';
@@ -19,6 +18,7 @@ import { ReportNav } from './ReportNav';
 import { UserContext } from '@components/context/UserContext';
 import Skeleton from 'react-loading-skeleton';
 import { Round } from '@components/generics/functions/Round';
+import Tables from '@components/bits-utils/Tables';
 
 export const ResourceUtilization = () => {
     const [metrics, setMetrics] =
@@ -134,7 +134,7 @@ export const ResourceUtilization = () => {
                         Resource Allocation
                     </Text>
                 </HStack>
-                <TableCard
+                <Tables
                     tableHead={[
                         'Department Name',
                         'No Of Resources',
@@ -173,7 +173,7 @@ export const ResourceUtilization = () => {
                                 })}
                         </>
                     )}
-                </TableCard>
+                </Tables>
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
 
@@ -187,7 +187,7 @@ export const ResourceUtilization = () => {
                         Top Resource Data
                     </Text>
                 </HStack>
-                <TableCard
+                <Tables
                     tableHead={[
                         'Resource Name',
                         'Department',
@@ -222,7 +222,7 @@ export const ResourceUtilization = () => {
                             })}
                         </>
                     )}
-                </TableCard>
+                </Tables>
             </Box>
         </Box>
     );

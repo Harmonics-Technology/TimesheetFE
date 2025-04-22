@@ -11,7 +11,6 @@ import {
 import DoughnutChart from '@components/bits-utils/Charts/DoughnutChart';
 import { ChartLargeCard } from '@components/bits-utils/ProjectManagement/Dashboard/ChartLargeCard';
 import { ChartMiniCard } from '@components/bits-utils/ProjectManagement/Dashboard/ChartMiniCard';
-import { TableCard } from '@components/bits-utils/ProjectManagement/Generics/TableCard';
 import { TableData, TableRow } from '@components/bits-utils/TableData';
 import React, { useEffect, useState, useContext } from 'react';
 import { LeaveReportView, ReportService } from 'src/services';
@@ -21,6 +20,7 @@ import Skeleton from 'react-loading-skeleton';
 import { formatDate } from '@components/generics/functions/formatDate';
 import { LineChartSingle } from '@components/bits-utils/Charts/LineChart';
 import { Round } from '@components/generics/functions/Round';
+import Tables from '@components/bits-utils/Tables';
 
 export const LeaveManagementReport = () => {
     const [metrics, setMetrics] = useState<LeaveReportView | null>({});
@@ -225,7 +225,7 @@ export const LeaveManagementReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Department',
                             'Total Leave Days',
@@ -264,7 +264,7 @@ export const LeaveManagementReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -282,7 +282,7 @@ export const LeaveManagementReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Employee Name',
                             'Total Number Leave Allocated (Hours)',
@@ -324,7 +324,7 @@ export const LeaveManagementReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -348,7 +348,7 @@ export const LeaveManagementReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Employee Nmae',
                             'Department',
@@ -383,7 +383,7 @@ export const LeaveManagementReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -407,7 +407,7 @@ export const LeaveManagementReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Employee Nmae',
                             'Department',
@@ -442,7 +442,7 @@ export const LeaveManagementReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
         </Box>

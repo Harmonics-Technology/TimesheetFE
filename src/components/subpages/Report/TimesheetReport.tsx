@@ -8,7 +8,6 @@ import {
     useToast,
     VStack,
 } from '@chakra-ui/react';
-import { TableCard } from '@components/bits-utils/ProjectManagement/Generics/TableCard';
 import { TableData, TableRow } from '@components/bits-utils/TableData';
 import React, { useEffect, useState, useContext } from 'react';
 import { ReportService, TimesheetReportView } from 'src/services';
@@ -16,6 +15,7 @@ import { ReportNav } from './ReportNav';
 import { UserContext } from '@components/context/UserContext';
 import Skeleton from 'react-loading-skeleton';
 import { Round } from '@components/generics/functions/Round';
+import Tables from '@components/bits-utils/Tables';
 
 export const TimesheetReport = () => {
     const [metrics, setMetrics] = useState<TimesheetReportView | null>({});
@@ -158,7 +158,7 @@ export const TimesheetReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Department Name',
                             'Total Hours',
@@ -195,7 +195,7 @@ export const TimesheetReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -218,7 +218,7 @@ export const TimesheetReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Employee Name',
                             'Job Title',
@@ -250,7 +250,7 @@ export const TimesheetReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -274,7 +274,7 @@ export const TimesheetReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <TableCard
+                    <Tables
                         tableHead={[
                             'Employee Name',
                             'Department',
@@ -314,7 +314,7 @@ export const TimesheetReport = () => {
                                     );
                                 })}
                         </>
-                    </TableCard>
+                    </Tables>
                 )}
             </Box>
         </Box>
