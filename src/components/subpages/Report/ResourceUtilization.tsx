@@ -129,8 +129,8 @@ export const ResourceUtilization = () => {
                 border="1px solid #E5E5E5"
                 p="20px 20px 50px"
             >
-                <HStack justify="space-between">
-                    <Text fontSize="14px" fontWeight={500} mb="1rem">
+                <HStack justify="space-between" mb="1rem">
+                    <Text fontSize="14px" fontWeight={500}>
                         Resource Allocation
                     </Text>
                 </HStack>
@@ -182,8 +182,8 @@ export const ResourceUtilization = () => {
                 border="1px solid #E5E5E5"
                 p="20px 20px 50px"
             >
-                <HStack justify="space-between">
-                    <Text fontSize="14px" fontWeight={500} mb="1rem">
+                <HStack justify="space-between" mb="1rem">
+                    <Text fontSize="14px" fontWeight={500}>
                         Top Resource Data
                     </Text>
                 </HStack>

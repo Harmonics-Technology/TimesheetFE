@@ -157,8 +157,8 @@ export const ProjectManagementReport = () => {
                 border="1px solid #E5E5E5"
                 p="20px 20px 50px"
             >
-                <HStack justify="space-between">
-                    <Text fontSize="14px" fontWeight={500} mb="1rem">
+                <HStack justify="space-between" mb="1rem">
+                    <Text fontSize="14px" fontWeight={500}>
                         Project Overview
                     </Text>
                 </HStack>
@@ -217,8 +217,8 @@ export const ProjectManagementReport = () => {
                 border="1px solid #E5E5E5"
                 p="20px 20px 50px"
             >
-                <HStack justify="space-between">
-                    <Text fontSize="14px" fontWeight={500} mb="1rem">
+                <HStack justify="space-between" mb="1rem">
+                    <Text fontSize="14px" fontWeight={500}>
                         Project Progress & Timeline
                     </Text>
                 </HStack>
@@ -276,8 +276,8 @@ export const ProjectManagementReport = () => {
                 border="1px solid #E5E5E5"
                 p="20px 20px 50px"
             >
-                <HStack justify="space-between">
-                    <Text fontSize="14px" fontWeight={500} mb="1rem">
+                <HStack justify="space-between" mb="1rem">
+                    <Text fontSize="14px" fontWeight={500}>
                         Project Budget Report
                     </Text>
                 </HStack>

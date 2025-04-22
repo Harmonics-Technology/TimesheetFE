@@ -211,9 +211,9 @@ export const LeaveManagementReport = () => {
                 border="1px solid #E5E5E5"
                 p="20px 20px 50px"
             >
-                <HStack justify="space-between">
+                <HStack justify="space-between" mb="1rem">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500} mb="1rem">
+                        <Text fontSize="14px" fontWeight={500}>
                             Leave Departmental Report
                         </Text>
                         <Text fontSize="14px" color="#787486">
@@ -274,8 +274,8 @@ export const LeaveManagementReport = () => {
                 border="1px solid #E5E5E5"
                 p="20px 20px 50px"
             >
-                <HStack justify="space-between">
-                    <Text fontSize="14px" fontWeight={500} mb="1rem">
+                <HStack justify="space-between" mb="1rem">
+                    <Text fontSize="14px" fontWeight={500}>
                         Employee Leave Report
                     </Text>
                 </HStack>
@@ -334,9 +334,9 @@ export const LeaveManagementReport = () => {
                 border="1px solid #E5E5E5"
                 p="20px 20px 50px"
             >
-                <HStack justify="space-between">
+                <HStack justify="space-between" mb="1rem">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500} mb="1rem">
+                        <Text fontSize="14px" fontWeight={500}>
                             Leave Request Approval Report
                         </Text>
                         <Text fontSize="14px" color="#787486">
@@ -393,9 +393,9 @@ export const LeaveManagementReport = () => {
                 border="1px solid #E5E5E5"
                 p="20px 20px 50px"
             >
-                <HStack justify="space-between">
+                <HStack justify="space-between" mb="1rem">
                     <Box>
-                        <Text fontSize="14px" fontWeight={500} mb="1rem">
+                        <Text fontSize="14px" fontWeight={500}>
                             Absenteeism & Attendance Report
                         </Text>
                         <Text fontSize="14px" color="#787486">
