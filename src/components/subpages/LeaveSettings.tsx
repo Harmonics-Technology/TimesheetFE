@@ -45,11 +45,14 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
             id: leaveConfiguration?.id,
             isStandardEligibleDays: leaveConfiguration?.isStandardEligibleDays,
             superAdminId: leaveConfiguration?.superAdminId,
+            allowRollover: leaveConfiguration?.allowRollover,
         },
     });
 
     const isProratedLeave = watch('isProrated');
     const allowRollover = watch('allowRollover');
+
+    // console.log({ allowRollover });
 
     console.log({
         leaveConfiguration,
@@ -223,9 +226,9 @@ const LeaveSettings = ({ leaveConfiguration }: leavesProps) => {
                         />
                     </Box>
                     {convertYesNo(
-                        leaveConfiguration?.allowRollover ||
-                            watch('allowRollover') ==
-                                ('Roll over unused leave days' as any),
+                        watch('allowRollover') ==
+                            ('Roll over unused leave days' as any) ||
+                            watch('allowRollover'),
                     ) && (
                         <Box mt=".6rem">
                             <Text fontSize="14px" color="#1b1d21">
