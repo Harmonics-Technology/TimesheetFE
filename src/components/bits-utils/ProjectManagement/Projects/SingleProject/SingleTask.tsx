@@ -872,7 +872,7 @@ export const SingleTask = ({
                                                         name={
                                                             x?.projectSubTask
                                                                 ?.name ||
-                                                            x?.projectTask?.name
+                                                            task?.name
                                                         }
                                                         fontWeight="500"
                                                     />

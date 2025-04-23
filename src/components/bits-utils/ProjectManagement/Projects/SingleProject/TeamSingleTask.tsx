@@ -1092,7 +1092,7 @@ export const TeamSingleTask = ({
                                                         name={
                                                             x?.projectSubTask
                                                                 ?.name ||
-                                                            x?.projectTask?.name
+                                                            task?.name
                                                         }
                                                         fontWeight="500"
                                                     />
