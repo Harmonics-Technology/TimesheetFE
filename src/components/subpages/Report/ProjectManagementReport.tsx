@@ -21,6 +21,7 @@ import { ProgressBar } from '@components/bits-utils/ProjectManagement/Generics/P
 import { Round } from '@components/generics/functions/Round';
 import { BarChart } from '@components/bits-utils/Charts/BarChart';
 import Tables from '@components/bits-utils/Tables';
+import Link from 'next/link';
 
 export const ProjectManagementReport = () => {
     const [metrics, setMetrics] = useState<ProjectManagementReportView | null>(
@@ -155,7 +156,7 @@ export const ProjectManagementReport = () => {
             <Box
                 borderRadius="10px"
                 border="1px solid #E5E5E5"
-                p="20px 20px 50px"
+                p="20px 20px 20px"
             >
                 <HStack justify="space-between" mb="1rem">
                     <Text fontSize="14px" fontWeight={500}>
@@ -165,49 +166,68 @@ export const ProjectManagementReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <Tables
-                        tableHead={[
-                            'Project',
-                            'Projet Manager',
-                            'Start Date',
-                            'End Date',
-                            'Project Status',
-                        ]}
-                        color="#2F363A"
-                    >
-                        <>
-                            {(metrics?.projectOverviewReportData || [])
-                                ?.slice(0, 4)
-                                ?.map((x) => {
-                                    return (
-                                        <TableRow>
-                                            <TableData name={x?.project} />
-                                            <TableData
-                                                name={x?.projectManager}
-                                            />
-                                            <TableData
-                                                name={formatDate(x?.startDate)}
-                                            />
-                                            <TableData
-                                                name={formatDate(x?.endDate)}
-                                            />
-                                            <TableData
-                                                name={x?.projectStatus}
-                                                customColor={
-                                                    x?.projectStatus ==
-                                                    'overdue'
-                                                        ? '#ff5b79'
-                                                        : x?.projectStatus ==
-                                                          'completed'
-                                                        ? '#2EAFA3'
-                                                        : '#28A3EF'
-                                                }
-                                            />
-                                        </TableRow>
-                                    );
-                                })}
-                        </>
-                    </Tables>
+                    <>
+                        <Tables
+                            tableHead={[
+                                'Project',
+                                'Projet Manager',
+                                'Start Date',
+                                'End Date',
+                                'Project Status',
+                            ]}
+                            color="#2F363A"
+                        >
+                            <>
+                                {(metrics?.projectOverviewReportData || [])
+                                    ?.slice(0, 4)
+                                    ?.map((x) => {
+                                        return (
+                                            <TableRow>
+                                                <TableData name={x?.project} />
+                                                <TableData
+                                                    name={x?.projectManager}
+                                                />
+                                                <TableData
+                                                    name={formatDate(
+                                                        x?.startDate,
+                                                    )}
+                                                />
+                                                <TableData
+                                                    name={formatDate(
+                                                        x?.endDate,
+                                                    )}
+                                                />
+                                                <TableData
+                                                    name={x?.projectStatus}
+                                                    customColor={
+                                                        x?.projectStatus ==
+                                                        'overdue'
+                                                            ? '#ff5b79'
+                                                            : x?.projectStatus ==
+                                                              'completed'
+                                                            ? '#2EAFA3'
+                                                            : '#28A3EF'
+                                                    }
+                                                />
+                                            </TableRow>
+                                        );
+                                    })}
+                            </>
+                        </Tables>
+                        <Link
+                            passHref
+                            href={`/${role}/project-management/projects`}
+                        >
+                            <Text
+                                color="#2EAFA3"
+                                fontSize="14px"
+                                mt="20px"
+                                cursor="pointer"
+                            >
+                                View More
+                            </Text>
+                        </Link>
+                    </>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
