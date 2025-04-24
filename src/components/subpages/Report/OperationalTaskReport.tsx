@@ -17,7 +17,6 @@ import { OperationalTaskReportView, ReportService } from 'src/services';
 import { ReportNav } from './ReportNav';
 import { UserContext } from '@components/context/UserContext';
 import Skeleton from 'react-loading-skeleton';
-import { formatDate } from '@components/generics/functions/formatDate';
 import { LineChartSingle } from '@components/bits-utils/Charts/LineChart';
 import { Round } from '@components/generics/functions/Round';
 import Tables from '@components/bits-utils/Tables';
@@ -261,7 +260,8 @@ export const OperationalTaskReport = () => {
                                             <TableData name={x?.overDueTasks} />
                                             <TableData
                                                 name={`${Round(
-                                                    x?.completionRate || 0,
+                                                    Number(x?.completionRate) *
+                                                        100 || 0,
                                                 )}%`}
                                             />
                                         </TableRow>
@@ -322,9 +322,7 @@ export const OperationalTaskReport = () => {
                                             <TableData name={x?.todoTasks} />
 
                                             <TableData
-                                                name={formatDate(
-                                                    x?.inProgressTasks,
-                                                )}
+                                                name={x?.inProgressTasks}
                                             />
                                         </TableRow>
                                     );
