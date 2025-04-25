@@ -58,6 +58,11 @@ export const ProjectManagementReport = () => {
         fetchData();
     }, []);
 
+    const totalProjectCount =
+        Number(metrics?.projectStatusReportData?.completed) +
+        Number(metrics?.projectStatusReportData?.notStarted) +
+        Number(metrics?.projectStatusReportData?.ongoing);
+
     return (
         <Box bgColor="white" p="2rem" borderRadius="10px">
             <ReportNav role={role} />
@@ -83,7 +88,7 @@ export const ProjectManagementReport = () => {
             >
                 <ChartLargeCard
                     title={`Total number of Projects: ${
-                        metrics?.ongoingVsCompletedProject?.length || 0
+                        totalProjectCount || 0
                     }`}
                     legend={[
                         { text: 'Completed Project', color: '#45DAB6' },
