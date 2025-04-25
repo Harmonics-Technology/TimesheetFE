@@ -175,7 +175,7 @@ export const ProjectManagementReport = () => {
                         <Tables
                             tableHead={[
                                 'Project',
-                                'Projet Manager',
+                                'Project Manager',
                                 'Start Date',
                                 'End Date',
                                 'Project Status',
@@ -253,11 +253,11 @@ export const ProjectManagementReport = () => {
                     <Tables
                         tableHead={[
                             'Project',
-                            'Total Team Members',
-                            'Total Hours Spent',
-                            '% Completed',
-                            'Pending Task',
-                            'Overdue Task',
+                            { label: 'Total Team Members', center: true },
+                            { label: 'Total Hours Spent', center: true },
+                            { label: '% Completed', center: true },
+                            { label: 'Pending Task', center: true },
+                            { label: 'Overdue Task', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -270,9 +270,11 @@ export const ProjectManagementReport = () => {
                                             <TableData name={x?.project} />
                                             <TableData
                                                 name={x?.totalTeamMembers}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.totalHoursSpent}
+                                                center
                                             />
                                             <TableData>
                                                 <ProgressBar
@@ -285,8 +287,14 @@ export const ProjectManagementReport = () => {
                                                     )}%`}
                                                 />
                                             </TableData>
-                                            <TableData name={x?.pendingTasks} />
-                                            <TableData name={x?.overdueTasks} />
+                                            <TableData
+                                                name={x?.pendingTasks}
+                                                center
+                                            />
+                                            <TableData
+                                                name={x?.overdueTasks}
+                                                center
+                                            />
                                         </TableRow>
                                     );
                                 })}
@@ -312,10 +320,10 @@ export const ProjectManagementReport = () => {
                     <Tables
                         tableHead={[
                             'Project',
-                            'Hours Spent',
-                            'Budget',
-                            'Budget Spent',
-                            'Remaining',
+                            { label: 'Hours Spent', center: true },
+                            { label: 'Budget', center: true },
+                            { label: 'Budget Spent', center: true },
+                            { label: 'Remaining', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -326,8 +334,14 @@ export const ProjectManagementReport = () => {
                                     return (
                                         <TableRow>
                                             <TableData name={x?.project} />
-                                            <TableData name={x?.hoursSpent} />
-                                            <TableData name={x?.budget} />
+                                            <TableData
+                                                name={x?.hoursSpent}
+                                                center
+                                            />
+                                            <TableData
+                                                name={x?.budget}
+                                                center
+                                            />
                                             <TableData>
                                                 <ProgressBar
                                                     barWidth={x.budgetSpent}
@@ -337,7 +351,10 @@ export const ProjectManagementReport = () => {
                                                     )}%`}
                                                 />
                                             </TableData>
-                                            <TableData name={x?.remainig} />
+                                            <TableData
+                                                name={x?.remainig}
+                                                center
+                                            />
                                         </TableRow>
                                     );
                                 })}

@@ -168,12 +168,12 @@ export const FinancialsReport = () => {
                     <Tables
                         tableHead={[
                             'Department',
-                            'Total Request',
-                            'Total Amount ($)',
-                            'Approved Request',
-                            'Approved Amount ($)',
-                            'Pending Request',
-                            'Pending Amount ($)',
+                            { label: 'Total Request', center: true },
+                            { label: 'Total Amount ($)', center: true },
+                            { label: 'Approved Request', center: true },
+                            { label: 'Approved Amount ($)', center: true },
+                            { label: 'Pending Request', center: true },
+                            { label: 'Pending Amount ($)', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -184,21 +184,31 @@ export const FinancialsReport = () => {
                                     return (
                                         <TableRow>
                                             <TableData name={x?.department} />
-                                            <TableData name={x?.totalRequest} />
-                                            <TableData name={x?.totalAmount} />
+                                            <TableData
+                                                name={x?.totalRequest}
+                                                center
+                                            />
+                                            <TableData
+                                                name={x?.totalAmount}
+                                                center
+                                            />
                                             <TableData
                                                 name={x?.approvedRequest}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.approvedAmount}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.pendingRequest}
+                                                center
                                             />
                                             <TableData
                                                 name={`${Round(
                                                     x?.pendingAmount || 0,
                                                 )}`}
+                                                center
                                             />
                                         </TableRow>
                                     );
@@ -232,7 +242,7 @@ export const FinancialsReport = () => {
                             'Department',
                             'Requestor',
                             'Expense Type',
-                            'Expense Amount($)',
+                            { label: 'Expense Amount($)', center: true },
                             'Status',
                             'Request Date',
                         ]}
@@ -247,7 +257,10 @@ export const FinancialsReport = () => {
                                             <TableData name={x?.department} />
                                             <TableData name={x?.requestor} />
                                             <TableData name={x?.expenseType} />
-                                            <TableData name={x?.amount} />
+                                            <TableData
+                                                name={x?.amount}
+                                                center
+                                            />
                                             <TableData
                                                 name={x?.status}
                                                 customColor={
@@ -293,11 +306,11 @@ export const FinancialsReport = () => {
                         tableHead={[
                             'Employee Name',
                             'Department',
-                            'Base Salary ($)',
+                            { label: 'Base Salary ($)', center: true },
                             'Payment Type',
-                            'Hours',
-                            'Rate ($)',
-                            'Net Salary ($)',
+                            { label: 'Hours', center: true },
+                            { label: 'Rate ($)', center: true },
+                            { label: 'Net Salary ($)', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -309,11 +322,17 @@ export const FinancialsReport = () => {
                                         <TableRow>
                                             <TableData name={x?.employeeName} />
                                             <TableData name={x?.department} />
-                                            <TableData name={x?.baseSalary} />
+                                            <TableData
+                                                name={x?.baseSalary}
+                                                center
+                                            />
                                             <TableData name={x?.paymentType} />
-                                            <TableData name={x?.hours} />
-                                            <TableData name={x?.rate} />
-                                            <TableData name={x?.netSalary} />
+                                            <TableData name={x?.hours} center />
+                                            <TableData name={x?.rate} center />
+                                            <TableData
+                                                name={x?.netSalary}
+                                                center
+                                            />
                                         </TableRow>
                                     );
                                 })}

@@ -232,11 +232,11 @@ export const OperationalTaskReport = () => {
                     <Tables
                         tableHead={[
                             'Department',
-                            'Total Task Assigned',
-                            'Completed Task',
-                            'Pending Task',
-                            'Overdue Task',
-                            'Task Completion Rate',
+                            { label: 'Total Task Assigned', center: true },
+                            { label: 'Completed Task', center: true },
+                            { label: 'Pending Task', center: true },
+                            { label: 'Overdue Task', center: true },
+                            { label: 'Task Completion Rate', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -252,17 +252,26 @@ export const OperationalTaskReport = () => {
                                             <TableData name={x?.department} />
                                             <TableData
                                                 name={x?.totalTaskAssigned}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.completedTasks}
+                                                center
                                             />
-                                            <TableData name={x?.pendingTasks} />
-                                            <TableData name={x?.overDueTasks} />
+                                            <TableData
+                                                name={x?.pendingTasks}
+                                                center
+                                            />
+                                            <TableData
+                                                name={x?.overDueTasks}
+                                                center
+                                            />
                                             <TableData
                                                 name={`${Round(
                                                     Number(x?.completionRate) *
                                                         100 || 0,
                                                 )}%`}
+                                                center
                                             />
                                         </TableRow>
                                     );
@@ -295,10 +304,10 @@ export const OperationalTaskReport = () => {
                         tableHead={[
                             'Employee Name',
                             'Department',
-                            'Total Task Assigned',
-                            'Completed Task',
-                            'To-do Task',
-                            'In-progress Task',
+                            { label: 'Total Task Assigned', center: true },
+                            { label: 'Completed Task', center: true },
+                            { label: 'To-do Task', center: true },
+                            { label: 'In-progress Task', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -315,14 +324,20 @@ export const OperationalTaskReport = () => {
                                             <TableData name={x?.department} />
                                             <TableData
                                                 name={x?.totalTaskAssigned}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.completedTasks}
+                                                center
                                             />
-                                            <TableData name={x?.todoTasks} />
+                                            <TableData
+                                                name={x?.todoTasks}
+                                                center
+                                            />
 
                                             <TableData
                                                 name={x?.inProgressTasks}
+                                                center
                                             />
                                         </TableRow>
                                     );
@@ -357,9 +372,9 @@ export const OperationalTaskReport = () => {
                             'Task Name',
                             'Department',
                             'Assigned To',
-                            'Planned Duration (Days)',
-                            'Actual Duration (Days)',
-                            'Delays (Days)',
+                            { label: 'Planned Duration (Days)', center: true },
+                            { label: 'Actual Duration (Days)', center: true },
+                            { label: 'Delays (Days)', center: true },
                             'Status',
                         ]}
                         color="#2F363A"
@@ -375,11 +390,13 @@ export const OperationalTaskReport = () => {
                                             <TableData name={x?.assignedTo} />
                                             <TableData
                                                 name={x?.plannedDuration}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.actualDuration}
+                                                center
                                             />
-                                            <TableData name={x?.delay} />
+                                            <TableData name={x?.delay} center />
                                             <TableData
                                                 name={x?.status}
                                                 customColor={

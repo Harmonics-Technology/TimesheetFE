@@ -14,13 +14,14 @@ import TableNoContentWrapper from './TableNoContentWrapper';
 import { BsFillInfoCircleFill } from 'react-icons/bs';
 
 interface TablesProps {
-    tableHead: string[];
+    tableHead: any[];
     children: ReactNode;
     bg?: string;
     color?: string;
     variant?: any;
     content?: any;
     overflow?: any;
+    breakWord?: any;
 }
 
 function Tables({
@@ -31,6 +32,7 @@ function Tables({
     variant = 'striped',
     overflow = 'auto',
     content = "There's currently no data available. Check back later",
+    breakWord = true,
 }: TablesProps) {
     //
     return (
@@ -49,11 +51,14 @@ function Tables({
                                 fontSize="12px"
                                 color={color}
                                 fontWeight="700"
+                                maxW={breakWord ? '150px' : 'unset'}
+                                whiteSpace="normal"
+                                textAlign={x?.center ? 'center' : 'left'}
                                 // color="gray.500"
                                 // textTransform="capitalize"
                                 key={i}
                             >
-                                {x}
+                                {x?.label || x}
                             </Th>
                         ))}
                     </Tr>

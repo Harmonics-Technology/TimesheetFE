@@ -137,10 +137,10 @@ export const ResourceUtilization = () => {
                 <Tables
                     tableHead={[
                         'Department Name',
-                        'No Of Resources',
-                        'No Of Task',
-                        'Completed Task',
-                        'No Of Hours',
+                        { label: 'No Of Resources', center: true },
+                        { label: 'No Of Task', center: true },
+                        { label: 'Completed Task', center: true },
+                        { label: 'No Of Hours', center: true },
                     ]}
                     color="#2F363A"
                 >
@@ -162,12 +162,20 @@ export const ResourceUtilization = () => {
                                             />
                                             <TableData
                                                 name={x?.noOfResources}
+                                                center
                                             />
-                                            <TableData name={x?.noOfTask} />
+                                            <TableData
+                                                name={x?.noOfTask}
+                                                center
+                                            />
                                             <TableData
                                                 name={x?.completedTask}
+                                                center
                                             />
-                                            <TableData name={x?.noOfHours} />
+                                            <TableData
+                                                name={x?.noOfHours}
+                                                center
+                                            />
                                         </TableRow>
                                     );
                                 })}
@@ -191,9 +199,9 @@ export const ResourceUtilization = () => {
                     tableHead={[
                         'Resource Name',
                         'Department',
-                        'Total Hours Available',
-                        'Hours Utilized',
-                        'Utilization Rate',
+                        { label: 'Total Hours Available', center: true },
+                        { label: 'Hours Utilized', center: true },
+                        { label: 'Utilization Rate', center: true },
                     ]}
                     color="#2F363A"
                 >
@@ -212,10 +220,15 @@ export const ResourceUtilization = () => {
                                         <TableData name={x?.department} />
                                         <TableData
                                             name={x?.totalHoursAvailable}
+                                            center
                                         />
-                                        <TableData name={x?.utilizedHours} />
+                                        <TableData
+                                            name={x?.utilizedHours}
+                                            center
+                                        />
                                         <TableData
                                             name={Round(x?.utilizationRate)}
+                                            center
                                         />
                                     </TableRow>
                                 );

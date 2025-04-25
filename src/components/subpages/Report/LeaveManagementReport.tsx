@@ -228,11 +228,11 @@ export const LeaveManagementReport = () => {
                     <Tables
                         tableHead={[
                             'Department',
-                            'Total Leave Days',
-                            'Accrued Leave Days',
-                            'Used Leave Days',
-                            'Remaining Leave Days',
-                            'Leave Balance (%)',
+                            { label: 'Total Leave Days', center: true },
+                            { label: 'Accrued Leave Days', center: true },
+                            { label: 'Used Leave Days', center: true },
+                            { label: 'Remaining Leave Days', center: true },
+                            { label: 'Leave Balance (%)', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -245,20 +245,25 @@ export const LeaveManagementReport = () => {
                                             <TableData name={x?.department} />
                                             <TableData
                                                 name={x?.totalLeaveDays}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.accruedLeaveDays}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.usedLeaveDays}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.remainingLeaveDays}
+                                                center
                                             />
                                             <TableData
                                                 name={`${Round(
                                                     x?.leaveBalance || 0,
                                                 )}%`}
+                                                center
                                             />
                                         </TableRow>
                                     );
@@ -285,10 +290,13 @@ export const LeaveManagementReport = () => {
                     <Tables
                         tableHead={[
                             'Employee Name',
-                            'Total Number Leave Allocated (Hours)',
-                            'Leave Accrued (Hours)',
-                            'Leave Balance (Hours)',
-                            'Unpaid Leave (Hours)',
+                            {
+                                label: 'Total Number Leave Allocated (Hours)',
+                                center: true,
+                            },
+                            { label: 'Leave Accrued (Hours)', center: true },
+                            { label: 'Leave Balance (Hours)', center: true },
+                            { label: 'Unpaid Leave (Hours)', center: true },
                             'Leave Expiry Date',
                         ]}
                         color="#2F363A"
@@ -304,15 +312,19 @@ export const LeaveManagementReport = () => {
                                                 name={
                                                     x?.totalNumberLeaveAllocated
                                                 }
+                                                center
                                             />
                                             <TableData
                                                 name={x?.leaveAccruedHours}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.leaveBalanceHours}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.unpaidLeaveHours}
+                                                center
                                             />
 
                                             <TableData
@@ -352,10 +364,10 @@ export const LeaveManagementReport = () => {
                         tableHead={[
                             'Employee Nmae',
                             'Department',
-                            'Leave Request Submittted',
-                            'Approved Request',
-                            'Pending Request',
-                            'Rejected Request',
+                            { label: 'Leave Request Submittted', center: true },
+                            { label: 'Approved Request', center: true },
+                            { label: 'Pending Request', center: true },
+                            { label: 'Rejected Request', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -369,15 +381,19 @@ export const LeaveManagementReport = () => {
                                             <TableData name={x?.department} />
                                             <TableData
                                                 name={x?.leaveRequestSubmitted}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.approvedRequest}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.pendingRequest}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.rejectedRequest}
+                                                center
                                             />
                                         </TableRow>
                                     );
@@ -411,11 +427,11 @@ export const LeaveManagementReport = () => {
                         tableHead={[
                             'Employee Nmae',
                             'Department',
-                            'Sick Leave Taken',
-                            'Mat Leave',
-                            'Vacation Leave Taken',
-                            'Unapproved Absence',
-                            'Total Absence',
+                            { label: 'Sick Leave Taken', center: true },
+                            { label: 'Mat Leave', center: true },
+                            { label: 'Vacation Leave Taken', center: true },
+                            { label: 'Unapproved Absence', center: true },
+                            { label: 'Total Absence', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -429,15 +445,24 @@ export const LeaveManagementReport = () => {
                                             <TableData name={x?.department} />
                                             <TableData
                                                 name={x?.sickLeaveTaken}
+                                                center
                                             />
-                                            <TableData name={x?.matLeave} />
+                                            <TableData
+                                                name={x?.matLeave}
+                                                center
+                                            />
                                             <TableData
                                                 name={x?.vacationLeaveTaken}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.unApprovedAbsence}
+                                                center
                                             />
-                                            <TableData name={x?.totalAbsence} />
+                                            <TableData
+                                                name={x?.totalAbsence}
+                                                center
+                                            />
                                         </TableRow>
                                     );
                                 })}

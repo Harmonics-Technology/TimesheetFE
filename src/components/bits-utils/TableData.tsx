@@ -84,6 +84,7 @@ export function TableData({
     breakWord,
     onClick,
     children,
+    center,
     ...props
 }: {
     name: any;
@@ -96,6 +97,7 @@ export function TableData({
     customColor?: any;
     breakWord?: any;
     onClick?: any;
+    center?: boolean;
     children?: ReactNode;
 } & any) {
     return (
@@ -126,7 +128,10 @@ export function TableData({
         >
             {children || (
                 <Tooltip label={name} hasArrow>
-                    <Text whiteSpace={breakWord ? 'normal' : 'unset'}>
+                    <Text
+                        whiteSpace={breakWord ? 'normal' : 'unset'}
+                        textAlign={center ? 'center' : 'left'}
+                    >
                         {full ? name : name?.toString()?.substring(0, 20) || ''}
                     </Text>
                 </Tooltip>

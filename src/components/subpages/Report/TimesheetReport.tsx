@@ -161,11 +161,11 @@ export const TimesheetReport = () => {
                     <Tables
                         tableHead={[
                             'Department Name',
-                            'Total Hours',
-                            'Approved Hours',
-                            'Overtime Hours',
-                            'Leave Hours',
-                            'Avg Hours Per Employee',
+                            { label: 'Total Hours', center: true },
+                            { label: 'Approved Hours', center: true },
+                            { label: 'Overtime Hours', center: true },
+                            { label: 'Leave Hours', center: true },
+                            { label: 'Avg Hours Per Employee', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -178,18 +178,25 @@ export const TimesheetReport = () => {
                                             <TableData name={x?.department} />
                                             <TableData
                                                 name={Round(x?.totalHours)}
+                                                center
                                             />
                                             <TableData
                                                 name={Round(x?.approvedHours)}
+                                                center
                                             />
                                             <TableData
+                                                center
                                                 name={x?.overtimeHours}
                                             />
-                                            <TableData name={x?.leaveHours} />
+                                            <TableData
+                                                name={x?.leaveHours}
+                                                center
+                                            />
                                             <TableData
                                                 name={`${Round(
                                                     x?.avgHoursPerEmployee || 0,
                                                 )}`}
+                                                center
                                             />
                                         </TableRow>
                                     );
@@ -223,9 +230,9 @@ export const TimesheetReport = () => {
                             'Employee Name',
                             'Job Title',
                             'Department',
-                            'Total Hours',
-                            'Approved Hours',
-                            'Overtime Hours',
+                            { label: 'Total Hours', center: true },
+                            { label: 'Approved Hours', center: true },
+                            { label: 'Overtime Hours', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -238,13 +245,18 @@ export const TimesheetReport = () => {
                                             <TableData name={x?.employee} />
                                             <TableData name={x?.jobTitle} />
                                             <TableData name={x?.department} />
-                                            <TableData name={x?.totalHours} />
+                                            <TableData
+                                                name={x?.totalHours}
+                                                center
+                                            />
                                             <TableData
                                                 name={x?.approvedHours}
+                                                center
                                             />
 
                                             <TableData
                                                 name={x?.overtimeHours}
+                                                center
                                             />
                                         </TableRow>
                                     );
@@ -278,10 +290,10 @@ export const TimesheetReport = () => {
                         tableHead={[
                             'Employee Name',
                             'Department',
-                            'Total Hours',
-                            'Billable Hours',
-                            'Non billable Hours',
-                            '% Billable',
+                            { label: 'Total Hours', center: true },
+                            { label: 'Billable Hours', center: true },
+                            { label: 'Non billable Hours', center: true },
+                            { label: '% Billable', center: true },
                         ]}
                         color="#2F363A"
                     >
@@ -295,14 +307,17 @@ export const TimesheetReport = () => {
                                             <TableData name={x?.department} />
                                             <TableData
                                                 name={Round(x?.totalHours)}
+                                                center
                                             />
                                             <TableData
                                                 name={x?.billableHours}
+                                                center
                                             />
                                             <TableData
                                                 name={Round(
                                                     x?.nonBillableHours,
                                                 )}
+                                                center
                                             />
                                             <TableData
                                                 name={`%${Round(
@@ -310,6 +325,7 @@ export const TimesheetReport = () => {
                                                         x?.percentageOfBillable,
                                                     ) * 100 || 0,
                                                 )}`}
+                                                center
                                             />
                                         </TableRow>
                                     );
