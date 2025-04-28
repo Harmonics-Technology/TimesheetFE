@@ -320,11 +320,11 @@ export const TimesheetReport = () => {
                                                 center
                                             />
                                             <TableData
-                                                name={`%${Round(
+                                                name={`${Round(
                                                     Number(
                                                         x?.percentageOfBillable,
                                                     ) * 100 || 0,
-                                                )}`}
+                                                )}%`}
                                                 center
                                             />
                                         </TableRow>

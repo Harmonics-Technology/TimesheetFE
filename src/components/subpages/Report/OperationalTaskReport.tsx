@@ -20,6 +20,7 @@ import Skeleton from 'react-loading-skeleton';
 import { LineChartSingle } from '@components/bits-utils/Charts/LineChart';
 import { Round } from '@components/generics/functions/Round';
 import Tables from '@components/bits-utils/Tables';
+import { calculatePer } from '@components/generics/functions/calculatePer';
 
 export const OperationalTaskReport = () => {
     const [metrics, setMetrics] = useState<OperationalTaskReportView | null>(
@@ -187,21 +188,15 @@ export const OperationalTaskReport = () => {
                             chart={[
                                 {
                                     name: 'Not Started',
-                                    count: metrics
-                                        ?.operationalTaskStatusReportView
-                                        ?.notStarted,
+                                    count: metrics?.taskNotStarted,
                                 },
                                 {
                                     name: 'Ongoing',
-                                    count: metrics
-                                        ?.operationalTaskStatusReportView
-                                        ?.ongoing,
+                                    count: metrics?.taskInProgress,
                                 },
                                 {
                                     name: 'Completed',
-                                    count: metrics
-                                        ?.operationalTaskStatusReportView
-                                        ?.completed,
+                                    count: metrics?.taskCompleted,
                                 },
                             ]}
                         />
@@ -268,8 +263,10 @@ export const OperationalTaskReport = () => {
                                             />
                                             <TableData
                                                 name={`${Round(
-                                                    Number(x?.completionRate) *
-                                                        100 || 0,
+                                                    calculatePer(
+                                                        x?.completedTasks,
+                                                        x?.totalTaskAssigned,
+                                                    ) || 0,
                                                 )}%`}
                                                 center
                                             />

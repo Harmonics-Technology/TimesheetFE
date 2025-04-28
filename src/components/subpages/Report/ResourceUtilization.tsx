@@ -199,7 +199,7 @@ export const ResourceUtilization = () => {
                     tableHead={[
                         'Resource Name',
                         'Department',
-                        { label: 'Total Hours Available', center: true },
+                        { label: 'Total Hours Expected', center: true },
                         { label: 'Hours Utilized', center: true },
                         { label: 'Utilization Rate', center: true },
                     ]}
@@ -227,7 +227,9 @@ export const ResourceUtilization = () => {
                                             center
                                         />
                                         <TableData
-                                            name={Round(x?.utilizationRate)}
+                                            name={`${Round(
+                                                x?.utilizationRate,
+                                            )}%`}
                                             center
                                         />
                                     </TableRow>
