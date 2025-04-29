@@ -8,6 +8,6 @@ export type PayrollSummaryReportView = {
     baseSalary?: number;
     paymentType?: string | null;
     hours?: number;
-    rate?: string | null;
+    rate?: number;
     netSalary?: number;
 };

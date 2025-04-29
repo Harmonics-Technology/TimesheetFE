@@ -5,7 +5,7 @@
 import type { EmployeeInformationView } from './EmployeeInformationView';
 import type { ExpenseView } from './ExpenseView';
 import type { PayrollView } from './PayrollView';
-import type { UserView } from './UserView';
+import type { StrippedUserView } from './StrippedUserView';
 
 export type InvoiceView = {
     id?: string;
@@ -27,7 +27,7 @@ export type InvoiceView = {
     hst?: string | null;
     clientTotalAmount?: number | null;
     createdByUserId?: string | null;
-    createdByUser?: UserView;
+    createdByUser?: StrippedUserView;
     payrolls?: Array<PayrollView> | null;
     expenses?: Array<ExpenseView> | null;
     children?: Array<InvoiceView> | null;

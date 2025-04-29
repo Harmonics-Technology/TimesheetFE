@@ -190,7 +190,9 @@ export const ProjectManagementReport = () => {
                                             <TableRow>
                                                 <TableData name={x?.project} />
                                                 <TableData
-                                                    name={x?.projectManager}
+                                                    name={x?.projectManager?.map(
+                                                        (x) => x.user?.fullName,
+                                                    )}
                                                 />
                                                 <TableData
                                                     name={formatDate(
