@@ -20,6 +20,8 @@ import Tables from '@components/bits-utils/Tables';
 export const TimesheetReport = () => {
     const [metrics, setMetrics] = useState<TimesheetReportView | null>({});
     const [loading, setLoading] = useState(true);
+    const [limit, setLimit] = useState(4);
+    const [billLimit, setBillLimit] = useState(4);
 
     const toast = useToast();
     const { user } = useContext(UserContext);
@@ -158,51 +160,70 @@ export const TimesheetReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <Tables
-                        tableHead={[
-                            'Department Name',
-                            { label: 'Total Hours', center: true },
-                            { label: 'Approved Hours', center: true },
-                            { label: 'Overtime Hours', center: true },
-                            { label: 'Leave Hours', center: true },
-                            { label: 'Avg Hours Per Employee', center: true },
-                        ]}
-                        color="#2F363A"
-                    >
-                        <>
-                            {(metrics?.departmentTimesheetReport || [])
-                                ?.slice(0, 4)
-                                ?.map((x) => {
-                                    return (
-                                        <TableRow>
-                                            <TableData name={x?.department} />
-                                            <TableData
-                                                name={Round(x?.totalHours)}
-                                                center
-                                            />
-                                            <TableData
-                                                name={Round(x?.approvedHours)}
-                                                center
-                                            />
-                                            <TableData
-                                                center
-                                                name={x?.overtimeHours}
-                                            />
-                                            <TableData
-                                                name={x?.leaveHours}
-                                                center
-                                            />
-                                            <TableData
-                                                name={`${Round(
-                                                    x?.avgHoursPerEmployee || 0,
-                                                )}`}
-                                                center
-                                            />
-                                        </TableRow>
-                                    );
-                                })}
-                        </>
-                    </Tables>
+                    <>
+                        <Tables
+                            tableHead={[
+                                'Department Name',
+                                { label: 'Total Hours', center: true },
+                                { label: 'Approved Hours', center: true },
+                                { label: 'Overtime Hours', center: true },
+                                { label: 'Leave Hours', center: true },
+                                {
+                                    label: 'Avg Hours Per Employee',
+                                    center: true,
+                                },
+                            ]}
+                            color="#2F363A"
+                        >
+                            <>
+                                {(metrics?.departmentTimesheetReport || [])
+                                    ?.slice(0, limit)
+                                    ?.map((x) => {
+                                        return (
+                                            <TableRow>
+                                                <TableData
+                                                    name={x?.department}
+                                                />
+                                                <TableData
+                                                    name={Round(x?.totalHours)}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={Round(
+                                                        x?.approvedHours,
+                                                    )}
+                                                    center
+                                                />
+                                                <TableData
+                                                    center
+                                                    name={x?.overtimeHours}
+                                                />
+                                                <TableData
+                                                    name={x?.leaveHours}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={`${Round(
+                                                        x?.avgHoursPerEmployee ||
+                                                            0,
+                                                    )}`}
+                                                    center
+                                                />
+                                            </TableRow>
+                                        );
+                                    })}
+                            </>
+                        </Tables>
+                        <Text
+                            color="#2EAFA3"
+                            fontSize="14px"
+                            mt="20px"
+                            cursor="pointer"
+                            onClick={() => setLimit(limit + 4)}
+                        >
+                            View More
+                        </Text>
+                    </>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -225,44 +246,57 @@ export const TimesheetReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <Tables
-                        tableHead={[
-                            'Employee Name',
-                            'Job Title',
-                            'Department',
-                            { label: 'Total Hours', center: true },
-                            { label: 'Approved Hours', center: true },
-                            { label: 'Overtime Hours', center: true },
-                        ]}
-                        color="#2F363A"
-                    >
-                        <>
-                            {(metrics?.employeeSummaryTimesheetReport || [])
-                                ?.slice(0, 4)
-                                ?.map((x) => {
-                                    return (
-                                        <TableRow>
-                                            <TableData name={x?.employee} />
-                                            <TableData name={x?.jobTitle} />
-                                            <TableData name={x?.department} />
-                                            <TableData
-                                                name={x?.totalHours}
-                                                center
-                                            />
-                                            <TableData
-                                                name={x?.approvedHours}
-                                                center
-                                            />
+                    <>
+                        <Tables
+                            tableHead={[
+                                'Employee Name',
+                                'Job Title',
+                                'Department',
+                                { label: 'Total Hours', center: true },
+                                { label: 'Approved Hours', center: true },
+                                { label: 'Overtime Hours', center: true },
+                            ]}
+                            color="#2F363A"
+                        >
+                            <>
+                                {(metrics?.employeeSummaryTimesheetReport || [])
+                                    ?.slice(0, billLimit)
+                                    ?.map((x) => {
+                                        return (
+                                            <TableRow>
+                                                <TableData name={x?.employee} />
+                                                <TableData name={x?.jobTitle} />
+                                                <TableData
+                                                    name={x?.department}
+                                                />
+                                                <TableData
+                                                    name={x?.totalHours}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.approvedHours}
+                                                    center
+                                                />
 
-                                            <TableData
-                                                name={x?.overtimeHours}
-                                                center
-                                            />
-                                        </TableRow>
-                                    );
-                                })}
-                        </>
-                    </Tables>
+                                                <TableData
+                                                    name={x?.overtimeHours}
+                                                    center
+                                                />
+                                            </TableRow>
+                                        );
+                                    })}
+                            </>
+                        </Tables>
+                        <Text
+                            color="#2EAFA3"
+                            fontSize="14px"
+                            mt="20px"
+                            cursor="pointer"
+                            onClick={() => setBillLimit(billLimit + 4)}
+                        >
+                            View More
+                        </Text>
+                    </>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />

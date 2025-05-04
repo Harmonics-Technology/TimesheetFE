@@ -21,12 +21,14 @@ import { LineChartSingle } from '@components/bits-utils/Charts/LineChart';
 import { Round } from '@components/generics/functions/Round';
 import Tables from '@components/bits-utils/Tables';
 import { calculatePer } from '@components/generics/functions/calculatePer';
+import Link from 'next/link';
 
 export const OperationalTaskReport = () => {
     const [metrics, setMetrics] = useState<OperationalTaskReportView | null>(
         {},
     );
     const [loading, setLoading] = useState(true);
+    const [limit, setLimit] = useState(4);
 
     const toast = useToast();
     const { user } = useContext(UserContext);
@@ -297,50 +299,64 @@ export const OperationalTaskReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <Tables
-                        tableHead={[
-                            'Employee Name',
-                            'Department',
-                            { label: 'Total Task Assigned', center: true },
-                            { label: 'Completed Task', center: true },
-                            { label: 'To-do Task', center: true },
-                            { label: 'In-progress Task', center: true },
-                        ]}
-                        color="#2F363A"
-                    >
-                        <>
-                            {(
-                                metrics?.operationalTaskResourceUtilizationReportView ||
-                                []
-                            )
-                                ?.slice(0, 4)
-                                ?.map((x) => {
-                                    return (
-                                        <TableRow>
-                                            <TableData name={x?.employee} />
-                                            <TableData name={x?.department} />
-                                            <TableData
-                                                name={x?.totalTaskAssigned}
-                                                center
-                                            />
-                                            <TableData
-                                                name={x?.completedTasks}
-                                                center
-                                            />
-                                            <TableData
-                                                name={x?.todoTasks}
-                                                center
-                                            />
+                    <>
+                        <Tables
+                            tableHead={[
+                                'Employee Name',
+                                'Department',
+                                { label: 'Total Task Assigned', center: true },
+                                { label: 'Completed Task', center: true },
+                                { label: 'To-do Task', center: true },
+                                { label: 'In-progress Task', center: true },
+                            ]}
+                            color="#2F363A"
+                        >
+                            <>
+                                {(
+                                    metrics?.operationalTaskResourceUtilizationReportView ||
+                                    []
+                                )
+                                    ?.slice(0, limit)
+                                    ?.map((x) => {
+                                        return (
+                                            <TableRow>
+                                                <TableData name={x?.employee} />
+                                                <TableData
+                                                    name={x?.department}
+                                                />
+                                                <TableData
+                                                    name={x?.totalTaskAssigned}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.completedTasks}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.todoTasks}
+                                                    center
+                                                />
 
-                                            <TableData
-                                                name={x?.inProgressTasks}
-                                                center
-                                            />
-                                        </TableRow>
-                                    );
-                                })}
-                        </>
-                    </Tables>
+                                                <TableData
+                                                    name={x?.inProgressTasks}
+                                                    center
+                                                />
+                                            </TableRow>
+                                        );
+                                    })}
+                            </>
+                        </Tables>
+
+                        <Text
+                            color="#2EAFA3"
+                            fontSize="14px"
+                            mt="20px"
+                            cursor="pointer"
+                            onClick={() => setLimit(limit + 4)}
+                        >
+                            View More
+                        </Text>
+                    </>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />

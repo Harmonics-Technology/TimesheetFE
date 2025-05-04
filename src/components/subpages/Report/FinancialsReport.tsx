@@ -21,6 +21,9 @@ import Tables from '@components/bits-utils/Tables';
 export const FinancialsReport = () => {
     const [metrics, setMetrics] = useState<FinancialReportView | null>({});
     const [loading, setLoading] = useState(true);
+    const [limit, setLimit] = useState(4);
+    const [expLimit, setExpLimit] = useState(4);
+    const [payLimit, setPayLimit] = useState(4);
 
     const toast = useToast();
     const { user } = useContext(UserContext);
@@ -165,56 +168,69 @@ export const FinancialsReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <Tables
-                        tableHead={[
-                            'Department',
-                            { label: 'Total Request', center: true },
-                            { label: 'Total Amount ($)', center: true },
-                            { label: 'Approved Request', center: true },
-                            { label: 'Approved Amount ($)', center: true },
-                            { label: 'Pending Request', center: true },
-                            { label: 'Pending Amount ($)', center: true },
-                        ]}
-                        color="#2F363A"
-                    >
-                        <>
-                            {(metrics?.expenseManagementReport || [])
-                                ?.slice(0, 4)
-                                ?.map((x) => {
-                                    return (
-                                        <TableRow>
-                                            <TableData name={x?.department} />
-                                            <TableData
-                                                name={x?.totalRequest}
-                                                center
-                                            />
-                                            <TableData
-                                                name={x?.totalAmount}
-                                                center
-                                            />
-                                            <TableData
-                                                name={x?.approvedRequest}
-                                                center
-                                            />
-                                            <TableData
-                                                name={x?.approvedAmount}
-                                                center
-                                            />
-                                            <TableData
-                                                name={x?.pendingRequest}
-                                                center
-                                            />
-                                            <TableData
-                                                name={`${Round(
-                                                    x?.pendingAmount || 0,
-                                                )}`}
-                                                center
-                                            />
-                                        </TableRow>
-                                    );
-                                })}
-                        </>
-                    </Tables>
+                    <>
+                        <Tables
+                            tableHead={[
+                                'Department',
+                                { label: 'Total Request', center: true },
+                                { label: 'Total Amount ($)', center: true },
+                                { label: 'Approved Request', center: true },
+                                { label: 'Approved Amount ($)', center: true },
+                                { label: 'Pending Request', center: true },
+                                { label: 'Pending Amount ($)', center: true },
+                            ]}
+                            color="#2F363A"
+                        >
+                            <>
+                                {(metrics?.expenseManagementReport || [])
+                                    ?.slice(0, limit)
+                                    ?.map((x) => {
+                                        return (
+                                            <TableRow>
+                                                <TableData
+                                                    name={x?.department}
+                                                />
+                                                <TableData
+                                                    name={x?.totalRequest}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.totalAmount}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.approvedRequest}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.approvedAmount}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.pendingRequest}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={`${Round(
+                                                        x?.pendingAmount || 0,
+                                                    )}`}
+                                                    center
+                                                />
+                                            </TableRow>
+                                        );
+                                    })}
+                            </>
+                        </Tables>
+                        <Text
+                            color="#2EAFA3"
+                            fontSize="14px"
+                            mt="20px"
+                            cursor="pointer"
+                            onClick={() => setLimit(limit + 4)}
+                        >
+                            View More
+                        </Text>
+                    </>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -237,52 +253,69 @@ export const FinancialsReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <Tables
-                        tableHead={[
-                            'Department',
-                            'Requestor',
-                            'Expense Type',
-                            { label: 'Expense Amount($)', center: true },
-                            'Status',
-                            'Request Date',
-                        ]}
-                        color="#2F363A"
-                    >
-                        <>
-                            {(metrics?.allExpenseReport || [])
-                                ?.slice(0, 4)
-                                ?.map((x) => {
-                                    return (
-                                        <TableRow>
-                                            <TableData name={x?.department} />
-                                            <TableData name={x?.requestor} />
-                                            <TableData name={x?.expenseType} />
-                                            <TableData
-                                                name={x?.amount}
-                                                center
-                                            />
-                                            <TableData
-                                                name={x?.status}
-                                                customColor={
-                                                    x?.status == 'REJECTED'
-                                                        ? '#ff5b79'
-                                                        : x?.status ==
-                                                          'completed'
-                                                        ? '#2EAFA3'
-                                                        : '#28A3EF'
-                                                }
-                                            />
+                    <>
+                        <Tables
+                            tableHead={[
+                                'Department',
+                                'Requestor',
+                                'Expense Type',
+                                { label: 'Expense Amount($)', center: true },
+                                'Status',
+                                'Request Date',
+                            ]}
+                            color="#2F363A"
+                        >
+                            <>
+                                {(metrics?.allExpenseReport || [])
+                                    ?.slice(0, expLimit)
+                                    ?.map((x) => {
+                                        return (
+                                            <TableRow>
+                                                <TableData
+                                                    name={x?.department}
+                                                />
+                                                <TableData
+                                                    name={x?.requestor}
+                                                />
+                                                <TableData
+                                                    name={x?.expenseType}
+                                                />
+                                                <TableData
+                                                    name={x?.amount}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.status}
+                                                    customColor={
+                                                        x?.status == 'REJECTED'
+                                                            ? '#ff5b79'
+                                                            : x?.status ==
+                                                              'completed'
+                                                            ? '#2EAFA3'
+                                                            : '#28A3EF'
+                                                    }
+                                                />
 
-                                            <TableData
-                                                name={formatDate(
-                                                    x?.requestDate,
-                                                )}
-                                            />
-                                        </TableRow>
-                                    );
-                                })}
-                        </>
-                    </Tables>
+                                                <TableData
+                                                    name={formatDate(
+                                                        x?.requestDate,
+                                                    )}
+                                                />
+                                            </TableRow>
+                                        );
+                                    })}
+                            </>
+                        </Tables>
+                        <Text
+                            color="#2EAFA3"
+                            fontSize="14px"
+                            mt="20px"
+                            cursor="pointer"
+                            onClick={() => setExpLimit(expLimit + 4)}
+                        >
+                            View More
+                        </Text>
+                    </>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
@@ -302,42 +335,65 @@ export const FinancialsReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <Tables
-                        tableHead={[
-                            'Employee Name',
-                            'Department',
-                            { label: 'Base Salary ($)', center: true },
-                            'Payment Type',
-                            { label: 'Hours', center: true },
-                            { label: 'Rate ($)', center: true },
-                            { label: 'Net Salary ($)', center: true },
-                        ]}
-                        color="#2F363A"
-                    >
-                        <>
-                            {(metrics?.payrollSummaryReport || [])
-                                ?.slice(0, 4)
-                                ?.map((x) => {
-                                    return (
-                                        <TableRow>
-                                            <TableData name={x?.employeeName} />
-                                            <TableData name={x?.department} />
-                                            <TableData
-                                                name={x?.baseSalary}
-                                                center
-                                            />
-                                            <TableData name={x?.paymentType} />
-                                            <TableData name={x?.hours} center />
-                                            <TableData name={x?.rate} center />
-                                            <TableData
-                                                name={x?.netSalary}
-                                                center
-                                            />
-                                        </TableRow>
-                                    );
-                                })}
-                        </>
-                    </Tables>
+                    <>
+                        <Tables
+                            tableHead={[
+                                'Employee Name',
+                                'Department',
+                                { label: 'Base Salary ($)', center: true },
+                                'Payment Type',
+                                { label: 'Hours', center: true },
+                                { label: 'Rate ($)', center: true },
+                                { label: 'Net Salary ($)', center: true },
+                            ]}
+                            color="#2F363A"
+                        >
+                            <>
+                                {(metrics?.payrollSummaryReport || [])
+                                    ?.slice(0, payLimit)
+                                    ?.map((x) => {
+                                        return (
+                                            <TableRow>
+                                                <TableData
+                                                    name={x?.employeeName}
+                                                />
+                                                <TableData
+                                                    name={x?.department}
+                                                />
+                                                <TableData
+                                                    name={x?.baseSalary}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.paymentType}
+                                                />
+                                                <TableData
+                                                    name={x?.hours}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.rate}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.netSalary}
+                                                    center
+                                                />
+                                            </TableRow>
+                                        );
+                                    })}
+                            </>
+                        </Tables>
+                        <Text
+                            color="#2EAFA3"
+                            fontSize="14px"
+                            mt="20px"
+                            cursor="pointer"
+                            onClick={() => setPayLimit(payLimit + 4)}
+                        >
+                            View More
+                        </Text>
+                    </>
                 )}
             </Box>
         </Box>

@@ -191,7 +191,7 @@ export const ProjectManagementReport = () => {
                                                 <TableData name={x?.project} />
                                                 <TableData
                                                     name={x?.projectManager?.map(
-                                                        (x) => x.user?.fullName,
+                                                        (x) => x,
                                                     )}
                                                 />
                                                 <TableData

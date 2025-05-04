@@ -21,10 +21,12 @@ import { formatDate } from '@components/generics/functions/formatDate';
 import { LineChartSingle } from '@components/bits-utils/Charts/LineChart';
 import { Round } from '@components/generics/functions/Round';
 import Tables from '@components/bits-utils/Tables';
+import Link from 'next/link';
 
 export const LeaveManagementReport = () => {
     const [metrics, setMetrics] = useState<LeaveReportView | null>({});
     const [loading, setLoading] = useState(true);
+    const [limit, setLimit] = useState(4);
 
     const toast = useToast();
     const { user } = useContext(UserContext);
@@ -287,56 +289,73 @@ export const LeaveManagementReport = () => {
                 {loading ? (
                     <Skeleton height="57px" count={4} style={{ top: '-4px' }} />
                 ) : (
-                    <Tables
-                        tableHead={[
-                            'Employee Name',
-                            {
-                                label: 'Total Number Leave Allocated (Hours)',
-                                center: true,
-                            },
-                            { label: 'Leave Accrued (Hours)', center: true },
-                            { label: 'Leave Balance (Hours)', center: true },
-                            { label: 'Unpaid Leave (Hours)', center: true },
-                            'Leave Expiry Date',
-                        ]}
-                        color="#2F363A"
-                    >
-                        <>
-                            {(metrics?.employeeLeaveReportData || [])
-                                ?.slice(0, 4)
-                                ?.map((x) => {
-                                    return (
-                                        <TableRow>
-                                            <TableData name={x?.employee} />
-                                            <TableData
-                                                name={
-                                                    x?.totalNumberLeaveAllocated
-                                                }
-                                                center
-                                            />
-                                            <TableData
-                                                name={x?.leaveAccruedHours}
-                                                center
-                                            />
-                                            <TableData
-                                                name={x?.leaveBalanceHours}
-                                                center
-                                            />
-                                            <TableData
-                                                name={x?.unpaidLeaveHours}
-                                                center
-                                            />
+                    <>
+                        <Tables
+                            tableHead={[
+                                'Employee Name',
+                                {
+                                    label: 'Total Number Leave Allocated (Hours)',
+                                    center: true,
+                                },
+                                {
+                                    label: 'Leave Accrued (Hours)',
+                                    center: true,
+                                },
+                                {
+                                    label: 'Leave Balance (Hours)',
+                                    center: true,
+                                },
+                                { label: 'Unpaid Leave (Hours)', center: true },
+                                'Leave Expiry Date',
+                            ]}
+                            color="#2F363A"
+                        >
+                            <>
+                                {(metrics?.employeeLeaveReportData || [])
+                                    ?.slice(0, limit)
+                                    ?.map((x) => {
+                                        return (
+                                            <TableRow>
+                                                <TableData name={x?.employee} />
+                                                <TableData
+                                                    name={
+                                                        x?.totalNumberLeaveAllocated
+                                                    }
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.leaveAccruedHours}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.leaveBalanceHours}
+                                                    center
+                                                />
+                                                <TableData
+                                                    name={x?.unpaidLeaveHours}
+                                                    center
+                                                />
 
-                                            <TableData
-                                                name={formatDate(
-                                                    x?.leaveExpiryDate,
-                                                )}
-                                            />
-                                        </TableRow>
-                                    );
-                                })}
-                        </>
-                    </Tables>
+                                                <TableData
+                                                    name={formatDate(
+                                                        x?.leaveExpiryDate,
+                                                    )}
+                                                />
+                                            </TableRow>
+                                        );
+                                    })}
+                            </>
+                        </Tables>
+                        <Text
+                            color="#2EAFA3"
+                            fontSize="14px"
+                            mt="20px"
+                            cursor="pointer"
+                            onClick={() => setLimit(limit + 4)}
+                        >
+                            View More
+                        </Text>
+                    </>
                 )}
             </Box>
             <Divider borderColor="#D9D9D9" my="20px" />
