@@ -149,7 +149,7 @@ function CollaboratorManagement({ userList, isSuperAdmin, subs }: adminProps) {
                     <>
                         {/* {!admin && ( */}
                         <ShiftBtn
-                            text="Add Collaborator"
+                            text="Add Project Collaborator"
                             onClick={onOpen}
                             px="1rem"
                         />
@@ -192,7 +192,7 @@ function CollaboratorManagement({ userList, isSuperAdmin, subs }: adminProps) {
             <DrawerWrapper
                 onClose={onClose}
                 isOpen={isOpen}
-                title={'Add new collaborator'}
+                title={'Add new Project collaborator'}
             >
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Grid

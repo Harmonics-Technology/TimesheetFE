@@ -49,7 +49,12 @@ export const TeamPrjDashboard = ({
 
     return (
         <Box>
-            <TeamTopBar data={projects} id={id} />
+            <TeamTopBar
+                data={projects}
+                id={id}
+                users={users}
+                currencies={currencies}
+            />
 
             <Grid
                 mb="1.25rem"

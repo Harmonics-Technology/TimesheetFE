@@ -332,10 +332,12 @@ function TeamProfile({
     //     userProfile?.userDepartments,
     // ];
     const [selectedDepartment, setSelectedDepartment] = useState<any>(
-        userProfile?.userDepartments?.map((obj) => ({
-            id: obj?.department?.id,
-            name: obj?.department?.name,
-        })) || [],
+        userProfile?.userDepartments
+            ?.filter((x) => x.primaryDepartment == false)
+            .map((obj) => ({
+                id: obj?.department?.id,
+                name: obj?.department?.name,
+            })) || [],
     );
 
     const priDept = userProfile?.userDepartments?.find(
@@ -667,6 +669,17 @@ function TeamProfile({
                                         ))}
                                     </>
                                 }
+                            />
+                            <PrimaryDate<TeamMemberModel>
+                                control={control}
+                                name="startDate"
+                                label="Start Date"
+                                error={errors.startDate}
+                                required={false}
+                                defaultValue={moment(
+                                    userProfile?.contractStartDate,
+                                ).format('YYYY/MM/DD')}
+                                // min={new Date()}
                             />
 
                             <SelectBlank

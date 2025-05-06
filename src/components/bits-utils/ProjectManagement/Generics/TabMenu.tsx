@@ -36,7 +36,7 @@ export const SubTabMenu = (subType) => {
 };
 
 export const TeamTabMenu = (subType, isPm, isProjectPm) => {
-    console.log({ subType, isPm, isProjectPm });
+    // console.log({ subType, isPm, isProjectPm });
     const menuItems =
         (isPm || isProjectPm) && subType == 'basic'
             ? [

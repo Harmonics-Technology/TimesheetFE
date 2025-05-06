@@ -141,13 +141,13 @@ export const CompleteResetExtra = ({
     };
 
     const timbaOpt = [
-        {
-            id: 1,
-            label: 'On your Email Inbox',
-            desc: ' Your Timba ID can be found in the onboarding email you received the very first time you were onboarded on Timba.',
-            img: '/assets/frommailb.png',
-            img2: '/assets/fromml.png',
-        },
+        // {
+        //     id: 1,
+        //     label: 'On your Email Inbox',
+        //     desc: ' Your Timba ID can be found in the onboarding email you received the very first time you were onboarded on Timba.',
+        //     img: '/assets/frommailb.png',
+        //     img2: '/assets/fromml.png',
+        // },
         {
             id: 2,
             label: 'On your Profile Page',

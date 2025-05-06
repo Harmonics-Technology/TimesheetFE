@@ -33,7 +33,7 @@ export const ListCollabInvoicesForAdmin = ({
         'Invoice Number',
         'Invoice Date',
         'Due Date',
-        'Collaborator',
+        'Project Collaborator',
         'Amount',
         'Status',
         'Action',
